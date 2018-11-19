@@ -7,47 +7,49 @@ import logging
 import os
 import site
 
-from ocean_plastic.constants import (
-    KEEPER_CONTRACTS
-)
 
 DEFAULT_KEEPER_HOST = 'localhost'
 DEFAULT_KEEPER_PORT = 8545
 DEFAULT_KEEPER_URL = 'http://localhost:8545'
-DEFAULT_KEEPER_PATH = 'contracts'
+DEFAULT_KEEPER_PATH = 'artifacts'
 DEFAULT_GAS_LIMIT = 300000
 DEFAULT_NAME_AQUARIUS_URL = 'http://localhost:5000'
+DEFAULT_STORAGE_PATH = 'squid_py.db'
 
 NAME_KEEPER_URL = 'keeper.url'
 NAME_KEEPER_PATH = 'keeper.path'
 NAME_GAS_LIMIT = 'gas_limit'
 NAME_AQUARIUS_URL = 'aquarius.url'
-NAME_MARKET_ADDRESS = 'market.address'
-NAME_AUTH_ADDRESS = 'auth.address'
-NAME_TOKEN_ADDRESS = 'token.address'
-NAME_DID_REGISTRY_ADDRESS = 'didregistry.address'
+NAME_STORAGE_PATH = 'storage.path'
+
+NAME_SECRET_STORE_URL = 'secret_store.url'
+NAME_PARITY_URL = 'parity.url'
+NAME_PARITY_ADDRESS = 'parity.address'
+NAME_PARITY_PASSWORD = 'parity.password'
 
 environ_names = {
     NAME_KEEPER_URL: ['KEEPER_URL', 'Keeper URL'],
     NAME_KEEPER_PATH: ['KEEPER_PATH', 'Path to the keeper contracts'],
     NAME_GAS_LIMIT: ['GAS_LIMIT', 'Gas limit'],
     NAME_AQUARIUS_URL: ['AQUARIUS_URL', 'Aquarius URL'],
-    NAME_MARKET_ADDRESS: ['MARKET_ADDRESS', 'Market address'],
-    NAME_AUTH_ADDRESS: ['AUTH_ADDRESS', 'Auth address'],
-    NAME_TOKEN_ADDRESS: ['TOKEN_ADDRESS', 'Token address'],
-    NAME_DID_REGISTRY_ADDRESS: ['DID_REGISTRY_ADDRESS', 'DIDRegistry address'],
+    NAME_STORAGE_PATH: ['STORAGE_PATH', 'Path to the local database file'],
+    NAME_SECRET_STORE_URL: ['SECRET_STORE_URL', 'Secret Store URL'],
+    NAME_PARITY_URL: ['PARITY_URL', 'Parity URL'],
+    NAME_PARITY_ADDRESS: ['PARITY_ADDRESS', 'Parity address'],
+    NAME_PARITY_PASSWORD: ['PARITY_PASSWORD', 'Parity password'],
 }
 
 config_defaults = {
-    KEEPER_CONTRACTS: {
+    'keeper-contracts': {
         NAME_KEEPER_URL: DEFAULT_KEEPER_URL,
         NAME_KEEPER_PATH: DEFAULT_KEEPER_PATH,
         NAME_GAS_LIMIT: DEFAULT_GAS_LIMIT,
         NAME_AQUARIUS_URL: DEFAULT_NAME_AQUARIUS_URL,
-        NAME_MARKET_ADDRESS: '',
-        NAME_AUTH_ADDRESS: '',
-        NAME_TOKEN_ADDRESS: '',
-        NAME_DID_REGISTRY_ADDRESS: '',
+        NAME_STORAGE_PATH: DEFAULT_STORAGE_PATH,
+        NAME_SECRET_STORE_URL: '',
+        NAME_PARITY_URL: '',
+        NAME_PARITY_ADDRESS: '',
+        NAME_PARITY_PASSWORD: '',
     }
 }
 
@@ -58,7 +60,7 @@ class Config(configparser.ConfigParser):
         configparser.ConfigParser.__init__(self)
 
         self.read_dict(config_defaults)
-        self._section_name = KEEPER_CONTRACTS
+        self._section_name = 'keeper-contracts'
         self._logger = kwargs.get('logger', logging.getLogger(__name__))
         self._logger.debug('Config: loading config file %s', filename)
 
@@ -95,7 +97,9 @@ class Config(configparser.ConfigParser):
             path = os.path.join(site.PREFIXES[0], 'artifacts')
         return path
 
-    # properties
+    @property
+    def storage_path(self):
+        return self.get(self._section_name, NAME_STORAGE_PATH)
 
     @property
     def keeper_url(self):
@@ -110,13 +114,20 @@ class Config(configparser.ConfigParser):
         return self.get(self._section_name, NAME_AQUARIUS_URL)
 
     @property
-    def address_list(self):
-        return {
-            'market': self.get(self._section_name, NAME_MARKET_ADDRESS),
-            'auth': self.get(self._section_name, NAME_AUTH_ADDRESS),
-            'token': self.get(self._section_name, NAME_TOKEN_ADDRESS),
-            'didregistry': self.get(self._section_name, NAME_DID_REGISTRY_ADDRESS),
-        }
+    def secret_store_url(self):
+        return self.get(self._section_name, NAME_SECRET_STORE_URL)
+
+    @property
+    def parity_url(self):
+        return self.get(self._section_name, NAME_PARITY_URL)
+
+    @property
+    def parity_address(self):
+        return self.get(self._section_name, NAME_PARITY_ADDRESS)
+
+    @property
+    def parity_password(self):
+        return self.get(self._section_name, NAME_PARITY_PASSWORD)
 
     # static methods
 

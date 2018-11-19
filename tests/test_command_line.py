@@ -14,14 +14,14 @@ from pytest import (
     raises,
 )
 
-from squid_py.command_line import CommandLine
-from squid_py.command_line.test_output import TestOutput
+from ocean_plastic.command_line import CommandLine
+from ocean_plastic.command_line.test_output import TestOutput
 
 
 def test_command_line_balance():
 
     test_output = TestOutput()
-    command_line = CommandLine(config_file='config_local.ini', output = test_output)
+    command_line = CommandLine(config='config_local.ini', output = test_output)
     ocean = command_line.open()
     args = []
     output = command_line.call('balance', args)

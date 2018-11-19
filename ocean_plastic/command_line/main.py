@@ -156,8 +156,8 @@ class CommandLine:
             if filter_account_id == None or account_id == filter_account_id:
                 self._output.set_item('index', str(index) )
                 self._output.set_item('account', account_id )
-                self._output.set_item('tokens', account.ocean)
-                self._output.set_item('ether', account.ether)
+                self._output.set_item('tokens', account.ocean_balance)
+                self._output.set_item('ether', account.ether_balance)
                 self._output.show_items()
             index = index + 1
 
