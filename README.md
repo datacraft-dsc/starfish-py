@@ -2,10 +2,10 @@
 
 # ocean-plastic
 
->    🐳  [Description of repo](https://www.elastic.co/) component for (Python).
+>    🐳  [Command line tools and interface for squid-py](https://www.elastic.co/) component for (Python).
 >    [oceanprotocol.com](https://oceanprotocol.com)
 
-At the surface of the Ocean, this provides user access and tools to the Ocean Protocol Network, via the python library.
+Floating on the surface of the Ocean. Ocean Plastic provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 [![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-elasticsearch-driver)
 [![Codacy coverage](https://img.shields.io/codacy/coverage/de067a9402c64b989c76b27cfc74fefe.svg)](https://app.codacy.com/project/ocean-protocol/oceandb-elasticsearch-driver/dashboard)
 [![PyPI](https://img.shields.io/pypi/v/oceandb-elasticsearch-driver.svg)](https://pypi.org/project/oceandb-elasticsearch-driver/)
@@ -28,36 +28,60 @@ At the surface of the Ocean, this provides user access and tools to the Ocean Pr
 
 ## Features
 
-TODO
-Elasticsearch driver to connect implementing OceanDB.
+Currently only provide basic account balance information
 
 ## Prerequisites
 
-TODO
-You should have running a elasticsearch instance.
+Python 3.6
 
-## Quickstart
+## Development
 
-...
+1. Set up a virtual environment
 
+1. Install requirements
 
-## Environment variables
+    ```
+    pip install -r requirements_dev.txt
+    ```
 
-TODO
-When you want to instantiate an Oceandb plugin you can provide the next environment variables:
+1. Run Docker images. Alternatively, set up and run some or all of the corresponding services locally.
 
-- **$CONFIG_PATH** 
-- **$MODULE** 
-- **$DB_HOSTNAME** 
-- **$DB_PORT**
+    ```
+    docker-compose -f ./docker/docker-compose.yml up
+    ```
 
-...
+    It runs an Aquarius node and an Ethereum RPC client. For details, read `docker-compose.yml`.
+
+1. Create local configuration file
+
+    ```
+    cp config.ini config_local.ini
+    ```
+
+   `config_local.ini` is used by unit tests.
+
+1. Copy keeper artifacts
+
+    A bash script is available to copy keeper artifacts into this file directly from a running docker image. This script needs to run in the root of the project.
+    The script waits until the keeper contracts are deployed, and then copies the artifacts.
+
+    ```
+    ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
+    ```
+
+    The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
+
+1. Run the unit tests
+
+    ```
+    python3 setup.py test
+    ```
 
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
 and [python-style-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-style-guide.md).
-    
+
 ## Testing
 
 Automatic tests are setup via Travis, executing `tox`.
