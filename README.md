@@ -6,6 +6,7 @@
 >    [oceanprotocol.com](https://oceanprotocol.com)
 
 Floating on the surface of the Ocean. Ocean Plastic provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
+
 [![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-elasticsearch-driver)
 [![Codacy coverage](https://img.shields.io/codacy/coverage/de067a9402c64b989c76b27cfc74fefe.svg)](https://app.codacy.com/project/ocean-protocol/oceandb-elasticsearch-driver/dashboard)
 [![PyPI](https://img.shields.io/pypi/v/oceandb-elasticsearch-driver.svg)](https://pypi.org/project/oceandb-elasticsearch-driver/)
