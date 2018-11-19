@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import argparse
+import sys
+import logging
+
+
+from ocean_plastic.command_line import CommandLine
+from ocean_plastic.exceptions import OceanCommandLineError
+
+from ocean_plastic.config import (
+    Config,
+    DEFAULT_KEEPER_URL,
+    DEFAULT_KEEPER_PATH,
+    DEFAULT_GAS_LIMIT,
+    DEFAULT_NAME_AQUARIUS_URL,
+)
+
+DEFAULT_CONFIG_FILE = 'config_local.ini'
+
+def main():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+
+Commands:
+
+balance [account_id]                                           Return balance of all acounts or a given account.
+buy <asset_id> <account_id>                                    Buy an asset using the account_id or index and return it's access_id and secret token.
+credit <account_id> <amount>                                   Credit <amount> tokens to account <account_id>.
+get <access_id> <token>                                        Get brought asset data from the asset provider.
+info <asset_id>                                                Show meta data and price information about an asset.
+list                                                           Show a list of assets from the meta-storage server.
+list access                                                    List the access logs for all assets.
+list sale                                                      List assets that are in the asset provider server for sale.
+list sold [account_id]                                         List the assets that have been sold to the 'account', defaults to the 'asset_trader_account'.
+register <account_id> <asset_filename> [name]                  Register a new asset, using the account_id.
+service <service_id/url>                                       Check a service with a given id or url
+setup                                                          Show the list of values used in connecting to the servers and Ethereum accounts.
+upload <asset_id> <price> <filename>                           Upload the asset to the asset provider server for selling, with a given price.
+
+'<>' are parameters
+'[]' are optional parameters
+acount_id - can be a 32 byte hex number or an index as displayed in the 'balance' command.
+
+Supported environment variables are:
+""" + Config.get_environ_help() + """
+        """
+    )
+
+    parser.add_argument('command', nargs=1,
+                        help='Toolkit command'
+                    )
+    parser.add_argument('-c', '--config', default=DEFAULT_CONFIG_FILE,
+                        help='Config file to load settings. default: {}'.format(DEFAULT_CONFIG_FILE)
+                    )
+    parser.add_argument('command_args', nargs='*',
+                        help='command arguments'
+                    )
+    """
+    parser.add_argument('-e', '--ethereum', default=None,
+                        help='Ethereum  url. default: %s' % DEFAULT_ETHEREUM_NODE
+                    )
+    parser.add_argument('-k', '--contracts', default=None,
+                        help='Ocean Keeper contracts. default: %s' % DEFAULT_CONTRACTS_PATH
+                    )
+    parser.add_argument('-o', '--ocean',
+                        help='Ocean node url.'
+                    )
+    parser.add_argument('-m', '--meta-storage', default=None,
+                        help='meta storage server url or service id. default: %s' % DEFAULT_META_STORAGE_URL
+                    )
+    parser.add_argument('-p', '--asset-provider', default=None,
+                        help='asset provider server url or service id. default: %s' % DEFAULT_ASSET_PROVIDER_URL
+                    )
+    """
+
+    parser.add_argument('-j', '--json', default=False, action='store_true',
+                        help='return output in JSON format. default: False'
+                    )
+    parser.add_argument('-d', '--debug', default=False, action='store_true',
+                        help='Show debug log entries. default: False'
+                    )
+
+    args = parser.parse_args()
+
+    logging.basicConfig(level = logging.INFO)
+    logger = logging.getLogger(os.path.basename(__file__))
+
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+
+
+    config = Config(args.config)
+
+    """
+    config.set_arguments({
+        'ethereum_url': args.ethereum,
+        # 'ocean_url' : args.ocean,
+        'meta_storage_url': args.meta_storage,
+        'asset_provider_url': args.asset_provider,
+        'contracts_path': args.contracts,
+    })
+    command_line = CommandLine (
+        # ocean_url = config.get_ocean_url(),
+        ethereum_url = config.get_ethereum_url(),
+        meta_storage_service = config.get_meta_storage_url(),
+        asset_provider_service = config.get_asset_provider_url(),
+        keeper_contracts_path=config.get_contracts_path(),    
+        is_json = args.json,
+        logger = logger
+    )
+    """
+    command_line = CommandLine(config_file = args.config)
+    command = args.command[0]
+    if command == 'help':
+        parser.print_help()
+        return
+    try:
+        output = command_line.call(command, args.command_args)
+        output.flush()
+    except OceanCommandLineError as e:
+        logger.error('Error "%s"', e)
+
+
+if __name__ == "__main__":
+    main()
