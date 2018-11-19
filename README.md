@@ -1,11 +1,11 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-# ocean-repo-name
+# ocean-plastic
 
 >    🐳  [Description of repo](https://www.elastic.co/) component for (Python).
 >    [oceanprotocol.com](https://oceanprotocol.com)
 
-TODO Change this to match the repo name and testing environments
+At the surface of the Ocean, this provides user access and tools to the Ocean Protocol Network, via the python library.
 [![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-elasticsearch-driver)
 [![Codacy coverage](https://img.shields.io/codacy/coverage/de067a9402c64b989c76b27cfc74fefe.svg)](https://app.codacy.com/project/ocean-protocol/oceandb-elasticsearch-driver/dashboard)
 [![PyPI](https://img.shields.io/pypi/v/oceandb-elasticsearch-driver.svg)](https://pypi.org/project/oceandb-elasticsearch-driver/)
