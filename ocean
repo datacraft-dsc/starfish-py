@@ -7,10 +7,10 @@ import sys
 import logging
 
 
-from ocean_plastic.command_line import CommandLine
-from ocean_plastic.exceptions import OceanCommandLineError
+from ocean_py.command_line import CommandLine
+from ocean_py.exceptions import OceanCommandLineError
 
-from ocean_plastic.config import (
+from ocean_py.config import (
     Config,
     DEFAULT_KEEPER_URL,
     DEFAULT_KEEPER_PATH,

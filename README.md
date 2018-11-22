@@ -1,11 +1,11 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-# ocean-plastic
+# ocean-py
 
 >    🐳  [Command line tools and interface for squid-py](https://www.elastic.co/) component for (Python).
 >    [oceanprotocol.com](https://oceanprotocol.com)
 
-Floating on the surface of the Ocean. Ocean Plastic provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
+Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 
 [![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-elasticsearch-driver)
 [![Codacy coverage](https://img.shields.io/codacy/coverage/de067a9402c64b989c76b27cfc74fefe.svg)](https://app.codacy.com/project/ocean-protocol/oceandb-elasticsearch-driver/dashboard)

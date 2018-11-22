@@ -14,8 +14,8 @@ from pytest import (
     raises,
 )
 
-from ocean_plastic.command_line import CommandLine
-from ocean_plastic.command_line.test_output import TestOutput
+from ocean_py.command_line import CommandLine
+from ocean_py.command_line.test_output import TestOutput
 
 
 def test_command_line_balance():
