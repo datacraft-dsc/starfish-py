@@ -3,7 +3,6 @@
     Command line base output
 
 """
-import json
 
 class BaseOutput():
     """
@@ -22,20 +21,20 @@ class BaseOutput():
         self._rows = []
         self._header = {}
 
-    def show(self, text = None, name = None):
-        if text != None:
-            if name == None:
+    def show(self, text=None, name=None):
+        if text is not None:
+            if name is None:
                 name = 'value'
             self.show_item(name, text)
 
-    def show_item(self, name, value, format_text = None):
+    def show_item(self, name, value, format_text=None):
         self._items[name] = value
 
-    def set_header(self, name, title, format = None):
+    def set_header(self, name, title, format_text=None):
         self._header[name] = {
             'name': name,
             'title': title,
-            'format': format
+            'format': format_text
         }
     def show_header(self):
         pass

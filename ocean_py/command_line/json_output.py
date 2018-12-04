@@ -11,7 +11,7 @@ class JSONOutput(BaseOutput):
 
 
     def show(self, text=None, name=None):
-        if len(self._rows) > 0:
+        if self._rows:
             print(json.dumps(self._rows))
 
     def show_item(self, name, value, format_text=None):

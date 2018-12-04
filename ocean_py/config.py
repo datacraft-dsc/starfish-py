@@ -27,7 +27,7 @@ NAME_PARITY_URL = 'parity.url'
 NAME_PARITY_ADDRESS = 'parity.address'
 NAME_PARITY_PASSWORD = 'parity.password'
 
-environ_names = {
+ENVIRON_NAMES = {
     NAME_KEEPER_URL: ['KEEPER_URL', 'Keeper URL'],
     NAME_KEEPER_PATH: ['KEEPER_PATH', 'Path to the keeper contracts'],
     NAME_GAS_LIMIT: ['GAS_LIMIT', 'Gas limit'],
@@ -39,7 +39,7 @@ environ_names = {
     NAME_PARITY_PASSWORD: ['PARITY_PASSWORD', 'Parity password'],
 }
 
-config_defaults = {
+CONFIG_DEFAULTS = {
     'keeper-contracts': {
         NAME_KEEPER_URL: DEFAULT_KEEPER_URL,
         NAME_KEEPER_PATH: DEFAULT_KEEPER_PATH,
@@ -59,14 +59,14 @@ class Config(configparser.ConfigParser):
     def __init__(self, filename=None, **kwargs):
         configparser.ConfigParser.__init__(self)
 
-        self.read_dict(config_defaults)
+        self.read_dict(CONFIG_DEFAULTS)
         self._section_name = 'keeper-contracts'
         self._logger = kwargs.get('logger', logging.getLogger(__name__))
         self._logger.debug('Config: loading config file %s', filename)
 
         if filename:
-            with open(filename) as fp:
-                text = fp.read()
+            with open(filename) as file_handle:
+                text = file_handle.read()
                 self.read_string(text)
         else:
             if 'text' in kwargs:
@@ -74,7 +74,7 @@ class Config(configparser.ConfigParser):
         self._load_environ()
 
     def _load_environ(self):
-        for option_name, environ_item in environ_names.items():
+        for option_name, environ_item in ENVIRON_NAMES.items():
             value = os.environ.get(environ_item[0])
             if value is not None:
                 self._logger.debug('Config: setting environ %s = %s', option_name, value)
@@ -134,7 +134,7 @@ class Config(configparser.ConfigParser):
     @staticmethod
     def get_environ_help():
         result = []
-        for option_name, environ_item in environ_names.items():
+        for option_name, environ_item in ENVIRON_NAMES.items():
             # codacy fix
             assert option_name
             result.append("{:20}{:40}".format(environ_item[0], environ_item[1]))

@@ -20,13 +20,13 @@ class CommandLine:
     def __init__(self, **kwargs):
         self._config_file = kwargs.get('config_file', None)
         self._output = kwargs.get('output', None)
-        if self._output == None:
+        if self._output is None:
             if kwargs.get('is_json', False):
                 self._output = JSONOutput()
             else:
                 self._output = ConsoleOutput()
     def open(self):
-        ocean = Ocean(config_file = self._config_file)
+        ocean = Ocean(config_file=self._config_file)
         return ocean
 
     def call(self, command, args):
@@ -34,13 +34,13 @@ class CommandLine:
             command_func = getattr(self, command.replace('-', '_'))
             command_func(args)
             return self._output
-        except Exception as e:
-            if isinstance(e, AttributeError):
+        except Exception as exception:
+            if isinstance(exception, AttributeError):
                 raise OceanCommandLineError('Cannot find command "{}"'.format(command))
-            print(e)
+            print(exception)
             traceback.print_exc()
             raise OceanCommandLineError('Command failed "{}"'.format(command))
-
+    """
     def register(self, args):
         account_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide an account id in argument #1')
         filename = self._assert_arg_filename(args, 1, 'You must provide a valid filename in argument #2')
@@ -62,7 +62,8 @@ class CommandLine:
         asset = ocean.register_asset(service, owner_account, meta_data)
         self._output.show_item('asset id', asset.get_id())
         self._output.show_item('owner', asset.get_owner())
-
+    """
+    """
     def upload(self, args):
         asset_id = self._assert_arg_match(args, 0,[HEX_STRING_FORMAT], 'You must provide an asset id in argument #1')
         price = int(self._assert_arg_match(args, 1, [INTEGER_FORMAT], 'You must provide a price in argument #2'))
@@ -82,7 +83,8 @@ class CommandLine:
         asset.write_to_provider(self._asset_provider_service, price, asset_data)
         self._output.show_item('asset_id', asset.get_id())
         self._output.show_item('price', price)
-
+    """
+    """
     def credit(self, args):
         account_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide an account id in argument #1')
         amount = int(self._assert_arg_match(args, 1, [INTEGER_FORMAT], 'You must provide an amount to credit in argument #2'))
@@ -97,7 +99,8 @@ class CommandLine:
         credit_amount = owner_account.ocean
         self._output.show_item('owner', owner_account.address)
         self._output.show_item('balance', credit_amount)
-
+    """
+    """
     def buy(self, args):
         asset_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT], 'You must provide an asset id in argument #1')
         account_id = self._assert_arg_match(args, 1, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide an account id in argument #2')
@@ -115,8 +118,8 @@ class CommandLine:
             self._output.show_item('access_id:', asset_access.get_access_id())
             self._output.show_item('secret token:', asset_access.get_token())
             self._output.show_item('from service id:', asset_access.get_asset_provider_service_id())
-
-
+    """
+    """
     def info(self, args):
         asset_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT], 'You must provide an asset id in argument #1')
         self._output.clear()
@@ -134,12 +137,13 @@ class CommandLine:
                 self._output.show_item('meta_data_is_valid', 'True')
             else:
                 self._output.show_item('meta_data_is_valid', 'False')
+    """
 
     def balance(self, args):
         self._output.clear()
         ocean = self.open()
         filter_account_id = None
-        if len(args) > 0:
+        if args:
             account_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide a valid account id')
             filter_account_id = ocean.get_account_from_value(account_id)
         index_format = '{:10}'
@@ -148,19 +152,20 @@ class CommandLine:
 
         self._output.set_header('index', 'Index', '{:10}')
         self._output.set_header('account', 'Account', '{:44}')
-        self._output.set_header('tokens', 'Ocean Tokens',  '{:>20}')
+        self._output.set_header('tokens', 'Ocean Tokens', '{:>20}')
         self._output.set_header('ether', 'Ether', '{:>40}')
         self._output.show_header()
         index = 0
         for account_id, account in ocean.get_accounts().items():
-            if filter_account_id == None or account_id == filter_account_id:
-                self._output.set_item('index', str(index) )
-                self._output.set_item('account', account_id )
+            if filter_account_id or account_id == filter_account_id:
+                self._output.set_item('index', str(index))
+                self._output.set_item('account', account_id)
                 self._output.set_item('tokens', account.ocean_balance)
                 self._output.set_item('ether', account.ether_balance)
                 self._output.show_items()
             index = index + 1
 
+    """
     def list(self, args):
         self._output.clear()
         ocean = self.open()
@@ -225,7 +230,8 @@ class CommandLine:
                 self._output.set_item('asset_id', row['asset_id'])
                 self._output.set_item('meta_data', row['meta_data'])
                 self._output.show_items()
-
+    """
+    """
     # send these details to the market
     def setup(self, args):
         self._output.clear()
@@ -233,7 +239,8 @@ class CommandLine:
         self._output.show_item('Ethereum Node URL:', self._ethereum_url, '{:40}{:40}')
         self._output.show_item('Asset meta-storage service:', self._meta_storage_service, '{:40}{:40}')
         self._output.show_item('Asset provider service: ', self._asset_provider_service, '{:40}{:40}')
-
+    """
+    """
 
     def get(self, args):
         access_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT], 'You must provide an access id in argument #1')
@@ -242,13 +249,14 @@ class CommandLine:
         ocean = self.open()
         service = ocean.get_asset_provider_service(self._asset_provider_service)
         self._output.show_item('data', service.get_access_item(access_id, token))
-
-
+    """
+    """
     def payments(self, args):
         self._output.clear()
         ocean = self.open()
         print(ocean.get_payment_list())
-
+    """
+    """
     def service(self, args):
         service_address =  self._assert_arg_match(args, 0, [HEX_STRING_FORMAT,URL_STRING_FORMAT], 'You must provide an asset id in argument #1')
         self._output.clear()
@@ -265,11 +273,13 @@ class CommandLine:
         self._output.set_item('service_type', service.get_service_type() )
         self._output.set_item('endpoint', service.get_endpoint() )
         self._output.show_items()
-
+    """
+    """
     def get_output(self):
         return self._output
+    """
 
-    def _get_arg(self, args, index, default_value = None):
+    def _get_arg(self, args, index, default_value=None):
         if len(args) >= index + 1:
             return args[index]
         return default_value
