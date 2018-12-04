@@ -62,7 +62,7 @@ setup(
         'test': test_requirements,
         'dev': dev_requirements + test_requirements + docs_requirements,
     },
-    install_requires=requirements,
+    install_requires=install_requirements,
     license="Apache Software License 2.0",
     long_description=readme,
     long_description_content_type='text/x-rst',

@@ -6,9 +6,9 @@ import sys
 import traceback
 import re
 
-from ocean_plastic.command_line.console_output import ConsoleOutput
-from ocean_plastic.command_line.json_output import JSONOutput
-from ocean_plastic.exceptions import OceanCommandLineError
+from ocean_py.command_line.console_output import ConsoleOutput
+from ocean_py.command_line.json_output import JSONOutput
+from ocean_py.exceptions import OceanCommandLineError
 from squid_py.ocean.ocean import Ocean
 
 
