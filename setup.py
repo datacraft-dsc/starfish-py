@@ -13,7 +13,15 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
-install_requirements = ['squid-py', ]
+install_requirements = [
+    'squid-py', 
+    'coloredlogs',
+    'eciespy',
+    'pyopenssl',
+    'PyJWT',  # not jwt
+    'PyYAML',
+    'web3==4.5.0',
+]
 
 setup_requirements = ['pytest-runner', ]
 

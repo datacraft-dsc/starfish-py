@@ -12,7 +12,7 @@ services:
     - backend
 
   keeper-contracts:
-    image: oceanprotocol/keeper-contracts:v0.4.0
+    image: oceanprotocol/keeper-contracts:v0.5.0
     ports:
     - 8545:8545
     networks:
