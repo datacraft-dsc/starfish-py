@@ -2,14 +2,17 @@ language: python
 matrix:
   include:
     - python: 3.6
-    - python: 3.7
       dist: xenial
       sudo: true
-services:
-  - elasticsearch
+      
+      
+sudo: required
 
-before_script:
-  - sleep 15
+services:
+- docker
+
+before_install:
+- docker-compose -f docker/docker-compose.yml up -d
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -U tox-travis
@@ -25,5 +28,5 @@ deploy:
   password: ${PYPI_PASSWORD}
   on:
     tags: true
-    repo: oceanprotocol/oceandb-elasticsearch-driver
+    repo: oceanprotocol/ocean-py
     python: 3.6
