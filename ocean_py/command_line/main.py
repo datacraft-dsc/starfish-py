@@ -1,11 +1,7 @@
-import json
 import os
 import os.path
-import logging
-import sys
 import traceback
 import re
-
 from ocean_py.command_line.console_output import ConsoleOutput
 from ocean_py.command_line.json_output import JSONOutput
 from ocean_py.exceptions import OceanCommandLineError
@@ -55,7 +51,7 @@ class CommandLine:
         }
         self._output.clear()
         ocean = self.open()
-        owner_account = self._get_account_from_value(ocean.get_accounts(), account_id)
+        owner_account = _get_account_from_value(ocean.get_accounts(), account_id)
         if not owner_account:
             raise OceanCommandLineError('You can only pass an index number or the actual account number to use')
         service = ocean.get_meta_storage_service(self._meta_storage_service)
@@ -91,7 +87,7 @@ class CommandLine:
         self._output.clear()
         ocean = self.open()
 
-        owner_account = self._get_account_from_value(ocean.get_accounts(), account_id)
+        owner_account = _get_account_from_value(ocean.get_accounts(), account_id)
         if not owner_account:
             raise OceanCommandLineError('You can only pass an index number or the actual account number to use')
 
@@ -146,9 +142,9 @@ class CommandLine:
         if args:
             account_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide a valid account id')
             filter_account_id = ocean.get_account_from_value(account_id)
-        index_format = '{:10}'
-        account_format = '{:44}'
-        balance_format = '{:>20}{:>40}'
+        # index_format = '{:10}'
+        # account_format = '{:44}'
+        # balance_format = '{:>20}{:>40}'
 
         self._output.set_header('index', 'Index', '{:10}')
         self._output.set_header('account', 'Account', '{:44}')
@@ -278,12 +274,14 @@ class CommandLine:
     def get_output(self):
         return self._output
     """
-
+    
+    """
     def _get_arg(self, args, index, default_value=None):
         if len(args) >= index + 1:
             return args[index]
         return default_value
-
+    """
+    
     def _assert_arg_match(self, args, index, patterns, message):
         value = self._get_arg(args, index, None)
         if value:
@@ -298,7 +296,8 @@ class CommandLine:
             return value
         raise OceanCommandLineError(message)
 
-    def _get_account_from_value(self, accounts, value):
+    @staticmethod
+    def _get_account_from_value(accounts, value):
         result = None
 
         if re.match('^[0-9]$', value):

@@ -134,8 +134,6 @@ class Config(configparser.ConfigParser):
     @staticmethod
     def get_environ_help():
         result = []
-        for option_name, environ_item in ENVIRON_NAMES.items():
-            # codacy fix
-            assert option_name
-            result.append("{:20}{:40}".format(environ_item[0], environ_item[1]))
+        for environ_name in ENVIRON_NAMES:
+            result.append("{:20}{:40}".format(environ_name[0], environ_name[1]))
         return "\n".join(result)
