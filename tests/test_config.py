@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 
-    Tests for `ocean agent command line`.
+    Tests for `ocean-py config`.
 
 """
 import unittest
