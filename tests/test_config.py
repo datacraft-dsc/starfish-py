@@ -48,14 +48,16 @@ def test_config_load():
 
     config = Config(TEST_VALUES)
     assert(config)
+    # remove environ setting
+    del os.environ['CONTRACT_PATH']
 
 def test_config_generation_for_squid():
     # start off with the most basic info to connect to ocean using squid-py library
-    
+
     config = Config(
         {
             'ocean_url': 'http://localhost:8545',
-            'contract_path': './artifacts'
+            'contract_path': 'artifacts'
         }
     )
     assert(config)
@@ -63,4 +65,3 @@ def test_config_generation_for_squid():
     ocean = Ocean(config_file=squid_config_file)
     assert(ocean)
     logger.debug('squid temp config file {}'.format(squid_config_file))
-
