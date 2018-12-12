@@ -15,6 +15,7 @@ from pytest import (
 )
 
 from ocean_py.config import Config
+from squid_py.ocean.ocean import Ocean
 
 
 TEST_VALUES = {
@@ -38,15 +39,28 @@ def test_config_load():
     config = Config(contract_path = test_contract_path)
     assert(config)
     assert(config.contract_path == test_contract_path)
-    
+
     test_contract_path_env = 'test_contract_path_env'
-    
+
     os.environ['CONTRACT_PATH'] = test_contract_path_env
     config = Config()
     assert(config)
     assert(config.contract_path == test_contract_path_env)
-    
+
     config = Config(TEST_VALUES)
     assert(config)
-    
+
+def test_config_generation_for_squid():
+    # start off with the most basic info to connect to ocean using squid-py library
+    config = Config(
+        {
+            'ocean_url': 'http://localhost:8545',
+            'contract_path': './artifacts'
+        }
+    )
+    assert(config)
+    squid_config_file = config.generate_ocean_config_file()
+    ocean = Ocean(config_file=squid_config_file)
+    assert(ocean)
+    print(squid_config_file)
 

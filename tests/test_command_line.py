@@ -21,7 +21,7 @@ from ocean_py.command_line.test_output import TestOutput
 def test_command_line_balance():
 
     test_output = TestOutput()
-    command_line = CommandLine(config='config_local.ini', output = test_output)
+    command_line = CommandLine(output = test_output)
     ocean = command_line.open()
     args = []
     output = command_line.call('balance', args)
