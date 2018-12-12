@@ -1,31 +1,35 @@
-import yaml
+"""
+    Setup logging, this ideally must be called only once an the start of using
+    this library.
+
+"""
+
 import os
 import logging.config
 import logging
+import yaml
 import coloredlogs
 
 
-def setup_logging(level=logging.INFO, setup_file='logging.yaml', env_key='LOG_CFG'):
+def setup_logging(level=logging.INFO, filename='logging.yaml', env_key='LOG_CFG'):
     """
-    | **@author:** Prathyush SP
+    | **@author:** Prathyush SP, but hacked around by Bill
     | Logging Setup
     """
     value = os.getenv(env_key, None)
     if value:
-        setup_file = value
-    if os.path.exists(setup_file):
-        with open(setup_file, 'rt') as file_handle:
+        filename = value
+
+    # start basic logging
+    logging.basicConfig(level=level)
+    coloredlogs.install(level=level)
+
+    if os.path.exists(filename):
+        with open(filename, 'rt') as file_handle:
             try:
                 config = yaml.safe_load(file_handle.read())
                 logging.config.dictConfig(config)
-                coloredlogs.install()
-                logging.info("Logging configuration loaded from file: {}".format(path))
-            except Exception as e:
-                print(e)
-                print('Error in Logging Configuration. Using default configs')
-                logging.basicConfig(level=level)
-                coloredlogs.install(level=level)
-    else:
-        logging.basicConfig(level=level)
-        coloredlogs.install(level=level)
-        # print('Failed to load configuration file. Using default configs')
+                logging.info("Logging configuration loaded from file: {}".format(filename))
+            except yaml.YAMLError as error_exception:
+                print(error_exception)
+                logging.error('Failed to load logging configuration file {0}: {1}'.format(filename, error_exception))

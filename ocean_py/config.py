@@ -1,4 +1,5 @@
-"""Config data
+"""
+    Config Class to handle config data and config files
 
 """
 
@@ -7,8 +8,6 @@ import logging
 import os
 import re
 import tempfile
-import site
-
 
 from ocean_py import logger
 
@@ -35,8 +34,12 @@ gas_limit = 300000
 
 
 class Config(configparser.ConfigParser):
+    """ The config class """
 
     def __init__(self, filename=None, **kwargs):
+        """
+        Create a new config instance, using a config file, dictionary of values or argument list (kwargs)
+        """
         configparser.ConfigParser.__init__(self)
 
         logger.debug('seting up config')
@@ -60,12 +63,13 @@ class Config(configparser.ConfigParser):
         self._read_environ()
 
     def _read_environ(self):
+        """ Read the environment variables and replace them with the config values """
         defaults = configparser.ConfigParser()
         defaults.read_string(CONFIG_DEFAULT)
         for name, value in defaults.items(CONFIG_SECTION_NAME):
             value = os.environ.get(re.sub(r'[^\w]+', '_', name).upper())
             if value is not None:
-                # self._logger.debug('Config: setting environ %s = %s', option_name, value)
+                logger.debug('setting environ {0} = {1}'.format(name, value))
                 self.set(self._section_name, name, value)
 
     def generate_ocean_config_file(self):
@@ -74,8 +78,9 @@ class Config(configparser.ConfigParser):
             The config values must conform to the current version of squid-py
 
         """
-        squid= configparser.ConfigParser()
-        values = {'keeper-contracts': {
+        squid = configparser.ConfigParser()
+        values = {
+            'keeper-contracts': {
                 'keeper.url': self.ocean_url,
                 'keeper.path': self.contract_path,
                 'secret_store.url': self.secret_store_url,
@@ -89,7 +94,7 @@ class Config(configparser.ConfigParser):
         }
         squid.read_dict(values)
         logger.debug('squid config values {}'.format(values))
-        temp_handle = tempfile.mkstemp('_squid.conf', text=True) 
+        temp_handle = tempfile.mkstemp('_squid.conf', text=True)
         os.close(temp_handle[0])
         filename = temp_handle[1]
         with open(filename, 'w') as file_handle:
@@ -98,40 +103,50 @@ class Config(configparser.ConfigParser):
 
     @property
     def contract_path(self):
+        """return the contract path value"""
         return self.get(self._section_name, 'contract_path')
 
     @property
     def storage_path(self):
+        """ return the storage path"""
         return self.get(self._section_name, 'storage_path')
 
     @property
     def ocean_url(self):
+        """ return the ocean url or ethereum node url"""
         return self.get(self._section_name, 'ocean_url')
 
     @property
     def gas_limit(self):
+        """ return the gas limit """
         return int(self.get(self._section_name, 'gas_limit'))
 
     @property
     def aquarius_url(self):
+        """ return the aquarius server URL """
         return self.get(self._section_name, 'aquarius_url')
 
     @property
     def brizo_url(self):
+        """ return the URL of the brizo server """
         return self.get(self._section_name, 'brizo_url')
 
     @property
     def secret_store_url(self):
+        """ return the secret store URL """
         return self.get(self._section_name, 'secret_store_url')
 
     @property
     def parity_url(self):
+        """ return the parity URL """
         return self.get(self._section_name, 'parity_url')
 
     @property
     def parity_address(self):
+        """ return the parity address """
         return self.get(self._section_name, 'parity_address')
 
     @property
     def parity_password(self):
+        """ return the parity password """
         return self.get(self._section_name, 'parity_password')
