@@ -53,14 +53,6 @@ Python 3.6
 
     It runs an Aquarius node and an Ethereum RPC client. For details, read `docker-compose.yml`.
 
-1. Create local configuration file
-
-    ```
-    cp config.ini config_local.ini
-    ```
-
-   `config_local.ini` is used by unit tests.
-
 1. Copy keeper artifacts
 
     A bash script is available to copy keeper artifacts into this file directly from a running docker image. This script needs to run in the root of the project.

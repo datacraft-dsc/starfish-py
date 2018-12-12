@@ -4,6 +4,7 @@ import traceback
 import re
 from ocean_py.command_line.console_output import ConsoleOutput
 from ocean_py.command_line.json_output import JSONOutput
+from ocean_py.config import Config
 from ocean_py.exceptions import OceanCommandLineError
 from squid_py.ocean.ocean import Ocean
 
@@ -14,15 +15,23 @@ URL_STRING_FORMAT = '^http.*'
 
 class CommandLine:
     def __init__(self, **kwargs):
+
+        # load the config via file or via arguments
         self._config_file = kwargs.get('config_file', None)
+        if self._config_file:
+            self._config = Config(self._config_file)
+        else:
+            self._config = Config(**kwargs)
+
         self._output = kwargs.get('output', None)
         if self._output is None:
             if kwargs.get('is_json', False):
                 self._output = JSONOutput()
             else:
                 self._output = ConsoleOutput()
+
     def open(self):
-        ocean = Ocean(config_file=self._config_file)
+        ocean = Ocean(config_file=self._config.generate_ocean_config_file())
         return ocean
 
     def call(self, command, args):

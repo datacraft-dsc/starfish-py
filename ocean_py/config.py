@@ -1,139 +1,152 @@
-"""Config data
+"""
+    Config Class to handle config data and config files
 
 """
 
 import configparser
 import logging
 import os
-import site
+import re
+import tempfile
 
+from ocean_py import logger
 
-DEFAULT_KEEPER_HOST = 'localhost'
-DEFAULT_KEEPER_PORT = 8545
-DEFAULT_KEEPER_URL = 'http://localhost:8545'
-DEFAULT_KEEPER_PATH = 'artifacts'
-DEFAULT_GAS_LIMIT = 300000
-DEFAULT_NAME_AQUARIUS_URL = 'http://localhost:5000'
-DEFAULT_STORAGE_PATH = 'squid_py.db'
+CONFIG_SECTION_NAME = 'ocean-py'
 
-NAME_KEEPER_URL = 'keeper.url'
-NAME_KEEPER_PATH = 'keeper.path'
-NAME_GAS_LIMIT = 'gas_limit'
-NAME_AQUARIUS_URL = 'aquarius.url'
-NAME_STORAGE_PATH = 'storage.path'
+CONFIG_DEFAULT = """
+[ocean-py]
+ocean_url = http://localhost:8545
+contract_path = artifacts
 
-NAME_SECRET_STORE_URL = 'secret_store.url'
-NAME_PARITY_URL = 'parity.url'
-NAME_PARITY_ADDRESS = 'parity.address'
-NAME_PARITY_PASSWORD = 'parity.password'
+secret_store_url = http://localhost:8010
+parity_url = http://localhost:9545
+parity_address = 0x594d9f933f4f2df6bb66bb34e7ff9d27acc1c019
+parity_password = password
 
-ENVIRON_NAMES = {
-    NAME_KEEPER_URL: ['KEEPER_URL', 'Keeper URL'],
-    NAME_KEEPER_PATH: ['KEEPER_PATH', 'Path to the keeper contracts'],
-    NAME_GAS_LIMIT: ['GAS_LIMIT', 'Gas limit'],
-    NAME_AQUARIUS_URL: ['AQUARIUS_URL', 'Aquarius URL'],
-    NAME_STORAGE_PATH: ['STORAGE_PATH', 'Path to the local database file'],
-    NAME_SECRET_STORE_URL: ['SECRET_STORE_URL', 'Secret Store URL'],
-    NAME_PARITY_URL: ['PARITY_URL', 'Parity URL'],
-    NAME_PARITY_ADDRESS: ['PARITY_ADDRESS', 'Parity address'],
-    NAME_PARITY_PASSWORD: ['PARITY_PASSWORD', 'Parity password'],
-}
+aquarius_url = http://localhost:5000
+brizo_url = http://localhost:8030
 
-CONFIG_DEFAULTS = {
-    'keeper-contracts': {
-        NAME_KEEPER_URL: DEFAULT_KEEPER_URL,
-        NAME_KEEPER_PATH: DEFAULT_KEEPER_PATH,
-        NAME_GAS_LIMIT: DEFAULT_GAS_LIMIT,
-        NAME_AQUARIUS_URL: DEFAULT_NAME_AQUARIUS_URL,
-        NAME_STORAGE_PATH: DEFAULT_STORAGE_PATH,
-        NAME_SECRET_STORE_URL: '',
-        NAME_PARITY_URL: '',
-        NAME_PARITY_ADDRESS: '',
-        NAME_PARITY_PASSWORD: '',
-    }
-}
+storage_path = squid_py.db
+
+gas_limit = 300000
+
+"""
 
 
 class Config(configparser.ConfigParser):
+    """ The config class """
 
     def __init__(self, filename=None, **kwargs):
+        """
+        Create a new config instance, using a config file, dictionary of values or argument list (kwargs)
+        """
         configparser.ConfigParser.__init__(self)
 
-        self.read_dict(CONFIG_DEFAULTS)
-        self._section_name = 'keeper-contracts'
-        self._logger = kwargs.get('logger', logging.getLogger(__name__))
-        self._logger.debug('Config: loading config file %s', filename)
+        logger.debug('seting up config')
+        self.read_string(CONFIG_DEFAULT)
+        self._section_name = CONFIG_SECTION_NAME
 
         if filename:
-            with open(filename) as file_handle:
-                text = file_handle.read()
-                self.read_string(text)
-        else:
-            if 'text' in kwargs:
-                self.read_string(kwargs['text'])
-        self._load_environ()
+            if isinstance(filename, str):
+                logging.debug('loading config file {}'.format(filename))
+                with open(filename) as file_handle:
+                    text = file_handle.read()
+                    self.read_string(text)
+            elif isinstance(filename, dict):
+                kwargs = filename
+            else:
+                raise TypeError('Invalid type of data passed, can only be a filename or a dict of values')
+        values = {}
+        values[self._section_name] = kwargs
+        logger.debug('loading values {}'.format(kwargs))
+        self.read_dict(values)
+        self._read_environ()
 
-    def _load_environ(self):
-        for option_name, environ_item in ENVIRON_NAMES.items():
-            value = os.environ.get(environ_item[0])
+    def _read_environ(self):
+        """ Read the environment variables and replace them with the config values """
+        defaults = configparser.ConfigParser()
+        defaults.read_string(CONFIG_DEFAULT)
+        for name, value in defaults.items(CONFIG_SECTION_NAME):
+            value = os.environ.get(re.sub(r'[^\w]+', '_', name).upper())
             if value is not None:
-                self._logger.debug('Config: setting environ %s = %s', option_name, value)
-                self.set(self._section_name, option_name, value)
-
-    def set_arguments(self, items):
-        for name, value in items.items():
-            if value is not None:
-                self._logger.debug('Config: setting argument %s = %s', name, value)
+                logger.debug('setting environ {0} = {1}'.format(name, value))
                 self.set(self._section_name, name, value)
 
+    def generate_ocean_config_file(self):
+        """
+            For compatibility generate a temporary config file, and pass back the filename.
+            The config values must conform to the current version of squid-py
+
+        """
+        squid = configparser.ConfigParser()
+        values = {
+            'keeper-contracts': {
+                'keeper.url': self.ocean_url,
+                'keeper.path': self.contract_path,
+                'secret_store.url': self.secret_store_url,
+                'parity.url': self.parity_url,
+                'parity.address': self.parity_address,
+                'parity.password':  self.parity_password,
+                'aquarius.url': self.aquarius_url,
+                'brizo.url': self.brizo_url,
+                'storage.path': self.storage_path,
+            }
+        }
+        squid.read_dict(values)
+        logger.debug('squid config values {}'.format(values))
+        temp_handle = tempfile.mkstemp('_squid.conf', text=True)
+        os.close(temp_handle[0])
+        filename = temp_handle[1]
+        with open(filename, 'w') as file_handle:
+            squid.write(file_handle)
+        return filename
+
     @property
-    def keeper_path(self):
-        path = self.get(self._section_name, NAME_KEEPER_PATH)
-        if os.path.exists(path):
-            pass
-        elif os.getenv('VIRTUAL_ENV'):
-            path = os.path.join(os.getenv('VIRTUAL_ENV'), 'artifacts')
-        else:
-            path = os.path.join(site.PREFIXES[0], 'artifacts')
-        return path
+    def contract_path(self):
+        """return the contract path value"""
+        return self.get(self._section_name, 'contract_path')
 
     @property
     def storage_path(self):
-        return self.get(self._section_name, NAME_STORAGE_PATH)
+        """ return the storage path"""
+        return self.get(self._section_name, 'storage_path')
 
     @property
-    def keeper_url(self):
-        return self.get(self._section_name, NAME_KEEPER_URL)
+    def ocean_url(self):
+        """ return the ocean url or ethereum node url"""
+        return self.get(self._section_name, 'ocean_url')
 
     @property
     def gas_limit(self):
-        return int(self.get(self._section_name, NAME_GAS_LIMIT))
+        """ return the gas limit """
+        return int(self.get(self._section_name, 'gas_limit'))
 
     @property
     def aquarius_url(self):
-        return self.get(self._section_name, NAME_AQUARIUS_URL)
+        """ return the aquarius server URL """
+        return self.get(self._section_name, 'aquarius_url')
+
+    @property
+    def brizo_url(self):
+        """ return the URL of the brizo server """
+        return self.get(self._section_name, 'brizo_url')
 
     @property
     def secret_store_url(self):
-        return self.get(self._section_name, NAME_SECRET_STORE_URL)
+        """ return the secret store URL """
+        return self.get(self._section_name, 'secret_store_url')
 
     @property
     def parity_url(self):
-        return self.get(self._section_name, NAME_PARITY_URL)
+        """ return the parity URL """
+        return self.get(self._section_name, 'parity_url')
 
     @property
     def parity_address(self):
-        return self.get(self._section_name, NAME_PARITY_ADDRESS)
+        """ return the parity address """
+        return self.get(self._section_name, 'parity_address')
 
     @property
     def parity_password(self):
-        return self.get(self._section_name, NAME_PARITY_PASSWORD)
-
-    # static methods
-
-    @staticmethod
-    def get_environ_help():
-        result = []
-        for environ_name in ENVIRON_NAMES:
-            result.append("{:20}{:40}".format(environ_name[0], environ_name[1]))
-        return "\n".join(result)
+        """ return the parity password """
+        return self.get(self._section_name, 'parity_password')

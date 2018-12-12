@@ -1,10 +1,12 @@
-# Exceptions for squid-py
+"""
+
+    Exceptions for ocean-py
+
+"""
 
 
-# Raised when an invalid address is passed to the contract loader
 class OceanInvalidContractAddress(Exception):
-    pass
+    """  Raised when an invalid address is passed to the contract loader """
 
-# raised on command line errors
 class OceanCommandLineError(Exception):
-    pass
+    """ raised on command line errors """
