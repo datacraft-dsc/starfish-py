@@ -7,10 +7,10 @@
 
 Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 
-[![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-elasticsearch-driver)
-[![Codacy coverage](https://img.shields.io/codacy/coverage/de067a9402c64b989c76b27cfc74fefe.svg)](https://app.codacy.com/project/ocean-protocol/oceandb-elasticsearch-driver/dashboard)
-[![PyPI](https://img.shields.io/pypi/v/oceandb-elasticsearch-driver.svg)](https://pypi.org/project/oceandb-elasticsearch-driver/)
-[![GitHub contributors](https://img.shields.io/github/contributors/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://github.com/oceanprotocol/oceandb-elasticsearch-driver/graphs/contributors)
+[![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/oceandb-elasticsearch-driver.svg)](https://travis-ci.com/oceanprotocol/oceandb-py)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/236520e0c2c94106b29d43731a599d22)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oceanprotocol/ocean-py&amp;utm_campaign=Badge_Grade)
+[![PyPI](https://img.shields.io/pypi/v/ocean-py.svg)](https://pypi.org/project/ocean-py/)
+[![GitHub contributors](https://img.shields.io/github/contributors/oceanprotocol/ocean-py.svg)](https://github.com/oceanprotocol/ocean-py/graphs/contributors)
 
 ---
 
