@@ -9,12 +9,15 @@ import re
 import tempfile
 import site
 
+
+from ocean_py import logger
+
 CONFIG_SECTION_NAME = 'ocean-py'
 
 CONFIG_DEFAULT = """
 [ocean-py]
 ocean_url = http://localhost:8545
-contract_path = ./artifacts
+contract_path = artifacts
 
 secret_store_url = http://localhost:8010
 parity_url = http://localhost:9545
@@ -36,11 +39,13 @@ class Config(configparser.ConfigParser):
     def __init__(self, filename=None, **kwargs):
         configparser.ConfigParser.__init__(self)
 
+        logger.debug('seting up config')
         self.read_string(CONFIG_DEFAULT)
         self._section_name = CONFIG_SECTION_NAME
 
         if filename:
             if isinstance(filename, str):
+                logging.debug('loading config file {}'.format(filename))
                 with open(filename) as file_handle:
                     text = file_handle.read()
                     self.read_string(text)
@@ -50,6 +55,7 @@ class Config(configparser.ConfigParser):
                 raise TypeError('Invalid type of data passed, can only be a filename or a dict of values')
         values = {}
         values[self._section_name] = kwargs
+        logger.debug('loading values {}'.format(kwargs))
         self.read_dict(values)
         self._read_environ()
 
@@ -82,6 +88,7 @@ class Config(configparser.ConfigParser):
             }
         }
         squid.read_dict(values)
+        logger.debug('squid config values {}'.format(values))
         temp_handle = tempfile.mkstemp('_squid.conf', text=True) 
         os.close(temp_handle[0])
         filename = temp_handle[1]

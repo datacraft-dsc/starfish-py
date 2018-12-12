@@ -16,7 +16,10 @@ from pytest import (
 
 from ocean_py.config import Config
 from squid_py.ocean.ocean import Ocean
+from ocean_py.logging import setup_logging
+from ocean_py import logger
 
+setup_logging(level=logging.DEBUG)
 
 TEST_VALUES = {
 
@@ -52,6 +55,7 @@ def test_config_load():
 
 def test_config_generation_for_squid():
     # start off with the most basic info to connect to ocean using squid-py library
+    
     config = Config(
         {
             'ocean_url': 'http://localhost:8545',
@@ -60,7 +64,7 @@ def test_config_generation_for_squid():
     )
     assert(config)
     squid_config_file = config.generate_ocean_config_file()
-    ocean = Ocean(config_file=squid_config_file)
-    assert(ocean)
-    print(squid_config_file)
+    # ocean = Ocean(config_file=squid_config_file)
+    # assert(ocean)
+    logger.debug('squid temp config file {}'.format(squid_config_file))
 
