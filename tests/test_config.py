@@ -20,6 +20,8 @@ from ocean_py.logging import setup_logging
 from ocean_py import logger
 
 setup_logging(level=logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("web3").setLevel(logging.WARNING)
 
 TEST_VALUES = {
 
