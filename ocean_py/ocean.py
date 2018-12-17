@@ -34,7 +34,7 @@ class Ocean():
 
         # With the interface loaded, the Keeper node is connected with all contracts
         self._keeper = Keeper(self._web3, self._config.contract_path)
-        
+
         self._agents = {}
 
 
@@ -46,7 +46,7 @@ class Ocean():
             raise ValueError('You must provide an agent object to assign')
         self._agents[agent.did] = agent
         return agent.did
-        
+
 
     def register_asset(self, metadata, did=None, agent=None):
         """
@@ -55,15 +55,15 @@ class Ocean():
         :param did: did of the meta storage agent
         :return The new asset registered, or return None on error
         """
-        
+
         if agent is None:
             # no agent so we need to see if it's assigned
             agent = self.get_agent(did)
-        
+
         if agent is None:
             raise ValueError('Please provide a agent object or a did of an assigned agent')
-            
-            
+
+
         asset = Asset(self)
         if asset.register(metadata, agent):
             return asset
@@ -72,16 +72,16 @@ class Ocean():
 
     def get_agent(self, did):
         # no agent so we need to see if it's assigned
-        agent = self._agents[did]        
+        agent = self._agents[did]
         return agent
-        
+
     def get_asset(self, did, agent = None):
-        
+
         """
         :param: did: DID of the asset and agent combined.
-        :param: agent: agent object to return meta data info for the asset, 
+        :param: agent: agent object to return meta data info for the asset,
         if None then the agent can be assigned earlier with this library.
-        
+
         :return a registered asset given a DID of the asset"""
         asset = Asset(self, did)
         if not asset.is_empty:

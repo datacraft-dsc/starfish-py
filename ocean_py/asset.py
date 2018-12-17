@@ -2,6 +2,7 @@
     Asset class to hold Ocean asset information such as asset id and metadata
 """
 import json
+import re
 from web3 import Web3
 
 from ocean_py.metadata_agent import MetadataAgent
@@ -9,6 +10,7 @@ from squid_py.did import (
     did_parse,
     id_to_did,
 )
+from ocean_py import logger
 
 class Asset():
     def __init__(self, ocean, did=None):
@@ -26,7 +28,7 @@ class Asset():
             data = did_parse(did)
             if data['id_hex'] and data['path']:
                 self._agent_did = id_to_did(data['id_hex'])
-                self._id = Web3.toHex(hexstr=data['path'])
+                self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
 
     def register(self, metadata, agent = None):
         """
@@ -34,13 +36,13 @@ class Asset():
         :param metadata: dict of the metadata
         :param agent: agent object for perform meta stroage, if None then look up the agent's DID
         in the ocean agent memory storage
-        
+
         :return The new asset registered, or return None on error
         """
 
         if agent is None:
             agent = self._ocean.get_agent(self._agent_did)
-            
+
         metadata_text = json.dumps(metadata)
         asset_id = Asset._get_asset_id_from_metadata(metadata_text)
         if asset_id and agent:
@@ -63,6 +65,8 @@ class Asset():
         if Asset.is_metadata_valid(self._id, metadata_text):
             self._metadata_text = metadata_text
             return self.metadata
+        else:
+            logger.warning('asset {} metadata is not valid'.format(self._id))
         return None
 
     @property
@@ -105,6 +109,8 @@ class Asset():
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
             metadata_id = Asset._get_asset_id_from_metadata(metadata_text)
+            if metadata_id != asset_id:
+                logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
             print(metadata_id == asset_id)
             return metadata_id == asset_id
         return False
