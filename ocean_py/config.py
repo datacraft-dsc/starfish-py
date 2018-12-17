@@ -15,7 +15,7 @@ CONFIG_SECTION_NAME = 'ocean-py'
 
 CONFIG_DEFAULT = """
 [ocean-py]
-ocean_url = http://localhost:8545
+keeper_url = http://localhost:8545
 contract_path = artifacts
 
 secret_store_url = http://localhost:8010
@@ -42,9 +42,9 @@ class Config(configparser.ConfigParser):
         """
         configparser.ConfigParser.__init__(self)
 
-        logger.debug('seting up config')
         self.read_string(CONFIG_DEFAULT)
         self._section_name = CONFIG_SECTION_NAME
+        values = {}
 
         if filename:
             if isinstance(filename, str):
@@ -52,14 +52,27 @@ class Config(configparser.ConfigParser):
                 with open(filename) as file_handle:
                     text = file_handle.read()
                     self.read_string(text)
+                    values[self._section_name] = kwargs
             elif isinstance(filename, dict):
-                kwargs = filename
+                logger.debug('loading config from a dict')
+                values[self._section_name] = filename
+            elif isinstance(filename, Config):
+                logger.debug('loading config from another config object')
+                for section_name in filename.items():
+                    values[section_name[0]] = {}
+                    for name, value in filename.items(section_name[0]):
+                        values[section_name[0]][name] = value
             else:
                 raise TypeError('Invalid type of data passed, can only be a filename or a dict of values')
-        values = {}
-        values[self._section_name] = kwargs
-        logger.debug('loading values {}'.format(kwargs))
-        self.read_dict(values)
+        else:
+            if kwargs:
+                logger.debug('loading config from a kwargs')
+                values[self._section_name] = kwargs
+
+        if values:
+            logger.debug('loading values {}'.format(kwargs))
+            self.read_dict(values)
+            
         self._read_environ()
 
     def _read_environ(self):
@@ -72,7 +85,8 @@ class Config(configparser.ConfigParser):
                 logger.debug('setting environ {0} = {1}'.format(name, value))
                 self.set(self._section_name, name, value)
 
-    def generate_ocean_config_file(self):
+    @property
+    def as_squid_file(self):
         """
             For compatibility generate a temporary config file, and pass back the filename.
             The config values must conform to the current version of squid-py
@@ -81,7 +95,7 @@ class Config(configparser.ConfigParser):
         squid = configparser.ConfigParser()
         values = {
             'keeper-contracts': {
-                'keeper.url': self.ocean_url,
+                'keeper.url': self.keeper_url,
                 'keeper.path': self.contract_path,
                 'secret_store.url': self.secret_store_url,
                 'parity.url': self.parity_url,
@@ -102,6 +116,22 @@ class Config(configparser.ConfigParser):
         return filename
 
     @property
+    def as_squid_dict(self):
+        return {
+            'keeper-contracts': {
+                'keeper.url': self.keeper_url,
+                'keeper.path': self.contract_path,
+                'secret_store.url': self.secret_store_url,
+                'parity.url': self.parity_url,
+                'parity.address': self.parity_address,
+                'parity.password':  self.parity_password,
+                'aquarius.url': self.aquarius_url,
+                'brizo.url': self.brizo_url,
+                'storage.path': self.storage_path,
+            }
+        }
+        
+    @property
     def contract_path(self):
         """return the contract path value"""
         return self.get(self._section_name, 'contract_path')
@@ -112,9 +142,9 @@ class Config(configparser.ConfigParser):
         return self.get(self._section_name, 'storage_path')
 
     @property
-    def ocean_url(self):
+    def keeper_url(self):
         """ return the ocean url or ethereum node url"""
-        return self.get(self._section_name, 'ocean_url')
+        return self.get(self._section_name, 'keeper_url')
 
     @property
     def gas_limit(self):
@@ -150,3 +180,4 @@ class Config(configparser.ConfigParser):
     def parity_password(self):
         """ return the parity password """
         return self.get(self._section_name, 'parity_password')
+
