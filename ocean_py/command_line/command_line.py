@@ -31,7 +31,7 @@ class CommandLine:
                 self._output = ConsoleOutput()
 
     def open(self):
-        ocean = Ocean(config_file=self._config.generate_ocean_config_file())
+        ocean = Ocean(config_file=self._config.as_squid_file)
         return ocean
 
     def call(self, command, args):
