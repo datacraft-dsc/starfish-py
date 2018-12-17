@@ -45,10 +45,10 @@ def test_ocean_instance():
 
     # now assign it to ocean lib for later use
     agent_did = ocean.assign_agent(agent)
-    
+
     # test getting the agent from a DID
     agent = ocean.get_agent(agent_did)
-    
+
     assert agent
     assert not agent.is_empty
 
@@ -61,10 +61,15 @@ def test_ocean_instance():
     assert metadata
 
     # test registering an asset
-    asset = ocean.register_asset(metadata['base'], agent.did)
+    asset = ocean.register_asset(metadata['base'], did=agent_did)
     assert asset
 
+    # test registering an asset
+    asset = ocean.register_asset(metadata['base'], agent=agent)
+    assert asset
+
+
+    asset_did = asset.did
     # start to test getting the asset from storage
-    asset_did = "{0}/{1}".format(agent.did, asset.asset_id)
     asset = ocean.get_asset(asset_did)
     assert asset

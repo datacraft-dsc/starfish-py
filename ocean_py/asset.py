@@ -111,7 +111,6 @@ class Asset():
             metadata_id = Asset._get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
-            print(metadata_id == asset_id)
             return metadata_id == asset_id
         return False
 
