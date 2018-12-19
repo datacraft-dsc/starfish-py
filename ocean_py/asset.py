@@ -5,7 +5,8 @@ import json
 import re
 from web3 import Web3
 
-from ocean_py.metadata_agent import MetadataAgent
+from ocean_py.agents.metadata_agent import MetadataAgent
+from ocean_py.agents.squid_agent import SquidAgent
 from squid_py.did import (
     did_parse,
     id_to_did,
@@ -30,18 +31,17 @@ class Asset():
                 self._agent_did = id_to_did(data['id_hex'])
                 self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
 
-    def register(self, metadata, agent = None):
+    def register(self, metadata, agent, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata
-        :param agent: agent object for perform meta stroage, if None then look up the agent's DID
+        :param agent: agent object for perform meta stroage
+        :param **kwargs: list of args that need to be passed to the agent object
+        to do the asset registration
         in the ocean agent memory storage
 
         :return The new asset registered, or return None on error
         """
-
-        if agent is None:
-            agent = self._ocean.get_agent(self._agent_did)
 
         metadata_text = json.dumps(metadata)
         asset_id = Asset._get_asset_id_from_metadata(metadata_text)

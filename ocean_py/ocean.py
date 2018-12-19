@@ -11,7 +11,7 @@ from web3 import (
 
 from ocean_py.config import Config
 from ocean_py.asset import Asset
-from ocean_py.agent import Agent
+from ocean_py.agents.agent import Agent
 from ocean_py.config import Config
 from ocean_py import logger
 
@@ -48,30 +48,32 @@ class Ocean():
         return agent.did
 
 
-    def register_asset(self, metadata, did=None, agent=None):
+    def register_asset(self, metadata, agent, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata
-        :param did: did of the meta storage agent
+        :param agent: agent object or agent did if the assign_agent was used
         :return The new asset registered, or return None on error
         """
 
-        if agent is None:
-            # no agent so we need to see if it's assigned
-            agent = self.get_agent(did)
+        if isinstance(agent, str):
+            # no agent object so we need to see if it's assigned
+            agent = self.get_agent(agent)
 
         if agent is None:
             raise ValueError('Please provide a agent object or a did of an assigned agent')
 
 
         asset = Asset(self)
-        if asset.register(metadata, agent):
+        if asset.register(metadata, agent, **kwargs):
             return asset
         return None
 
 
     def get_agent(self, did):
-        # no agent so we need to see if it's assigned
+        """ returns an agent object from a did or agent
+        :param did: did of the agent stored locally
+        """
         agent = self._agents[did]
         return agent
 

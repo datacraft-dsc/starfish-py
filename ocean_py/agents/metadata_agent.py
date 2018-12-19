@@ -5,7 +5,7 @@ import json
 import re
 import requests
 
-from ocean_py.agent import Agent
+from ocean_py.agents.agent import Agent
 from ocean_py import logger
 
 
