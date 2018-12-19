@@ -18,7 +18,11 @@ class SquidAgent(Agent):
         self._did = SQUID_AGENT_DID
 
     def register(self, url, account, did=None):
-        """ Squid agent does not need to register on the block chain, 
+        """ Squid agent does not need to register on the block chain,
         the asset is registered instead
         """
         return None
+    def register_asset(self, metadata, **kwargs):
+        if 'account' in kwags and 'services' in kwargs:
+            result = self._ocean.squid.register(metadata, kwargs['account'], kwargs['services'])
+            print(result)

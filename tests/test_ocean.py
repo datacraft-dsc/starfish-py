@@ -111,5 +111,5 @@ def test_ocean_squid_agent():
     asset_price = 100
     service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price, '/purchaseEndpoint', '/serviceEndpoint', 600, ('0x%s' % generate_new_id()))]
 
-    asset = ocean.register_asset(metadata['base'], agent_did, publisher_account, service_descriptors)
+    asset = ocean.register_asset(metadata['base'], agent_did, account=publisher_account, services=service_descriptors)
     assert asset

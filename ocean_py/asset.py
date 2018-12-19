@@ -43,15 +43,7 @@ class Asset():
         :return The new asset registered, or return None on error
         """
 
-        metadata_text = json.dumps(metadata)
-        asset_id = Asset._get_asset_id_from_metadata(metadata_text)
-        if asset_id and agent:
-            if agent.is_valid:
-                if agent.save(asset_id, metadata_text):
-                    self._id = asset_id
-                    self._agent_did = agent.did
-                    self._metadata_text = metadata_text
-                    return True
+        asset_data = agent.register_asset(metadata, **kwargs)
         return None
 
     def read_metadata(self, agent = None):
@@ -113,13 +105,3 @@ class Asset():
                 logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
             return metadata_id == asset_id
         return False
-
-    @staticmethod
-    def _get_asset_id_from_metadata(metadata_text):
-        """
-        return the asset_id calculated from the metadata
-        :param metadata: dict of metadata to hash
-        a 64 char hex string, which is the asset id
-        :return 64 char hex string, with no leading '0x'
-        """
-        return Web3.toHex(Web3.sha3(metadata_text.encode()))[2:]

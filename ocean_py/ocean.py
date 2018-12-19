@@ -110,3 +110,7 @@ class Ocean():
     @property
     def agents(self):
         return self._agents
+
+    @property
+    def squid(self):
+        return self._squid_ocean
