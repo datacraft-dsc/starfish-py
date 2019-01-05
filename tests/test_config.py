@@ -61,7 +61,7 @@ def test_config_generation_for_squid():
         }
     )
     assert(config)
-    squid_config_file = config.generate_ocean_config_file()
+    squid_config_file = config.as_squid_file
     ocean = Ocean(config_file=squid_config_file)
     assert(ocean)
     logger.debug('squid temp config file {}'.format(squid_config_file))

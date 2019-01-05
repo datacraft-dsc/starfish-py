@@ -24,13 +24,15 @@ class Asset():
         self._id = None
         self._metadata_text = None
         self._agent_did = None
+        self._asset_data = None
         if did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
             data = did_parse(did)
+            print(data)
             if data['id_hex'] and data['path']:
                 self._agent_did = id_to_did(data['id_hex'])
                 self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
-
+        
     def register(self, metadata, agent, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
@@ -42,24 +44,27 @@ class Asset():
 
         :return The new asset registered, or return None on error
         """
+        
+        self._asset_data = agent.register_asset(metadata, **kwargs)
+        if self._asset_data:
+            # assign the did of the agent that we registered this with
+            self._agent_did = agent.did
+            self._id = self._asset_data['asset_id']
 
-        asset_data = agent.register_asset(metadata, **kwargs)
-        return None
+        return self._asset_data
 
-    def read_metadata(self, agent = None):
+    def read(self, agent = None):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
 
         if agent is None:
             agent = self._ocean.get_agent(self._agent_did)
 
-        metadata_text = agent.read(self._id)
-        # only return the valid metadata
-        if Asset.is_metadata_valid(self._id, metadata_text):
-            self._metadata_text = metadata_text
-            return self.metadata
-        else:
-            logger.warning('asset {} metadata is not valid'.format(self._id))
-        return None
+        self._asset_data = agent.read_asset(self._id)
+        if self._asset_data:
+            # assign the did of the agent that we registered this with
+            self._agent_did = agent.did
+            # self._id = self._asset_data['asset_id']        
+        return self._asset_data
 
     @property
     def asset_id(self):
@@ -85,23 +90,7 @@ class Asset():
     @property
     def did(self):
         """return the DID of the asset"""
-        if not self.is_empty:
+        if self._agent_did:
             return self._agent_did + '/' + self._id
         return None
 
-    @staticmethod
-    def is_metadata_valid(asset_id, metadata_text):
-        """
-        validate metadata, by calcualating the hash (asset_id) and compare this to the
-        given asset_id, if both are equal then the metadata is valid
-        :param asset_id: asset id to compare with
-        :param metadata: dict of metadata to calculate the hash ( asset_id)
-        :return bool True if metadata is valid for the asset_id provided
-        """
-        if metadata_text:
-            # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = Asset._get_asset_id_from_metadata(metadata_text)
-            if metadata_id != asset_id:
-                logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
-            return metadata_id == asset_id
-        return False

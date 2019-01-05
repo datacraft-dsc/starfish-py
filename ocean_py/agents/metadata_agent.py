@@ -4,6 +4,8 @@
 import json
 import re
 import requests
+from web3 import Web3
+
 
 from ocean_py.agents.agent import Agent
 from ocean_py import logger
@@ -29,17 +31,17 @@ class MetadataAgent(Agent):
     def register_asset(self, metadata, **kwargs):
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = MetadataAgent._get_asset_id_from_metadata(metadata_text)
-        if self._save(asset_id, metadata_text):
+        asset_id = self._get_asset_id_from_metadata(metadata_text)
+        if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
-                'did': '{0}/{1}'.format(agent.did, asset_id),
+                'did': '{0}/{1}'.format(self._did, asset_id),
                 'metadata_text': metadata_text,
             }
         return result
 
 
-    def _saveMetadat(self, asset_id, metadata_text):
+    def save(self, asset_id, metadata_text):
         """save metadata to the agent server, using the asset_id and metadata"""
         endpoint = self._get_endpoint(METADATA_AGENT_ENDPOINT_NAME)
         if endpoint:
@@ -52,21 +54,43 @@ class MetadataAgent(Agent):
                 logger.warning('metadata asset read {0} response returned {1}'. format(asset_id, response))
         return None
 
-    def _readMetadata(self, asset_id):
+    def read_asset(self, asset_id):
         """read the metadata from a service agent using the asset_id"""
+        result = None
         endpoint = self._get_endpoint(METADATA_AGENT_ENDPOINT_NAME)
         if endpoint:
             url = endpoint + METADATA_BASE_URI + '/' + asset_id
             logger.debug('metadata read url {}'.format(url))
             response = requests.get(url, headers=self._headers)
             if response.status_code == requests.codes.ok:
-                return response.content.decode('utf-8')
+                result = {
+                    'asset_id': asset_id,
+                    'did': '{0}/{1}'.format(self._did, asset_id),
+                    'metadata_text': response.content.decode('utf-8')
+                }
             else:
                 logger.warning('metadata asset read {0} response returned {1}'. format(asset_id, response))
-        return None
+        return result
 
-    @staticmethod
-    def _get_asset_id_from_metadata(metadata_text):
+
+    def is_metadata_valid(self, asset_id, metadata_text):
+        """
+        validate metadata, by calcualating the hash (asset_id) and compare this to the
+        given asset_id, if both are equal then the metadata is valid
+        :param asset_id: asset id to compare with
+        :param metadata: dict of metadata to calculate the hash ( asset_id)
+        :return bool True if metadata is valid for the asset_id provided
+        """
+        if metadata_text:
+            # the calc asset_id from the metadata should be same as this asset_id
+            metadata_id = self._get_asset_id_from_metadata(metadata_text)
+            if metadata_id != asset_id:
+                logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
+            return metadata_id == asset_id
+        return False
+        
+
+    def _get_asset_id_from_metadata(self, metadata_text):
         """
         return the asset_id calculated from the metadata
         :param metadata: dict of metadata to hash

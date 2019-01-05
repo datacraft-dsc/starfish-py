@@ -27,7 +27,7 @@ class Ocean():
         """init the basic OceanClient for the connection and contract info"""
         self._config = Config(*args, **kwargs)
         # self._squid_ocean = SquidOcean(config_dict=self._config.as_squid_dict) - not ready yet in release
-        self._squid_ocean = SquidOcean(config_file=self._config.as_squid_file)
+        self._squid_ocean = SquidOcean(config_dict=self._config.as_squid_dict)
 
         # For development, we use the HTTPProvider Web3 interface
         self._web3 = Web3(HTTPProvider(self._config.keeper_url))
@@ -87,7 +87,7 @@ class Ocean():
         :return a registered asset given a DID of the asset"""
         asset = Asset(self, did)
         if not asset.is_empty:
-            if asset.read_metadata(agent):
+            if asset.read(agent):
                 return asset
         return None
 

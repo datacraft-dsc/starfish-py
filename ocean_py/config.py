@@ -20,13 +20,14 @@ contract_path = artifacts
 
 secret_store_url = http://localhost:8010
 parity_url = http://localhost:9545
-parity_address = 0x594d9f933f4f2df6bb66bb34e7ff9d27acc1c019
-parity_password = password
+parity_address = 0x00bd138abd70e2f00903268f3db08f2d25677c9e
+parity_password = node0
 
 aquarius_url = http://localhost:5000
 brizo_url = http://localhost:8030
 
 storage_path = squid_py.db
+download_path = consume_downloads
 
 gas_limit = 300000
 
@@ -93,19 +94,7 @@ class Config(configparser.ConfigParser):
 
         """
         squid = configparser.ConfigParser()
-        values = {
-            'keeper-contracts': {
-                'keeper.url': self.keeper_url,
-                'keeper.path': self.contract_path,
-                'secret_store.url': self.secret_store_url,
-                'parity.url': self.parity_url,
-                'parity.address': self.parity_address,
-                'parity.password':  self.parity_password,
-                'aquarius.url': self.aquarius_url,
-                'brizo.url': self.brizo_url,
-                'storage.path': self.storage_path,
-            }
-        }
+        values = self.as_squid_dict
         squid.read_dict(values)
         logger.debug('squid config values {}'.format(values))
         temp_handle = tempfile.mkstemp('_squid.conf', text=True)
@@ -125,9 +114,12 @@ class Config(configparser.ConfigParser):
                 'parity.url': self.parity_url,
                 'parity.address': self.parity_address,
                 'parity.password':  self.parity_password,
+            },
+            'resources': {
                 'aquarius.url': self.aquarius_url,
                 'brizo.url': self.brizo_url,
                 'storage.path': self.storage_path,
+                'downloads.path': self.download_path,
             }
         }
         
@@ -140,6 +132,11 @@ class Config(configparser.ConfigParser):
     def storage_path(self):
         """ return the storage path"""
         return self.get(self._section_name, 'storage_path')
+
+    @property
+    def download_path(self):
+        """ return the download path"""
+        return self.get(self._section_name, 'download_path')
 
     @property
     def keeper_url(self):
