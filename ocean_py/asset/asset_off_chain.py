@@ -5,34 +5,33 @@ import json
 import re
 from web3 import Web3
 
+from ocean_py.asset.asset_base import AssetBase
 from ocean_py.agents.metadata_agent import MetadataAgent
-from ocean_py.agents.squid_agent import SquidAgent
 from squid_py.did import (
     did_parse,
     id_to_did,
 )
 from ocean_py import logger
 
-class Asset():
+class AssetOffChain(AssetBase:
     def __init__(self, ocean, did=None):
         """
         init an asset class with the following:
         :param ocean: ocean object to use to connect to the ocean network
         :param did: Optional did of the asset
         """
-        self._ocean = ocean
-        self._id = None
+        super().__init__(ocean, did)
         self._metadata_text = None
         self._agent_did = None
         self._asset_data = None
-        if did:
+        if self._did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
-            data = did_parse(did)
+            data = did_parse(self._did)
             print(data)
             if data['id_hex'] and data['path']:
                 self._agent_did = id_to_did(data['id_hex'])
                 self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
-        
+
     def register(self, metadata, agent, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
@@ -44,7 +43,8 @@ class Asset():
 
         :return The new asset registered, or return None on error
         """
-        
+
+        agent = MetadataAgent(ocean, auth=METADATA_STORAGE_AUTH)
         self._asset_data = agent.register_asset(metadata, **kwargs)
         if self._asset_data:
             # assign the did of the agent that we registered this with
@@ -63,7 +63,7 @@ class Asset():
         if self._asset_data:
             # assign the did of the agent that we registered this with
             self._agent_did = agent.did
-            # self._id = self._asset_data['asset_id']        
+            # self._id = self._asset_data['asset_id']
         return self._asset_data
 
     @property
@@ -93,4 +93,3 @@ class Asset():
         if self._agent_did:
             return self._agent_did + '/' + self._id
         return None
-

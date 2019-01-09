@@ -29,6 +29,9 @@ brizo_url = http://localhost:8030
 storage_path = squid_py.db
 download_path = consume_downloads
 
+metadata_storage_url = http://localhost:8080
+metadata_storage_authorization = 
+
 gas_limit = 300000
 
 """
@@ -73,7 +76,7 @@ class Config(configparser.ConfigParser):
         if values:
             logger.debug('loading values {}'.format(kwargs))
             self.read_dict(values)
-            
+
         self._read_environ()
 
     def _read_environ(self):
@@ -122,7 +125,7 @@ class Config(configparser.ConfigParser):
                 'downloads.path': self.download_path,
             }
         }
-        
+
     @property
     def contract_path(self):
         """return the contract path value"""
@@ -177,4 +180,3 @@ class Config(configparser.ConfigParser):
     def parity_password(self):
         """ return the parity password """
         return self.get(self._section_name, 'parity_password')
-

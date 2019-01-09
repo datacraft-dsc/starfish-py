@@ -34,27 +34,16 @@ CONFIG_PARMS = {
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
-def test_ocean_squid_agent():
+def test_asset_on_chain():
     # create an ocean object
     ocean = Ocean(CONFIG_PARMS)
     assert ocean
     assert ocean.keeper
     assert ocean.web3
     assert ocean.accounts
-    
+
     # test node has the account #1 unlocked
     publisher_account = ocean.accounts[list(ocean.accounts)[1]]
-
-    agent = SquidAgent(ocean)
-
-    # now assign it to ocean lib for later use
-    agent_did = ocean.assign_agent(agent)
-
-    # test getting the agent from a DID
-    agent = ocean.get_agent(agent_did)
-
-    assert agent
-    assert not agent.is_empty
 
     # load in the sample metadata
     assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
@@ -67,11 +56,10 @@ def test_ocean_squid_agent():
     asset_price = 100
     #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
 
-    asset = ocean.register_asset(metadata, agent_did, account=publisher_account, price=asset_price)
+    asset = ocean.register_asset(metadata, account=publisher_account, price=asset_price)
     assert asset
-    
+
     asset_did = asset.did
     # start to test getting the asset from storage
     asset = ocean.get_asset(asset_did)
     assert asset
-

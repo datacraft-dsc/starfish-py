@@ -30,30 +30,24 @@ METADATA_STORAGE_AUTH = 'QWxhZGRpbjpPcGVuU2VzYW1l'
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
 
-def test_ocean_metadata_agent():
+def test_asset_off_chain():
     # create an ocean object
-    ocean = Ocean( keeper_url=KEEPER_URL, contract_path=CONTRACTS_PATH)
+    ocean = Ocean( keeper_url=KEEPER_URL, contract_path=CONTRACTS_PATH, metadata_storage_authorization=METADATA_STORAGE_AUTH)
     assert ocean
     assert ocean.keeper
     assert ocean.web3
     assert ocean.accounts
-    
+
     # in testing only account #1 is left unlocked
     agent_account = ocean.accounts[list(ocean.accounts)[1]]
 
-    agent = MetadataAgent(ocean, auth=METADATA_STORAGE_AUTH)
+    agent = MetadataAgent(ocean)
     # test register a new metadata storage agent
-    password = agent.register(METADATA_STORAGE_URL, agent_account)
+    password = agent.register(agent_account)
     assert agent
     assert password
     assert agent.did
     assert agent.ddo
-
-    # now assign it to ocean lib for later use
-    agent_did = ocean.assign_agent(agent)
-
-    # test getting the agent from a DID
-    agent = ocean.get_agent(agent_did)
 
     assert agent
     assert not agent.is_empty
@@ -71,7 +65,7 @@ def test_ocean_metadata_agent():
     # assert asset
 
     # test registering an asset using an agent object
-    asset = ocean.register_asset(metadata['base'], agent)
+    asset = ocean.register_asset(metadata['base'], agent_did)
     assert asset
 
 
@@ -79,4 +73,3 @@ def test_ocean_metadata_agent():
     # start to test getting the asset from storage
     asset = ocean.get_asset(asset_did)
     assert asset
-
