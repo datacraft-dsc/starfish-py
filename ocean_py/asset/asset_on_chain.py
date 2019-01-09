@@ -22,7 +22,7 @@ class AssetOnChain(AssetBase):
         :param ocean: ocean object to use to connect to the ocean network
         :param did: Optional did of the asset
         """
-        super().__init__(ocean, did)
+        AssetBase.__init__(self, ocean, did)
         self._ddo = None
 
         if self._did:

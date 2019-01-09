@@ -20,7 +20,7 @@ class AssetOffChain(AssetBase:
         :param ocean: ocean object to use to connect to the ocean network
         :param did: Optional did of the asset
         """
-        super().__init__(ocean, did)
+        AssetBase.__init__(self, ocean, did)
         self._metadata_text = None
         self._agent_did = None
         self._asset_data = None
