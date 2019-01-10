@@ -18,7 +18,7 @@ class Agent():
         if self._did:
             self._ddo = self._resolve_did_to_ddo(self._did)
 
-    def register(self, name, endpoint, account, did=None):
+    def register_url(self, name, endpoint, account, did=None):
         """
         Register this agent on the block chain
         :param did: DID of the agent to register
@@ -52,9 +52,6 @@ class Agent():
         # register/update the did->ddo to the block chain
         return self._ocean.keeper.didregistry.register(did, ddo=ddo, account=account)
 
-    def set_header(self, name, value):
-        self._headers[name] = value
-        
     @property
     def ddo(self):
         """return the DDO stored for this agent"""
@@ -75,7 +72,7 @@ class Agent():
         """return True if this agent has a valid ddo"""
         return self._ddo and self._ddo.is_valid
 
-        
+
     def _resolve_did_to_ddo(self, did):
         """resolve a DID to a given DDO, return the DDO if found"""
         did_resolver = DIDResolver(self._ocean.web3, self._ocean.keeper.didregistry)

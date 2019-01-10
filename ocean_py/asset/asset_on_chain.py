@@ -1,17 +1,16 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
-import json
 import re
-from web3 import Web3
 
 from squid_py.did import (
     did_parse,
-    id_to_did,
     did_to_id,
 )
 
+# next version of squid...
 # from squid_py.brizo.brizo import Brizo
+
 from squid_py import (
     get_purchase_endpoint,
     get_service_endpoint,
@@ -20,7 +19,7 @@ from squid_py import (
 )
 from ocean_py.asset.asset_base import AssetBase
 
-from ocean_py import logger
+# from ocean_py import logger
 
 
 class AssetOnChain(AssetBase):
@@ -31,12 +30,11 @@ class AssetOnChain(AssetBase):
         :param did: Optional did of the asset
         """
         AssetBase.__init__(self, ocean, did)
-        self._ddo = None
 
         if self._did:
             self._id = did_to_id(did)
 
-    def register(self, metadata, account, service=None, price=None, timeout=900):
+    def register(self, metadata, **kwargs):
         """
         Register on chain asset
         :param metadata: dict of the metadata
@@ -48,7 +46,11 @@ class AssetOnChain(AssetBase):
         :return The new asset metadata ( ddo)
         """
 
-        result = None
+        account = kwargs.get('account')
+        service = kwargs.get('service')
+        price = kwargs.get('price')
+        timeout = kwargs.get('timeout', 900)
+
         if not account:
             raise ValueError('you must provide an account number to register the asset')
 
@@ -66,31 +68,28 @@ class AssetOnChain(AssetBase):
                 ACCESS_SERVICE_TEMPLATE_ID
             )]
         ddo = self._ocean.squid.register_asset(metadata, account, service)
-        self._ddo = None
+        self._metadata = None
         if ddo:
             self._id = re.sub(r'^0[xX]', '', did_to_id(ddo.did))
             self._did = ddo.did
-            self._ddo = ddo
+            self._metadata = ddo
 
 
-        return self._ddo
+        return self._metadata
 
     def read(self):
         """read the asset metadata (DDO) from the block chain, if not found return None"""
-        result = None
-        self._ddo = self._ocean.squid.resolve_did(self._did)
-        return self._ddo
+        self._metadata = self._ocean.squid.resolve_did(self._did)
+        return self._metadata
 
-    @property
-    def metadata(self):
-        return self._ddo
 
     @property
     def is_empty(self):
+        """ return true if the asset is empty"""
         return self._id is None
 
     @staticmethod
     def is_did_valid(did):
+        """ return true if the DID is in the format 'did:op:xxxxx' """
         data = did_parse(did)
-        return data['path'] == None
-
+        return data['path'] is None

@@ -1,15 +1,9 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
-import json
-import re
-from web3 import Web3
 
-from squid_py.did import (
-    did_parse,
-    id_to_did,
-)
-from ocean_py import logger
+
+# from ocean_py import logger
 
 class AssetBase():
     def __init__(self, ocean, did=None):
@@ -19,42 +13,17 @@ class AssetBase():
         """
         self._ocean = ocean
         self._id = None
+        self._metadata = None
         self._did = did
-        self._agent = None
-        
+
 
     def register(self, metadata, **kwargs):
-        """
-        Register an asset by writing it's meta data to the meta storage agent
-        :param metadata: dict of the metadata
-        :param agent: agent object for perform meta stroage
-        :param **kwargs: list of args that need to be passed to the agent object
-        to do the asset registration
-        in the ocean agent memory storage
+        """ abstract method to register an asset"""
+        return None
 
-        :return The new asset registered, or return None on error
-        """
-
-        self._asset_data = agent.register_asset(metadata, **kwargs)
-        if self._asset_data:
-            # assign the did of the agent that we registered this with
-            self._agent_did = agent.did
-            self._id = self._asset_data['asset_id']
-
-        return self._asset_data
-
-    def read(self, agent = None):
-        """read the asset metadata from an Ocean Agent, using the agents DID"""
-
-        if agent is None:
-            agent = self._ocean.get_agent(self._agent_did)
-
-        self._asset_data = agent.read_asset(self._id)
-        if self._asset_data:
-            # assign the did of the agent that we registered this with
-            self._agent_did = agent.did
-            # self._id = self._asset_data['asset_id']
-        return self._asset_data
+    def read(self):
+        """ abstract method to read an asset """
+        return None
 
     @property
     def asset_id(self):
@@ -63,10 +32,12 @@ class AssetBase():
 
     @property
     def metadata(self):
-        return None
+        """ return the core metadata"""
+        return self._metadata
 
     @property
     def is_empty(self):
+        """ return true if empty asset """
         return self._id is None
 
     @property
@@ -76,4 +47,5 @@ class AssetBase():
 
     @staticmethod
     def is_did_valid(did):
+        """ return true if the did is valid for this asset type"""
         return False

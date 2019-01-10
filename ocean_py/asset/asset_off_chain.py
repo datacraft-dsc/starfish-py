@@ -1,17 +1,16 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
-import json
 import re
 from web3 import Web3
 
-from ocean_py.asset.asset_base import AssetBase
-from ocean_py.agents.metadata_agent import MetadataAgent
 from squid_py.did import (
     did_parse,
     id_to_did,
 )
-from ocean_py import logger
+
+from ocean_py.asset.asset_base import AssetBase
+# from ocean_py import logger
 
 class AssetOffChain(AssetBase):
     def __init__(self, ocean, did=None, agent=None, **kwargs):
@@ -21,10 +20,10 @@ class AssetOffChain(AssetBase):
         :param did: Optional did of the asset
         """
         AssetBase.__init__(self, ocean, did)
-        
+
         if agent:
             self._agent = agent
-            
+
         if self._did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
             data = did_parse(self._did)
@@ -80,4 +79,3 @@ class AssetOffChain(AssetBase):
     def is_did_valid(did):
         data = did_parse(did)
         return data['id_hex'] and data['path']
-

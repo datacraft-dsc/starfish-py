@@ -50,7 +50,7 @@ class Ocean():
             raise ValueError('You must provide a did or an agent object to add too the library')
         return agent
 
-    def register_asset_on_chain(self, metadata, account, service=None, price=None, timeout=900):
+    def register_asset_on_chain(self, metadata, **kwargs):
         """
         Register an on chain asset
         :param metadata: dict of the metadata
@@ -58,7 +58,7 @@ class Ocean():
         """
 
         asset = AssetOnChain(self)
-        if asset.register(metadata, account, service, price):
+        if asset.register(metadata, **kwargs):
             return asset
         return None
 

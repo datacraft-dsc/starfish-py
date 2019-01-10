@@ -2,7 +2,6 @@
     MetadataAgent - Agent to read/write and list metadata on the Ocean network
 """
 import json
-import re
 import requests
 from web3 import Web3
 
@@ -26,12 +25,23 @@ class MetadataAgent(Agent):
             self._headers['Authorization'] = 'Basic {}'.format(kwargs['authorization'])
 
     def register(self, url, account, did=None):
-        return super(MetadataAgent, self).register( METADATA_AGENT_ENDPOINT_NAME, url, account, did)
+        """
+        Register an agent on the block chain, returns the DID used to register
+        :param url: of the agent
+        :param account: Ethereum account used to spend gas for the registration process
+        :para did: opitional DID to use to update, instead of add
+        """
+        return super(MetadataAgent, self).register_url(METADATA_AGENT_ENDPOINT_NAME, url, account, did)
 
     def register_asset(self, metadata, **kwargs):
+        """
+        Register an asset with the agent storage server
+        :param metadata: metadata to write to the storage server
+
+        """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = self._get_asset_id_from_metadata(metadata_text)
+        asset_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
         if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
@@ -48,10 +58,9 @@ class MetadataAgent(Agent):
             url = endpoint + METADATA_BASE_URI + '/' + asset_id
             logger.debug('metadata save url {}'.format(url))
             response = requests.put(url, data=metadata_text, headers=self._headers)
-            if response.status_code == requests.codes.ok:
+            if response and response.status_code == requests.codes.ok:
                 return asset_id
-            else:
-                logger.warning('metadata asset read {0} response returned {1}'. format(asset_id, response))
+            logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
         return None
 
     def read_asset(self, asset_id):
@@ -62,14 +71,14 @@ class MetadataAgent(Agent):
             url = endpoint + METADATA_BASE_URI + '/' + asset_id
             logger.debug('metadata read url {}'.format(url))
             response = requests.get(url, headers=self._headers)
-            if response.status_code == requests.codes.ok:
+            if response and response.status_code == requests.codes.ok:
                 result = {
                     'asset_id': asset_id,
                     'did': '{0}/{1}'.format(self._did, asset_id),
                     'metadata_text': response.content.decode('utf-8')
                 }
             else:
-                logger.warning('metadata asset read {0} response returned {1}'. format(asset_id, response))
+                logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
         return result
 
 
@@ -83,14 +92,15 @@ class MetadataAgent(Agent):
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = self._get_asset_id_from_metadata(metadata_text)
+            metadata_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
             return metadata_id == asset_id
         return False
-        
 
-    def _get_asset_id_from_metadata(self, metadata_text):
+
+    @staticmethod
+    def get_asset_id_from_metadata(metadata_text):
         """
         return the asset_id calculated from the metadata
         :param metadata: dict of metadata to hash
