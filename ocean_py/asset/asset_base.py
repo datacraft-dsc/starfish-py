@@ -5,8 +5,6 @@ import json
 import re
 from web3 import Web3
 
-from ocean_py.agents.metadata_agent import MetadataAgent
-from ocean_py.agents.squid_agent import SquidAgent
 from squid_py.did import (
     did_parse,
     id_to_did,
@@ -68,11 +66,6 @@ class AssetBase():
     @property
     def is_empty(self):
         return self._id is None
-
-    @property
-    def agent_did(self):
-        """DID of the metadata agent for this asset"""
-        return self._agent_did
 
     @property
     def did(self):

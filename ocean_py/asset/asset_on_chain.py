@@ -5,14 +5,12 @@ import json
 import re
 from web3 import Web3
 
-from ocean_py.asset.asset_base import AssetBase
-from ocean_py.agents.metadata_agent import MetadataAgent
-from ocean_py.agents.squid_agent import SquidAgent
 from squid_py.did import (
     did_parse,
     id_to_did,
     did_to_id,
 )
+
 # from squid_py.brizo.brizo import Brizo
 from squid_py import (
     get_purchase_endpoint,
@@ -20,6 +18,7 @@ from squid_py import (
     ServiceDescriptor,
     ACCESS_SERVICE_TEMPLATE_ID,
 )
+from ocean_py.asset.asset_base import AssetBase
 
 from ocean_py import logger
 
@@ -37,16 +36,16 @@ class AssetOnChain(AssetBase):
         if self._did:
             self._id = did_to_id(did)
 
-    def register(self, metadata, account, service=None, price=None, timeout = 900):
+    def register(self, metadata, account, service=None, price=None, timeout=900):
         """
-        Register an asset by writing it's meta data to the meta storage agent
+        Register on chain asset
         :param metadata: dict of the metadata
-        :param agent: agent object for perform meta stroage
-        :param **kwargs: list of args that need to be passed to the agent object
-        to do the asset registration
-        in the ocean agent memory storage
+        :param account: account to use to register this asset
+        :param service: if provided use the service from a ServiceDiscpitor
+        :param price: If no service provided set the asset price
+        :param timout: timeout in seconds to register the service
 
-        :return The new asset registered, or return None on error
+        :return The new asset metadata ( ddo)
         """
 
         result = None
@@ -77,7 +76,7 @@ class AssetOnChain(AssetBase):
         return self._ddo
 
     def read(self):
-        """read the asset metadata from an Ocean Agent, using the agents DID"""
+        """read the asset metadata (DDO) from the block chain, if not found return None"""
         result = None
         self._ddo = self._ocean.squid.resolve_did(self._did)
         return self._ddo

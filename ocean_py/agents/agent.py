@@ -52,12 +52,6 @@ class Agent():
         # register/update the did->ddo to the block chain
         return self._ocean.keeper.didregistry.register(did, ddo=ddo, account=account)
 
-    def read_asset(self, asset_id):
-        return None
-        
-    def is_metadata_valid(self, asset_id, metadata_text):
-        return False
-
     @property
     def ddo(self):
         """return the DDO stored for this agent"""

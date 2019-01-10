@@ -8,9 +8,6 @@ import json
 import logging
 
 from ocean_py.ocean import Ocean
-from ocean_py.agents.metadata_agent import MetadataAgent
-from ocean_py.agents.squid_agent import SquidAgent
-
 from ocean_py.logging import setup_logging
 from ocean_py import logger
 

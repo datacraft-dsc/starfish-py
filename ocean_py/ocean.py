@@ -37,7 +37,7 @@ class Ocean():
 
     def register_asset_on_chain(self, metadata, account, service=None, price=None, timeout=900):
         """
-        Register an asset by writing it's meta data to the meta storage agent
+        Register an on chain asset
         :param metadata: dict of the metadata
         :return The new asset registered, or return None on error
         """
