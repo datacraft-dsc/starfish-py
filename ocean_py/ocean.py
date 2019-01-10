@@ -36,12 +36,20 @@ class Ocean():
         self._squid_ocean = SquidOcean(config_dict=self._config.as_squid_dict)
         # For development, we use the HTTPProvider Web3 interface
         self._web3 = Web3(HTTPProvider(self._config.keeper_url))
-        
+
         self._agent = None
         if self._config.agent_store_did:
             self._agent = self.resolve_agent(self._config.agent_store_did, authorization=self._config.agent_store_auth)
 
     def resolve_agent(self, agent_did, **kwargs):
+        """
+        Resolve an agent did or agent object
+        :param agent_did: obect or string of the agent or DID of the agent
+        :param kwargs: optional args to pass to the agent
+        
+        :return: return the agent object that has been resolved, or None if no 
+        agent found for a DID.
+        """
         if isinstance(agent_did, str):
             agent = MetadataAgent(self, did=agent_did, **kwargs)
         elif isinstance(agent_did, Agent):
@@ -63,32 +71,31 @@ class Ocean():
         return None
 
     def register_asset_off_chain(self, metadata, **kwargs):
+        """
+        Register an asset on the off chain system using an metadata storage agent
+        :return: the asset that has been registered
+        """
         if not self._agent:
             raise ValueError('Please set the "agent_store_did" setting when starting the Ocean library')
-            
+
         asset = AssetOffChain(self, agent=self._agent)
         if asset.register(metadata, **kwargs):
             return asset
         return None
-        
-    def get_asset(self, did):
 
+    def get_asset(self, did):
         """
         :param: did: DID of the asset and agent combined.
-        :param: agent: agent object to return meta data info for the asset,
-        if None then the agent can be assigned earlier with this library.
-
-        :return a registered asset given a DID of the asset"""
-        
+        :return a registered asset given a DID of the asset
+        """
         if AssetOnChain.is_did_valid(did):
             asset = AssetOnChain(self, did)
         elif AssetOffChain.is_did_valid(did):
             if not self._agent:
                 raise ValueError('Please set the "agent_store_did" setting when starting the Ocean library')
             asset = AssetOffChain(self, did, agent=self._agent)
-                
-        
-        
+
+
         if not asset.is_empty:
             if asset.read():
                 return asset
@@ -112,4 +119,5 @@ class Ocean():
 
     @property
     def squid(self):
+        """return squid ocean library"""
         return self._squid_ocean
