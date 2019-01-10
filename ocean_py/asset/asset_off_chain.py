@@ -14,25 +14,27 @@ from squid_py.did import (
 from ocean_py import logger
 
 class AssetOffChain(AssetBase):
-    def __init__(self, ocean, did=None):
+    def __init__(self, ocean, did=None, agent=None, **kwargs):
         """
         init an asset class with the following:
         :param ocean: ocean object to use to connect to the ocean network
         :param did: Optional did of the asset
         """
         AssetBase.__init__(self, ocean, did)
-        self._metadata_text = None
-        self._agent_did = None
-        self._asset_data = None
+        
+        if agent:
+            self._agent = agent
+            
         if self._did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
             data = did_parse(self._did)
-            print(data)
             if data['id_hex'] and data['path']:
-                self._agent_did = id_to_did(data['id_hex'])
+                agent_did = id_to_did(data['id_hex'])
+                if not self._agent:
+                    self._agent = ocean.resolve_agent(agent_did, **kwargs)
                 self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
 
-    def register(self, metadata, agent, **kwargs):
+    def register(self, metadata, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata
@@ -44,55 +46,35 @@ class AssetOffChain(AssetBase):
         :return The new asset registered, or return None on error
         """
 
-        agent = MetadataAgent(ocean, auth=METADATA_STORAGE_AUTH)
-        self._asset_data = agent.register_asset(metadata, **kwargs)
-        if self._asset_data:
+        self._metadata = None
+        asset_data = self._agent.register_asset(metadata, **kwargs)
+        if asset_data:
             # assign the did of the agent that we registered this with
-            self._agent_did = agent.did
-            self._id = self._asset_data['asset_id']
+            self._id = asset_data['asset_id']
+            self._did = '{0}/{1}'.format(self._agent.did, self._id)
+            self._metadata = metadata
 
-        return self._asset_data
+        return self._metadata
 
-    def read(self, agent = None):
+    def read(self):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
 
-        if agent is None:
-            agent = self._ocean.get_agent(self._agent_did)
-
-        self._asset_data = agent.read_asset(self._id)
-        if self._asset_data:
+        asset_data = self._agent.read_asset(self._id)
+        if asset_data:
             # assign the did of the agent that we registered this with
-            self._agent_did = agent.did
-            # self._id = self._asset_data['asset_id']
-        return self._asset_data
+            self._id = asset_data['asset_id']
+            self._metadata = asset_data['metadata_text']
+        return self._metadata
 
-    @property
-    def asset_id(self):
-        """return the asset id"""
-        return self._id
-
-    @property
-    def metadata(self):
-        """return the associated metadata for this assset"""
-        if self._metadata_text:
-            return json.loads(self._metadata_text)
-        return None
 
     @property
     def is_empty(self):
-        return self._id is None or self._agent_did is None
+        return self._id is None or self._agent is None
 
     @property
-    def agent_did(self):
+    def agent(self):
         """DID of the metadata agent for this asset"""
-        return self._agent_did
-
-    @property
-    def did(self):
-        """return the DID of the asset"""
-        if self._agent_did:
-            return self._agent_did + '/' + self._id
-        return None
+        return self._agent
 
     @staticmethod
     def is_did_valid(did):

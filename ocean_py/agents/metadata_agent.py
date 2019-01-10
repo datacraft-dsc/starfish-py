@@ -22,8 +22,8 @@ class MetadataAgent(Agent):
         Agent.__init__(self, ocean, **kwargs)
 
         self._headers = {'content-type': 'application/json'}
-        if kwargs.get('auth', None):
-            self._headers['Authorization'] = 'Basic {}'.format(kwargs.get('auth'))
+        if 'authorization' in kwargs and kwargs['authorization']:
+            self._headers['Authorization'] = 'Basic {}'.format(kwargs['authorization'])
 
     def register(self, url, account, did=None):
         return super(MetadataAgent, self).register( METADATA_AGENT_ENDPOINT_NAME, url, account, did)

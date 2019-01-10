@@ -20,8 +20,10 @@ class AssetBase():
         self._ocean = ocean
         self._id = None
         self._did = did
+        self._agent = None
+        
 
-    def register(self, metadata, agent, **kwargs):
+    def register(self, metadata, **kwargs):
         """
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata

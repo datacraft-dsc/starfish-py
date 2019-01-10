@@ -52,6 +52,9 @@ class Agent():
         # register/update the did->ddo to the block chain
         return self._ocean.keeper.didregistry.register(did, ddo=ddo, account=account)
 
+    def set_header(self, name, value):
+        self._headers[name] = value
+        
     @property
     def ddo(self):
         """return the DDO stored for this agent"""
