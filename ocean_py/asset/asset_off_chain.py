@@ -13,7 +13,7 @@ from squid_py.did import (
 )
 from ocean_py import logger
 
-class AssetOffChain(AssetBase:
+class AssetOffChain(AssetBase):
     def __init__(self, ocean, did=None):
         """
         init an asset class with the following:
@@ -93,3 +93,9 @@ class AssetOffChain(AssetBase:
         if self._agent_did:
             return self._agent_did + '/' + self._id
         return None
+
+    @staticmethod
+    def is_did_valid(did):
+        data = did_parse(did)
+        return data['id_hex'] and data['path']
+

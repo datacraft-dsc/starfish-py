@@ -78,3 +78,7 @@ class AssetBase():
     def did(self):
         """return the DID of the asset"""
         return self._did
+
+    @staticmethod
+    def is_did_valid(did):
+        return False

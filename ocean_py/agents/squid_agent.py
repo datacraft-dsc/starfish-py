@@ -10,14 +10,11 @@ from ocean_py import logger
 from squid_py import (
     ServiceDescriptor,
     ACCESS_SERVICE_TEMPLATE_ID,
-    get_service_endpoint,
-    get_purchase_endpoint
 )
 from squid_py.did import (
     did_to_id,
-    id_to_did
+    id_to_did,
 )
-
 
 
 SQUID_AGENT_DID = 'did:op:squid-agent'
@@ -44,8 +41,8 @@ class SquidAgent(Agent):
             if not 'price' in kwargs:
                 raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
             timeout = kwargs.get('timeout', 900)
-            purchase_endpoint = get_purchase_endpoint(self._ocean.squid.config)
-            service_endpoint = get_service_endpoint(self._ocean.squid.config)
+            purchase_endpoint = Brizo.get_purchase_endpoint(self._ocean.squid.config)
+            service_endpoint = Brizo.get_service_endpoint(self._ocean.squid.config)
             service = [ServiceDescriptor.access_service_descriptor(
                 kwargs['price'],
                 purchase_endpoint,

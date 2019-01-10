@@ -13,7 +13,16 @@ from squid_py.did import (
     id_to_did,
     did_to_id,
 )
+# from squid_py.brizo.brizo import Brizo
+from squid_py import (
+    get_purchase_endpoint,
+    get_service_endpoint,
+    ServiceDescriptor,
+    ACCESS_SERVICE_TEMPLATE_ID,
+)
+
 from ocean_py import logger
+
 
 class AssetOnChain(AssetBase):
     def __init__(self, ocean, did=None):
@@ -28,7 +37,7 @@ class AssetOnChain(AssetBase):
         if self._did:
             self._id = did_to_id(did)
 
-    def register(self, metadata, **kwargs):
+    def register(self, metadata, account, service=None, price=None, timeout = 900):
         """
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata
@@ -41,24 +50,24 @@ class AssetOnChain(AssetBase):
         """
 
         result = None
-        if not 'account' in kwargs:
+        if not account:
             raise ValueError('you must provide an account number to register the asset')
 
-        service  = kwargs.get('service')
         if not service:
-            if not 'price' in kwargs:
+            if not price:
                 raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
-            timeout = kwargs.get('timeout', 900)
+            timeout = timeout
             purchase_endpoint = get_purchase_endpoint(self._ocean.squid.config)
             service_endpoint = get_service_endpoint(self._ocean.squid.config)
             service = [ServiceDescriptor.access_service_descriptor(
-                kwargs['price'],
+                price,
                 purchase_endpoint,
                 service_endpoint,
                 timeout,
                 ACCESS_SERVICE_TEMPLATE_ID
             )]
-        ddo = self._ocean.squid.register_asset(metadata, kwargs['account'], service)
+        ddo = self._ocean.squid.register_asset(metadata, account, service)
+        self._ddo = None
         if ddo:
             self._id = re.sub(r'^0[xX]', '', did_to_id(ddo.did))
             self._did = ddo.did
@@ -67,7 +76,7 @@ class AssetOnChain(AssetBase):
 
         return self._ddo
 
-    def read(self, agent = None):
+    def read(self):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
         result = None
         self._ddo = self._ocean.squid.resolve_did(self._did)
@@ -79,4 +88,10 @@ class AssetOnChain(AssetBase):
 
     @property
     def is_empty(self):
-        return self._id is None or self._ddo is None
+        return self._id is None
+
+    @staticmethod
+    def is_did_valid(did):
+        data = did_parse(did)
+        return data['path'] == None
+
