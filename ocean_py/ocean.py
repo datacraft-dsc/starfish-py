@@ -2,8 +2,6 @@
     Basic Ocean class to allow for registration and obtaining assets and agents
 
 """
-import secrets
-
 from web3 import (
     Web3,
     HTTPProvider
@@ -13,13 +11,11 @@ from ocean_py.asset.asset_on_chain import AssetOnChain
 from ocean_py.asset.asset_off_chain import AssetOffChain
 from ocean_py.config import Config as OceanConfig
 from ocean_py.agents.metadata_agent import MetadataAgent
-from ocean_py import logger
 
-
-from squid_py.did import id_to_did
 from squid_py.ocean.ocean import Ocean as SquidOcean
-# from squid_py.config import Config
 
+# from squid_py.config import Config
+# from ocean_py import logger
 
 class Ocean():
 

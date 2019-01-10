@@ -82,7 +82,8 @@ class MetadataAgent(Agent):
         return result
 
 
-    def is_metadata_valid(self, asset_id, metadata_text):
+    @staticmethod
+    def is_metadata_valid(asset_id, metadata_text):
         """
         validate metadata, by calcualating the hash (asset_id) and compare this to the
         given asset_id, if both are equal then the metadata is valid
