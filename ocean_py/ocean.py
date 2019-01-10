@@ -9,7 +9,6 @@ from web3 import (
     HTTPProvider
 )
 
-from ocean_py.config import Config
 from ocean_py.asset.asset_on_chain import AssetOnChain
 from ocean_py.asset.asset_off_chain import AssetOffChain
 from ocean_py.config import Config as OceanConfig
@@ -19,8 +18,7 @@ from ocean_py import logger
 
 from squid_py.did import id_to_did
 from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.keeper import Keeper
-from squid_py.config import Config
+# from squid_py.config import Config
 
 
 class Ocean():
@@ -46,8 +44,8 @@ class Ocean():
         Resolve an agent did or agent object
         :param agent_did: obect or string of the agent or DID of the agent
         :param kwargs: optional args to pass to the agent
-        
-        :return: return the agent object that has been resolved, or None if no 
+
+        :return: return the agent object that has been resolved, or None if no
         agent found for a DID.
         """
         if isinstance(agent_did, str):
