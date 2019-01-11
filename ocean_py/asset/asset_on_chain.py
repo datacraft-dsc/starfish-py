@@ -1,7 +1,6 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
-import re
 
 from squid_py.did import (
     did_parse,
@@ -70,7 +69,7 @@ class AssetOnChain(AssetBase):
         ddo = self._ocean.squid.register_asset(metadata, account, service)
         self._metadata = None
         if ddo:
-            self._id = re.sub(r'^0[xX]', '', did_to_id(ddo.did))
+            self._id = remove_0x_prefix(did_to_id(ddo.did))
             self._did = ddo.did
             self._metadata = ddo
 

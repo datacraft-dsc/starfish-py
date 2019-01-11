@@ -1,14 +1,13 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
-import re
 from web3 import Web3
 
 from squid_py.did import (
     did_parse,
     id_to_did,
 )
-
+from eth_utils import remove_0x_prefix
 from ocean_py.asset.asset_base import AssetBase
 # from ocean_py import logger
 
@@ -31,7 +30,7 @@ class AssetOffChain(AssetBase):
                 agent_did = id_to_did(data['id_hex'])
                 if not self._agent:
                     self._agent = ocean.resolve_agent(agent_did, **kwargs)
-                self._id = re.sub(r'^0[xX]', '', Web3.toHex(hexstr=data['path']))
+                self._id = remove_0x_prefix(Web3.toHex(hexstr=data['path']))
 
     def register(self, metadata, **kwargs):
         """
