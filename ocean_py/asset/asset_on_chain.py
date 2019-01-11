@@ -1,6 +1,7 @@
 """
     Asset class to hold Ocean asset information such as asset id and metadata
 """
+from eth_utils import remove_0x_prefix
 
 from squid_py.did import (
     did_parse,
