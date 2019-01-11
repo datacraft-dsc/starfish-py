@@ -24,9 +24,12 @@ def test_ocean_cli():
     if program[0] != '/':
         program = os.path.join(os.getcwd(), program)
     pdir = os.path.normpath(os.path.dirname(program))
+    dot_tox = pdir.find('/.tox')
+    if dot_tox > 0:
+        pdir = pdir[0:dot_tox]
     cli_path = os.path.join(pdir, "ocean")
     command = "balance"
-    args = [cli_path, command]
+    args = [cli_path, '--config', 'tests/resources/config.ini', command]
     cli = subprocess.run(args, capture_output=True)
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
@@ -43,7 +46,7 @@ def test_ocean_cli():
         # FUTURE assert valid_id(last_account_id)
         assert 0 == len(lines[num_accounts + 2])
     # test with narrowing to just one account
-    args = [cli_path, command, last_account_id]
+    args.append(last_account_id)
     cli = subprocess.run(args, capture_output=True)
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
