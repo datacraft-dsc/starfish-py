@@ -5,7 +5,7 @@
 import secrets
 
 from squid_py.ddo import DDO
-from squid_py.didresolver import DIDResolver
+from squid_py.did_resolver import DIDResolver
 from squid_py.did import id_to_did
 
 class Agent():
