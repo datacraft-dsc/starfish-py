@@ -19,11 +19,11 @@ class AssetBase():
 
     def register(self, metadata, **kwargs):
         """ abstract method to register an asset"""
-        return None
+        pass
 
     def read(self):
         """ abstract method to read an asset """
-        return None
+        pass
 
     @property
     def asset_id(self):
