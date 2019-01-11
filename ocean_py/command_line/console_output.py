@@ -24,7 +24,8 @@ class ConsoleOutput(BaseOutput):
     def show_header(self):
         line = []
 
-        for header in self._header:
+        # for header in self._header:
+        for header_name, header in self._header.items():
             line.append(header['format'].format(header['title']))
 
         if line:

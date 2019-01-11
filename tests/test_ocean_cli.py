@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+"""
+
+    Tests for `ocean CLI`.
+
+"""
+#import unittest
+#import random
+import os
+import os.path
+import sys
+import subprocess
+# import logging
+
+# from pytest import (
+#     mark,
+#     raises,
+# )
+
+def test_ocean_cli():
+    log_msg = 'Using default logging settings.'
+    header = 'Index     Account                                             Ocean Tokens                                   Ether'
+    program = sys.argv[0]
+    if program[0] != '/':
+        program = os.path.join(os.getcwd(), program)
+    pdir = os.path.normpath(os.path.dirname(program))
+    cli_path = os.path.join(pdir, "ocean")
+    command = "balance"
+    args = [cli_path, command]
+    cli = subprocess.run(args, capture_output=True)
+    stdout = cli.stdout.decode()
+    assert 0 == cli.returncode
+    lines = stdout.split('\n')
+    num_accounts = 5
+    assert (num_accounts + 3) == len(lines)
+    if len(lines) == (num_accounts + 3):
+        assert log_msg == lines[0]
+        assert header == lines[1]
+        for i in range(num_accounts):
+            account = lines[i + 2].split()
+            assert 3 == len(account)
+        last_account_id = account[1]
+        # FUTURE assert valid_id(last_account_id)
+        assert 0 == len(lines[num_accounts + 2])
+    # test with narrowing to just one account
+    args = [cli_path, command, last_account_id]
+    cli = subprocess.run(args, capture_output=True)
+    stdout = cli.stdout.decode()
+    assert 0 == cli.returncode
+    lines = stdout.split('\n')
+    num_accounts = 1
+    assert (num_accounts + 3) == len(lines)
+    if len(lines) == (num_accounts + 3):
+        assert log_msg == lines[0]
+        assert header == lines[1]
+        for i in range(num_accounts):
+            account = lines[i + 2].split()
+            assert 3 == len(account)
+        last_account_id2 = account[1]
+        # FUTURE assert valid_id(last_account_id2)
+        assert 0 == len(lines[num_accounts + 2])
+    assert last_account_id == last_account_id2

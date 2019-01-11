@@ -52,7 +52,9 @@ class CommandLine:
         filter_account_id = None
         if args:
             account_id = self._assert_arg_match(args, 0, [HEX_STRING_FORMAT, INTEGER_FORMAT], 'You must provide a valid account id')
-            filter_account_id = ocean.get_account_from_value(account_id)
+            # REVIEW
+            # filter_account_id = ocean.get_account_from_value(account_id)
+            filter_account_id = account_id
         # index_format = '{:10}'
         # account_format = '{:44}'
         # balance_format = '{:>20}{:>40}'
@@ -64,7 +66,7 @@ class CommandLine:
         self._output.show_header()
         index = 0
         for account_id, account in ocean.get_accounts().items():
-            if filter_account_id or account_id == filter_account_id:
+            if not filter_account_id or account_id == filter_account_id:
                 self._output.set_item('index', str(index))
                 self._output.set_item('account', account_id)
                 self._output.set_item('tokens', account.ocean_balance)
@@ -86,12 +88,17 @@ class CommandLine:
             return value
         raise OceanCommandLineError(message)
 
-    @staticmethod
-    def _get_account_from_value(accounts, value):
-        result = None
+    def _get_arg(self, args, index, default):
+        if len(args) > index:
+            return args[index]
+        return default
 
-        if re.match('^[0-9]$', value):
-            result = accounts[list(accounts)[int(value)]]
-        else:
-            result = accounts[Web3.toHex(hexstr=value)]
-        return result
+    # @staticmethod
+    # def _get_account_from_value(accounts, value):
+    #     result = None
+    #
+    #     if re.match('^[0-9]$', value):
+    #         result = accounts[list(accounts)[int(value)]]
+    #     else:
+    #         result = accounts[Web3.toHex(hexstr=value)]
+    #     return result
