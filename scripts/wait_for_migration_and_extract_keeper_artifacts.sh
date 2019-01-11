@@ -26,11 +26,11 @@ until [ ${CONTRACTS_READY} -eq 0 ] || [ ${RETRY_COUNT} -eq 120 ]; do
     let RETRY_COUNT=RETRY_COUNT+1
 done
 
-if [ ! -f ${CONTRACT_FOLDER}/ready ]; then
+if [ ${CONTRACTS_READY} -eq 1 ]; then
     echo "Waited for more than ten minutes, but keeper contracts have not been migrated yet. Did you run an Ethereum RPC client and the migration script?"
     exit 1
 fi
 
 # docker cp ${KEEPER_CONTRACTS_DOCKER_ID}:/keeper-contracts/artifacts/. ./${CONTRACT_FOLDER}/
-echo "copied over the following contracts"
-ls -lrth ${CONTRACT_FOLDER}/*
+echo "copied over the following contracts:"
+ls -1 ${CONTRACT_FOLDER}
