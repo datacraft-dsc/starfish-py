@@ -19,3 +19,5 @@ if [ $COMMAND_STATUS -ne 0 ]; then
 fi
 
 docker cp ${KEEPER_CONTRACTS_DOCKER_ID}:/keeper-contracts/artifacts/. ./artifacts/
+echo "copied over contracts"
+ls -lrth ./artifacts
