@@ -35,16 +35,16 @@ class Agent():
         # create a new DDO
         ddo = DDO(did)
         # add a signature
-        private_password = ddo.add_signature()
+        private_key_pem = ddo.add_signature()
         # add the service endpoint with the meta data
         ddo.add_service(name, endpoint)
         # add the static proof
-        ddo.add_proof(0, private_password)
+        ddo.add_proof(0, private_key_pem)
         if self.register_ddo(did, ddo, account):
             # save this to the object once the registration has occured
             self._did = did
             self._ddo = ddo
-            return private_password
+            return private_key_pem
         return None
 
     def register_ddo(self, did, ddo, account):
