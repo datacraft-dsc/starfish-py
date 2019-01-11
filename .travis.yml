@@ -13,7 +13,8 @@ services:
 before_install:
   - git clone https://github.com/oceanprotocol/barge
   - cd barge
-  - bash -x start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
+#  - bash -x start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
+  - bash -x start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node 2>&1 &
   - cd ..
   - sleep 15
 
