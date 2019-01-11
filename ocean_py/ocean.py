@@ -38,7 +38,7 @@ class Ocean():
     def resolve_agent(self, agent_did, **kwargs):
         """
         Resolve an agent did or agent object
-        :param agent_did: obect or string of the agent or DID of the agent
+        :param agent_did: object or string of the agent or DID of the agent
         :param kwargs: optional args to pass to the agent
 
         :return: return the agent object that has been resolved, or None if no
