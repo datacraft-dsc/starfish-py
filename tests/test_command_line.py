@@ -15,12 +15,12 @@ from pytest import (
 )
 
 from ocean_py.command_line import CommandLine
-from ocean_py.command_line.test_output import TestOutput
+from ocean_py.command_line.pytest_output import PyTestOutput
 
 
 def test_command_line_balance():
 
-    test_output = TestOutput()
+    test_output = PyTestOutput()
     command_line = CommandLine(output = test_output)
     ocean = command_line.open()
     args = []
@@ -44,7 +44,7 @@ def test_command_line_asset():
         meta_storage_service = META_STORAGE_URL,
         asset_provider_service = ASSET_PROVIDER_URL,
         logger = logger,
-        output = TestOutput()
+        output = PyTestOutput()
     )
     ocean = command_line.open()
 
