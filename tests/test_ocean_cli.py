@@ -30,7 +30,7 @@ def test_ocean_cli():
     cli_path = os.path.join(pdir, "ocean")
     command = "balance"
     args = [cli_path, '--config', 'tests/resources/config.ini', command]
-    cli = subprocess.run(args, capture_output=True)
+    cli = subprocess.run(args, stdout=subprocess.PIPE)
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
