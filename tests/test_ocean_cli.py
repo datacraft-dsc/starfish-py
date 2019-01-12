@@ -47,7 +47,7 @@ def test_ocean_cli():
         assert 0 == len(lines[num_accounts + 2])
     # test with narrowing to just one account
     args.append(last_account_id)
-    cli = subprocess.run(args, capture_output=True)
+    cli = subprocess.run(args, stdout=subprocess.PIPE)
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
