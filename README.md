@@ -45,13 +45,11 @@ Python 3.6
     pip install -r requirements_dev.txt
     ```
 
-1. Run Docker images. Alternatively, set up and run some or all of the corresponding services locally.
+1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge). Once cloned that repository, you can start the cluster running:
 
     ```
-    docker-compose -f ./docker/docker-compose.yml up
+    ./start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node
     ```
-
-    It runs an Aquarius node and an Ethereum RPC client. For details, read `docker-compose.yml`.
 
 1. Copy keeper artifacts
 

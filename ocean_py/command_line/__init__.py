@@ -1,3 +1,3 @@
 
 
-from .main import CommandLine
+from .command_line import CommandLine
