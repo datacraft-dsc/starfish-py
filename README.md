@@ -45,10 +45,12 @@ Python 3.6
     pip install -r requirements_dev.txt
     ```
 
-1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge). Once cloned that repository, you can start the cluster running:
+1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge).
 
     There is an issue with the latest keeper not deploying contracts,
     for the moment you will need to specifiy the version of the keeper to use.
+
+    Once cloned that repository, you can start the cluster running:
     ```
     export KEEPER_VERSION=v0.5.3
     ./start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node
