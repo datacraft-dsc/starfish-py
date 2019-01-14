@@ -114,7 +114,7 @@ Supported environment variables are:
         logger = logger
     )
     """
-    command_line = CommandLine(config_file = args.config)
+    command_line = CommandLine(filename=args.config)
     command = args.command[0]
     if command == 'help':
         parser.print_help()
