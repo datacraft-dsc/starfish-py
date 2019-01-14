@@ -9,7 +9,7 @@ from .base_output import (
     BaseOutput,
 )
 
-class TestOutput(BaseOutput):
+class PyTestOutput(BaseOutput):
 
     def __init__(self):
         BaseOutput.__init__(self)
