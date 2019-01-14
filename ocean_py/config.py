@@ -6,6 +6,7 @@
 import configparser
 import logging
 import os
+import os.path
 import re
 import tempfile
 
@@ -29,8 +30,8 @@ brizo_url = http://localhost:8030
 storage_path = squid_py.db
 download_path = consume_downloads
 
-agent_store_did = 
-agent_store_auth = 
+agent_store_did =
+agent_store_auth =
 
 gas_limit = 300000
 
@@ -52,6 +53,8 @@ class Config(configparser.ConfigParser):
 
         if filename:
             if isinstance(filename, str):
+                if not os.path.exists(filename):
+                    logging.error('Config file not found: "{}"'.format(filename))
                 logging.debug('loading config file {}'.format(filename))
                 with open(filename) as file_handle:
                     text = file_handle.read()

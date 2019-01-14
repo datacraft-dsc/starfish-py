@@ -12,10 +12,10 @@ from ocean_py.exceptions import OceanCommandLineError
 
 from ocean_py.config import (
     Config,
-    DEFAULT_KEEPER_URL,
-    DEFAULT_KEEPER_PATH,
-    DEFAULT_GAS_LIMIT,
-    DEFAULT_NAME_AQUARIUS_URL,
+    # DEFAULT_KEEPER_URL,
+    # DEFAULT_KEEPER_PATH,
+    # DEFAULT_GAS_LIMIT,
+    # DEFAULT_NAME_AQUARIUS_URL,
 )
 
 DEFAULT_CONFIG_FILE = 'config_local.ini'
@@ -46,8 +46,9 @@ upload <asset_id> <price> <filename>                           Upload the asset 
 acount_id - can be a 32 byte hex number or an index as displayed in the 'balance' command.
 
 Supported environment variables are:
-""" + Config.get_environ_help() + """
         """
+# FIXME
+# """ + Config.get_environ_help() + """
     )
 
     parser.add_argument('command', nargs=1,
@@ -108,7 +109,7 @@ Supported environment variables are:
         ethereum_url = config.get_ethereum_url(),
         meta_storage_service = config.get_meta_storage_url(),
         asset_provider_service = config.get_asset_provider_url(),
-        keeper_contracts_path=config.get_contracts_path(),    
+        keeper_contracts_path=config.get_contracts_path(),
         is_json = args.json,
         logger = logger
     )
