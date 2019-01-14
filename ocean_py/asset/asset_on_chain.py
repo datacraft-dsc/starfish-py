@@ -8,12 +8,9 @@ from squid_py.did import (
     did_to_id,
 )
 
-# next version of squid...
-# from squid_py.brizo.brizo import Brizo
+from squid_py.ocean.brizo import Brizo
 
 from squid_py import (
-    get_purchase_endpoint,
-    get_service_endpoint,
     ServiceDescriptor,
     ACCESS_SERVICE_TEMPLATE_ID,
 )
@@ -58,8 +55,8 @@ class AssetOnChain(AssetBase):
             if not price:
                 raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
             timeout = timeout
-            purchase_endpoint = get_purchase_endpoint(self._ocean.squid.config)
-            service_endpoint = get_service_endpoint(self._ocean.squid.config)
+            purchase_endpoint = Brizo.get_purchase_endpoint(self._ocean.squid.config)
+            service_endpoint = Brizo.get_service_endpoint(self._ocean.squid.config)
             service = [ServiceDescriptor.access_service_descriptor(
                 price,
                 purchase_endpoint,
@@ -92,4 +89,4 @@ class AssetOnChain(AssetBase):
     def is_did_valid(did):
         """ return true if the DID is in the format 'did:op:xxxxx' """
         data = did_parse(did)
-        return data['path'] is None
+        return 'data' not in data

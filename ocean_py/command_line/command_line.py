@@ -4,9 +4,10 @@ import traceback
 import re
 from ocean_py.command_line.console_output import ConsoleOutput
 from ocean_py.command_line.json_output import JSONOutput
-from ocean_py.config import Config
+from ocean_py.config import Config as OceanConfig
 from ocean_py.exceptions import OceanCommandLineError
-from squid_py.ocean.ocean import Ocean
+from squid_py.ocean.ocean import Ocean as SquidOcean
+from squid_py.config import Config as SquidConfig
 
 
 HEX_STRING_FORMAT = '[0-fx]+'
@@ -40,9 +41,9 @@ class CommandLine:
         # load the config via file or via arguments
         self._config_file = kwargs.get('config_file', None)
         if self._config_file:
-            self._config = Config(self._config_file)
+            self._config = OceanConfig(self._config_file)
         else:
-            self._config = Config(**kwargs)
+            self._config = OceanConfig(**kwargs)
 
         self._output = kwargs.get('output', None)
         if self._output is None:
@@ -52,7 +53,9 @@ class CommandLine:
                 self._output = ConsoleOutput()
 
     def open(self):
-        ocean = Ocean(config_file=self._config.as_squid_file)
+
+        squid_config = SquidConfig(options_dict=self._config.as_squid_dict)
+        ocean = SquidOcean(squid_config)
         return ocean
 
     def call(self, command, args):

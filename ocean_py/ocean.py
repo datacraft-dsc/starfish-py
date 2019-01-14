@@ -13,6 +13,7 @@ from ocean_py.config import Config as OceanConfig
 from ocean_py.agents.metadata_agent import MetadataAgent
 
 from squid_py.ocean.ocean import Ocean as SquidOcean
+from squid_py.config import Config
 
 # from squid_py.config import Config
 # from ocean_py import logger
@@ -23,11 +24,9 @@ class Ocean():
         """init the basic OceanClient for the connection and contract info"""
         self._config = OceanConfig(*args, **kwargs)
 
-        # until 0.2.19
-        # squid_config = Config(options_dict=self._config.as_squid_dict)
-        # self._squid_ocean = SquidOcean(squid_config)
+        squid_config = Config(options_dict=self._config.as_squid_dict)
+        self._squid_ocean = SquidOcean(squid_config)
 
-        self._squid_ocean = SquidOcean(config_dict=self._config.as_squid_dict)
         # For development, we use the HTTPProvider Web3 interface
         self._web3 = Web3(HTTPProvider(self._config.keeper_url))
 
