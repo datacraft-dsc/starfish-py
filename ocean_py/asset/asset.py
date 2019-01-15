@@ -77,7 +77,7 @@ class Asset(AssetBase):
         return self._metadata
 
     def _set_ddo(self, ddo):
-        """ assign ddo values to the asset id/did and metadata proporeties"""
+        """ assign ddo values to the asset id/did and metadata properties"""
         self._did = ddo.did
         self._id = remove_0x_prefix(did_to_id(self._did))
         self._metadata = ddo
