@@ -131,10 +131,10 @@ class MetadataMarketAgent(AgentBase):
             return ddo
         return None
 
-    def _get_endpoint(self, name):
-        """return the endpoint based on the service name"""
+    def _get_endpoint(self, service_type):
+        """return the endpoint based on the service service_type"""
         if self._ddo:
-            service = self._ddo.get_service(name)
+            service = self._ddo.get_service(service_type)
             if service:
                 return service.get_endpoint()
         return None
