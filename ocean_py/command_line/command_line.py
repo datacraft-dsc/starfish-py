@@ -4,10 +4,8 @@ import traceback
 import re
 from ocean_py.command_line.console_output import ConsoleOutput
 from ocean_py.command_line.json_output import JSONOutput
-from ocean_py.config import Config as OceanConfig
 from ocean_py.exceptions import OceanCommandLineError
-from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config as SquidConfig
+from ocean_py.ocean import Ocean
 
 
 HEX_STRING_FORMAT = '[0-fx]+'
@@ -37,26 +35,13 @@ def assert_arg_filename(args, index, message):
 
 class CommandLine:
     def __init__(self, **kwargs):
-
-        # load the config via file or via arguments
-        self._config_file = kwargs.get('config_file', None)
-        if self._config_file:
-            self._config = OceanConfig(self._config_file)
-        else:
-            self._config = OceanConfig(**kwargs)
-
+        self._ocean = Ocean(**kwargs)
         self._output = kwargs.get('output', None)
         if self._output is None:
             if kwargs.get('is_json', False):
                 self._output = JSONOutput()
             else:
                 self._output = ConsoleOutput()
-
-    def open(self):
-
-        squid_config = SquidConfig(options_dict=self._config.as_squid_dict)
-        ocean = SquidOcean(squid_config)
-        return ocean
 
     def call(self, command, args):
         try:
@@ -72,7 +57,6 @@ class CommandLine:
 
     def balance(self, args):
         self._output.clear()
-        ocean = self.open()
         filter_account_id = None
         if args:
             filter_account_id = assert_arg_match(args, 0,
@@ -85,7 +69,7 @@ class CommandLine:
         self._output.set_header('ether', 'Ether', '{:>40}')
         self._output.show_header()
         index = 0
-        for account_id, account in ocean.get_accounts().items():
+        for account_id, account in self._ocean.accounts.items():
             if not filter_account_id or account_id == filter_account_id:
                 self._output.set_item('index', str(index))
                 self._output.set_item('account', account_id)

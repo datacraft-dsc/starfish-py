@@ -22,13 +22,12 @@ def test_command_line_balance():
 
     test_output = PyTestOutput()
     command_line = CommandLine(output = test_output)
-    ocean = command_line.open()
     args = []
     output = command_line.call('balance', args)
     index = 0
     for row in output.rows:
         assert int(row['index']) == index
-        assert row['account'] == ocean.accounts[row['account']].address
+        assert row['account'] == command_line._ocean.accounts[row['account']].address
         assert 'tokens' in row
         assert 'ether' in row
         index += 1
