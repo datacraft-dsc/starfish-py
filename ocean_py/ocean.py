@@ -61,6 +61,8 @@ class Ocean():
         """
 
         asset = Asset(self)
+        
+        # TODO: fix the exit, so that we raise an error or return an asset
         if asset.register(metadata, **kwargs):
             return asset
         return None
@@ -72,6 +74,8 @@ class Ocean():
         """
 
         asset = AssetLight(self)
+        
+        # TODO: fix the exit, so that we raise an error or return an asset
         if asset.register(metadata, **kwargs):
             return asset
         return None

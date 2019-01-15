@@ -31,7 +31,7 @@ class MetadataAgent(AgentBase):
 
         if not service:
             if not price:
-                raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
+                raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscripto;r) or "price=" (Asset Price)')
             timeout = timeout
             purchase_endpoint = Brizo.get_purchase_endpoint(self._ocean.squid.config)
             service_endpoint = Brizo.get_service_endpoint(self._ocean.squid.config)
