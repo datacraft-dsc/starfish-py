@@ -4,6 +4,6 @@
 
 class AgentBase():
     def __init__(self, ocean, **kwargs):
-        """init the Agent with a connection client and optional DID"""
+        """init the the AgentBase with the ocean instance"""
         self._ocean = ocean
 
