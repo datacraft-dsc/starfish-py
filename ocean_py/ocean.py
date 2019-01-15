@@ -10,7 +10,7 @@ from web3 import (
 from ocean_py.asset.asset_on_chain import AssetOnChain
 from ocean_py.asset.asset_off_chain import AssetOffChain
 from ocean_py.config import Config as OceanConfig
-from ocean_py.agents.metadata_agent import MetadataAgent
+from ocean_py.agent.metadata_agent import MetadataStorageAgent
 
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config
