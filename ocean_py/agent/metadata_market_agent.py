@@ -5,9 +5,12 @@ import json
 import requests
 from web3 import Web3
 
+from squid_py.did_resolver import DIDResolver
+from squid_py.ddo import DDO
 
 from ocean_py.agent.agent_base import AgentBase
 from ocean_py import logger
+
 
 
 
@@ -18,7 +21,15 @@ METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 class MetadataMarketAgent(AgentBase):
     def __init__(self, ocean, **kwargs):
         """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean, register_name=METADATA_MARKET_AGENT_ENDPOINT_NAME, **kwargs)
+        AgentBase.__init__(self, ocean, **kwargs)
+
+        self._did = kwargs.get('did')
+        self._ddo = None
+        self._register_name = METADATA_MARKET_AGENT_ENDPOINT_NAME
+
+        # if DID then try to load in the linked DDO
+        if self._did:
+            self._ddo = self._resolve_did_to_ddo(self._did)
 
         self._headers = {'content-type': 'application/json'}
         if 'authorization' in kwargs and kwargs['authorization']:
@@ -32,7 +43,7 @@ class MetadataMarketAgent(AgentBase):
         """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
+        asset_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
         if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
@@ -71,6 +82,20 @@ class MetadataMarketAgent(AgentBase):
                 logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
         return result
 
+    @property
+    def ddo(self):
+        """return the DDO stored for this agent"""
+        return self._ddo
+
+    @property
+    def did(self):
+        """return the DID used for this agent"""
+        return self._did
+
+    @property
+    def register_name(self):
+        return self._register_name
+
 
     @staticmethod
     def is_metadata_valid(asset_id, metadata_text):
@@ -83,7 +108,7 @@ class MetadataMarketAgent(AgentBase):
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
+            metadata_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
             return metadata_id == asset_id
@@ -99,3 +124,20 @@ class MetadataMarketAgent(AgentBase):
         :return 64 char hex string, with no leading '0x'
         """
         return Web3.toHex(Web3.sha3(metadata_text.encode()))[2:]
+
+    def _resolve_did_to_ddo(self, did):
+        """resolve a DID to a given DDO, return the DDO if found"""
+        did_resolver = DIDResolver(self._ocean.web3, self._ocean.keeper.did_registry)
+        resolved = did_resolver.resolve(did)
+        if resolved and resolved.is_ddo:
+            ddo = DDO(json_text=resolved.value)
+            return ddo
+        return None
+
+    def _get_endpoint(self, name):
+        """return the endpoint based on the service name"""
+        if self._ddo:
+            service = self._ddo.get_service(name)
+            if service:
+                return service.get_endpoint()
+        return None
