@@ -51,6 +51,35 @@ class Ocean():
             raise ValueError('You must provide a did or an agent object to add too the library')
         return agent
 
+    def register_agent(self, name, endpoint, account, did=None):
+        """
+        Register this agent on the block chain
+        :param name: name of the service endpoint to register
+        :param endpoint: URL of the agents service to register
+        :param account: Ethereum account to use as the owner of the DID->DDO registration
+        :param did: DID of the agent to register, if it already exists
+        :return private password of the signed DDO
+        """
+
+        if did is None:
+            # if no did then we need to create a new one
+            did = id_to_did(secrets.token_hex(32))
+
+        # create a new DDO
+        ddo = DDO(did)
+        # add a signature
+        private_key_pem = ddo.add_signature()
+        # add the service endpoint with the meta data
+        ddo.add_service(name, endpoint)
+        # add the static proof
+        ddo.add_proof(0, private_key_pem)
+        if self.register_ddo(did, ddo, account):
+            # save this to the object once the registration has occured
+            self._did = did
+            self._ddo = ddo
+            return private_key_pem
+        return None
+
     def register_asset_on_chain(self, metadata, **kwargs):
         """
         Register an on chain asset

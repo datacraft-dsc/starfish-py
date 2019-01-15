@@ -18,35 +18,6 @@ class Agent():
         if self._did:
             self._ddo = self._resolve_did_to_ddo(self._did)
 
-    def register_url(self, name, endpoint, account, did=None):
-        """
-        Register this agent on the block chain
-        :param did: DID of the agent to register
-        :param name: name of the service endpoint to register
-        :param endpoint: URL of the agents service to register
-        :param account: Ethereum account to use as the owner of the DID->DDO registration
-        :return private password of the signed DDO
-        """
-
-        if did is None:
-            # if no did then we need to create a new one
-            did = id_to_did(secrets.token_hex(32))
-
-        # create a new DDO
-        ddo = DDO(did)
-        # add a signature
-        private_key_pem = ddo.add_signature()
-        # add the service endpoint with the meta data
-        ddo.add_service(name, endpoint)
-        # add the static proof
-        ddo.add_proof(0, private_key_pem)
-        if self.register_ddo(did, ddo, account):
-            # save this to the object once the registration has occured
-            self._did = did
-            self._ddo = ddo
-            return private_key_pem
-        return None
-
     def register_ddo(self, did, ddo, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
