@@ -9,9 +9,11 @@ from squid_py.did import (
 )
 from eth_utils import remove_0x_prefix
 from ocean_py.asset.asset_base import AssetBase
+from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
+
 # from ocean_py import logger
 
-class AssetOffChain(AssetBase):
+class AssetLight(AssetBase):
     def __init__(self, ocean, did=None, agent=None, **kwargs):
         """
         init an asset class with the following:
@@ -43,9 +45,11 @@ class AssetOffChain(AssetBase):
 
         :return The new asset registered, or return None on error
         """
+        
+        agent = MetadataMarketAgent(self, **kwargs)
 
         self._metadata = None
-        asset_data = self._agent.register_asset(metadata, **kwargs)
+        asset_data = agent.register_asset(metadata, **kwargs)
         if asset_data:
             # assign the did of the agent that we registered this with
             self._id = asset_data['asset_id']
@@ -54,10 +58,11 @@ class AssetOffChain(AssetBase):
 
         return self._metadata
 
-    def read(self):
+    def read(self, **kwargs):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
 
-        asset_data = self._agent.read_asset(self._id)
+        agent = MetadataMarketAgent(self._ocean, **kwargs)
+        asset_data = agent.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with
             self._id = asset_data['asset_id']
@@ -69,10 +74,6 @@ class AssetOffChain(AssetBase):
     def is_empty(self):
         return self._id is None or self._agent is None
 
-    @property
-    def agent(self):
-        """DID of the metadata agent for this asset"""
-        return self._agent
 
     @staticmethod
     def is_did_valid(did):

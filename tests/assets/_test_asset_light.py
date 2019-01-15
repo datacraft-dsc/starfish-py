@@ -8,7 +8,7 @@ import json
 import logging
 
 from ocean_py.ocean import Ocean
-from ocean_py.agents.metadata_agent import MetadataAgent
+from ocean_py.agent.metadata_storage_agent import MetadataStorageAgent
 
 from ocean_py.logging import setup_logging
 from ocean_py import logger
@@ -29,7 +29,7 @@ METADATA_STORAGE_AUTH = 'QWxhZGRpbjpPcGVuU2VzYW1l'
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
 
-def test_asset_off_chain():
+def test_asset_light():
     
     """
     First part register the agent and get it's DID for later use
@@ -46,7 +46,7 @@ def test_asset_off_chain():
 
     agent = MetadataAgent(ocean)
     # test register a new metadata storage agent
-    password = agent.register(METADATA_STORAGE_URL, agent_account)
+    password = ocean.register_agent(agent, METADATA_STORAGE_URL, agent_account)
     assert agent
     assert password
     assert agent.did
@@ -78,7 +78,7 @@ def test_asset_off_chain():
 
     
     # test registering an asset using an agent object
-    asset = ocean.register_asset_off_chain(metadata['base'])
+    asset = ocean.register_asset_light(metadata['base'])
     assert asset
 
 

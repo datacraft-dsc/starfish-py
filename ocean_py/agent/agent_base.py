@@ -8,11 +8,13 @@ from squid_py.ddo import DDO
 from squid_py.did_resolver import DIDResolver
 from squid_py.did import id_to_did
 
-class Agent():
+class AgentBase():
     def __init__(self, ocean, **kwargs):
         """init the Agent with a connection client and optional DID"""
         self._ocean = ocean
-        self._did = kwargs.get('did', None)
+        self._did = kwargs.get('did')
+        self._register_name = kwargs.get('register_name')
+               
         self._ddo = None
         # if DID then try to load in the linked DDO
         if self._did:
@@ -22,7 +24,7 @@ class Agent():
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
         return self._ocean.keeper.didregistry.register(did, ddo=ddo, account=account)
-
+        
     @property
     def ddo(self):
         """return the DDO stored for this agent"""
@@ -42,6 +44,10 @@ class Agent():
     def is_valid(self):
         """return True if this agent has a valid ddo"""
         return self._ddo and self._ddo.is_valid
+
+    @property
+    def register_name(self):
+        return _register_name
 
 
     def _resolve_did_to_ddo(self, did):

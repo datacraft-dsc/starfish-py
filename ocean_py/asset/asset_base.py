@@ -13,15 +13,14 @@ class AssetBase():
         """
         self._ocean = ocean
         self._id = None
-        self._metadata = None
         self._did = did
-
+        self._metadata = None
 
     def register(self, metadata, **kwargs):
         """ abstract method to register an asset"""
         pass
 
-    def read(self):
+    def read(self, **kwargs):
         """ abstract method to read an asset """
         pass
 

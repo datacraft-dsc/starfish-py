@@ -7,10 +7,11 @@ from web3 import (
     HTTPProvider
 )
 
-from ocean_py.asset.asset_on_chain import AssetOnChain
-from ocean_py.asset.asset_off_chain import AssetOffChain
+from ocean_py.asset.asset import Asset
+from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
-from ocean_py.agent.metadata_agent import MetadataStorageAgent
+from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
+from ocean_py.agent.metadata_agent import MetadataAgent
 
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config
@@ -51,16 +52,25 @@ class Ocean():
             raise ValueError('You must provide a did or an agent object to add too the library')
         return agent
 
-    def register_agent(self, name, endpoint, account, did=None):
+    def register_agent(self, agent_name, endpoint, account, did=None):
         """
         Register this agent on the block chain
-        :param name: name of the service endpoint to register
+        :param agent_name: agent object or name of the registration to use to register an agent
         :param endpoint: URL of the agents service to register
         :param account: Ethereum account to use as the owner of the DID->DDO registration
         :param did: DID of the agent to register, if it already exists
         :return private password of the signed DDO
         """
+        
+        name = None
+        if isinstance(agent_name, Agent):
+            name = agent_name.register_name
+        elif isinstance(agent_name, str):
+            name = agent_name
 
+        if not name:
+            raise ValueError('Provide an agent or a agent service name to register')
+            
         if did is None:
             # if no did then we need to create a new one
             did = id_to_did(secrets.token_hex(32))
@@ -80,46 +90,43 @@ class Ocean():
             return private_key_pem
         return None
 
-    def register_asset_on_chain(self, metadata, **kwargs):
+    def register_asset(self, metadata, **kwargs):
         """
         Register an on chain asset
         :param metadata: dict of the metadata
         :return The new asset registered, or return None on error
         """
 
-        asset = AssetOnChain(self)
+        asset = Asset(self)
         if asset.register(metadata, **kwargs):
             return asset
         return None
 
-    def register_asset_off_chain(self, metadata, **kwargs):
+    def register_asset_light(self, metadata, **kwargs):
         """
         Register an asset on the off chain system using an metadata storage agent
         :return: the asset that has been registered
         """
-        if not self._agent:
-            raise ValueError('Please set the "agent_store_did" setting when starting the Ocean library')
 
-        asset = AssetOffChain(self, agent=self._agent)
+        asset = AssetLight(self, **kwargs)
         if asset.register(metadata, **kwargs):
             return asset
         return None
 
-    def get_asset(self, did):
+    def get_asset(self, did, **kwargs):
         """
         :param: did: DID of the asset and agent combined.
         :return a registered asset given a DID of the asset
         """
-        if AssetOnChain.is_did_valid(did):
-            asset = AssetOnChain(self, did)
-        elif AssetOffChain.is_did_valid(did):
+        if Asset.is_did_valid(did):
+            asset = Asset(self, did)
+        elif AssetLight.is_did_valid(did):
             if not self._agent:
                 raise ValueError('Please set the "agent_store_did" setting when starting the Ocean library')
-            asset = AssetOffChain(self, did, agent=self._agent)
-
-
+            asset = AssetLight(self, did)
+            
         if not asset.is_empty:
-            if asset.read():
+            if asset.read(**kwargs):
                 return asset
         return None
 
