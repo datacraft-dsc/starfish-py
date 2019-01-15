@@ -107,7 +107,7 @@ class MetadataMarketAgent(AgentBase):
             # the calc asset_id from the metadata should be same as this asset_id
             metadata_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
-                logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
+                logger.debug('metdata does not match {0} != {1}'.format(metadata_id, asset_id))
             return metadata_id == asset_id
         return False
 
