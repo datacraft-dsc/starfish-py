@@ -11,9 +11,6 @@ from squid_py.ddo import DDO
 from ocean_py.agent.agent_base import AgentBase
 from ocean_py import logger
 
-
-
-
 # service endpoint type name to use for this agent
 METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
 METADATA_MARKET_BASE_URI = '/api/v1/meta/data'

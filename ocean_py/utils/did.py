@@ -25,6 +25,7 @@ def did_parse(did):
         'fragment': None,
         'id_hex': None
     }
+    
     uri_text = match.group(3)
     if uri_text:
         uri = urlparse(uri_text)

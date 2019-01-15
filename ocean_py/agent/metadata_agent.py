@@ -10,13 +10,12 @@ from squid_py import (
 )
 
 from ocean_py.agent.agent_base import AgentBase
-from ocean_py import logger
+# from ocean_py import logger
 
 class MetadataAgent(AgentBase):
     def __init__(self, ocean, **kwargs):
         """init a standard ocean agent, with a given DID"""
         AgentBase.__init__(self, ocean, **kwargs)
-
 
     def register_asset(self, metadata, account, service=None, price=None, timeout=9000):
         """
@@ -44,8 +43,7 @@ class MetadataAgent(AgentBase):
                 ACCESS_SERVICE_TEMPLATE_ID
             )]
         return self._ocean.squid.register_asset(metadata, account, service)
-        
 
     def read_asset(self, did):
+        """ read the asset metadata(DDO) using the asset DID """
         return self._ocean.squid.resolve_did(did)
-        

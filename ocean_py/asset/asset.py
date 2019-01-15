@@ -3,14 +3,15 @@
 """
 from eth_utils import remove_0x_prefix
 
-from squid_py.did import (
-    did_parse,
-    did_to_id,
-)
+from squid_py.did import did_to_id
 
 from ocean_py.asset.asset_base import AssetBase
 from ocean_py.agent.metadata_agent import MetadataAgent
-from ocean_py.agent.publish_agent import PublishAgent
+
+# TODO: implement this...
+# from ocean_py.agent.publish_agent import PublishAgent
+
+from ocean_py.utils.did import did_parse
 
 
 # from ocean_py import logger
@@ -39,7 +40,7 @@ class Asset(AssetBase):
 
         :return The new asset metadata ( ddo)
         """
-        
+
         account = kwargs.get('account')
         service = kwargs.get('service')
         price = kwargs.get('price')
@@ -50,23 +51,30 @@ class Asset(AssetBase):
 
 
         agent = MetadataAgent(self._ocean, **kwargs)
-        
+
         self._metadata = None
         ddo = agent.register_asset(metadata, account, service, price, timeout)
         if ddo:
             self._set_ddo(ddo)
-            
+
         return self._metadata
 
     def read(self, **kwargs):
-        """read the asset metadata (DDO) from the block chain, if not found return None"""
-        
+        """read the asset metadata in this case it's the DDO with the metadat included from the off chain
+        metadata agent, if not found return None"""
+
         agent = MetadataAgent(self._ocean, **kwargs)
 
+        self._metadata = None
         ddo = agent.read_asset(self._did)
-        self._set_ddo(ddo)
-        return self._metadata
+        if ddo:
+            self._set_ddo(ddo)
 
+        # TODO: Resolve the agent endpoints for this asset.
+        # The DID we can get squid to go too the blockchain, resolve the URL then get the DDO
+        # from the DDO we can then decode using the SecretStore brizo url's
+
+        return self._metadata
 
     def _set_ddo(self, ddo):
         """ assign ddo values to the asset id/did and metadata proporeties"""
@@ -74,7 +82,6 @@ class Asset(AssetBase):
         self._id = remove_0x_prefix(did_to_id(self._did))
         self._metadata = ddo
 
-        
     @property
     def is_empty(self):
         """ return true if the asset is empty"""
@@ -84,4 +91,4 @@ class Asset(AssetBase):
     def is_did_valid(did):
         """ return true if the DID is in the format 'did:op:xxxxx' """
         data = did_parse(did)
-        return 'data' not in data
+        return not data['path']

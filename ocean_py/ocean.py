@@ -7,17 +7,15 @@ from web3 import (
     HTTPProvider
 )
 
+from squid_py.ocean.ocean import Ocean as SquidOcean
+from squid_py.config import Config
+
 from ocean_py.asset.asset import Asset
 from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
 from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
-from ocean_py.agent.metadata_agent import MetadataAgent
+from ocean_py.agent.manager_agent import ManagerAgent
 
-from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config
-
-# from squid_py.config import Config
-# from ocean_py import logger
 
 class Ocean():
 
@@ -31,64 +29,29 @@ class Ocean():
         # For development, we use the HTTPProvider Web3 interface
         self._web3 = Web3(HTTPProvider(self._config.keeper_url))
 
-        self._agent = None
-        if self._config.agent_store_did:
-            self._agent = self.resolve_agent(self._config.agent_store_did, authorization=self._config.agent_store_auth)
-
-    def resolve_agent(self, agent_did, **kwargs):
-        """
-        Resolve an agent did or agent object
-        :param agent_did: object or string of the agent or DID of the agent
-        :param kwargs: optional args to pass to the agent
-
-        :return: return the agent object that has been resolved, or None if no
-        agent found for a DID.
-        """
-        if isinstance(agent_did, str):
-            agent = MetadataAgent(self, did=agent_did, **kwargs)
-        elif isinstance(agent_did, Agent):
-            agent = agent_did
-        else:
-            raise ValueError('You must provide a did or an agent object to add too the library')
-        return agent
-
-    def register_agent(self, agent_name, endpoint, account, did=None):
+    def register_agent(self, agent_service_name, endpoint_url, account, did=None):
         """
         Register this agent on the block chain
-        :param agent_name: agent object or name of the registration to use to register an agent
-        :param endpoint: URL of the agents service to register
+        :param agent_service_name: agent object or name of the registration to use to register an agent
+        :param endpoint_url: URL of the agents service to register
         :param account: Ethereum account to use as the owner of the DID->DDO registration
         :param did: DID of the agent to register, if it already exists
         :return private password of the signed DDO
         """
-        
-        name = None
-        if isinstance(agent_name, Agent):
-            name = agent_name.register_name
-        elif isinstance(agent_name, str):
-            name = agent_name
 
-        if not name:
-            raise ValueError('Provide an agent or a agent service name to register')
-            
-        if did is None:
-            # if no did then we need to create a new one
-            did = id_to_did(secrets.token_hex(32))
+        service_name = None
+        if isinstance(agent_service_name, MetadataMarketAgent):
+            service_name = agent_service_name.register_name
+        elif isinstance(agent_service_name, str):
+            service_name = agent_service_name
 
-        # create a new DDO
-        ddo = DDO(did)
-        # add a signature
-        private_key_pem = ddo.add_signature()
-        # add the service endpoint with the meta data
-        ddo.add_service(name, endpoint)
-        # add the static proof
-        ddo.add_proof(0, private_key_pem)
-        if self.register_ddo(did, ddo, account):
-            # save this to the object once the registration has occured
-            self._did = did
-            self._ddo = ddo
-            return private_key_pem
-        return None
+        if not service_name:
+            raise ValueError('Provide an MetadataMarketAgent or a agent service name to register')
+        agent = ManagerAgent(self)
+
+        return agent.register_agent(service_name, endpoint_url, account, did)
+
+
 
     def register_asset(self, metadata, **kwargs):
         """
@@ -108,7 +71,7 @@ class Ocean():
         :return: the asset that has been registered
         """
 
-        asset = AssetLight(self, **kwargs)
+        asset = AssetLight(self)
         if asset.register(metadata, **kwargs):
             return asset
         return None
@@ -118,13 +81,14 @@ class Ocean():
         :param: did: DID of the asset and agent combined.
         :return a registered asset given a DID of the asset
         """
+        asset = None
         if Asset.is_did_valid(did):
             asset = Asset(self, did)
         elif AssetLight.is_did_valid(did):
-            if not self._agent:
-                raise ValueError('Please set the "agent_store_did" setting when starting the Ocean library')
             asset = AssetLight(self, did)
-            
+        else:
+            raise ValueError(f'Invalid did "{did}" for an asset')
+
         if not asset.is_empty:
             if asset.read(**kwargs):
                 return asset
