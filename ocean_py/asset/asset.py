@@ -3,23 +3,21 @@
 """
 from eth_utils import remove_0x_prefix
 
-from squid_py.did import (
-    did_parse,
-    did_to_id,
-)
+from squid_py.did import did_to_id
 
-from squid_py.ocean.brizo import Brizo
-
-from squid_py import (
-    ServiceDescriptor,
-    ACCESS_SERVICE_TEMPLATE_ID,
-)
 from ocean_py.asset.asset_base import AssetBase
+from ocean_py.agent.metadata_agent import MetadataAgent
+
+# TODO: implement this...
+# from ocean_py.agent.publish_agent import PublishAgent
+
+from ocean_py.utils.did import did_parse
+
 
 # from ocean_py import logger
 
 
-class AssetOnChain(AssetBase):
+class Asset(AssetBase):
     def __init__(self, ocean, did=None):
         """
         init an asset class with the following:
@@ -46,39 +44,43 @@ class AssetOnChain(AssetBase):
         account = kwargs.get('account')
         service = kwargs.get('service')
         price = kwargs.get('price')
-        timeout = kwargs.get('timeout', 900)
+        timeout = kwargs.get('timeout', 9000)
 
         if not account:
             raise ValueError('you must provide an account number to register the asset')
 
-        if not service:
-            if not price:
-                raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
-            timeout = timeout
-            purchase_endpoint = Brizo.get_purchase_endpoint(self._ocean.squid.config)
-            service_endpoint = Brizo.get_service_endpoint(self._ocean.squid.config)
-            service = [ServiceDescriptor.access_service_descriptor(
-                price,
-                purchase_endpoint,
-                service_endpoint,
-                timeout,
-                ACCESS_SERVICE_TEMPLATE_ID
-            )]
-        ddo = self._ocean.squid.register_asset(metadata, account, service)
+
+        agent = MetadataAgent(self._ocean, **kwargs)
+
         self._metadata = None
+        ddo = agent.register_asset(metadata, account, service, price, timeout)
         if ddo:
-            self._id = remove_0x_prefix(did_to_id(ddo.did))
-            self._did = ddo.did
-            self._metadata = ddo
-
+            self._set_ddo(ddo)
 
         return self._metadata
 
-    def read(self):
-        """read the asset metadata (DDO) from the block chain, if not found return None"""
-        self._metadata = self._ocean.squid.resolve_did(self._did)
+    def read(self, **kwargs):
+        """read the asset metadata in this case it's the DDO with the metadat included from the off chain
+        metadata agent, if not found return None"""
+
+        agent = MetadataAgent(self._ocean, **kwargs)
+
+        self._metadata = None
+        ddo = agent.read_asset(self._did)
+        if ddo:
+            self._set_ddo(ddo)
+
+        # TODO: Resolve the agent endpoints for this asset.
+        # The DID we can get squid to go too the blockchain, resolve the URL then get the DDO
+        # from the DDO we can then decode using the SecretStore brizo url's
+
         return self._metadata
 
+    def _set_ddo(self, ddo):
+        """ assign ddo values to the asset id/did and metadata properties"""
+        self._did = ddo.did
+        self._id = remove_0x_prefix(did_to_id(self._did))
+        self._metadata = ddo
 
     @property
     def is_empty(self):
@@ -89,4 +91,4 @@ class AssetOnChain(AssetBase):
     def is_did_valid(did):
         """ return true if the DID is in the format 'did:op:xxxxx' """
         data = did_parse(did)
-        return 'data' not in data
+        return not data['path']

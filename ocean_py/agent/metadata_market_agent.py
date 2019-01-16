@@ -5,35 +5,34 @@ import json
 import requests
 from web3 import Web3
 
+from squid_py.did_resolver import DIDResolver
+from squid_py.ddo import DDO
 
-from ocean_py.agents.agent import Agent
+from ocean_py.agent.agent_base import AgentBase
 from ocean_py import logger
 
-
-
 # service endpoint type name to use for this agent
-METADATA_AGENT_ENDPOINT_NAME = 'metadata-storage'
-METADATA_BASE_URI = '/api/v1/meta/data'
+METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
+METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 
-class MetadataAgent(Agent):
+class MetadataMarketAgent(AgentBase):
     def __init__(self, ocean, **kwargs):
         """init a standard ocean agent, with a given DID"""
-        Agent.__init__(self, ocean, **kwargs)
+        AgentBase.__init__(self, ocean, **kwargs)
+
+        self._did = kwargs.get('did')
+        self._ddo = None
+        self._register_name = METADATA_MARKET_AGENT_ENDPOINT_NAME
+
+        # if DID then try to load in the linked DDO
+        if self._did:
+            self._ddo = self._resolve_did_to_ddo(self._did)
 
         self._headers = {'content-type': 'application/json'}
         if 'authorization' in kwargs and kwargs['authorization']:
             self._headers['Authorization'] = 'Basic {}'.format(kwargs['authorization'])
 
-    def register(self, url, account, did=None):
-        """
-        Register an agent on the block chain, returns the DID used to register
-        :param url: of the agent
-        :param account: Ethereum account used to spend gas for the registration process
-        :para did: opitional DID to use to update, instead of add
-        """
-        return super(MetadataAgent, self).register_url(METADATA_AGENT_ENDPOINT_NAME, url, account, did)
-
-    def register_asset(self, metadata, **kwargs):
+    def register_asset(self, metadata):
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
@@ -41,7 +40,7 @@ class MetadataAgent(Agent):
         """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
+        asset_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
         if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
@@ -50,12 +49,11 @@ class MetadataAgent(Agent):
             }
         return result
 
-
     def save(self, asset_id, metadata_text):
         """save metadata to the agent server, using the asset_id and metadata"""
-        endpoint = self._get_endpoint(METADATA_AGENT_ENDPOINT_NAME)
+        endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
         if endpoint:
-            url = endpoint + METADATA_BASE_URI + '/' + asset_id
+            url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
             logger.debug('metadata save url {}'.format(url))
             response = requests.put(url, data=metadata_text, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
@@ -66,9 +64,9 @@ class MetadataAgent(Agent):
     def read_asset(self, asset_id):
         """read the metadata from a service agent using the asset_id"""
         result = None
-        endpoint = self._get_endpoint(METADATA_AGENT_ENDPOINT_NAME)
+        endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
         if endpoint:
-            url = endpoint + METADATA_BASE_URI + '/' + asset_id
+            url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
             logger.debug('metadata read url {}'.format(url))
             response = requests.get(url, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
@@ -80,6 +78,20 @@ class MetadataAgent(Agent):
             else:
                 logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
         return result
+
+    @property
+    def ddo(self):
+        """return the DDO stored for this agent"""
+        return self._ddo
+
+    @property
+    def did(self):
+        """return the DID used for this agent"""
+        return self._did
+
+    @property
+    def register_name(self):
+        return self._register_name
 
 
     @staticmethod
@@ -93,9 +105,9 @@ class MetadataAgent(Agent):
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = MetadataAgent.get_asset_id_from_metadata(metadata_text)
+            metadata_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
-                logger.debug('metdata has does not match {0} != {1}'.format(metadata_id, asset_id))
+                logger.debug('metdata does not match {0} != {1}'.format(metadata_id, asset_id))
             return metadata_id == asset_id
         return False
 
@@ -109,3 +121,20 @@ class MetadataAgent(Agent):
         :return 64 char hex string, with no leading '0x'
         """
         return Web3.toHex(Web3.sha3(metadata_text.encode()))[2:]
+
+    def _resolve_did_to_ddo(self, did):
+        """resolve a DID to a given DDO, return the DDO if found"""
+        did_resolver = DIDResolver(self._ocean.web3, self._ocean.keeper.did_registry)
+        resolved = did_resolver.resolve(did)
+        if resolved and resolved.is_ddo:
+            ddo = DDO(json_text=resolved.value)
+            return ddo
+        return None
+
+    def _get_endpoint(self, service_type):
+        """return the endpoint based on the service service_type"""
+        if self._ddo:
+            service = self._ddo.get_service(service_type)
+            if service:
+                return service.get_endpoint()
+        return None
