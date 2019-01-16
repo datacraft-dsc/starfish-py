@@ -54,8 +54,8 @@ class Config(configparser.ConfigParser):
         if filename:
             if isinstance(filename, str):
                 if not os.path.exists(filename):
-                    logging.error('Config file not found: "{}"'.format(filename))
-                logging.debug('loading config file {}'.format(filename))
+                    logging.error(f'Config file not found: "{filename}"'
+                logging.debug(f'loading config file {filename}'
                 with open(filename) as file_handle:
                     text = file_handle.read()
                     self.read_string(text)
@@ -77,7 +77,7 @@ class Config(configparser.ConfigParser):
                 values[self._section_name] = kwargs
 
         if values:
-            logger.debug('loading values {}'.format(kwargs))
+            logger.debug(f'loading values {kwargs}')
             self.read_dict(values)
 
         self._read_environ()
@@ -89,7 +89,7 @@ class Config(configparser.ConfigParser):
         for name, value in defaults.items(CONFIG_SECTION_NAME):
             value = os.environ.get(re.sub(r'[^\w]+', '_', name).upper())
             if value is not None:
-                logger.debug('setting environ {0} = {1}'.format(name, value))
+                logger.debug(f'setting environ {name} = {value}')
                 self.set(self._section_name, name, value)
 
     @property
@@ -102,7 +102,7 @@ class Config(configparser.ConfigParser):
         squid = configparser.ConfigParser()
         values = self.as_squid_dict
         squid.read_dict(values)
-        logger.debug('squid config values {}'.format(values))
+        logger.debug(f'squid config values {values}')
         temp_handle = tempfile.mkstemp('_squid.conf', text=True)
         os.close(temp_handle[0])
         filename = temp_handle[1]

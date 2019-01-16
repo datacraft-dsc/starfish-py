@@ -50,10 +50,10 @@ class CommandLine:
             return self._output
         except Exception as exception:
             if isinstance(exception, AttributeError):
-                raise OceanCommandLineError('Cannot find command "{}"'.format(command))
+                raise OceanCommandLineError(f'Cannot find command "{command}"')
             print(exception)
             traceback.print_exc()
-            raise OceanCommandLineError('Command failed "{}"'.format(command))
+            raise OceanCommandLineError(f'Command failed "{command}"')
 
     def balance(self, args):
         self._output.clear()
