@@ -54,8 +54,8 @@ class Config(configparser.ConfigParser):
         if filename:
             if isinstance(filename, str):
                 if not os.path.exists(filename):
-                    logging.error(f'Config file not found: "{filename}"'
-                logging.debug(f'loading config file {filename}'
+                    logging.error(f'Config file not found: "{filename}"')
+                logging.debug(f'loading config file {filename}')
                 with open(filename) as file_handle:
                     text = file_handle.read()
                     self.read_string(text)
