@@ -118,3 +118,8 @@ class Ocean():
     def squid(self):
         """return squid ocean library"""
         return self._squid_ocean
+
+    @property
+    def config(self):
+        """return config info"""
+        return self._config

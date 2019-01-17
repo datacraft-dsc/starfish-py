@@ -40,7 +40,9 @@ def test_asset():
 
     # test node has the account #1 unlocked
     publisher_account = ocean.accounts[list(ocean.accounts)[1]]
-
+    publisher_account.password = ocean.config.parity_password
+    publisher_account.unlock()
+    
     # load in the sample metadata
     assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
     metadata = None
@@ -61,9 +63,12 @@ def test_asset():
     assert asset
     assert asset.did == asset_did
     purchase_account = ocean.accounts[list(ocean.accounts)[1]]
+    purchase_account.password = ocean.config.parity_password
+    purchase_account.unlock()
+
     purchase_account.request_tokens(100)
     
     # test purchase an asset
-    asset.purchase(purchase_account)
+    assert asset.purchase(purchase_account)
      
     
