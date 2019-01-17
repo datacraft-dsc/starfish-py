@@ -20,9 +20,10 @@ class PurchaseAgent(AgentBase):
         :param account: account to use for buying this asset
         """
         
-        ddo = asset.metadata
-        service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
-        assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
-        sa = ServiceAgreement.from_service_dict(service.as_dictionary())
-        self._ocean.squid.purchase_asset_service(asset.did, sa.sa_definition_id, account)
-
+        ddo = asset.ddo
+        if ddo:
+            service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
+            assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
+            sa = ServiceAgreement.from_service_dict(service.as_dictionary())
+            return self._ocean.squid.purchase_asset_service(asset.did, sa.sa_definition_id, account)
+        return False

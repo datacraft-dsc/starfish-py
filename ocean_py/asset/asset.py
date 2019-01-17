@@ -4,6 +4,7 @@
 from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
+from squid_py import DDO
 
 from ocean_py.asset.asset_base import AssetBase
 from ocean_py.agent.metadata_agent import MetadataAgent
@@ -26,7 +27,8 @@ class Asset(AssetBase):
         :param did: Optional did of the asset
         """
         AssetBase.__init__(self, ocean, did)
-
+        self._ddo = None
+        
         if self._did:
             self._id = did_to_id(did)
 
@@ -88,13 +90,20 @@ class Asset(AssetBase):
         """ assign ddo values to the asset id/did and metadata properties"""
         self._did = ddo.did
         self._id = remove_0x_prefix(did_to_id(self._did))
-        self._metadata = ddo
+        self._ddo = ddo
+        
+        self._metadata = ddo.get_metadata()
 
     @property
     def is_empty(self):
         """ return true if the asset is empty"""
-        return self._id is None
+        return  self._id is None
 
+    @property
+    def ddo(self):
+        """ return the ddo assigned with this asset"""
+        return self._ddo
+        
     @staticmethod
     def is_did_valid(did):
         """ return true if the DID is in the format 'did:op:xxxxx' """
