@@ -59,3 +59,5 @@ def test_asset():
     asset = ocean.get_asset(asset_did)
     assert asset
     assert asset.did == asset_did
+     
+    
