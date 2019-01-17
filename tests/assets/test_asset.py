@@ -13,6 +13,7 @@ from ocean_py import logger
 
 from squid_py.service_agreement.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
+from squid_py import ACCESS_SERVICE_TEMPLATE_ID
 
 
 setup_logging(level=logging.DEBUG)
@@ -59,5 +60,10 @@ def test_asset():
     asset = ocean.get_asset(asset_did)
     assert asset
     assert asset.did == asset_did
+    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
+    purchase_account.request_tokens(100)
+    
+    # test purchase an asset
+    asset.purchase(purchase_account)
      
     

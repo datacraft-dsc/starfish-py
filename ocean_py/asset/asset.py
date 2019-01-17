@@ -7,6 +7,7 @@ from squid_py.did import did_to_id
 
 from ocean_py.asset.asset_base import AssetBase
 from ocean_py.agent.metadata_agent import MetadataAgent
+from ocean_py.agent.purchase_agent import PurchaseAgent
 
 # TODO: implement this...
 # from ocean_py.agent.publish_agent import PublishAgent
@@ -76,6 +77,13 @@ class Asset(AssetBase):
 
         return self._metadata
 
+    def purchase(self, account, **kwargs):
+        """
+            Purchase this asset using the account details
+        """
+        agent = PurchaseAgent(self._ocean, **kwargs)
+        return agent.purchase_asset(self, account)
+        
     def _set_ddo(self, ddo):
         """ assign ddo values to the asset id/did and metadata properties"""
         self._did = ddo.did
