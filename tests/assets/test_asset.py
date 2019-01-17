@@ -47,11 +47,9 @@ def test_asset():
         metadata = json.load(file_handle)
     assert metadata
 
-    # test registering an asset
-    asset_price = 100
     #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
 
-    asset = ocean.register_asset(metadata, account=publisher_account, price=asset_price)
+    asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did
     

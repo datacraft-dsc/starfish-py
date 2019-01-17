@@ -2,7 +2,7 @@
     MetadataAgent - Agent to access the off chain meta storage in squid aka Aquarius
 """
 
-from squid_py.ocean.brizo import Brizo
+from squid_py.brizo.brizo import Brizo
 
 from squid_py import (
     ServiceDescriptor,
@@ -42,7 +42,9 @@ class MetadataAgent(AgentBase):
                 timeout,
                 ACCESS_SERVICE_TEMPLATE_ID
             )]
-        return self._ocean.squid.register_asset(metadata, account, service)
+        # TODO: we may need to see if we can pass our own service descriptors
+        # instead of relying squid to create them for us.
+        return self._ocean.squid.register_asset(metadata, account)
 
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """

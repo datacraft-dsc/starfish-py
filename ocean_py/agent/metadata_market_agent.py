@@ -5,7 +5,7 @@ import json
 import requests
 from web3 import Web3
 
-from squid_py.did_resolver import DIDResolver
+from squid_py.did_resolver.did_resolver import DIDResolver
 from squid_py.ddo import DDO
 
 from ocean_py.agent.agent_base import AgentBase
