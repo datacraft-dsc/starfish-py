@@ -29,7 +29,7 @@ def setup_logging(level=logging.INFO, filename='logging.yaml', env_key='LOG_CFG'
             try:
                 config = yaml.safe_load(file_handle.read())
                 logging.config.dictConfig(config)
-                logging.info("Logging configuration loaded from file: {}".format(filename))
+                logging.info(f'Logging configuration loaded from file: {filename}')
             except yaml.YAMLError as error_exception:
                 print(error_exception)
-                logging.error('Failed to load logging configuration file {0}: {1}'.format(filename, error_exception))
+                logging.error(f'Failed to load logging configuration file {filename}: {error_exception}')

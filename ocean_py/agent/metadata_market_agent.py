@@ -30,7 +30,7 @@ class MetadataMarketAgent(AgentBase):
 
         self._headers = {'content-type': 'application/json'}
         if 'authorization' in kwargs and kwargs['authorization']:
-            self._headers['Authorization'] = 'Basic {}'.format(kwargs['authorization'])
+            self._headers['Authorization'] = f'Basic {kwargs["authorization"]}'
 
     def register_asset(self, metadata):
         """
@@ -44,7 +44,7 @@ class MetadataMarketAgent(AgentBase):
         if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
-                'did': '{0}/{1}'.format(self._did, asset_id),
+                'did': f'{self._did}/{asset_id}',
                 'metadata_text': metadata_text,
             }
         return result
@@ -54,11 +54,11 @@ class MetadataMarketAgent(AgentBase):
         endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
         if endpoint:
             url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
-            logger.debug('metadata save url {}'.format(url))
+            logger.debug(f'metadata save url {url}')
             response = requests.put(url, data=metadata_text, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 return asset_id
-            logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
+            logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return None
 
     def read_asset(self, asset_id):
@@ -67,16 +67,16 @@ class MetadataMarketAgent(AgentBase):
         endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
         if endpoint:
             url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
-            logger.debug('metadata read url {}'.format(url))
+            logger.debug(f'metadata read url {url}')
             response = requests.get(url, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 result = {
                     'asset_id': asset_id,
-                    'did': '{0}/{1}'.format(self._did, asset_id),
+                    'did': f'{self._did}/{asset_id}',
                     'metadata_text': response.content.decode('utf-8')
                 }
             else:
-                logger.warning('metadata asset read {0} response returned {1}'.format(asset_id, response))
+                logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
 
     @property
@@ -107,7 +107,7 @@ class MetadataMarketAgent(AgentBase):
             # the calc asset_id from the metadata should be same as this asset_id
             metadata_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
-                logger.debug('metdata does not match {0} != {1}'.format(metadata_id, asset_id))
+                logger.debug(f'metdata does not match {metadata_id} != {asset_id}')
             return metadata_id == asset_id
         return False
 
