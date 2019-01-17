@@ -2,14 +2,17 @@
     MetadataAgent - Agent to access the off chain meta storage in squid aka Aquarius
 """
 
+from ocean_py.agent.agent_base import AgentBase
+
+"""
 from squid_py.brizo.brizo import Brizo
 
 from squid_py import (
     ServiceDescriptor,
     ACCESS_SERVICE_TEMPLATE_ID,
 )
+"""
 
-from ocean_py.agent.agent_base import AgentBase
 # from ocean_py import logger
 
 class MetadataAgent(AgentBase):
@@ -17,7 +20,7 @@ class MetadataAgent(AgentBase):
         """init a standard ocean agent, with a given DID"""
         AgentBase.__init__(self, ocean, **kwargs)
 
-    def register_asset(self, metadata, account, service=None, price=None, timeout=9000):
+    def register_asset(self, metadata, account):
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
@@ -28,7 +31,7 @@ class MetadataAgent(AgentBase):
         """
         if not account:
             raise ValueError('you must provide an account number to register the asset')
-
+        """
         if not service:
             if not price:
                 raise ValueError('you must provide at least one parameter  "service=" (ServiceDiscriptor) or "price=" (Asset Price)')
@@ -42,10 +45,11 @@ class MetadataAgent(AgentBase):
                 timeout,
                 ACCESS_SERVICE_TEMPLATE_ID
             )]
+        """
         # TODO: we may need to see if we can pass our own service descriptors
         # instead of relying squid to create them for us.
         return self._ocean.squid.register_asset(metadata, account)
 
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """
-        return self._ocean.squid.resolve_did(did)
+        return self._ocean.squid.resolve_asset_did(did)

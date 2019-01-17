@@ -47,6 +47,7 @@ def test_asset():
         metadata = json.load(file_handle)
     assert metadata
 
+    # as of squid-0.1.22 - price is set in the metadata
     #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
 
     asset = ocean.register_asset(metadata, account=publisher_account)
