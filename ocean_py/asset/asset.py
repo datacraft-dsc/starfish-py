@@ -42,9 +42,9 @@ class Asset(AssetBase):
         """
 
         account = kwargs.get('account')
-        service = kwargs.get('service')
-        price = kwargs.get('price')
-        timeout = kwargs.get('timeout', 9000)
+        # service = kwargs.get('service')
+        # price = kwargs.get('price')
+        # timeout = kwargs.get('timeout', 9000)
 
         if not account:
             raise ValueError('you must provide an account number to register the asset')
@@ -53,7 +53,7 @@ class Asset(AssetBase):
         agent = MetadataAgent(self._ocean, **kwargs)
 
         self._metadata = None
-        ddo = agent.register_asset(metadata, account, service, price, timeout)
+        ddo = agent.register_asset(metadata, account)
         if ddo:
             self._set_ddo(ddo)
 
