@@ -6,6 +6,8 @@
 import pathlib
 import json
 import logging
+import time
+from web3 import Web3
 
 from ocean_py.ocean import Ocean
 from ocean_py.logging import setup_logging
@@ -14,6 +16,10 @@ from ocean_py import logger
 from squid_py.service_agreement.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 from squid_py import ACCESS_SERVICE_TEMPLATE_ID
+from squid_py.keeper.event_listener import EventListener
+
+from squid_py.brizo.brizo import Brizo
+from tests.helpers.brizo_mock import BrizoMock
 
 
 setup_logging(level=logging.DEBUG)
@@ -31,6 +37,12 @@ CONFIG_PARMS = {
 
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
+
+
+def _log_event(event_name):
+    def _process_event(event):
+        logging.debug(f'Received event {event_name}: {event}')
+    return _process_event
 
 def test_asset():
     # create an ocean object
@@ -55,6 +67,7 @@ def test_asset():
     # as of squid-0.1.22 - price is set in the metadata
     #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
 
+    
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did
@@ -64,12 +77,44 @@ def test_asset():
     asset = ocean.get_asset(asset_did)
     assert asset
     assert asset.did == asset_did
-    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
-    purchase_account.password = ocean.config.parity_password
+
+
+    purchase_account = ocean.accounts[list(ocean.accounts)[2]]
+    
+    purchase_account.password = 'secret'
     purchase_account.unlock()
 
+    purchase_account.request_tokens(100)
+
+    # since Brizo does not work outside in the barge , we need to start
+    # brizo as a dumy client to do the brizo work...
+    Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
     
     # test purchase an asset
-    assert asset.purchase(purchase_account)
-     
+    service_agreement_id = asset.purchase(purchase_account)
+    assert service_agreement_id
+    
+    
+    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=service_agreement_id)}
+    filter2 = {'serviceId': Web3.toBytes(hexstr=service_agreement_id)}
+
+    EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
+        _log_event('ExecuteAgreement'),
+        10,
+        blocking=True
+    )
+    EventListener('AccessConditions', 'AccessGranted', filters=filter2).listen_once(
+        _log_event('AccessGranted'),
+        10,
+        blocking=True
+    )
+    event = EventListener('ServiceAgreement', 'AgreementFulfilled', filters=filter1).listen_once(
+        _log_event('AgreementFulfilled'),
+        10,
+        blocking=True
+    )
+    
+    assert asset.is_access_granted(service_agreement_id, purchase_account)
+    
+    asset.consume(service_agreement_id, purchase_account)
     

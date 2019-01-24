@@ -106,3 +106,4 @@ sphinx
 config_local.ini
 artifacts/
 squid_py.db
+consume_downloads/

@@ -16,9 +16,9 @@ METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
 METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 
 class MetadataMarketAgent(AgentBase):
-    def __init__(self, ocean, **kwargs):
+    def __init__(self, ocean):
         """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean, **kwargs)
+        AgentBase.__init__(self, ocean)
 
         self._did = kwargs.get('did')
         self._ddo = None

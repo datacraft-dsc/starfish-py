@@ -53,7 +53,7 @@ class Ocean():
 
 
 
-    def register_asset(self, metadata, **kwargs):
+    def register_asset(self, metadata, account):
         """
         Register an on chain asset
         :param metadata: dict of the metadata
@@ -63,11 +63,11 @@ class Ocean():
         asset = Asset(self)
 
         # TODO: fix the exit, so that we raise an error or return an asset
-        if asset.register(metadata, **kwargs):
+        if asset.register(metadata, account):
             return asset
         return None
 
-    def register_asset_light(self, metadata, **kwargs):
+    def register_asset_light(self, metadata):
         """
         Register an asset on the off chain system using an metadata storage agent
         :return: the asset that has been registered
@@ -76,11 +76,11 @@ class Ocean():
         asset = AssetLight(self)
 
         # TODO: fix the exit, so that we raise an error or return an asset
-        if asset.register(metadata, **kwargs):
+        if asset.register(metadata):
             return asset
         return None
 
-    def get_asset(self, did, **kwargs):
+    def get_asset(self, did):
         """
         :param: did: DID of the asset and agent combined.
         :return a registered asset given a DID of the asset
@@ -94,7 +94,7 @@ class Ocean():
             raise ValueError(f'Invalid did "{did}" for an asset')
 
         if not asset.is_empty:
-            if asset.read(**kwargs):
+            if asset.read():
                 return asset
         return None
 

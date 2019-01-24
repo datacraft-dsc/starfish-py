@@ -9,9 +9,9 @@ from ocean_py.agent.agent_base import AgentBase
 # from ocean_py import logger
 
 class PurchaseAgent(AgentBase):
-    def __init__(self, ocean, **kwargs):
+    def __init__(self, ocean):
         """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean, **kwargs)
+        AgentBase.__init__(self, ocean)
 
 
     def purchase_asset(self, asset, account):
@@ -20,48 +20,44 @@ class PurchaseAgent(AgentBase):
         :param asset: asset to purchase
         :param account: account to use for buying this asset
         """
+        service_agreement_id = None
+        service_agreement = self.get_service_agreement_from_asset(asset)
+        if service_agreement:
+            service_agreement_id = self._ocean.squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account)
+            
+        return service_agreement_id
         
+    def consume_asset(self, asset, service_agreement_id, account):
+        downloads_path = self._ocean.squid._downloads_path
+        print(downloads_path)
+        service_agreement = self.get_service_agreement_from_asset(asset)
+        if service_agreement:        
+            self._ocean.squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id,  account)
+            
+    def is_access_granted_for_asset(self, asset, service_agreement_id, account):
+        account_address = None
+        if isinstance(account, object):
+            account_address = account.address
+        elif isinstance(account, str):
+            account_address = account
+        else:
+            raise TypeError(f'You need to pass an account object or account address')
+            
+        agreement_address = self._ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
+        print('agreement_address=', agreement_address, service_agreement_id)
+        
+        return self._ocean.squid.is_access_granted(service_agreement_id, asset.did, account_address)
+        
+    def get_service_agreement_from_asset(self, asset):
+        service_agreement = None
         ddo = asset.ddo
+        
         if ddo:
             service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
             assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
-            sa = ServiceAgreement.from_service_dict(service.as_dictionary())
-            service_agreement_id = self._ocean.squid.purchase_asset_service(asset.did, sa.sa_definition_id, account)
-            
-            assert service_agreement_id, 'agreement id is None.'
-            print('got new service agreement id:', service_agreement_id)
-            filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=service_agreement_id)}
-            filter_2 = {'serviceId': Web3.toBytes(hexstr=service_agreement_id)}
-            executed = PurchaseAgent.wait_for_event(
-                self._ocean.keeper.service_agreement.events.ExecuteAgreement, 
-                filter1
-            )
-            assert executed
-            locked = PurchaseAgent.wait_for_event(
-                self._ocean.squid.keeper.payment_conditions.events.PaymentLocked,
-                filter_2
-            )
-            assert locked
-            granted = PurchaseAgent.wait_for_event(
-                self._ocean.squid.keeper.access_conditions.events.AccessGranted,
-                filter_2
-            )
-            assert granted
-            released = PurchaseAgent.wait_for_event(
-                self._ocean.squid.keeper.payment_conditions.events.PaymentReleased, 
-                filter_2
-            )
-            assert released
-            fulfilled = PurchaseAgent.wait_for_event(
-                self._ocean.squid.keeper.service_agreement.events.AgreementFulfilled, 
-                filter1
-            )
-            assert fulfilled
-            print('agreement was fulfilled.')
-            return True
-            
-        return False
-
+            service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
+        return service_agreement
+        
     @staticmethod
     def wait_for_event(event, arg_filter, wait_iterations=20):
         _filter = event.createFilter(fromBlock=0, argument_filters=arg_filter)

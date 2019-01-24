@@ -32,28 +32,16 @@ class Asset(AssetBase):
         if self._did:
             self._id = did_to_id(did)
 
-    def register(self, metadata, **kwargs):
+    def register(self, metadata, account):
         """
         Register on chain asset
         :param metadata: dict of the metadata
         :param account: account to use to register this asset
-        :param service: if provided use the service from a ServiceDiscpitor
-        :param price: If no service provided set the asset price
-        :param timout: timeout in seconds to register the service
 
         :return The new asset metadata ( ddo)
         """
 
-        account = kwargs.get('account')
-        # service = kwargs.get('service')
-        # price = kwargs.get('price')
-        # timeout = kwargs.get('timeout', 9000)
-
-        if not account:
-            raise ValueError('you must provide an account number to register the asset')
-
-
-        agent = MetadataAgent(self._ocean, **kwargs)
+        agent = MetadataAgent(self._ocean)
 
         self._metadata = None
         ddo = agent.register_asset(metadata, account)
@@ -62,11 +50,11 @@ class Asset(AssetBase):
 
         return self._metadata
 
-    def read(self, **kwargs):
+    def read(self):
         """read the asset metadata in this case it's the DDO with the metadat included from the off chain
         metadata agent, if not found return None"""
 
-        agent = MetadataAgent(self._ocean, **kwargs)
+        agent = MetadataAgent(self._ocean)
 
         self._metadata = None
         ddo = agent.read_asset(self._did)
@@ -79,12 +67,20 @@ class Asset(AssetBase):
 
         return self._metadata
 
-    def purchase(self, account, **kwargs):
+    def purchase(self, account):
         """
-            Purchase this asset using the account details
+            Purchase this asset using the account details, return the service agreement id
         """
-        agent = PurchaseAgent(self._ocean, **kwargs)
+        agent = PurchaseAgent(self._ocean)
         return agent.purchase_asset(self, account)
+        
+    def is_access_granted(self, service_agreement_id, account):
+        agent = PurchaseAgent(self._ocean)
+        return agent.is_access_granted_for_asset(self, service_agreement_id, account)
+        
+    def consume(self, service_agreement_id, account):
+        agent = PurchaseAgent(self._ocean)
+        return agent.consume_asset(self, service_agreement_id, account)
         
     def _set_ddo(self, ddo):
         """ assign ddo values to the asset id/did and metadata properties"""

@@ -16,10 +16,10 @@ class AssetBase():
         self._did = did
         self._metadata = None
 
-    def register(self, metadata, **kwargs):
+    def register(self, metadata):
         """ abstract method to register an asset"""
 
-    def read(self, **kwargs):
+    def read(self):
         """ abstract method to read an asset """
 
     @property
