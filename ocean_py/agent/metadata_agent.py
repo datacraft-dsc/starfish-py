@@ -4,14 +4,6 @@
 
 from ocean_py.agent.agent_base import AgentBase
 
-"""
-from squid_py.brizo.brizo import Brizo
-
-from squid_py import (
-    ServiceDescriptor,
-    ACCESS_SERVICE_TEMPLATE_ID,
-)
-"""
 
 # from ocean_py import logger
 

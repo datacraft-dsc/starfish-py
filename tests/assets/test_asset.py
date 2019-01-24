@@ -81,6 +81,7 @@ def test_asset():
 
     purchase_account = ocean.accounts[list(ocean.accounts)[2]]
     
+    # TODO: have this password saved in config or even better a wallet.
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
