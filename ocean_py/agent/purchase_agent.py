@@ -42,6 +42,7 @@ class PurchaseAgent(AgentBase):
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
+        print(service_agreement_id, account_address)
         agreement_address = self._ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
         print('agreement_address=', agreement_address, service_agreement_id)
 

@@ -20,16 +20,26 @@ from ocean_py.utils.did import did_parse
 
 
 class Asset(AssetBase):
-    def __init__(self, ocean, did=None):
+    def __init__(self, ocean, did=None, purchase_id=None, asset=None):
         """
         init an asset class with the following:
         :param ocean: ocean object to use to connect to the ocean network
         :param did: Optional did of the asset
+        :param asset: Optional asset to copy from
         """
-        AssetBase.__init__(self, ocean, did)
+        AssetBase.__init__(self, ocean, did=did, asset=asset)
         self._ddo = None
-        
-        if self._did:
+        self._purchase_id = None
+
+        # copy from another asset
+        if asset:
+            self._ddo = asset.ddo
+            self._purchase_id = asset.purchase_id
+
+        if purchase_id:
+            self._purchase_id = purchase_id
+
+        if did:
             self._id = did_to_id(did)
 
     def register(self, metadata, account):
@@ -69,25 +79,58 @@ class Asset(AssetBase):
 
     def purchase(self, account):
         """
-            Purchase this asset using the account details, return the service agreement id
+        Purchase this asset using the account details, return a copy of this asset
+        with the service_agreement_id ( purchase_id) set
+
+        :return asset object that has been purchased
         """
         agent = PurchaseAgent(self._ocean)
-        return agent.purchase_asset(self, account)
-        
-    def is_access_granted(self, service_agreement_id, account):
+        service_agreement_id = agent.purchase_asset(self, account)
+        if service_agreement_id:
+            purchase_asset = self.copy()
+            purchase_asset.set_purchase_id(service_agreement_id)
+            return purchase_asset
+        return None
+
+
+    def is_purchase_valid(self, account):
+        """
+        test to see if this purchased asset can be accessed and is valid
+
+        :return: boolean value if this asset has been purchased
+        """
+        print(self._purchase_id)
+        if not self.is_purchased:
+            return False
+
         agent = PurchaseAgent(self._ocean)
-        return agent.is_access_granted_for_asset(self, service_agreement_id, account)
-        
-    def consume(self, service_agreement_id, account):
+        return agent.is_access_granted_for_asset(self, self._purchase_id, account)
+
+    def consume(self, account):
+        """
+        Consume a purchased asset.
+
+        :return: data returned from the asset , or False
+        """
+        if not self.is_purchased:
+            return False
+
         agent = PurchaseAgent(self._ocean)
-        return agent.consume_asset(self, service_agreement_id, account)
-        
+        return agent.consume_asset(self, self._purchase_id, account)
+
+    def set_purchase_id(self, service_agreement_id):
+        """ Set the purchase id or 'service_agreement_id' """
+        self._purchase_id = service_agreement_id
+
+    def copy(self):
+        return Asset(self._ocean, asset=self)
+
     def _set_ddo(self, ddo):
         """ assign ddo values to the asset id/did and metadata properties"""
         self._did = ddo.did
         self._id = remove_0x_prefix(did_to_id(self._did))
         self._ddo = ddo
-        
+
         self._metadata = ddo.get_metadata()
 
     @property
@@ -99,7 +142,15 @@ class Asset(AssetBase):
     def ddo(self):
         """ return the ddo assigned with this asset"""
         return self._ddo
-        
+
+    @property
+    def is_purchased(self):
+        return not self._purchase_id is None
+
+    @property
+    def purchase_id(self):
+        return self._purchase_id
+
     @staticmethod
     def is_did_valid(did):
         """ return true if the DID is in the format 'did:op:xxxxx' """

@@ -92,12 +92,12 @@ def test_asset():
     Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
     
     # test purchase an asset
-    service_agreement_id = asset.purchase(purchase_account)
-    assert service_agreement_id
+    purchase_asset = asset.purchase(purchase_account)
+    assert purchase_asset
     
     
-    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=service_agreement_id)}
-    filter2 = {'serviceId': Web3.toBytes(hexstr=service_agreement_id)}
+    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+    filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
 
     EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
         _log_event('ExecuteAgreement'),
@@ -115,7 +115,9 @@ def test_asset():
         blocking=True
     )
     
-    assert asset.is_access_granted(service_agreement_id, purchase_account)
+    assert purchase_asset.is_purchased
+    assert not asset.is_purchased
+    assert purchase_asset.is_purchase_valid(purchase_account)
     
-    asset.consume(service_agreement_id, purchase_account)
+    purchase_asset.consume(purchase_account)
     
