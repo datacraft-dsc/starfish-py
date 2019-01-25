@@ -20,7 +20,7 @@ from ocean_py.utils.did import did_parse
 
 
 class Asset(AssetBase):
-    def __init__(self, ocean, did=None, purchase_id=None, asset=None):
+    def __init__(self, ocean, did=None, purchase_id=None, asset=None, ddo=None):
         """
         init an asset class with the following:
         :param ocean: ocean object to use to connect to the ocean network

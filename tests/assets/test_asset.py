@@ -38,15 +38,8 @@ CONFIG_PARMS = {
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
+def _register_asset(ocean):
 
-def _log_event(event_name):
-    def _process_event(event):
-        logging.debug(f'Received event {event_name}: {event}')
-    return _process_event
-
-def test_asset():
-    # create an ocean object
-    ocean = Ocean(CONFIG_PARMS)
     assert ocean
     assert ocean.accounts
 
@@ -64,13 +57,26 @@ def test_asset():
         metadata = json.load(file_handle)
     assert metadata
 
-    # as of squid-0.1.22 - price is set in the metadata
-    #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
-
     
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did
+    return asset, publisher_account
+
+def _log_event(event_name):
+    def _process_event(event):
+        logging.debug(f'Received event {event_name}: {event}')
+    return _process_event
+
+def test_asset():
+    # create an ocean object
+    ocean = Ocean(CONFIG_PARMS)
+    assert ocean
+    assert ocean.accounts
+
+    asset, publisher_account = _register_asset(ocean)
+    assert asset
+    assert publisher_account
     
     asset_did = asset.did
     # start to test getting the asset from storage
@@ -85,7 +91,7 @@ def test_asset():
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
-    purchase_account.request_tokens(100)
+    purchase_account.request_tokens(10)
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
@@ -94,24 +100,26 @@ def test_asset():
     # test purchase an asset
     purchase_asset = asset.purchase(purchase_account)
     assert purchase_asset
-    
-    
-    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
-    filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+    assert purchase_asset.purchase_id
+    service_agreement_id = purchase_asset.purchase_id
+    print('purchase_id',  purchase_asset.purchase_id)
+
+    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=service_agreement_id)}
+    filter2 = {'serviceId': Web3.toBytes(hexstr=service_agreement_id)}
 
     EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
         _log_event('ExecuteAgreement'),
-        10,
+        20,
         blocking=True
     )
     EventListener('AccessConditions', 'AccessGranted', filters=filter2).listen_once(
         _log_event('AccessGranted'),
-        10,
+        20,
         blocking=True
     )
     event = EventListener('ServiceAgreement', 'AgreementFulfilled', filters=filter1).listen_once(
         _log_event('AgreementFulfilled'),
-        10,
+        20,
         blocking=True
     )
     
@@ -120,4 +128,26 @@ def test_asset():
     assert purchase_asset.is_purchase_valid(purchase_account)
     
     purchase_asset.consume(purchase_account)
+    
+    """
+    print(ocean.search_purchased_assets('Office', purchase_account))
+
+    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+    event_signature = ocean.squid.keeper.servce_agreement.get_event_signature('fulfillAgreement')
+    print(event_signature)
+    """
+    
+def test_asset_search():
+    
+    ocean = Ocean(CONFIG_PARMS)
+    assert ocean
+    assert ocean.accounts
+
+    asset, publisher_account = _register_asset(ocean)
+    assert asset
+    
+    
+    # FIXME: this does not work on this version of squid
+    # 
+    # print(ocean.search_registered_assets('Office'))
     

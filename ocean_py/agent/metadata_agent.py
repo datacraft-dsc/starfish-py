@@ -26,3 +26,8 @@ class MetadataAgent(AgentBase):
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """
         return self._ocean.squid.resolve_asset_did(did)
+
+    def search_assets(self, text, sort=None, offset=100, page=0):
+        ddo_list = self._ocean.squid.search_assets_by_text(text, sort, offset, page)
+        print(ddo_list)
+        return ddo_list

@@ -42,7 +42,6 @@ class PurchaseAgent(AgentBase):
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        print(service_agreement_id, account_address)
         agreement_address = self._ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
         print('agreement_address=', agreement_address, service_agreement_id)
 
@@ -58,6 +57,9 @@ class PurchaseAgent(AgentBase):
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 
+    def search_assets(self, text, account, offset=100, page=0):
+        return []
+        
     @staticmethod
     def wait_for_event(event, arg_filter, wait_iterations=20):
         _filter = event.createFilter(fromBlock=0, argument_filters=arg_filter)
