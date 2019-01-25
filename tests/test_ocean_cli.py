@@ -47,7 +47,7 @@ def test_ocean_cli():
         assert header == lines[1]
         for i in range(num_accounts):
             account = lines[i + 2].split()
-            assert 3 == len(account)
+            assert 4 == len(account)
         last_account_id = account[1]
         # FUTURE assert valid_id(last_account_id)
         assert 0 == len(lines[num_accounts + 2])
