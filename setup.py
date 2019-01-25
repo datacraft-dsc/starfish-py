@@ -56,8 +56,8 @@ for d, _, _ in os.walk('ocean_py'):
         packages.append(d.replace(os.path.sep, '.'))
 
 setup(
-    author="leucothia",
-    author_email='devops@oceanprotocol.com',
+    author="dex-company",
+    author_email='devops@dex.sg',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -81,7 +81,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/oceanprotocol/ocean-py',
+    url='https://github.com/DEX-Company/ocean-py',
     version='0.0.1',
     zip_safe=False,
 )

@@ -30,5 +30,5 @@ deploy:
   password: ${PYPI_PASSWORD}
   on:
     tags: true
-    repo: oceanprotocol/ocean-py
+    repo: DEX-Company/ocean-py
     python: 3.6
