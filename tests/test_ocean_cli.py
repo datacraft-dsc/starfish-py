@@ -10,6 +10,7 @@ import os
 import os.path
 import sys
 import subprocess
+import re
 # import logging
 
 # from pytest import (
@@ -23,6 +24,11 @@ def test_ocean_cli():
     program = sys.argv[0]
     if program[0] != '/':
         program = os.path.join(os.getcwd(), program)
+    
+    # fix for running from the command line 'python -m pytest tests' within venv
+    if re.search(r'/venv/', program):
+        program = './'
+    
     pdir = os.path.normpath(os.path.dirname(program))
     dot_tox = pdir.find('/.tox')
     if dot_tox > 0:
