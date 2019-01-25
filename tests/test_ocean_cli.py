@@ -24,11 +24,11 @@ def test_ocean_cli():
     program = sys.argv[0]
     if program[0] != '/':
         program = os.path.join(os.getcwd(), program)
-    
+
     # fix for running from the command line 'python -m pytest tests' within venv
     if re.search(r'/venv/', program):
         program = './'
-    
+
     pdir = os.path.normpath(os.path.dirname(program))
     dot_tox = pdir.find('/.tox')
     if dot_tox > 0:
@@ -40,7 +40,7 @@ def test_ocean_cli():
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
-    num_accounts = 5
+    num_accounts = 3
     assert (num_accounts + 3) == len(lines)
     if len(lines) == (num_accounts + 3):
         assert log_msg == lines[0]
