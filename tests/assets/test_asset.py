@@ -79,7 +79,7 @@ def test_asset():
     assert asset.did == asset_did
 
 
-    purchase_account = ocean.accounts[list(ocean.accounts)[2]]
+    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
     
     # TODO: have this password saved in config or even better a wallet.
     purchase_account.password = 'secret'
