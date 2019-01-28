@@ -79,13 +79,14 @@ def test_asset():
     assert asset.did == asset_did
 
 
-    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
+    purchase_account = ocean.accounts[list(ocean.accounts)[2]]
+    print('purchase_account', purchase_account.balance)
 
     # TODO: have this password saved in config or even better a wallet.
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
-    purchase_account.request_tokens(4)
+    purchase_account.request_tokens(10)
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
@@ -98,6 +99,8 @@ def test_asset():
 
     filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
     filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+
+    print('wating for', purchase_asset.purchase_id)
 
     EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
         _log_event('ExecuteAgreement'),
@@ -115,6 +118,7 @@ def test_asset():
         blocking=True
     )
 
+    # This test does not work with the current barge
     assert purchase_asset.is_purchased
     assert not asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
