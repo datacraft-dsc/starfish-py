@@ -55,8 +55,8 @@ def test_asset():
     publisher_account = ocean.accounts[list(ocean.accounts)[0]]
     publisher_account.password = ocean.config.parity_password
     publisher_account.unlock()
-    publisher_account.request_tokens(10) 
-    
+    publisher_account.request_tokens(10)
+
     # load in the sample metadata
     assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
     metadata = None
@@ -67,11 +67,11 @@ def test_asset():
     # as of squid-0.1.22 - price is set in the metadata
     #service_descriptors = [ServiceDescriptor.access_service_descriptor(asset_price)]
 
-    
+
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did
-    
+
     asset_did = asset.did
     # start to test getting the asset from storage
     asset = ocean.get_asset(asset_did)
@@ -80,22 +80,22 @@ def test_asset():
 
 
     purchase_account = ocean.accounts[list(ocean.accounts)[1]]
-    
+
     # TODO: have this password saved in config or even better a wallet.
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
-    purchase_account.request_tokens(100)
+    purchase_account.request_tokens(4)
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
     Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
-    
+
     # test purchase an asset
     purchase_asset = asset.purchase(purchase_account)
     assert purchase_asset
-    
-    
+
+
     filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
     filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
 
@@ -114,10 +114,9 @@ def test_asset():
         10,
         blocking=True
     )
-    
+
     assert purchase_asset.is_purchased
     assert not asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
-    
+
     purchase_asset.consume(purchase_account)
-    
