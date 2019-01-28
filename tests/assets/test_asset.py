@@ -52,7 +52,7 @@ def test_asset():
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.accounts[list(ocean.accounts)[0]]
+    publisher_account = ocean.accounts[list(ocean.accounts)[1]]
     publisher_account.password = ocean.config.parity_password
     publisher_account.unlock()
     publisher_account.request_tokens(10)
