@@ -11,10 +11,11 @@ services:
 - docker
 
 before_install:
-  - git clone https://github.com/oceanprotocol/barge
+  - git clone https://github.com/DEX-Company/barge.git
   - cd barge
-  - git checkout def6075864fd1324d90e8970062e7f7e5a3a118b .
-  - KEEPER_VERSION=v0.5.3 bash -x start_ocean.sh --latest --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
+  - git checkout tmarble/versions-can-be-sha256
+  - git pull
+  - bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
   - cd ..
   - sleep 15
 
