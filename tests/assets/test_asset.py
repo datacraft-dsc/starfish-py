@@ -100,22 +100,20 @@ def test_asset():
     filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
     filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
 
-
     EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
         _log_event('ExecuteAgreement'),
-        10,
+        20,
         blocking=True
     )
 
-
     EventListener('AccessConditions', 'AccessGranted', filters=filter2).listen_once(
         _log_event('AccessGranted'),
-        10,
+        20,
         blocking=True
     )
     event = EventListener('ServiceAgreement', 'AgreementFulfilled', filters=filter1).listen_once(
         _log_event('AgreementFulfilled'),
-        10,
+        20,
         blocking=True
     )
 
