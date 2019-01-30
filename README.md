@@ -72,7 +72,15 @@ Python 3.6
     ```
     python3 setup.py test
     ```
+## Documentation
 
+1. Build Sphinx documentation
+    To build the Syphinx auto documentation, you need to do the following:
+    ```bash
+    cd docs
+    ./build.sh
+    ```
+    
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
