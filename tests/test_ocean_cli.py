@@ -10,6 +10,7 @@ import os
 import os.path
 import sys
 import subprocess
+import re
 # import logging
 
 # from pytest import (
@@ -23,6 +24,11 @@ def test_ocean_cli():
     program = sys.argv[0]
     if program[0] != '/':
         program = os.path.join(os.getcwd(), program)
+
+    # fix for running from the command line 'python -m pytest tests' within venv
+    if re.search(r'/venv/', program):
+        program = './'
+
     pdir = os.path.normpath(os.path.dirname(program))
     dot_tox = pdir.find('/.tox')
     if dot_tox > 0:
@@ -34,14 +40,14 @@ def test_ocean_cli():
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
-    num_accounts = 5
+    num_accounts = 3
     assert (num_accounts + 3) == len(lines)
     if len(lines) == (num_accounts + 3):
         assert log_msg == lines[0]
         assert header == lines[1]
         for i in range(num_accounts):
             account = lines[i + 2].split()
-            assert 3 == len(account)
+            assert 4 == len(account)
         last_account_id = account[1]
         # FUTURE assert valid_id(last_account_id)
         assert 0 == len(lines[num_accounts + 2])
@@ -58,7 +64,7 @@ def test_ocean_cli():
         assert header == lines[1]
         for i in range(num_accounts):
             account = lines[i + 2].split()
-            assert 3 == len(account)
+            assert 4 == len(account)
         last_account_id2 = account[1]
         # FUTURE assert valid_id(last_account_id2)
         assert 0 == len(lines[num_accounts + 2])
