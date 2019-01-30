@@ -1,4 +1,4 @@
-[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
+[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://dex.sg)
 
 # ocean-py
 
@@ -46,13 +46,13 @@ Python 3.6
 
 1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge).
 
-    There is an issue with the latest keeper not deploying contracts,
-    for the moment you will need to specifiy the version of the keeper to use.
-
-    Once cloned that repository, you can start the cluster running:
+    In a sepearte terminal session you need to clone and checkout the correct taged
+    version of ```barge``` repository, by doing the following:
     ```
-    export KEEPER_VERSION=v0.5.3
-    ./start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node
+    git clone https://github.com/DEX-Company/barge.git
+    cd barge
+    git checkout tags/dex-2019-01-30
+    ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
     ```
 
 1. Copy keeper artifacts
