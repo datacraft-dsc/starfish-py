@@ -52,7 +52,7 @@ def test_asset():
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.accounts[list(ocean.accounts)[1]]
+    publisher_account = ocean.accounts[list(ocean.accounts)[0]]
     publisher_account.password = ocean.config.parity_password
     publisher_account.unlock()
     publisher_account.request_tokens(10)
@@ -79,7 +79,7 @@ def test_asset():
     assert asset.did == asset_did
 
 
-    purchase_account = ocean.accounts[list(ocean.accounts)[2]]
+    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
     print('purchase_account', purchase_account.balance)
 
     # TODO: have this password saved in config or even better a wallet.
