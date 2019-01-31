@@ -77,8 +77,7 @@ Python 3.6
 1. Build Sphinx documentation
     To build the Syphinx auto documentation, you need to do the following:
     ```bash
-    cd docs
-    ./build.sh
+    make docs
     ```
     
 ## Code style
