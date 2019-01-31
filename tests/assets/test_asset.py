@@ -86,7 +86,8 @@ def test_asset():
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
-    purchase_account.request_tokens(100)
+    purchase_account.request_tokens(10)
+    time.sleep(10)
 
     print('purchase_account', purchase_account.balance)
 
