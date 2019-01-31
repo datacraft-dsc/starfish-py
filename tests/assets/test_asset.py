@@ -86,7 +86,9 @@ def test_asset():
     purchase_account.password = 'secret'
     purchase_account.unlock()
 
-    purchase_account.request_tokens(20)
+    purchase_account.request_tokens(100)
+
+    print('purchase_account', purchase_account.balance)
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
