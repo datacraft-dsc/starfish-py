@@ -40,14 +40,14 @@ def test_ocean_cli():
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
-    num_accounts = 5
+    num_accounts = 3
     assert (num_accounts + 3) == len(lines)
     if len(lines) == (num_accounts + 3):
         assert log_msg == lines[0]
         assert header == lines[1]
         for i in range(num_accounts):
             account = lines[i + 2].split()
-            assert 3 == len(account)
+            assert 4 == len(account)
         last_account_id = account[1]
         # FUTURE assert valid_id(last_account_id)
         assert 0 == len(lines[num_accounts + 2])
@@ -64,7 +64,7 @@ def test_ocean_cli():
         assert header == lines[1]
         for i in range(num_accounts):
             account = lines[i + 2].split()
-            assert 3 == len(account)
+            assert 4 == len(account)
         last_account_id2 = account[1]
         # FUTURE assert valid_id(last_account_id2)
         assert 0 == len(lines[num_accounts + 2])
