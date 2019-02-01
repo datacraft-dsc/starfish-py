@@ -50,7 +50,7 @@ Python 3.6
     ```
     git clone https://github.com/DEX-Company/barge.git
     cd barge
-    git checkout tags/dex-2019-01-30
+    git checkout tags/dex-2019-02-01
     ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
     ```
 
