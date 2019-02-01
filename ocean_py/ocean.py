@@ -112,11 +112,13 @@ class Ocean():
                 asset_list.append(asset)
         return asset_list
 
+    """
     def search_purchased_assets(self, text, account, sort=None, offset=100, page=0):
         agent = PurchaseAgent(self)
         asset_list = agent.search_assets(text, account, sort, offset, page)
         return asset_list
-
+    """
+    
     @property
     def accounts(self):
         """return the ethereum accounts"""
