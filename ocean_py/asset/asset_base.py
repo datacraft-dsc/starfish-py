@@ -5,22 +5,32 @@
 
 # from ocean_py import logger
 
-class AssetBase():
-    def __init__(self, ocean, did=None):
+class AssetBase(object):
+    def __init__(self, ocean, did=None, asset=None):
         """
         init an asset class with the following:
         :param ocean: ocean object to use to connect to the ocean network
+        :param asset: opiton asset to copy from
         """
         self._ocean = ocean
+
         self._id = None
         self._did = did
         self._metadata = None
 
-    def register(self, metadata, **kwargs):
+        if asset:
+            self._id = asset.id
+            self._did = asset.did
+            self._metadata = asset.metadata
+
+    def register(self, metadata):
         """ abstract method to register an asset"""
 
-    def read(self, **kwargs):
+    def read(self):
         """ abstract method to read an asset """
+
+    def copy(self):
+        return AssetBase(self)
 
     @property
     def asset_id(self):
@@ -37,6 +47,10 @@ class AssetBase():
         """ return true if empty asset """
         return self._id is None
 
+    @property
+    def id(self):
+        """return the id of the asset"""
+        return self._id
     @property
     def did(self):
         """return the DID of the asset"""

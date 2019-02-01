@@ -34,14 +34,11 @@ class AssetLight(AssetBase):
         Register an asset by writing it's meta data to the meta storage agent
         :param metadata: dict of the metadata
         :param agent: agent object for perform meta stroage
-        :param **kwargs: list of args that need to be passed to the agent object
-        to do the asset registration
-        in the ocean agent memory storage
 
         :return The new asset registered, or return None on error
         """
 
-        agent = MetadataMarketAgent(self._ocean, **kwargs)
+        agent = MetadataMarketAgent(self._ocean)
 
         self._metadata = None
         asset_data = agent.register_asset(metadata)
@@ -52,10 +49,10 @@ class AssetLight(AssetBase):
             self._metadata = metadata
         return self._metadata
 
-    def read(self, **kwargs):
+    def read(self):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
 
-        agent = MetadataMarketAgent(self._ocean, did=self._agent_did, **kwargs)
+        agent = MetadataMarketAgent(self._ocean, did=self._agent_did)
         asset_data = agent.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with

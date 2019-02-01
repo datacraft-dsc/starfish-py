@@ -16,11 +16,11 @@ METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
 METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 
 class MetadataMarketAgent(AgentBase):
-    def __init__(self, ocean, **kwargs):
+    def __init__(self, ocean, did = None, authorization=None):
         """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean, **kwargs)
+        AgentBase.__init__(self, ocean)
 
-        self._did = kwargs.get('did')
+        self._did = did
         self._ddo = None
         self._register_name = METADATA_MARKET_AGENT_ENDPOINT_NAME
 
@@ -29,8 +29,8 @@ class MetadataMarketAgent(AgentBase):
             self._ddo = self._resolve_did_to_ddo(self._did)
 
         self._headers = {'content-type': 'application/json'}
-        if 'authorization' in kwargs and kwargs['authorization']:
-            self._headers['Authorization'] = f'Basic {kwargs["authorization"]}'
+        if authorization:
+            self._headers['Authorization'] = f'Basic {authorization}'
 
     def register_asset(self, metadata):
         """
