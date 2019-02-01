@@ -7,6 +7,8 @@ Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user acce
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/ocean-py.svg)](https://travis-ci.com/DEX-Company/ocean-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4a8f378e80be435084f5e9bee39e769b)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/ocean-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/ocean-py.svg)](https://github.com/DEX-Company/ocean-py/graphs/contributors)
+[![Squid Version]()(https://github.com/oceanprotocol/squid-py/releases/tag/v0.3.2)
+[![Barge Version]()(https://github.com/DEX-Company/barge/releases/tag/dex-2019-02-01)
 
 ---
 
