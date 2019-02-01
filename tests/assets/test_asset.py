@@ -7,7 +7,6 @@ import pathlib
 import json
 import logging
 import time
-import secrets
 from web3 import Web3
 
 from ocean_py.ocean import Ocean
@@ -45,7 +44,7 @@ def _read_metadata():
     metadata = None
     with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
         metadata = json.load(file_handle)
-    
+
     return metadata
 
 def _register_asset(ocean):
@@ -62,7 +61,7 @@ def _register_asset(ocean):
 
     metadata = _read_metadata()
     assert metadata
-    
+
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did
@@ -82,7 +81,7 @@ def test_asset():
     asset, publisher_account = _register_asset(ocean)
     assert asset
     assert publisher_account
-    
+
     asset_did = asset.did
     # start to test getting the asset from storage
     asset = ocean.get_asset(asset_did)
@@ -137,30 +136,28 @@ def test_asset():
 
     purchase_asset.consume(purchase_account)
     """
-    
+
 
 def test_asset_search():
-    
+
     ocean = Ocean(CONFIG_PARMS)
     assert ocean
     assert ocean.accounts
 
     asset, publisher_account = _register_asset(ocean)
     assert asset
-    
+
     metadata = _read_metadata()
     assert metadata
 
     # choose a word from the description field
     text = metadata['base']['description']
     words = text.split(' ')
-    # word = secrets.choice(words)
     word = words[0]
+    
     # should return at least 1 or more assets
     logging.info(f'search word is {word}')
     searchResult = ocean.search_registered_assets(word)
     assert searchResult
-    
+
     assert(len(searchResult) > 1)
-
-
