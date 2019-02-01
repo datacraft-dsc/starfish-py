@@ -2,13 +2,10 @@
 
 # ocean-py
 
->    🐳  [Command line tools and interface for squid-py](https://www.elastic.co/) component for (Python).
->    [oceanprotocol.com](https://oceanprotocol.com)
-
 Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/ocean-py.svg)](https://travis-ci.com/DEX-Company/ocean-py)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6dd63d6418764b9ebaaf53b284a60680)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/ocean-py&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4a8f378e80be435084f5e9bee39e769b)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/ocean-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/ocean-py.svg)](https://github.com/DEX-Company/ocean-py/graphs/contributors)
 
 ---
