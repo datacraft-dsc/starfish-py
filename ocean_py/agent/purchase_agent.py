@@ -70,7 +70,7 @@ class PurchaseAgent(AgentBase):
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 
-    def search_assets(self, text, account, offset=100, page=0):
+    def search_assets(self, text, account, sort=None, offset=100, page=0):
         assert self
         return []
 
