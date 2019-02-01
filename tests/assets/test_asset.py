@@ -100,21 +100,19 @@ def test_asset():
     assert purchase_asset
 
 
-    filter1 = {'serviceAgreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
-    filter2 = {'serviceId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+    _filter = {'agreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
 
-    EventListener('ServiceAgreement', 'ExecuteAgreement', filters=filter1).listen_once(
-        _log_event('ExecuteAgreement'),
+    EventListener('ServiceExecutionAgreement', 'AgreementInitialized', filters=_filter).listen_once(
+        _log_event('AgreementInitialized'),
         20,
         blocking=True
     )
-
-    EventListener('AccessConditions', 'AccessGranted', filters=filter2).listen_once(
+    EventListener('AccessConditions', 'AccessGranted', filters=_filter).listen_once(
         _log_event('AccessGranted'),
         20,
         blocking=True
     )
-    event = EventListener('ServiceAgreement', 'AgreementFulfilled', filters=filter1).listen_once(
+    event = EventListener('ServiceExecutionAgreement', 'AgreementFulfilled', filters=_filter).listen_once(
         _log_event('AgreementFulfilled'),
         20,
         blocking=True
