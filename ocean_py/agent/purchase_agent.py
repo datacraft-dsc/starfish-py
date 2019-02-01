@@ -70,9 +70,10 @@ class PurchaseAgent(AgentBase):
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 
+    """
     def search_assets(self, text, account, sort=None, offset=100, page=0):
-        assert self
         return []
+    """
 
     @staticmethod
     def wait_for_event(event, arg_filter, wait_iterations=20):

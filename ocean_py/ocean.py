@@ -15,7 +15,7 @@ from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
 from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
 from ocean_py.agent.metadata_agent import MetadataAgent
-from ocean_py.agent.purchase_agent import PurchaseAgent
+# from ocean_py.agent.purchase_agent import PurchaseAgent
 from ocean_py.agent.manager_agent import ManagerAgent
 
 
@@ -118,7 +118,7 @@ class Ocean():
         asset_list = agent.search_assets(text, account, sort, offset, page)
         return asset_list
     """
-    
+
     @property
     def accounts(self):
         """return the ethereum accounts"""
