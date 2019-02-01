@@ -137,12 +137,7 @@ def test_asset():
 
     purchase_asset.consume(purchase_account)
     """
-    metadata = _read_metadata()
-    assert metadata
     
-#    print(ocean.search_purchased_assets('Office', purchase_account))
-    assert(len(ocean.search_registered_assets('Office')) > 1)
-
 
 def test_asset_search():
     
@@ -156,7 +151,7 @@ def test_asset_search():
     metadata = _read_metadata()
     assert metadata
 
-    # randomly choose a word from the description field
+    # choose a word from the description field
     text = metadata['base']['description']
     words = text.split(' ')
     # word = secrets.choice(words)
