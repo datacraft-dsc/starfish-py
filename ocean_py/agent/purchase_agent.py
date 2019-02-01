@@ -19,7 +19,7 @@ class PurchaseAgent(AgentBase):
         Purchase an asset with the agent storage server
         :param asset: asset to purchase
         :param account: account unlocked and has sufficient funds to buy this asset
-        
+
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
         service_agreement_id = None
@@ -32,7 +32,7 @@ class PurchaseAgent(AgentBase):
     def consume_asset(self, asset, service_agreement_id, account):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
-        
+
         """
         downloads_path = self._ocean.squid._downloads_path
         service_agreement = self.get_service_agreement_from_asset(asset)
@@ -41,7 +41,7 @@ class PurchaseAgent(AgentBase):
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
-        Return true if we have access to the asset's data using the service_agreement_id and account used 
+        Return true if we have access to the asset's data using the service_agreement_id and account used
         to purchase this asset
         """
         account_address = None
@@ -71,8 +71,9 @@ class PurchaseAgent(AgentBase):
         return service_agreement
 
     def search_assets(self, text, account, offset=100, page=0):
+        assert self
         return []
-        
+
     @staticmethod
     def wait_for_event(event, arg_filter, wait_iterations=20):
         """
