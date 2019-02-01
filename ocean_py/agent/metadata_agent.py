@@ -9,7 +9,7 @@ from ocean_py.agent.agent_base import AgentBase
 
 class MetadataAgent(AgentBase):
     def __init__(self, ocean):
-        """init a standard ocean agent, with a given DID"""
+        """init a standard ocean agent"""
         AgentBase.__init__(self, ocean)
 
     def register_asset(self, metadata, account):

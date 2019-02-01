@@ -1,15 +1,14 @@
-[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
+[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://dex.sg)
 
 # ocean-py
-
->    🐳  [Command line tools and interface for squid-py](https://www.elastic.co/) component for (Python).
->    [oceanprotocol.com](https://oceanprotocol.com)
 
 Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/ocean-py.svg)](https://travis-ci.com/DEX-Company/ocean-py)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6dd63d6418764b9ebaaf53b284a60680)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/ocean-py&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4a8f378e80be435084f5e9bee39e769b)](https://www.codacy.com/app/billbsing/ocean-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/ocean-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/ocean-py.svg)](https://github.com/DEX-Company/ocean-py/graphs/contributors)
+[![Squid Version](https://img.shields.io/badge/squid--py-v0.3.2-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.3.2)
+[![Barge Version](https://img.shields.io/badge/barge-dex--2019--02--01-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-02-01)
 
 ---
 
@@ -46,13 +45,13 @@ Python 3.6
 
 1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge).
 
-    There is an issue with the latest keeper not deploying contracts,
-    for the moment you will need to specifiy the version of the keeper to use.
-
-    Once cloned that repository, you can start the cluster running:
+    In a sepearte terminal session you need to clone and checkout the correct taged
+    version of ```barge``` repository, by doing the following:
     ```
-    export KEEPER_VERSION=v0.5.3
-    ./start_ocean.sh --latest --no-brizo --no-pleuston --local-spree-node
+    git clone https://github.com/DEX-Company/barge.git
+    cd barge
+    git checkout tags/dex-2019-02-01
+    ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
     ```
 
 1. Copy keeper artifacts
@@ -71,7 +70,14 @@ Python 3.6
     ```
     python3 setup.py test
     ```
+## Documentation
 
+1. Build Sphinx documentation
+    To build the Syphinx auto documentation, you need to do the following:
+    ```bash
+    make docs
+    ```
+    
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
