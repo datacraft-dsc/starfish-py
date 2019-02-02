@@ -98,7 +98,7 @@ def test_asset():
 
     purchase_account.request_tokens(10)
 
-    time.sleep(10)
+    time.sleep(2)
     logging.info(f'purchase_account {purchase_account.balance}')
 
 
