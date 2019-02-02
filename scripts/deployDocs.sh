@@ -9,6 +9,10 @@ SOURCE_FILES="$DOC_PATH/build/html/"
 PACKAGE_NAME="docs_${PROJECT_NAME}_${VERSION}"
 
 echo "building docs package $PACKAGE_NAME"
+
+# install dev packages for doc build
+pip install -e .[dev] -U tox-travis 
+
 # make the docs from source
 make docs
 
