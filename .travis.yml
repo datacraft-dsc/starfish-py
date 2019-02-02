@@ -38,3 +38,4 @@ deploy:
     script: bash scripts/deployDocs.sh
     on:
       branch: feature/deploy-docs
+      python: 3.6
