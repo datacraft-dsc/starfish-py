@@ -67,7 +67,7 @@ class PurchaseAgent(AgentBase):
         if ddo:
             service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
             assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
-            service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())            
+            service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 
     @staticmethod

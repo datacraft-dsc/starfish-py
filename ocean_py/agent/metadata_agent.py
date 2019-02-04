@@ -44,7 +44,7 @@ class MetadataAgent(AgentBase):
         if not template_owner:
             template = register_service_agreement_template(
                 self._ocean.squid.keeper.service_agreement,
-                account, 
+                account,
                 template,
                 self._ocean.squid.keeper.network_name
             )
