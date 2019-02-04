@@ -53,7 +53,6 @@ class PurchaseAgent(AgentBase):
             raise TypeError(f'You need to pass an account object or account address')
 
         agreement_address = self._ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
-        print('agreement_address=', agreement_address, service_agreement_id)
 
         return self._ocean.squid.is_access_granted(service_agreement_id, asset.did, account_address)
 

@@ -25,7 +25,7 @@ class MetadataAgent(AgentBase):
         :param metadata: metadata to write to the storage server
         :param account: account to register the asset
         """
-        # self.get_registered_access_service_template(account)
+        self.get_registered_access_service_template(account)
         return self._ocean.squid.register_asset(metadata, account)
 
     def read_asset(self, did):
