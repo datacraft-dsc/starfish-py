@@ -34,17 +34,33 @@ class SquidModel(ModelBase):
         return self._ocean.squid.resolve_asset_did(did)
 
     def search_assets(self, text, sort=None, offset=100, page=0):
+        """
+        Search assets from the squid API.
+        """
         ddo_list = self._ocean.squid.search_assets_by_text(text, sort, offset, page)
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
-        return self.get_service_agreement_template_owner(template_id)
+        """
+        :return: True if the service level agreement template has already been registered
+        """
+        return not self.get_service_agreement_template_owner(template_id) is None
 
     def get_service_agreement_template_owner(self, template_id):
-        owner = self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
-        return owner
+        """
+        :return: Owner of the registered service level agreement template, if not
+        registered then return None
+        """
+        return self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
 
     def register_service_agreement_template(self, template_id, account):
+        """
+        Try to register service level agreement template using an account
+
+        :param template_id: template id to use to register
+        :param account: account to register for
+        :return: The template registered
+        """
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
             self._ocean.squid.keeper.service_agreement,
