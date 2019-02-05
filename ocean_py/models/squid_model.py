@@ -2,7 +2,7 @@
     SquidModel - Access squid services using the squid-py api
 """
 
-from ocean_py.middleware_model.model_base import ModelBase
+from ocean_py.models.model_base import ModelBase
 from squid_py.service_agreement.utils import (
     get_sla_template_path,
     register_service_agreement_template

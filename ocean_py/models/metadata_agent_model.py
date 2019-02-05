@@ -8,7 +8,7 @@ from web3 import Web3
 from squid_py.did_resolver.did_resolver import DIDResolver
 from squid_py.ddo import DDO
 
-from ocean_py.middleware_model.model_base import ModelBase
+from ocean_py.models.model_base import ModelBase
 from ocean_py import logger
 
 # service endpoint type name to use for this agent

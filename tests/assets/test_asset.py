@@ -25,7 +25,7 @@ setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
-CONFIG_PARMS = {
+CONFIG_PARAMS = {
     'contracts_path': 'artifacts',
     'keeper_url': 'http://localhost:8545',
     'secret_store_url': 'http://localhost:12001',
@@ -72,14 +72,14 @@ def _log_event(event_name):
     return _process_event
 
 def test_asset():
-    
+
 
     # create an ocean object
-    ocean = Ocean(CONFIG_PARMS)
+    ocean = Ocean(CONFIG_PARAMS)
     assert ocean
     assert ocean.accounts
 
-    
+
 
     asset, publisher_account = _register_asset(ocean)
     assert asset
@@ -106,12 +106,12 @@ def test_asset():
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
-    
+
     # FIXME: bug in squid ... this does not work at the moment
-    # see 
+    # see
     # https://github.com/oceanprotocol/squid-py/issues/282
     Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
-    
+
     # so instead..
     # Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
 
@@ -119,7 +119,7 @@ def test_asset():
     # test purchase an asset
     purchase_asset = asset.purchase(purchase_account)
     assert purchase_asset
-    
+
     _filter = {'agreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
 
     EventListener('ServiceExecutionAgreement', 'AgreementInitialized', filters=_filter).listen_once(
@@ -143,18 +143,18 @@ def test_asset():
     # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
 
     # This test does not work with the current barge
-    
+
     assert purchase_asset.is_purchased
     assert not asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
 
     purchase_asset.consume(purchase_account)
-    
+
 
 
 def test_asset_search():
 
-    ocean = Ocean(CONFIG_PARMS)
+    ocean = Ocean(CONFIG_PARAMS)
     assert ocean
     assert ocean.accounts
 
@@ -168,7 +168,7 @@ def test_asset_search():
     text = metadata['base']['description']
     words = text.split(' ')
     word = words[0]
-    
+
     # should return at least 1 or more assets
     logging.info(f'search word is {word}')
     searchResult = ocean.search_registered_assets(word)
