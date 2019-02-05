@@ -9,7 +9,9 @@ from squid_py.service_agreement.utils import (
 )
 from squid_py import (
     ACCESS_SERVICE_TEMPLATE_ID,
-    ServiceAgreementTemplate
+    ServiceAgreementTemplate,
+    ServiceAgreement,
+    ServiceTypes
 )
 
 # from ocean_py import logger

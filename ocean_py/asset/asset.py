@@ -47,10 +47,10 @@ class Asset(AssetBase):
         :return The new asset metadata ( ddo)
         """
 
-        agent = MetadataAgent(self._ocean)
+        model = SquidModel(self._ocean)
 
         self._metadata = None
-        ddo = agent.register_asset(metadata, account)
+        ddo = model.register_asset(metadata, account)
         if ddo:
             self._set_ddo(ddo)
 
