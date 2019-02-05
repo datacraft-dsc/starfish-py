@@ -14,6 +14,8 @@ from ocean_py.asset.asset import Asset
 from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
 from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
+from ocean_py.agent.metadata_agent import MetadataAgent
+# from ocean_py.agent.purchase_agent import PurchaseAgent
 from ocean_py.agent.manager_agent import ManagerAgent
 
 
@@ -98,6 +100,17 @@ class Ocean():
                 return asset
         return None
 
+
+    def search_registered_assets(self, text, sort=None, offset=100, page=0):
+        asset_list = None
+        agent = MetadataAgent(self)
+        ddo_list = agent.search_assets(text, sort, offset, page)
+        if ddo_list:
+            asset_list = []
+            for ddo in ddo_list:
+                asset = Asset(self, ddo = ddo)
+                asset_list.append(asset)
+        return asset_list
 
     @property
     def accounts(self):
