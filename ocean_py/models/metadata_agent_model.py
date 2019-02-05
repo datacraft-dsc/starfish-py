@@ -1,5 +1,5 @@
 """
-    MetadataAgent - Agent to read/write and list metadata on the Ocean network
+    MetadataAgentModel - Model to access the Metadata Agent
 """
 import json
 import requests
@@ -8,17 +8,17 @@ from web3 import Web3
 from squid_py.did_resolver.did_resolver import DIDResolver
 from squid_py.ddo import DDO
 
-from ocean_py.agent.agent_base import AgentBase
+from ocean_py.middleware_model.model_base import ModelBase
 from ocean_py import logger
 
 # service endpoint type name to use for this agent
 METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
 METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 
-class MetadataMarketAgent(AgentBase):
+class MetadataAgentModel(ModelBase):
     def __init__(self, ocean, did = None, authorization=None):
-        """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean)
+        """init a standard ocan connection, with a given DID"""
+        ModelBase.__init__(self, ocean)
 
         self._did = did
         self._ddo = None
