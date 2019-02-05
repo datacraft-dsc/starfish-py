@@ -111,6 +111,18 @@ class Ocean():
                 asset_list.append(asset)
         return asset_list
 
+    def register_service_level_agreement_template(self, template_id, account):
+        """
+        Register the service level agreement on the block chain.
+        :return: True if the agreemtn template gets added, else False if it's already
+        registered
+        """
+        model = SquidModel(self)
+        if model.is_service_agreement_template_registered(template_id):
+            model.register_service_agreement_template(template_id, account)
+            return True
+        return False
+
     @property
     def accounts(self):
         """return the ethereum accounts"""

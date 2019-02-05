@@ -61,6 +61,9 @@ def _register_asset(ocean):
     metadata = _read_metadata()
     assert metadata
 
+    # check is the SLA Template has been regsitered
+    ocean.register_service_level_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
+
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
     assert asset.did

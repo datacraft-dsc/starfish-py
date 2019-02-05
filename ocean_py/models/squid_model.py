@@ -27,7 +27,6 @@ class SquidModel(ModelBase):
         :param metadata: metadata to write to the storage server
         :param account: account to register the asset
         """
-        self.get_registered_access_service_template(account)
         return self._ocean.squid.register_asset(metadata, account)
 
     def read_asset(self, did):
@@ -38,19 +37,21 @@ class SquidModel(ModelBase):
         ddo_list = self._ocean.squid.search_assets_by_text(text, sort, offset, page)
         return ddo_list
 
-    def get_registered_access_service_template(self, account):
-        # register an asset Access service agreement template
-        template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
-        template_id = ACCESS_SERVICE_TEMPLATE_ID
-        template_owner = self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
-        if not template_owner:
-            template = register_service_agreement_template(
-                self._ocean.squid.keeper.service_agreement,
-                account,
-                template,
-                self._ocean.squid.keeper.network_name
-            )
+    def is_service_agreement_template_registered(self, template_id):
+        return self.get_service_agreement_template_owner(template_id)
 
+    def get_service_agreement_template_owner(self, template_id):
+        owner = self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
+        return owner
+
+    def register_service_agreement_template(self, template_id, account):
+        template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
+        template = register_service_agreement_template(
+            self._ocean.squid.keeper.service_agreement,
+            account,
+            template,
+            self._ocean.squid.keeper.network_name
+        )
         return template
 
     def purchase_asset(self, asset, account):
