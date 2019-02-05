@@ -13,7 +13,6 @@ from squid_py.config import Config
 from ocean_py.asset.asset import Asset
 from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
-from ocean_py.models.metadata_agent_model import MetadataAgentModel
 from ocean_py.models.squid_model import SquidModel
 from ocean_py.agent import Agent
 
