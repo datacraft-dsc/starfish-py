@@ -22,7 +22,7 @@ fi
 echo "building docs package $PACKAGE_NAME"
 
 # install dev packages for doc build
-pip install -e .[dev] -U tox-travis 
+pip install -e .[dev] -U tox-travis
 
 # make the docs from source
 make docs
@@ -30,7 +30,7 @@ make docs
 # package into a tar.gz file for deployment
 tar -czvf "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" "$SOURCE_FILES"
 
-if [ ! -z "$DEPLOY_SERVER"]; then
+if [ ! -z "$DEPLOY_SERVER" ]; then
     echo "Deploying doc file to $DEPLOY_SERVER"
     openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv \
     -in docs/keys/dex-docs-deploy.enc \
@@ -40,4 +40,3 @@ if [ ! -z "$DEPLOY_SERVER"]; then
     scp -i /tmp/dex-docs-deploy "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" ${DEPLOY_USER}@${DEPLOY_SERVER}:
     rm /tmp/dex-docs-deploy
 fi
-
