@@ -20,4 +20,10 @@ make docs
 # package into a tar.gz file for deployment
 tar -czvf "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" "$SOURCE_FILES"
 
+openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv \
+-in docs/keys/dex-deploy-docs.enc \
+-out /tmp/dex-deploy-docs -d
+
+chmod 0600 /tmp/dex-deploy-docs
 scp -i /tmp/dex-deploy-docs "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services:
+rm /tmp/dex-deploy-docs
