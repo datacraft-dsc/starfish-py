@@ -29,7 +29,7 @@ deploy:
     python: 3.6
 - provider: script
   skip_cleanup: true
-  script: bash scripts/deployDocs.sh
+  script: bash scripts/deployDocs.sh shrimp.octet.services
   on:
     branch: feature/deploy-docs
     python: 3.6

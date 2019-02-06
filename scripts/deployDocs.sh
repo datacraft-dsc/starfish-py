@@ -8,6 +8,16 @@ PROJECT_NAME=`cat $DOC_PATH/source/conf.py | egrep 'project\s?=' | awk '{print $
 SOURCE_FILES="$DOC_PATH/build/html/"
 PACKAGE_NAME="docs_${PROJECT_NAME}_${VERSION}"
 
+DEPLOY_USER=docs_deploy
+
+if [ ! -z "$1" ]; then
+    DEPLOY_SERVER="$1"
+fi
+
+if [ ! -z "$2" ]; then
+    DEPLOY_USER="$2"
+fi
+
 
 echo "building docs package $PACKAGE_NAME"
 
@@ -20,10 +30,14 @@ make docs
 # package into a tar.gz file for deployment
 tar -czvf "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" "$SOURCE_FILES"
 
-openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv \
--in docs/keys/dex-docs-deploy.enc \
--out /tmp/dex-docs-deploy -d
+if [ ! -z "$DEPLOY_SERVER"]; then
+    echo "Deploying doc file to $DEPLOY_SERVER"
+    openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv \
+    -in docs/keys/dex-docs-deploy.enc \
+    -out /tmp/dex-docs-deploy -d
 
-chmod 0600 /tmp/dex-docs-deploy
-scp -i /tmp/dex-docs-deploy "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services:
-rm /tmp/dex-docs-deploy
+    chmod 0600 /tmp/dex-docs-deploy
+    scp -i /tmp/dex-docs-deploy "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" ${DEPLOY_USER}@${DEPLOY_SERVER}:
+    rm /tmp/dex-docs-deploy
+fi
+
