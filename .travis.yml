@@ -1,42 +1,35 @@
 language: python
-
 python:
-  - "3.6"
-  - "3.7"
-
+- '3.6'
+- '3.7'
 dist: xenial
 sudo: false
-
 services:
 - docker
-
 before_install:
-  - git clone https://github.com/DEX-Company/barge.git
-  - cd barge
-  - git checkout tags/dex-2019-02-01
-  - bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
-  - cd ..
-  - sleep 15
-
+- openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv
+  -in docs/keys/dex-deploy-docs.enc -out /tmp/dex-deploy-docs -d
+- git clone https://github.com/DEX-Company/barge.git
+- cd barge
+- git checkout tags/dex-2019-02-01
+- bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log
+  &
+- cd ..
+- sleep 15
 install: pip install -U tox-travis
-
-# Command to run tests, e.g. python setup.py test
 script: tox
-
-# Generate PYPI package on tagged versions
 deploy:
-  - provider: pypi
-    distributions: sdist bdist_wheel
-    user: ${PYPI_USER}
-    password: ${PYPI_PASSWORD}
-    on:
-      tags: true
-      repo: DEX-Company/ocean-py
-      python: 3.6
-
-  - provider: script
-    skip_cleanup: true
-    script: bash scripts/deployDocs.sh
-    on:
-      branch: feature/deploy-docs
-      python: 3.6
+- provider: pypi
+  distributions: sdist bdist_wheel
+  user: "${PYPI_USER}"
+  password: "${PYPI_PASSWORD}"
+  on:
+    tags: true
+    repo: DEX-Company/ocean-py
+    python: 3.6
+- provider: script
+  skip_cleanup: true
+  script: bash scripts/deployDocs.sh
+  on:
+    branch: feature/deploy-docs
+    python: 3.6
