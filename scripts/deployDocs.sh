@@ -42,5 +42,6 @@ if [ ! -z "$DEPLOY_SERVER" ]; then
     scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
     rm /tmp/dex-docs-deploy
 
+    echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
     curl -H "Content-Type: application/json" -X POST -d '{"file":"$DEPLOY_FILENAME"}' "$DEPLOY_BUILD_URL"
 fi
