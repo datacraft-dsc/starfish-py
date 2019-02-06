@@ -34,6 +34,7 @@ deploy:
     tags: true
     repo: DEX-Company/ocean-py
     all_branches: true
+    tags: true
 #    - branch: feature/deploy-docs
 #    - branch: develop
     python: 3.6
