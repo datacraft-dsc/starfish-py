@@ -13,10 +13,8 @@ from squid_py.config import Config
 from ocean_py.asset.asset import Asset
 from ocean_py.asset.asset_light import AssetLight
 from ocean_py.config import Config as OceanConfig
-from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
-from ocean_py.agent.metadata_agent import MetadataAgent
-# from ocean_py.agent.purchase_agent import PurchaseAgent
-from ocean_py.agent.manager_agent import ManagerAgent
+from ocean_py.models.squid_model import SquidModel
+from ocean_py.agent import Agent
 
 
 class Ocean():
@@ -49,9 +47,9 @@ class Ocean():
 
         if not service_name:
             raise ValueError('Provide an MetadataMarketAgent or a agent service name to register')
-        agent = ManagerAgent(self)
+        agent = Agent(self)
 
-        return agent.register_agent(service_name, endpoint_url, account, did)
+        return agent.register(service_name, endpoint_url, account, did)
 
 
 
@@ -103,14 +101,26 @@ class Ocean():
 
     def search_registered_assets(self, text, sort=None, offset=100, page=0):
         asset_list = None
-        agent = MetadataAgent(self)
-        ddo_list = agent.search_assets(text, sort, offset, page)
+        model = SquidModel(self)
+        ddo_list = model.search_assets(text, sort, offset, page)
         if ddo_list:
             asset_list = []
             for ddo in ddo_list:
                 asset = Asset(self, ddo = ddo)
                 asset_list.append(asset)
         return asset_list
+
+    def register_service_level_agreement_template(self, template_id, account):
+        """
+        Register the service level agreement on the block chain.
+        :return: True if the agreemtn template gets added, else False if it's already
+        registered
+        """
+        model = SquidModel(self)
+        if not model.is_service_agreement_template_registered(template_id):
+            model.register_service_agreement_template(template_id, account)
+            return True
+        return False
 
     @property
     def accounts(self):

@@ -43,7 +43,7 @@ Python 3.6
     pip install -r requirements_dev.txt
     ```
 
-1. Create the local testing environment using [barge](https://github.com/oceanprotocol/barge).
+1. Create the local testing environment using [barge](https://github.com/DEX-Company/barge).
 
     In a sepearte terminal session you need to clone and checkout the correct taged
     version of ```barge``` repository, by doing the following:
@@ -77,7 +77,7 @@ Python 3.6
     ```bash
     make docs
     ```
-    
+
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)

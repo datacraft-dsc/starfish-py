@@ -21,12 +21,11 @@ from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo import Brizo
 from tests.helpers.brizo_mock import BrizoMock
 
-
 setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
-CONFIG_PARMS = {
+CONFIG_PARAMS = {
     'contracts_path': 'artifacts',
     'keeper_url': 'http://localhost:8545',
     'secret_store_url': 'http://localhost:12001',
@@ -55,12 +54,15 @@ def _register_asset(ocean):
 
     # test node has the account #0 unlocked
     publisher_account = ocean.accounts[list(ocean.accounts)[0]]
-    publisher_account.password = ocean.config.parity_password
+    publisher_account.password = 'node0'
     publisher_account.unlock()
-    publisher_account.request_tokens(10)
+    publisher_account.request_tokens(20)
 
     metadata = _read_metadata()
     assert metadata
+
+    # check is the SLA Template has been regsitered
+    ocean.register_service_level_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
 
     asset = ocean.register_asset(metadata, account=publisher_account)
     assert asset
@@ -73,10 +75,14 @@ def _log_event(event_name):
     return _process_event
 
 def test_asset():
+
+
     # create an ocean object
-    ocean = Ocean(CONFIG_PARMS)
+    ocean = Ocean(CONFIG_PARAMS)
     assert ocean
     assert ocean.accounts
+
+
 
     asset, publisher_account = _register_asset(ocean)
     assert asset
@@ -99,12 +105,19 @@ def test_asset():
     purchase_account.request_tokens(10)
 
     time.sleep(2)
-    logging.info(f'purchase_account {purchase_account.balance}')
-
+    logging.info(f'purchase_account after token request {purchase_account.balance}')
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
+
+    # FIXME: bug in squid ... this does not work at the moment
+    # see
+    # https://github.com/oceanprotocol/squid-py/issues/282
     Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
+
+    # so instead..
+    # Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
+
 
     # test purchase an asset
     purchase_asset = asset.purchase(purchase_account)
@@ -128,19 +141,23 @@ def test_asset():
         blocking=True
     )
 
+    assert event, 'No event received for ServiceAgreement Fulfilled.'
+    assert Web3.toHex(event.args['agreementId']) == purchase_asset.purchase_id
+    # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
+
     # This test does not work with the current barge
-    """
+
     assert purchase_asset.is_purchased
     assert not asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
 
     purchase_asset.consume(purchase_account)
-    """
+
 
 
 def test_asset_search():
 
-    ocean = Ocean(CONFIG_PARMS)
+    ocean = Ocean(CONFIG_PARAMS)
     assert ocean
     assert ocean.accounts
 
@@ -154,7 +171,7 @@ def test_asset_search():
     text = metadata['base']['description']
     words = text.split(' ')
     word = words[0]
-    
+
     # should return at least 1 or more assets
     logging.info(f'search word is {word}')
     searchResult = ocean.search_registered_assets(word)

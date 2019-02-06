@@ -7,7 +7,7 @@ from squid_py.did import id_to_did
 
 from eth_utils import remove_0x_prefix
 from ocean_py.asset.asset_base import AssetBase
-from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
+from ocean_py.models.metadata_agent_model import MetadataAgentModel
 from ocean_py.utils.did import did_parse
 
 # from ocean_py import logger
@@ -38,10 +38,10 @@ class AssetLight(AssetBase):
         :return The new asset registered, or return None on error
         """
 
-        agent = MetadataMarketAgent(self._ocean)
+        model = MetadataAgentModel(self._ocean)
 
         self._metadata = None
-        asset_data = agent.register_asset(metadata)
+        asset_data = model.register_asset(metadata)
         if asset_data:
             # assign the did of the agent that we registered this with
             self._id = asset_data['asset_id']
@@ -52,8 +52,8 @@ class AssetLight(AssetBase):
     def read(self):
         """read the asset metadata from an Ocean Agent, using the agents DID"""
 
-        agent = MetadataMarketAgent(self._ocean, did=self._agent_did)
-        asset_data = agent.read_asset(self._id)
+        model = MetadataAgentModel(self._ocean, did=self._agent_did)
+        asset_data = model.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with
             self._id = asset_data['asset_id']

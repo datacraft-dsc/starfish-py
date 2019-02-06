@@ -7,11 +7,7 @@ from squid_py.did import did_to_id
 from squid_py import DDO
 
 from ocean_py.asset.asset_base import AssetBase
-from ocean_py.agent.metadata_agent import MetadataAgent
-from ocean_py.agent.purchase_agent import PurchaseAgent
-
-# TODO: implement this...
-# from ocean_py.agent.publish_agent import PublishAgent
+from ocean_py.models.squid_model import SquidModel
 
 from ocean_py.utils.did import did_parse
 
@@ -51,10 +47,10 @@ class Asset(AssetBase):
         :return The new asset metadata ( ddo)
         """
 
-        agent = MetadataAgent(self._ocean)
+        model = SquidModel(self._ocean)
 
         self._metadata = None
-        ddo = agent.register_asset(metadata, account)
+        ddo = model.register_asset(metadata, account)
         if ddo:
             self._set_ddo(ddo)
 
@@ -64,10 +60,10 @@ class Asset(AssetBase):
         """read the asset metadata in this case it's the DDO with the metadat included from the off chain
         metadata agent, if not found return None"""
 
-        agent = MetadataAgent(self._ocean)
+        model = SquidModel(self._ocean)
 
         self._metadata = None
-        ddo = agent.read_asset(self._did)
+        ddo = model.read_asset(self._did)
         if ddo:
             self._set_ddo(ddo)
 
@@ -84,8 +80,8 @@ class Asset(AssetBase):
 
         :return asset object that has been purchased
         """
-        agent = PurchaseAgent(self._ocean)
-        service_agreement_id = agent.purchase_asset(self, account)
+        model = SquidModel(self._ocean)
+        service_agreement_id = model.purchase_asset(self, account)
         if service_agreement_id:
             purchase_asset = self.copy()
             purchase_asset.set_purchase_id(service_agreement_id)
@@ -103,8 +99,8 @@ class Asset(AssetBase):
         if not self.is_purchased:
             return False
 
-        agent = PurchaseAgent(self._ocean)
-        return agent.is_access_granted_for_asset(self, self._purchase_id, account)
+        model = SquidModel(self._ocean)
+        return model.is_access_granted_for_asset(self, self._purchase_id, account)
 
     def consume(self, account):
         """
@@ -115,8 +111,8 @@ class Asset(AssetBase):
         if not self.is_purchased:
             return False
 
-        agent = PurchaseAgent(self._ocean)
-        return agent.consume_asset(self, self._purchase_id, account)
+        model = SquidModel(self._ocean)
+        return model.consume_asset(self, self._purchase_id, account)
 
     def set_purchase_id(self, service_agreement_id):
         """ Set the purchase id or 'service_agreement_id' """
