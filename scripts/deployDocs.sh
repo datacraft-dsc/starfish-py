@@ -21,9 +21,9 @@ make docs
 tar -czvf "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" "$SOURCE_FILES"
 
 openssl aes-256-cbc -K $encrypted_e14c59e0af38_key -iv $encrypted_e14c59e0af38_iv \
--in docs/keys/dex-deploy-docs.enc \
--out /tmp/dex-deploy-docs -d
+-in docs/keys/dex-docs-deploy.enc \
+-out /tmp/dex-docs-deploy -d
 
-chmod 0600 /tmp/dex-deploy-docs
-scp -i /tmp/dex-deploy-docs "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services:
-rm /tmp/dex-deploy-docs
+chmod 0600 /tmp/dex-docs-deploy
+scp -i /tmp/dex-docs-deploy "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services:
+rm /tmp/dex-docs-deploy
