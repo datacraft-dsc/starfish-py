@@ -1,21 +1,15 @@
 """
-    ManagerAgent - Agent to register other agents on the block chain using a DDI, and DDO
+    Agent class to provide basic functionality for all Ocean Agents
 """
-import secrets
 
-from squid_py.ddo import DDO
-from squid_py.did import id_to_did
+class Agent():
 
-from ocean_py.agent.agent_base import AgentBase
-# from ocean_py import logger
-
-class ManagerAgent(AgentBase):
     def __init__(self, ocean, **kwargs):
-        """init a standard ocean agent, with a given DID"""
-        AgentBase.__init__(self, ocean, **kwargs)
+        """init a standard ocean agent"""
+        self._ocean = ocean
+        self._did = kwargs.get('did')
 
-
-    def register_agent(self, service_name, endpoint_url, account, did=None):
+    def register(self, service_name, endpoint_url, account, did=None):
         """
         Register an agent on the block chain
         :param service_name: service_name to add into the DDO service field

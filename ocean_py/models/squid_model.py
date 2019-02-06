@@ -1,18 +1,73 @@
 """
-    PublishAgent - Agent to access the ocean publishing and services aka Brizo
+    SquidModel - Access squid services using the squid-py api
 """
-import time
-from web3 import Web3
-from squid_py import ServiceAgreement, ServiceTypes
 
-from ocean_py.agent.agent_base import AgentBase
+from ocean_py.models.model_base import ModelBase
+from squid_py.service_agreement.utils import (
+    get_sla_template_path,
+    register_service_agreement_template
+)
+from squid_py import (
+    ServiceAgreementTemplate,
+    ServiceAgreement,
+    ServiceTypes
+)
+
 # from ocean_py import logger
 
-class PurchaseAgent(AgentBase):
+class SquidModel(ModelBase):
     def __init__(self, ocean):
         """init a standard ocean agent"""
-        AgentBase.__init__(self, ocean)
+        ModelBase.__init__(self, ocean)
 
+    def register_asset(self, metadata, account):
+        """
+        Register an asset with the agent storage server
+        :param metadata: metadata to write to the storage server
+        :param account: account to register the asset
+        """
+        return self._ocean.squid.register_asset(metadata, account)
+
+    def read_asset(self, did):
+        """ read the asset metadata(DDO) using the asset DID """
+        return self._ocean.squid.resolve_asset_did(did)
+
+    def search_assets(self, text, sort=None, offset=100, page=0):
+        """
+        Search assets from the squid API.
+        """
+        ddo_list = self._ocean.squid.search_assets_by_text(text, sort, offset, page)
+        return ddo_list
+
+    def is_service_agreement_template_registered(self, template_id):
+        """
+        :return: True if the service level agreement template has already been registered
+        """
+        return not self.get_service_agreement_template_owner(template_id) is None
+
+    def get_service_agreement_template_owner(self, template_id):
+        """
+        :return: Owner of the registered service level agreement template, if not
+        registered then return None
+        """
+        return self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
+
+    def register_service_agreement_template(self, template_id, account):
+        """
+        Try to register service level agreement template using an account
+
+        :param template_id: template id to use to register
+        :param account: account to register for
+        :return: The template registered
+        """
+        template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
+        template = register_service_agreement_template(
+            self._ocean.squid.keeper.service_agreement,
+            account,
+            template,
+            self._ocean.squid.keeper.network_name
+        )
+        return template
 
     def purchase_asset(self, asset, account):
         """
