@@ -20,4 +20,4 @@ make docs
 # package into a tar.gz file for deployment
 tar -czvf "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" "$SOURCE_FILES"
 
-scp -i /tmp/dex-deploy-docs "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services
+scp -i /tmp/dex-deploy-docs "${DOC_PATH}/${PACKAGE_NAME}.tar.gz" docs_deploy@shrimp.octet.services:
