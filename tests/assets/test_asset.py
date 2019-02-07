@@ -113,10 +113,10 @@ def test_asset():
     # FIXME: bug in squid ... this does not work at the moment
     # see
     # https://github.com/oceanprotocol/squid-py/issues/282
-    Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
+    Brizo.set_http_client(BrizoMock(ocean._squid, publisher_account))
 
     # so instead..
-    # Brizo.set_http_client(BrizoMock(ocean.squid, publisher_account))
+    # Brizo.set_http_client(BrizoMock(ocean._squid, publisher_account))
 
 
     # test purchase an asset

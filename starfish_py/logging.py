@@ -13,8 +13,8 @@ import coloredlogs
 
 def setup_logging(level=logging.INFO, filename='logging.yaml', env_key='LOG_CFG'):
     """
-    | **@author:** Prathyush SP, but hacked around by Bill
-    | Logging Setup
+    **@author:** Prathyush SP, but hacked around by Bill
+    Logging Setup
     """
     value = os.getenv(env_key, None)
     if value:

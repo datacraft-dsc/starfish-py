@@ -26,17 +26,17 @@ class SquidModel(ModelBase):
         :param metadata: metadata to write to the storage server
         :param account: account to register the asset
         """
-        return self._ocean.squid.register_asset(metadata, account)
+        return self._ocean._squid.register_asset(metadata, account)
 
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """
-        return self._ocean.squid.resolve_asset_did(did)
+        return self._ocean._squid.resolve_asset_did(did)
 
     def search_assets(self, text, sort=None, offset=100, page=0):
         """
         Search assets from the squid API.
         """
-        ddo_list = self._ocean.squid.search_assets_by_text(text, sort, offset, page)
+        ddo_list = self._ocean._squid.search_assets_by_text(text, sort, offset, page)
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
@@ -47,10 +47,9 @@ class SquidModel(ModelBase):
 
     def get_service_agreement_template_owner(self, template_id):
         """
-        :return: Owner of the registered service level agreement template, if not
-        registered then return None
+        :return: Owner of the registered service level agreement template, if not registered then return None
         """
-        return self._ocean.squid.keeper.service_agreement.get_template_owner(template_id)
+        return self._ocean._squid.keeper.service_agreement.get_template_owner(template_id)
 
     def register_service_agreement_template(self, template_id, account):
         """
@@ -62,10 +61,10 @@ class SquidModel(ModelBase):
         """
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
-            self._ocean.squid.keeper.service_agreement,
+            self._ocean._squid.keeper.service_agreement,
             account,
             template,
-            self._ocean.squid.keeper.network_name
+            self._ocean._squid.keeper.network_name
         )
         return template
 
@@ -80,7 +79,7 @@ class SquidModel(ModelBase):
         service_agreement_id = None
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            service_agreement_id = self._ocean.squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account)
+            service_agreement_id = self._ocean._squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account)
 
         return service_agreement_id
 
@@ -89,10 +88,10 @@ class SquidModel(ModelBase):
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
-        downloads_path = self._ocean.squid._downloads_path
+        downloads_path = self._ocean._squid._downloads_path
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            self._ocean.squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
+            self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
@@ -107,9 +106,9 @@ class SquidModel(ModelBase):
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        agreement_address = self._ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
+        agreement_address = self._ocean._keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
 
-        return self._ocean.squid.is_access_granted(service_agreement_id, asset.did, account_address)
+        return self._ocean._squid.is_access_granted(service_agreement_id, asset.did, account_address)
 
     def get_service_agreement_from_asset(self, asset):
         """

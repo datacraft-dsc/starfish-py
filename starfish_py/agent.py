@@ -38,4 +38,4 @@ class Agent():
     def _register_ddo(self, did, ddo, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
-        return self._ocean.keeper.did_registry.register(did, ddo=ddo, account=account)
+        return self._ocean._keeper.did_registry.register(did, ddo=ddo, account=account)

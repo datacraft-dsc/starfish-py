@@ -27,7 +27,7 @@ class Ocean():
         self._squid_ocean = SquidOcean(squid_config)
 
         # For development, we use the HTTPProvider Web3 interface
-        self._web3 = Web3(HTTPProvider(self._config.keeper_url))
+        self.__web3 = Web3(HTTPProvider(self._config.keeper_url))
 
     def register_agent(self, agent_service_name, endpoint_url, account, did=None):
         """
@@ -83,7 +83,7 @@ class Ocean():
     def get_asset(self, did):
         """
         :param: did: DID of the asset and agent combined.
-        :return a registered asset given a DID of the asset
+        :return: a registered asset given a DID of the asset
         """
         asset = None
         if Asset.is_did_valid(did):
@@ -128,17 +128,17 @@ class Ocean():
         return self._squid_ocean.get_accounts()
 
     @property
-    def web3(self):
+    def _web3(self):
         """return the web3 instance"""
-        return self._web3
+        return self.__web3
 
     @property
-    def keeper(self):
+    def _keeper(self):
         """return the keeper contracts"""
         return self._squid_ocean.keeper
 
     @property
-    def squid(self):
+    def _squid(self):
         """return squid ocean library"""
         return self._squid_ocean
 

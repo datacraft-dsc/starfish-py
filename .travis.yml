@@ -29,7 +29,7 @@ deploy:
     python: 3.6
 - provider: script
   skip_cleanup: true
-  script: bash scripts/deployDocs.sh shrimp.octet.services
+  script: bash scripts/deployDocs.sh shrimp.octet.services docs_deploy
   on:
     tags: true
     repo: DEX-Company/starfish-py
