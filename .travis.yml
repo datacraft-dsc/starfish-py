@@ -1,35 +1,39 @@
 language: python
-
 python:
-  - "3.6"
-  - "3.7"
-
+- '3.6'
+- '3.7'
 dist: xenial
 sudo: false
-
+addons:
+  ssh_known_hosts: shrimp.octet.services
 services:
 - docker
-
 before_install:
-  - git clone https://github.com/DEX-Company/barge.git
-  - cd barge
-  - git checkout tags/dex-2019-02-01
-  - bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log &
-  - cd ..
-  - sleep 15
-
+- git clone https://github.com/DEX-Company/barge.git
+- cd barge
+- git checkout tags/dex-2019-02-01
+- bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log
+  &
+- cd ..
+- sleep 15
 install: pip install -U tox-travis
-
-# Command to run tests, e.g. python setup.py test
 script: tox
-
-# Generate PYPI package on tagged versions on master
 deploy:
-  provider: pypi
+- provider: pypi
   distributions: sdist bdist_wheel
-  user: ${PYPI_USER}
-  password: ${PYPI_PASSWORD}
+  user: "${PYPI_USER}"
+  password: "${PYPI_PASSWORD}"
   on:
     tags: true
     repo: DEX-Company/ocean-py
+    python: 3.6
+- provider: script
+  skip_cleanup: true
+  script: bash scripts/deployDocs.sh shrimp.octet.services
+  on:
+    tags: true
+    repo: DEX-Company/ocean-py
+    all_branches: true
+#    - branch: feature/deploy-docs
+#    - branch: develop
     python: 3.6
