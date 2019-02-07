@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 """
 
-    Tests for `ocean-py config`.
+    Tests for `starfish-py config`.
 
 """
 import unittest
 import os
 import logging
 
-from ocean_py.config import Config as OceanConfig
-from ocean_py.logging import setup_logging
-from ocean_py import logger
+from starfish_py.config import Config as OceanConfig
+from starfish_py.logging import setup_logging
+from starfish_py import logger
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config as SquidConfig
 

@@ -1,6 +1,6 @@
 """
 
-    Exceptions for ocean-py
+    Exceptions for starfish-py
 
 """
 

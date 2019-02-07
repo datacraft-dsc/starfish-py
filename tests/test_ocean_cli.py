@@ -33,7 +33,7 @@ def test_ocean_cli():
     dot_tox = pdir.find('/.tox')
     if dot_tox > 0:
         pdir = pdir[0:dot_tox]
-    cli_path = os.path.join(pdir, "ocean")
+    cli_path = os.path.join(pdir, "starfish")
     command = "balance"
     args = [cli_path, '--config', 'tests/resources/config.ini', command]
     cli = subprocess.run(args, stdout=subprocess.PIPE)

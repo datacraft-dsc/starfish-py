@@ -9,9 +9,9 @@ import logging
 import time
 from web3 import Web3
 
-from ocean_py.ocean import Ocean
-from ocean_py.logging import setup_logging
-from ocean_py import logger
+from starfish_py.ocean import Ocean
+from starfish_py.logging import setup_logging
+from starfish_py import logger
 
 from squid_py.service_agreement.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id

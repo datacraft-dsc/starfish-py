@@ -36,7 +36,7 @@ test_requirements = [
     'tox',
 ]
 
-# Possibly required by developers of ocean-py:
+# Possibly required by developers of starfish-py:
 dev_requirements = [
     'bumpversion',
     'pkginfo',
@@ -51,7 +51,7 @@ docs_requirements = [
 ]
 
 packages = []
-for d, _, _ in os.walk('ocean_py'):
+for d, _, _ in os.walk('starfish_py'):
     if os.path.exists(join(d, '__init__.py')):
         packages.append(d.replace(os.path.sep, '.'))
 
@@ -75,13 +75,13 @@ setup(
     long_description=readme,
     long_description_content_type='text/x-rst',
     include_package_data=True,
-    keywords='ocean-py',
-    name='ocean-py',
+    keywords='starfish-py',
+    name='starfish-py',
     packages=packages,
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/DEX-Company/ocean-py',
+    url='https://github.com/DEX-Company/starfish-py',
     version='0.0.1',
     zip_safe=False,
 )

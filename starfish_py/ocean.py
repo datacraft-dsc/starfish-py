@@ -10,11 +10,11 @@ from web3 import (
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config
 
-from ocean_py.asset.asset import Asset
-from ocean_py.asset.asset_light import AssetLight
-from ocean_py.config import Config as OceanConfig
-from ocean_py.models.squid_model import SquidModel
-from ocean_py.agent import Agent
+from starfish_py.asset.asset import Asset
+from starfish_py.asset.asset_light import AssetLight
+from starfish_py.config import Config as OceanConfig
+from starfish_py.models.squid_model import SquidModel
+from starfish_py.agent import Agent
 
 
 class Ocean():

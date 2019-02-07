@@ -7,10 +7,10 @@ import sys
 import logging
 
 
-from ocean_py.command_line import CommandLine
-from ocean_py.exceptions import OceanCommandLineError
+from starfish_py.command_line import CommandLine
+from starfish_py.exceptions import OceanCommandLineError
 
-from ocean_py.config import (
+from starfish_py.config import (
     Config,
     # DEFAULT_KEEPER_URL,
     # DEFAULT_KEEPER_PATH,

@@ -6,11 +6,11 @@ from web3 import Web3
 from squid_py.did import id_to_did
 
 from eth_utils import remove_0x_prefix
-from ocean_py.asset.asset_base import AssetBase
-from ocean_py.models.metadata_agent_model import MetadataAgentModel
-from ocean_py.utils.did import did_parse
+from starfish_py.asset.asset_base import AssetBase
+from starfish_py.models.metadata_agent_model import MetadataAgentModel
+from starfish_py.utils.did import did_parse
 
-# from ocean_py import logger
+# from starfish_py import logger
 
 class AssetLight(AssetBase):
     def __init__(self, ocean, did=None):

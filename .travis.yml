@@ -25,14 +25,14 @@ deploy:
   password: "${PYPI_PASSWORD}"
   on:
     tags: true
-    repo: DEX-Company/ocean-py
+    repo: DEX-Company/starfish-py
     python: 3.6
 - provider: script
   skip_cleanup: true
   script: bash scripts/deployDocs.sh shrimp.octet.services
   on:
     tags: true
-    repo: DEX-Company/ocean-py
+    repo: DEX-Company/starfish-py
     all_branches: true
 #    - branch: feature/deploy-docs
 #    - branch: develop
