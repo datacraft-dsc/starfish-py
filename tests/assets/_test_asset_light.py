@@ -7,11 +7,11 @@ import pathlib
 import json
 import logging
 
-from ocean_py.ocean import Ocean
-from ocean_py.agent.metadata_market_agent import MetadataMarketAgent
+from starfish_py.ocean import Ocean
+from starfish_py.agent.metadata_market_agent import MetadataMarketAgent
 
-from ocean_py.logging import setup_logging
-from ocean_py import logger
+from starfish_py.logging import setup_logging
+from starfish_py import logger
 
 from squid_py.service_agreement.service_factory import ServiceDescriptor
 

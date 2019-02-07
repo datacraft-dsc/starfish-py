@@ -3,7 +3,7 @@
 """
 
 
-# from ocean_py import logger
+# from starfish_py import logger
 
 class AssetBase(object):
     def __init__(self, ocean, did=None, asset=None):

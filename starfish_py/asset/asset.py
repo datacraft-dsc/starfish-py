@@ -6,13 +6,13 @@ from eth_utils import remove_0x_prefix
 from squid_py.did import did_to_id
 from squid_py import DDO
 
-from ocean_py.asset.asset_base import AssetBase
-from ocean_py.models.squid_model import SquidModel
+from starfish_py.asset.asset_base import AssetBase
+from starfish_py.models.squid_model import SquidModel
 
-from ocean_py.utils.did import did_parse
+from starfish_py.utils.did import did_parse
 
 
-# from ocean_py import logger
+# from starfish_py import logger
 
 
 class Asset(AssetBase):

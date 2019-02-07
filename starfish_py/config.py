@@ -10,12 +10,12 @@ import os.path
 import re
 import tempfile
 
-from ocean_py import logger
+from starfish_py import logger
 
-CONFIG_SECTION_NAME = 'ocean-py'
+CONFIG_SECTION_NAME = 'starfish-py'
 
 CONFIG_DEFAULT = """
-[ocean-py]
+[starfish-py]
 keeper_url = http://localhost:8545
 contract_path = artifacts
 
