@@ -7,7 +7,6 @@ Asset class to hold Ocean asset information such as an asset id and metadata
 from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
-from squid_py import DDO
 
 from starfish_py.asset.asset_base import AssetBase
 from starfish_py.models.squid_model import SquidModel
