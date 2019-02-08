@@ -92,7 +92,7 @@ class SquidModel(ModelBase):
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
             self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
-        assert download_path
+        assert downloads_path
         
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
