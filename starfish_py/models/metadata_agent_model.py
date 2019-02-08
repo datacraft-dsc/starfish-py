@@ -124,7 +124,7 @@ class MetadataAgentModel(ModelBase):
 
     def _resolve_did_to_ddo(self, did):
         """resolve a DID to a given DDO, return the DDO if found"""
-        did_resolver = DIDResolver(self._ocean.web3, self._ocean.keeper.did_registry)
+        did_resolver = DIDResolver(self._ocean._web3, self._ocean._keeper.did_registry)
         resolved = did_resolver.resolve(did)
         if resolved and resolved.is_ddo:
             ddo = DDO(json_text=resolved.value)

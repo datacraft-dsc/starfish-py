@@ -49,6 +49,17 @@ apidoc_module_dir = '../../starfish_py'
 apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
+apidoc_excluded_paths = [
+  'agent.py',
+  'asset.py',
+  'command_line',
+  'config.py',
+  'constants.py',
+  'exceptions.py',
+  'logging.py',
+  'models',
+  'utils'
+]
 
 # autodoc settings
 # Setting None is equivalent to giving the option name

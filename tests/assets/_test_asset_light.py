@@ -30,14 +30,14 @@ METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' /
 
 
 def test_asset_light():
-    
+
     """
     First part register the agent and get it's DID for later use
     """
     # create an ocean object
     ocean = Ocean( keeper_url=KEEPER_URL, contract_path=CONTRACTS_PATH)
     assert ocean
-    assert ocean.keeper
+    assert ocean._keeper
     assert ocean.accounts
 
     # in testing only account #1 is left unlocked
@@ -51,7 +51,7 @@ def test_asset_light():
     assert ddo
 
     agent_did = did
-    
+
     """
     Now re-connect to Ocean using the agent's DID and Auth access codes
     """
@@ -64,15 +64,15 @@ def test_asset_light():
     assert metadata
 
 
-    ocean = Ocean( 
-        keeper_url=KEEPER_URL, 
-        contract_path=CONTRACTS_PATH, 
+    ocean = Ocean(
+        keeper_url=KEEPER_URL,
+        contract_path=CONTRACTS_PATH,
     )
 
     # test registering an asset using an agent object
     asset = ocean.register_asset_light(
-        metadata['base'], 
-        did=agent_did, 
+        metadata['base'],
+        did=agent_did,
         authorization=METADATA_STORAGE_AUTH
     )
     assert asset

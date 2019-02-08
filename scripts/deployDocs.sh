@@ -28,7 +28,7 @@ pip install -e .[dev] -U tox-travis
 make docs
 
 # package into a tar.gz file for deployment
-tar -czvf "$DEPLOY_FILENAME" "$SOURCE_FILES"
+(cd "$SOURCE_FILES"; tar -czvf "../../../$DEPLOY_FILENAME" ./)
 
 if [ ! -z "$DEPLOY_SERVER" ]; then
     DEPLOY_BUILD_URL="http://${DEPLOY_SERVER}/docs_build"
