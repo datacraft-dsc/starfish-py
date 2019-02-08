@@ -1,8 +1,17 @@
 """
-    Agent class to provide basic functionality for all Ocean Agents
+
+Agent class to provide basic functionality for all Ocean Agents
+
 """
 
 class Agent():
+    """
+
+    Agent class allows you to cover Ocean Agent functionality by inheriting this class.
+
+    **TBA: Stil in Development**
+
+    """
 
     def __init__(self, ocean, **kwargs):
         """init a standard ocean agent"""
@@ -11,11 +20,15 @@ class Agent():
 
     def register(self, service_name, endpoint_url, account, did=None):
         """
-        Register an agent on the block chain
+
+        Register an agent on the block chain. This is called by the method :func:`starfish_py.ocean.Ocean.register_agent`.
+
         :param service_name: service_name to add into the DDO service field
         :param endpoint_url: url of the agent service
         :param account: Ethereum account to use to register on the block chain
         :param did: optional did to update the did with this value (if you are the account owner of the DID)
+
+        :return: a list of DID, DDO and  private pem of the registered DDO.
 
         """
 
@@ -36,6 +49,8 @@ class Agent():
         return None
 
     def _register_ddo(self, did, ddo, account):
-        """register a ddo object on the block chain for this agent"""
+        """
+        register a ddo object on the block chain for this agent
+        """
         # register/update the did->ddo to the block chain
         return self._ocean._keeper.did_registry.register(did, ddo=ddo, account=account)

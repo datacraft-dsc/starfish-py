@@ -1,10 +1,12 @@
 """
-    Asset class to hold Ocean asset information such as asset id and metadata
+
+Asset class to hold Ocean asset information such as an asset id and metadata
+
 """
+
 from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
-from squid_py import DDO
 
 from starfish_py.asset.asset_base import AssetBase
 from starfish_py.models.squid_model import SquidModel
@@ -16,12 +18,19 @@ from starfish_py.utils.did import did_parse
 
 
 class Asset(AssetBase):
+    """
+    The creation of an asset is normally performed by the :func:`starfish_py.ocean.Ocean' class.
+
+    :param ocean: ocean object to use to connect to the ocean network.
+    :param did: Optional did of the asset.
+    :param purchase_id: Optional purchase_id to assign to this asset.
+    :param asset: Optional asset to copy from.
+    :param ddo: Optional DDO to assign to this asset.
+
+    """
     def __init__(self, ocean, did=None, purchase_id=None, asset=None, ddo=None):
         """
         init an asset class with the following:
-        :param ocean: ocean object to use to connect to the ocean network
-        :param did: Optional did of the asset
-        :param asset: Optional asset to copy from
         """
         AssetBase.__init__(self, ocean, did=did, asset=asset)
         self._ddo = None
@@ -40,11 +49,13 @@ class Asset(AssetBase):
 
     def register(self, metadata, account):
         """
-        Register on chain asset
-        :param metadata: dict of the metadata
-        :param account: account to use to register this asset
 
-        :return The new asset metadata ( ddo)
+        Register on chain asset
+
+        :param metadata: dict of the metadata to use for registration
+        :param account: Ocean account to use too register this asset
+
+        :return: The new asset's metadata
         """
 
         model = SquidModel(self._ocean)
@@ -57,8 +68,14 @@ class Asset(AssetBase):
         return self._metadata
 
     def read(self):
-        """read the asset metadata in this case it's the DDO with the metadat included from the off chain
-        metadata agent, if not found return None"""
+        """
+
+        Read the asset metadata in this case it's the DDO with the metadata
+        included from the off chain metadata agent.
+
+        :return: metadata of the asset, or None if not found in storage.
+
+        """
 
         model = SquidModel(self._ocean)
 
@@ -75,10 +92,11 @@ class Asset(AssetBase):
 
     def purchase(self, account):
         """
-        Purchase this asset using the account details, return a copy of this asset
-        with the service_agreement_id ( purchase_id) set
 
-        :return asset object that has been purchased
+        Purchase this asset using the account details, return a copy of this asset
+        with the service_agreement_id ( purchase_id ) set.
+
+        :return: asset object that has been purchased
         """
         model = SquidModel(self._ocean)
         service_agreement_id = model.purchase_asset(self, account)
@@ -91,7 +109,8 @@ class Asset(AssetBase):
 
     def is_purchase_valid(self, account):
         """
-        test to see if this purchased asset can be accessed and is valid
+
+        Test to see if this purchased asset can be accessed and is valid.
 
         :return: boolean value if this asset has been purchased
         """
@@ -104,7 +123,12 @@ class Asset(AssetBase):
 
     def consume(self, account):
         """
-        Consume a purchased asset.
+
+        Consume a purchased asset. This call will try to download the asset data
+        that you have already called using the :func:`purchase` method.
+
+        You can call the :func:`is_purchased` property before hand to check that you
+        have already purchased this asset.
 
         :return: data returned from the asset , or False
         """
@@ -115,14 +139,28 @@ class Asset(AssetBase):
         return model.consume_asset(self, self._purchase_id, account)
 
     def set_purchase_id(self, service_agreement_id):
-        """ Set the purchase id or 'service_agreement_id' """
+        """
+
+        Set the purchase id or 'service_agreement_id'
+
+        """
         self._purchase_id = service_agreement_id
 
     def copy(self):
+        """
+
+        Copy this asset and return a duplicate.
+
+        :return: copy of this asset.
+        """
         return Asset(self._ocean, asset=self)
 
     def _set_ddo(self, ddo):
-        """ assign ddo values to the asset id/did and metadata properties"""
+        """
+
+        Assign ddo values to the asset id/did and metadata properties
+
+        """
         self._did = ddo.did
         self._id = remove_0x_prefix(did_to_id(self._did))
         self._ddo = ddo
@@ -131,24 +169,39 @@ class Asset(AssetBase):
 
     @property
     def is_empty(self):
-        """ return true if the asset is empty"""
+        """
+
+        Checks to see if this Asset is empty.
+
+        :return: True if this asset is empty else False.
+        """
         return  self._id is None
 
     @property
     def ddo(self):
-        """ return the ddo assigned with this asset"""
+        """
+        :return: The ddo assigned with this asset.
+        """
         return self._ddo
 
     @property
     def is_purchased(self):
+        """
+        :return: True if this asset is a purchased asset.
+        """
         return not self._purchase_id is None
 
     @property
     def purchase_id(self):
+        """
+        :return: The purchase id for this asset, if not purchased then return None.
+        """
         return self._purchase_id
 
     @staticmethod
     def is_did_valid(did):
-        """ return true if the DID is in the format 'did:op:xxxxx' """
+        """
+        :return: True if the DID is in the format 'did:op:xxxxx'
+        """
         data = did_parse(did)
         return not data['path']

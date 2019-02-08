@@ -8,3 +8,7 @@ a.reference {
 a.reference:hover {
     border-bottom: none;
 }
+
+pre, highlight { 
+    background: #F0F0F0;
+}

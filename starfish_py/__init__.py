@@ -1,8 +1,9 @@
 """
-    Starfish-py module init
+    Starfish-py module
+
+    The main class to call is the :func:`starfish_py.ocean.Ocean` class.
 
 
-    Return the global logger, hopefully you have called starfish_py.logging.setup_logging, before using this
 """
 
 

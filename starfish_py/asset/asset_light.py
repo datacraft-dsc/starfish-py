@@ -1,5 +1,8 @@
 """
-    Asset class to hold Ocean asset information such as asset id and metadata
+    Asset class to handle the _other_ type of asset storage and addressing.
+
+    **Currently this is in development**
+
 """
 from web3 import Web3
 
@@ -13,11 +16,15 @@ from starfish_py.utils.did import did_parse
 # from starfish_py import logger
 
 class AssetLight(AssetBase):
+    """
+
+        :param ocean: ocean object to use to connect to the ocean network.
+        :param did: Optional did of the asset.
+
+    """
     def __init__(self, ocean, did=None):
         """
         init an asset class with the following:
-        :param ocean: ocean object to use to connect to the ocean network
-        :param did: Optional did of the asset
         """
         AssetBase.__init__(self, ocean, did)
 
@@ -31,11 +38,13 @@ class AssetLight(AssetBase):
 
     def register(self, metadata, **kwargs):
         """
-        Register an asset by writing it's meta data to the meta storage agent
-        :param metadata: dict of the metadata
-        :param agent: agent object for perform meta stroage
 
-        :return The new asset registered, or return None on error
+        Register an asset by writing it's meta data to the meta storage agent
+
+        :param metadata: dict of the metadata.
+        :param agent: agent object for perform meta stroage.
+
+        :return: The new asset registered, or return None on error.
         """
 
         model = MetadataAgentModel(self._ocean)
@@ -50,7 +59,12 @@ class AssetLight(AssetBase):
         return self._metadata
 
     def read(self):
-        """read the asset metadata from an Ocean Agent, using the agents DID"""
+        """
+
+        Reads the asset metadata from an Ocean Agent, using the agents DID.
+
+        :return: metadata read for this asset, if non found then return None.
+        """
 
         model = MetadataAgentModel(self._ocean, did=self._agent_did)
         asset_data = model.read_asset(self._id)
@@ -62,11 +76,15 @@ class AssetLight(AssetBase):
 
     @property
     def is_empty(self):
-        """return true if this asset is empty """
+        """
+        :return: True if this asset is empty.
+        """
         return self._id is None or self._agent_did is None
 
     @staticmethod
     def is_did_valid(did):
-        """ return true if the did is a valid did for this type of asset """
+        """
+        :return: True if the did is a valid did for this type of asset.
+        """
         data = did_parse(did)
         return data['id_hex'] and data['path']

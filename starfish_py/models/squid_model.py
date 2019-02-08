@@ -92,6 +92,7 @@ class SquidModel(ModelBase):
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
             self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
+        print(f'downloads path {downloads_path}')
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
@@ -107,6 +108,7 @@ class SquidModel(ModelBase):
             raise TypeError(f'You need to pass an account object or account address')
 
         agreement_address = self._ocean._keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
+        print(f'agreement address {agreement_address}')
 
         return self._ocean._squid.is_access_granted(service_agreement_id, asset.did, account_address)
 
@@ -130,6 +132,8 @@ class SquidModel(ModelBase):
         """
         _filter = event.createFilter(fromBlock=0, argument_filters=arg_filter)
         for check in range(wait_iterations):
+            if not check:
+                raise AssertionError
             events = _filter.get_all_entries()
             if events:
                 return events[0]
