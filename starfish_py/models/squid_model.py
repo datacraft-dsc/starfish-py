@@ -93,7 +93,7 @@ class SquidModel(ModelBase):
         if service_agreement:
             self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
         assert downloads_path
-        
+
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used
@@ -109,7 +109,7 @@ class SquidModel(ModelBase):
 
         agreement_address = self._ocean._keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
         assert agreement_address
-        
+
         return self._ocean._squid.is_access_granted(service_agreement_id, asset.did, account_address)
 
     def get_service_agreement_from_asset(self, asset):

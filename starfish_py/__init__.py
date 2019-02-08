@@ -1,6 +1,6 @@
 """
     Starfish-py module
-    
+
     The main class to call is the :func:`starfish_py.ocean.Ocean` class.
 
 

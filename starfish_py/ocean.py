@@ -160,14 +160,14 @@ class Ocean():
         :param sort: sort the results ( defaults: None, no sort).
         :param offset: Return the result from with the maximum record count ( defaults: 100 ).
         :param page: Returns the page number based on the offset.
-        
+
         :return: a list of assets objects found using the search.
 
         For example::
 
             # return the 300 -> 399 records in the search for the text 'weather' in the metadata.
             my_result = ocean.search_registered_assets('weather', None, 100, 3)
-            
+
         """
         asset_list = None
         model = SquidModel(self)
@@ -186,12 +186,12 @@ class Ocean():
 
         This is currently only **used for testing**, as we assume that Ocean has
         already registered a service level agreement template onchain for usage.
-        
+
         :param template_id: Template id of the service level agreement template.
         :param account: Ocean account to use if this method needs to register the template.
 
         :return: True if the agreement template has been added, else False if it's already been registered
-        
+
         """
         model = SquidModel(self)
         if not model.is_service_agreement_template_registered(template_id):
