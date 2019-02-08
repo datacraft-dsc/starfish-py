@@ -8,8 +8,7 @@ Contents
 
 .. toctree::
    :maxdepth: 4
-
+   
    api/modules
-
-
+    
 * :ref:`modindex`

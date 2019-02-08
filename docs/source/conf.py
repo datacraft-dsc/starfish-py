@@ -50,10 +50,8 @@ apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
 apidoc_excluded_paths = [
-  'agent.py',
-  'asset.py',
+  'asset_*.py',
   'command_line',
-  'config.py',
   'constants.py',
   'exceptions.py',
   'logging.py',
@@ -107,8 +105,8 @@ highlight_language = 'python3'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
-# html_theme = 'sphinx_rtd_theme'
+# html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -116,6 +114,7 @@ html_theme = 'alabaster'
 # For the Alabaster theme, see:
 # https://alabaster.readthedocs.io/en/latest/customization.html
 
+"""
 # Colors
 brand_white = '#fff'
 brand_black = '#141414'
@@ -153,12 +152,14 @@ html_theme_options = {
     'sidebar_list': brand_black,
     'sidebar_link_underscore': brand_white,
     'sidebar_text': brand_black,
+    'code_highlight': brand_white,
     # Fonts
     'caption_font_family': font_family_base,
     'code_font_family': font_family_monospace,
     'font_family': font_family_base,
     'head_font_family': font_family_title,
 }
+"""
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
