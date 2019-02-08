@@ -19,6 +19,12 @@ if [ ! -z "$2" ]; then
     DEPLOY_USER="$2"
 fi
 
+if [ "$3" = "dev" ]; then
+    DEV_BRANCH="true"
+else
+    DEV_BRANCH=""
+fi
+
 echo "building docs package $PACKAGE_NAME"
 
 # install dev packages for doc build
@@ -40,6 +46,12 @@ if [ ! -z "$DEPLOY_SERVER" ]; then
 
     chmod 0600 /tmp/dex-docs-deploy
     scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
+    if [ -n "$DEV_BRANCH" ]; then
+        # for debugging send the environment from travis
+        env > env.txt
+        scp -i /tmp/dex-docs-deploy env.txt ${DEPLOY_USER}@${DEPLOY_SERVER}:
+    fi
+
     rm /tmp/dex-docs-deploy
 
     echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
