@@ -57,10 +57,18 @@ class Config(configparser.ConfigParser):
     :param agent_store_auth: Authorziation text to access the metadat service.
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
 
+
+
     For example::
 
         # only set the contarcts path and keeper url values
         ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8080')
+
+    The default config values as defined as an `ini` file are defined as follows:
+    
+    .. literalinclude:: ../../../starfish_py/config.py
+        :start-after: CONFIG_DEFAULT
+        :end-before: "
     """
 
     def __init__(self, filename=None, **kwargs):

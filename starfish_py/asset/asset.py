@@ -1,3 +1,4 @@
+
 """
 
 Asset class to hold Ocean asset information such as an asset id and metadata
@@ -18,7 +19,7 @@ from starfish_py.utils.did import did_parse
 
 
 class Asset(AssetBase):
-    """    
+    """
 
     The creation of an asset is normally performed by the :func:`starfish_py.ocean.Ocean' class.
 

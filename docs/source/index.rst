@@ -19,7 +19,6 @@ Contents
     modules/agent
     modules/asset
     modules/asset_light
-#    modules/asset_base
 
 
     

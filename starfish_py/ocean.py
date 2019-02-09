@@ -69,6 +69,7 @@ class Ocean():
         :param did: DID of the agent to register, if it already exists
 
         :return: a list of DID, DDO and  private pem of the registered DDO.
+        :type: string
 
         For example::
 
@@ -204,6 +205,7 @@ class Ocean():
     def accounts(self):
         """
         :return: a list of ocean accounts
+        :type: list of accounts
 
         """
         return self._squid_ocean.get_accounts()
@@ -227,7 +229,8 @@ class Ocean():
     def config(self):
         """
 
-        :return: the used config object for this connection, see :func:`starfish_py.config`
+        :return: the used config object for this connection
+        :type: :func:`starfish_py.config` object
 
         """
         return self._config

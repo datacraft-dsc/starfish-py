@@ -36,13 +36,11 @@ Startup a local ocean node (``barge``)
         git checkout tags/dex-2019-02-01
         ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
 
-    So you should now have two folders:
+    So you should now have two folders::
 
-    .. code-block:: console
-
-        myProjects/-----|
-                        |--> barge
-                        |--> starfish_py
+        myProjects/--|
+                     |--> barge/
+                     |--> starfish_py/
 
 
 Copy keeper artifacts
