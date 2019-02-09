@@ -9,7 +9,7 @@ Install the library
 
     First you need to clone and download the latest version of starfish-py.
     Then you need to use ``virtualvenv`` to create a python enrivornment to work with.
-    
+
     For example you can do something like this below:
 
     .. code-block:: console
@@ -28,7 +28,7 @@ Startup a local ocean node (``barge``)
 
     In a sepearte terminal session you need to clone and checkout the correct taged
     version of ``barge`` repository, by doing the following:
-      
+
     .. code-block:: console
 
         git clone https://github.com/DEX-Company/barge.git
@@ -63,7 +63,7 @@ Run the unit tests
 ------------------
 
     Now you can run the tests by running the command:
-    
+
     .. code-block:: console
 
         python3 setup.py test

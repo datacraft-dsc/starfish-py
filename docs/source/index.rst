@@ -12,7 +12,7 @@ Contents
 .. toctree::
     :maxdepth: 4
     :glob:
-   
+
     getting_started
     modules/ocean
     modules/config
@@ -21,4 +21,4 @@ Contents
     modules/asset_light
 
 
-    
+
