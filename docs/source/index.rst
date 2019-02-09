@@ -1,5 +1,7 @@
-.. image:: _static/logo-dex.svg
+.. image:: _static/collab-dex-logo.svg
     :align: right
+    :alt: Dex.sg
+    :target: https://dex.sg
 
 starfish-py API Documentation
 =============================
