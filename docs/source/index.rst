@@ -1,5 +1,8 @@
-starfish-py API Reference Docs
-==============================
+.. image:: _static/logo-dex.svg
+    :align: right
+
+starfish-py API Documentation
+=============================
 
 These docs are API Reference docs.
 
@@ -10,6 +13,7 @@ Contents
     :maxdepth: 4
     :glob:
    
+    getting_started
     modules/ocean
     modules/config
     modules/agent

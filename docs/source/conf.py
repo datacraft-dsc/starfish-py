@@ -29,7 +29,7 @@ author = 'starfish-py contributors'
 release = '0.0.1'
 # The short X.Y version
 release_parts = release.split('.')  # a list
-version = release_parts[0] + '.' + release_parts[1]
+version = release_parts[0] + '.' + release_parts[1] + '.' + release_parts[2]
 
 # -- General configuration ---------------------------------------------------
 

@@ -48,6 +48,7 @@ docs_requirements = [
     'Sphinx',
     'sphinx-rtd-theme',
     'sphinxcontrib-apidoc',
+    'pygments',
 ]
 
 packages = []
