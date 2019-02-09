@@ -7,8 +7,15 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 4
+    :glob:
    
-   api/modules
+    modules/ocean
+    modules/config
+    modules/agent
+    modules/asset
+    modules/asset_light
+#    modules/asset_base
+
+
     
-* :ref:`modindex`

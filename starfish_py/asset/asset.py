@@ -18,7 +18,8 @@ from starfish_py.utils.did import did_parse
 
 
 class Asset(AssetBase):
-    """
+    """    
+
     The creation of an asset is normally performed by the :func:`starfish_py.ocean.Ocean' class.
 
     :param ocean: ocean object to use to connect to the ocean network.
@@ -30,6 +31,7 @@ class Asset(AssetBase):
     """
     def __init__(self, ocean, did=None, purchase_id=None, asset=None, ddo=None):
         """
+
         init an asset class with the following:
         """
         AssetBase.__init__(self, ocean, did=did, asset=asset)
