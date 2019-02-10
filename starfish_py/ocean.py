@@ -42,19 +42,31 @@ class Ocean():
     You can provide these parameters in a dictionary or as individual parameters.
 
     :param filename: Filename of the config file to load.
+    :type filename: str or None
     :param contracts_path: path to the contract files ( artifacts ).
+    :type contracts_path: str or None
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :type keeper_url: str or None
     :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :type secret_store_url: str or None
     :param parity_url: url to the parity node ( http://localhost:8545 ).
+    :type parity_url: str or None
     :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
+    :type aquarius_url: str or None
     :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
+    :type brizo_url: str or None
     :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
+    :type storage_path: str or None
     :param download_path: Path to save the consumed assets too. ( consume_downloads ).
+    :type download_path: str or None
     :param agent_store_did: DID of the agent metadata service.
+    :type agent_store_did: str or None
     :param agent_store_auth: Authorziation text to access the metadat service.
+    :type agent_store_auth: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
+    :type gas_limit: int or string
 
-    see the `Config class`_ module for more details.
+    see the :class:`.Config` class for more details as to the parameters you can pass.
 
     """
 
@@ -81,7 +93,8 @@ class Ocean():
         :param str agent_service_name: service name of the registration to use to register for the agent.
         :param str endpoint_url: URL of the agents service to register.
         :param object account: Ocean account to use as the owner of the DID->DDO registration.
-        :param str did: Optional DID of the agent to register, if it already exists
+        :param did: Optional DID of the agent to register, if it already exists
+        :type did: str or None
 
         :return: a list of DID, DDO and  private pem of the registered DDO.
         :type: string
@@ -108,7 +121,7 @@ class Ocean():
         :param object account: Ocean account to use to register this asset.
 
         :return: A new _Asset_ object that has been registered, if failure then return None.
-        :type: `Asset class`_
+        :type: :class:`.Asset` class
 
         For example::
 
@@ -135,7 +148,7 @@ class Ocean():
         :param dict metadata: metadata dictonary to store for this asset.
 
         :return: the asset that has been registered
-        :type: object
+        :type: :class:`.AssetLight` class
 
         """
 
@@ -151,10 +164,10 @@ class Ocean():
 
         Return an asset based on the asset's DID.
 
-        :param did: DID of the asset and agent combined.
+        :param str did: DID of the asset and agent combined.
 
         :return: a registered asset given a DID of the asset
-        :type: `Asset class`_
+        :type: :class:`.Asset` class
 
         """
         asset = None
@@ -176,10 +189,11 @@ class Ocean():
 
         Search the off chain storage for an asset with the givien 'text'
 
-        :param text: Test to search all metadata items for.
+        :param str text: Test to search all metadata items for.
         :param sort: sort the results ( defaults: None, no sort).
-        :param offset: Return the result from with the maximum record count ( defaults: 100 ).
-        :param page: Returns the page number based on the offset.
+        :type sort: str or None
+        :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
+        :param int page: Returns the page number based on the offset.
 
         :return: a list of assets objects found using the search.
         :type: list of DID strings
@@ -208,8 +222,8 @@ class Ocean():
         This is currently only **used for testing**, as we assume that Ocean has
         already registered a service level agreement template onchain for usage.
 
-        :param template_id: Template id of the service level agreement template.
-        :param account: Ocean account to use if this method needs to register the template.
+        :param str template_id: Template id of the service level agreement template.
+        :param object account: Ocean account to use if this method needs to register the template.
 
         :return: True if the agreement template has been added, else False if it's already been registered
         :type: boolean
@@ -227,7 +241,6 @@ class Ocean():
         """
         :return: a list of ocean accounts
         :type: list of accounts
-
         """
         return self._squid_ocean.get_accounts()
 
@@ -249,9 +262,7 @@ class Ocean():
     @property
     def config(self):
         """
-
         :return: the used config object for this connection
-        :type: `Config class`_
-
+        :type: :class:`.Config` class
         """
         return self._config

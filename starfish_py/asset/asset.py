@@ -21,13 +21,17 @@ from starfish_py.utils.did import did_parse
 class Asset(AssetBase):
     """
 
-    The creation of an asset is normally performed by the :func:`starfish_py.ocean.Ocean' class.
+    The creation of an asset is normally performed by the :class:`.Ocean` class.
 
     :param object ocean: ocean object to use to connect to the ocean network.
-    :param str did: Optional did of the asset.
-    :param str purchase_id: Optional purchase_id to assign to this asset.
-    :param Asset asset: Optional asset to copy from.
-    :param dict ddo: Optional DDO to assign to this asset.
+    :param did: Optional did of the asset.
+    :type did: str or None
+    :param purchase_id: Optional purchase_id to assign to this asset.
+    :type purchase_id: str or None
+    :param asset: Optional asset to copy from.
+    :type asset: :class:`.Asset` or None
+    :param ddo: Optional DDO to assign to this asset.
+    :type ddo: dict or None
 
     """
     def __init__(self, ocean, did=None, purchase_id=None, asset=None, ddo=None):
@@ -105,7 +109,7 @@ class Asset(AssetBase):
         :param object account: account to use to purchase this asset.
 
         :return: asset object that has been purchased
-        :type: object
+        :type: :class:`.Asset`
 
         """
         model = SquidModel(self._ocean)
@@ -168,7 +172,7 @@ class Asset(AssetBase):
         Copy this asset and return a duplicate.
 
         :return: copy of this asset.
-        :type: object
+        :type: :class:`.Asset`
 
         """
         return Asset(self._ocean, asset=self)

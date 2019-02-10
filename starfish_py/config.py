@@ -44,19 +44,29 @@ class Config(configparser.ConfigParser):
     Create a new config instance, using a config file, dictionary of values or argument list (kwargs)
 
     :param filename: Filename of the config file to load.
+    :type filename: str or None
     :param contracts_path: path to the contract files ( artifacts ).
+    :type contracts_path: str or None
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :type keeper_url: str or None
     :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :type secret_store_url: str or None
     :param parity_url: url to the parity node ( http://localhost:8545 ).
+    :type parity_url: str or None
     :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
+    :type aquarius_url: str or None
     :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
+    :type brizo_url: str or None
     :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
+    :type storage_path: str or None
     :param download_path: Path to save the consumed assets too. ( consume_downloads ).
+    :type download_path: str or None
     :param agent_store_did: DID of the agent metadata service.
+    :type agent_store_did: str or None
     :param agent_store_auth: Authorziation text to access the metadat service.
+    :type agent_store_auth: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
-
-
+    :type gas_limit: int or string
 
     For example::
 
