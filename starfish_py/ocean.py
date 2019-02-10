@@ -2,8 +2,6 @@
 
 Ocean class to access the Ocean eco system.
 
-.. _Asset class: asset.html
-.. _Config class: config.html
 """
 from web3 import (
     Web3,
@@ -19,9 +17,13 @@ from starfish_py import Config as OceanConfig
 from starfish_py.models.squid_model import SquidModel
 from starfish_py import Agent
 
+"""
 
+"""
 class Ocean():
     """
+    .. _Asset class: asset.html
+    .. _Config class: config.html
 
     The Ocean class connects to the ocean network.
 
@@ -37,10 +39,20 @@ class Ocean():
         }
         ocean = Ocean(my_config)
 
-    :param str contracts_path: path to the contract files ( artifacts ).
-    :param str keeper_url: url to the keeper node ( http://localhost:8545 ).
-    :param str secret_store_url: url to the secret store node ( http://localhost:12001 ).
-    :param str parity_url: url to the parity node ( 'http://localhost:8545 ).
+    You can provide these parameters in a dictionary or as individual parameters.
+
+    :param filename: Filename of the config file to load.
+    :param contracts_path: path to the contract files ( artifacts ).
+    :param keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :param parity_url: url to the parity node ( http://localhost:8545 ).
+    :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
+    :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
+    :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
+    :param download_path: Path to save the consumed assets too. ( consume_downloads ).
+    :param agent_store_did: DID of the agent metadata service.
+    :param agent_store_auth: Authorziation text to access the metadat service.
+    :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
 
     see the `Config class`_ module for more details.
 
@@ -48,9 +60,9 @@ class Ocean():
 
     def __init__(self, *args, **kwargs):
         """
+        .. :class: starfish_py.Ocean
 
         init the basic Ocean class for the connection and contract info
-
 
         """
         self._config = OceanConfig(*args, **kwargs)

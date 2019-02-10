@@ -50,7 +50,6 @@ class Config(configparser.ConfigParser):
     :param parity_url: url to the parity node ( http://localhost:8545 ).
     :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
     :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
-
     :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
     :param download_path: Path to save the consumed assets too. ( consume_downloads ).
     :param agent_store_did: DID of the agent metadata service.

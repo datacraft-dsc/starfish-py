@@ -1,7 +1,7 @@
 Agent class
 ===========
 
-.. automodule:: starfish_py.agent
+.. autoclass:: starfish_py.Agent
     :members:
     :undoc-members:
     :show-inheritance:

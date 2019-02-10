@@ -1,7 +1,7 @@
 Config class
 ============
 
-.. automodule:: starfish_py.config
+.. autoclass:: starfish_py.Config
     :members:
     :undoc-members:
     :show-inheritance:

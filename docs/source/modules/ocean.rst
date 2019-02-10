@@ -1,7 +1,7 @@
 Ocean class
 ===========
 
-.. automodule:: starfish_py.ocean
+.. autoclass:: starfish_py.Ocean
     :members:
     :undoc-members:
     :show-inheritance:

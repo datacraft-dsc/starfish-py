@@ -20,7 +20,3 @@ Contents
     modules/config
     modules/agent
     modules/asset
-    modules/asset_light
-
-
-
