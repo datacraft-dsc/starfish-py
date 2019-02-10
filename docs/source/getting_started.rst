@@ -26,7 +26,7 @@ Startup a local ocean node (``barge``)
 
     Create the local testing environment using the barge_ repo.
 
-    In a sepearte terminal session you need to clone and checkout the correct taged
+    In a separate terminal session you need to clone and checkout the correct tagged
     version of ``barge`` repository, by doing the following:
 
     .. code-block:: console

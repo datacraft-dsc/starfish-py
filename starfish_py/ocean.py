@@ -2,6 +2,8 @@
 
 Ocean class to access the Ocean eco system.
 
+.. _Asset class: asset.html
+.. _Config class: config.html
 """
 from web3 import (
     Web3,
@@ -35,12 +37,13 @@ class Ocean():
         }
         ocean = Ocean(my_config)
 
-    :param contracts_path: path to the contract files ( artifacts ).
-    :param keeper_url: url to the keeper node ( http://localhost:8545 ).
-    :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
-    :param parity_url: url to the parity node ( 'http://localhost:8545 ).
+    :param str contracts_path: path to the contract files ( artifacts ).
+    :param str keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :param str secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :param str parity_url: url to the parity node ( 'http://localhost:8545 ).
 
-    see the :func:`starfish_py.config` module for more details.
+    see the `Config class`_ module for more details.
+
     """
 
     def __init__(self, *args, **kwargs):
@@ -63,10 +66,10 @@ class Ocean():
 
         Register this agent on the block chain.
 
-        :param agent_service_name: service name of the registration to use to register for the agent.
-        :param endpoint_url: URL of the agents service to register.
-        :param account: Ocean account to use as the owner of the DID->DDO registration.
-        :param did: DID of the agent to register, if it already exists
+        :param str agent_service_name: service name of the registration to use to register for the agent.
+        :param str endpoint_url: URL of the agents service to register.
+        :param object account: Ocean account to use as the owner of the DID->DDO registration.
+        :param str did: Optional DID of the agent to register, if it already exists
 
         :return: a list of DID, DDO and  private pem of the registered DDO.
         :type: string
@@ -89,10 +92,11 @@ class Ocean():
         Register an asset with the ocean network.
 
 
-        :param metadata: metadata dictionary to store for this asset.
-        :param account: Ocean account to use to register this asset.
+        :param dict metadata: metadata dictionary to store for this asset.
+        :param object account: Ocean account to use to register this asset.
 
         :return: A new _Asset_ object that has been registered, if failure then return None.
+        :type: `Asset class`_
 
         For example::
 
@@ -116,9 +120,10 @@ class Ocean():
 
         Register an asset using the **off chain** system using an metadata storage agent
 
-        :param metadata: metadata dictonary to store for this asset.
+        :param dict metadata: metadata dictonary to store for this asset.
 
         :return: the asset that has been registered
+        :type: object
 
         """
 
@@ -137,6 +142,8 @@ class Ocean():
         :param did: DID of the asset and agent combined.
 
         :return: a registered asset given a DID of the asset
+        :type: `Asset class`_
+
         """
         asset = None
         if Asset.is_did_valid(did):
@@ -163,6 +170,7 @@ class Ocean():
         :param page: Returns the page number based on the offset.
 
         :return: a list of assets objects found using the search.
+        :type: list of DID strings
 
         For example::
 
@@ -192,6 +200,7 @@ class Ocean():
         :param account: Ocean account to use if this method needs to register the template.
 
         :return: True if the agreement template has been added, else False if it's already been registered
+        :type: boolean
 
         """
         model = SquidModel(self)
@@ -230,7 +239,7 @@ class Ocean():
         """
 
         :return: the used config object for this connection
-        :type: :func:`starfish_py.config` object
+        :type: `Config class`_
 
         """
         return self._config
