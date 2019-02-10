@@ -10,13 +10,7 @@ import logging
 from starfish_py.command_line import CommandLine
 from starfish_py.exceptions import OceanCommandLineError
 
-from starfish_py.config import (
-    Config,
-    # DEFAULT_KEEPER_URL,
-    # DEFAULT_KEEPER_PATH,
-    # DEFAULT_GAS_LIMIT,
-    # DEFAULT_NAME_AQUARIUS_URL,
-)
+from starfish_py import Config
 
 DEFAULT_CONFIG_FILE = 'config_local.ini'
 
