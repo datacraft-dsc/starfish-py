@@ -16,7 +16,8 @@ Contents
     :glob:
 
     getting_started
-    modules/ocean
-    modules/config
-    modules/agent
-    modules/asset
+    modules/starfish_py
+    classes/ocean
+    classes/config
+    classes/agent
+    classes/asset

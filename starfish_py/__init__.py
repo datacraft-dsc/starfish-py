@@ -1,8 +1,13 @@
 """
     Starfish-py module
 
-    The main class to call is the :func:`starfish_py.ocean.Ocean` class.
-
+    This module contains the following classes
+    
+    * :class:`Agent` The Agent wrapper class.
+    * :class:`Asset` The Asset class.
+    * :class:`Config` The Config data class.
+    * :class:`Ocean` The main Ocean connection class.
+    * :data:`logger` The logger class.
 
 """
 
@@ -15,10 +20,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+from .agent import Agent
 from .asset.asset import Asset
 from .asset.asset_light import AssetLight
-
-from .agent import Agent
 from .config import Config
 from .ocean import Ocean
 
