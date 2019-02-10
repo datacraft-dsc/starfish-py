@@ -29,6 +29,7 @@ class Agent():
         :param did: optional did to update the did with this value (if you are the account owner of the DID)
 
         :return: a list of DID, DDO and  private pem of the registered DDO.
+        :type: (str, dict, str)
 
         """
 

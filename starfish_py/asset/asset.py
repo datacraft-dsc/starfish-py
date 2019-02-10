@@ -23,11 +23,11 @@ class Asset(AssetBase):
 
     The creation of an asset is normally performed by the :func:`starfish_py.ocean.Ocean' class.
 
-    :param ocean: ocean object to use to connect to the ocean network.
-    :param did: Optional did of the asset.
-    :param purchase_id: Optional purchase_id to assign to this asset.
-    :param asset: Optional asset to copy from.
-    :param ddo: Optional DDO to assign to this asset.
+    :param object ocean: ocean object to use to connect to the ocean network.
+    :param str did: Optional did of the asset.
+    :param str purchase_id: Optional purchase_id to assign to this asset.
+    :param Asset asset: Optional asset to copy from.
+    :param dict ddo: Optional DDO to assign to this asset.
 
     """
     def __init__(self, ocean, did=None, purchase_id=None, asset=None, ddo=None):
@@ -55,10 +55,12 @@ class Asset(AssetBase):
 
         Register on chain asset
 
-        :param metadata: dict of the metadata to use for registration
-        :param account: Ocean account to use too register this asset
+        :param dict metadata: dict of the metadata to use for registration
+        :param object account: Ocean account to use too register this asset
 
         :return: The new asset's metadata
+        :type: dict
+
         """
 
         model = SquidModel(self._ocean)
@@ -77,6 +79,7 @@ class Asset(AssetBase):
         included from the off chain metadata agent.
 
         :return: metadata of the asset, or None if not found in storage.
+        :type: dict
 
         """
 
@@ -99,7 +102,11 @@ class Asset(AssetBase):
         Purchase this asset using the account details, return a copy of this asset
         with the service_agreement_id ( purchase_id ) set.
 
+        :param object account: account to use to purchase this asset.
+
         :return: asset object that has been purchased
+        :type: object
+
         """
         model = SquidModel(self._ocean)
         service_agreement_id = model.purchase_asset(self, account)
@@ -115,7 +122,10 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
+        :param object account: account to used to purchase this asset.
+
         :return: boolean value if this asset has been purchased
+        :type: boolean
         """
         print(self._purchase_id)
         if not self.is_purchased:
@@ -133,7 +143,10 @@ class Asset(AssetBase):
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
+        :param object account: account to used to consume this asset.
+
         :return: data returned from the asset , or False
+        :type: object or False
         """
         if not self.is_purchased:
             return False
@@ -155,6 +168,8 @@ class Asset(AssetBase):
         Copy this asset and return a duplicate.
 
         :return: copy of this asset.
+        :type: object
+
         """
         return Asset(self._ocean, asset=self)
 
@@ -177,6 +192,7 @@ class Asset(AssetBase):
         Checks to see if this Asset is empty.
 
         :return: True if this asset is empty else False.
+        :type: boolean
         """
         return  self._id is None
 
@@ -184,6 +200,7 @@ class Asset(AssetBase):
     def ddo(self):
         """
         :return: The ddo assigned with this asset.
+        :type: dict
         """
         return self._ddo
 
@@ -191,6 +208,7 @@ class Asset(AssetBase):
     def is_purchased(self):
         """
         :return: True if this asset is a purchased asset.
+        :type: boolean
         """
         return not self._purchase_id is None
 
@@ -198,6 +216,7 @@ class Asset(AssetBase):
     def purchase_id(self):
         """
         :return: The purchase id for this asset, if not purchased then return None.
+        :type: str
         """
         return self._purchase_id
 
@@ -205,6 +224,7 @@ class Asset(AssetBase):
     def is_did_valid(did):
         """
         :return: True if the DID is in the format 'did:op:xxxxx'
+        :type: boolean
         """
         data = did_parse(did)
         return not data['path']

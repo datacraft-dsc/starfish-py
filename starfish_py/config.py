@@ -65,7 +65,7 @@ class Config(configparser.ConfigParser):
         ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8080')
 
     The default config values as defined as an `ini` file are defined as follows:
-    
+
     .. literalinclude:: ../../../starfish_py/config.py
         :start-after: CONFIG_DEFAULT
         :end-before: "
@@ -135,6 +135,7 @@ class Config(configparser.ConfigParser):
         The config values must conform to the current version of squid-py
 
         :return: A temporary filename that can be used by squid.
+        :type: str
 
         """
         squid = configparser.ConfigParser()
@@ -155,6 +156,8 @@ class Config(configparser.ConfigParser):
         Return a set of config values, so that squid can read.
 
         :return: a dict that is compatiable with the current supported version of squid-py.
+        :type: dict
+
         """
         return {
             'keeper-contracts': {
@@ -177,6 +180,7 @@ class Config(configparser.ConfigParser):
     def contract_path(self):
         """
         :return: the contract path value.
+        :type: str
         """
         return self.get(self._section_name, 'contract_path')
 
@@ -184,6 +188,7 @@ class Config(configparser.ConfigParser):
     def storage_path(self):
         """
         :return: the storage path.
+        :type: str
         """
         return self.get(self._section_name, 'storage_path')
 
@@ -191,6 +196,7 @@ class Config(configparser.ConfigParser):
     def download_path(self):
         """
         :return: the download path.
+        :type: str
         """
         return self.get(self._section_name, 'download_path')
 
@@ -198,6 +204,7 @@ class Config(configparser.ConfigParser):
     def keeper_url(self):
         """
         :return: the ocean url or ethereum node url.
+        :type: str
         """
         return self.get(self._section_name, 'keeper_url')
 
@@ -205,6 +212,7 @@ class Config(configparser.ConfigParser):
     def gas_limit(self):
         """
         :return: the default gas limit
+        :type: int
         """
         return int(self.get(self._section_name, 'gas_limit'))
 
@@ -212,6 +220,7 @@ class Config(configparser.ConfigParser):
     def aquarius_url(self):
         """
         :return: the aquarius server URL.
+        :type: str
         """
         return self.get(self._section_name, 'aquarius_url')
 
@@ -219,6 +228,7 @@ class Config(configparser.ConfigParser):
     def brizo_url(self):
         """
         :return: the URL of the brizo server.
+        :type: str
         """
         return self.get(self._section_name, 'brizo_url')
 
@@ -226,6 +236,7 @@ class Config(configparser.ConfigParser):
     def secret_store_url(self):
         """
         :return: the secret store URL.
+        :type: str
         """
         return self.get(self._section_name, 'secret_store_url')
 
@@ -233,6 +244,7 @@ class Config(configparser.ConfigParser):
     def parity_url(self):
         """
         :return: the parity URL.
+        :type: str
         """
         return self.get(self._section_name, 'parity_url')
 
@@ -240,6 +252,7 @@ class Config(configparser.ConfigParser):
     def parity_address(self):
         """
         :return: the parity address.
+        :type: str
         """
         return self.get(self._section_name, 'parity_address')
 
@@ -247,6 +260,7 @@ class Config(configparser.ConfigParser):
     def parity_password(self):
         """
         :return: the parity password.
+        :type: str
         """
         return self.get(self._section_name, 'parity_password')
 
@@ -254,6 +268,7 @@ class Config(configparser.ConfigParser):
     def agent_store_did(self):
         """
         :return: the storage agent's DID.
+        :type: str
         """
         return self.get(self._section_name, 'agent_store_did')
 
@@ -261,5 +276,6 @@ class Config(configparser.ConfigParser):
     def agent_store_auth(self):
         """
         :return: the storage agent's authorization.
+        :type: str
         """
         return self.get(self._section_name, 'agent_store_auth')
