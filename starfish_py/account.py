@@ -9,7 +9,7 @@ class Account():
 
     Account class, adds functionality for an account to be used by the Ocean network.
 
-    At the moment the Account object in created by the :class:`Ocean` class.
+    At the moment the Account object is created by the :class:`Ocean` class.
 
     :param ocean: Ocean object
     :type ocean: :class:`.Ocean`
@@ -18,11 +18,12 @@ class Account():
     :param password: password for the account
     :type password: str or None
 
-    If the address parameter is a string then it's the account address, if dict then the format should be: ::
+    If the address parameter is a string then it's the account address.
+    If dict then the dict can be the following format: ::
 
         {
-            'address': 'xxx',
-            'password': 'xxx', 
+            'address': 'xxxx',
+            'password': 'yyyy',
         }
 
     """
@@ -67,9 +68,9 @@ class Account():
     def lock(self):
         """
 
-        Lock the account, to stop access to this account for token transfer
+        Lock the account, to stop access to this account for ethereum token transfer
 
-        :return: True if this account was unlocked, else False
+        :return: True if this account was unlocked, else False if the account was not locked.
         :type: boolean
 
         """
