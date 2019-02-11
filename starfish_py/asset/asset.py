@@ -9,6 +9,7 @@ from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
 
+from starfish_py import Account
 from starfish_py.asset.asset_base import AssetBase
 from starfish_py.models.squid_model import SquidModel
 
@@ -118,8 +119,14 @@ class Asset(AssetBase):
         :type: :class:`.Asset`
 
         """
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self._ocean)
-        service_agreement_id = model.purchase_asset(self, account)
+        service_agreement_id = model.purchase_asset(self, account._squid_account)
         if service_agreement_id:
             purchase_asset = self.copy()
             purchase_asset.set_purchase_id(service_agreement_id)

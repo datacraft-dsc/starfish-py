@@ -29,6 +29,8 @@ class Account():
         self._ocean = ocean
         self._address = None
         self._password = None
+        self._unlock_squid_account = None
+
         if isinstance(address, dict):
             self.set_address(address.get('address'))
             self._password = address.get('password')
@@ -51,9 +53,26 @@ class Account():
         if password is None:
             raise ValueError('You must provid an account password to unlock')
 
-        squid_account = self._squid_account
-        if squid_account:
-            squid_account.unlock(password)
+        # clear out the onlocked account for squid
+        self._unlock_squid_account = None
+        self._unlock_squid_account = self._squid_account
+        if self._unlock_squid_account:
+            self._unlock_squid_account.password = password
+            self._unlock_squid_account.unlock()
+
+    def lock(self):
+        """
+
+        Lock the account, to stop access to this account for token transfer
+
+        :return: True if this account was unlocked, else False
+        :type: boolean
+
+        """
+        if self._unlock_squid_account:
+            self._unlock_squid_account = None
+            return True
+        return False
 
     def request_tokens(self, amount):
         """
@@ -81,7 +100,7 @@ class Account():
         :type: boolean
 
         """
-        return self._ocean._web3.toChecksumAddress(self._address) == self._ocean._web3.toChecksumAddress(address)
+        return self.as_checksum_address == self._ocean._web3.toChecksumAddress(address)
 
     @property
     def is_valid(self):
@@ -105,11 +124,14 @@ class Account():
 
         """
 
-        if self._address:
-            address = self._ocean._web3.toChecksumAddress(self._address)
-            account_list = self._ocean._squid.get_accounts()
-            if address in account_list:
-                return account_list[address]
+        if self._unlock_squid_account:
+            return self._unlock_squid_account
+        else:
+            address = self.as_checksum_address
+            if self._address:
+                account_list = self._ocean._squid.get_accounts()
+                if address in account_list:
+                    return account_list[address]
         return None
 
     @property
@@ -121,6 +143,18 @@ class Account():
         :type: str
         """
         return self._address
+
+    @property
+    def as_checksum_address(self):
+        """
+
+        Return the address as a checksum address
+        :return: checksum address
+        :type: str
+        """
+        if self._address:
+            return self._ocean._web3.toChecksumAddress(self._address.lower())
+        return None
 
     def set_address(self, address):
         """
@@ -150,6 +184,7 @@ class Account():
         :param str password: Password to set for this account
 
         """
+        self.lock()
         self._password = password
 
     @property

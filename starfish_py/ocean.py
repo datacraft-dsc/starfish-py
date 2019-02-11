@@ -228,15 +228,22 @@ class Ocean():
         already registered a service level agreement template onchain for usage.
 
         :param str template_id: Template id of the service level agreement template.
-        :param object account: Ocean account to use if this method needs to register the template.
+        :param :class:`.Account` account: account object to use if this method needs to register the template.
 
         :return: True if the agreement template has been added, else False if it's already been registered
         :type: boolean
 
         """
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self)
         if not model.is_service_agreement_template_registered(template_id):
-            model.register_service_agreement_template(template_id, account)
+            model.register_service_agreement_template(template_id, account._squid_account)
             return True
         return False
 

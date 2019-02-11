@@ -36,6 +36,7 @@ CONFIG_PARAMS = {
 }
 
 PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
+PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
@@ -96,17 +97,15 @@ def test_asset():
     assert asset.did == asset_did
 
 
-    purchase_account = ocean.accounts[list(ocean.accounts)[1]]
-    logging.info(f'purchase_account {purchase_account.balance}')
+    purchase_account = ocean.get_account(PURCHASER_ACCOUNT)
+    logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
-    # TODO: have this password saved in config or even better a wallet.
-    purchase_account.password = 'secret'
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
 
     time.sleep(2)
-    logging.info(f'purchase_account after token request {purchase_account.balance}')
+    logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
@@ -114,7 +113,7 @@ def test_asset():
     # FIXME: bug in squid ... this does not work at the moment
     # see
     # https://github.com/oceanprotocol/squid-py/issues/282
-    Brizo.set_http_client(BrizoMock(ocean._squid, publisher_account))
+    Brizo.set_http_client(BrizoMock(ocean._squid, publisher_account._squid_account))
 
     # so instead..
     # Brizo.set_http_client(BrizoMock(ocean._squid, publisher_account))
