@@ -115,7 +115,7 @@ class Asset(AssetBase):
         with the service_agreement_id ( purchase_id ) set.
 
         :param account: account to use to purchase this asset.
-        :type account: :class:`.Account`     
+        :type account: :class:`.Account`
 
         :return: asset object that has been purchased
         :type: :class:`.Asset`
@@ -174,6 +174,7 @@ class Asset(AssetBase):
 
         :return: data returned from the asset , or False
         :type: object or False
+
         """
         if not self.is_purchased:
             return False
