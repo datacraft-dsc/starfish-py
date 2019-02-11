@@ -78,7 +78,7 @@ class Asset(AssetBase):
         model = SquidModel(self._ocean)
 
         self._metadata = None
-        ddo = model.register_asset(metadata, account._squid_account)
+        ddo = model.register_asset(metadata, account)
         if ddo:
             self._set_ddo(ddo)
 
@@ -127,7 +127,7 @@ class Asset(AssetBase):
             raise ValueError('You must pass a valid account')
 
         model = SquidModel(self._ocean)
-        service_agreement_id = model.purchase_asset(self, account._squid_account)
+        service_agreement_id = model.purchase_asset(self, account)
         if service_agreement_id:
             purchase_asset = self.copy()
             purchase_asset.set_purchase_id(service_agreement_id)
@@ -157,7 +157,7 @@ class Asset(AssetBase):
 
 
         model = SquidModel(self._ocean)
-        return model.is_access_granted_for_asset(self, self._purchase_id, account._squid_account)
+        return model.is_access_granted_for_asset(self, self._purchase_id, account)
 
     def consume(self, account):
         """
@@ -183,7 +183,7 @@ class Asset(AssetBase):
             raise ValueError('You must pass a valid account')
 
         model = SquidModel(self._ocean)
-        return model.consume_asset(self, self._purchase_id, account._squid_account)
+        return model.consume_asset(self, self._purchase_id, account)
 
     def set_purchase_id(self, service_agreement_id):
         """

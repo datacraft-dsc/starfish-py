@@ -9,15 +9,15 @@ from web3 import (
 )
 
 from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config
+from squid_py.config import Config as SquidConfig
 
 from starfish_py import (
     Account,
     Agent,
     Asset,
     AssetLight,
+    Config,
 )
-from starfish_py import Config as OceanConfig
 from starfish_py.models.squid_model import SquidModel
 
 
@@ -78,9 +78,9 @@ class Ocean():
         init the basic Ocean class for the connection and contract info
 
         """
-        self._config = OceanConfig(*args, **kwargs)
+        self._config = Config(*args, **kwargs)
 
-        squid_config = Config(options_dict=self._config.as_squid_dict)
+        squid_config = SquidConfig(options_dict=self._config.as_squid_dict())
         self._squid_ocean = SquidOcean(squid_config)
 
         # For development, we use the HTTPProvider Web3 interface
@@ -290,6 +290,19 @@ class Ocean():
         """return squid ocean library"""
         return self._squid_ocean
 
+    def _squid_for_account(self, account):
+        """
+        Return an instance of squid for an account
+
+        """
+
+        config_params = self._config.as_squid_dict({
+            'parity_address': account.address,
+            'parity_password': account.password
+        })
+        print(config_params)
+        squid_config = SquidConfig(options_dict=config_params)
+        return SquidOcean(squid_config)
     @property
     def config(self):
         """

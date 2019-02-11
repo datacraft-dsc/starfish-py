@@ -28,8 +28,6 @@ TEST_VALUES = {
     'brizo_url': 'test brizo url',
     'secret_store_url': 'test secret store url',
     'parity_url': 'test parity url',
-    'parity_address': 'test parity address',
-    'parity_password': 'test_password'
 }
 
 
@@ -62,6 +60,6 @@ def test_config_generation_for_squid():
         }
     )
     assert(config)
-    squid_config = SquidConfig(options_dict=config.as_squid_dict)
+    squid_config = SquidConfig(options_dict=config.as_squid_dict())
     ocean = SquidOcean(squid_config)
     assert(ocean)

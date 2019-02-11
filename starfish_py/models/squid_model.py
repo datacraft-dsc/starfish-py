@@ -26,7 +26,8 @@ class SquidModel(ModelBase):
         :param metadata: metadata to write to the storage server
         :param account: account to register the asset
         """
-        return self._ocean._squid.register_asset(metadata, account)
+        squid = self._ocean._squid_for_account(account)
+        return squid.register_asset(metadata, account._squid_account)
 
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """
@@ -62,7 +63,7 @@ class SquidModel(ModelBase):
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
             self._ocean._squid.keeper.service_agreement,
-            account,
+            account._squid_account,
             template,
             self._ocean._squid.keeper.network_name
         )
@@ -79,7 +80,7 @@ class SquidModel(ModelBase):
         service_agreement_id = None
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            service_agreement_id = self._ocean._squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account)
+            service_agreement_id = self._ocean._squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account._squid_account)
 
         return service_agreement_id
 
@@ -91,7 +92,7 @@ class SquidModel(ModelBase):
         downloads_path = self._ocean._squid._downloads_path
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account)
+            self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account)
         print(f'downloads path {downloads_path}')
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
