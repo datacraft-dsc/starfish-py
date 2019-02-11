@@ -43,9 +43,10 @@ class Account():
 
         Unlock the account so that it can be used to spend tokens/gas
 
-        :param password: optional password to use to unlock this account, if none provided
-        then the original password will be used.
+        :param password: optional password to use to unlock this account, if none provided then the original password will be used.
+
         :type password: str or None
+
         """
         if password is None:
             password = self._password

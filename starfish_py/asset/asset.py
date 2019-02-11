@@ -60,8 +60,9 @@ class Asset(AssetBase):
 
         Register on chain asset
 
-        :param dict metadata: dict of the metadata to use for registration
-        :param :class:`.Account` account: A valid Account objct to use too register this asset
+        :param dict metadata: dict of the metadata to use for registration.
+        :param account: A valid Account objct to use too register this asset.
+        :type account: :class:`.Account`
 
         :return: The new asset's metadata
         :type: dict

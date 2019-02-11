@@ -18,6 +18,7 @@ Contents
     getting_started
     modules/starfish_py
     classes/ocean
+    classes/account
     classes/config
     classes/agent
     classes/asset

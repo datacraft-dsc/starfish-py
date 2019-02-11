@@ -93,12 +93,12 @@ class Ocean():
 
         :param str agent_service_name: service name of the agent to register.
         :param str endpoint_url: URL of the agents service to add to the DDO to register.
-        :param object account: account to use as the owner of the registration.
-        :param did: Optional DID to use to update the registration for this agent, you must use
-        the same account as the when you did the original registartion.
+        :param account: account to use as the owner of the registration.
+        :type account: :class:`.Account`
+        :param did: Optional DID to use to update the registration for this agent, you must use the same account as the when you did the original registartion.
         :type did: str or None
-
         :return: a tuple of (DID, DDO, private_pem).
+
         | *DID*: of the registerered agent.
         | *DDO*: record writtern to the block chain as part of the registration.
         | *private_pem*: private PEM used to sign the DDO.
@@ -228,7 +228,8 @@ class Ocean():
         already registered a service level agreement template onchain for usage.
 
         :param str template_id: Template id of the service level agreement template.
-        :param :class:`.Account` account: account object to use if this method needs to register the template.
+        :param account: account object to use if this method needs to register the template.
+        :type account: :class:`.Account`
 
         :return: True if the agreement template has been added, else False if it's already been registered
         :type: boolean
@@ -252,8 +253,7 @@ class Ocean():
         """
         Get an account object based on it's address
 
-        :param: address: address of the account, if dict then use the fields,
-        `address` and `password`.
+        :param: address: address of the account, if dict then use the fields, `address` and `password`.
         :type address: str or dict
         :param password: optional password to save with the account
         :type password: str or None

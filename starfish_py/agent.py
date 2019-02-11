@@ -27,7 +27,8 @@ class Agent():
 
         :param str service_name: service_name to add into the DDO service field
         :param str endpoint_url: url of the agent service
-        :param :class:`.Account` account: Ethereum account to use to register on the block chain
+        :param account: account object to use to register on the block chain
+        :type account: :class:`.Account`
         :param did: Optional did to update the did with this value (if you are the account owner of the DID)
         :type did: str or None
 
