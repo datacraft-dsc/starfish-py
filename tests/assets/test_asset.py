@@ -33,10 +33,9 @@ CONFIG_PARAMS = {
     'keeper_url': 'http://localhost:8545',
     'secret_store_url': 'http://localhost:12001',
     'parity_url': 'http://localhost:8545',
-    'parity_address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e',
-    'parity_password': 'node0',
 }
 
+PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
@@ -56,8 +55,7 @@ def _register_asset(ocean):
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.accounts[list(ocean.accounts)[0]]
-    publisher_account.password = 'node0'
+    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 

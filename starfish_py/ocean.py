@@ -11,15 +11,16 @@ from web3 import (
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config
 
-from starfish_py import Asset
-from starfish_py import AssetLight
+from starfish_py import (
+    Account,
+    Agent,
+    Asset,
+    AssetLight,
+)
 from starfish_py import Config as OceanConfig
 from starfish_py.models.squid_model import SquidModel
-from starfish_py import Agent
 
-"""
 
-"""
 class Ocean():
     """
     .. _Asset class: asset.html
@@ -101,7 +102,7 @@ class Ocean():
         | *DID*: of the registerered agent.
         | *DDO*: record writtern to the block chain as part of the registration.
         | *private_pem*: private PEM used to sign the DDO.
-        
+
         :type: string
 
         For example::
@@ -240,13 +241,32 @@ class Ocean():
         return False
 
 
+    def get_account(self, address, password=None):
+        """
+        Get an account object based on it's address
+
+        :param: address: address of the account, if dict then use the fields,
+        `address` and `password`.
+        :type address: str or dict
+        :param password: optional password to save with the account
+        :type password: str or None
+
+        :return: return the :class:`Account` object or None if the account can not be used.
+        :type: :class:`Account` or None
+        """
+        return Account(self, address, password)
+
     @property
     def accounts(self):
         """
-        :return: a list of ocean accounts
-        :type: list of accounts
+        :return: a list of :class:`.Account` objects
+        :type: list of :class:`Account` objects
         """
-        return self._squid_ocean.get_accounts()
+        accounts = {}
+        for address in self._squid_ocean.get_accounts():
+            account = Account(self, address)
+            accounts[account.address] = account
+        return accounts
 
     @property
     def _web3(self):

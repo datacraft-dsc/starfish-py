@@ -60,17 +60,23 @@ class Asset(AssetBase):
         Register on chain asset
 
         :param dict metadata: dict of the metadata to use for registration
-        :param object account: Ocean account to use too register this asset
+        :param :class:`.Account` account: A valid Account objct to use too register this asset
 
         :return: The new asset's metadata
         :type: dict
 
         """
 
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self._ocean)
 
         self._metadata = None
-        ddo = model.register_asset(metadata, account)
+        ddo = model.register_asset(metadata, account._squid_account)
         if ddo:
             self._set_ddo(ddo)
 
@@ -126,18 +132,24 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
-        :param object account: account to used to check to see if this 
+        :param :class:`.Account` account: account to used to check to see if this
         asset is purchased and has access using this account.
 
         :return: boolean value if this asset has been purchased
         :type: boolean
         """
-        print(self._purchase_id)
         if not self.is_purchased:
             return False
 
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
+
         model = SquidModel(self._ocean)
-        return model.is_access_granted_for_asset(self, self._purchase_id, account)
+        return model.is_access_granted_for_asset(self, self._purchase_id, account._squid_account)
 
     def consume(self, account):
         """
@@ -148,7 +160,7 @@ class Asset(AssetBase):
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
-        :param object account: account to used to consume this asset.
+        :param :class:`.Account` account: account to used to consume this asset.
 
         :return: data returned from the asset , or False
         :type: object or False
@@ -156,8 +168,14 @@ class Asset(AssetBase):
         if not self.is_purchased:
             return False
 
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self._ocean)
-        return model.consume_asset(self, self._purchase_id, account)
+        return model.consume_asset(self, self._purchase_id, account._squid_account)
 
     def set_purchase_id(self, service_agreement_id):
         """
@@ -231,9 +249,9 @@ class Asset(AssetBase):
         Checks to see if the DID string is a valid DID for this type of Asset.
         This method only checks the syntax of the DID, it does not resolve the DID
         to see if it is assigned to a valid Asset.
-        
+
         :param str did: DID string to check to see if it is in a valid format.
-        
+
         :return: True if the DID is in the format 'did:op:xxxxx'
         :type: boolean
         """
