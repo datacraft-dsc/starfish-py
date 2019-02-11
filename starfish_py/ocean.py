@@ -253,7 +253,7 @@ class Ocean():
         """
         Get an account object based on it's address
 
-        :param: address: address of the account, if dict then use the fields, `address` and `password`.
+        :param address: address of the account, if dict then use the fields, `address` and `password`.
         :type address: str or dict
         :param password: optional password to save with the account
         :type password: str or None

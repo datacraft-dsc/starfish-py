@@ -114,7 +114,8 @@ class Asset(AssetBase):
         Purchase this asset using the account details, return a copy of this asset
         with the service_agreement_id ( purchase_id ) set.
 
-        :param object account: account to use to purchase this asset.
+        :param account: account to use to purchase this asset.
+        :type account: :class:`.Account`        
 
         :return: asset object that has been purchased
         :type: :class:`.Asset`
@@ -140,8 +141,8 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
-        :param :class:`.Account` account: account to used to check to see if this
-        asset is purchased and has access using this account.
+        :param account: account to used to check to see if this asset is purchased and has access using this account.
+        :type account: :class:`.Account`
 
         :return: boolean value if this asset has been purchased
         :type: boolean
@@ -168,7 +169,8 @@ class Asset(AssetBase):
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
-        :param :class:`.Account` account: account to used to consume this asset.
+        :param account: account to used to consume this asset.
+        :type account: :class:`.Account`
 
         :return: data returned from the asset , or False
         :type: object or False

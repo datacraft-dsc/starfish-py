@@ -18,9 +18,12 @@ class Account():
     :param password: password for the account
     :type password: str or None
 
-    If the address parameter is a string then it's the account address, if dict then the format:
-        'address': 'xxx',
-        'password': 'xxx'
+    If the address parameter is a string then it's the account address, if dict then the format should be: ::
+
+        {
+            'address': 'xxx',
+            'password': 'xxx', 
+        }
 
     """
 
