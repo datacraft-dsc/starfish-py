@@ -20,10 +20,7 @@ from starfish_py import (
 )
 from starfish_py.models.squid_model import SquidModel
 
-<<<<<<< HEAD
 
-=======
->>>>>>> feature/cleanup-module-imports
 class Ocean():
     """
     .. _Asset class: asset.html

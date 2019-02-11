@@ -3,10 +3,7 @@
 
     This module contains the following classes
 
-<<<<<<< HEAD
     * :class:`Account` The Account class.
-=======
->>>>>>> feature/cleanup-module-imports
     * :class:`Agent` The Agent wrapper class.
     * :class:`Asset` The Asset class.
     * :class:`Config` The Config data class.
@@ -21,11 +18,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
 
 from .account import Account
-=======
->>>>>>> feature/cleanup-module-imports
 from .agent import Agent
 from .asset.asset import Asset
 from .asset.asset_light import AssetLight
