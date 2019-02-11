@@ -91,7 +91,7 @@ class Account():
 
         Request some ocean tokens to be transfere to this account address
 
-        :param number amount: The amount of ocean tokens to transfer ( Money for nothing? )
+        :param number amount: The amount of ocean tokens to transfer ( *Money for nothing* )
 
         :return: number of tokens transfered
         :type: int
@@ -163,6 +163,7 @@ class Account():
         :return: address
         :type: str
 
+        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.address
         0x00bd138abd70e2f00903268f3db08f2d25677c9e
         """
@@ -177,8 +178,9 @@ class Account():
         :return: checksum address
         :type: str
 
+        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.as_checksum_address
-        0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0
+        0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e
 
         """
         if self._address:
@@ -217,6 +219,9 @@ class Account():
 
         :param str password: Password to set for this account
 
+        >>> account.set_password('new secret')
+        >>> account.password
+        new secret
         """
         self.lock()
         self._password = password

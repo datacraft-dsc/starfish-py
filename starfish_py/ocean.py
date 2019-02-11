@@ -234,6 +234,8 @@ class Ocean():
         :return: True if the agreement template has been added, else False if it's already been registered
         :type: boolean
 
+        >>> ocean.register_service_level_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
+
         """
 
         if not isinstance(account, Account):
@@ -260,6 +262,8 @@ class Ocean():
 
         :return: return the :class:`Account` object or None if the account can not be used.
         :type: :class:`Account` or None
+
+        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         """
         return Account(self, address, password)
 
@@ -268,6 +272,9 @@ class Ocean():
         """
         :return: a list of :class:`.Account` objects
         :type: list of :class:`Account` objects
+
+        >>> ocean.accounts
+        {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish_py.account.Account object at 0x10456c080>, ...
         """
         accounts = {}
         for address in self._squid_ocean.get_accounts():
