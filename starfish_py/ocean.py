@@ -88,15 +88,20 @@ class Ocean():
     def register_agent(self, agent_service_name, endpoint_url, account, did=None):
         """
 
-        Register this agent on the block chain.
+        Register this agent with a DDO on the block chain.
 
-        :param str agent_service_name: service name of the registration to use to register for the agent.
-        :param str endpoint_url: URL of the agents service to register.
-        :param object account: Ocean account to use as the owner of the DID->DDO registration.
-        :param did: Optional DID of the agent to register, if it already exists
+        :param str agent_service_name: service name of the agent to register.
+        :param str endpoint_url: URL of the agents service to add to the DDO to register.
+        :param object account: account to use as the owner of the registration.
+        :param did: Optional DID to use to update the registration for this agent, you must use
+        the same account as the when you did the original registartion.
         :type did: str or None
 
-        :return: a list of DID, DDO and  private pem of the registered DDO.
+        :return: a tuple of (DID, DDO, private_pem).
+        | *DID*: of the registerered agent.
+        | *DDO*: record writtern to the block chain as part of the registration.
+        | *private_pem*: private PEM used to sign the DDO.
+        
         :type: string
 
         For example::
@@ -116,11 +121,10 @@ class Ocean():
 
         Register an asset with the ocean network.
 
-
         :param dict metadata: metadata dictionary to store for this asset.
         :param object account: Ocean account to use to register this asset.
 
-        :return: A new _Asset_ object that has been registered, if failure then return None.
+        :return: A new :class:`.Asset` object that has been registered, if failure then return None.
         :type: :class:`.Asset` class
 
         For example::
