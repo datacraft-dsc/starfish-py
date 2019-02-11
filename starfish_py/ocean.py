@@ -244,7 +244,7 @@ class Ocean():
 
         model = SquidModel(self)
         if not model.is_service_agreement_template_registered(template_id):
-            model.register_service_agreement_template(template_id, account._squid_account)
+            model.register_service_agreement_template(template_id, account)
             return True
         return False
 
