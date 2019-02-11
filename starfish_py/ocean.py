@@ -17,9 +17,6 @@ from starfish_py import Config as OceanConfig
 from starfish_py.models.squid_model import SquidModel
 from starfish_py import Agent
 
-"""
-
-"""
 class Ocean():
     """
     .. _Asset class: asset.html
@@ -101,7 +98,7 @@ class Ocean():
         | *DID*: of the registerered agent.
         | *DDO*: record writtern to the block chain as part of the registration.
         | *private_pem*: private PEM used to sign the DDO.
-        
+
         :type: string
 
         For example::

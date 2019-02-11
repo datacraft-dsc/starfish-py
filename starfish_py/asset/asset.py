@@ -126,7 +126,7 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
-        :param object account: account to used to check to see if this 
+        :param object account: account to used to check to see if this
         asset is purchased and has access using this account.
 
         :return: boolean value if this asset has been purchased
@@ -231,9 +231,9 @@ class Asset(AssetBase):
         Checks to see if the DID string is a valid DID for this type of Asset.
         This method only checks the syntax of the DID, it does not resolve the DID
         to see if it is assigned to a valid Asset.
-        
+
         :param str did: DID string to check to see if it is in a valid format.
-        
+
         :return: True if the DID is in the format 'did:op:xxxxx'
         :type: boolean
         """
