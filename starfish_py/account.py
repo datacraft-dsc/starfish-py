@@ -51,6 +51,9 @@ class Account():
 
         :type password: str or None
 
+        >>> account.unlock('secret')
+        True
+
         """
         if password is None:
             password = self._password
@@ -73,6 +76,8 @@ class Account():
         :return: True if this account was unlocked, else False if the account was not locked.
         :type: boolean
 
+        >>> account.lock()
+        True
         """
         if self._unlock_squid_account:
             self._unlock_squid_account = None
@@ -86,8 +91,13 @@ class Account():
 
         Request some ocean tokens to be transfere to this account address
 
+        :param number amount: The amount of ocean tokens to transfer ( Money for nothing? )
+
         :return: number of tokens transfered
         :type: int
+
+        >>> account.request_tokens(100)
+        100
         """
         squid_account = self._squid_account
         if squid_account:
@@ -98,12 +108,15 @@ class Account():
         """
 
         Compares two addresses if are equal. Both addresses are converted to checksum
-        address and then compared
+        address and then compared.
 
         :param str address: address to compare with this object's address
         :return: True if the param address is the same is the one held in this account
         :type: boolean
 
+        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        >>> account.is_address_equal('0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e')
+        True
         """
         return self.as_checksum_address == self._ocean._web3.toChecksumAddress(address)
 
@@ -115,6 +128,8 @@ class Account():
         :return: True if this account address is valid
         :type: boolean
 
+        >>> account.is_valid
+        True
         """
         squid_account = self._squid_account
         return not squid_account is None
@@ -144,8 +159,12 @@ class Account():
         """
 
         Return the account address for this account
+
         :return: address
         :type: str
+
+        >>> account.address
+        0x00bd138abd70e2f00903268f3db08f2d25677c9e
         """
         return self._address
 
@@ -154,8 +173,13 @@ class Account():
         """
 
         Return the address as a checksum address
+
         :return: checksum address
         :type: str
+
+        >>> account.as_checksum_address
+        0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0
+
         """
         if self._address:
             return self._ocean._web3.toChecksumAddress(self._address.lower())
@@ -176,8 +200,13 @@ class Account():
         """
 
         Return the account password for this account
+
         :return: password
         :type: str
+
+        >>> account.password
+        secret
+
         """
         return self._password
 
@@ -200,6 +229,10 @@ class Account():
 
         :return: number of ocean tokens
         :type: number
+
+        >>> account.ocean_balance
+        101
+
         """
         squid_account = self._squid_account
         if squid_account:
@@ -215,6 +248,10 @@ class Account():
 
         :return: number of ocean tokens
         :type: number
+
+        >>> account.ether_balance
+        1000000001867769600000000000
+
         """
         squid_account = self._squid_account
         if squid_account:
