@@ -11,16 +11,16 @@ class Account():
 
     At the moment the Account object in created by the :class:`Ocean` class.
 
-    :param :class:`Ocean` ocean: Ocean object
+    :param ocean: Ocean object
+    :type ocean: :class:`.Ocean`
     :param address: address or dict of the account details
-
-    If string then it's the account address, if dict then the format:
-        'address': 'xxx',
-        'password': 'xxx'
-
     :type address: string or dict
     :param password: password for the account
+    :type password: str or None
 
+    If the address parameter is a string then it's the account address, if dict then the format:
+        'address': 'xxx',
+        'password': 'xxx'
 
     """
 
