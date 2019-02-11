@@ -141,8 +141,13 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
+<<<<<<< HEAD
         :param account: account to used to check to see if this asset is purchased and has access using this account.
         :type account: :class:`.Account`
+=======
+        :param object account: account to used to check to see if this
+        asset is purchased and has access using this account.
+>>>>>>> feature/cleanup-module-imports
 
         :return: boolean value if this asset has been purchased
         :type: boolean
