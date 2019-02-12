@@ -11,15 +11,16 @@ from web3 import (
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config
 
-from starfish_py.asset.asset import Asset
-from starfish_py.asset.asset_light import AssetLight
-from starfish_py.config import Config as OceanConfig
+from starfish_py import Asset
+from starfish_py import AssetLight
+from starfish_py import Config as OceanConfig
 from starfish_py.models.squid_model import SquidModel
-from starfish_py.agent import Agent
-
+from starfish_py import Agent
 
 class Ocean():
     """
+    .. _Asset class: asset.html
+    .. _Config class: config.html
 
     The Ocean class connects to the ocean network.
 
@@ -35,19 +36,42 @@ class Ocean():
         }
         ocean = Ocean(my_config)
 
-    :param contracts_path: path to the contract files ( artifacts ).
-    :param keeper_url: url to the keeper node ( http://localhost:8545 ).
-    :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
-    :param parity_url: url to the parity node ( 'http://localhost:8545 ).
+    You can provide these parameters in a dictionary or as individual parameters.
 
-    see the :func:`starfish_py.config` module for more details.
+    :param filename: Filename of the config file to load.
+    :type filename: str or None
+    :param contracts_path: path to the contract files ( artifacts ).
+    :type contracts_path: str or None
+    :param keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :type keeper_url: str or None
+    :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :type secret_store_url: str or None
+    :param parity_url: url to the parity node ( http://localhost:8545 ).
+    :type parity_url: str or None
+    :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
+    :type aquarius_url: str or None
+    :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
+    :type brizo_url: str or None
+    :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
+    :type storage_path: str or None
+    :param download_path: Path to save the consumed assets too. ( consume_downloads ).
+    :type download_path: str or None
+    :param agent_store_did: DID of the agent metadata service.
+    :type agent_store_did: str or None
+    :param agent_store_auth: Authorziation text to access the metadat service.
+    :type agent_store_auth: str or None
+    :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
+    :type gas_limit: int or string
+
+    see the :class:`.Config` class for more details as to the parameters you can pass.
+
     """
 
     def __init__(self, *args, **kwargs):
         """
+        .. :class: starfish_py.Ocean
 
         init the basic Ocean class for the connection and contract info
-
 
         """
         self._config = OceanConfig(*args, **kwargs)
@@ -61,14 +85,21 @@ class Ocean():
     def register_agent(self, agent_service_name, endpoint_url, account, did=None):
         """
 
-        Register this agent on the block chain.
+        Register this agent with a DDO on the block chain.
 
-        :param agent_service_name: service name of the registration to use to register for the agent.
-        :param endpoint_url: URL of the agents service to register.
-        :param account: Ocean account to use as the owner of the DID->DDO registration.
-        :param did: DID of the agent to register, if it already exists
+        :param str agent_service_name: service name of the agent to register.
+        :param str endpoint_url: URL of the agents service to add to the DDO to register.
+        :param object account: account to use as the owner of the registration.
+        :param did: Optional DID to use to update the registration for this agent, you must use
+        the same account as the when you did the original registartion.
+        :type did: str or None
 
-        :return: a list of DID, DDO and  private pem of the registered DDO.
+        :return: a tuple of (DID, DDO, private_pem).
+        | *DID*: of the registerered agent.
+        | *DDO*: record writtern to the block chain as part of the registration.
+        | *private_pem*: private PEM used to sign the DDO.
+
+        :type: string
 
         For example::
 
@@ -87,11 +118,11 @@ class Ocean():
 
         Register an asset with the ocean network.
 
+        :param dict metadata: metadata dictionary to store for this asset.
+        :param object account: Ocean account to use to register this asset.
 
-        :param metadata: metadata dictionary to store for this asset.
-        :param account: Ocean account to use to register this asset.
-
-        :return: A new _Asset_ object that has been registered, if failure then return None.
+        :return: A new :class:`.Asset` object that has been registered, if failure then return None.
+        :type: :class:`.Asset` class
 
         For example::
 
@@ -115,9 +146,10 @@ class Ocean():
 
         Register an asset using the **off chain** system using an metadata storage agent
 
-        :param metadata: metadata dictonary to store for this asset.
+        :param dict metadata: metadata dictonary to store for this asset.
 
         :return: the asset that has been registered
+        :type: :class:`.AssetLight` class
 
         """
 
@@ -133,9 +165,11 @@ class Ocean():
 
         Return an asset based on the asset's DID.
 
-        :param did: DID of the asset and agent combined.
+        :param str did: DID of the asset and agent combined.
 
         :return: a registered asset given a DID of the asset
+        :type: :class:`.Asset` class
+
         """
         asset = None
         if Asset.is_did_valid(did):
@@ -156,12 +190,14 @@ class Ocean():
 
         Search the off chain storage for an asset with the givien 'text'
 
-        :param text: Test to search all metadata items for.
+        :param str text: Test to search all metadata items for.
         :param sort: sort the results ( defaults: None, no sort).
-        :param offset: Return the result from with the maximum record count ( defaults: 100 ).
-        :param page: Returns the page number based on the offset.
+        :type sort: str or None
+        :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
+        :param int page: Returns the page number based on the offset.
 
         :return: a list of assets objects found using the search.
+        :type: list of DID strings
 
         For example::
 
@@ -187,10 +223,11 @@ class Ocean():
         This is currently only **used for testing**, as we assume that Ocean has
         already registered a service level agreement template onchain for usage.
 
-        :param template_id: Template id of the service level agreement template.
-        :param account: Ocean account to use if this method needs to register the template.
+        :param str template_id: Template id of the service level agreement template.
+        :param object account: Ocean account to use if this method needs to register the template.
 
         :return: True if the agreement template has been added, else False if it's already been registered
+        :type: boolean
 
         """
         model = SquidModel(self)
@@ -199,11 +236,12 @@ class Ocean():
             return True
         return False
 
+
     @property
     def accounts(self):
         """
         :return: a list of ocean accounts
-
+        :type: list of accounts
         """
         return self._squid_ocean.get_accounts()
 
@@ -225,8 +263,7 @@ class Ocean():
     @property
     def config(self):
         """
-
-        :return: the used config object for this connection, see :func:`starfish_py.config`
-
+        :return: the used config object for this connection
+        :type: :class:`.Config` class
         """
         return self._config

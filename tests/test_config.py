@@ -11,8 +11,8 @@ import logging
 from starfish_py.config import Config as OceanConfig
 from starfish_py.logging import setup_logging
 from starfish_py import logger
-from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config as SquidConfig
+from squid_py import Ocean as SquidOcean
+from squid_py import Config as SquidConfig
 
 setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
@@ -63,5 +63,5 @@ def test_config_generation_for_squid():
     )
     assert(config)
     squid_config = SquidConfig(options_dict=config.as_squid_dict)
-    ocean = SquidOcean(squid_config)    
+    ocean = SquidOcean(squid_config)
     assert(ocean)

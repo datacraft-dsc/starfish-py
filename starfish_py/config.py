@@ -44,23 +44,40 @@ class Config(configparser.ConfigParser):
     Create a new config instance, using a config file, dictionary of values or argument list (kwargs)
 
     :param filename: Filename of the config file to load.
+    :type filename: str or None
     :param contracts_path: path to the contract files ( artifacts ).
+    :type contracts_path: str or None
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
+    :type keeper_url: str or None
     :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
+    :type secret_store_url: str or None
     :param parity_url: url to the parity node ( http://localhost:8545 ).
+    :type parity_url: str or None
     :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
+    :type aquarius_url: str or None
     :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
-
+    :type brizo_url: str or None
     :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
+    :type storage_path: str or None
     :param download_path: Path to save the consumed assets too. ( consume_downloads ).
+    :type download_path: str or None
     :param agent_store_did: DID of the agent metadata service.
+    :type agent_store_did: str or None
     :param agent_store_auth: Authorziation text to access the metadat service.
+    :type agent_store_auth: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
+    :type gas_limit: int or string
 
     For example::
 
         # only set the contarcts path and keeper url values
         ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8080')
+
+    The default config values as defined as an `ini` file are defined as follows:
+
+    .. literalinclude:: ../../../starfish_py/config.py
+        :start-after: CONFIG_DEFAULT
+        :end-before: "
     """
 
     def __init__(self, filename=None, **kwargs):
@@ -127,6 +144,7 @@ class Config(configparser.ConfigParser):
         The config values must conform to the current version of squid-py
 
         :return: A temporary filename that can be used by squid.
+        :type: str
 
         """
         squid = configparser.ConfigParser()
@@ -147,6 +165,8 @@ class Config(configparser.ConfigParser):
         Return a set of config values, so that squid can read.
 
         :return: a dict that is compatiable with the current supported version of squid-py.
+        :type: dict
+
         """
         return {
             'keeper-contracts': {
@@ -169,6 +189,7 @@ class Config(configparser.ConfigParser):
     def contract_path(self):
         """
         :return: the contract path value.
+        :type: str
         """
         return self.get(self._section_name, 'contract_path')
 
@@ -176,6 +197,7 @@ class Config(configparser.ConfigParser):
     def storage_path(self):
         """
         :return: the storage path.
+        :type: str
         """
         return self.get(self._section_name, 'storage_path')
 
@@ -183,6 +205,7 @@ class Config(configparser.ConfigParser):
     def download_path(self):
         """
         :return: the download path.
+        :type: str
         """
         return self.get(self._section_name, 'download_path')
 
@@ -190,6 +213,7 @@ class Config(configparser.ConfigParser):
     def keeper_url(self):
         """
         :return: the ocean url or ethereum node url.
+        :type: str
         """
         return self.get(self._section_name, 'keeper_url')
 
@@ -197,6 +221,7 @@ class Config(configparser.ConfigParser):
     def gas_limit(self):
         """
         :return: the default gas limit
+        :type: int
         """
         return int(self.get(self._section_name, 'gas_limit'))
 
@@ -204,6 +229,7 @@ class Config(configparser.ConfigParser):
     def aquarius_url(self):
         """
         :return: the aquarius server URL.
+        :type: str
         """
         return self.get(self._section_name, 'aquarius_url')
 
@@ -211,6 +237,7 @@ class Config(configparser.ConfigParser):
     def brizo_url(self):
         """
         :return: the URL of the brizo server.
+        :type: str
         """
         return self.get(self._section_name, 'brizo_url')
 
@@ -218,6 +245,7 @@ class Config(configparser.ConfigParser):
     def secret_store_url(self):
         """
         :return: the secret store URL.
+        :type: str
         """
         return self.get(self._section_name, 'secret_store_url')
 
@@ -225,6 +253,7 @@ class Config(configparser.ConfigParser):
     def parity_url(self):
         """
         :return: the parity URL.
+        :type: str
         """
         return self.get(self._section_name, 'parity_url')
 
@@ -232,6 +261,7 @@ class Config(configparser.ConfigParser):
     def parity_address(self):
         """
         :return: the parity address.
+        :type: str
         """
         return self.get(self._section_name, 'parity_address')
 
@@ -239,6 +269,7 @@ class Config(configparser.ConfigParser):
     def parity_password(self):
         """
         :return: the parity password.
+        :type: str
         """
         return self.get(self._section_name, 'parity_password')
 
@@ -246,6 +277,7 @@ class Config(configparser.ConfigParser):
     def agent_store_did(self):
         """
         :return: the storage agent's DID.
+        :type: str
         """
         return self.get(self._section_name, 'agent_store_did')
 
@@ -253,5 +285,6 @@ class Config(configparser.ConfigParser):
     def agent_store_auth(self):
         """
         :return: the storage agent's authorization.
+        :type: str
         """
         return self.get(self._section_name, 'agent_store_auth')

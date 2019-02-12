@@ -23,12 +23,14 @@ class Agent():
 
         Register an agent on the block chain. This is called by the method :func:`starfish_py.ocean.Ocean.register_agent`.
 
-        :param service_name: service_name to add into the DDO service field
-        :param endpoint_url: url of the agent service
-        :param account: Ethereum account to use to register on the block chain
-        :param did: optional did to update the did with this value (if you are the account owner of the DID)
+        :param str service_name: service_name to add into the DDO service field
+        :param str endpoint_url: url of the agent service
+        :param object account: Ethereum account to use to register on the block chain
+        :param did: Optional did to update the did with this value (if you are the account owner of the DID)
+        :type did: str or None
 
-        :return: a list of DID, DDO and  private pem of the registered DDO.
+        :return: a tuple of ( DID, DDO, private pem ) used in the registeration of a DDO.
+        :type: (str, dict, str)
 
         """
 

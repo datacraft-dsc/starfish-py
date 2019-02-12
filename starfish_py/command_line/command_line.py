@@ -5,7 +5,7 @@ import re
 from starfish_py.command_line.console_output import ConsoleOutput
 from starfish_py.command_line.json_output import JSONOutput
 from starfish_py.exceptions import OceanCommandLineError
-from starfish_py.ocean import Ocean
+from starfish_py import Ocean
 
 
 HEX_STRING_FORMAT = '[0-fx]+'

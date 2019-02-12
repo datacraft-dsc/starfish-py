@@ -29,7 +29,7 @@ author = 'starfish-py contributors'
 release = '0.0.1'
 # The short X.Y version
 release_parts = release.split('.')  # a list
-version = release_parts[0] + '.' + release_parts[1]
+version = release_parts[0] + '.' + release_parts[1] + '.' + release_parts[2]
 
 # -- General configuration ---------------------------------------------------
 
@@ -50,7 +50,10 @@ apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
 apidoc_excluded_paths = [
-  'asset_*.py',
+  'ocean.py',
+  'config.py',
+  'agent.py',
+  'asset',
   'command_line',
   'constants.py',
   'exceptions.py',
