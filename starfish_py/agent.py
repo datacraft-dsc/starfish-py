@@ -29,7 +29,7 @@ class Agent():
         :param did: Optional did to update the did with this value (if you are the account owner of the DID)
         :type did: str or None
 
-        :return: a tuple of [ DID, DDO, private pem ] used in the registeration of a DDO.
+        :return: a tuple of ( DID, DDO, private pem ) used in the registeration of a DDO.
         :type: (str, dict, str)
 
         """
