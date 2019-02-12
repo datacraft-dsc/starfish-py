@@ -22,8 +22,6 @@ contract_path = artifacts
 
 secret_store_url = http://localhost:8010
 parity_url = http://localhost:9545
-parity_address = 0x00bd138abd70e2f00903268f3db08f2d25677c9e
-parity_password = node0
 
 aquarius_url = http://localhost:5000
 brizo_url = http://localhost:8030
@@ -158,24 +156,25 @@ class Config(configparser.ConfigParser):
             squid.write(file_handle)
         return filename
 
-    @property
-    def as_squid_dict(self):
+    def as_squid_dict(self, options = None):
         """
 
         Return a set of config values, so that squid can read.
+
+        :param options: optional values to add to the dict to send to squid
+        :type options: dict or None
+
 
         :return: a dict that is compatiable with the current supported version of squid-py.
         :type: dict
 
         """
-        return {
+        data = {
             'keeper-contracts': {
                 'keeper.url': self.keeper_url,
                 'keeper.path': self.contract_path,
                 'secret_store.url': self.secret_store_url,
                 'parity.url': self.parity_url,
-                'parity.address': self.parity_address,
-                'parity.password':  self.parity_password,
             },
             'resources': {
                 'aquarius.url': self.aquarius_url,
@@ -184,6 +183,13 @@ class Config(configparser.ConfigParser):
                 'downloads.path': self.download_path,
             }
         }
+        if isinstance(options, dict):
+            if 'parity_address' in options:
+                data['keeper-contracts']['parity.address'] = options['parity_address']
+            if 'parity_password' in options:
+                data['keeper-contracts']['parity.password'] = options['parity_password']
+
+        return data
 
     @property
     def contract_path(self):
@@ -256,22 +262,6 @@ class Config(configparser.ConfigParser):
         :type: str
         """
         return self.get(self._section_name, 'parity_url')
-
-    @property
-    def parity_address(self):
-        """
-        :return: the parity address.
-        :type: str
-        """
-        return self.get(self._section_name, 'parity_address')
-
-    @property
-    def parity_password(self):
-        """
-        :return: the parity password.
-        :type: str
-        """
-        return self.get(self._section_name, 'parity_password')
 
     @property
     def agent_store_did(self):

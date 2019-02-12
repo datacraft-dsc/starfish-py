@@ -4,6 +4,8 @@ Agent class to provide basic functionality for all Ocean Agents
 
 """
 
+from starfish_py import Account
+
 class Agent():
     """
 
@@ -25,7 +27,8 @@ class Agent():
 
         :param str service_name: service_name to add into the DDO service field
         :param str endpoint_url: url of the agent service
-        :param object account: Ethereum account to use to register on the block chain
+        :param account: account object to use to register on the block chain
+        :type account: :class:`.Account`
         :param did: Optional did to update the did with this value (if you are the account owner of the DID)
         :type did: str or None
 
@@ -33,6 +36,12 @@ class Agent():
         :type: (str, dict, str)
 
         """
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
 
         if did is None:
             # if no did then we need to create a new one
@@ -46,7 +55,7 @@ class Agent():
         ddo.add_service(service_name, endpoint_url)
         # add the static proof
         ddo.add_proof(0, private_key_pem)
-        if self._register_ddo(did, ddo, account):
+        if self._register_ddo(did, ddo, account._squid_account):
             return [did, ddo, private_key_pem]
         return None
 

@@ -9,6 +9,7 @@ from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
 
+from starfish_py import Account
 from starfish_py.asset.asset_base import AssetBase
 from starfish_py.models.squid_model import SquidModel
 
@@ -59,13 +60,20 @@ class Asset(AssetBase):
 
         Register on chain asset
 
-        :param dict metadata: dict of the metadata to use for registration
-        :param object account: Ocean account to use too register this asset
+        :param dict metadata: dict of the metadata to use for registration.
+        :param account: A valid Account objct to use too register this asset.
+        :type account: :class:`.Account`
 
         :return: The new asset's metadata
         :type: dict
 
         """
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
 
         model = SquidModel(self._ocean)
 
@@ -106,12 +114,19 @@ class Asset(AssetBase):
         Purchase this asset using the account details, return a copy of this asset
         with the service_agreement_id ( purchase_id ) set.
 
-        :param object account: account to use to purchase this asset.
+        :param account: account to use to purchase this asset.
+        :type account: :class:`.Account`
 
         :return: asset object that has been purchased
         :type: :class:`.Asset`
 
         """
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self._ocean)
         service_agreement_id = model.purchase_asset(self, account)
         if service_agreement_id:
@@ -126,15 +141,21 @@ class Asset(AssetBase):
 
         Test to see if this purchased asset can be accessed and is valid.
 
-        :param object account: account to used to check to see if this
-        asset is purchased and has access using this account.
+        :param account: account to used to check to see if this asset is purchased and has access using this account.
+        :type account: :class:`.Account`
 
         :return: boolean value if this asset has been purchased
         :type: boolean
         """
-        print(self._purchase_id)
         if not self.is_purchased:
             return False
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
 
         model = SquidModel(self._ocean)
         return model.is_access_granted_for_asset(self, self._purchase_id, account)
@@ -148,13 +169,21 @@ class Asset(AssetBase):
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
-        :param object account: account to used to consume this asset.
+        :param account: account to used to consume this asset.
+        :type account: :class:`.Account`
 
         :return: data returned from the asset , or False
         :type: object or False
+
         """
         if not self.is_purchased:
             return False
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
 
         model = SquidModel(self._ocean)
         return model.consume_asset(self, self._purchase_id, account)

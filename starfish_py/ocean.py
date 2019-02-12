@@ -9,13 +9,17 @@ from web3 import (
 )
 
 from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config
+from squid_py.config import Config as SquidConfig
 
-from starfish_py import Asset
-from starfish_py import AssetLight
-from starfish_py import Config as OceanConfig
+from starfish_py import (
+    Account,
+    Agent,
+    Asset,
+    AssetLight,
+    Config,
+)
 from starfish_py.models.squid_model import SquidModel
-from starfish_py import Agent
+
 
 class Ocean():
     """
@@ -74,9 +78,9 @@ class Ocean():
         init the basic Ocean class for the connection and contract info
 
         """
-        self._config = OceanConfig(*args, **kwargs)
+        self._config = Config(*args, **kwargs)
 
-        squid_config = Config(options_dict=self._config.as_squid_dict)
+        squid_config = SquidConfig(options_dict=self._config.as_squid_dict())
         self._squid_ocean = SquidOcean(squid_config)
 
         # For development, we use the HTTPProvider Web3 interface
@@ -89,12 +93,12 @@ class Ocean():
 
         :param str agent_service_name: service name of the agent to register.
         :param str endpoint_url: URL of the agents service to add to the DDO to register.
-        :param object account: account to use as the owner of the registration.
-        :param did: Optional DID to use to update the registration for this agent, you must use
-        the same account as the when you did the original registartion.
+        :param account: account to use as the owner of the registration.
+        :type account: :class:`.Account`
+        :param did: Optional DID to use to update the registration for this agent, you must use the same account as the when you did the original registartion.
         :type did: str or None
-
         :return: a tuple of (DID, DDO, private_pem).
+
         | *DID*: of the registerered agent.
         | *DDO*: record writtern to the block chain as part of the registration.
         | *private_pem*: private PEM used to sign the DDO.
@@ -224,12 +228,22 @@ class Ocean():
         already registered a service level agreement template onchain for usage.
 
         :param str template_id: Template id of the service level agreement template.
-        :param object account: Ocean account to use if this method needs to register the template.
+        :param account: account object to use if this method needs to register the template.
+        :type account: :class:`.Account`
 
         :return: True if the agreement template has been added, else False if it's already been registered
         :type: boolean
 
+        >>> ocean.register_service_level_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
+
         """
+
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
         model = SquidModel(self)
         if not model.is_service_agreement_template_registered(template_id):
             model.register_service_agreement_template(template_id, account)
@@ -237,13 +251,36 @@ class Ocean():
         return False
 
 
+    def get_account(self, address, password=None):
+        """
+        Get an account object based on it's address
+
+        :param address: address of the account, if dict then use the fields, `address` and `password`.
+        :type address: str or dict
+        :param password: optional password to save with the account
+        :type password: str or None
+
+        :return: return the :class:`Account` object or None if the account can not be used.
+        :type: :class:`Account` or None
+
+        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        """
+        return Account(self, address, password)
+
     @property
     def accounts(self):
         """
-        :return: a list of ocean accounts
-        :type: list of accounts
+        :return: a list of :class:`.Account` objects
+        :type: list of :class:`Account` objects
+
+        >>> ocean.accounts
+        {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish_py.account.Account object at 0x10456c080>, ...
         """
-        return self._squid_ocean.get_accounts()
+        accounts = {}
+        for address in self._squid_ocean.get_accounts():
+            account = Account(self, address)
+            accounts[account.address] = account
+        return accounts
 
     @property
     def _web3(self):
@@ -260,6 +297,19 @@ class Ocean():
         """return squid ocean library"""
         return self._squid_ocean
 
+    def _squid_for_account(self, account):
+        """
+        Return an instance of squid for an account
+
+        """
+
+        config_params = self._config.as_squid_dict({
+            'parity_address': account.address,
+            'parity_password': account.password
+        })
+        print(config_params)
+        squid_config = SquidConfig(options_dict=config_params)
+        return SquidOcean(squid_config)
     @property
     def config(self):
         """
