@@ -8,10 +8,10 @@ import unittest
 import os
 import logging
 
-from starfish_py import Ocean
-from starfish_py import Config as OceanConfig
-from starfish_py.logging import setup_logging
-from starfish_py import logger
+from starfish import Ocean
+from starfish import Config as OceanConfig
+from starfish.logging import setup_logging
+from starfish import logger
 from squid_py import Ocean as SquidOcean
 from squid_py import Config as SquidConfig
 

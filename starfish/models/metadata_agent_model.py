@@ -8,8 +8,8 @@ from web3 import Web3
 from squid_py.did_resolver.did_resolver import DIDResolver
 from squid_py.ddo import DDO
 
-from starfish_py.models.model_base import ModelBase
-from starfish_py import logger
+from starfish.models.model_base import ModelBase
+from starfish import logger
 
 # service endpoint type name to use for this agent
 METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'

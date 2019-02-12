@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from squid_py import ServiceAgreement
 
-from starfish_py.logging import setup_logging
+from starfish.logging import setup_logging
 
 setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)

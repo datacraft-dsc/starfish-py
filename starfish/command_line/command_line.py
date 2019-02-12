@@ -2,10 +2,10 @@ import os
 import os.path
 import traceback
 import re
-from starfish_py.command_line.console_output import ConsoleOutput
-from starfish_py.command_line.json_output import JSONOutput
-from starfish_py.exceptions import OceanCommandLineError
-from starfish_py import Ocean
+from starfish.command_line.console_output import ConsoleOutput
+from starfish.command_line.json_output import JSONOutput
+from starfish.exceptions import OceanCommandLineError
+from starfish import Ocean
 
 
 HEX_STRING_FORMAT = '[0-fx]+'

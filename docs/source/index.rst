@@ -16,7 +16,7 @@ Contents
     :glob:
 
     getting_started
-    modules/starfish_py
+    modules/starfish
     classes/ocean
     classes/account
     classes/config

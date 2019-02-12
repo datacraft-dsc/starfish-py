@@ -1,7 +1,7 @@
 Asset class
 ===========
 
-.. autoclass:: starfish_py.Asset
+.. autoclass:: starfish.Asset
     :members:
     :undoc-members:
     :show-inheritance:
