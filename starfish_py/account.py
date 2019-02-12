@@ -59,7 +59,7 @@ class Account():
             password = self._password
 
         if password is None:
-            raise ValueError('You must provid an account password to unlock')
+            raise ValueError('You must provide an account password to unlock')
 
         # clear out the onlocked account for squid
         self._unlock_squid_account = None
