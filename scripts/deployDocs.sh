@@ -20,7 +20,8 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ "$3" = "dev" ]; then
-    DEV_BRANCH="true"
+    # create safe branch name
+    DEV_BRANCH=$(echo $TRAVIS_BRANCH | sed -e 's^/^%^g' -e 's/[()<>&*!]/_/g' -e 's/\s/_/g')
 else
     DEV_BRANCH=""
 fi
@@ -45,11 +46,14 @@ if [ ! -z "$DEPLOY_SERVER" ]; then
     -out /tmp/dex-docs-deploy -d
 
     chmod 0600 /tmp/dex-docs-deploy
-    scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
-    if [ -n "$DEV_BRANCH" ]; then
+    if [ -z "$DEV_BRANCH" ]; then
+        scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
+    else
         # for debugging send the environment from travis
         env > env.txt
-        scp -i /tmp/dex-docs-deploy env.txt ${DEPLOY_USER}@${DEPLOY_SERVER}:
+        branchdir="starfish-py/branches/$DEV_BRANCH"
+        ssh -i /tmp/dex-docs-deploy ${DEPLOY_USER}@${DEPLOY_SERVER} "mkdir -p $branchdir"
+        scp -i /tmp/dex-docs-deploy env.txt "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:$branchdir/
     fi
 
     rm /tmp/dex-docs-deploy

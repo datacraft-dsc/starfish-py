@@ -37,6 +37,7 @@ version = release_parts[0] + '.' + release_parts[1] + '.' + release_parts[2]
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.intersphinx',
     'sphinxcontrib.apidoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
@@ -50,10 +51,7 @@ apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
 apidoc_excluded_paths = [
-  'ocean.py',
-  'config.py',
-  'agent.py',
-  'asset',
+  'asset_*.py',
   'command_line',
   'constants.py',
   'exceptions.py',
@@ -102,6 +100,12 @@ exclude_patterns = []
 pygments_style = 'sphinx'
 
 highlight_language = 'python3'
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'starfishapi': ('http://shrimp.octet.services/', None)
+}
 
 # -- Options for HTML output -------------------------------------------------
 
