@@ -11,14 +11,14 @@ from web3 import (
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py.config import Config as SquidConfig
 
-from starfish_py import (
+from starfish import (
     Account,
     Agent,
     Asset,
     AssetLight,
     Config,
 )
-from starfish_py.models.squid_model import SquidModel
+from starfish.models.squid_model import SquidModel
 
 
 class Ocean():
@@ -30,7 +30,7 @@ class Ocean():
 
     For example to use this class you can do the following::
 
-        from starfish_py.ocean import Ocean
+        from starfish.ocean import Ocean
 
         my_config = {
             'contracts_path': 'artifacts',
@@ -73,7 +73,7 @@ class Ocean():
 
     def __init__(self, *args, **kwargs):
         """
-        .. :class: starfish_py.Ocean
+        .. :class: starfish.Ocean
 
         init the basic Ocean class for the connection and contract info
 
@@ -274,7 +274,7 @@ class Ocean():
         :type: list of :class:`Account` objects
 
         >>> ocean.accounts
-        {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish_py.account.Account object at 0x10456c080>, ...
+        {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish.account.Account object at 0x10456c080>, ...
         """
         accounts = {}
         for address in self._squid_ocean.get_accounts():

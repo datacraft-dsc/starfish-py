@@ -2,7 +2,6 @@
     SquidModel - Access squid services using the squid-py api
 """
 
-from starfish_py.models.model_base import ModelBase
 from squid_py.service_agreement.utils import (
     get_sla_template_path,
     register_service_agreement_template
@@ -13,7 +12,9 @@ from squid_py import (
     ServiceTypes
 )
 
-# from starfish_py import logger
+from starfish.models.model_base import ModelBase
+
+# from starfish import logger
 
 class SquidModel(ModelBase):
     def __init__(self, ocean):

@@ -14,8 +14,8 @@ from pytest import (
     raises,
 )
 
-from starfish_py.command_line import CommandLine
-from starfish_py.command_line.pytest_output import PyTestOutput
+from starfish.command_line import CommandLine
+from starfish.command_line.pytest_output import PyTestOutput
 
 
 def test_command_line_balance():

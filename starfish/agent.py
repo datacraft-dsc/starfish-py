@@ -4,7 +4,7 @@ Agent class to provide basic functionality for all Ocean Agents
 
 """
 
-from starfish_py import Account
+from starfish import Account
 
 class Agent():
     """
@@ -23,7 +23,7 @@ class Agent():
     def register(self, service_name, endpoint_url, account, did=None):
         """
 
-        Register an agent on the block chain. This is called by the method :func:`starfish_py.ocean.Ocean.register_agent`.
+        Register an agent on the block chain. This is called by the method :func:`starfish.Ocean.register_agent`.
 
         :param str service_name: service_name to add into the DDO service field
         :param str endpoint_url: url of the agent service

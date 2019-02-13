@@ -52,7 +52,7 @@ docs_requirements = [
 ]
 
 packages = []
-for d, _, _ in os.walk('starfish_py'):
+for d, _, _ in os.walk('starfish'):
     if os.path.exists(join(d, '__init__.py')):
         packages.append(d.replace(os.path.sep, '.'))
 

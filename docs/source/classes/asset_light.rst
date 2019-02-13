@@ -1,7 +1,7 @@
 AssetLight class
 ================
 
-.. autoclass:: starfish_py.AssetLight
+.. autoclass:: starfish.AssetLight
     :members:
     :undoc-members:
     :show-inheritance:

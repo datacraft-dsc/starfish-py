@@ -44,7 +44,7 @@ extensions = [
 
 # apidoc settings
 # See https://github.com/sphinx-contrib/apidoc
-apidoc_module_dir = '../../starfish_py'
+apidoc_module_dir = '../../starfish'
 # apidoc_output_dir = 'api' by default, and leave it that way!
 apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html

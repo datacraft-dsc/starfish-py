@@ -11,7 +11,7 @@ import os.path
 import re
 import tempfile
 
-from starfish_py import logger
+from starfish import logger
 
 CONFIG_SECTION_NAME = 'starfish-py'
 
@@ -73,7 +73,7 @@ class Config(configparser.ConfigParser):
 
     The default config values as defined as an `ini` file are defined as follows:
 
-    .. literalinclude:: ../../../starfish_py/config.py
+    .. literalinclude:: ../../../starfish/config.py
         :start-after: CONFIG_DEFAULT
         :end-before: "
     """

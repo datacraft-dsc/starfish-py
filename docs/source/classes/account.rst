@@ -1,7 +1,7 @@
 Account class
 =============
 
-.. autoclass:: starfish_py.Account
+.. autoclass:: starfish.Account
     :members:
     :undoc-members:
     :show-inheritance:

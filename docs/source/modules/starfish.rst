@@ -1,7 +1,7 @@
 starfish_py module
 ==================
 
-.. automodule:: starfish_py
+.. automodule:: starfish
     :members:
     :undoc-members:
     :show-inheritance:

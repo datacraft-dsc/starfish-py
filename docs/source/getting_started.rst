@@ -40,7 +40,7 @@ Startup a local ocean node (``barge``)
 
         myProjects/--|
                      |--> barge/
-                     |--> starfish_py/
+                     |--> starfish-py/
 
 
 Copy keeper artifacts
@@ -53,7 +53,7 @@ Copy keeper artifacts
 
     .. code-block:: console
 
-        cd starfish_py
+        cd starfish-py
         ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
 
     The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
