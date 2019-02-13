@@ -50,10 +50,10 @@ if [ ! -z "$DEPLOY_SERVER" ]; then
         scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
     else
         # for debugging send the environment from travis
-        env > env.txt
-        branchdir="starfish-py/branches/$DEV_BRANCH"
-        ssh -i /tmp/dex-docs-deploy ${DEPLOY_USER}@${DEPLOY_SERVER} "mkdir -p $branchdir"
-        scp -i /tmp/dex-docs-deploy env.txt "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:$branchdir/
+        mkdir -p "target/starfish-py/branches/$DEV_BRANCH"
+        mv "$DEPLOY_FILENAME" "target/starfish-py/branches/$DEV_BRANCH/"
+        env > "target/starfish-py/branches/$DEV_BRANCH/env.txt"
+        rsync -auvW --rsh 'ssh -i /tmp/dex-docs-deploy' target/ ${DEPLOY_USER}@${DEPLOY_SERVER}:./
     fi
 
     rm /tmp/dex-docs-deploy
