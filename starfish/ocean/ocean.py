@@ -32,9 +32,9 @@ class Ocean():
             'gas_limit': 1000,
         }
         ocean = Ocean(my_config)
-    
+
     or you can do the following setup: ::
-    
+
         from starfish.ocean import Ocean
         ocean = Ocean(keeper_url='http://localhost:8545', contracts_path= artifacts, gas_limit=1000)
 
@@ -59,7 +59,7 @@ class Ocean():
         """
         if args and len(args) > 0 and isinstance(args[0], dict):
             kwargs = args[0]
-            
+
         self._keeper_url = kwargs.get('keeper_url', 'http://localhost:8545')
         self._contracts_path = kwargs.get('contracts_path', 'artifacts')
         self._gas_limit = kwargs.get('gas_limit', GAS_LIMIT_DEFAULT)
@@ -91,6 +91,7 @@ class Ocean():
             # register the public surfer on the block chain
             did, ddo, key_pem = ocean.register_agent('surfer', 'https://market_surfer.io', ocean.accounts[0])
 
+        TODO: Need to split this up into two calls, one to add, other to update
         """
 
         if not isinstance(account, Account):
@@ -155,7 +156,7 @@ class Ocean():
     @property
     def keeper_url(self):
         return self._keeper_url
-    
+
     @property
     def contracts_path(self):
         return self._contracts_path

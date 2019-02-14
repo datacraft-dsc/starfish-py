@@ -1,7 +1,7 @@
 
 """
 
-Trade class to hold Ocean tradeing information such as an asset id and metadata
+Squid Listing class to hold Ocean listing information such as an asset id and metadata
 
 """
 
@@ -9,17 +9,13 @@ from eth_utils import remove_0x_prefix
 
 from squid_py.did import did_to_id
 
-from starfish import (
-    Account
-)
-
+from starfish import Account
 from starfish.models.squid_model import SquidModel
 from starfish.utils.did import did_parse
 from starfish.purchase import SquidPurchase
 from starfish.listing import ListingObject
 
 # from starfish import logger
-
 
 class SquidListing(ListingObject):
     """
@@ -36,11 +32,11 @@ class SquidListing(ListingObject):
     """
     def __init__(self, agent, did=None, metadata=None):
         """
-        
+
         init a standard ocean object.
         For squid we have metadata but it is in a DDO,
         so the creator of this class sends the metadata as a DDO.
-        
+
         """
         ListingObject.__init__(self, agent, did, None)
 
@@ -95,15 +91,15 @@ class SquidListing(ListingObject):
 
         purchase = None
         model = self.agent.squid_model
-        
+
         # check to see if we need to read in the listing data
         if self.ddo is None:
             self.read()
-            
+
         service_agreement_id = model.purchase_asset(self, account)
         if service_agreement_id:
             purchase = SquidPurchase(self._agent, self, service_agreement_id)
-            
+
         return purchase
 
     def _set_ddo(self, ddo):
@@ -128,7 +124,7 @@ class SquidListing(ListingObject):
         :type: boolean
         """
         return self._did is None
-        
+
     @property
     def ddo(self):
         """

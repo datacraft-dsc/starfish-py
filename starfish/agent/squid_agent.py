@@ -17,7 +17,7 @@ class SquidAgent(AgentObject):
     """
 
     Squid Agent class allows to register and list asset listings.
-    
+
     :param ocean: Ocean object that is being used.
     :type ocean: :class:`starfish.Ocean`
     :param aquarius_url: Aquarius url ( http://localhost:5000 ).
@@ -30,19 +30,19 @@ class SquidAgent(AgentObject):
     :type parity_url: str or None
     :param storage_path: Path to the storage db (squid_py.db).
     :type storage_path: str or None
-    
+
     Example how to use this agent: ::
-    
+
         # First import the classes
         from starfish.SquidAgent import SquidAgent
         from starfish import Ocean
-        
+
         # create the ocean object
         ocean = Ocean()
-        
+
         # get your publisher account
         account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
-        
+
         #create the SquidAgent
         my_config = {
             'aquarius_url': 'http://localhost:5000',
@@ -52,7 +52,7 @@ class SquidAgent(AgentObject):
             'storage_path': 'squid_py.db',
         }
         agent = SquidAgent(ocean, my_config)
-        
+
         # register an asset data and listing info
         listing = agent.register(metadata, account)
     """
@@ -158,11 +158,11 @@ class SquidAgent(AgentObject):
     @property
     def squid_model(self):
         """
-        
+
         Return an instance of the squid model, for access to the squid library layer
         :return: squid model object
         """
-        
+
         if not self._model:
             options = {
                 'aquarius_url': self._aquarius_url,

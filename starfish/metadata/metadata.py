@@ -11,8 +11,10 @@ from starfish.metadata.metadata_object import MetadataObject
 class Metadata(MetadataObject):
     """
 
-        :param ocean: agent object to used to creat
-        :param did: Optional did of the asset.
+    :param agent: agent object to used to create
+    :type agent: :class:`.AgentObject`
+    :param metadata: Metadata.
+    :type metadata: dict
 
     """
     def __init__(self, agent, metadata):

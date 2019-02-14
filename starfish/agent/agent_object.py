@@ -11,4 +11,7 @@ class AgentObject():
 
     @property
     def ocean(self):
+        """
+        :return: Ocean object
+        """
         return self._ocean

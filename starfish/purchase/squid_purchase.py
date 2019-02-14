@@ -22,7 +22,7 @@ class SquidPurchase(PurchaseObject):
     """
 
     This class is returned by purchasing an asset uning the :func:`.SquidListing.purchase` method.
-    
+
     :param agent: agent that was used create this object.
     :type agent: :class:`.SquidAgent`
     :param listing: Listing used to purchase this asset.
@@ -57,7 +57,7 @@ class SquidPurchase(PurchaseObject):
             raise ValueError('You must pass a valid account')
 
 
-        model = self.agent.squid_model        
+        model = self.agent.squid_model
         return model.is_access_granted_for_asset(self._listing, self._purchase_id, account)
 
     def consume(self, account, download_path):
@@ -103,4 +103,3 @@ class SquidPurchase(PurchaseObject):
         :type: str
         """
         return self._purchase_id
-
