@@ -1,7 +1,7 @@
 Squid Purchase class
 ====================
 
-.. autoclass:: starfish.purchase.squid_purchase.SquidPurchase
+.. autoclass:: starfish.purchase.SquidPurchase
     :members:
     :undoc-members:
     :show-inheritance:

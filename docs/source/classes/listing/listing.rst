@@ -1,7 +1,7 @@
 Listing class
 =============
 
-.. autoclass:: starfish.listing.listing.Listing
+.. autoclass:: starfish.listing.Listing
     :members:
     :undoc-members:
     :show-inheritance:

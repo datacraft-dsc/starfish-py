@@ -18,5 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 from starfish.account.account import Account
-from starfish.agent.squid_agent import SquidAgent
 from starfish.ocean.ocean import Ocean
+
+

@@ -10,7 +10,7 @@ from eth_utils import remove_0x_prefix
 
 from starfish.models.metadata_agent_model import MetadataAgentModel
 from starfish.utils.did import did_parse
-from starfish.listing.listing_object import ListingObject
+from starfish.listing import ListingObject
 
 # from starfish import logger
 

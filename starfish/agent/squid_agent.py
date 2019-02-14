@@ -4,16 +4,20 @@ Agent class to provide basic functionality for all Ocean Agents
 
 """
 
-from starfish import Account
+from starfish import (
+    Account,
+)
+
 from starfish.models.squid_model import SquidModel
-from starfish.listing.squid_listing import SquidListing
-from starfish.agent.agent_object import AgentObject
+from starfish.agent import AgentObject
+from starfish.listing import SquidListing
+
 
 class SquidAgent(AgentObject):
     """
 
-    Squid Agent class allows you to cover Ocean squid functionality by inheriting this class.
-
+    Squid Agent class allows to connect to the ocean squid library and perform asset based tasks.
+    
     'aquarius_url': 'http://localhost:5000',
     'brizo_url': 'http://localhost:8030',
     'secret_store_url': 'http://localhost:8010',

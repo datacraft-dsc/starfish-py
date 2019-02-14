@@ -6,7 +6,7 @@ Agent class to provide basic functionality for all Ocean Agents
 
 from starfish import Account
 from starfish.models.squid_model import SquidModel
-from starfish.agent.agent_object import AgentObject
+from starfish.agent import AgentObject
 
 class ListingAgent(AgentObject):
     """
