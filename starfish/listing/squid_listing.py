@@ -10,7 +10,6 @@ from eth_utils import remove_0x_prefix
 from squid_py.did import did_to_id
 
 from starfish import Account
-from starfish.models.squid_model import SquidModel
 from starfish.utils.did import did_parse
 from starfish.purchase import SquidPurchase
 from starfish.listing import ListingObject

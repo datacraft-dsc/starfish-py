@@ -150,7 +150,6 @@ class SquidAgent(AgentObject):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        asset_list = None
         model = self.squid_model
         ddo_list = model.search_assets(text, sort, offset, page)
         return ddo_list

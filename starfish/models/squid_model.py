@@ -22,16 +22,16 @@ class SquidModel():
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
-        
+
         if not isinstance(options, dict):
             options = {}
-            
+
         self._aquarius_url = options.get('aquarius_url', 'http://localhost:5000')
         self._brizo_url = options.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
-        
+
         self._squid_ocean = self.get_squid_ocean()
 
     def register_asset(self, metadata, account):
@@ -124,7 +124,7 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        agreement_address = self._squid_ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
+#        agreement_address = self._squid_ocean.keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
 
         return self._squid_ocean.is_access_granted(service_agreement_id, asset.did, account_address)
 
@@ -147,8 +147,8 @@ class SquidModel():
         """
         # register/update the did->ddo to the block chain
         return self._ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
-        
-        
+
+
     def _as_config_dict(self, options=None):
         """
 
@@ -182,24 +182,24 @@ class SquidModel():
                 data['keeper-contracts']['parity.password'] = options['parity_password']
             if 'download_path' in options:
                 data['resources']['downloads.path'] = options['download_path']
-            
+
         return data
-        
+
     @property
     def accounts(self):
         return self._squid_ocean.get_accounts()
-    
+
     @property
     def aquarius_url(self):
         return self._aquarius_url
-    
+
     @property
     def brizo_url(self):
         return self._brizo_url
-        
+
     def get_squid_ocean(self, account = None, download_path=None):
         """
-        
+
         Return an instance of squid for an account
 
         """
@@ -208,11 +208,11 @@ class SquidModel():
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
-            
+
         if download_path:
             options['download_path'] = download_path
-            
-            
+
+
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
         return SquidOcean(config)
