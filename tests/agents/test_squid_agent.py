@@ -74,8 +74,6 @@ def _log_event(event_name):
 
 def test_asset():
 
-
-
     # create an ocean object
     ocean = Ocean(CONFIG_PARAMS)
     assert ocean

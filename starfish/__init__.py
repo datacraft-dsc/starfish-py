@@ -4,7 +4,6 @@
     This module contains the following classes
 
     * :class:`Account` The Account class.
-    * :class:`Agent` The Agent wrapper class.
     * :class:`Ocean` The main Ocean connection class.
     * :data:`logger` The logger class.
 """

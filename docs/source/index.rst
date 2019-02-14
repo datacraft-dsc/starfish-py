@@ -16,11 +16,10 @@ Contents
     :glob:
 
     getting_started
+    register_an_asset
     modules/starfish
     classes/ocean
     classes/account/account
-    classes/agent/listing_agent
-    classes/agent/squid_agent
-    classes/listing/listing
-    classes/listing/squid_listing
-    classes/purchase/squid_purchase
+    classes/agent
+    classes/listing
+    classes/purchase

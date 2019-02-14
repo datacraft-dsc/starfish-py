@@ -21,12 +21,14 @@ from starfish.purchase import PurchaseObject
 class SquidPurchase(PurchaseObject):
     """
 
-    :param agent: ocean object to use to connect to the ocean network.
-    :type agent: OceanObject
+    This class is returned by purchasing an asset uning the :func:`.SquidListing.purchase` method.
+    
+    :param agent: agent that was used create this object.
+    :type agent: :class:`.SquidAgent`
+    :param listing: Listing used to purchase this asset.
+    :type listing: :class:`.SquidListing`
     :param purchase_id: purchase_id used to buy this asset.
     :type purchase_id: str
-    :param listing: Listing used to purchase this asset
-    :type listing: :class:`.Listing`
 
     """
     def __init__(self, agent, listing, purchase_id):
@@ -61,8 +63,7 @@ class SquidPurchase(PurchaseObject):
     def consume(self, account, download_path):
         """
 
-        Consume a purchased asset. This call will try to download the asset data
-        that you have already called using the :func:`listing.purchase` method.
+        Consume a purchased asset. This call will try to download the asset data.
 
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.

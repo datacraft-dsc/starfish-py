@@ -16,14 +16,45 @@ from starfish.listing import SquidListing
 class SquidAgent(AgentObject):
     """
 
-    Squid Agent class allows to connect to the ocean squid library and perform asset based tasks.
+    Squid Agent class allows to register and list asset listings.
     
-    'aquarius_url': 'http://localhost:5000',
-    'brizo_url': 'http://localhost:8030',
-    'secret_store_url': 'http://localhost:8010',
-    'parity_url': 'http://localhost:9545',
-    'storage_path = squid_py.db',
-
+    :param ocean: Ocean object that is being used.
+    :type ocean: :class:`starfish.Ocean`
+    :param aquarius_url: Aquarius url ( http://localhost:5000 ).
+    :type aquarius_url: str or None
+    :param brizo_url: Brizo url (http://localhost:8030).
+    :type brizo_url: str or None
+    :param secret_store_url: Secret store URL (http://localhost:8010).
+    :type secret_store_url: str or None
+    :param parity_url: Parity URL, if you are using the secret store (http://localhost:9545').
+    :type parity_url: str or None
+    :param storage_path: Path to the storage db (squid_py.db).
+    :type storage_path: str or None
+    
+    Example how to use this agent: ::
+    
+        # First import the classes
+        from starfish.SquidAgent import SquidAgent
+        from starfish import Ocean
+        
+        # create the ocean object
+        ocean = Ocean()
+        
+        # get your publisher account
+        account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        
+        #create the SquidAgent
+        my_config = {
+            'aquarius_url': 'http://localhost:5000',
+            'brizo_url': 'http://localhost:8030',
+            'secret_store_url': 'http://localhost:12001',
+            'parity_url': 'http://localhost:9545',
+            'storage_path': 'squid_py.db',
+        }
+        agent = SquidAgent(ocean, my_config)
+        
+        # register an asset data and listing info
+        listing = agent.register(metadata, account)
     """
 
     def __init__(self, ocean, *args, **kwargs):

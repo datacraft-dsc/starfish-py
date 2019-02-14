@@ -23,12 +23,13 @@ class ListingAgent(AgentObject):
     def register(self, metadata, **kwargs):
         """
 
-        Register an asset by writing it's meta data to the meta storage agent
+        Register an asset listing by writing it's listing and meta data to storage
 
         :param metadata: dict of the metadata.
         :param agent: agent object for perform meta stroage.
 
-        :return: The new asset registered, or return None on error.
+        :return: The new listing object
+        :type: :class:`listing.Listing`
         """
 
         model = MetadataAgentModel(self._ocean)

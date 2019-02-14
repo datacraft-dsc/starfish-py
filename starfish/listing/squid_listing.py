@@ -24,9 +24,9 @@ from starfish.listing import ListingObject
 class SquidListing(ListingObject):
     """
 
-    The creation of an asset is normally performed by the :class:`.SquidAgent` class.
+    The listing object is created by the :class:`.SquidAgent` class.
 
-    :param agent: ocean object to use to connect to the ocean network.
+    :param agent: agent object that created this listing.
     :type agent: :class:`.SquidAgent`
     :param did: Optional did of the asset.
     :type did: str or None
@@ -72,14 +72,14 @@ class SquidListing(ListingObject):
     def purchase(self, account):
         """
 
-        Purchase this asset listing using the account details, return a purchased asset
+        Purchase the underlying asset within this listing using the account details, return a purchased asset
         with the service_agreement_id ( purchase_id ) set.
 
         :param account: account to use to purchase this asset.
         :type account: :class:`.Account`
 
         :return: asset object that has been purchased
-        :type: :class:`.Asset`
+        :type: :class:`.SquidPurchase`
 
         """
         if not isinstance(account, Account):

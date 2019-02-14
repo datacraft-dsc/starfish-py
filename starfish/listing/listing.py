@@ -17,8 +17,12 @@ from starfish.listing import ListingObject
 class Listing(ListingObject):
     """
 
-        :param ocean: ocean object to use to connect to the ocean network.
-        :param did: Optional did of the asset.
+        :param agent: agent object that was used to create this listing
+        :type agent: :class:`agent.ListingAgent`
+        :param did: Optional did for this listing.
+        :type did: str or None
+        :param metadata: Optional metadata for the asset
+        :type metadata: dict or None
 
     """
     def __init__(self, agent, did=None, metadata=None):
@@ -39,7 +43,7 @@ class Listing(ListingObject):
     def read(self):
         """
 
-        Reads the asset metadata from an Ocean Agent, using the agents DID.
+        Reads the listing from the agent using the listing DID.
 
         :return: metadata read for this asset, if non found then return None.
         """
