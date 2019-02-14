@@ -57,7 +57,7 @@ class Ocean():
         init the basic Ocean class for the connection and contract info
 
         """
-        if args and len(args) > 0 and isinstance(args[0], dict):
+        if args and isinstance(args[0], dict):
             kwargs = args[0]
 
         self._keeper_url = kwargs.get('keeper_url', 'http://localhost:8545')

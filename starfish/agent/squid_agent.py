@@ -62,13 +62,13 @@ class SquidAgent(AgentObject):
         AgentObject.__init__(self, ocean)
         self._model = None
 
-        if args and len(args) > 0 and isinstance(args[0], dict):
+        if args and isinstance(args[0], dict):
             kwargs = args[0]
 
         self._aquarius_url = kwargs.get('aquarius_url', 'http://localhost:5000')
         self._brizo_url = kwargs.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
-        self._storage_path = kwargs.get( 'storage_path', 'squid_py.db')
+        self._storage_path = kwargs.get('storage_path', 'squid_py.db')
 
     def register(self, metadata, account):
         """

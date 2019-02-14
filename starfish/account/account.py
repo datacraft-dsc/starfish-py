@@ -149,13 +149,13 @@ class Account(AccountObject):
 
         if self._unlock_squid_account:
             return self._unlock_squid_account
-        else:
-            model = SquidModel(self._ocean)
-            address = self.as_checksum_address
-            if self._address:
-                account_list = model.accounts
-                if address in account_list:
-                    return account_list[address]
+
+        model = SquidModel(self._ocean)
+        address = self.as_checksum_address
+        if self._address:
+            account_list = model.accounts
+            if address in account_list:
+                return account_list[address]
         return None
 
     @property
@@ -237,7 +237,6 @@ class Account(AccountObject):
         if squid_account:
             return squid_account.ocean_balance
         return 0
-
 
     @property
     def ether_balance(self):

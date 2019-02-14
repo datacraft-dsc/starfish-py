@@ -48,7 +48,7 @@ class Listing(ListingObject):
         """
 
         self._metadata = None
-        model = MetadataAgentModel(self._ocean, did=self._agent_did)
+        model = MetadataAgentModel(self._agent, did=self._agent_did)
         asset_data = model.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with
