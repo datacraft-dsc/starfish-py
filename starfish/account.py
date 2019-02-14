@@ -4,7 +4,10 @@ Account class to provide basic functionality for all Ocean Accounts
 
 """
 
-class Account():
+from starfish.ocean_object import OceanObject
+from starfish.models.squid_model import SquidModel
+
+class Account(OceanObject):
     """
 
     Account class, adds functionality for an account to be used by the Ocean network.
@@ -30,16 +33,16 @@ class Account():
 
     def __init__(self, ocean, address, password=None):
         """init a standard ocean agent"""
-        self._ocean = ocean
+        OceanObject.__init__(self, ocean)
         self._address = None
         self._password = None
         self._unlock_squid_account = None
 
         if isinstance(address, dict):
-            self.set_address(address.get('address'))
+            self._address = address.get('address')
             self._password = address.get('password')
         elif isinstance(address, str):
-            self.set_address(address)
+            self._address = address
             self._password = password
 
     def unlock(self, password=None):
@@ -147,9 +150,10 @@ class Account():
         if self._unlock_squid_account:
             return self._unlock_squid_account
         else:
+            model = SquidModel(self._ocean)
             address = self.as_checksum_address
             if self._address:
-                account_list = self._ocean._squid.get_accounts()
+                account_list = model.accounts
                 if address in account_list:
                     return account_list[address]
         return None
@@ -186,16 +190,6 @@ class Account():
         if self._address:
             return self._ocean._web3.toChecksumAddress(self._address.lower())
         return None
-
-    def set_address(self, address):
-        """
-
-        Sets the address and converts the address to a ethereum checksum address
-
-        :param str address: new address to set for this account
-
-        """
-        self._address = address
 
     @property
     def password(self):

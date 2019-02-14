@@ -8,17 +8,13 @@ from web3 import (
     HTTPProvider
 )
 
-from squid_py.ocean.ocean import Ocean as SquidOcean
-from squid_py.config import Config as SquidConfig
-
 from starfish import (
     Account,
-    Agent,
-    Asset,
-    AssetLight,
-    Config,
 )
 from starfish.models.squid_model import SquidModel
+
+
+GAS_LIMIT_DEFAULT = 30000
 
 
 class Ocean():
@@ -28,46 +24,31 @@ class Ocean():
 
     The Ocean class connects to the ocean network.
 
-    For example to use this class you can do the following::
+    For example to use this class you can do the following: ::
 
         from starfish.ocean import Ocean
 
         my_config = {
             'contracts_path': 'artifacts',
             'keeper_url': 'http://localhost:8545',
-            'secret_store_url': 'http://localhost:12001',
-            'parity_url': 'http://localhost:8545',
+            'gas_limit': 1000,
         }
         ocean = Ocean(my_config)
+    
+    or you can do the following setup: ::
+    
+        from starfish.ocean import Ocean
+        ocean = Ocean(keeper_url='http://localhost:8545', contracts_path= artifacts, gas_limit=1000)
+
 
     You can provide these parameters in a dictionary or as individual parameters.
 
-    :param filename: Filename of the config file to load.
-    :type filename: str or None
     :param contracts_path: path to the contract files ( artifacts ).
     :type contracts_path: str or None
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
     :type keeper_url: str or None
-    :param secret_store_url: url to the secret store node ( http://localhost:12001 ).
-    :type secret_store_url: str or None
-    :param parity_url: url to the parity node ( http://localhost:8545 ).
-    :type parity_url: str or None
-    :param aquarius_url: url of the Aquarius metadata service ( http://localhost:5000 ).
-    :type aquarius_url: str or None
-    :param brizo_url: url of the Brizo consumer service (http://localhost:8030 ).
-    :type brizo_url: str or None
-    :param storage_path: Path to save temporary storage of assets purchased and consumed ( squid_py.db ).
-    :type storage_path: str or None
-    :param download_path: Path to save the consumed assets too. ( consume_downloads ).
-    :type download_path: str or None
-    :param agent_store_did: DID of the agent metadata service.
-    :type agent_store_did: str or None
-    :param agent_store_auth: Authorziation text to access the metadat service.
-    :type agent_store_auth: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
     :type gas_limit: int or string
-
-    see the :class:`.Config` class for more details as to the parameters you can pass.
 
     """
 
@@ -78,20 +59,22 @@ class Ocean():
         init the basic Ocean class for the connection and contract info
 
         """
-        self._config = Config(*args, **kwargs)
-
-        squid_config = SquidConfig(options_dict=self._config.as_squid_dict())
-        self._squid_ocean = SquidOcean(squid_config)
+        if args and len(args) > 0 and isinstance(args[0], dict):
+            kwargs = args[0]
+            
+        self._keeper_url = kwargs.get('keeper_url', 'http://localhost:8545')
+        self._contracts_path = kwargs.get('contracts_path', 'artifacts')
+        self._gas_limit = kwargs.get('gas_limit', GAS_LIMIT_DEFAULT)
 
         # For development, we use the HTTPProvider Web3 interface
-        self.__web3 = Web3(HTTPProvider(self._config.keeper_url))
+        self.__web3 = Web3(HTTPProvider(self._keeper_url))
 
-    def register_agent(self, agent_service_name, endpoint_url, account, did=None):
+    def register_update_agent_service(self, service_name, endpoint_url, account, did=None):
         """
 
-        Register this agent with a DDO on the block chain.
+        Register this agent service with a DDO on the block chain.
 
-        :param str agent_service_name: service name of the agent to register.
+        :param str service_name: service name of the agent service to register.
         :param str endpoint_url: URL of the agents service to add to the DDO to register.
         :param account: account to use as the owner of the registration.
         :type account: :class:`.Account`
@@ -112,144 +95,27 @@ class Ocean():
 
         """
 
-        agent = Agent(self)
-        return agent.register(agent_service_name, endpoint_url, account, did)
-
-
-
-    def register_asset(self, metadata, account):
-        """
-
-        Register an asset with the ocean network.
-
-        :param dict metadata: metadata dictionary to store for this asset.
-        :param object account: Ocean account to use to register this asset.
-
-        :return: A new :class:`.Asset` object that has been registered, if failure then return None.
-        :type: :class:`.Asset` class
-
-        For example::
-
-            metadata = json.loads('my_metadata')
-            account = ocean.accounts[0]
-            asset = ocean.register_asset(metadata, account)
-            if asset:
-                print(f'registered my asset with the did {asset.did}')
-
-        """
-
-        asset = Asset(self)
-
-        # TODO: fix the exit, so that we raise an error or return an asset
-        if asset.register(metadata, account):
-            return asset
-        return None
-
-    def register_asset_light(self, metadata):
-        """
-
-        Register an asset using the **off chain** system using an metadata storage agent
-
-        :param dict metadata: metadata dictonary to store for this asset.
-
-        :return: the asset that has been registered
-        :type: :class:`.AssetLight` class
-
-        """
-
-        asset = AssetLight(self)
-
-        # TODO: fix the exit, so that we raise an error or return an asset
-        if asset.register(metadata):
-            return asset
-        return None
-
-    def get_asset(self, did):
-        """
-
-        Return an asset based on the asset's DID.
-
-        :param str did: DID of the asset and agent combined.
-
-        :return: a registered asset given a DID of the asset
-        :type: :class:`.Asset` class
-
-        """
-        asset = None
-        if Asset.is_did_valid(did):
-            asset = Asset(self, did)
-        elif AssetLight.is_did_valid(did):
-            asset = AssetLight(self, did)
-        else:
-            raise ValueError(f'Invalid did "{did}" for an asset')
-
-        if not asset.is_empty:
-            if asset.read():
-                return asset
-        return None
-
-
-    def search_registered_assets(self, text, sort=None, offset=100, page=0):
-        """
-
-        Search the off chain storage for an asset with the givien 'text'
-
-        :param str text: Test to search all metadata items for.
-        :param sort: sort the results ( defaults: None, no sort).
-        :type sort: str or None
-        :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
-        :param int page: Returns the page number based on the offset.
-
-        :return: a list of assets objects found using the search.
-        :type: list of DID strings
-
-        For example::
-
-            # return the 300 -> 399 records in the search for the text 'weather' in the metadata.
-            my_result = ocean.search_registered_assets('weather', None, 100, 3)
-
-        """
-        asset_list = None
-        model = SquidModel(self)
-        ddo_list = model.search_assets(text, sort, offset, page)
-        if ddo_list:
-            asset_list = []
-            for ddo in ddo_list:
-                asset = Asset(self, ddo = ddo)
-                asset_list.append(asset)
-        return asset_list
-
-    def register_service_level_agreement_template(self, template_id, account):
-        """
-
-        Register the service level agreement on the block chain.
-
-        This is currently only **used for testing**, as we assume that Ocean has
-        already registered a service level agreement template onchain for usage.
-
-        :param str template_id: Template id of the service level agreement template.
-        :param account: account object to use if this method needs to register the template.
-        :type account: :class:`.Account`
-
-        :return: True if the agreement template has been added, else False if it's already been registered
-        :type: boolean
-
-        >>> ocean.register_service_level_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
-
-        """
-
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        model = SquidModel(self)
-        if not model.is_service_agreement_template_registered(template_id):
-            model.register_service_agreement_template(template_id, account)
-            return True
-        return False
+        if did is None:
+            # if no did then we need to create a new one
+            did = id_to_did(secrets.token_hex(32))
 
+        # create a new DDO
+        ddo = DDO(did)
+        # add a signature
+        private_key_pem = ddo.add_signature()
+        # add the service endpoint with the meta data
+        ddo.add_service(service_name, endpoint_url)
+        # add the static proof
+        ddo.add_proof(0, private_key_pem)
+        if self._register_ddo(did, ddo, account._squid_account):
+            return [did, ddo, private_key_pem]
+        return None
 
     def get_account(self, address, password=None):
         """
@@ -276,8 +142,9 @@ class Ocean():
         >>> ocean.accounts
         {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish.account.Account object at 0x10456c080>, ...
         """
+        model = SquidModel(self)
         accounts = {}
-        for address in self._squid_ocean.get_accounts():
+        for address in model.accounts:
             account = Account(self, address)
             accounts[account.address] = account
         return accounts
@@ -288,32 +155,13 @@ class Ocean():
         return self.__web3
 
     @property
-    def _keeper(self):
-        """return the keeper contracts"""
-        return self._squid_ocean.keeper
+    def keeper_url(self):
+        return self._keeper_url
+    
+    @property
+    def contracts_path(self):
+        return self._contracts_path
 
     @property
-    def _squid(self):
-        """return squid ocean library"""
-        return self._squid_ocean
-
-    def _squid_for_account(self, account):
-        """
-        Return an instance of squid for an account
-
-        """
-
-        config_params = self._config.as_squid_dict({
-            'parity_address': account.address,
-            'parity_password': account.password
-        })
-        print(config_params)
-        squid_config = SquidConfig(options_dict=config_params)
-        return SquidOcean(squid_config)
-    @property
-    def config(self):
-        """
-        :return: the used config object for this connection
-        :type: :class:`.Config` class
-        """
-        return self._config
+    def gas_limit(self):
+        return self._gas_limit
