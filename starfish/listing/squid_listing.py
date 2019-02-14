@@ -25,8 +25,8 @@ class SquidListing(ListingObject):
     :type agent: :class:`.SquidAgent`
     :param did: Optional did of the asset.
     :type did: str or None
-    :param ddo: Optional DDO to assign to this asset.
-    :type ddo: dict or None
+    :param metadata: Optional metadata, in this class it is really the DDO.
+    :type metadata: dict or None
 
     """
     def __init__(self, agent, did=None, metadata=None):
