@@ -50,7 +50,7 @@ class ListingAgent(AgentObject):
 
         Return an asset based on the asset's DID.
 
-        :param str did: DID of the asset and agent combined.
+        :param str did: DID of the listng and agent combined.
 
         :return: a registered asset given a DID of the asset
         :type: :class:`.Asset` class

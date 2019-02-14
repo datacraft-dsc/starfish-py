@@ -29,8 +29,7 @@ class Listing(ListingObject):
         """
         init an asset class with the following:
         """
-        ListingObject.__init__(self, agent, did)
-        self._metadata = metadata
+        ListingObject.__init__(self, agent, did, metadata)
 
         if self._did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
@@ -43,11 +42,12 @@ class Listing(ListingObject):
     def read(self):
         """
 
-        Reads the listing from the agent using the listing DID.
+        Reads the listing from the agent using the listing's DID.
 
-        :return: metadata read for this asset, if non found then return None.
+        :return: metadata read for this listing, if non found then return None.
         """
 
+        self._metadata = None
         model = MetadataAgentModel(self._ocean, did=self._agent_did)
         asset_data = model.read_asset(self._id)
         if asset_data:

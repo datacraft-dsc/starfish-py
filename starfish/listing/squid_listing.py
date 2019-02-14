@@ -34,13 +34,19 @@ class SquidListing(ListingObject):
     :type ddo: dict or None
 
     """
-    def __init__(self, agent, did=None, ddo=None):
-        """init a standard ocean object"""
-        ListingObject.__init__(self, agent, did)
+    def __init__(self, agent, did=None, metadata=None):
+        """
+        
+        init a standard ocean object.
+        For squid we have metadata but it is in a DDO,
+        so the creator of this class sends the metadata as a DDO.
+        
+        """
+        ListingObject.__init__(self, agent, did, None)
 
         self._ddo = None
-        if ddo:
-            self._set_ddo(ddo)
+        if metadata:
+            self._set_ddo(metadata)
 
         if did:
             self._id = did_to_id(did)
@@ -56,9 +62,8 @@ class SquidListing(ListingObject):
 
         """
 
-        model = self.agent.squid_model
-
         self._metadata = None
+        model = self.agent.squid_model
         ddo = model.read_asset(self._did)
         if ddo:
             self._set_ddo(ddo)
@@ -91,6 +96,7 @@ class SquidListing(ListingObject):
         purchase = None
         model = self.agent.squid_model
         
+        # check to see if we need to read in the listing data
         if self.ddo is None:
             self.read()
             

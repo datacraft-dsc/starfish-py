@@ -84,10 +84,13 @@ class SquidAgent(AgentObject):
         For example::
 
             metadata = json.loads('my_metadata')
-            account = ocean.accounts[0]
-            asset = ocean.register_asset(metadata, account)
-            if asset:
-                print(f'registered my asset with the did {asset.did}')
+            # get your publisher account
+            account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+            agent = SquidAgent(ocean)
+            listing = agent.register_asset(metadata, account)
+
+            if listing:
+                print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
 
@@ -102,7 +105,7 @@ class SquidAgent(AgentObject):
         ddo = model.register_asset(metadata, account)
         listing = None
         if ddo:
-            listing = SquidListing(self, ddo=ddo)
+            listing = SquidListing(self, metadata=ddo)
 
         return listing
 
@@ -112,7 +115,7 @@ class SquidAgent(AgentObject):
 
         Return an listing on the listing's DID.
 
-        :param str did: DID of the asset and agent combined.
+        :param str did: DID of the listing.
 
         :return: a registered asset given a DID of the asset
         :type: :class:`.Asset` class
@@ -144,7 +147,7 @@ class SquidAgent(AgentObject):
         For example::
 
             # return the 300 -> 399 records in the search for the text 'weather' in the metadata.
-            my_result = ocean.search_registered_assets('weather', None, 100, 3)
+            my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
         asset_list = None
@@ -154,6 +157,12 @@ class SquidAgent(AgentObject):
 
     @property
     def squid_model(self):
+        """
+        
+        Return an instance of the squid model, for access to the squid library layer
+        :return: squid model object
+        """
+        
         if not self._model:
             options = {
                 'aquarius_url': self._aquarius_url,
