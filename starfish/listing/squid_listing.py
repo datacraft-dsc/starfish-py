@@ -12,33 +12,28 @@ from squid_py.did import did_to_id
 from starfish import Account
 from starfish.models.squid_model import SquidModel
 from starfish.utils.did import did_parse
-from starfish.squid_purchase import SquidPurchase
-from starfish.squid_object import SquidObject
+from starfish.purchase.squid_purchase import SquidPurchase
+from starfish.listing.listing_object import ListingObject
 # from starfish import logger
 
 
-class SquidListing(SquidObject):
+class SquidListing(ListingObject):
     """
 
-    The creation of an asset is normally performed by the :class:`.Ocean` class.
+    The creation of an asset is normally performed by the :class:`.SquidAgent` class.
 
-    :param object ocean: ocean object to use to connect to the ocean network.
+    :param agent: ocean object to use to connect to the ocean network.
+    :type agent: :class:`.SquidAgent`
     :param did: Optional did of the asset.
     :type did: str or None
-    :param purchase_id: Optional purchase_id to assign to this asset.
-    :type purchase_id: str or None
-    :param asset: Optional asset to copy from.
-    :type asset: :class:`.Asset` or None
     :param ddo: Optional DDO to assign to this asset.
     :type ddo: dict or None
 
     """
     def __init__(self, agent, did=None, ddo=None):
         """init a standard ocean object"""
-        SquidObject.__init__(self, agent)
+        ListingObject.__init__(self, agent, did)
 
-        self._id = None
-        self._did = did
         self._ddo = None
         if ddo:
             self._set_ddo(ddo)
@@ -57,7 +52,7 @@ class SquidListing(SquidObject):
 
         """
 
-        model = self.squid_model
+        model = self.agent.squid_model
 
         self._metadata = None
         ddo = model.read_asset(self._did)
@@ -89,17 +84,17 @@ class SquidListing(SquidObject):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        purchase_asset = None
-        model = self.squid_model
+        purchase = None
+        model = self.agent.squid_model
         
         if self.ddo is None:
             self.read()
             
         service_agreement_id = model.purchase_asset(self, account)
         if service_agreement_id:
-            purchase_asset = SquidPurchase(self._agent, service_agreement_id, self)
+            purchase = SquidPurchase(self._agent, self, service_agreement_id)
             
-        return purchase_asset
+        return purchase
 
     def _set_ddo(self, ddo):
         """
@@ -131,10 +126,6 @@ class SquidListing(SquidObject):
         :type: dict
         """
         return self._ddo
-
-    @property
-    def did(self):
-        return self._did
 
     @staticmethod
     def is_did_valid(did):

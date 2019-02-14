@@ -6,10 +6,10 @@ Agent class to provide basic functionality for all Ocean Agents
 
 from starfish import Account
 from starfish.models.squid_model import SquidModel
-from starfish.ocean_object import OceanObject
-from starfish.squid_listing import SquidListing
+from starfish.listing.squid_listing import SquidListing
+from starfish.agent.agent_object import AgentObject
 
-class SquidAgent(OceanObject):
+class SquidAgent(AgentObject):
     """
 
     Squid Agent class allows you to cover Ocean squid functionality by inheriting this class.
@@ -24,11 +24,12 @@ class SquidAgent(OceanObject):
 
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
-        OceanObject.__init__(self, ocean)
+        AgentObject.__init__(self, ocean)
         self._model = None
 
-        if isinstance(args[0], dict):
+        if args and len(args) > 0 and isinstance(args[0], dict):
             kwargs = args[0]
+
         self._aquarius_url = kwargs.get('aquarius_url', 'http://localhost:5000')
         self._brizo_url = kwargs.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
@@ -37,7 +38,7 @@ class SquidAgent(OceanObject):
     def register(self, metadata, account):
         """
 
-        Register an asset with the ocean network.
+        Register a squid asset with the ocean network.
 
         :param dict metadata: metadata dictionary to store for this asset.
         :param object account: Ocean account to use to register this asset.
@@ -54,7 +55,7 @@ class SquidAgent(OceanObject):
                 print(f'registered my asset with the did {asset.did}')
 
         """
-        
+
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
@@ -69,7 +70,7 @@ class SquidAgent(OceanObject):
             listing = SquidListing(self, ddo=ddo)
 
         return listing
-        
+
 
     def get_listing(self, did):
         """
@@ -87,7 +88,7 @@ class SquidAgent(OceanObject):
             listing = SquidListing(self, did)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')
-            
+
         return listing
 
 

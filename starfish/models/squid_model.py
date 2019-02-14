@@ -15,14 +15,13 @@ from squid_py import (
     ServiceTypes
 )
 
-from starfish.ocean_object import OceanObject
 
 # from starfish import logger
 
-class SquidModel(OceanObject):
+class SquidModel():
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
-        OceanObject.__init__(self, ocean)
+        self._ocean = ocean
         
         if not isinstance(options, dict):
             options = {}

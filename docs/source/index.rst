@@ -18,7 +18,9 @@ Contents
     getting_started
     modules/starfish
     classes/ocean
-    classes/account
-    classes/config
-    classes/agent
-    classes/asset
+    classes/account/account
+    classes/agent/listing_agent
+    classes/agent/squid_agent
+    classes/listing/listing
+    classes/listing/squid_listing
+    classes/purchase/squid_purchase

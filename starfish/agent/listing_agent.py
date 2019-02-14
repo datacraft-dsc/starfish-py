@@ -6,10 +6,9 @@ Agent class to provide basic functionality for all Ocean Agents
 
 from starfish import Account
 from starfish.models.squid_model import SquidModel
+from starfish.agent.agent_object import AgentObject
 
-from starfish.ocean_object import OceanObject
-
-class ListingAgent(OceanObject):
+class ListingAgent(AgentObject):
     """
 
     Listing Agent class allows you to get and register listings.
@@ -18,27 +17,32 @@ class ListingAgent(OceanObject):
 
     def __init__(self, ocean):
         """init a standard ocean object"""
-        OceanObject.__init__(self, ocean)
+        AgentObject.__init__(self, ocean)
 
 
-    def register(self, metadata):
+    def register(self, metadata, **kwargs):
         """
 
-        Register an asset using the **off chain** system using an metadata storage agent
+        Register an asset by writing it's meta data to the meta storage agent
 
-        :param dict metadata: metadata dictonary to store for this asset.
+        :param metadata: dict of the metadata.
+        :param agent: agent object for perform meta stroage.
 
-        :return: the asset that has been registered
-        :type: :class:`.AssetLight` class
-
+        :return: The new asset registered, or return None on error.
         """
 
-        asset = AssetLight(self)
+        model = MetadataAgentModel(self._ocean)
 
-        # TODO: fix the exit, so that we raise an error or return an asset
-        if asset.register(metadata):
-            return asset
-        return None
+        listing = None
+        register_data = model.register_asset(metadata)
+        if register_data:
+            # assign the did of the agent that we registered this with
+            data_id = asset_data['asset_id']
+            did = f'{agent.did}/{data_id}'
+            
+            listing = Listing(self, did, metadata)
+        return listing
+
         
     def get_asset(self, did):
         """

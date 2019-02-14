@@ -51,15 +51,16 @@ apidoc_separate_modules = True
 apidoc_extra_args = []
 apidoc_excluded_paths = [
   'ocean.py',
-  'config.py',
-  'agent.py',
-  'asset',
   'command_line',
   'constants.py',
   'exceptions.py',
   'logging.py',
   'models',
-  'utils'
+  'utils',
+  'agent',
+  'purchase',
+  'listing',
+  'account',
 ]
 
 # autodoc settings

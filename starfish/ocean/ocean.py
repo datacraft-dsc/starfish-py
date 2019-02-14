@@ -8,9 +8,7 @@ from web3 import (
     HTTPProvider
 )
 
-from starfish import (
-    Account,
-)
+from starfish import Account
 from starfish.models.squid_model import SquidModel
 
 

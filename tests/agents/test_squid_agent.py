@@ -42,7 +42,7 @@ SQUID_AGENT_CONFIG_PARAMS = {
     'parity_url': 'http://localhost:9545',
     'storage_path': 'squid_py.db',
 }
-DOWNLOAD_PATH = 'consume_downloads'
+SQUID_DOWNLOAD_PATH = 'consume_downloads'
 
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
@@ -153,7 +153,7 @@ def test_asset():
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
 
-    purchase_asset.consume(purchase_account, DOWNLOAD_PATH)
+    purchase_asset.consume(purchase_account, SQUID_DOWNLOAD_PATH)
 
 
 
