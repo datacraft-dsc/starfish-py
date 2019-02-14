@@ -11,10 +11,11 @@ from web3 import Web3
 
 from starfish import (
     Ocean,
-    SquidAgent,
     logger
 )
 from starfish.models.squid_model import SquidModel
+from starfish.agent import SquidAgent
+
 from starfish.logging import setup_logging
 
 from squid_py.service_agreement.service_factory import ServiceDescriptor
