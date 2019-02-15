@@ -34,7 +34,7 @@ class SquidAgent(AgentObject):
     Example how to use this agent: ::
 
         # First import the classes
-        from starfish.SquidAgent import SquidAgent
+        from starfish.agent import SquidAgent
         from starfish import Ocean
 
         # create the ocean object
