@@ -1,7 +1,7 @@
-Agent class
-===========
+Agent Classes
+=============
 
-.. autoclass:: starfish.Agent
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
+
+    agent/listing_agent
+    agent/squid_agent

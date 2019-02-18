@@ -7,10 +7,13 @@ import sys
 import logging
 
 
-from starfish.command_line import CommandLine
+from starfish.command_line import (
+    CommandLine,
+    Config
+)
+    
 from starfish.exceptions import OceanCommandLineError
 
-from starfish import Config
 
 DEFAULT_CONFIG_FILE = 'config_local.ini'
 

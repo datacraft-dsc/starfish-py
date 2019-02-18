@@ -16,9 +16,10 @@ Contents
     :glob:
 
     getting_started
+    register_an_asset
     modules/starfish
     classes/ocean
-    classes/account
-    classes/config
+    classes/account/account
     classes/agent
-    classes/asset
+    classes/listing
+    classes/purchase
