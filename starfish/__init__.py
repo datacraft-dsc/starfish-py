@@ -4,9 +4,6 @@
     This module contains the following classes
 
     * :class:`Account` The Account class.
-    * :class:`Agent` The Agent wrapper class.
-    * :class:`Asset` The Asset class.
-    * :class:`Config` The Config data class.
     * :class:`Ocean` The main Ocean connection class.
     * :data:`logger` The logger class.
 """
@@ -19,9 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from .account import Account
-from .agent import Agent
-from .asset.asset import Asset
-from .asset.asset_light import AssetLight
-from .config import Config
-from .ocean import Ocean
+from starfish.account.account import Account
+from starfish.ocean.ocean import Ocean
+
+

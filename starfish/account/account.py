@@ -4,7 +4,10 @@ Account class to provide basic functionality for all Ocean Accounts
 
 """
 
-class Account():
+from starfish.account.account_object import AccountObject
+from starfish.models.squid_model import SquidModel
+
+class Account(AccountObject):
     """
 
     Account class, adds functionality for an account to be used by the Ocean network.
@@ -30,16 +33,16 @@ class Account():
 
     def __init__(self, ocean, address, password=None):
         """init a standard ocean agent"""
-        self._ocean = ocean
+        AccountObject.__init__(self, ocean)
         self._address = None
         self._password = None
         self._unlock_squid_account = None
 
         if isinstance(address, dict):
-            self.set_address(address.get('address'))
+            self._address = address.get('address')
             self._password = address.get('password')
         elif isinstance(address, str):
-            self.set_address(address)
+            self._address = address
             self._password = password
 
     def unlock(self, password=None):
@@ -66,7 +69,8 @@ class Account():
         self._unlock_squid_account = self._squid_account
         if self._unlock_squid_account:
             self._unlock_squid_account.password = password
-            self._unlock_squid_account.unlock()
+            return True
+        return False
 
     def lock(self):
         """
@@ -99,10 +103,11 @@ class Account():
         >>> account.request_tokens(100)
         100
         """
-        squid_account = self._squid_account
-        if squid_account:
-            return squid_account.request_tokens(amount)
-        return 0
+        model = SquidModel(self._ocean)
+        if not self._unlock_squid_account:
+            raise ValueError('You must unlock the account before requesting tokens')
+
+        return model.request_tokens(self._unlock_squid_account, amount)
 
     def is_address_equal(self, address):
         """
@@ -146,13 +151,9 @@ class Account():
 
         if self._unlock_squid_account:
             return self._unlock_squid_account
-        else:
-            address = self.as_checksum_address
-            if self._address:
-                account_list = self._ocean._squid.get_accounts()
-                if address in account_list:
-                    return account_list[address]
-        return None
+
+        model = SquidModel(self._ocean)
+        return model.get_account(self.as_checksum_address)
 
     @property
     def address(self):
@@ -186,16 +187,6 @@ class Account():
         if self._address:
             return self._ocean._web3.toChecksumAddress(self._address.lower())
         return None
-
-    def set_address(self, address):
-        """
-
-        Sets the address and converts the address to a ethereum checksum address
-
-        :param str address: new address to set for this account
-
-        """
-        self._address = address
 
     @property
     def password(self):
@@ -239,11 +230,13 @@ class Account():
         101
 
         """
+        model = SquidModel(self._ocean)
         squid_account = self._squid_account
         if squid_account:
-            return squid_account.ocean_balance
+            balance = model.get_account_balance(squid_account)
+            if balance:
+                return balance.eth
         return 0
-
 
     @property
     def ether_balance(self):
@@ -258,7 +251,10 @@ class Account():
         1000000001867769600000000000
 
         """
+        model = SquidModel(self._ocean)
         squid_account = self._squid_account
         if squid_account:
-            return squid_account.ether_balance
+            balance = model.get_account_balance(self._squid_account)
+            if balance:
+                return balance.ocn
         return 0

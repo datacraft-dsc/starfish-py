@@ -6,20 +6,18 @@ import requests
 from web3 import Web3
 
 from squid_py.did_resolver.did_resolver import DIDResolver
-from squid_py.ddo import DDO
+from squid_py.ddo.ddo import DDO
 
-from starfish.models.model_base import ModelBase
 from starfish import logger
 
 # service endpoint type name to use for this agent
 METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
 METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
 
-class MetadataAgentModel(ModelBase):
+class MetadataAgentModel():
     def __init__(self, ocean, did = None, authorization=None):
         """init a standard ocan connection, with a given DID"""
-        ModelBase.__init__(self, ocean)
-
+        self._ocean = ocean
         self._did = did
         self._ddo = None
         self._register_name = METADATA_MARKET_AGENT_ENDPOINT_NAME

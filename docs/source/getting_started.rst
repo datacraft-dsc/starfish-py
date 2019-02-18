@@ -21,8 +21,8 @@ Install the library
         pip install -r requirements_dev.txt
 
 
-Startup a local ocean node (``barge``)
---------------------------------------
+Startup a local ocean test node (``barge``)
+-------------------------------------------
 
     Create the local testing environment using the barge_ repo.
 
@@ -66,4 +66,4 @@ Run the unit tests
 
     .. code-block:: console
 
-        python3 setup.py test
+        python3 -m pytest tests

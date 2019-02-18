@@ -55,13 +55,17 @@ apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
 apidoc_excluded_paths = [
-  'asset_*.py',
+  'ocean.py',
   'command_line',
   'constants.py',
   'exceptions.py',
   'logging.py',
   'models',
-  'utils'
+  'utils',
+  'agent',
+  'purchase',
+  'listing',
+  'account',
 ]
 
 # autodoc settings

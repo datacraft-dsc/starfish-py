@@ -5,28 +5,31 @@
 
 """
 from web3 import Web3
-
 from squid_py.did import id_to_did
-
 from eth_utils import remove_0x_prefix
-from starfish.asset.asset_base import AssetBase
+
 from starfish.models.metadata_agent_model import MetadataAgentModel
 from starfish.utils.did import did_parse
+from starfish.listing import ListingObject
 
 # from starfish import logger
 
-class AssetLight(AssetBase):
+class Listing(ListingObject):
     """
 
-        :param ocean: ocean object to use to connect to the ocean network.
-        :param did: Optional did of the asset.
+        :param agent: agent object that was used to create this listing
+        :type agent: :class:`agent.ListingAgent`
+        :param did: Optional did for this listing.
+        :type did: str or None
+        :param metadata: Optional metadata for the asset
+        :type metadata: dict or None
 
     """
-    def __init__(self, ocean, did=None):
+    def __init__(self, agent, did=None, metadata=None):
         """
         init an asset class with the following:
         """
-        AssetBase.__init__(self, ocean, did)
+        ListingObject.__init__(self, agent, did, metadata)
 
         if self._did:
             # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
@@ -36,37 +39,16 @@ class AssetLight(AssetBase):
                 self._id = remove_0x_prefix(Web3.toHex(hexstr=data['path']))
 
 
-    def register(self, metadata, **kwargs):
-        """
-
-        Register an asset by writing it's meta data to the meta storage agent
-
-        :param metadata: dict of the metadata.
-        :param agent: agent object for perform meta stroage.
-
-        :return: The new asset registered, or return None on error.
-        """
-
-        model = MetadataAgentModel(self._ocean)
-
-        self._metadata = None
-        asset_data = model.register_asset(metadata)
-        if asset_data:
-            # assign the did of the agent that we registered this with
-            self._id = asset_data['asset_id']
-            self._did = f'{agent.did}/{self._id}'
-            self._metadata = metadata
-        return self._metadata
-
     def read(self):
         """
 
-        Reads the asset metadata from an Ocean Agent, using the agents DID.
+        Reads the listing from the agent using the listing's DID.
 
-        :return: metadata read for this asset, if non found then return None.
+        :return: metadata read for this listing, if non found then return None.
         """
 
-        model = MetadataAgentModel(self._ocean, did=self._agent_did)
+        self._metadata = None
+        model = MetadataAgentModel(self._agent, did=self._agent_did)
         asset_data = model.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with
