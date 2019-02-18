@@ -40,17 +40,17 @@ class SquidModel():
         :param account: account to register the asset
         """
         squid_ocean = self.get_squid_ocean(account)
-        return squid_ocean.register_asset(metadata, account._squid_account)
+        return squid_ocean.assets.create(metadata, account._squid_account)
 
     def read_asset(self, did):
         """ read the asset metadata(DDO) using the asset DID """
-        return self._squid_ocean.resolve_asset_did(did)
+        return self._squid_ocean.assets.resolve(did)
 
     def search_assets(self, text, sort=None, offset=100, page=0):
         """
         Search assets from the squid API.
         """
-        ddo_list = self._squid_ocean.search_assets_by_text(text, sort, offset, page)
+        ddo_list = self._squid_ocean.assets.search(text, sort, offset, page)
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
@@ -63,7 +63,7 @@ class SquidModel():
         """
         :return: Owner of the registered service level agreement template, if not registered then return None
         """
-        return self._squid_ocean.keeper.service_agreement.get_template_owner(template_id)
+        return self._squid_ocean._keeper.service_agreement.get_template_owner(template_id)
 
     def register_service_agreement_template(self, template_id, account):
         """
@@ -75,10 +75,10 @@ class SquidModel():
         """
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
-            self._squid_ocean.keeper.service_agreement,
+            self._squid_ocean._keeper.service_agreement,
             account._squid_account,
             template,
-            self._squid_ocean.keeper.network_name
+            self._squid_ocean._keeper.network_name
         )
         return template
 
@@ -95,7 +95,7 @@ class SquidModel():
         service_agreement_id = None
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            service_agreement_id = self._squid_ocean.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account._squid_account)
+            service_agreement_id = self._squid_ocean.assets.order(asset.did, service_agreement.sa_definition_id, account._squid_account)
 
         return service_agreement_id
 
@@ -107,7 +107,7 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean(account, download_path)
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            squid_ocean.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account)
+            squid_ocean.assets.consume(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account)
         print(f'downloads path {download_path}')
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
@@ -145,7 +145,7 @@ class SquidModel():
         register a ddo object on the block chain for this agent
         """
         # register/update the did->ddo to the block chain
-        return self._ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
+        return self._squid_ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
 
 
     def _as_config_dict(self, options=None):
@@ -194,7 +194,7 @@ class SquidModel():
 
     def get_account_balance(self, account):
         return self._squid_ocean.accounts.balance(account)
-        
+
     @property
     def accounts(self):
         return self._squid_ocean.accounts.list()
