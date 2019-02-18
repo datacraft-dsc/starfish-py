@@ -6,6 +6,8 @@ from squid_py.agreements.utils import (
     get_sla_template_path,
     register_service_agreement_template
 )
+from squid_py.config import Config as SquidConfig
+from squid_py.ocean import Ocean as SquidOcean
 
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
 from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
@@ -182,9 +184,20 @@ class SquidModel():
 
         return data
 
+    def get_account(self, address):
+        for account in self.accounts:
+            if account.address == address:
+                return account
+
+    def request_tokens(self, account, value):
+        return self._squid_ocean.accounts.request_tokens(account, value)
+
+    def get_account_balance(self, account):
+        return self._squid_ocean.accounts.balance(account)
+        
     @property
     def accounts(self):
-        return self._squid_ocean.get_accounts()
+        return self._squid_ocean.accounts.list()
 
     @property
     def aquarius_url(self):
