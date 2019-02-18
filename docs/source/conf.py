@@ -15,6 +15,7 @@
 import os
 import sys
 import shutil
+from sphinx.domains.python import PythonDomain
 
 print(os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../'))
@@ -41,6 +42,9 @@ extensions = [
     'sphinxcontrib.apidoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'sphinx.ext.graphviz',
+    'sphinxcontrib.plantuml',
+    'sphinx_automodapi.automodapi',
 ]
 
 # apidoc settings
@@ -96,7 +100,7 @@ language = 'en'
 # This pattern also affects html_static_path and html_extra_path .
 exclude_patterns = []
 
-# The name of the Pygments (syntax highlighting) style to use.
+# The name of the Pygments (syntax highlig1hting) style to use.
 pygments_style = 'sphinx'
 
 highlight_language = 'python3'
@@ -187,3 +191,28 @@ html_static_path = ['_static']
 print("Removing the api/ directory via conf.py, if api/ exists.")
 shutil.rmtree('api', ignore_errors=True)
 print("Done removal.")
+
+# Fix for
+# https://github.com/sphinx-doc/sphinx/issues/3866
+_desired_base_module = 'starfish'
+
+class MyPythonDomain(PythonDomain):
+    def find_obj(self, env, modname, classname, name, type, searchmode=0):
+        """Ensures an object always resolves to the desired module if defined there."""
+        orig_matches = PythonDomain.find_obj(self, env, modname, classname, name, type, searchmode)
+        matches = []
+        for match in orig_matches:
+            match_name = match[0]
+            desired_name = _desired_base_module + '.' + name.strip('.')
+            if match_name == desired_name:
+                matches.append(match)
+                break
+        if matches:
+            return matches
+        else:
+            return orig_matches
+
+
+def setup(sphinx):
+    """Use MyPythonDomain in place of PythonDomain"""
+    sphinx.override_domain(MyPythonDomain)

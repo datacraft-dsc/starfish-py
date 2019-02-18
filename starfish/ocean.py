@@ -30,7 +30,7 @@ class Ocean():
 
     For example to use this class you can do the following::
 
-        from starfish.ocean import Ocean
+        from starfish import Ocean
 
         my_config = {
             'contracts_path': 'artifacts',

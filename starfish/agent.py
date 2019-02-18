@@ -11,7 +11,7 @@ class Agent():
 
     Agent class allows you to cover Ocean Agent functionality by inheriting this class.
 
-    **TBA: Stil in Development**
+    **TBA: Still in Development**
 
     """
 

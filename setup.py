@@ -48,6 +48,8 @@ docs_requirements = [
     'Sphinx',
     'sphinx-rtd-theme',
     'sphinxcontrib-apidoc',
+    'sphinxcontrib.plantuml',
+    'sphinx-automodapi',
     'pygments',
 ]
 

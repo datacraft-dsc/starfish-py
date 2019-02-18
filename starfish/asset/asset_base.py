@@ -10,6 +10,7 @@ class AssetBase(object):
     init an asset class with the following:
 
     :param ocean: ocean object to use to connect to the ocean network.
+    :type ocean: :class:`.Ocean`
     :param did: Optional DID of the asset.
     :param asset: Optional asset to copy from.
     """

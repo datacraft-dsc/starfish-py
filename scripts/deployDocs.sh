@@ -29,13 +29,13 @@ fi
 echo "building docs package $PACKAGE_NAME"
 
 # install dev packages for doc build
-pip install -e .[dev] -U tox-travis
+pip install -q -e .[dev] -U tox-travis
 
 # make the docs from source
 make docs
 
 # package into a tar.gz file for deployment
-(cd "$SOURCE_FILES"; tar -czvf "../../../$DEPLOY_FILENAME" ./)
+(cd "$SOURCE_FILES"; tar -czf "../../../$DEPLOY_FILENAME" ./)
 
 if [ ! -z "$DEPLOY_SERVER" ]; then
     DEPLOY_BUILD_URL="http://${DEPLOY_SERVER}/docs_build"
@@ -53,11 +53,11 @@ if [ ! -z "$DEPLOY_SERVER" ]; then
         mkdir -p "target/$PROJECT_NAME/branches/$DEV_BRANCH"
         mv "$DEPLOY_FILENAME" "target/$PROJECT_NAME/branches/$DEV_BRANCH/"
         env > "target/$PROJECT_NAME/branches/$DEV_BRANCH/env.txt"
-        rsync -auvW --rsh 'ssh -i /tmp/dex-docs-deploy' target/ ${DEPLOY_USER}@${DEPLOY_SERVER}:./
+        rsync -auW --rsh 'ssh -i /tmp/dex-docs-deploy' target/ ${DEPLOY_USER}@${DEPLOY_SERVER}:./
     fi
 
     rm /tmp/dex-docs-deploy
 
-    echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
-    curl -H "Content-Type: application/json" -X POST -d '{"file":"$DEPLOY_FILENAME"}' "$DEPLOY_BUILD_URL"
+    # echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
+    # curl -H "Content-Type: application/json" -X POST -d '{"file":"$DEPLOY_FILENAME"}' "$DEPLOY_BUILD_URL"
 fi

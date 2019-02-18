@@ -25,6 +25,7 @@ class Asset(AssetBase):
     The creation of an asset is normally performed by the :class:`.Ocean` class.
 
     :param object ocean: ocean object to use to connect to the ocean network.
+    :type ocean: :class:`.Ocean`
     :param did: Optional did of the asset.
     :type did: str or None
     :param purchase_id: Optional purchase_id to assign to this asset.
