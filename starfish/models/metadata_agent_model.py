@@ -6,7 +6,7 @@ import requests
 from web3 import Web3
 
 from squid_py.did_resolver.did_resolver import DIDResolver
-from squid_py.ddo import DDO
+from squid_py.ddo.ddo import DDO
 
 from starfish import logger
 

@@ -2,18 +2,22 @@
     SquidModel - Access squid services using the squid-py api
 """
 
+<<<<<<< HEAD
 from squid_py.ocean.ocean import Ocean as SquidOcean
 from squid_py import Config as SquidConfig
 
 from squid_py.service_agreement.utils import (
+=======
+from squid_py.agreements.utils import (
+>>>>>>> 7fed38d12829ac43f77e75aa6ba98ca167c1c47b
     get_sla_template_path,
     register_service_agreement_template
 )
-from squid_py import (
-    ServiceAgreementTemplate,
-    ServiceAgreement,
-    ServiceTypes
-)
+
+from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
+from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
+from squid_py.agreements.service_agreement import ServiceAgreement
+from squid_py.agreements.service_types import ServiceTypes
 
 
 # from starfish import logger
