@@ -22,8 +22,8 @@ from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
+from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
-
 
 from tests.helpers.brizo_mock import BrizoMock
 
@@ -118,6 +118,7 @@ def test_asset():
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
+    # BrizoProvider.set_brizo_class(BrizoMock)
     Brizo.set_http_client(BrizoMock(model.get_squid_ocean(), publisher_account._squid_account))
 
 

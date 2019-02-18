@@ -104,11 +104,10 @@ class SquidModel():
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
-        squid_ocean = self.get_squid_ocean(account, download_path)
+        squid_ocean = self.get_squid_ocean(account)
         service_agreement = self.get_service_agreement_from_asset(asset)
         if service_agreement:
-            squid_ocean.assets.consume(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account)
-        print(f'downloads path {download_path}')
+            squid_ocean.assets.consume(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account, download_path)
 
     def is_access_granted_for_asset(self, asset, service_agreement_id, account):
         """
@@ -207,7 +206,7 @@ class SquidModel():
     def brizo_url(self):
         return self._brizo_url
 
-    def get_squid_ocean(self, account = None, download_path=None):
+    def get_squid_ocean(self, account = None):
         """
 
         Return an instance of squid for an account
@@ -218,10 +217,6 @@ class SquidModel():
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
-
-        if download_path:
-            options['download_path'] = download_path
-
 
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)

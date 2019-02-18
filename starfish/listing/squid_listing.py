@@ -111,7 +111,7 @@ class SquidListing(ListingObject):
         self._id = remove_0x_prefix(did_to_id(self._did))
         self._ddo = ddo
 
-        self._metadata = ddo.get_metadata()
+        self._metadata = ddo.metadata
 
     @property
     def is_empty(self):
