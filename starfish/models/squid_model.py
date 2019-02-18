@@ -10,7 +10,6 @@ from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
-from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 
