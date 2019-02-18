@@ -1,8 +1,7 @@
 import logging
 import json
 from unittest.mock import Mock
-
-from squid_py import ServiceAgreement
+from squid_py.agreements.service_agreement import ServiceAgreement
 
 from starfish.logging import setup_logging
 

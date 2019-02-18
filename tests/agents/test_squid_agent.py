@@ -18,9 +18,9 @@ from starfish.agent import SquidAgent
 
 from starfish.logging import setup_logging
 
-from squid_py.service_agreement.service_factory import ServiceDescriptor
+from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
-from squid_py import ACCESS_SERVICE_TEMPLATE_ID
+from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo import Brizo
 
@@ -61,7 +61,7 @@ def _register_asset_for_sale(agent, account):
 
     metadata = _read_metadata()
     assert metadata
-    
+
     listing = agent.register(metadata, account=account)
     assert listing
     assert listing.did
