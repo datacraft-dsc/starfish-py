@@ -143,8 +143,8 @@ class Ocean():
         """
         model = SquidModel(self)
         accounts = {}
-        for address in model.accounts:
-            account = Account(self, address)
+        for squid_account in model.accounts:
+            account = Account(self, squid_account.address)
             accounts[account.address] = account
         return accounts
 

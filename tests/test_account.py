@@ -47,6 +47,7 @@ def test_account_get_balance():
     ocean = Ocean(CONFIG_PARAMS)
     account = ocean.get_account(PUBLISHER_ACCOUNT)
     assert account
+    assert account.unlock()
     account.request_tokens(1)
     assert account.ocean_balance
     assert account.ether_balance

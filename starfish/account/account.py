@@ -69,7 +69,8 @@ class Account(AccountObject):
         self._unlock_squid_account = self._squid_account
         if self._unlock_squid_account:
             self._unlock_squid_account.password = password
-            self._unlock_squid_account.unlock()
+            return True
+        return False
 
     def lock(self):
         """
@@ -102,10 +103,11 @@ class Account(AccountObject):
         >>> account.request_tokens(100)
         100
         """
-        squid_account = self._squid_account
-        if squid_account:
-            return squid_account.request_tokens(amount)
-        return 0
+        model = SquidModel(self._ocean)
+        if not self._unlock_squid_account:
+            raise ValueError('You must unlock the account before requesting tokens')
+
+        return model.request_tokens(self._unlock_squid_account, amount)
 
     def is_address_equal(self, address):
         """
@@ -151,12 +153,7 @@ class Account(AccountObject):
             return self._unlock_squid_account
 
         model = SquidModel(self._ocean)
-        address = self.as_checksum_address
-        if self._address:
-            account_list = model.accounts
-            if address in account_list:
-                return account_list[address]
-        return None
+        return model.get_account(self.as_checksum_address)
 
     @property
     def address(self):
@@ -233,9 +230,12 @@ class Account(AccountObject):
         101
 
         """
+        model = SquidModel(self._ocean)
         squid_account = self._squid_account
         if squid_account:
-            return squid_account.ocean_balance
+            balance = model.get_account_balance(squid_account)
+            if balance:
+                return balance.eth
         return 0
 
     @property
@@ -251,7 +251,10 @@ class Account(AccountObject):
         1000000001867769600000000000
 
         """
+        model = SquidModel(self._ocean)
         squid_account = self._squid_account
         if squid_account:
-            return squid_account.ether_balance
+            balance = model.get_account_balance(self._squid_account)
+            if balance:
+                return balance.ocn
         return 0
