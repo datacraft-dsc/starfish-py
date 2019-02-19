@@ -19,7 +19,7 @@ install_requirements = [
     'eciespy',
     'pyopenssl',
     'PyJWT',  # not jwt
-    'PyYAML',
+    'PyYAML==4.2b4',
     'web3==4.5.0',
 ]
 
@@ -48,6 +48,8 @@ docs_requirements = [
     'Sphinx',
     'sphinx-rtd-theme',
     'sphinxcontrib-apidoc',
+    'sphinxcontrib-plantuml',
+    'sphinx-automodapi',
     'pygments',
 ]
 

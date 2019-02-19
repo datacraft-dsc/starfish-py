@@ -20,7 +20,8 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ "$3" = "dev" ]; then
-    DEV_BRANCH="true"
+    # create safe branch name
+    DEV_BRANCH=$(echo $TRAVIS_BRANCH | sed -e 's^/^%^g' -e 's/[()<>&*!]/_/g' -e 's/\s/_/g')
 else
     DEV_BRANCH=""
 fi
@@ -28,32 +29,35 @@ fi
 echo "building docs package $PACKAGE_NAME"
 
 # install dev packages for doc build
-pip install -e .[dev] -U tox-travis
+pip install -q -e .[dev] -U tox-travis
 
 # make the docs from source
 make docs
 
 # package into a tar.gz file for deployment
-(cd "$SOURCE_FILES"; tar -czvf "../../../$DEPLOY_FILENAME" ./)
+(cd "$SOURCE_FILES"; tar -czf "../../../$DEPLOY_FILENAME" ./)
 
 if [ ! -z "$DEPLOY_SERVER" ]; then
     DEPLOY_BUILD_URL="http://${DEPLOY_SERVER}/docs_build"
 
     echo "Deploying doc file to $DEPLOY_SERVER"
     openssl aes-256-cbc -K $encrypted_86d65e2fd543_key -iv $encrypted_86d65e2fd543_iv \
-    -in docs/keys/dex-docs-deploy.enc \
+    -in scripts/keys/dex-docs-deploy.enc \
     -out /tmp/dex-docs-deploy -d
 
     chmod 0600 /tmp/dex-docs-deploy
-    scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
-    if [ -n "$DEV_BRANCH" ]; then
+    if [ -z "$DEV_BRANCH" ]; then
+        scp -i /tmp/dex-docs-deploy "$DEPLOY_FILENAME" ${DEPLOY_USER}@${DEPLOY_SERVER}:
+    else
         # for debugging send the environment from travis
-        env > env.txt
-        scp -i /tmp/dex-docs-deploy env.txt ${DEPLOY_USER}@${DEPLOY_SERVER}:
+        mkdir -p "target/$PROJECT_NAME/branches/$DEV_BRANCH"
+        mv "$DEPLOY_FILENAME" "target/$PROJECT_NAME/branches/$DEV_BRANCH/"
+        env > "target/$PROJECT_NAME/branches/$DEV_BRANCH/env.txt"
+        rsync -auW --rsh 'ssh -i /tmp/dex-docs-deploy' target/ ${DEPLOY_USER}@${DEPLOY_SERVER}:./
     fi
 
     rm /tmp/dex-docs-deploy
 
-    echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
-    curl -H "Content-Type: application/json" -X POST -d '{"file":"$DEPLOY_FILENAME"}' "$DEPLOY_BUILD_URL"
+    # echo "requesting docs rebuild at $DEPLOY_BUILD_URL"
+    # curl -H "Content-Type: application/json" -X POST -d '{"file":"$DEPLOY_FILENAME"}' "$DEPLOY_BUILD_URL"
 fi

@@ -19,7 +19,7 @@ class SquidAgent(AgentObject):
     Squid Agent class allows to register and list asset listings.
 
     :param ocean: Ocean object that is being used.
-    :type ocean: :class:`starfish.Ocean`
+    :type ocean: :class:`.Ocean`
     :param aquarius_url: Aquarius url ( http://localhost:5000 ).
     :type aquarius_url: str or None
     :param brizo_url: Brizo url (http://localhost:8030).
