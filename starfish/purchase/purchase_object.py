@@ -33,3 +33,11 @@ class PurchaseObject():
         :type: str
         """
         return self._purchase_id
+        
+    @property
+    def is_purchased(self):
+        """
+        :return: True if this asset is a purchased asset.
+        :type: boolean
+        """
+        return not self._purchase_id is None

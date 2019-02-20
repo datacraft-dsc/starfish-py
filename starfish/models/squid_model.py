@@ -101,7 +101,7 @@ class SquidModel():
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
         service_agreement_id = None
-        service_agreement = self.get_service_agreement_from_asset(ddo)
+        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             service_agreement_id = self._squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
 
@@ -113,7 +113,7 @@ class SquidModel():
 
         """
         squid_ocean = self.get_squid_ocean(account)
-        service_agreement = self.get_service_agreement_from_asset(ddo)
+        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
 
@@ -132,16 +132,6 @@ class SquidModel():
 
         return self._squid_ocean.is_access_granted(service_agreement_id, did, account_address)
 
-    def get_service_agreement_from_asset(self, ddo):
-        """
-        return the service agreement definition for this asset
-        """
-        service_agreement = None
-        if ddo:
-            service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
-            assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
-            service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
-        return service_agreement
 
     def register_ddo(self, did, ddo, account):
         """
@@ -241,3 +231,15 @@ class SquidModel():
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
         return SquidOcean(config)
+
+    @staticmethod
+    def get_service_agreement_from_ddo(ddo):
+        """
+        return the service agreement definition for this asset
+        """
+        service_agreement = None
+        if ddo:
+            service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
+            assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
+            service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
+        return service_agreement

@@ -75,19 +75,3 @@ class SquidPurchase(PurchaseObject):
             raise ValueError('You must pass a valid account')
 
         return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
-
-    @property
-    def is_purchased(self):
-        """
-        :return: True if this asset is a purchased asset.
-        :type: boolean
-        """
-        return not self._purchase_id is None
-
-    @property
-    def purchase_id(self):
-        """
-        :return: The purchase id for this asset, if not purchased then return None.
-        :type: str
-        """
-        return self._purchase_id
