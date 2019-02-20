@@ -11,7 +11,6 @@ from squid_py.did import did_to_id
 
 from starfish import Account
 from starfish.utils.did import did_parse
-from starfish.purchase import SquidPurchase
 from starfish.listing import ListingObject
 
 # from starfish import logger
@@ -25,11 +24,11 @@ class SquidListing(ListingObject):
     :type agent: :class:`.SquidAgent`
     :param did: Optional did of the asset.
     :type did: str or None
-    :param metadata: Optional metadata, in this class it is really the DDO.
-    :type metadata: dict or None
+    :param asset: Optional asset, in this class it is really the wrapped DDO & metadata.
+    :type asset: :class:`.Asset` or None
 
     """
-    def __init__(self, agent, did=None, metadata=None):
+    def __init__(self, agent, asset=None, data=None):
         """
 
         init a standard ocean object.
@@ -37,37 +36,8 @@ class SquidListing(ListingObject):
         so the creator of this class sends the metadata as a DDO.
 
         """
-        ListingObject.__init__(self, agent, did, None)
+        ListingObject.__init__(self, agent, asset, data)
 
-        self._ddo = None
-        if metadata:
-            self._set_ddo(metadata)
-
-        if did:
-            self._id = did_to_id(did)
-
-    def read(self):
-        """
-
-        Read the asset metadata in this case it's the DDO with the metadata
-        included from the off chain metadata agent.
-
-        :return: metadata of the asset, or None if not found in storage.
-        :type: dict
-
-        """
-
-        self._metadata = None
-        model = self.agent.squid_model
-        ddo = model.read_asset(self._did)
-        if ddo:
-            self._set_ddo(ddo)
-
-        # TODO: Resolve the agent endpoints for this asset.
-        # The DID we can get squid to go too the blockchain, resolve the URL then get the DDO
-        # from the DDO we can then decode using the SecretStore brizo url's
-
-        return self._metadata
 
     def purchase(self, account):
         """
@@ -88,49 +58,7 @@ class SquidListing(ListingObject):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        purchase = None
-        model = self.agent.squid_model
-
-        # check to see if we need to read in the listing data
-        if self.ddo is None:
-            self.read()
-
-        service_agreement_id = model.purchase_asset(self, account)
-        if service_agreement_id:
-            purchase = SquidPurchase(self._agent, self, service_agreement_id)
-
-        return purchase
-
-    def _set_ddo(self, ddo):
-        """
-
-        Assign ddo values to the asset id/did and metadata properties
-
-        """
-        self._did = ddo.did
-        self._id = remove_0x_prefix(did_to_id(self._did))
-        self._ddo = ddo
-
-        self._metadata = ddo.metadata
-
-    @property
-    def is_empty(self):
-        """
-
-        Checks to see if this Listinng is empty.
-
-        :return: True if this listing is empty else False.
-        :type: boolean
-        """
-        return self._did is None
-
-    @property
-    def ddo(self):
-        """
-        :return: The ddo assigned with this asset.
-        :type: dict
-        """
-        return self._ddo
+        return self._agent.purchase_asset(self, account)
 
     @staticmethod
     def is_did_valid(did):

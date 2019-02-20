@@ -11,6 +11,8 @@ from starfish import (
 from starfish.models.squid_model import SquidModel
 from starfish.agent import AgentObject
 from starfish.listing import SquidListing
+from starfish.asset import Asset
+from starfish.purchase import SquidPurchase
 
 
 class SquidAgent(AgentObject):
@@ -70,7 +72,7 @@ class SquidAgent(AgentObject):
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
 
-    def register(self, metadata, account):
+    def register_asset(self, metadata, account):
         """
 
         Register a squid asset with the ocean network.
@@ -103,9 +105,11 @@ class SquidAgent(AgentObject):
         model = self.squid_model
 
         ddo = model.register_asset(metadata, account)
+
         listing = None
         if ddo:
-            listing = SquidListing(self, metadata=ddo)
+            asset = Asset(ddo.did, metadata)
+            listing = SquidListing(self, asset, ddo)
 
         return listing
 
@@ -123,7 +127,12 @@ class SquidAgent(AgentObject):
         """
         listing = None
         if SquidListing.is_did_valid(did):
-            listing = SquidListing(self, did)
+            model = self.squid_model
+            ddo = model.read_asset(did)
+
+            if ddo:
+                asset = Asset(ddo.did, ddo.metadata)
+                listing = SquidListing(self, asset, ddo)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')
 
@@ -153,6 +162,26 @@ class SquidAgent(AgentObject):
         model = self.squid_model
         ddo_list = model.search_assets(text, sort, offset, page)
         return ddo_list
+
+    def purchase_asset(self, listing, account):
+
+        purchase = None
+        model = self.squid_model
+
+        service_agreement_id = model.purchase_asset(listing.data, account)
+        if service_agreement_id:
+            purchase = SquidPurchase(self, listing, service_agreement_id)
+
+        return purchase
+
+    def is_access_granted_for_asset(self, asset, purchase_id, account):
+        model = self.squid_model
+        return model.is_access_granted_for_asset(asset.did, purchase_id, account)
+
+
+    def consume_asset(self, listing, purchase_id, account, download_path ):
+        model = self.squid_model
+        return model.consume_asset(listing.data, purchase_id, account, download_path)
 
     @property
     def squid_model(self):

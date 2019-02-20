@@ -62,9 +62,9 @@ def _register_asset_for_sale(agent, account):
     metadata = _read_metadata()
     assert metadata
 
-    listing = agent.register(metadata, account=account)
+    listing = agent.register_asset(metadata, account=account)
     assert listing
-    assert listing.did
+    assert listing.asset.did
     return listing
 
 def _log_event(event_name):
@@ -99,11 +99,11 @@ def test_asset():
     assert listing
     assert publisher_account
 
-    listing_did = listing.did
+    listing_did = listing.asset.did
     # start to test getting the asset from storage
     listing = agent.get_listing(listing_did)
     assert listing
-    assert listing.did == listing_did
+    assert listing.asset.did == listing_did
 
 
     purchase_account = ocean.get_account(PURCHASER_ACCOUNT)

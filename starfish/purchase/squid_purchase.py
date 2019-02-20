@@ -25,8 +25,7 @@ class SquidPurchase(PurchaseObject):
     """
     def __init__(self, agent, listing, purchase_id):
         """init a standard ocean object"""
-        PurchaseObject.__init__(self, agent, listing)
-        self._purchase_id = purchase_id
+        PurchaseObject.__init__(self, agent, listing, purchase_id)
 
     def is_purchase_valid(self, account):
         """
@@ -48,9 +47,7 @@ class SquidPurchase(PurchaseObject):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-
-        model = self.agent.squid_model
-        return model.is_access_granted_for_asset(self._listing, self._purchase_id, account)
+        return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
 
     def consume(self, account, download_path):
         """
@@ -77,8 +74,7 @@ class SquidPurchase(PurchaseObject):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        model = self.agent.squid_model
-        return model.consume_asset(self._listing, self._purchase_id, account, download_path)
+        return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
 
     @property
     def is_purchased(self):

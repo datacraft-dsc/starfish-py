@@ -38,8 +38,8 @@ class ListingAgent(AgentObject):
             # assign the did of the agent that we registered this with
             data_id = asset_data['asset_id']
             did = f'{agent.did}/{data_id}'
-
-            listing = Listing(self, did, metadata)
+            asset = Asset(did, metadata)
+            listing = Listing(self, asset, None)
         return listing
 
 
