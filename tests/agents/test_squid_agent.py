@@ -88,10 +88,11 @@ def test_asset():
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
-    # check to see if the sla template has been registered
+    # check to see if the sla template has been registered, this is only run on
+    # new networks, especially during a travis test run..
     model = SquidModel(ocean)
     if not model.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
-        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account)
+        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account._squid_account)
 
 
 
