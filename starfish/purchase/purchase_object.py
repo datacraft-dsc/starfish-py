@@ -33,7 +33,7 @@ class PurchaseObject():
         :type: str
         """
         return self._purchase_id
-        
+
     @property
     def is_purchased(self):
         """
