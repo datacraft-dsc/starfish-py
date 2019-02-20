@@ -23,5 +23,6 @@ Contents
     classes/ocean
     classes/account/account
     classes/agent
+    classes/asset
     classes/listing
     classes/purchase

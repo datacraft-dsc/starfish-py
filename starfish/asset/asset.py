@@ -8,11 +8,11 @@
 class Asset():
     """
 
-        :param metadata: Optional metadata for the asset
-        :type metadata: dict or None
+    :param dict metadata: metadata for the asset
+    :param str did: did of the asset.
 
     """
-    def __init__(self, did=None, metadata=None):
+    def __init__(self, metadata, did):
         """
         init an asset class
         """

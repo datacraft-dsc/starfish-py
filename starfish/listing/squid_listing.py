@@ -10,7 +10,6 @@ from eth_utils import remove_0x_prefix
 from squid_py.did import did_to_id
 
 from starfish import Account
-from starfish.utils.did import did_parse
 from starfish.listing import ListingObject
 
 # from starfish import logger
@@ -59,18 +58,3 @@ class SquidListing(ListingObject):
             raise ValueError('You must pass a valid account')
 
         return self._agent.purchase_asset(self, account)
-
-    @staticmethod
-    def is_did_valid(did):
-        """
-        Checks to see if the DID string is a valid DID for this type of Asset.
-        This method only checks the syntax of the DID, it does not resolve the DID
-        to see if it is assigned to a valid Asset.
-
-        :param str did: DID string to check to see if it is in a valid format.
-
-        :return: True if the DID is in the format 'did:op:xxxxx'
-        :type: boolean
-        """
-        data = did_parse(did)
-        return not data['path']

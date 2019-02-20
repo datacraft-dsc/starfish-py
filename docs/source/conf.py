@@ -66,6 +66,7 @@ apidoc_excluded_paths = [
   'purchase',
   'listing',
   'account',
+  'asset'
 ]
 
 # autodoc settings

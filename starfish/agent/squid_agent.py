@@ -4,6 +4,7 @@ Agent class to provide basic functionality for all Ocean Agents
 
 """
 
+
 from starfish import (
     Account,
 )
@@ -13,6 +14,7 @@ from starfish.agent import AgentObject
 from starfish.listing import SquidListing
 from starfish.asset import Asset
 from starfish.purchase import SquidPurchase
+from starfish.utils.did import did_parse
 
 
 class SquidAgent(AgentObject):
@@ -109,7 +111,7 @@ class SquidAgent(AgentObject):
 
         listing = None
         if ddo:
-            asset = Asset(ddo.did, metadata)
+            asset = Asset(metadata, ddo.did)
             listing = SquidListing(self, asset, ddo)
 
         return listing
@@ -127,12 +129,12 @@ class SquidAgent(AgentObject):
 
         """
         listing = None
-        if SquidListing.is_did_valid(did):
+        if SquidAgent.is_did_valid(did):
             model = self.squid_model
             ddo = model.read_asset(did)
 
             if ddo:
-                asset = Asset(ddo.did, ddo.metadata)
+                asset = Asset(ddo.metadata, ddo.did)
                 listing = SquidListing(self, asset, ddo)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')
@@ -240,3 +242,18 @@ class SquidAgent(AgentObject):
             }
             self._model = SquidModel(self._ocean, options)
         return self._model
+
+    @staticmethod
+    def is_did_valid(did):
+        """
+        Checks to see if the DID string is a valid DID for this type of Asset.
+        This method only checks the syntax of the DID, it does not resolve the DID
+        to see if it is assigned to a valid Asset.
+
+        :param str did: DID string to check to see if it is in a valid format.
+
+        :return: True if the DID is in the format 'did:op:xxxxx'
+        :type: boolean
+        """
+        data = did_parse(did)
+        return not data['path']
