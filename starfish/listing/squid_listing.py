@@ -22,13 +22,13 @@ class SquidListing(ListingObject):
 
     :param agent: agent object that created this listing.
     :type agent: :class:`.SquidAgent`
-    :param did: Optional did of the asset.
-    :type did: str or None
-    :param asset: Optional asset, in this class it is really the wrapped DDO & metadata.
-    :type asset: :class:`.Asset` or None
+    :param asset: Asset object to set with this listing.
+    :type asset: :class:`.Asset` object
+    :param any data: listing data to provide information about this listing
+    :type data: dict
 
     """
-    def __init__(self, agent, asset=None, data=None):
+    def __init__(self, agent, asset, data):
         """
 
         init a standard ocean object.
@@ -48,7 +48,7 @@ class SquidListing(ListingObject):
         :param account: account to use to purchase this asset.
         :type account: :class:`.Account`
 
-        :return: asset object that has been purchased
+        :return: SquidPurchase object that has information about this listing, asset and purcase id.
         :type: :class:`.SquidPurchase`
 
         """

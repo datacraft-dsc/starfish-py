@@ -78,10 +78,11 @@ class SquidAgent(AgentObject):
         Register a squid asset with the ocean network.
 
         :param dict metadata: metadata dictionary to store for this asset.
-        :param object account: Ocean account to use to register this asset.
+        :param account: Ocean account to use to register this asset.
+        :type account: :class:`.Account` object to use for registration.
 
-        :return: A new :class:`.Asset` object that has been registered, if failure then return None.
-        :type: :class:`.Asset` class
+        :return: A new :class:`.Listing` object that has been registered, if failure then return None.
+        :type: :class:`.Listing` class
 
         For example::
 
@@ -104,7 +105,7 @@ class SquidAgent(AgentObject):
 
         model = self.squid_model
 
-        ddo = model.register_asset(metadata, account)
+        ddo = model.register_asset(metadata, account._squid_account)
 
         listing = None
         if ddo:
@@ -164,24 +165,63 @@ class SquidAgent(AgentObject):
         return ddo_list
 
     def purchase_asset(self, listing, account):
+        """
 
+        Purchase an asset using it's listing and an account.
+
+        :param listing: Listing to use for the purchase.
+        :type listing: :class:`.Listing`
+        :param account: Ocean account to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+
+        """
         purchase = None
         model = self.squid_model
 
-        service_agreement_id = model.purchase_asset(listing.data, account)
+        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
         if service_agreement_id:
             purchase = SquidPurchase(self, listing, service_agreement_id)
 
         return purchase
 
     def is_access_granted_for_asset(self, asset, purchase_id, account):
+        """
+
+        Check to see if the account and purchase_id have access to the assed data.
+
+
+        :param asset: Asset to check for access.
+        :type asset: :class:`.Asset` object
+        :param str purchase_id: purchase id that was used to purchase the asset.
+        :param account: Ocean account to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+
+        :return: True if the asset can be accessed and consumed.
+        :type: boolean
+        """
+
         model = self.squid_model
-        return model.is_access_granted_for_asset(asset.did, purchase_id, account)
+        return model.is_access_granted_for_asset(asset.did, purchase_id, account._squid_account)
 
 
     def consume_asset(self, listing, purchase_id, account, download_path ):
+        """
+        Consume the asset and download the data. The actual payment to the asset
+        provider will be made at this point.
+
+        :param listing: Listing that was used to make the purchase.
+        :type listing: :class:`.Listing`
+        :param str purchase_id: purchase id that was used to purchase the asset.
+        :param account: Ocean account that was used to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+        :param str download_path: path to store the asset data.
+
+        :return: True if the asset has been consumed and downloaded
+        :type: boolean
+
+        """
         model = self.squid_model
-        return model.consume_asset(listing.data, purchase_id, account, download_path)
+        return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
 
     @property
     def squid_model(self):
