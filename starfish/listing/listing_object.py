@@ -4,11 +4,21 @@
 """
 
 class ListingObject():
-    def __init__(self, agent, did, metadata):
+    """
+        Create a basic ListingObject
+
+        :param agent: agent object that created the listing.
+        :type agent: :class:`.Agent` object to assign to this Listing
+        :param asset: the core asset
+        :type asset: :class:`.Asset` object
+        :param data: data of the listing
+        :type data: dict
+    """
+    def __init__(self, agent, asset, data):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
-        self._did = did
-        self._metadata = metadata
+        self._asset = asset
+        self._data = data
 
     @property
     def agent(self):
@@ -20,19 +30,30 @@ class ListingObject():
         return self._agent
 
     @property
-    def did(self):
+    def data(self):
         """
 
-        :return: DID of the listing
-        :type: str
+        :return: data of the listing
+        :type: dict or None
         """
-        return self._did
+        return self._data
 
     @property
-    def metadata(self):
+    def asset(self):
         """
 
-        :return: metadata held by the listing
-        :type: dict
+        :return: asset held by the listing
+        :type: :class:`.Asset`
         """
-        return self._metadata
+        return self._asset
+
+    @property
+    def is_empty(self):
+        """
+
+        Checks to see if this Listinng is empty.
+
+        :return: True if this listing is empty else False.
+        :type: boolean
+        """
+        return self._did is None or self._asset is None

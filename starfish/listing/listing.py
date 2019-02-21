@@ -25,19 +25,11 @@ class Listing(ListingObject):
         :type metadata: dict or None
 
     """
-    def __init__(self, agent, did=None, metadata=None):
+    def __init__(self, agent, asset=None, data=None):
         """
         init an asset class with the following:
         """
-        ListingObject.__init__(self, agent, did, metadata)
-
-        if self._did:
-            # look for did:op:xxxx/yyy, where xxx is the agent and yyy is the asset id
-            data = did_parse(self._did)
-            if data['id_hex'] and data['path']:
-                self._agent_did = id_to_did(data['id_hex'])
-                self._id = remove_0x_prefix(Web3.toHex(hexstr=data['path']))
-
+        ListingObject.__init__(self, agent, asset, data)
 
     def read(self):
         """
