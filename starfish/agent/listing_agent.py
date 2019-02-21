@@ -38,10 +38,10 @@ class ListingAgent(AgentObject):
         register_data = model.register_asset(metadata)
         if register_data:
             # assign the did of the agent that we registered this with
-            data_id = asset_data['asset_id']
-            did = f'{agent.did}/{data_id}'
-            asset = Asset(did, metadata)
-            listing = Listing(self, asset, None)
+            asset_id = asset_data['asset_id']
+            did = f'{agent.did}/{asset_id}'
+            asset = Asset(asset_id, metadata)
+            listing = Listing(self, did, asset, None)
         return listing
 
     def get_listing(self, did):
@@ -52,14 +52,17 @@ class ListingAgent(AgentObject):
         :return: metadata read for this listing, if non found then return None.
         """
 
-        self._metadata = None
+        listing = None
         model = MetadataAgentModel(self._agent, did=self._agent_did)
         asset_data = model.read_asset(self._id)
         if asset_data:
             # assign the did of the agent that we registered this with
-            self._id = asset_data['asset_id']
-            self._metadata = asset_data['metadata_text']
-        return self._metadata
+            metadata = asset_data['metadata_text']
+            asset_id = asset_data['asset_id']
+            did = f'{agent.did}/{asset_id}'
+            asset = Asset(asset_id, metadata)
+            listing = Listing(self,did, asset, None)
+        return listing
 
     def get_asset(self, did):
         """
