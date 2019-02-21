@@ -1,64 +1,93 @@
-"""
-    Asset class to handle the _other_ type of asset storage and addressing.
-
-    **Currently this is in development**
 
 """
-from web3 import Web3
-from squid_py.did import id_to_did
-from eth_utils import remove_0x_prefix
+   Listing class
+"""
 
-from starfish.models.metadata_agent_model import MetadataAgentModel
-from starfish.utils.did import did_parse
-from starfish.listing import ListingObject
+from starfish.account import AccountObject
 
-# from starfish import logger
-
-class Listing(ListingObject):
+class Listing():
     """
+        Create a Listing object
 
-        :param agent: agent object that was used to create this listing
-        :type agent: :class:`agent.ListingAgent`
-        :param did: Optional did for this listing.
-        :type did: str or None
-        :param metadata: Optional metadata for the asset
-        :type metadata: dict or None
-
+        :param agent: agent object that created the listing.
+        :type agent: :class:`.Agent` object to assign to this Listing
+        :param str did: did of the listing, this can be the did of the underling asset.
+        :param asset: the core asset for this listing
+        :type asset: :class:`.Asset` object
+        :param data: data of the listing
+        :type data: dict
     """
-    def __init__(self, agent, asset=None, data=None):
-        """
-        init an asset class with the following:
-        """
-        ListingObject.__init__(self, agent, asset, data)
+    def __init__(self, agent, did, asset, data):
+        """init the the Listing Object Base with the agent instance"""
+        self._agent = agent
+        self._did = did
+        self._asset = asset
+        self._data = data
 
-    def read(self):
-        """
 
-        Reads the listing from the agent using the listing's DID.
-
-        :return: metadata read for this listing, if non found then return None.
+    def purchase(self, account):
         """
 
-        self._metadata = None
-        model = MetadataAgentModel(self._agent, did=self._agent_did)
-        asset_data = model.read_asset(self._id)
-        if asset_data:
-            # assign the did of the agent that we registered this with
-            self._id = asset_data['asset_id']
-            self._metadata = asset_data['metadata_text']
-        return self._metadata
+        Purchase the underlying asset within this listing using the account details, return a purchased asset
+        with the service_agreement_id ( purchase_id ) set.
+
+        :param account: account to use to purchase this asset.
+        :type account: :class:`.Account`
+
+        :return: SquidPurchase object that has information about this listing, asset and purcase id.
+        :type: :class:`.SquidPurchase`
+
+        """
+        if not isinstance(account, AccountObject):
+            raise TypeError('You need to pass an Account object')
+
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
+
+        return self._agent.purchase_asset(self, account)
+
+    @property
+    def agent(self):
+        """
+
+        :return: Agent object that created this listing
+        :type: :class:`.SquidAgent`
+        """
+        return self._agent
+
+    @property
+    def did(self):
+        """
+        :return: did of the listing
+        :type: string
+        """
+        return self._did
+
+    @property
+    def data(self):
+        """
+
+        :return: data of the listing
+        :type: dict or None
+        """
+        return self._data
+
+    @property
+    def asset(self):
+        """
+
+        :return: asset held by the listing
+        :type: :class:`.Asset`
+        """
+        return self._asset
 
     @property
     def is_empty(self):
         """
-        :return: True if this asset is empty.
-        """
-        return self._id is None or self._agent_did is None
 
-    @staticmethod
-    def is_did_valid(did):
+        Checks to see if this Listinng is empty.
+
+        :return: True if this listing is empty else False.
+        :type: boolean
         """
-        :return: True if the did is a valid did for this type of asset.
-        """
-        data = did_parse(did)
-        return data['id_hex'] and data['path']
+        return self._did is None or self._did is None or self._asset is None

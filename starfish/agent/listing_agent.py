@@ -5,6 +5,8 @@ Agent class to provide basic functionality for all Ocean Agents
 """
 
 from starfish.agent import AgentObject
+from starfish.listing import Listing
+
 
 class ListingAgent(AgentObject):
     """
@@ -18,7 +20,7 @@ class ListingAgent(AgentObject):
         AgentObject.__init__(self, ocean)
 
 
-    def register(self, metadata, **kwargs):
+    def register_asset(self, metadata, **kwargs):
         """
 
         Register an asset listing by writing it's listing and meta data to storage
@@ -42,6 +44,22 @@ class ListingAgent(AgentObject):
             listing = Listing(self, asset, None)
         return listing
 
+    def get_listing(self, did):
+        """
+
+        Reads the listing from the agent using the listing's DID.
+
+        :return: metadata read for this listing, if non found then return None.
+        """
+
+        self._metadata = None
+        model = MetadataAgentModel(self._agent, did=self._agent_did)
+        asset_data = model.read_asset(self._id)
+        if asset_data:
+            # assign the did of the agent that we registered this with
+            self._id = asset_data['asset_id']
+            self._metadata = asset_data['metadata_text']
+        return self._metadata
 
     def get_asset(self, did):
         """
@@ -83,3 +101,11 @@ class ListingAgent(AgentObject):
         :type: list of DID strings
         """
         pass
+
+    @staticmethod
+    def is_did_valid(did):
+        """
+        :return: True if the did is a valid did for this type of asset.
+        """
+        data = did_parse(did)
+        return data['id_hex'] and data['path']
