@@ -2,43 +2,65 @@
     SquidModel - Access squid services using the squid-py api
 """
 
-from squid_py.service_agreement.utils import (
+from squid_py.agreements.utils import (
     get_sla_template_path,
     register_service_agreement_template
 )
-from squid_py import (
-    ServiceAgreementTemplate,
-    ServiceAgreement,
-    ServiceTypes
-)
+from squid_py.config import Config as SquidConfig
+from squid_py.ocean import Ocean as SquidOcean
 
-from starfish.models.model_base import ModelBase
+from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
+from squid_py.agreements.service_agreement import ServiceAgreement
+from squid_py.agreements.service_types import ServiceTypes
+
 
 # from starfish import logger
 
-class SquidModel(ModelBase):
-    def __init__(self, ocean):
-        """init a standard ocean agent"""
-        ModelBase.__init__(self, ocean)
+class SquidModel():
+    def __init__(self, ocean, options=None):
+        """init a standard ocean object"""
+        self._ocean = ocean
+
+        if not isinstance(options, dict):
+            options = {}
+
+        self._aquarius_url = options.get('aquarius_url', 'http://localhost:5000')
+        self._brizo_url = options.get('brizo_url', 'http://localhost:8030')
+        self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
+        self._storage_path = options.get('storage_path', 'squid_py.db')
+        self._parity_url = options.get('parity_url', self._ocean.keeper_url)
+
+        self._squid_ocean = self.get_squid_ocean()
 
     def register_asset(self, metadata, account):
         """
+
         Register an asset with the agent storage server
-        :param metadata: metadata to write to the storage server
-        :param account: account to register the asset
+
+        :param dict metadata: metadata to write to the storage server
+        :param object account: squid account to register the asset
         """
-        squid = self._ocean._squid_for_account(account)
-        return squid.register_asset(metadata, account._squid_account)
+        squid_ocean = self.get_squid_ocean(account)
+        return squid_ocean.assets.create(metadata, account)
 
     def read_asset(self, did):
-        """ read the asset metadata(DDO) using the asset DID """
-        return self._ocean._squid.resolve_asset_did(did)
+        """
+
+        Read the asset metadata(DDO) using the asset DID
+
+        :param str did: DID of the asset to read.
+
+        :return: DDO of the read asset or None if not found
+        :type: dict or None
+
+        """
+        return self._squid_ocean.assets.resolve(did)
 
     def search_assets(self, text, sort=None, offset=100, page=0):
         """
         Search assets from the squid API.
         """
-        ddo_list = self._ocean._squid.search_assets_by_text(text, sort, offset, page)
+        ddo_list = self._squid_ocean.assets.search(text, sort, offset, page)
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
@@ -51,7 +73,7 @@ class SquidModel(ModelBase):
         """
         :return: Owner of the registered service level agreement template, if not registered then return None
         """
-        return self._ocean._squid.keeper.service_agreement.get_template_owner(template_id)
+        return self._squid_ocean._keeper.service_agreement.get_template_owner(template_id)
 
     def register_service_agreement_template(self, template_id, account):
         """
@@ -63,40 +85,39 @@ class SquidModel(ModelBase):
         """
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
-            self._ocean._squid.keeper.service_agreement,
-            account._squid_account,
+            self._squid_ocean._keeper.service_agreement,
+            account,
             template,
-            self._ocean._squid.keeper.network_name
+            self._squid_ocean._keeper.network_name
         )
         return template
 
-    def purchase_asset(self, asset, account):
+    def purchase_asset(self, ddo, account):
         """
         Purchase an asset with the agent storage server
-        :param asset: asset to purchase
-        :param account: account unlocked and has sufficient funds to buy this asset
+        :param dict ddo: ddo of the asset
+        :param object account: squid account unlocked and has sufficient funds to buy this asset
 
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
         service_agreement_id = None
-        service_agreement = self.get_service_agreement_from_asset(asset)
+        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            service_agreement_id = self._ocean._squid.purchase_asset_service(asset.did, service_agreement.sa_definition_id, account._squid_account)
+            service_agreement_id = self._squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
 
         return service_agreement_id
 
-    def consume_asset(self, asset, service_agreement_id, account):
+    def consume_asset(self, ddo, service_agreement_id, account, download_path):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
-        downloads_path = self._ocean._squid._downloads_path
-        service_agreement = self.get_service_agreement_from_asset(asset)
+        squid_ocean = self.get_squid_ocean(account)
+        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            self._ocean._squid.consume_service(service_agreement_id, asset.did, service_agreement.sa_definition_id, account._squid_account)
-        print(f'downloads path {downloads_path}')
+            squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
 
-    def is_access_granted_for_asset(self, asset, service_agreement_id, account):
+    def is_access_granted_for_asset(self, did, service_agreement_id, account):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used
         to purchase this asset
@@ -109,34 +130,116 @@ class SquidModel(ModelBase):
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        agreement_address = self._ocean._keeper.service_agreement.get_service_agreement_consumer(service_agreement_id)
-        print(f'agreement address {agreement_address}')
+        return self._squid_ocean.is_access_granted(service_agreement_id, did, account_address)
 
-        return self._ocean._squid.is_access_granted(service_agreement_id, asset.did, account_address)
 
-    def get_service_agreement_from_asset(self, asset):
+    def register_ddo(self, did, ddo, account):
+        """
+        register a ddo object on the block chain for this agent
+        """
+        # register/update the did->ddo to the block chain
+        return self._squid_ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
+
+    def _as_config_dict(self, options=None):
+        """
+
+        Return a set of config values, so that squid can read.
+
+        :param options: optional values to add to the dict to send to squid
+        :type options: dict or None
+
+
+        :return: a dict that is compatiable with the current supported version of squid-py.
+        :type: dict
+
+        """
+        data = {
+            'keeper-contracts': {
+                'keeper.url': self._ocean.keeper_url,
+                'keeper.path': self._ocean.contracts_path,
+                'secret_store.url': self._secret_store_url,
+                'parity.url': self._parity_url,
+            },
+            'resources': {
+                'aquarius.url': self._aquarius_url,
+                'brizo.url': self._brizo_url,
+                'storage.path': self._storage_path,
+            }
+        }
+        if options:
+            if 'parity_address' in options:
+                data['keeper-contracts']['parity.address'] = options['parity_address']
+            if 'parity_password' in options:
+                data['keeper-contracts']['parity.password'] = options['parity_password']
+            if 'download_path' in options:
+                data['resources']['downloads.path'] = options['download_path']
+
+        return data
+
+    def get_account(self, address):
+        """
+        :return: sqiud account object if the address is found, else None
+        :type: object or None
+        """
+        for account in self.accounts:
+            if account.address == address:
+                return account
+
+    def request_tokens(self, account, value):
+        """
+        Request some ocean tokens
+        :param object account: squid account to request
+        :param number value: amount of tokens to request
+        :return: number of tokens requested and added to the account
+        :type: number
+        """
+        return self._squid_ocean.accounts.request_tokens(account, value)
+
+    def get_account_balance(self, account):
+        """
+
+        :param object account: squid account to get the balance for.
+        :return: ethereum and ocean balance of the account
+        :type: tuple(eth,ocn)
+        """
+        return self._squid_ocean.accounts.balance(account)
+
+    @property
+    def accounts(self):
+        return self._squid_ocean.accounts.list()
+
+    @property
+    def aquarius_url(self):
+        return self._aquarius_url
+
+    @property
+    def brizo_url(self):
+        return self._brizo_url
+
+    def get_squid_ocean(self, account = None):
+        """
+
+        Return an instance of squid for an account
+
+        """
+
+        options = {}
+        if account:
+            options['parity_address'] = account.address
+            options['parity_password'] = account.password
+
+        config_params = self._as_config_dict(options)
+        config = SquidConfig(options_dict=config_params)
+        return SquidOcean(config)
+
+    @staticmethod
+    def get_service_agreement_from_ddo(ddo):
         """
         return the service agreement definition for this asset
         """
         service_agreement = None
-        ddo = asset.ddo
-
         if ddo:
             service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
             assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
-
-    @staticmethod
-    def wait_for_event(event, arg_filter, wait_iterations=20):
-        """
-        Method used to wait for the service agreements to complete
-        """
-        _filter = event.createFilter(fromBlock=0, argument_filters=arg_filter)
-        for check in range(wait_iterations):
-            if not check:
-                raise AssertionError
-            events = _filter.get_all_entries()
-            if events:
-                return events[0]
-            time.sleep(0.5)

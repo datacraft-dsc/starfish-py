@@ -7,8 +7,8 @@ Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user acce
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/starfish-py.svg)](https://travis-ci.com/DEX-Company/starfish-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Squid Version](https://img.shields.io/badge/squid--py-v0.3.2-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.3.2)
-[![Barge Version](https://img.shields.io/badge/barge-dex--2019--02--01-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-02-01)
+[![Squid Version](https://img.shields.io/badge/squid--py-v0.4.2-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.3.2)
+[![Barge Version](https://img.shields.io/badge/barge-dex--2019--02--18-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-02-01)
 
 ---
 
@@ -50,7 +50,7 @@ Python 3.6
     ```
     git clone https://github.com/DEX-Company/barge.git
     cd barge
-    git checkout tags/dex-2019-02-01
+    git checkout tags/dex-2019-02-18
     ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
     ```
 

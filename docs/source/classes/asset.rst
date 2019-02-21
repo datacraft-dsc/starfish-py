@@ -1,7 +1,7 @@
 Asset class
 ===========
 
-.. autoclass:: starfish.Asset
+.. autoclass:: starfish.asset.Asset
     :members:
     :undoc-members:
     :show-inheritance:

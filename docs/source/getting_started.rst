@@ -21,8 +21,8 @@ Install the library
         pip install -r requirements_dev.txt
 
 
-Startup a local ocean node (``barge``)
---------------------------------------
+Startup a local ocean test node (``barge``)
+-------------------------------------------
 
     Create the local testing environment using the barge_ repo.
 
@@ -33,7 +33,7 @@ Startup a local ocean node (``barge``)
 
         git clone https://github.com/DEX-Company/barge.git
         cd barge
-        git checkout tags/dex-2019-02-01
+        git checkout tags/dex-2019-02-18
         ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
 
     So you should now have two folders::
@@ -66,4 +66,4 @@ Run the unit tests
 
     .. code-block:: console
 
-        python3 setup.py test
+        python3 -m pytest tests
