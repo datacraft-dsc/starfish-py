@@ -118,19 +118,23 @@ class Ocean():
 
     def search_operations(self, text, limit=10):
         """
+        
         Search the off chain storage for an operation that matches 'text'
+
         :param str text: Search for 'text' in metadata.
         :param int limit: Limit the result. If not provided, default is 10
         :return: a list of where each object is a 2-tuple (service provider did, operation did)
         :type: list of 2-tuple strings
-        For example::
+
+        For example: ::
+
             # return the first 10 records in the search for operations that do model training
             #
             my_result = ocean.search_operations('model_training')
         """
         ## To be implemented
         return []
-        
+
     def get_account(self, address, password=None):
         """
         Get an account object based on it's address
