@@ -11,7 +11,7 @@ from starfish import (
 
 from starfish.models.squid_model import SquidModel
 from starfish.agent import AgentObject
-from starfish.listing import SquidListing
+from starfish.listing import Listing
 from starfish.asset import Asset
 from starfish.purchase import SquidPurchase
 from starfish.utils.did import did_parse
@@ -112,7 +112,7 @@ class SquidAgent(AgentObject):
         listing = None
         if ddo:
             asset = Asset(metadata, ddo.did)
-            listing = SquidListing(self, asset, ddo)
+            listing = Listing(self, ddo.did, asset, ddo)
 
         return listing
 
@@ -135,7 +135,7 @@ class SquidAgent(AgentObject):
 
             if ddo:
                 asset = Asset(ddo.metadata, ddo.did)
-                listing = SquidListing(self, asset, ddo)
+                listing = Listing(self, ddo.did, asset, ddo)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')
 
