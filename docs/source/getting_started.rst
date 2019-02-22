@@ -66,4 +66,4 @@ Run the unit tests
 
     .. code-block:: console
 
-        python3 -m pytest tests
+        python3 setup.py test
