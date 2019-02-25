@@ -3,7 +3,7 @@
     Basic Purchase class
 """
 
-from starfish import Account
+from starfish.account import Account
 
 
 class Purchase():

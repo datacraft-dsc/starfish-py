@@ -5,11 +5,9 @@ Agent class to provide basic functionality for all Ocean Agents
 """
 
 
-from starfish import (
-    Account,
-)
 
 from starfish.models.squid_model import SquidModel
+from starfish.account import Account
 from starfish.agent import Agent
 from starfish.listing import Listing
 from starfish.asset import Asset
