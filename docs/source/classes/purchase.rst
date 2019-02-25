@@ -1,6 +1,7 @@
-Purchase Classes
-================
+Purchase class
+====================
 
-.. toctree::
-
-    purchase/squid_purchase
+.. autoclass:: starfish.purchase.Purchase
+    :members:
+    :undoc-members:
+    :show-inheritance:
