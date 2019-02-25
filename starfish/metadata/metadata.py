@@ -1,14 +1,13 @@
 """
-    Asset class to handle the _other_ type of asset storage and addressing.
+    Metadata class to handle the asset storage and addressing.
 
     **Currently this is in development**
 
 """
-from starfish.metadata.metadata_object import MetadataObject
 
 # from starfish import logger
 
-class Metadata(MetadataObject):
+class Metadata():
     """
 
     :param agent: agent object to used to create
@@ -21,4 +20,21 @@ class Metadata(MetadataObject):
         """
         init an asset class with the following:
         """
-        MetadataObject.__init__(self, agent, metadata)
+        self._agent = agent
+        self._metadata = metadata
+
+    @property
+    def agent(self):
+        """
+        :return: Agent object
+        :type: :class:`.AgentObject`
+        """
+        return self._agent
+
+    @property
+    def data(self):
+        """
+        :return: metadata of the asset
+        :type: dict
+        """
+        return self._metadata

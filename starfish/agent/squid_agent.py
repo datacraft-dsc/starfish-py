@@ -10,14 +10,14 @@ from starfish import (
 )
 
 from starfish.models.squid_model import SquidModel
-from starfish.agent import AgentObject
+from starfish.agent import Agent
 from starfish.listing import Listing
 from starfish.asset import Asset
-from starfish.purchase import SquidPurchase
+from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
 
 
-class SquidAgent(AgentObject):
+class SquidAgent(Agent):
     """
 
     Squid Agent class allows to register and list asset listings.
@@ -63,7 +63,7 @@ class SquidAgent(AgentObject):
 
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
-        AgentObject.__init__(self, ocean)
+        Agent.__init__(self, ocean)
         self._model = None
 
         if args and isinstance(args[0], dict):
@@ -182,7 +182,7 @@ class SquidAgent(AgentObject):
 
         service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
         if service_agreement_id:
-            purchase = SquidPurchase(self, listing, service_agreement_id)
+            purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
 

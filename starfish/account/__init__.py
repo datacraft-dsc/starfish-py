@@ -1,2 +1,2 @@
 
-from starfish.account.account_object import AccountObject
+from starfish.account.account import Account

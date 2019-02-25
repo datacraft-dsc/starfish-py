@@ -4,10 +4,9 @@ Account class to provide basic functionality for all Ocean Accounts
 
 """
 
-from starfish.account.account_object import AccountObject
 from starfish.models.squid_model import SquidModel
 
-class Account(AccountObject):
+class Account():
     """
 
     Account class, adds functionality for an account to be used by the Ocean network.
@@ -33,7 +32,7 @@ class Account(AccountObject):
 
     def __init__(self, ocean, address, password=None):
         """init a standard ocean agent"""
-        AccountObject.__init__(self, ocean)
+        self._ocean = ocean
         self._address = None
         self._password = None
         self._unlock_squid_account = None
@@ -124,6 +123,17 @@ class Account(AccountObject):
         True
         """
         return self.as_checksum_address == self._ocean._web3.toChecksumAddress(address)
+
+    @property
+    def ocean(self):
+        """
+
+        Return the :class:`.Ocean` object for this account
+        :return: The main ocean class
+        :type: :class:`.Ocean`
+
+        """
+        return self._ocean
 
     @property
     def is_valid(self):

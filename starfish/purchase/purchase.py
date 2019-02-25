@@ -1,32 +1,30 @@
 
 """
-
-SquidPurchase class to hold Squid purchased asset information.
-
+    Basic Purchase class
 """
 
 from starfish import Account
-from starfish.purchase import PurchaseObject
 
-# from starfish import logger
 
-class SquidPurchase(PurchaseObject):
+class Purchase():
     """
 
-    This class is returned by purchasing an asset uning the :func:`.SquidListing.purchase` method.
+    This class is returned by purchasing an asset uning the :func:`.Listing.purchase` method.
 
     :param agent: agent that was used create this object.
-    :type agent: :class:`.SquidAgent`
+    :type agent: :class:`.Agent`
     :param listing: Listing used to purchase this asset.
-    :type listing: :class:`.SquidListing`
+    :type listing: :class:`.Listing`
     :param purchase_id: purchase_id used to buy this asset.
     :type purchase_id: str
 
     """
-    def __init__(self, agent, listing, purchase_id):
-        """init a standard ocean object"""
-        PurchaseObject.__init__(self, agent, listing, purchase_id)
 
+    def __init__(self, agent, listing, purchase_id):
+        """init the the Purchase Object Base with the agent instance"""
+        self._agent = agent
+        self._listing = listing
+        self._purchase_id = purchase_id
     def is_purchase_valid(self, account):
         """
 
@@ -75,3 +73,35 @@ class SquidPurchase(PurchaseObject):
             raise ValueError('You must pass a valid account')
 
         return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
+
+    @property
+    def agent(self):
+        """
+        :return: Agent object
+        :type: :class:`.AgentObject`
+        """
+        return self._agent
+
+    @property
+    def listing(self):
+        """
+        :return: Listing object
+        :type: :class:`.ListingObject'`
+        """
+        return self._listing
+
+    @property
+    def purchase_id(self):
+        """
+        :return: purchase id
+        :type: str
+        """
+        return self._purchase_id
+
+    @property
+    def is_purchased(self):
+        """
+        :return: True if this asset is a purchased asset.
+        :type: boolean
+        """
+        return not self._purchase_id is None

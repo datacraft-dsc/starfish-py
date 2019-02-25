@@ -3,7 +3,7 @@
    Listing class
 """
 
-from starfish.account import AccountObject
+from starfish.account import Account
 
 class Listing():
     """
@@ -38,7 +38,7 @@ class Listing():
         :type: :class:`.SquidPurchase`
 
         """
-        if not isinstance(account, AccountObject):
+        if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
         if not account.is_valid:
