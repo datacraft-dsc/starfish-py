@@ -179,6 +179,8 @@ class SquidAgent(Agent):
         model = self.squid_model
 
         service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        metadata=listing.asset.metadata
+        print(' purchase_asset: metadata ', metadata)
         if service_agreement_id:
             purchase = Purchase(self, listing, service_agreement_id)
 
@@ -222,6 +224,26 @@ class SquidAgent(Agent):
         """
         model = self.squid_model
         return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
+
+    def invoke_operation(self, listing, purchase_id, account, payload ):
+        """
+        Invoke the operation
+
+        :param listing: Listing that was used to make the purchase.
+        :type listing: :class:`.Listing`
+        :param str purchase_id: purchase id that was used to purchase the asset.
+        :param account: Ocean account that was used to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+        :param str payload: params required for the operation 
+
+        :return: True if the operation was invoked
+        :type: boolean
+
+        """
+        model = self.squid_model
+        # TBD
+        return 0 
+
 
     @property
     def squid_model(self):

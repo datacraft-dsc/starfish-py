@@ -1,15 +1,15 @@
 
 """
-    Basic Purchase class
+    Operation class
 """
 
 from starfish.account import Account
 from starfish.purchase.purchaseabc import PurchaseABC
 
-class Purchase(PurchaseABC):
+class Operation(PurchaseABC):
     """
 
-    This class is returned by purchasing an asset uning the :func:`.Listing.purchase` method.
+    This class is returned by purchasing an invokable asset uning the :func:`.Listing.purchase` method.
 
     :param agent: agent that was used create this object.
     :type agent: :class:`.Agent`
@@ -21,8 +21,8 @@ class Purchase(PurchaseABC):
     """
 
     def __init__(self, agent, listing, purchase_id):
-        """init the the Purchase Object Base with the agent instance"""
-        super().__init__(agent,listing,purchase_id)
+        """init the the Operation Object Base with the agent instance"""
+        super(Operation, self).__init__()
 
     def is_purchase_valid(self, account):
         """
@@ -46,7 +46,7 @@ class Purchase(PurchaseABC):
 
         return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
 
-    def consume(self, account, download_path):
+    def invoke(self, account, payload):
         """
 
         Consume a purchased asset. This call will try to download the asset data.
@@ -71,7 +71,7 @@ class Purchase(PurchaseABC):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
+        return self._agent.invoke_operation(self._listing, self._purchase_id, account, payload)
 
     @property
     def is_purchased(self):
