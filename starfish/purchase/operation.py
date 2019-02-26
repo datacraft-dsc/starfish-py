@@ -3,8 +3,10 @@
     Operation class
 """
 
+import logging
 from starfish.account import Account
 from starfish.purchase.purchaseabc import PurchaseABC
+logger = logging.getLogger('ocean')
 
 class Operation(PurchaseABC):
     """
@@ -22,7 +24,7 @@ class Operation(PurchaseABC):
 
     def __init__(self, agent, listing, purchase_id):
         """init the the Operation Object Base with the agent instance"""
-        super(Operation, self).__init__()
+        super().__init__(agent, listing, purchase_id)
 
     def is_purchase_valid(self, account):
         """
@@ -49,14 +51,14 @@ class Operation(PurchaseABC):
     def invoke(self, account, payload):
         """
 
-        Consume a purchased asset. This call will try to download the asset data.
+        Call invoke
 
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
         :param account: account to used to consume this asset.
         :type account: :class:`.Account`
-        :param str download_path: Path to download the asset files too.
+        :param str payload: Json payload that the invoke operation needs.
 
         :return: data returned from the asset , or False
         :type: object or False
@@ -70,7 +72,7 @@ class Operation(PurchaseABC):
 
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
-
+        logger.info(f'KK calling invoke with payload: {payload}')
         return self._agent.invoke_operation(self._listing, self._purchase_id, account, payload)
 
     @property

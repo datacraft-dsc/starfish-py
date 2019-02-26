@@ -12,8 +12,9 @@ from starfish.agent import Agent
 from starfish.listing import Listing
 from starfish.asset import Asset
 from starfish.purchase import Purchase
+from starfish.purchase import Operation
 from starfish.utils.did import did_parse
-
+import json
 
 class SquidAgent(Agent):
     """
@@ -178,11 +179,22 @@ class SquidAgent(Agent):
         purchase = None
         model = self.squid_model
 
-        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        ##avoid calling the default purchase (ocean.assets.order...), which uses callbacks
+        ## to consume an asset
         metadata=listing.asset.metadata
-        print(' purchase_asset: metadata ', metadata)
+        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
+        invokable=not(invoke_endpoint == "asset")
+        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        with open('/tmp/a.txt', 'a') as the_file:
+            the_file.write(' invokable : ')
+            the_file.write(str(invokable))
+            the_file.write(' \n ')
+            the_file.write(json.dumps(metadata))
         if service_agreement_id:
-            purchase = Purchase(self, listing, service_agreement_id)
+            if invokable==True:
+                purchase = Operation(self, listing, service_agreement_id)
+            else:
+                purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
 
