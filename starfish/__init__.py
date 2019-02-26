@@ -16,7 +16,4 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from starfish.account.account import Account
 from starfish.ocean.ocean import Ocean
-
-

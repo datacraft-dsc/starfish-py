@@ -21,7 +21,7 @@ Contents
     register_an_asset
     modules/starfish
     classes/ocean
-    classes/account/account
+    classes/account
     classes/agent
     classes/asset
     classes/listing

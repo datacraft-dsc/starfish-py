@@ -4,11 +4,11 @@ Agent class to provide basic functionality for all Ocean Agents
 
 """
 
-from starfish.agent import AgentObject
+from starfish.agent import Agent
 from starfish.listing import Listing
 
 
-class ListingAgent(AgentObject):
+class ListingAgent(Agent):
     """
 
     Listing Agent class allows you to get and register listings.
@@ -17,7 +17,7 @@ class ListingAgent(AgentObject):
 
     def __init__(self, ocean):
         """init a standard ocean object"""
-        AgentObject.__init__(self, ocean)
+        Agent.__init__(self, ocean)
 
 
     def register_asset(self, metadata, **kwargs):

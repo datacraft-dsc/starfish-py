@@ -8,7 +8,7 @@ from web3 import (
     HTTPProvider
 )
 
-from starfish import Account
+from starfish.account import Account
 from starfish.models.squid_model import SquidModel
 
 
@@ -118,7 +118,7 @@ class Ocean():
 
     def search_operations(self, text, limit=10):
         """
-        
+
         Search the off chain storage for an operation that matches 'text'
 
         :param str text: Search for 'text' in metadata.

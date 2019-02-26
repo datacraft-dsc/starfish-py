@@ -1,5 +1,3 @@
 
 
-from starfish.purchase.purchase_object import PurchaseObject
-from starfish.purchase.squid_purchase import SquidPurchase
-
+from starfish.purchase.purchase import Purchase
