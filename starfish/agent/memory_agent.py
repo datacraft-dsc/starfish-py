@@ -204,9 +204,7 @@ class MemoryAgent(Agent):
         :type: boolean
 
         """
-
-#        return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
-        return download_path
+        return purchase_id in self._memory['purchase']
 
     @staticmethod
     def is_did_valid(did):
