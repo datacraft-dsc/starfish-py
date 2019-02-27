@@ -184,7 +184,7 @@ class MemoryAgent(Agent):
 
         if purchase_id in self._memory['purchase']:
             purchase, account_address = self._memory['purchase'][purchase_id]
-            return account.is_address_equal(account_address)
+            return purchase and account.is_address_equal(account_address)
 
         return False
 
@@ -206,7 +206,7 @@ class MemoryAgent(Agent):
         """
 
 #        return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
-        return False
+        return download_path
 
     @staticmethod
     def is_did_valid(did):

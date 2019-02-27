@@ -25,7 +25,7 @@ class Purchase():
         self._agent = agent
         self._listing = listing
         self._purchase_id = purchase_id
-        
+
     def is_purchase_valid(self, account):
         """
 
