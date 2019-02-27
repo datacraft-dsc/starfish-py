@@ -74,6 +74,10 @@ class Purchase(PurchaseABC):
         return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
 
     @property
+    def get_type(self):
+        return "asset"
+
+    @property
     def is_purchased(self):
         """
         :return: True if this asset is a purchased asset.

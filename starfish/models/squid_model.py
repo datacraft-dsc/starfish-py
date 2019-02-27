@@ -14,8 +14,8 @@ from squid_py.agreements.service_agreement_template import ServiceAgreementTempl
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.ocean.ocean_agreements import OceanAgreements
-
-
+from squid_py.agreements.register_service_agreement import register_service_agreement
+from squid_py.brizo.brizo_provider import BrizoProvider
 logger = logging.getLogger('ocean')
 
 # from starfish import logger
@@ -122,10 +122,12 @@ class SquidModel():
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         ments=self._squid_ocean.agreements
+        logger.info(f'KK start of purchase invoke operation in squid_model.py ')
         did=ddo.did
         if service_agreement:
-            service_agreement_id,signature = ments.prepare(ddo.did, service_agreement.sa_definition_id, account)
-
+            logger.info(f'KK purchase invoke operation in squid_model.py ')
+            service_definition_id=service_agreement.sa_definition_id
+            service_agreement_id,signature = ments.prepare(ddo.did, service_definition_id, account)
             asset = ments._asset_resolver.resolve(did)
 
             service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
@@ -276,7 +278,7 @@ class SquidModel():
 
         """
 
-        options = {"resources" : {"downloads.path" : "/tmp/downloads"}}
+        options = {} 
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password

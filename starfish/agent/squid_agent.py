@@ -6,6 +6,7 @@ Agent class to provide basic functionality for all Ocean Agents
 
 
 
+import logging
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import Agent
@@ -14,7 +15,11 @@ from starfish.asset import Asset
 from starfish.purchase import Purchase
 from starfish.purchase import Operation
 from starfish.utils.did import did_parse
+from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.agreements.service_types import ServiceTypes
+import sys,traceback
 import json
+logger = logging.getLogger('ocean')
 
 class SquidAgent(Agent):
     """
@@ -184,17 +189,18 @@ class SquidAgent(Agent):
         metadata=listing.asset.metadata
         invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
         invokable=not(invoke_endpoint == "asset")
-        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
         with open('/tmp/a.txt', 'a') as the_file:
             the_file.write(' invokable : ')
             the_file.write(str(invokable))
             the_file.write(' \n ')
             the_file.write(json.dumps(metadata))
-        if service_agreement_id:
-            if invokable==True:
-                purchase = Operation(self, listing, service_agreement_id)
-            else:
-                purchase = Purchase(self, listing, service_agreement_id)
+
+        if invokable==True:
+            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
+            purchase = Operation(self, listing, service_agreement_id)
+        else:
+            service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+            purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
 
@@ -237,7 +243,7 @@ class SquidAgent(Agent):
         model = self.squid_model
         return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
 
-    def invoke_operation(self, listing, purchase_id, account, payload ):
+    def invoke_operation(self, listing, purchase_id, account, payload):
         """
         Invoke the operation
 
@@ -253,8 +259,33 @@ class SquidAgent(Agent):
 
         """
         model = self.squid_model
-        # TBD
-        return 0 
+        logger.info(f'KK calling invoke in squid_agent.py with payload: {payload}')
+        try :
+            # TBD
+            asset=listing.asset
+
+            did = listing.did
+            ddo= listing.data
+            files = ddo.metadata['base']['encryptedFiles']
+            logger.info(f'encrypted contentUrls: {files}')
+            files = files if isinstance(files, str) else files[0]
+            sa = SquidModel.get_service_agreement_from_ddo(ddo)
+            service_url = sa.service_endpoint
+            if not service_url:
+                logger.error(
+                    'Consume asset failed, service definition is missing the "serviceEndpoint".')
+                raise AssertionError(
+                    'Consume asset failed, service definition is missing the "serviceEndpoint".')
+
+            return BrizoProvider.get_brizo().invoke_service(
+                purchase_id, service_url,
+                account.address, payload)
+            
+        except:
+            logger.error('got error invoking Brizo')
+            traceback.print_exc(file=sys.stdout)
+            return 0 
+
 
 
     @property
