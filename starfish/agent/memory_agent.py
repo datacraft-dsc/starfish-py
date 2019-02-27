@@ -1,6 +1,6 @@
 """
 
-Agent class to provide basic functionality for Ocean Agents
+Memory Agent class to provide basic functionality for Ocean Agents
 
 """
 
@@ -118,16 +118,16 @@ class MemoryAgent(Agent):
     def search_listings(self, text, sort=None, offset=100, page=0):
         """
 
-        Search the off chain storage for an asset with the givien 'text'
+        Search for listings with the givien 'text'
 
-        :param str text: Test to search all metadata items for.
+        :param str text: Text to search all listing data for.
         :param sort: sort the results ( defaults: None, no sort).
         :type sort: str or None
         :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
         :param int page: Returns the page number based on the offset.
 
-        :return: a list of assets objects found using the search.
-        :type: list of DID strings
+        :return: a list of listing objects found using the search.
+        :type: :class:`.Listing` objects
 
         For example::
 
