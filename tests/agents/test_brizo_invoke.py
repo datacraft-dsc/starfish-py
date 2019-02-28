@@ -25,7 +25,7 @@ from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 from tests.helpers.brizo_mock import BrizoMock
-from tests.helpers.brizo import Brizo
+from tests.helpers.koi_client import KoiClient
 
 
 setup_logging(level=logging.DEBUG)
@@ -121,7 +121,7 @@ def test_asset():
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
     # BrizoProvider.set_brizo_class(BrizoMock)
-    BrizoProvider.set_brizo_class(Brizo)
+    BrizoProvider.set_brizo_class(KoiClient)
     #Brizo.set_http_client(BrizoMock(model.get_squid_ocean(), publisher_account._squid_account))
 
 
@@ -158,7 +158,7 @@ def test_asset():
     assert purchase_asset.is_purchase_valid(purchase_account)
     purch_type=purchase_asset.get_type
     logging.debug(f'KK purchase type {purch_type}')
-    result=purchase_asset.invoke(purchase_account, 'hello world')
+    result=purchase_asset.invoke(purchase_account,{'operation':'echo','params':{'hello':'world'}})
     logging.debug(f'KK invoke reesult {result}')
 
 
