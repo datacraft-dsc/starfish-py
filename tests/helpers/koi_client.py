@@ -53,7 +53,7 @@ class KoiClient:
             'consumer-address': account_address
         }
         payload = json.dumps(paymap)
-        logger.info(f' KK Koi client sending request to server {paymap}')
+        logger.info(f' Koi client sending request to server {paymap}')
         response = KoiClient._http_client.post( purchase_endpoint, data=payload, headers={'content-type': 'application/json'})
 
         if response and hasattr(response, 'status_code'):
