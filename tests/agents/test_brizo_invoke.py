@@ -157,9 +157,9 @@ def test_asset():
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
     purch_type=purchase_asset.get_type
-    logging.debug(f'KK purchase type {purch_type}')
+    logging.debug(f'purchase type {purch_type}')
     result=purchase_asset.invoke(purchase_account,{'operation':'echo','params':{'hello':'world'}})
-    logging.debug(f'KK invoke reesult {result}')
+    logging.debug(f'invoke result {result}')
 
 
 
