@@ -162,36 +162,4 @@ def test_asset():
     logging.debug(f'invoke result {result}')
 
 
-
-def test_search_listing():
-
-    ocean = Ocean(CONFIG_PARAMS)
-    assert ocean
-    assert ocean.accounts
-
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
-
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
-    publisher_account.unlock()
-
-    listing = _register_asset_for_sale(agent, publisher_account)
-    assert listing
-    assert publisher_account
-
-    metadata = _read_metadata()
-    assert metadata
-
-    # choose a word from the description field
-    text = metadata['base']['description']
-    words = text.split(' ')
-    word = words[0]
-
-    # should return at least 1 or more assets
-    logging.info(f'search word is {word}')
-    searchResult = agent.search_listings(word)
-    assert searchResult
-
-    assert(len(searchResult) > 1)
-
 test_asset()

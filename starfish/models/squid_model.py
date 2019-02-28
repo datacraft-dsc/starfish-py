@@ -122,10 +122,9 @@ class SquidModel():
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         ments=self._squid_ocean.agreements
-        logger.info(f'KK start of purchase invoke operation in squid_model.py ')
         did=ddo.did
         if service_agreement:
-            logger.info(f'KK purchase invoke operation in squid_model.py ')
+            logger.info(f'purchase invoke operation ')
             service_definition_id=service_agreement.sa_definition_id
             service_agreement_id,signature = ments.prepare(ddo.did, service_definition_id, account)
             asset = ments._asset_resolver.resolve(did)
@@ -139,23 +138,23 @@ class SquidModel():
             # subscribe to events related to this agreement_id before sending the request.
             logger.debug(f'Registering service agreement with id: {service_agreement_id}')
 
-            register_service_agreement( ments._config.storage_path, ##
-                                        account, ##
-                                        service_agreement_id, ##
-                                        did, ##
-                                        service_def, ##
-                                        'consumer', ##
-                                        service_agreement.sa_definition_id, ##
-                                        service_agreement.get_price(), ##
-                                        asset.encrypted_files, ##
-                                        start_time=None ##
+            register_service_agreement( ments._config.storage_path, 
+                                        account, 
+                                        service_agreement_id, 
+                                        did, 
+                                        service_def, 
+                                        'consumer', 
+                                        service_agreement.sa_definition_id, 
+                                        service_agreement.get_price(), 
+                                        asset.encrypted_files, 
+                                        start_time=None 
             )
 
-            BrizoProvider.get_brizo().initialize_service_agreement(did, ##
-                                                                   service_agreement_id, ##
-                                                                   service_agreement.sa_definition_id, ##
-                                                                   signature, ##
-                                                                   account.address, ##
+            BrizoProvider.get_brizo().initialize_service_agreement(did, 
+                                                                   service_agreement_id, 
+                                                                   service_agreement.sa_definition_id, 
+                                                                   signature, 
+                                                                   account.address, 
                                                                    service_agreement.purchase_endpoint)
 
         return service_agreement_id

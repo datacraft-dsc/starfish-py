@@ -72,7 +72,7 @@ class Operation(PurchaseABC):
 
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
-        logger.info(f'KK calling invoke in operation.py with payload: {payload}')
+        logger.info(f'calling invoke in operation.py with payload: {payload}')
         return self._agent.invoke_operation(self._listing, self._purchase_id, account,
                                             payload)
 
