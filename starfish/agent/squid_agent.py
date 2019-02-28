@@ -189,12 +189,6 @@ class SquidAgent(Agent):
         metadata=listing.asset.metadata
         invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
         invokable=not(invoke_endpoint == "asset")
-        with open('/tmp/a.txt', 'a') as the_file:
-            the_file.write(' invokable : ')
-            the_file.write(str(invokable))
-            the_file.write(' \n ')
-            the_file.write(json.dumps(metadata))
-
         if invokable==True:
             service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
             purchase = Operation(self, listing, service_agreement_id)
@@ -259,7 +253,7 @@ class SquidAgent(Agent):
 
         """
         model = self.squid_model
-        logger.info(f'KK calling invoke in squid_agent.py with payload: {payload}')
+        logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
         try :
             # TBD
             asset=listing.asset
