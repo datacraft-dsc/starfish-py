@@ -31,7 +31,7 @@ setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545','resources': {'downloads.path':'/tmp' }}
+CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 
 PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
 PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
@@ -45,7 +45,7 @@ SQUID_AGENT_CONFIG_PARAMS = {
 }
 SQUID_DOWNLOAD_PATH = 'consume_downloads'
 
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'invoke_metadata.json'
+METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
 def _read_metadata():
     # load in the sample metadata
@@ -154,7 +154,7 @@ def test_asset():
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
 
-    purchase_asset.invoke(purchase_account, 'hello world')
+    purchase_asset.consume(purchase_account, SQUID_DOWNLOAD_PATH)
 
 
 
@@ -188,5 +188,3 @@ def test_search_listing():
     assert searchResult
 
     assert(len(searchResult) > 1)
-
-test_asset()
