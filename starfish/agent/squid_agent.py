@@ -255,7 +255,6 @@ class SquidAgent(Agent):
         model = self.squid_model
         logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
         try :
-            # TBD
             asset=listing.asset
 
             did = listing.did
@@ -278,7 +277,7 @@ class SquidAgent(Agent):
         except:
             logger.error('got error invoking Brizo')
             traceback.print_exc(file=sys.stdout)
-            return 0 
+            return False 
 
 
 

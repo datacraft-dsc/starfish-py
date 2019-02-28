@@ -24,7 +24,6 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-from tests.helpers.brizo_mock import BrizoMock
 from tests.helpers.koi_client import KoiClient
 
 
@@ -118,14 +117,11 @@ def test_asset():
     time.sleep(2)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
-    # BrizoProvider.set_brizo_class(BrizoMock)
+    #Use the Koi server, and therefore use the Koi client instead of Brizo.py
     BrizoProvider.set_brizo_class(KoiClient)
-    #Brizo.set_http_client(BrizoMock(model.get_squid_ocean(), publisher_account._squid_account))
-
 
     # test purchase an asset
+    # this purchase does not automatically fire a consume() request as no callback is registered
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
@@ -159,6 +155,7 @@ def test_asset():
     purch_type=purchase_asset.get_type
     logging.debug(f'purchase type {purch_type}')
     result=purchase_asset.invoke(purchase_account,{'operation':'echo','params':{'hello':'world'}})
+    ## TBD: asset on the result of the invoke
     logging.debug(f'invoke result {result}')
 
 

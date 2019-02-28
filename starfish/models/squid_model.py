@@ -216,8 +216,7 @@ class SquidModel():
             'resources': {
                 'aquarius.url': self._aquarius_url,
                 'brizo.url': self._brizo_url,
-                'storage.path': self._storage_path,
-                'downloads.path' : '/tmp/downloads'
+                'storage.path': self._storage_path
             }
         }
         if options:
