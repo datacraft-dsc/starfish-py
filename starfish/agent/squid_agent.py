@@ -98,7 +98,7 @@ class SquidAgent(Agent):
                 print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
-        
+
         if not isinstance(asset, SquidAsset):
             raise TypeError('You need to pass a SquidAsset object')
 

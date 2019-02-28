@@ -21,13 +21,13 @@ class Asset():
 
     def set_did(self, did):
         """
-        This method makes the object immutable. 
-        So maybe a solution is that we have a 'copy' and 
+        This method makes the object immutable.
+        So maybe a solution is that we have a 'copy' and
         set the did in the __init__ of the new class, to return a mutable copy of the
         same asset object.
         """
         self._did = did
-        
+
     @property
     def did(self):
         """
@@ -35,7 +35,7 @@ class Asset():
         :type: str
         """
         return self._did
-        
+
     @property
     def metadata(self):
         """

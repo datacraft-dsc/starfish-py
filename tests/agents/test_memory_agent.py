@@ -43,9 +43,9 @@ def _read_metadata():
 def _create_asset():
     metadata = _read_metadata()
     assert metadata
-    
+
     return MemoryAsset(metadata=metadata, data=secrets.token_hex(256))
-    
+
 def _register_asset_for_sale(agent, account):
 
     asset = _create_asset()

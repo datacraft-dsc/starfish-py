@@ -248,7 +248,7 @@ class SquidModel():
     @staticmethod
     def get_default_metadata():
         return Metadata.get_example()
-    
+
     @staticmethod
     def validate_metadata(metadata):
         return Metadata.validate(metadata)
