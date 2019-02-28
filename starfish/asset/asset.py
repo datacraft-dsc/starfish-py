@@ -49,7 +49,7 @@ class Asset():
     def generate_metadata():
         """
         Return a generated example metadata that can be changed by the child asset class
-        
+
         :return: default metadata
         :type: dict
         """
