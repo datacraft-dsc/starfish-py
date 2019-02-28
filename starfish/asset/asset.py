@@ -9,7 +9,8 @@ class Asset():
     """
 
     :param dict metadata: metadata for the asset
-    :param str did: did of the asset.
+    :param did: Octional did of the asset, if the asset is new then the did will be None.
+    :type did: None or str
 
     """
     def __init__(self, metadata, did=None):
@@ -46,6 +47,12 @@ class Asset():
 
     @staticmethod
     def generate_metadata():
+        """
+        Return a generated example metadata that can be changed by the child asset class
+        
+        :return: default metadata
+        :type: dict
+        """
         metadata = {
             'name': "Ocean protocol white paper",
             'type': "dataset",
