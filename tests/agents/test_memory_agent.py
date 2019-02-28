@@ -7,6 +7,7 @@ import pathlib
 import json
 import logging
 import time
+import secrets
 from web3 import Web3
 
 from starfish import (
@@ -14,6 +15,7 @@ from starfish import (
     logger
 )
 from starfish.agent import MemoryAgent
+from starfish.asset import MemoryAsset
 
 from starfish.logging import setup_logging
 
@@ -38,13 +40,16 @@ def _read_metadata():
 
     return metadata
 
-def _register_asset_for_sale(agent, account):
-
-
+def _create_asset():
     metadata = _read_metadata()
     assert metadata
+    
+    return MemoryAsset(metadata=metadata, data=secrets.token_hex(256))
+    
+def _register_asset_for_sale(agent, account):
 
-    listing = agent.register_asset(metadata, account=account)
+    asset = _create_asset()
+    listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
     return listing
