@@ -131,7 +131,7 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        return self._squid_ocean.is_access_granted(service_agreement_id, did, account_address)
+        return self._squid_ocean.agreements.is_access_granted(service_agreement_id, did, account_address)
 
 
     def register_ddo(self, did, ddo, account):
