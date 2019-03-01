@@ -37,11 +37,11 @@ class MemoryAgent(Agent):
 
         self._memory = {
             'listingdata': {},
-            'metadata': {},
+            'asset': {},
             'purchase': {}
         }
 
-    def register_asset(self, metadata, account):
+    def register_asset(self, asset, account):
         """
 
         Register a memory asset with the ocean network.
@@ -79,11 +79,11 @@ class MemoryAgent(Agent):
             'asset_did': asset_did
         }
         self._memory['listingdata'][did] = listingdata
-        self._memory['metadata'][did] = metadata
+        self._memory['asset'][asset_did] = asset
 
         listing = None
         if listingdata:
-            asset = Asset(metadata, asset_did)
+            asset.set_did(asset_did)
             listing = Listing(self, did, asset, listingdata)
 
         return listing
@@ -106,8 +106,7 @@ class MemoryAgent(Agent):
                 listingdata = self._memory['listingdata'][did]
                 if listingdata:
                     asset_did = listingdata['asset_did']
-                    metadata = self._memory['metadata'][asset_did]
-                    asset = Asset(metadata, asset_did)
+                    asset = self._memory['asset'][asset_did]
                     listing = Listing(self, did, asset, listingdata)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')
@@ -136,8 +135,8 @@ class MemoryAgent(Agent):
 
         """
         listing_items = None
-        for asset_did, metadata in self._memory['metadata'].items():
-            if re.search(text, json.dumps(metadata)):
+        for asset_did, asset in self._memory['asset'].items():
+            if re.search(text, json.dumps(asset.metadata)):
                 for did, listing in self._memory['listingdata'].items():
                     if listing['asset_did'] == asset_did:
                         if listing_items is None:

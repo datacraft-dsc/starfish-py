@@ -13,6 +13,7 @@ from squid_py.agreements.service_agreement_template import ServiceAgreementTempl
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 
+from squid_py.ddo.metadata import Metadata
 
 # from starfish import logger
 
@@ -130,7 +131,7 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        return self._squid_ocean.is_access_granted(service_agreement_id, did, account_address)
+        return self._squid_ocean.agreements.is_access_granted(service_agreement_id, did, account_address)
 
 
     def register_ddo(self, did, ddo, account):
@@ -243,3 +244,11 @@ class SquidModel():
             assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
+
+    @staticmethod
+    def get_default_metadata():
+        return Metadata.get_example()
+
+    @staticmethod
+    def validate_metadata(metadata):
+        return Metadata.validate(metadata)
