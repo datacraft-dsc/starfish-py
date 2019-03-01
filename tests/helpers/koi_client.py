@@ -82,7 +82,7 @@ class KoiClient:
         :return:
         """
         #TODO remove this hardcoding
-        service_endpoint='http://localhost:8030/api/v1/brizo/services/invoke'
+        service_endpoint='http://localhost:8031/api/v1/brizo/services/invoke'
         logger.info(f'invoke endpoint with this url: {service_endpoint}')
         payload=json.dumps({'operationSAInfo':{'consumer-address': account_address, 'service-agreement-id': service_agreement_id}, 
             'payload':invoke_payload})
@@ -104,7 +104,7 @@ class KoiClient:
         :param config: Config
         :return: Url, str
         """
-        brizo_url = 'http://localhost:8030'
+        brizo_url = 'http://localhost:8031'
         if config.has_option('resources', 'brizo.url'):
             brizo_url = config.get('resources', 'brizo.url') or brizo_url
 

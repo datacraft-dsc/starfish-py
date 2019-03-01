@@ -38,7 +38,7 @@ PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'p
 
 SQUID_AGENT_CONFIG_PARAMS = {
     'aquarius_url': 'http://localhost:5000',
-    'brizo_url': 'http://localhost:8030',
+    'brizo_url': 'http://localhost:8031',
     'secret_store_url': 'http://localhost:12001',
     'parity_url': 'http://localhost:9545',
     'storage_path': 'squid_py.db',
