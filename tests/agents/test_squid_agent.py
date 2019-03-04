@@ -129,7 +129,6 @@ def test_asset():
     BrizoMock.ocean_instance = model.get_squid_ocean()
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
-    # Brizo.set_http_client(BrizoMock(model.get_squid_ocean(), publisher_account._squid_account))
 
 
     # test purchase an asset
