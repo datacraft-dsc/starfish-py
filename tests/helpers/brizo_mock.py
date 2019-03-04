@@ -1,8 +1,10 @@
 import os
 import logging
 import json
+# import responses
 
 from unittest.mock import Mock
+
 from squid_py import ConfigProvider
 from squid_py.brizo.brizo import Brizo
 
@@ -12,54 +14,22 @@ setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
+brizo_mock_ocean_instance = None
+brizo_mock_account = None
 
 class BrizoMock(object):
+    publisher_account = None
+    ocean_instance = None
+    
     def __init__(self, ocean_instance=None, account=None):
         self.ocean_instance = ocean_instance
-        """
-        if not ocean_instance:
-            from tests.resources.helper_functions import get_publisher_ocean_instance
-            self.ocean_instance = get_publisher_ocean_instance(
-                init_tokens=False, use_ss_mock=False, use_brizo_mock=False
-            )
-        """
+        if not self.ocean_instance:
+            self.ocean_instance = BrizoMock.ocean_instance
+
         self.account = account
-        """
-        if not account:
-            from tests.resources.helper_functions import get_publisher_account
-            self.account = get_publisher_account(ConfigProvider.get_config())
-        """
-    def get(self, url, *args, **kwargs):
-        response = Mock()
-        response.data = b'good luck squiddo.'
-        response.status_code = 200
-        response.url = 'http://mock.url/filename.mock?blahblah'
-        response.content = b'asset data goes here.'
-        return response
+        if not self.account:
+            self.account = BrizoMock.publisher_account
 
-    def post(self, url, data=None, **kwargs):
-        response = Mock()
-        logging.debug(f'mock post url {url}')
-        if url.endswith('initialize'):
-            payload = json.loads(data)
-            did = payload['did']
-            service_definition_id = payload['serviceDefinitionId']
-            agreement_id = payload['serviceAgreementId']
-            signature = payload['signature']
-            consumer_address = payload['consumerAddress']
-            self.ocean_instance.agreements.create(
-                did,
-                service_definition_id,
-                agreement_id,
-                signature,
-                consumer_address,
-                self.account
-            )
-
-            response.status_code = 201
-        else:
-            response.status_code = 404
-        return response
 
     def initialize_service_agreement(self, did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
