@@ -14,9 +14,6 @@ setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
-brizo_mock_ocean_instance = None
-brizo_mock_account = None
-
 class BrizoMock(object):
     publisher_account = None
     ocean_instance = None
