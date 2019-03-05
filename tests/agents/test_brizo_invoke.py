@@ -38,7 +38,7 @@ PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', '
 PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
 
 SQUID_AGENT_CONFIG_PARAMS = {
-    'aquarius_url': 'http://localhost:5000',
+    'aquarius_url': 'http://aquarius:5000',
     'brizo_url': 'http://localhost:8031',
     'secret_store_url': 'http://localhost:12001',
     'parity_url': 'http://localhost:9545',
@@ -74,7 +74,7 @@ def _log_event(event_name):
         logging.debug(f'Received event {event_name}: {event}')
     return _process_event
 
-def test_asset():
+def test_invoke():
 
     # create an ocean object
     ocean = Ocean(CONFIG_PARAMS)
@@ -129,7 +129,8 @@ def test_asset():
 
 
     _filter = {'agreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
-
+    pid=purchase_asset.purchase_id
+    logging.info(f' invoke test purchase id {pid}')
     EventListener('ServiceExecutionAgreement', 'AgreementInitialized', filters=_filter).listen_once(
         _log_event('AgreementInitialized'),
         20,
