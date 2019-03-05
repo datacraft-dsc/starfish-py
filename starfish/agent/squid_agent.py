@@ -11,7 +11,7 @@ from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import Agent
 from starfish.listing import Listing
-from starfish.asset import Asset
+from starfish.asset import SquidAsset
 from starfish.purchase import Purchase
 from starfish.purchase import Operation
 from starfish.utils.did import did_parse
@@ -78,12 +78,13 @@ class SquidAgent(Agent):
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
 
-    def register_asset(self, metadata, account):
+    def register_asset(self, asset, account):
         """
 
         Register a squid asset with the ocean network.
 
-        :param dict metadata: metadata dictionary to store for this asset.
+        :param asset: the SquidAsset to register, at the moment only a SquidAsset can be used.
+        :type asset: :class:`.SquidAsset` object to register
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
 
@@ -96,12 +97,16 @@ class SquidAgent(Agent):
             # get your publisher account
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
-            listing = agent.register_asset(metadata, account)
+            asset = SquidAsset(metadata)
+            listing = agent.register_asset(asset, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
+
+        if not isinstance(asset, SquidAsset):
+            raise TypeError('You need to pass a SquidAsset object')
 
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
@@ -111,11 +116,11 @@ class SquidAgent(Agent):
 
         model = self.squid_model
 
-        ddo = model.register_asset(metadata, account._squid_account)
+        ddo = model.register_asset(asset.metadata, account._squid_account)
 
         listing = None
         if ddo:
-            asset = Asset(metadata, ddo.did)
+            asset.set_did(ddo.did)
             listing = Listing(self, ddo.did, asset, ddo)
 
         return listing
@@ -129,7 +134,7 @@ class SquidAgent(Agent):
         :param str did: DID of the listing.
 
         :return: a registered asset given a DID of the asset
-        :type: :class:`.Asset` class
+        :type: :class:`.SquidAsset` class
 
         """
         listing = None
@@ -138,7 +143,7 @@ class SquidAgent(Agent):
             ddo = model.read_asset(did)
 
             if ddo:
-                asset = Asset(ddo.metadata, ddo.did)
+                asset = SquidAsset(ddo.metadata, ddo.did)
                 listing = Listing(self, ddo.did, asset, ddo)
         else:
             raise ValueError(f'Invalid did "{did}" for an asset')

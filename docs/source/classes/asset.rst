@@ -1,7 +1,8 @@
-Asset class
-===========
+Asset Classes
+=============
 
-.. autoclass:: starfish.asset.Asset
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
+
+    asset/asset
+    asset/memory_asset
+    asset/squid_asset

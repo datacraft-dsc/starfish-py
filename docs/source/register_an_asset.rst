@@ -21,16 +21,37 @@ Now we need to load an account and see how much ocean tokens and ether we have
 >>> print(account.ocean_balance, account.ether_balance)
 1067 1000000003718520260000000000
 
-Loading the asset data and listing
-----------------------------------
+Create a  Memory Asset
+----------------------
 
-Next we need to source our asset and it's metadata. An asset is divided into
-the following sections:
+For a first test we can try out a basic memory asset to see how the library works
 
-#. **Asset data** - The actual `file` data residing on secure storage.
+>>> from starfish.asset import MemoryAsset
+>>> asset = MemoryAsset(data='Some test data that I want to save for this asset')
 
-#. **Listing** - The `sales` part of the asset. For example a listing will contain price, data samples e.t.c. This can change and you can store multiple listings for a single asset.
+Let see what's in the memory asset
 
-#. **Metadata** - The meta data describing the asset. This is the data describing the asset data and contains proof that the asset data has not been changed or altered.
+>>> print(asset.data)
+Some test data that I want to save for this asset
+>>> print(asset.did)
+None
+
+Setup the Memory Agent
+----------------------
+
+We now need an agent to register and manage our memory asset.
+
+>>> from starfish.agent import MemoryAgent
+>>> agent = MemoryAgent(ocean)
+
+Register the Asset
+------------------
+
+Now we can register the asset with the ocean account
+
+>>> listing = agent.register_asset(asset, account)
+>>> print(listing.asset.did)
+did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
+
 
 
