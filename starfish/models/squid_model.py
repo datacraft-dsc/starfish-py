@@ -234,7 +234,7 @@ class SquidModel():
 
         if download_path:
             options['download_path'] = download_path
-            
+
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
         return SquidOcean(config)
