@@ -16,9 +16,7 @@ from starfish.purchase import Purchase
 from starfish.purchase import Operation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.agreements.service_types import ServiceTypes
 import sys,traceback
-import json
 logger = logging.getLogger('ocean')
 
 class SquidAgent(Agent):
@@ -251,16 +249,14 @@ class SquidAgent(Agent):
         :param str purchase_id: purchase id that was used to purchase the asset.
         :param account: Ocean account that was used to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
-        :param str payload: params required for the operation 
+        :param str payload: params required for the operation
 
         :return: True if the operation was invoked
         :type: boolean
 
         """
-        model = self.squid_model
         logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
         try :
-            asset=listing.asset
 
             did = listing.did
             ddo= listing.data
@@ -278,11 +274,10 @@ class SquidAgent(Agent):
             return BrizoProvider.get_brizo().invoke_service(
                 purchase_id, service_url,
                 account.address, payload)
-            
-        except:
+        except Exception:
             logger.error('got error invoking Brizo')
             traceback.print_exc(file=sys.stdout)
-            return False 
+            return False
 
 
 
