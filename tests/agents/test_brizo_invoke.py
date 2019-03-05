@@ -159,4 +159,4 @@ def test_asset():
     logging.debug(f'invoke result {result}')
 
 
-test_asset()
+#test_asset()
