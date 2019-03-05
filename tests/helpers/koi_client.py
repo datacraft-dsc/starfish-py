@@ -10,6 +10,7 @@ from tqdm import tqdm
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.exceptions import OceanInitializeServiceAgreementError
 
+from squid_py.brizo.brizo import Brizo
 logger = logging.getLogger(__name__)
 
 
