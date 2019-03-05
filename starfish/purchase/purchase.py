@@ -4,9 +4,9 @@
 """
 
 from starfish.account import Account
-from starfish.purchase.purchaseabc import PurchaseABC
+from starfish.purchase.apurchase import APurchase
 
-class Purchase(PurchaseABC):
+class Purchase(APurchase):
     """
 
     This class is returned by purchasing an asset uning the :func:`.Listing.purchase` method.

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from starfish.account import Account
 
 
-class PurchaseABC(ABC):
+class APurchase(ABC):
 
     def __init__(self, agent, listing, purchase_id):
         """init the the Purchase Object Base with the agent instance"""
