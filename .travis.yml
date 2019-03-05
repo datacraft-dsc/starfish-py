@@ -11,7 +11,7 @@ services:
 before_install:
 - git clone https://github.com/DEX-Company/barge.git
 - cd barge
-- git checkout tags/dex-2019-02-18
+- git checkout tags/dex-2019-03-05
 - bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log
   &
 - cd ..
