@@ -240,7 +240,8 @@ class SquidAgent(Agent):
         model = self.squid_model
         return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
 
-    def invoke_operation(self, listing, purchase_id, account, payload):
+    @staticmethod
+    def invoke_operation(listing, purchase_id, account, payload):
         """
         Invoke the operation
 
@@ -257,8 +258,6 @@ class SquidAgent(Agent):
         """
         logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
         try :
-
-            did = listing.did
             ddo= listing.data
             files = ddo.metadata['base']['encryptedFiles']
             logger.info(f'encrypted contentUrls: {files}')
