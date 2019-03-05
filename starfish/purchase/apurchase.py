@@ -3,7 +3,6 @@
     Basic Purchase class
 """
 from abc import ABC, abstractmethod
-from starfish.account import Account
 
 
 class APurchase(ABC):
@@ -13,7 +12,7 @@ class APurchase(ABC):
         self._agent = agent
         self._listing = listing
         self._purchase_id = purchase_id
-        super().__init__() 
+        super().__init__()
 
     @abstractmethod
     def is_purchase_valid(self, account):

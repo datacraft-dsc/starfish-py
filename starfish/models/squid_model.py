@@ -13,7 +13,6 @@ from squid_py.ocean import Ocean as SquidOcean
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
-from squid_py.ocean.ocean_agreements import OceanAgreements
 from squid_py.agreements.register_service_agreement import register_service_agreement
 from squid_py.brizo.brizo_provider import BrizoProvider
 
@@ -143,23 +142,23 @@ class SquidModel():
             # subscribe to events related to this agreement_id before sending the request.
             logger.debug(f'Registering service agreement with id: {service_agreement_id}')
 
-            register_service_agreement( ments._config.storage_path, 
-                                        account, 
-                                        service_agreement_id, 
-                                        did, 
-                                        service_def, 
-                                        'consumer', 
-                                        service_agreement.sa_definition_id, 
-                                        service_agreement.get_price(), 
-                                        asset.encrypted_files, 
-                                        start_time=None 
+            register_service_agreement( ments._config.storage_path,
+                                        account,
+                                        service_agreement_id,
+                                        did,
+                                        service_def,
+                                        'consumer',
+                                        service_agreement.sa_definition_id,
+                                        service_agreement.get_price(),
+                                        asset.encrypted_files,
+                                        start_time=None
             )
 
-            BrizoProvider.get_brizo().initialize_service_agreement(did, 
-                                                                   service_agreement_id, 
-                                                                   service_agreement.sa_definition_id, 
-                                                                   signature, 
-                                                                   account.address, 
+            BrizoProvider.get_brizo().initialize_service_agreement(did,
+                                                                   service_agreement_id,
+                                                                   service_agreement.sa_definition_id,
+                                                                   signature,
+                                                                   account.address,
                                                                    service_agreement.purchase_endpoint)
 
         return service_agreement_id
@@ -281,7 +280,7 @@ class SquidModel():
 
         """
 
-        options = {} 
+        options = {}
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
