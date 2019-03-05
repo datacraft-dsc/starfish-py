@@ -15,6 +15,7 @@ from starfish import (
 )
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
+from starfish.asset import SquidAsset
 
 from starfish.logging import setup_logging
 
@@ -62,7 +63,8 @@ def _register_asset_for_sale(agent, account):
     metadata = _read_metadata()
     assert metadata
 
-    listing = agent.register_asset(metadata, account=account)
+    asset=SquidAsset(metadata)
+    listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
     return listing
