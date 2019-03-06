@@ -32,13 +32,13 @@ setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545','resources': {'downloads.path':'/tmp' }}
+CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545'}
 
 PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
 PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
 
 SQUID_AGENT_CONFIG_PARAMS = {
-    'aquarius_url': 'http://aquarius:5000',
+    'aquarius_url': 'http://localhost:5000',
     'brizo_url': 'http://localhost:8031',
     'secret_store_url': 'http://localhost:12001',
     'parity_url': 'http://localhost:9545',
