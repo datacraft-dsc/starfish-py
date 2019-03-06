@@ -25,7 +25,7 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-from tests.helpers.koi_client import KoiClient
+from tests.helpers.koi_mock import KoiMock
 
 
 setup_logging(level=logging.DEBUG)
@@ -120,7 +120,9 @@ def test_invoke():
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     #Use the Koi server, and therefore use the Koi client instead of Brizo.py
-    BrizoProvider.set_brizo_class(KoiClient)
+    KoiMock.ocean_instance = model.get_squid_ocean()
+    KoiMock.publisher_account = publisher_account._squid_account
+    BrizoProvider.set_brizo_class(KoiMock)
 
     # test purchase an asset
     # this purchase does not automatically fire a consume() request as no callback is registered
@@ -158,9 +160,11 @@ def test_invoke():
     #this assertion fails
     purch_type=purchase_asset.get_type
     logging.debug(f'purchase type {purch_type}')
-    result=purchase_asset.invoke(purchase_account,{'operation':'echo','params':{'hello':'world'}})
+    paramvalue={'hello':'world'}
+    result=purchase_asset.invoke(purchase_account,{'operation':'echo','params':paramvalue})
     ## TBD: asset on the result of the invoke
     logging.debug(f'invoke result {result}')
+    assert result == paramvalue
 
 
 #test_asset()
