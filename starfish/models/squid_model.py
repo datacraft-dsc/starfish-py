@@ -101,10 +101,11 @@ class SquidModel():
 
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
+        squid_ocean = self.get_squid_ocean(account)
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            service_agreement_id = self._squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
+            service_agreement_id = squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
 
         return service_agreement_id
 
@@ -172,8 +173,6 @@ class SquidModel():
                 data['keeper-contracts']['parity.address'] = options['parity_address']
             if 'parity_password' in options:
                 data['keeper-contracts']['parity.password'] = options['parity_password']
-            if 'download_path' in options:
-                data['resources']['downloads.path'] = options['download_path']
 
         return data
 
@@ -217,7 +216,7 @@ class SquidModel():
     def brizo_url(self):
         return self._brizo_url
 
-    def get_squid_ocean(self, account = None):
+    def get_squid_ocean(self, account=None):
         """
 
         Return an instance of squid for an account

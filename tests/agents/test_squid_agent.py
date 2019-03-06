@@ -28,6 +28,7 @@ from squid_py.brizo.brizo import Brizo
 
 from tests.helpers.brizo_mock import BrizoMock
 
+
 setup_logging(level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
@@ -121,8 +122,9 @@ def test_asset():
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
-    # BrizoProvider.set_brizo_class(BrizoMock)
-    Brizo.set_http_client(BrizoMock(model.get_squid_ocean(), publisher_account._squid_account))
+    BrizoMock.ocean_instance = model.get_squid_ocean()
+    BrizoMock.publisher_account = publisher_account._squid_account
+    BrizoProvider.set_brizo_class(BrizoMock)
 
 
     # test purchase an asset
