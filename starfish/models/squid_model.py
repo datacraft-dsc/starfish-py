@@ -105,12 +105,10 @@ class SquidModel():
 
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
-        squid_ocean = self.get_squid_ocean(account, 'consume_downloads')
-
+        squid_ocean = self.get_squid_ocean(account)
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            # service_agreement_id = self._squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
             service_agreement_id = squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
 
         return service_agreement_id
@@ -169,7 +167,7 @@ class SquidModel():
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
-        squid_ocean = self.get_squid_ocean(account, download_path)
+        squid_ocean = self.get_squid_ocean(account)
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
@@ -228,8 +226,6 @@ class SquidModel():
                 data['keeper-contracts']['parity.address'] = options['parity_address']
             if 'parity_password' in options:
                 data['keeper-contracts']['parity.password'] = options['parity_password']
-            if 'download_path' in options:
-                data['resources']['downloads.path'] = options['download_path']
 
         return data
 
@@ -273,7 +269,7 @@ class SquidModel():
     def brizo_url(self):
         return self._brizo_url
 
-    def get_squid_ocean(self, account=None, download_path=None):
+    def get_squid_ocean(self, account=None):
         """
 
         Return an instance of squid for an account
@@ -284,9 +280,6 @@ class SquidModel():
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
-
-        if download_path:
-            options['download_path'] = download_path
 
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
