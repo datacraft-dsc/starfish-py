@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -x
-set -e
-
 usage(){
   echo "Usage: $0 {major|minor|patch} [--tag]"
   exit 1
