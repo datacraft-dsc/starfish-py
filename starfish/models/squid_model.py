@@ -2,6 +2,7 @@
     SquidModel - Access squid services using the squid-py api
 """
 
+import logging
 from squid_py.agreements.utils import (
     get_sla_template_path,
     register_service_agreement_template
@@ -12,9 +13,12 @@ from squid_py.ocean import Ocean as SquidOcean
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
+from squid_py.agreements.register_service_agreement import register_service_agreement
+from squid_py.brizo.brizo_provider import BrizoProvider
 
 from squid_py.ddo.metadata import Metadata
 
+logger = logging.getLogger('ocean')
 # from starfish import logger
 
 class SquidModel():
@@ -109,6 +113,55 @@ class SquidModel():
 
         return service_agreement_id
 
+    def purchase_operation(self, ddo, account):
+        """
+        Purchase an invoke operation
+        :param dict ddo: ddo of the asset
+        :param object account: squid account unlocked and has sufficient funds to buy this asset
+
+        :return: service_agreement_id of the purchase or None if no purchase could be made
+        """
+        service_agreement_id = None
+        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
+        ments=self._squid_ocean.agreements
+        did=ddo.did
+        if service_agreement:
+            logger.info(f'purchase invoke operation ')
+            service_definition_id=service_agreement.sa_definition_id
+            service_agreement_id,signature = ments.prepare(ddo.did, service_definition_id, account)
+            asset = ments._asset_resolver.resolve(did)
+
+            service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
+            service_def = asset.find_service_by_id(service_definition_id).as_dictionary()
+
+            # Must approve token transfer for this purchase
+
+            ments._approve_token_transfer(service_agreement.get_price(), account)
+            # subscribe to events related to this agreement_id before sending the request.
+            logger.debug(f'Registering service agreement with id: {service_agreement_id}')
+
+            register_service_agreement( ments._config.storage_path,
+                                        account,
+                                        service_agreement_id,
+                                        did,
+                                        service_def,
+                                        'consumer',
+                                        service_agreement.sa_definition_id,
+                                        service_agreement.get_price(),
+                                        asset.encrypted_files,
+                                        start_time=None
+            )
+
+            BrizoProvider.get_brizo().initialize_service_agreement(did,
+                                                                   service_agreement_id,
+                                                                   service_agreement.sa_definition_id,
+                                                                   signature,
+                                                                   account.address,
+                                                                   service_agreement.purchase_endpoint)
+
+        return service_agreement_id
+
+
     def consume_asset(self, ddo, service_agreement_id, account, download_path):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
@@ -165,7 +218,7 @@ class SquidModel():
             'resources': {
                 'aquarius.url': self._aquarius_url,
                 'brizo.url': self._brizo_url,
-                'storage.path': self._storage_path,
+                'storage.path': self._storage_path
             }
         }
         if options:

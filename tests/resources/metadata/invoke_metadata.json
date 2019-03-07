@@ -1,0 +1,57 @@
+{
+    "base": {
+        "name": "UK Weather information 2011",
+        "type": "dataset",
+        "description": "Weather information of UK including temperature and humidity",
+        "size": "3.1gb",
+        "dateCreated": "2012-10-10T17:00:000Z",
+        "author": "Met Office",
+        "license": "CC-BY",
+        "copyrightHolder": "Met Office",
+        "encoding": "UTF-8",
+        "compression": "",
+        "contentType": "text/csv",
+        "workExample": "Text PDF",
+        "language": "en",
+        "categories": ["white-papers"],
+        "tags": "weather, uk, 2011, temperature, humidity",
+        "price": 10,
+        "checksum": "000000000000000000000000000000000000000000000000000",
+        "files": [
+            {
+                "url": "https://mybrizo.net"
+            }
+        ],
+        "links": [
+            {
+                "sample1": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-daily/"
+            },
+
+            {
+                "sample2": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-averages-25km/"
+            },
+            {
+                "fieldsDescription": "http://data.ceda.ac.uk/badc/ukcp09/"
+            }
+        ],
+	"invoke_endpoint": {"url":"https://mybrizo.net"}
+    },
+    "curation": {
+        "rating": 0.93,
+        "numVotes": 123,
+        "schema": "Binary Voting"
+    },
+    "additionalInformation": {
+        "updateFrequency": "yearly",
+        "structuredMarkup": [
+            {
+                "uri": "http://skos.um.es/unescothes/C01194/jsonld",
+                "mediaType": "application/ld+json"
+            },
+            {
+                "uri": "http://skos.um.es/unescothes/C01194/turtle",
+                "mediaType": "text/turtle"
+            }
+        ]
+    }
+}

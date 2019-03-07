@@ -1,15 +1,17 @@
 
 """
-    Basic Purchase class
+    Operation class
 """
 
+import logging
 from starfish.account import Account
 from starfish.purchase.apurchase import APurchase
+logger = logging.getLogger('ocean')
 
-class Purchase(APurchase):
+class Operation(APurchase):
     """
 
-    This class is returned by purchasing an asset uning the :func:`.Listing.purchase` method.
+    This class is returned by purchasing an invokable asset uning the :func:`.Listing.purchase` method.
 
     :param agent: agent that was used create this object.
     :type agent: :class:`.Agent`
@@ -21,8 +23,8 @@ class Purchase(APurchase):
     """
 
     def __init__(self, agent, listing, purchase_id):
-        """init the the Purchase Object Base with the agent instance"""
-        super().__init__(agent,listing,purchase_id)
+        """init the the Operation Object Base with the agent instance"""
+        super().__init__(agent, listing, purchase_id)
 
     def is_purchase_valid(self, account):
         """
@@ -46,17 +48,17 @@ class Purchase(APurchase):
 
         return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
 
-    def consume(self, account, download_path):
+    def invoke(self, account, payload):
         """
 
-        Consume a purchased asset. This call will try to download the asset data.
+        Call invoke
 
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
         :param account: account to used to consume this asset.
         :type account: :class:`.Account`
-        :param str download_path: Path to download the asset files too.
+        :param str payload: Json payload that the invoke operation needs.
 
         :return: data returned from the asset , or False
         :type: object or False
@@ -70,12 +72,13 @@ class Purchase(APurchase):
 
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
-
-        return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
+        logger.info(f'calling invoke in operation.py with payload: {payload}')
+        return self._agent.invoke_operation(self._listing, self._purchase_id, account,
+                                            payload)
 
     @property
     def get_type(self):
-        return "asset"
+        return "operation"
 
     @property
     def is_purchased(self):
