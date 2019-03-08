@@ -1,16 +1,8 @@
 """
 
-Agent class to provide basic functionality for all Ocean Agents
+Agent class for Invokable Ocean Agents
 
-#returns a Listing object.
-listing=agent.get_listing(did)
-#returns operation
-
-operation=listing.purchase(XX)
-#invoke operation
-operation.invoke(XX)
 """
-
 
 
 import logging
@@ -53,12 +45,7 @@ class InvokeAgent:
     def get_listing(self, did):
         """
 
-        Return an listing on the listing's DID.
-
-        :param str did: DID of the listing.
-
-        :return: a registered asset given a DID of the asset
-        :type: :class:`.SquidAsset` class
+        Return an listing on the listing's DID-will be supported in future.
 
         """
         pass 
@@ -67,31 +54,7 @@ class InvokeAgent:
     def purchase(self, listing, account):
         """
 
-        Purchase an asset using it's listing and an account.
-
-        :param listing: Listing to use for the purchase.
-        :type listing: :class:`.Listing`
-        :param account: Ocean account to purchase the asset.
-        :type account: :class:`.Account` object to use for registration.
+        Purchase an asset using it's listing and an account.-will be supported in future
 
         """
-        purchase = None
-        return purchase
-
-    def invoke_operation(self,listing, purchase_id, account, payload):
-        """
-        Invoke the operation
-
-        :param listing: Listing that was used to make the purchase.
-        :type listing: :class:`.Listing`
-        :param str purchase_id: purchase id that was used to purchase the asset.
-        :param account: Ocean account that was used to purchase the asset.
-        :type account: :class:`.Account` object to use for registration.
-        :param str payload: params required for the operation
-
-        :return: True if the operation was invoked
-        :type: boolean
-
-        """
-        logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
-
+        pass
