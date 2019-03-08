@@ -28,12 +28,13 @@ def test_invoke():
     assert 'hashing_did'==res['hashing']
     assert 'echo_did'==res['echo']
 
+    op=agent.get_operation('echo_did')
+    assert op
+
     sch=op.get_schema()
     assert 1==len(sch)
     assert sch[0]=={'name':'firstparam','type':'string'}
 
-    op=agent.get_operation('echo_did')
-    assert op
     res=op.invoke(firstparam='ocean')
     assert res['firstparam']=='hello ocean'
 
