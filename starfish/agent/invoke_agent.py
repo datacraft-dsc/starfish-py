@@ -23,14 +23,13 @@ class InvokeAgent:
 
         self._koi_url = kwargs.get('koi_url', 'http://localhost:8031/api/v1/brizo/services/')
 
-        r=requests.get(self._koi_url+'operations')
-        j=json.loads(r.text)
-        self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
-
     def get_operations(self):
         """
         returns a list of operations and their associated DIDs.
         """
+        r=requests.get(self._koi_url+'operations')
+        j=json.loads(r.text)
+        self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
         return self.operations
     
     def get_operation(self,did):
