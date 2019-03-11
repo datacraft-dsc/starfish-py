@@ -4,7 +4,6 @@
 """
 
 import logging
-from starfish.account import Account
 from starfish.operation.aoperation import AOperation
 logger = logging.getLogger('ocean')
 import requests
@@ -13,7 +12,7 @@ import json
 class Operation(AOperation):
     """
 
-    This class returns an operation that can be invoked on a remote Ocean Invoke server 
+    This class returns an operation that can be invoked on a remote Ocean Invoke server
     :param agent: agent that was used create this object.
     :type agent: :class:`.Agent`
     :param did: the did of this Operation
@@ -49,5 +48,4 @@ class Operation(AOperation):
             j=json.loads(r.text)
             return j
         else:
-            raise ValueError("Invalid arguments ") 
-
+            raise ValueError("Invalid arguments ")

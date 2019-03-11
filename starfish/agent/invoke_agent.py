@@ -7,13 +7,7 @@ Agent class for Invokable Ocean Agents
 
 import logging
 import json
-from starfish.account import Account
-from starfish.agent import Agent
-from starfish.listing import Listing
-from starfish.asset import SquidAsset
-from starfish.purchase import Purchase
 from starfish.operation.operation import Operation
-import sys,traceback
 logger = logging.getLogger('ocean')
 import requests
 
@@ -34,13 +28,13 @@ class InvokeAgent:
         self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
 
     def get_operations(self):
-        """ 
+        """
         returns a list of operations and their associated DIDs.
         """
-        return self.operations  
+        return self.operations
     
     def get_operation(self,did):
-        return Operation(self,did)        
+        return Operation(self,did)
 
     def get_listing(self, did):
         """
@@ -48,7 +42,7 @@ class InvokeAgent:
         Return an listing on the listing's DID-will be supported in future.
 
         """
-        pass 
+        pass
 
 
     def purchase(self, listing, account):
