@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 import json
 import pathlib
 
@@ -32,7 +31,10 @@ def read_sample_metadata():
     """
     Reads the sample metadata from the 'sample_data' folder within the examples.
     """
-    assert METADATA_SAMPLE_PATH.exists(), f'{METADATA_SAMPLE_PATH} does not exist!'
+    if not METADATA_SAMPLE_PATH.exists():
+        print(f'{METADATA_SAMPLE_PATH} does not exist!')
+        return None
+
     metadata = None
     with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
         metadata = json.load(file_handle)

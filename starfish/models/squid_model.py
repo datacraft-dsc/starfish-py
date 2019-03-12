@@ -200,17 +200,17 @@ class SquidModel():
 
     def auto_create_service_agreement_template(self, account):
         """
-        
+
         Called to auto create service level agremment template on test networks
-        
+
         Currently squid - will fail on simple tasks if there is no SLA templated defined on the block chain
-        
+
         :param account: Account to use to create the SLA template if it does not exist
         """
         if not self.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
             return self.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, account)
         return False
-        
+
     def _as_config_dict(self, options=None):
         """
 
@@ -297,7 +297,7 @@ class SquidModel():
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
-            
+
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
         return SquidOcean(config)

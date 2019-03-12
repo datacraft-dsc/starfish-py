@@ -153,7 +153,7 @@ class Account():
     def is_password(self):
         """
         Return True if the password has been set, else return False
-        
+
         """
         return not self._password is None
 

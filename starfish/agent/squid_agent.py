@@ -80,13 +80,13 @@ class SquidAgent(Agent):
         """
         For test networks, and networks that do not have ocean agreements installed, you need to call this
         method to create a basic service level agreement template.
-        
+
         :param account: account object to use too create the SLA template.
         :type account: :class:.Account object
-        
+
         :return: True if a new service level agreement template was created, else False.
         :type: boolean
-        
+
         """
         model = self.squid_model
         return model.auto_create_service_agreement_template(account._squid_account)
@@ -129,7 +129,7 @@ class SquidAgent(Agent):
 
         if not account.is_password:
             raise ValueError('You must set the account password')
-            
+
         model = self.squid_model
 
         ddo = model.register_asset(asset.metadata, account._squid_account)

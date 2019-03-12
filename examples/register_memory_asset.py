@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 
 from starfish import Ocean
 from starfish.asset import MemoryAsset
@@ -10,7 +9,7 @@ from starfish.agent import MemoryAgent
 def main():
     """
     Create a new Ocean instance.
-    You can pass 'log_level=logging.DEBUG' parameter to get full debug 
+    You can pass 'log_level=logging.DEBUG' parameter to get full debug
     logging information.
     """
     ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8545')
