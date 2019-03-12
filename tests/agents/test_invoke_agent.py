@@ -33,7 +33,7 @@ def test_invoke():
 
     sch=op.get_schema()
     assert 1==len(sch)
-    assert sch[0]=={'name':'firstparam','type':'string'}
+    assert sch['firstparam']=='string'
 
     res=op.invoke(firstparam='ocean')
     assert res['firstparam']=='hello ocean'
