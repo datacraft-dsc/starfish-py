@@ -1,5 +1,5 @@
-Register an Asset
-=================
+Register a Memory Asset
+=======================
 
 Creating a new `Ocean` instance
 -------------------------------
@@ -54,4 +54,7 @@ Now we can register the asset with the ocean account
 did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
 
-
+Full example to register a Memory Asset
+---------------------------------------
+.. literalinclude:: ../../examples/register_memory_asset.py
+   :language: python

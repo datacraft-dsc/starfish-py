@@ -9,10 +9,7 @@ import logging
 import time
 from web3 import Web3
 
-from starfish import (
-    Ocean,
-    logger
-)
+from starfish import Ocean
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import SquidAsset
@@ -29,9 +26,9 @@ from squid_py.brizo.brizo import Brizo
 from tests.helpers.brizo_mock import BrizoMock
 
 
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
+# setup_logging(level=logging.DEBUG)
+# logging.getLogger("urllib3").setLevel(logging.WARNING)
+# logging.getLogger("web3").setLevel(logging.WARNING)
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 
@@ -78,7 +75,8 @@ def _log_event(event_name):
 def test_asset():
 
     # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS)
+    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
+    
     assert ocean
     assert ocean.accounts
 
@@ -93,11 +91,7 @@ def test_asset():
 
     # check to see if the sla template has been registered, this is only run on
     # new networks, especially during a travis test run..
-    model = SquidModel(ocean)
-    if not model.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
-        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account._squid_account)
-
-
+    agent.init_network(publisher_account)
 
     listing = _register_asset_for_sale(agent, publisher_account)
     assert listing
@@ -122,6 +116,7 @@ def test_asset():
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
+    model = agent.squid_model
     BrizoMock.ocean_instance = model.get_squid_ocean()
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)

@@ -76,6 +76,21 @@ class SquidAgent(Agent):
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
 
+    def init_network(self, account):
+        """
+        For test networks, and networks that do not have ocean agreements installed, you need to call this
+        method to create a basic service level agreement template.
+        
+        :param account: account object to use too create the SLA template.
+        :type account: :class:.Account object
+        
+        :return: True if a new service level agreement template was created, else False.
+        :type: boolean
+        
+        """
+        model = self.squid_model
+        return model.auto_create_service_agreement_template(account._squid_account)
+
     def register_asset(self, asset, account):
         """
 
