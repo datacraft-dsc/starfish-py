@@ -127,6 +127,9 @@ class SquidAgent(Agent):
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
+        if not account.is_password:
+            raise ValueError('You must set the account password')
+            
         model = self.squid_model
 
         ddo = model.register_asset(asset.metadata, account._squid_account)

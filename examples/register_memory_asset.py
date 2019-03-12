@@ -54,3 +54,17 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+"""
+
+./example/register_memory_asset.py
+
+Example output:
+
+    Using default logging settings.
+    my account ocean balance: 181
+    my account ether balance: 1000000001878471200000000000
+    my asset: Some test data that I want to save for this asset
+    memory listing did:op:9e51b6167180f675586bda86148bc6300cb06da954c7c05d55a55ce0ea9c1b8e54fd280cbefcd5b58410b0b651e8728efc021b94bdd281e8bca4fbac2195544a {'did': 'did:op:9e51b6167180f675586bda86148bc6300cb06da954c7c05d55a55ce0ea9c1b8e54fd280cbefcd5b58410b0b651e8728efc021b94bdd281e8bca4fbac2195544a', 'asset_did': 'did:op:9e51b6167180f675586bda86148bc6300cb06da954c7c05d55a55ce0ea9c1b8e54fd280cbefcd5b58410b0b651e8728efc021b94bdd281e8bca4fbac2195544a'}
+
+"""

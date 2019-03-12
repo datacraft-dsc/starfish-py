@@ -150,6 +150,14 @@ class Account():
         return not squid_account is None
 
     @property
+    def is_password(self):
+        """
+        Return True if the password has been set, else return False
+        
+        """
+        return not self._password is None
+
+    @property
     def _squid_account(self):
         """
 
@@ -163,7 +171,7 @@ class Account():
             return self._unlock_squid_account
 
         model = SquidModel(self._ocean)
-        return model.get_account(self.as_checksum_address)
+        return model.get_account(self.as_checksum_address, self._password)
 
     @property
     def address(self):

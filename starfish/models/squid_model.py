@@ -245,13 +245,14 @@ class SquidModel():
 
         return data
 
-    def get_account(self, address):
+    def get_account(self, address, password=None):
         """
         :return: sqiud account object if the address is found, else None
         :type: object or None
         """
         for account in self.accounts:
             if account.address == address:
+                account.password=password
                 return account
 
     def request_tokens(self, account, value):
@@ -296,7 +297,7 @@ class SquidModel():
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
-
+            
         config_params = self._as_config_dict(options)
         config = SquidConfig(options_dict=config_params)
         return SquidOcean(config)
