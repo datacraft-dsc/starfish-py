@@ -102,12 +102,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-"""
-
-./example/register_squid_asset.py
-
-Example output:
-
-
-"""
