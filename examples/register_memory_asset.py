@@ -24,7 +24,8 @@ def main():
     """
     Print out the account's ocean balance.
     """
-    print('my account', account.ocean_balance)
+    print('my account ocean balance:', account.ocean_balance)
+    print('my account ether balance:', account.ether_balance)
 
     """
     Now create a memory asset
@@ -34,7 +35,7 @@ def main():
     """
     Print the memory asset out
     """
-    print('my asset', asset)
+    print('my asset:', asset.data)
 
     """
     Create a new memory agent to do the work.

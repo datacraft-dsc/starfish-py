@@ -245,7 +245,7 @@ class Account():
         if squid_account:
             balance = model.get_account_balance(squid_account)
             if balance:
-                return balance.eth
+                return balance.ocn
         return 0
 
     @property
@@ -266,5 +266,5 @@ class Account():
         if squid_account:
             balance = model.get_account_balance(self._squid_account)
             if balance:
-                return balance.ocn
+                return balance.eth
         return 0
