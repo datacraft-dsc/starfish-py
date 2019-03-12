@@ -20,35 +20,23 @@ def main():
     """
     account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
 
-    """
-    Print out the account's ocean balance.
-    """
+    """ Print out the account's ocean balance. """
     print('my account ocean balance:', account.ocean_balance)
     print('my account ether balance:', account.ether_balance)
 
-    """
-    Now create a memory asset
-    """
+    """ Now create a memory asset """
     asset = MemoryAsset(data='Some test data that I want to save for this asset')
 
-    """
-    Print the memory asset out
-    """
+    """ Print the memory asset out """
     print('my asset:', asset.data)
 
-    """
-    Create a new memory agent to do the work.
-    """
+    """ Create a new memory agent to do the work. """
     agent = MemoryAgent(ocean)
 
-    """
-    Register the memory asset.
-    """
+    """ Register the memory asset. """
     listing = agent.register_asset(asset, account)
 
-    """
-    Print out the listing did and listing data.
-    """
+    """ Print out the listing did and listing data. """
     print('memory listing', listing.did, listing.data)
 
 if __name__ == '__main__':
