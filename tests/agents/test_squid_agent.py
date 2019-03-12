@@ -25,11 +25,6 @@ from squid_py.brizo.brizo import Brizo
 
 from tests.helpers.brizo_mock import BrizoMock
 
-
-# setup_logging(level=logging.DEBUG)
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
-# logging.getLogger("web3").setLevel(logging.WARNING)
-
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 
 PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}

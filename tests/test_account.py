@@ -9,21 +9,15 @@ import os
 import logging
 
 from starfish import Ocean
-from starfish.logging import setup_logging
-from starfish import logger
 from squid_py import Ocean as SquidOcean
 from squid_py import Config as SquidConfig
-
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
 
 
 def test_account_load():
-    ocean = Ocean(CONFIG_PARAMS)
+    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
     account = ocean.get_account(PUBLISHER_ACCOUNT['address'])
     assert account
     assert account.address == PUBLISHER_ACCOUNT['address']

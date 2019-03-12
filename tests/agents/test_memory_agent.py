@@ -10,19 +10,12 @@ import time
 import secrets
 from web3 import Web3
 
-from starfish import (
-    Ocean,
-    logger
-)
+from starfish import Ocean
 from starfish.agent import MemoryAgent
 from starfish.asset import MemoryAsset
 
 from starfish.logging import setup_logging
 
-
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 
@@ -62,7 +55,7 @@ def _log_event(event_name):
 def test_asset():
 
     # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS)
+    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
     assert ocean
     assert ocean.accounts
 
