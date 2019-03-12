@@ -1,6 +1,8 @@
 Register a Memory Asset
 =======================
 
+This is the most simplest example, to register an in memory asset.
+
 Creating a new `Ocean` instance
 -------------------------------
 
@@ -64,7 +66,8 @@ information about the asset.
 did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
 
-Full example to register a Memory Asset
----------------------------------------
+Example program
+---------------
+
 .. literalinclude:: ../../examples/register_memory_asset.py
    :language: python

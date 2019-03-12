@@ -19,6 +19,7 @@ Contents
 
     getting_started
     register_a_memory_asset
+    register_asset
     modules/starfish
     classes/ocean
     classes/account
