@@ -15,6 +15,8 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.agreements.register_service_agreement import register_service_agreement
 from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
+
 
 from squid_py.ddo.metadata import Metadata
 
@@ -195,6 +197,20 @@ class SquidModel():
         # register/update the did->ddo to the block chain
         return self._squid_ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
 
+
+    def auto_create_service_agreement_template(self, account):
+        """
+
+        Called to auto create service level agremment template on test networks
+
+        Currently squid - will fail on simple tasks if there is no SLA templated defined on the block chain
+
+        :param account: Account to use to create the SLA template if it does not exist
+        """
+        if not self.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
+            return self.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, account)
+        return False
+
     def _as_config_dict(self, options=None):
         """
 
@@ -229,13 +245,14 @@ class SquidModel():
 
         return data
 
-    def get_account(self, address):
+    def get_account(self, address, password=None):
         """
         :return: sqiud account object if the address is found, else None
         :type: object or None
         """
         for account in self.accounts:
             if account.address == address:
+                account.password=password
                 return account
 
     def request_tokens(self, account, value):

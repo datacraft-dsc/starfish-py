@@ -3,6 +3,8 @@
 Ocean class to access the Ocean eco system.
 
 """
+import logging
+
 from web3 import (
     Web3,
     HTTPProvider
@@ -10,6 +12,8 @@ from web3 import (
 
 from starfish.account import Account
 from starfish.models.squid_model import SquidModel
+
+from starfish.logging import setup_logging
 
 
 GAS_LIMIT_DEFAULT = 30000
@@ -47,6 +51,8 @@ class Ocean():
     :type keeper_url: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
     :type gas_limit: int or string
+    :param log_level: The log level to use for logging, the default is logging.DEBUG
+    :type log_level: python logging level
 
     """
 
@@ -63,6 +69,8 @@ class Ocean():
         self._keeper_url = kwargs.get('keeper_url', 'http://localhost:8545')
         self._contracts_path = kwargs.get('contracts_path', 'artifacts')
         self._gas_limit = kwargs.get('gas_limit', GAS_LIMIT_DEFAULT)
+        setup_logging(level = kwargs.get('log_level', logging.WARNING))
+
 
         # For development, we use the HTTPProvider Web3 interface
         self.__web3 = Web3(HTTPProvider(self._keeper_url))
