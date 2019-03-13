@@ -61,7 +61,7 @@ class Operation(AOperation):
         #if True==valid_args and string_args_only==True:
         if True==valid_args:
             r=requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=kwargs)
-            j=json.loads(r.text) 
+            j=json.loads(r.text)
             return j
         else:
             raise ValueError("Invalid arguments ")

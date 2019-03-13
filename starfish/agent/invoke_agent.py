@@ -17,7 +17,6 @@ class InvokeAgent:
     Invoke Agent class allows get a list of operations and invoke them.
 
     """
-    
     def __init__(self, **kwargs):
         """init a standard ocean object"""
 
