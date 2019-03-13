@@ -9,10 +9,7 @@ import logging
 import time
 from web3 import Web3
 
-from starfish import (
-    Ocean,
-    logger
-)
+from starfish import Ocean
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import SquidAsset
@@ -26,11 +23,6 @@ from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 from tests.helpers.koi_mock import KoiMock
-
-
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545'}
 
@@ -77,7 +69,7 @@ def _log_event(event_name):
 def test_invoke():
 
     # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS)
+    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
     assert ocean
     assert ocean.accounts
 
@@ -91,12 +83,7 @@ def test_invoke():
     publisher_account.request_tokens(20)
 
     # check to see if the sla template has been registered, this is only run on
-    # new networks, especially during a travis test run..
-    model = SquidModel(ocean)
-    if not model.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
-        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account._squid_account)
-
-
+    agent.init_network(publisher_account)
 
     listing = _register_asset_for_sale(agent, publisher_account)
     assert listing
@@ -120,6 +107,7 @@ def test_invoke():
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     #Use the Koi server, and therefore use the Koi client instead of Brizo.py
+    model = agent.squid_model
     KoiMock.ocean_instance = model.get_squid_ocean()
     KoiMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(KoiMock)

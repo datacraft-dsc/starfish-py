@@ -18,7 +18,8 @@ Contents
     :glob:
 
     getting_started
-    register_an_asset
+    register_a_memory_asset
+    register_asset
     modules/starfish
     classes/ocean
     classes/account
