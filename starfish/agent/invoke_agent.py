@@ -31,7 +31,7 @@ class InvokeAgent:
         j=json.loads(r.text)
         self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
         return self.operations
-    
+
     def get_operation(self,did):
         return Operation(self,did)
 

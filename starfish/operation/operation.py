@@ -39,7 +39,7 @@ class Operation(AOperation):
         return self.schema
 
     def _payload(self,account,k,v):
-        if self.schema(k)=='asset': 
+        if self.schema.get(k)=='asset':
             if isinstance(v,Asset):
                 return {k:{'service_agreement_id':v.purchase_id, 'account':account}}
             raise ValueError("Invalid arguments ")
@@ -48,8 +48,7 @@ class Operation(AOperation):
 
     def invoke(self, **kwargs):
         """
-        Call the invoke function with keyword arguments. 
-        
+        Call the invoke function with keyword arguments.
         The keywords should be argument names required in the invoke function payload.
         returns the payload returned by the operation, or ValueError.
         This parameterization of invoke takes only string arguments (and not Ocean assets).
@@ -81,7 +80,7 @@ class Operation(AOperation):
                 payload=dict(ChainMap(*payload_seq))
 
                 r=requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=payload)
-                j=json.loads(r.text) 
+                j=json.loads(r.text)
                 return j
             except ValueError:
                 raise ValueError(" arguments are invalid according to the schema defn " )
