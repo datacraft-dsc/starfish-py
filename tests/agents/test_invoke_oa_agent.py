@@ -190,6 +190,7 @@ def test_invoke_with_sa():
         'did':did,
         'url':url,
         'consumerAddress':PURCHASER_ACCOUNT['address']})
+    logging.info(f' invoke returns {res}')
     assert res['hash']==hashval
 
 
