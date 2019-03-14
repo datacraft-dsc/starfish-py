@@ -8,7 +8,7 @@ from starfish.account import Account
 from starfish.purchase.apurchase import APurchase
 logger = logging.getLogger('ocean')
 
-class Operation(APurchase):
+class SquidOperation(APurchase):
     """
 
     This class is returned by purchasing an invokable asset uning the :func:`.Listing.purchase` method.

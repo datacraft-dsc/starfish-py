@@ -13,7 +13,7 @@ from starfish.agent import Agent
 from starfish.listing import Listing
 from starfish.asset import SquidAsset
 from starfish.purchase import Purchase
-from starfish.purchase import Operation
+from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
 import sys,traceback
@@ -212,7 +212,7 @@ class SquidAgent(Agent):
         invokable=not(invoke_endpoint == "asset")
         if invokable==True:
             service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
-            purchase = Operation(self, listing, service_agreement_id)
+            purchase = SquidOperation(self, listing, service_agreement_id)
         else:
             service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
             purchase = Purchase(self, listing, service_agreement_id)
