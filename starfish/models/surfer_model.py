@@ -33,12 +33,12 @@ class SurferModel():
             self._did = did
         else:
             raise ValueError('did must be a type string')
-        
+
         if ddo is None or isinstance(ddo, DDO) or isinstance(ddo, dict):
             self._ddo = ddo
         else:
             raise ValueEror('ddo must be a DOD object or type dict')
-            
+
         # if DID then try to load in the linked DDO
         if self._did and not self._ddo:
             self._ddo = self._resolve_did_to_ddo(self._did)
@@ -47,7 +47,7 @@ class SurferModel():
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
-        
+
         :return: A dict of the following items
         [0] asset_id.
         [1] did of the asset.

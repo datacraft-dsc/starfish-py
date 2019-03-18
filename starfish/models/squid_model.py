@@ -49,6 +49,10 @@ class SquidModel():
 
         self._squid_ocean = self.get_squid_ocean()
 
+        # to get past codacy static method 'register_agent'
+        self._keeper = Keeper.get_instance()
+
+
     def register_agent(self, service_name, endpoint_url, account, did=None):
         if did is None:
             # if no did then we need to create a new one
@@ -62,7 +66,7 @@ class SquidModel():
         ddo.add_service(service_name, endpoint_url)
         # add the static proof
         ddo.add_proof(0, private_key_pem)
-        if SquidModel.register_ddo(did, ddo, account._squid_account):
+        if self.register_ddo(did, ddo, account._squid_account):
             return [did, ddo, private_key_pem]
         return None
 
@@ -292,6 +296,14 @@ class SquidModel():
         """
         return self._squid_ocean.accounts.balance(account)
 
+    def register_ddo(self, did, ddo, account):
+        """register a ddo object on the block chain for this agent"""
+        # register/update the did->ddo to the block chain
+
+        ddo_text = ddo.as_text()
+        checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
+        did_id = did_to_id_bytes(did)
+        return self._keeper.did_registry.register_attribute(did_id, checksum, ddo_text, account.address)
 
     @property
     def accounts(self):
@@ -340,14 +352,3 @@ class SquidModel():
     @staticmethod
     def validate_metadata(metadata):
         return Metadata.validate(metadata)
-
-    @staticmethod
-    def register_ddo(did, ddo, account):
-        """register a ddo object on the block chain for this agent"""
-        # register/update the did->ddo to the block chain
-
-        keeper = Keeper.get_instance()
-        ddo_text = ddo.as_text()
-        checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
-        did_id = did_to_id_bytes(did)
-        return keeper.did_registry.register_attribute(did_id, checksum, ddo_text, account.address)
