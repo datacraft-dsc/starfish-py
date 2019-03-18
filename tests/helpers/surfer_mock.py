@@ -52,11 +52,12 @@ class SurferMock(object):
 
 
     def put_metadata(self, asset_id, metadata):
-        Asset_storage[asset_id] = metadata
         asset_hash = Web3.toHex(Web3.sha3(metadata.encode()))[2:]
         if asset_hash == asset_id:
+            # now save in memory the asset metadata for the read? ( TODO: read)
+            Asset_storage[asset_id] = metadata
             return SurferMock._response(200, asset_hash)
-        return SurferMock._response(400, f'Invalid ID for metadata, expcted: "{asset_hash}" got "{asset_id}"')
+        return SurferMock._response(400, f'Invalid ID for metadata, expected: "{asset_hash}" got "{asset_id}"')
 
 
     @staticmethod
