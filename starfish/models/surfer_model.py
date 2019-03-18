@@ -1,5 +1,5 @@
 """
-    SuferModel - Model to access the Sufer Service
+    SurferModel - Model to access the Surfer Services
 """
 import json
 import requests
