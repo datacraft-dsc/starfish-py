@@ -30,6 +30,7 @@ logging.getLogger("web3").setLevel(logging.WARNING)
 Asset_storage = {}
 
 
+
 class SurferMock(object):
 
     def __init__(self, url):
@@ -37,28 +38,44 @@ class SurferMock(object):
 
 
     def put(self, url, data=None, headers=None):
+        return self._route('put', url, data, headers)
+    
+
+    def metadata_api(self, method_type, path_items, data):
+        if method_type == 'put':
+            asset_id = ''
+            if len(path_items) > 5:
+                asset_id = path_items[5]
+            metadata = data
+            
+            asset_hash = Web3.toHex(Web3.sha3(metadata.encode()))[2:]
+            if asset_hash == asset_id:
+                # now save in memory the asset metadata for the read? ( TODO: read)
+                Asset_storage[asset_id] = metadata
+                return SurferMock._response(200, asset_hash)
+            return SurferMock._response(400, f'Invalid ID for metadata, expected: "{asset_hash}" got "{asset_id}"')
+        return SurferMock._response(400, 'Bad request')
+
+    def _route(self, method_type, url, data=None, headers=None):
         url_split = urlparse(url)
         assert(url_split)
         if url_split.path:
-            if not re.match('^/api/v1/meta', url_split.path):
+            if not re.match('^/api/v1', url_split.path):
                 return SurferMock._repsonse(404, 'path not found')
             path_items = url_split.path.split('/')
             if len(path_items) < 4:
                 return SurferMock._repsonse(404, 'path not found')
 
-            if path_items[4] == 'data' and len(path_items) > 5:
-               return self.put_metadata(path_items[5], data)
+            if path_items[3] == 'meta':
+                if path_items[4] == 'data':
+                    return self.metadata_api(method_type, path_items, data)
+                else:
+                    return SurferMock._repsonse(404, 'path not found')
+            else:
+                return SurferMock._repsonse(404, 'path not found')
+                                
         return SurferMock._response(400, 'Bad request')
-
-
-    def put_metadata(self, asset_id, metadata):
-        asset_hash = Web3.toHex(Web3.sha3(metadata.encode()))[2:]
-        if asset_hash == asset_id:
-            # now save in memory the asset metadata for the read? ( TODO: read)
-            Asset_storage[asset_id] = metadata
-            return SurferMock._response(200, asset_hash)
-        return SurferMock._response(400, f'Invalid ID for metadata, expected: "{asset_hash}" got "{asset_id}"')
-
+        
 
     @staticmethod
     def _response(status=200, content="CONTENT", json_data=None):
