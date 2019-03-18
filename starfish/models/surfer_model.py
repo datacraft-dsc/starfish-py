@@ -52,7 +52,7 @@ class SurferModel():
         [0] asset_id.
         [1] did of the asset.
         [2] metadata in text format, that was saved.
-        
+
         :type: dict
         """
         result = None
