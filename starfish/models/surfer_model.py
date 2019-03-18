@@ -1,5 +1,5 @@
 """
-    MetadataAgentModel - Model to access the Metadata Agent
+    SuferModel - Model to access the Sufer Service
 """
 import json
 import requests
@@ -11,16 +11,18 @@ from squid_py.ddo.ddo import DDO
 from starfish import logger
 
 # service endpoint type name to use for this agent
-METADATA_MARKET_AGENT_ENDPOINT_NAME = 'metadata-storage'
-METADATA_MARKET_BASE_URI = '/api/v1/meta/data'
+SURFER_AGENT_ENDPOINT_NAME = 'metadata-storage'
+SURFER_BASE_URI = '/api/v1/meta/data'
 
-class MetadataAgentModel():
+class SuferModel():
+    _http_client = requests
+
     def __init__(self, ocean, did = None, authorization=None):
         """init a standard ocan connection, with a given DID"""
         self._ocean = ocean
         self._did = did
         self._ddo = None
-        self._register_name = METADATA_MARKET_AGENT_ENDPOINT_NAME
+        self._register_name = SURFER_AGENT_ENDPOINT_NAME
 
         # if DID then try to load in the linked DDO
         if self._did:
@@ -38,7 +40,7 @@ class MetadataAgentModel():
         """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
+        asset_id = SuferModel.get_asset_id_from_metadata(metadata_text)
         if self.save(asset_id, metadata_text):
             result = {
                 'asset_id': asset_id,
@@ -49,11 +51,11 @@ class MetadataAgentModel():
 
     def save(self, asset_id, metadata_text):
         """save metadata to the agent server, using the asset_id and metadata"""
-        endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
+        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
         if endpoint:
-            url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
+            url = endpoint + SURFER_BASE_URI + '/' + asset_id
             logger.debug(f'metadata save url {url}')
-            response = requests.put(url, data=metadata_text, headers=self._headers)
+            response = _http_client.put(url, data=metadata_text, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 return asset_id
             logger.warning(f'metadata asset read {asset_id} response returned {response}')
@@ -62,11 +64,11 @@ class MetadataAgentModel():
     def read_asset(self, asset_id):
         """read the metadata from a service agent using the asset_id"""
         result = None
-        endpoint = self._get_endpoint(METADATA_MARKET_AGENT_ENDPOINT_NAME)
+        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
         if endpoint:
-            url = endpoint + METADATA_MARKET_BASE_URI + '/' + asset_id
+            url = endpoint + SURFER_BASE_URI + '/' + asset_id
             logger.debug(f'metadata read url {url}')
-            response = requests.get(url, headers=self._headers)
+            response = _http_client.get(url, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 result = {
                     'asset_id': asset_id,
@@ -103,7 +105,7 @@ class MetadataAgentModel():
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = MetadataMarketAgent.get_asset_id_from_metadata(metadata_text)
+            metadata_id = SurferModel.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug(f'metdata does not match {metadata_id} != {asset_id}')
             return metadata_id == asset_id
@@ -119,6 +121,11 @@ class MetadataAgentModel():
         :return 64 char hex string, with no leading '0x'
         """
         return Web3.toHex(Web3.sha3(metadata_text.encode()))[2:]
+
+    @staticmethod
+    def set_http_client(http_client):
+        """Set the http client to something other than the default `requests`"""
+        SurferModel._http_client = http_client
 
     def _resolve_did_to_ddo(self, did):
         """resolve a DID to a given DDO, return the DDO if found"""
