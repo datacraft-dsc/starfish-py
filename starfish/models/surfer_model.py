@@ -47,7 +47,13 @@ class SurferModel():
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
-
+        
+        :return: A dict of the following items
+        [0] asset_id.
+        [1] did of the asset.
+        [2] metadata in text format, that was saved.
+        
+        :type: dict
         """
         result = None
         metadata_text = json.dumps(metadata)
