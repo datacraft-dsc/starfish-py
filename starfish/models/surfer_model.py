@@ -59,7 +59,7 @@ class SurferModel():
         metadata_text = json.dumps(metadata)
         asset_id = SurferModel.get_asset_id_from_metadata(metadata_text)
         endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
-        saved_asset_id = self.save(asset_id, metadata_text, endpoint)
+        saved_asset_id = self.save_metadata(asset_id, metadata_text, endpoint)
         if asset_id == saved_asset_id:
             result = {
                 'asset_id': asset_id,
@@ -68,7 +68,7 @@ class SurferModel():
             }
         return result
 
-    def save(self, asset_id, metadata_text, endpoint):
+    def save_metadata(self, asset_id, metadata_text, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
         url = endpoint + SURFER_BASE_URI + '/' + asset_id
         logger.debug(f'metadata save url {url}')
