@@ -14,23 +14,26 @@ from starfish import logger
 SURFER_AGENT_ENDPOINT_NAME = 'metadata-storage'
 SURFER_BASE_URI = '/api/v1/meta/data'
 
-class SuferModel():
+class SurferModel():
     _http_client = requests
 
-    def __init__(self, ocean, did = None, authorization=None):
+    def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
         self._ocean = ocean
-        self._did = did
-        self._ddo = None
-        self._register_name = SURFER_AGENT_ENDPOINT_NAME
 
-        # if DID then try to load in the linked DDO
-        if self._did:
-            self._ddo = self._resolve_did_to_ddo(self._did)
+        if options is None:
+            options = {}
+
 
         self._headers = {'content-type': 'application/json'}
-        if authorization:
+        if options.get('authorization'):
             self._headers['Authorization'] = f'Basic {authorization}'
+
+        self._did = did
+        self._ddo = ddo
+        # if DID then try to load in the linked DDO
+        if self._did and not self._ddo:
+            self._ddo = self._resolve_did_to_ddo(self._did)
 
     def register_asset(self, metadata):
         """
@@ -40,8 +43,9 @@ class SuferModel():
         """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = SuferModel.get_asset_id_from_metadata(metadata_text)
-        if self.save(asset_id, metadata_text):
+        asset_id = SurferModel.get_asset_id_from_metadata(metadata_text)
+        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
+        if self.save(asset_id, metadata_text, endpoint):
             result = {
                 'asset_id': asset_id,
                 'did': f'{self._did}/{asset_id}',
@@ -49,17 +53,14 @@ class SuferModel():
             }
         return result
 
-    def save(self, asset_id, metadata_text):
+    def save(self, asset_id, metadata_text, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
-        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
-        if endpoint:
-            url = endpoint + SURFER_BASE_URI + '/' + asset_id
-            logger.debug(f'metadata save url {url}')
-            response = _http_client.put(url, data=metadata_text, headers=self._headers)
-            if response and response.status_code == requests.codes.ok:
-                return asset_id
-            logger.warning(f'metadata asset read {asset_id} response returned {response}')
-        return None
+        url = endpoint + SURFER_BASE_URI + '/' + asset_id
+        logger.debug(f'metadata save url {url}')
+        response = SurferModel._http_client.put(url, data=metadata_text, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            return asset_id
+        logger.warning(f'metadata asset read {asset_id} response returned {response}')
 
     def read_asset(self, asset_id):
         """read the metadata from a service agent using the asset_id"""
@@ -68,7 +69,7 @@ class SuferModel():
         if endpoint:
             url = endpoint + SURFER_BASE_URI + '/' + asset_id
             logger.debug(f'metadata read url {url}')
-            response = _http_client.get(url, headers=self._headers)
+            response = SurferModel._http_client.get(url, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 result = {
                     'asset_id': asset_id,
@@ -141,5 +142,6 @@ class SuferModel():
         if self._ddo:
             service = self._ddo.get_service(service_type)
             if service:
-                return service.get_endpoint()
+                endpoints = service.endpoints
+                return endpoints[0]
         return None
