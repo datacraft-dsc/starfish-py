@@ -29,8 +29,16 @@ class SurferModel():
         if options.get('authorization'):
             self._headers['Authorization'] = f'Basic {authorization}'
 
-        self._did = did
-        self._ddo = ddo
+        if did is None or isinstance(did, str):
+            self._did = did
+        else:
+            raise ValueError('did must be a type string')
+        
+        if ddo is None or isinstance(ddo, DDO) or isinstance(ddo, dict):
+            self._ddo = ddo
+        else:
+            raise ValueEror('ddo must be a DOD object or type dict')
+            
         # if DID then try to load in the linked DDO
         if self._did and not self._ddo:
             self._ddo = self._resolve_did_to_ddo(self._did)
@@ -45,7 +53,8 @@ class SurferModel():
         metadata_text = json.dumps(metadata)
         asset_id = SurferModel.get_asset_id_from_metadata(metadata_text)
         endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
-        if self.save(asset_id, metadata_text, endpoint):
+        saved_asset_id = self.save(asset_id, metadata_text, endpoint)
+        if asset_id == saved_asset_id:
             result = {
                 'asset_id': asset_id,
                 'did': f'{self._did}/{asset_id}',
@@ -59,8 +68,12 @@ class SurferModel():
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.put(url, data=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            return asset_id
-        logger.warning(f'metadata asset read {asset_id} response returned {response}')
+            if response.content == asset_id:
+                return asset_id
+            logger.warning(f'on asset save ( {asset_id} ) surfer returned an invalid asset id ({respones.content})')
+            return None
+        logger.warning(f'metadata asset save {asset_id} response returned {response}')
+        return None
 
     def read_asset(self, asset_id):
         """read the metadata from a service agent using the asset_id"""

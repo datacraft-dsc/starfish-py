@@ -1,7 +1,21 @@
+"""
+
+
+This class mocks the Surfer web service api.
+
+I have been trying to get as close as the current surfer API, including the error
+messages returned
+
+see https://github.com/DEX-Company/surfer/blob/develop/src/main/clojure/surfer/handler.clj
+
+"""
+
 import pytest
 import os
 import logging
 import json
+import re
+
 from urllib.parse import urlparse
 from web3 import Web3
 
@@ -26,20 +40,23 @@ class SurferMock(object):
         url_split = urlparse(url)
         assert(url_split)
         if url_split.path:
-           path_items = url_split.path.split('/')
-           assert(len(path_items) > 4)
-           assert(path_items[1] == 'api')
-           assert(path_items[2] == 'v1')
-           assert(path_items[3] == 'meta')
+            if not re.match('^/api/v1/meta', url_split.path):
+                return SurferMock._repsonse(404, 'path not found')
+            path_items = url_split.path.split('/')
+            if len(path_items) < 4:
+                return SurferMock._repsonse(404, 'path not found')
 
-           if path_items[4] == 'data':
-               return self.put_data(path_items[5], data)
-        return SurferMock._response(401, 'Error')
+            if path_items[4] == 'data' and len(path_items) > 5:
+               return self.put_metadata(path_items[5], data)
+        return SurferMock._response(400, 'Bad request')
 
-    def put_data(self, asset_id, metadata):
-       Asset_storage[asset_id] = metadata
-       new_asset_id = Web3.toHex(Web3.sha3(metadata.encode()))[2:]
-       return SurferMock._response(200, new_asset_id)
+
+    def put_metadata(self, asset_id, metadata):
+        Asset_storage[asset_id] = metadata
+        asset_hash = Web3.toHex(Web3.sha3(metadata.encode()))[2:]
+        if asset_hash == asset_id:
+            return SurferMock._response(200, asset_hash)
+        return SurferMock._response(400, f'Invalid ID for metadata, expcted: "{asset_hash}" got "{asset_id}"')
 
 
     @staticmethod

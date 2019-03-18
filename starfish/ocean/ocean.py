@@ -108,6 +108,7 @@ class Ocean():
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
+        # call the squid model to do the actual registration writing the ddo to the block chain
         model = SquidModel(self)
         return model.register_agent(service_name, endpoint_url, account, did)
 

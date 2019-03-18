@@ -51,9 +51,13 @@ def test_register_asset():
 
     surferMock = SurferMock(SURFER_URL)
 
-    model = SurferModel(ocean, agent_register.did, agent_register.ddo)
+    model = SurferModel(ocean, agent_register[0], agent_register[1])
     SurferModel.set_http_client(surferMock)
 
     metadata = _read_metadata()
     result = model.register_asset(metadata['base'])
     assert(result)
+    assert(result['asset_id'])
+    assert(result['did'])
+    assert(result['did'] == agent_register[0] + '/' + result['asset_id'])
+

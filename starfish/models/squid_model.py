@@ -5,7 +5,6 @@
 import logging
 import secrets
 
-from collections import namedtuple
 from web3 import Web3
 
 from squid_py.agreements.utils import (
@@ -33,8 +32,6 @@ from squid_py.ddo.metadata import Metadata
 
 logger = logging.getLogger('ocean')
 # from starfish import logger
-
-AgentRegister = namedtuple('AgentRegister', ('did', 'ddo', 'private_pem'))
 
 class SquidModel():
     def __init__(self, ocean, options=None):
@@ -66,7 +63,7 @@ class SquidModel():
         # add the static proof
         ddo.add_proof(0, private_key_pem)
         if SquidModel.register_ddo(did, ddo, account._squid_account):
-            return AgentRegister(did, ddo, private_key_pem)
+            return [did, ddo, private_key_pem]
         return None
 
     def register_asset(self, metadata, account):
