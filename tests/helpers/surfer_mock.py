@@ -40,6 +40,8 @@ class SurferMock(object):
     def put(self, url, data=None, headers=None):
         return self._route('put', url, data, headers)
     
+    def get(self, url, data=None, headers=None):
+        return self._route('get', url, data, headers)
 
     def metadata_api(self, method_type, path_items, data):
         if method_type == 'put':
@@ -54,6 +56,13 @@ class SurferMock(object):
                 Asset_storage[asset_id] = metadata
                 return SurferMock._response(200, asset_hash)
             return SurferMock._response(400, f'Invalid ID for metadata, expected: "{asset_hash}" got "{asset_id}"')
+        elif method_type == 'get':            
+            asset_id = ''
+            if len(path_items) > 5:
+                asset_id = path_items[5]
+            if Asset_storage[asset_id]:
+                return SurferMock._response(200, Asset_storage[asset_id])
+            return SurferMock._response(404, 'Asset id not found')
         return SurferMock._response(400, 'Bad request')
 
     def _route(self, method_type, url, data=None, headers=None):

@@ -10,8 +10,7 @@ from squid_py.ddo.ddo import DDO
 
 from starfish import logger
 
-# service endpoint type name to use for this agent
-SURFER_AGENT_ENDPOINT_NAME = 'metadata-storage'
+# default base URI for this version surfer 
 SURFER_BASE_URI = '/api/v1/meta/data'
 
 class SurferModel():
@@ -20,30 +19,17 @@ class SurferModel():
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
         self._ocean = ocean
-
-        if options is None:
+        self._did = did
+        self._ddo = ddo
+        if not options:
             options = {}
 
-
         self._headers = {'content-type': 'application/json'}
-        if options.get('authorization'):
+        authorization = options.get('authorization')
+        if authorization:
             self._headers['Authorization'] = f'Basic {authorization}'
-
-        if did is None or isinstance(did, str):
-            self._did = did
-        else:
-            raise ValueError('did must be a type string')
-
-        if ddo is None or isinstance(ddo, DDO) or isinstance(ddo, dict):
-            self._ddo = ddo
-        else:
-            raise ValueEror('ddo must be a DOD object or type dict')
-
-        # if DID then try to load in the linked DDO
-        if self._did and not self._ddo:
-            self._ddo = self._resolve_did_to_ddo(self._did)
-
-    def register_asset(self, metadata):
+        
+    def register_asset(self, metadata, endpoint):
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
@@ -58,46 +44,61 @@ class SurferModel():
         result = None
         metadata_text = json.dumps(metadata)
         asset_id = SurferModel.get_asset_id_from_metadata(metadata_text)
-        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
         saved_asset_id = self.save_metadata(asset_id, metadata_text, endpoint)
         if asset_id == saved_asset_id:
             result = {
                 'asset_id': asset_id,
-                'did': f'{self._did}/{asset_id}',
                 'metadata_text': metadata_text,
             }
         return result
 
     def save_metadata(self, asset_id, metadata_text, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = endpoint + SURFER_BASE_URI + '/' + asset_id
+        url = endpoint + '/' + asset_id
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.put(url, data=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             if response.content == asset_id:
                 return asset_id
-            logger.warning(f'on asset save ( {asset_id} ) surfer returned an invalid asset id ({respones.content})')
+            logger.warning(f'on asset save ( {asset_id} ) surfer returned an invalid asset id ({response.content})')
             return None
         logger.warning(f'metadata asset save {asset_id} response returned {response}')
         return None
 
-    def read_asset(self, asset_id):
+    def read_asset(self, asset_id, endpoint):
         """read the metadata from a service agent using the asset_id"""
+
         result = None
-        endpoint = self._get_endpoint(SURFER_AGENT_ENDPOINT_NAME)
         if endpoint:
-            url = endpoint + SURFER_BASE_URI + '/' + asset_id
+            url = endpoint + '/' + asset_id
             logger.debug(f'metadata read url {url}')
             response = SurferModel._http_client.get(url, headers=self._headers)
             if response and response.status_code == requests.codes.ok:
                 result = {
                     'asset_id': asset_id,
-                    'did': f'{self._did}/{asset_id}',
-                    'metadata_text': response.content.decode('utf-8')
+                    'metadata_text': response.content
                 }
+                # convert to str if bytes
+                if isinstance(result['metadata_text'], bytes):
+                    result['metadat_text'] = response.content.encode('utf-8')
             else:
                 logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
+
+    def get_endpoint(self, name, service_type):
+        """return the endpoint based on the name of the service, service service_type"""
+        base_uri = '/api/v1'
+        if name == 'metadata':
+            base_uri = base_uri + '/meta/data'
+        else:
+            logger:warning(f'unknown service endpoint name {name}')
+        
+        if self._ddo:
+            service = self._ddo.get_service(service_type)
+            if service:
+                endpoints = service.endpoints
+                return endpoints[0] + base_uri
+        return None
 
     @property
     def ddo(self):
@@ -147,20 +148,3 @@ class SurferModel():
         """Set the http client to something other than the default `requests`"""
         SurferModel._http_client = http_client
 
-    def _resolve_did_to_ddo(self, did):
-        """resolve a DID to a given DDO, return the DDO if found"""
-        did_resolver = DIDResolver(self._ocean._web3, self._ocean._keeper.did_registry)
-        resolved = did_resolver.resolve(did)
-        if resolved and resolved.is_ddo:
-            ddo = DDO(json_text=resolved.value)
-            return ddo
-        return None
-
-    def _get_endpoint(self, service_type):
-        """return the endpoint based on the service service_type"""
-        if self._ddo:
-            service = self._ddo.get_service(service_type)
-            if service:
-                endpoints = service.endpoints
-                return endpoints[0]
-        return None

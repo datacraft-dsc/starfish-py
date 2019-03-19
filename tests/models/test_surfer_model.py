@@ -14,7 +14,8 @@ from web3 import Web3
 
 
 from starfish import Ocean
-from starfish.models.surfer_model import SurferModel, SURFER_AGENT_ENDPOINT_NAME
+from starfish.models.surfer_model import SurferModel
+from starfish.agent import SurferAgent
 from starfish import logger
 
 
@@ -46,7 +47,7 @@ def test_register_asset():
     agent_account = ocean.get_account(AGENT_ACCOUNT)
     agent_account.unlock()
 
-    agent_register = ocean.register_update_agent_service(SURFER_AGENT_ENDPOINT_NAME, SURFER_URL, agent_account )
+    agent_register = ocean.register_update_agent_service(SurferAgent.endPointName, SURFER_URL, agent_account )
     assert(agent_register)
 
     surferMock = SurferMock(SURFER_URL)
@@ -55,9 +56,8 @@ def test_register_asset():
     SurferModel.set_http_client(surferMock)
 
     metadata = _read_metadata()
-    result = model.register_asset(metadata['base'])
+    endpoint = model.get_endpoint('metadata', SurferAgent.endPointName)
+    result = model.register_asset(metadata['base'], endpoint)
     assert(result)
     assert(result['asset_id'])
-    assert(result['did'])
-    assert(result['did'] == agent_register[0] + '/' + result['asset_id'])
-
+    assert(result['metadata_text'])

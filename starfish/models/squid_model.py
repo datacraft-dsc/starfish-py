@@ -305,6 +305,15 @@ class SquidModel():
         did_id = did_to_id_bytes(did)
         return self._keeper.did_registry.register_attribute(did_id, checksum, ddo_text, account.address)
 
+    def resolve_did_to_ddo(self, did):
+        """resolve a DID to a given DDO, return the DDO if found"""
+        did_resolver = DIDResolver(self._ocean._web3, self._keeper.did_registry)
+        resolved = did_resolver.resolve(did)
+        if resolved and resolved.is_ddo:
+            ddo = DDO(json_text=resolved.value)
+            return ddo
+        return None
+
     @property
     def accounts(self):
         return self._squid_ocean.accounts.list()
