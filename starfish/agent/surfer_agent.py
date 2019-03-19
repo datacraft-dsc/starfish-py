@@ -32,6 +32,13 @@ class SurferAgent(Agent):
 
     :param ocean: Ocean object that is being used.
     :type ocean: :class:`.Ocean`
+    :param did: Optional did of the Surfer agent
+    
+    :param ddo: Optional ddo of the surfer agent, if not provided the agent
+will automatically get the DDO from the network based on the DID.
+
+    :param options: Optional opitions, only `authorization` is used to access the 
+Surfer server.
 
     """
     endPointName = 'metadata-storage'
@@ -70,7 +77,7 @@ class SurferAgent(Agent):
         FIXME BELOW
 
         :type asset: :class:`.Asset` object to register
-        :param account: Ocean account to use to register this asset.
+        :param account: This is not used for this agent, so for compatibility it is left in
         :type account: :class:`.Account` object to use for registration.
 
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
@@ -79,10 +86,9 @@ class SurferAgent(Agent):
         For example::
 
             metadata = json.loads('my_metadata')
-            # get your publisher account
-            account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+            asset = MemoryAsset(metadata)
             agent = SurferAgent(ocean)
-            listing = agent.register_asset(metadata, account)
+            listing = agent.register_asset(asset, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
