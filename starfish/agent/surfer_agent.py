@@ -33,11 +33,11 @@ class SurferAgent(Agent):
     :param ocean: Ocean object that is being used.
     :type ocean: :class:`.Ocean`
     :param did: Optional did of the Surfer agent
-    
+
     :param ddo: Optional ddo of the surfer agent, if not provided the agent
 will automatically get the DDO from the network based on the DID.
 
-    :param options: Optional opitions, only `authorization` is used to access the 
+    :param options: Optional opitions, only `authorization` is used to access the
 Surfer server.
 
     """
