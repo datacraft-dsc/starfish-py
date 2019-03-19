@@ -10,8 +10,8 @@ from squid_py.ddo.ddo import DDO
 
 from starfish import logger
 
-# default base URI for this version surfer 
-SURFER_BASE_URI = '/api/v1/meta/data'
+# default base URI for this version surfer
+SURFER_BASE_URI = '/api/v1'
 
 class SurferModel():
     _http_client = requests
@@ -28,7 +28,7 @@ class SurferModel():
         authorization = options.get('authorization')
         if authorization:
             self._headers['Authorization'] = f'Basic {authorization}'
-        
+
     def register_asset(self, metadata, endpoint):
         """
         Register an asset with the agent storage server
@@ -87,13 +87,13 @@ class SurferModel():
 
     def get_endpoint(self, name, service_type):
         """return the endpoint based on the name of the service, service service_type"""
-        base_uri = '/api/v1'
+        base_uri = None
         if name == 'metadata':
-            base_uri = base_uri + '/meta/data'
-        else:
-            logger:warning(f'unknown service endpoint name {name}')
-        
-        if self._ddo:
+            base_uri = SURFER_BASE_URI + '/meta/data'
+        # else: codacy complaint ..
+        #    logger:warning(f'unknown service endpoint name {name}')
+
+        if self._ddo and base_uri:
             service = self._ddo.get_service(service_type)
             if service:
                 endpoints = service.endpoints

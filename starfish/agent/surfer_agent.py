@@ -41,7 +41,7 @@ class SurferAgent(Agent):
         Agent.__init__(self, ocean)
         self._did = did
         self._ddo = ddo
-        
+
         if options is None:
             options = {}
 
@@ -61,7 +61,7 @@ class SurferAgent(Agent):
         if self._did and not self._ddo:
             model = SquidModel(ocean)
             self._ddo = model.resolve_did_to_ddo(self._did)
-        
+
 
     def register_asset(self, asset, account=None):
         """
@@ -117,7 +117,7 @@ class SurferAgent(Agent):
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            listing = Listing(self, did, asset, self._ddo)            
+            listing = Listing(self, did, asset, self._ddo)
         return listing
 
 
@@ -135,7 +135,7 @@ class SurferAgent(Agent):
         """
         listing = None
         if SurferAgent.is_did_valid(did):
-            
+
             data = did_parse(did)
 
             asset_id = data['path']
@@ -152,16 +152,16 @@ class SurferAgent(Agent):
             raise ValueError(f'Invalid did "{did}" for an asset')
 
         return listing
-        
-        
+
+
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
-        
+
         Return a new SurferModel object based on the did.
         If did == None then use the loaded did in this class.
         else check to see if the did != self._did, if not then load in the ddo as well
         """
-        
+
         # if the given did is different, and no ddo, then we are requesting
         # data from a different source, so load in the ddo
         if did and did != self._did and ddo is None:
@@ -171,12 +171,12 @@ class SurferAgent(Agent):
 
         if did is None:
             did = self._did
-        
+
         if ddo is None:
             ddo = self._ddo
-            
+
         # TODO: check that the ddo is valid with the did
-            
+
         options = {
             'authorization': authorization
         }
