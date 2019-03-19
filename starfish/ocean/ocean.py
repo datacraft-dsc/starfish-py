@@ -108,21 +108,9 @@ class Ocean():
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
-        if did is None:
-            # if no did then we need to create a new one
-            did = id_to_did(secrets.token_hex(32))
-
-        # create a new DDO
-        ddo = DDO(did)
-        # add a signature
-        private_key_pem = ddo.add_signature()
-        # add the service endpoint with the meta data
-        ddo.add_service(service_name, endpoint_url)
-        # add the static proof
-        ddo.add_proof(0, private_key_pem)
-        if self._register_ddo(did, ddo, account._squid_account):
-            return [did, ddo, private_key_pem]
-        return None
+        # call the squid model to do the actual registration writing the ddo to the block chain
+        model = SquidModel(self)
+        return model.register_agent(service_name, endpoint_url, account, did)
 
     def search_operations(self, text, limit=10):
         """

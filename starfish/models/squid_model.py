@@ -3,12 +3,22 @@
 """
 
 import logging
+import secrets
+
+from web3 import Web3
+
 from squid_py.agreements.utils import (
     get_sla_template_path,
     register_service_agreement_template
 )
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
+from squid_py.did import (
+    id_to_did,
+    did_to_id_bytes,
+)
+from squid_py.ddo.ddo import DDO
+from squid_py.keeper import Keeper
 
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
 from squid_py.agreements.service_agreement import ServiceAgreement
@@ -38,6 +48,27 @@ class SquidModel():
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
 
         self._squid_ocean = self.get_squid_ocean()
+
+        # to get past codacy static method 'register_agent'
+        self._keeper = Keeper.get_instance()
+
+
+    def register_agent(self, service_name, endpoint_url, account, did=None):
+        if did is None:
+            # if no did then we need to create a new one
+            did = id_to_did(secrets.token_hex(32))
+
+        # create a new DDO
+        ddo = DDO(did)
+        # add a signature
+        private_key_pem = ddo.add_signature()
+        # add the service endpoint with the meta data
+        ddo.add_service(service_name, endpoint_url)
+        # add the static proof
+        ddo.add_proof(0, private_key_pem)
+        if self.register_ddo(did, ddo, account._squid_account):
+            return [did, ddo, private_key_pem]
+        return None
 
     def register_asset(self, metadata, account):
         """
@@ -189,15 +220,6 @@ class SquidModel():
 
         return self._squid_ocean.agreements.is_access_granted(service_agreement_id, did, account_address)
 
-
-    def register_ddo(self, did, ddo, account):
-        """
-        register a ddo object on the block chain for this agent
-        """
-        # register/update the did->ddo to the block chain
-        return self._squid_ocean._keeper.did_registry.register(did, ddo=ddo, account=account)
-
-
     def auto_create_service_agreement_template(self, account):
         """
 
@@ -273,6 +295,24 @@ class SquidModel():
         :type: tuple(eth,ocn)
         """
         return self._squid_ocean.accounts.balance(account)
+
+    def register_ddo(self, did, ddo, account):
+        """register a ddo object on the block chain for this agent"""
+        # register/update the did->ddo to the block chain
+
+        ddo_text = ddo.as_text()
+        checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
+        did_id = did_to_id_bytes(did)
+        return self._keeper.did_registry.register_attribute(did_id, checksum, ddo_text, account.address)
+
+    def resolve_did_to_ddo(self, did):
+        """resolve a DID to a given DDO, return the DDO if found"""
+        did_resolver = DIDResolver(self._ocean._web3, self._keeper.did_registry)
+        resolved = did_resolver.resolve(did)
+        if resolved and resolved.is_ddo:
+            ddo = DDO(json_text=resolved.value)
+            return ddo
+        return None
 
     @property
     def accounts(self):

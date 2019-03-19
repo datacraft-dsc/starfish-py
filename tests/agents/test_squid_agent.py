@@ -71,7 +71,7 @@ def test_asset():
 
     # create an ocean object
     ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
-    
+
     assert ocean
     assert ocean.accounts
 
