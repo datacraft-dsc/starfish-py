@@ -71,9 +71,11 @@ class Ocean():
         self._gas_limit = kwargs.get('gas_limit', GAS_LIMIT_DEFAULT)
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
-
         # For development, we use the HTTPProvider Web3 interface
         self.__web3 = Web3(HTTPProvider(self._keeper_url))
+
+        self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
+
 
     def register_update_agent_service(self, service_name, endpoint_url, account, did=None):
         """
@@ -109,7 +111,7 @@ class Ocean():
             raise ValueError('You must pass a valid account')
 
         # call the squid model to do the actual registration writing the ddo to the block chain
-        model = SquidModel(self)
+        model = self.get_squid_model()
         return model.register_agent(service_name, endpoint_url, account, did)
 
     def search_operations(self, text, limit=10):
@@ -156,7 +158,7 @@ class Ocean():
         >>> ocean.accounts
         {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish.account.Account object at 0x10456c080>, ...
         """
-        model = SquidModel(self)
+        model = self.get_squid_model()
         accounts = {}
         for squid_account in model.accounts:
             account = Account(self, squid_account.address)
@@ -179,3 +181,6 @@ class Ocean():
     @property
     def gas_limit(self):
         return self._gas_limit
+
+    def get_squid_model(self, options=None):
+        return self.__squid_model_class(self)

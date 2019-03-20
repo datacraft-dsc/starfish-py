@@ -170,7 +170,7 @@ class Account():
         if self._unlock_squid_account:
             return self._unlock_squid_account
 
-        model = SquidModel(self._ocean)
+        model = self._ocean.get_squid_model()
         return model.get_account(self.as_checksum_address, self._password)
 
     @property
@@ -248,7 +248,7 @@ class Account():
         101
 
         """
-        model = SquidModel(self._ocean)
+        model = self._ocean.get_squid_model()
         squid_account = self._squid_account
         if squid_account:
             balance = model.get_account_balance(squid_account)
@@ -269,7 +269,7 @@ class Account():
         1000000001867769600000000000
 
         """
-        model = SquidModel(self._ocean)
+        model = self._ocean.get_squid_model()
         squid_account = self._squid_account
         if squid_account:
             balance = model.get_account_balance(self._squid_account)
