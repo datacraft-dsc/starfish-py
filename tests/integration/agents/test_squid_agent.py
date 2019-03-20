@@ -23,7 +23,7 @@ from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 
-from tests.helpers.brizo_mock import BrizoMock
+from tests.integration.helpers.brizo_mock import BrizoMock
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 

@@ -25,7 +25,7 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
-from tests.helpers.brizo_mock import BrizoMock
+from tests.integration.helpers.brizo_mock import BrizoMock
 import requests
 import hashlib
 from starfish import (
@@ -161,7 +161,7 @@ def purchase_asset():
 
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
-    return purchase_asset.purchase_id,listing_did 
+    return purchase_asset.purchase_id,listing_did
 
 
 def test_invoke_with_sa():
@@ -192,5 +192,3 @@ def test_invoke_with_sa():
         'consumerAddress':PURCHASER_ACCOUNT['address']})
     logging.info(f' invoke returns {res}')
     assert res['hash']==hashval
-
-

@@ -12,7 +12,7 @@ from web3 import Web3
 from starfish import Ocean
 from starfish.agent import SurferAgent
 from starfish.asset import MemoryAsset
-from tests.helpers.surfer_mock import SurferMock
+from tests.integration.helpers.surfer_mock import SurferMock
 from starfish.models.surfer_model import SurferModel
 
 from starfish.logging import setup_logging
@@ -60,9 +60,9 @@ def test_asset():
 
     # we first need to register the Surfer agent with a did/ddo on chain
     register_account = ocean.get_account(REGISTER_ACCOUNT)
-    
+
     agent_did, ddo, private_key_pem = ocean.register_update_agent_service(SurferAgent.endPointName, SURFER_URL, register_account)
-    
+
     surferMock = SurferMock(SURFER_URL)
     SurferModel.set_http_client(surferMock)
 
@@ -72,11 +72,11 @@ def test_asset():
 
     asset = _create_memory_asset()
     assert(asset)
-    
+
     print(asset.did)
     listing = agent.register_asset(asset)
     assert(listing)
     asset_did = listing.asset.did
-    
+
     listing = agent.get_listing(asset_did)
     print(listing)

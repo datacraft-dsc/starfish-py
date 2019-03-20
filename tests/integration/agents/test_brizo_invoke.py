@@ -22,7 +22,7 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-from tests.helpers.koi_mock import KoiMock
+from tests.integration.helpers.koi_mock import KoiMock
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545'}
 

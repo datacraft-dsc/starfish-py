@@ -19,7 +19,7 @@ from starfish.agent import SurferAgent
 from starfish import logger
 
 
-from tests.helpers.surfer_mock import SurferMock
+from tests.integration.helpers.surfer_mock import SurferMock
 
 CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 AGENT_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
