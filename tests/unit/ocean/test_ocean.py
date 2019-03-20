@@ -19,6 +19,7 @@ def test_register_update_agent_service(ocean):
 
     info = ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
     assert(info)
+    assert(len(info) == 3)
     assert(info[0])
     assert(type(info[1]).__name__ == 'DDO')
     assert(isinstance(info[2], bytes))
