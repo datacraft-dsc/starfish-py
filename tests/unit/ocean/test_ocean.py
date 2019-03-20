@@ -2,10 +2,7 @@ from unittest.mock import Mock
 import pytest
 import secrets
 
-
 from starfish.account import Account
-# ocean class test
-
 from tests.unit.test_config import testConfig
 
 def test_ocean_init(ocean):
@@ -20,7 +17,11 @@ def test_register_update_agent_service(ocean):
     with pytest.raises(TypeError):
         ocean.register_update_agent_service('service-name', 'http://endpoint:8080', None)
 
-    ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
+    info = ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
+    assert(info)
+    assert(info[0])
+    assert(type(info[1]).__name__ == 'DDO')
+    assert(isinstance(info[2], bytes))
 
 def test_search_operations(ocean):
     assert(not ocean.search_operations('test search text') is None)
