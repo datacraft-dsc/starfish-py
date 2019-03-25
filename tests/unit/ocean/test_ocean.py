@@ -12,7 +12,7 @@ def test_ocean_init(ocean):
 
 def test_register_update_agent_service(ocean):
 
-    account = ocean.get_account(testConfig.accounts[0])
+    account = ocean.get_account(testConfig.accounts[0].as_dict)
 
     with pytest.raises(TypeError):
         ocean.register_update_agent_service('service-name', 'http://endpoint:8080', None)
@@ -30,7 +30,7 @@ def test_search_operations(ocean):
     assert(isinstance(ocean.search_operations('test search text'), list))
 
 def test_get_account(ocean):
-    account = ocean.get_account(testConfig.accounts[0])
+    account = ocean.get_account(testConfig.accounts[0].as_dict)
     assert(account)
 
 def test_accounts(ocean):
