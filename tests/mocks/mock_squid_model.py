@@ -17,10 +17,15 @@ class MockSquidModel():
         self._ocean = ocean
 
     def get_account(self, address, password=None):
-        account = Mock()
-        account.address = address
-        account.password = password
-        return account
+        if address:
+            for index in testConfig.accounts:
+                test_account = testConfig.accounts[index]
+                if address.lower() == test_account.test_address.lower():
+                    account = Mock()
+                    account.address = address
+                    account.password = password
+                    return account
+        return None
 
     def register_agent(self, service_name, endpoint_url, account, did=None):
         # if no did then we need to create a new one
@@ -37,13 +42,30 @@ class MockSquidModel():
         # if self.register_ddo(did, ddo, account._squid_account):
         return [did, ddo, private_key_pem]
 
+    def get_account_balance(self, account):
+        for index in testConfig.accounts:
+            test_account = testConfig.accounts[index]
+            if account.address.lower() == test_account.test_address.lower():
+                balance = Mock()
+                balance.eth = test_account.test_ether
+                balance.ocn = test_account.test_tokens
+                return balance
+        return 0
+        
+    def request_tokens(self, account, value):
+        found_account = self.get_account(account.address)
+        if found_account.address == account.address:
+            return value
+        return 0
+
     @property
     def accounts(self):
         result = []
-        for index in range(0, len(testConfig.accounts)):
-            mock_account = Mock()
-            mock_account.address = testConfig.accounts[index][0]
-            mock_account.password = testConfig.accounts[index][1]
-            result.append(mock_account)
+        for index in testConfig.accounts:
+            test_account = testConfig.accounts[index]
+            account = Mock()
+            account.address = test_account.test_address,
+            account.password = test_account.test_password
+            result.append(account)
 
         return result

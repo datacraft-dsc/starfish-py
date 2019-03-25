@@ -5,6 +5,7 @@ Account class to provide basic functionality for all Ocean Accounts
 """
 
 from starfish.models.squid_model import SquidModel
+from eth_utils import add_0x_prefix
 
 class Account():
     """
@@ -40,9 +41,16 @@ class Account():
         if isinstance(address, dict):
             self._address = address.get('address')
             self._password = address.get('password')
+        elif isinstance(address, (tuple, list)):
+            self._address = address[0]
+            if len(address) > 1:
+                self._password = address[1]
         elif isinstance(address, str):
             self._address = address
             self._password = password
+
+#        if isinstance(self._address, str):
+#            self._address = add_0x_prefix(self._address)
 
     def unlock(self, password=None):
         """
@@ -102,7 +110,7 @@ class Account():
         >>> account.request_tokens(100)
         100
         """
-        model = SquidModel(self._ocean)
+        model = self._ocean.get_squid_model()
         if not self._unlock_squid_account:
             raise ValueError('You must unlock the account before requesting tokens')
 
@@ -276,3 +284,6 @@ class Account():
             if balance:
                 return balance.eth
         return 0
+
+    def __str__(self):
+        return f'Account: {self.address}'
