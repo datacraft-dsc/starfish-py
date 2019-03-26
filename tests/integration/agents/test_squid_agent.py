@@ -23,40 +23,11 @@ from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 
-from tests.integration.helpers.brizo_mock import BrizoMock
+from tests.integration.mocks.brizo_mock import BrizoMock
 
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
 
-PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
-PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
-
-SQUID_AGENT_CONFIG_PARAMS = {
-    'aquarius_url': 'http://localhost:5000',
-    'brizo_url': 'http://localhost:8030',
-    'secret_store_url': 'http://localhost:12001',
-    'parity_url': 'http://localhost:9545',
-    'storage_path': 'squid_py.db',
-}
-SQUID_DOWNLOAD_PATH = 'consume_downloads'
-
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
-
-def _read_metadata():
-    # load in the sample metadata
-    assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
-    metadata = None
-    with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
-        metadata = json.load(file_handle)
-
-    return metadata
-
-def _create_asset():
-    metadata = _read_metadata()
-    assert metadata
-    return SquidAsset(metadata)
-
-def _register_asset_for_sale(agent, account):
-    asset = _create_asset()
+def _register_asset_for_sale(agent, metadata, account):
+    asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
@@ -67,20 +38,15 @@ def _log_event(event_name):
         logging.debug(f'Received event {event_name}: {event}')
     return _process_event
 
-def test_asset():
+def test_asset(ocean, metadata, config):
 
-    # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
 
-    assert ocean
-    assert ocean.accounts
-
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
+    agent = SquidAgent(ocean, config.squid_config)
     assert agent
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
@@ -88,7 +54,7 @@ def test_asset():
     # new networks, especially during a travis test run..
     agent.init_network(publisher_account)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
 
@@ -99,7 +65,7 @@ def test_asset():
     assert listing.asset.did == listing_did
 
 
-    purchase_account = ocean.get_account(PURCHASER_ACCOUNT)
+    purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
     purchase_account.unlock()
@@ -148,28 +114,22 @@ def test_asset():
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
 
-    purchase_asset.consume(purchase_account, SQUID_DOWNLOAD_PATH)
+    purchase_asset.consume(purchase_account, config.squid_config['download_path'])
 
 
 
-def test_search_listing():
+def test_search_listing(ocean, metadata, config):
 
-    ocean = Ocean(CONFIG_PARAMS)
-    assert ocean
-    assert ocean.accounts
 
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
+    agent = SquidAgent(ocean, config.squid_config)
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
-
-    metadata = _read_metadata()
-    assert metadata
 
     # choose a word from the description field
     text = metadata['base']['description']

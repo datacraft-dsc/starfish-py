@@ -25,7 +25,7 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
-from tests.integration.helpers.brizo_mock import BrizoMock
+from tests.integration.mocks.brizo_mock import BrizoMock
 import requests
 import hashlib
 from starfish import (
@@ -34,44 +34,9 @@ from starfish import (
 )
 from starfish.agent.invoke_agent import InvokeAgent
 
-from starfish.logging import setup_logging
 
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
-
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
-
-PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
-PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
-
-SQUID_AGENT_CONFIG_PARAMS = {
-    'aquarius_url': 'http://localhost:5000',
-    'brizo_url': 'http://localhost:8030',
-    'secret_store_url': 'http://localhost:12001',
-    'parity_url': 'http://localhost:9545',
-    'storage_path': 'squid_py.db',
-}
-SQUID_DOWNLOAD_PATH = 'consume_downloads'
-
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
-
-def _read_metadata():
-    # load in the sample metadata
-    assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
-    metadata = None
-    with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
-        metadata = json.load(file_handle)
-
-    return metadata
-
-def _create_asset():
-    metadata = _read_metadata()
-    assert metadata
-    return SquidAsset(metadata)
-
-def _register_asset_for_sale(agent, account):
-    asset = _create_asset()
+def _register_asset_for_sale(agent, metadata, account):
+    asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
@@ -82,19 +47,15 @@ def _log_event(event_name):
         logging.debug(f'Received event {event_name}: {event}')
     return _process_event
 
-def purchase_asset():
+def purchase_asset(ocean, metadata, config):
 
-    # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS)
-    assert ocean
-    assert ocean.accounts
 
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
+    agent = SquidAgent(ocean, config.squid_config)
     assert agent
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
@@ -106,7 +67,7 @@ def purchase_asset():
 
 
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
 
@@ -117,7 +78,7 @@ def purchase_asset():
     assert listing.asset.did == listing_did
     ld=listing.data
     logging.info(f' listing.data is {ld}')
-    purchase_account = ocean.get_account(PURCHASER_ACCOUNT)
+    purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
     purchase_account.unlock()
@@ -164,9 +125,9 @@ def purchase_asset():
     return purchase_asset.purchase_id,listing_did
 
 
-def test_invoke_with_sa():
+def test_invoke_with_sa(ocean, metadata, config):
 
-    said,did=purchase_asset()
+    said,did=purchase_asset(ocean, metadata, config)
     assert said
     agent = InvokeAgent()
     assert agent
@@ -189,7 +150,7 @@ def test_invoke_with_sa():
     res=op.invoke(to_hash={'serviceAgreementId':said,
         'did':did,
         'url':url,
-        'consumerAddress':PURCHASER_ACCOUNT['address']})
+        'consumerAddress':config.purchaser_account['address']})
     logging.info(f' invoke returns {res}')
     # TO DO: This needs testing again, since koi fails on calling invoke in the current barge.
     # assert res['hash']==hashval

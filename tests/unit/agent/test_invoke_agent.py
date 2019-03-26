@@ -4,7 +4,6 @@ import secrets
 
 
 from starfish.agent.invoke_agent import InvokeAgent
-from tests.unit.test_config import testConfig
 
 TEST_KOI_URL = 'http:testkoi.com:8080'
 

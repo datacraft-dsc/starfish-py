@@ -8,7 +8,7 @@ from squid_py.did import (
     did_to_id_bytes,
 )
 
-from tests.unit.test_config import testConfig
+from tests.unit.libs.unit_test_config import unitTestConfig
 
 
 class MockSquidModel():
@@ -18,8 +18,8 @@ class MockSquidModel():
 
     def get_account(self, address, password=None):
         if address:
-            for index in testConfig.accounts:
-                test_account = testConfig.accounts[index]
+            for index in unitTestConfig.accounts:
+                test_account = unitTestConfig.accounts[index]
                 if address.lower() == test_account.test_address.lower():
                     account = Mock()
                     account.address = address
@@ -43,8 +43,8 @@ class MockSquidModel():
         return [did, ddo, private_key_pem]
 
     def get_account_balance(self, account):
-        for index in testConfig.accounts:
-            test_account = testConfig.accounts[index]
+        for index in unitTestConfig.accounts:
+            test_account = unitTestConfig.accounts[index]
             if account.address.lower() == test_account.test_address.lower():
                 balance = Mock()
                 balance.eth = test_account.test_ether
@@ -61,8 +61,8 @@ class MockSquidModel():
     @property
     def accounts(self):
         result = []
-        for index in testConfig.accounts:
-            test_account = testConfig.accounts[index]
+        for index in unitTestConfig.accounts:
+            test_account = unitTestConfig.accounts[index]
             account = Mock()
             account.address = test_account.test_address,
             account.password = test_account.test_password
