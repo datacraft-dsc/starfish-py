@@ -5,7 +5,6 @@ Account class to provide basic functionality for all Ocean Accounts
 """
 
 from starfish.models.squid_model import SquidModel
-from eth_utils import add_0x_prefix
 
 class Account():
     """
