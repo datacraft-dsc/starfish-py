@@ -16,9 +16,6 @@ from starfish.models.squid_model import SquidModel
 from starfish.logging import setup_logging
 
 
-GAS_LIMIT_DEFAULT = 30000
-
-
 class Ocean():
     """
     .. _Asset class: asset.html
@@ -66,16 +63,22 @@ class Ocean():
         if args and isinstance(args[0], dict):
             kwargs = args[0]
 
-        self._keeper_url = kwargs.get('keeper_url', 'http://localhost:8545')
-        self._contracts_path = kwargs.get('contracts_path', 'artifacts')
-        self._gas_limit = kwargs.get('gas_limit', GAS_LIMIT_DEFAULT)
+        self._keeper_url = kwargs.get('keeper_url', None)
+        self._contracts_path = kwargs.get('contracts_path', None)
+        self._gas_limit = kwargs.get('gas_limit', 0)
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
         # For development, we use the HTTPProvider Web3 interface
-        self.__web3 = Web3(HTTPProvider(self._keeper_url))
+        if self._keeper_url:
+            self.__web3 = Web3(HTTPProvider(self._keeper_url))
 
-        self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
 
+        # default not to use squid
+        self.__squid_model_class = None
+
+        # only use squid or simiiar if we have the keeper url setup
+        if self._keeper_url:
+            self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
 
     def register_update_agent_service(self, service_name, endpoint_url, account, did=None):
         """
@@ -112,7 +115,9 @@ class Ocean():
 
         # call the squid model to do the actual registration writing the ddo to the block chain
         model = self.get_squid_model()
-        return model.register_agent(service_name, endpoint_url, account, did)
+        if model:
+            return model.register_agent(service_name, endpoint_url, account, did)
+        return None
 
     def search_operations(self, text, limit=10):
         """
@@ -160,9 +165,10 @@ class Ocean():
         """
         model = self.get_squid_model()
         accounts = {}
-        for squid_account in model.accounts:
-            account = Account(self, squid_account.address)
-            accounts[account.address] = account
+        if model:
+            for squid_account in model.accounts:
+                account = Account(self, squid_account.address)
+                accounts[account.address] = account
         return accounts
 
     @property
@@ -183,4 +189,6 @@ class Ocean():
         return self._gas_limit
 
     def get_squid_model(self, options=None):
-        return self.__squid_model_class(self)
+        if self.__squid_model_class:
+            return self.__squid_model_class(self)
+        return None
