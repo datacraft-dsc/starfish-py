@@ -43,6 +43,12 @@ Python 3.6
     pip install -r requirements_dev.txt
     ```
 
+1. Run the unit tests, without any supporting software/libraries outside of starfish
+
+    ```
+    python3 setup.py tests/unit
+    ```
+
 1. Create the local testing environment using [barge](https://github.com/DEX-Company/barge).
 
     In a sepearte terminal session you need to clone and checkout the correct taged
@@ -65,11 +71,18 @@ Python 3.6
 
     The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
 
-1. Run the unit tests
+1. Run the integration tests
 
     ```
-    python3 setup.py test
+    python3 setup.py tests/integration
     ```
+
+1. Run the all tests
+
+    ```
+    python3 setup.py tests
+    ```
+
 ## Documentation
 
 1. Build Sphinx documentation
