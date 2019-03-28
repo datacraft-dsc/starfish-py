@@ -46,7 +46,7 @@ Python 3.6
 1. Run the unit tests, without any supporting software/libraries outside of starfish
 
     ```
-    python3 setup.py tests/unit
+    python3 -m pytest tests/unit
     ```
 
 1. Create the local testing environment using [barge](https://github.com/DEX-Company/barge).
@@ -74,13 +74,13 @@ Python 3.6
 1. Run the integration tests
 
     ```
-    python3 setup.py tests/integration
+    python3 -m pytest tests/integration
     ```
 
 1. Run the all tests
 
     ```
-    python3 setup.py tests
+    python3 -m pytest tests
     ```
 
 ## Documentation
