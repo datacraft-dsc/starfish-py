@@ -1,5 +1,5 @@
 """
-    Test ocean class
+    Test invoke agent
 
 """
 
@@ -9,7 +9,10 @@ import logging
 import time
 from web3 import Web3
 
-from starfish import Ocean
+from starfish import (
+    Ocean,
+    logger
+)
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import SquidAsset
@@ -22,41 +25,18 @@ from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.event_listener import EventListener
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
+from tests.integration.mocks.brizo_mock import BrizoMock
+import requests
+import hashlib
+from starfish import (
+    Ocean,
+    logger
+)
+from starfish.agent.invoke_agent import InvokeAgent
 
-from tests.helpers.brizo_mock import BrizoMock
 
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
-
-PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
-PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
-
-SQUID_AGENT_CONFIG_PARAMS = {
-    'aquarius_url': 'http://localhost:5000',
-    'brizo_url': 'http://localhost:8030',
-    'secret_store_url': 'http://localhost:12001',
-    'parity_url': 'http://localhost:9545',
-    'storage_path': 'squid_py.db',
-}
-SQUID_DOWNLOAD_PATH = 'consume_downloads'
-
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
-
-def _read_metadata():
-    # load in the sample metadata
-    assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
-    metadata = None
-    with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
-        metadata = json.load(file_handle)
-
-    return metadata
-
-def _create_asset():
-    metadata = _read_metadata()
-    assert metadata
-    return SquidAsset(metadata)
-
-def _register_asset_for_sale(agent, account):
-    asset = _create_asset()
+def _register_asset_for_sale(agent, metadata, account):
+    asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
@@ -67,28 +47,27 @@ def _log_event(event_name):
         logging.debug(f'Received event {event_name}: {event}')
     return _process_event
 
-def test_asset():
+def purchase_asset(ocean, metadata, config):
 
-    # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
 
-    assert ocean
-    assert ocean.accounts
-
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
+    agent = SquidAgent(ocean, config.squid_config)
     assert agent
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
     # check to see if the sla template has been registered, this is only run on
     # new networks, especially during a travis test run..
-    agent.init_network(publisher_account)
+    model = SquidModel(ocean)
+    if not model.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
+        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account._squid_account)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+
+
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
 
@@ -97,9 +76,9 @@ def test_asset():
     listing = agent.get_listing(listing_did)
     assert listing
     assert listing.asset.did == listing_did
-
-
-    purchase_account = ocean.get_account(PURCHASER_ACCOUNT)
+    ld=listing.data
+    logging.info(f' listing.data is {ld}')
+    purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
     purchase_account.unlock()
@@ -111,7 +90,6 @@ def test_asset():
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
-    model = agent.squid_model
     BrizoMock.ocean_instance = model.get_squid_ocean()
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
@@ -141,44 +119,38 @@ def test_asset():
 
     assert event, 'No event received for ServiceAgreement Fulfilled.'
     assert Web3.toHex(event.args['agreementId']) == purchase_asset.purchase_id
-    # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
-
-    # This test does not work with the current barge
 
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)
-
-    purchase_asset.consume(purchase_account, SQUID_DOWNLOAD_PATH)
-
+    return purchase_asset.purchase_id,listing_did
 
 
-def test_search_listing():
+def test_invoke_with_sa(ocean, metadata, config):
 
-    ocean = Ocean(CONFIG_PARAMS)
-    assert ocean
-    assert ocean.accounts
+    said,did=purchase_asset(ocean, metadata, config)
+    assert said
+    agent = InvokeAgent()
+    assert agent
 
-    agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
+    res=agent.get_operations()
+    assert 'hashing_did'==res['hashing']
 
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
-    publisher_account.unlock()
+    op=agent.get_operation('hashing_did')
+    assert op
 
-    listing = _register_asset_for_sale(agent, publisher_account)
-    assert listing
-    assert publisher_account
+    sch=op.get_schema()
+    assert 1==len(sch)
+    assert sch['to_hash']=='asset'
+    url='http://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv'
+    download = requests.get(url)
+    m = hashlib.sha256()
+    m.update(download.content)
+    hashval= m.hexdigest()
 
-    metadata = _read_metadata()
-    assert metadata
-
-    # choose a word from the description field
-    text = metadata['base']['description']
-    words = text.split(' ')
-    word = words[0]
-
-    # should return at least 1 or more assets
-    logging.info(f'search word is {word}')
-    searchResult = agent.search_listings(word)
-    assert searchResult
-
-    assert(len(searchResult) > 1)
+    res=op.invoke(to_hash={'serviceAgreementId':said,
+        'did':did,
+        'url':url,
+        'consumerAddress':config.purchaser_account['address']})
+    logging.info(f' invoke returns {res}')
+    # TO DO: This needs testing again, since koi fails on calling invoke in the current barge.
+    # assert res['hash']==hashval
