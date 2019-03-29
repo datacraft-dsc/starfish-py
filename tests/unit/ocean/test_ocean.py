@@ -16,23 +16,25 @@ def test_ocean_init(config):
     assert(ocean.contracts_path == config.contracts_path)
     assert(ocean.gas_limit == config.gas_limit)
 
-
-
 def test_ocean_init_empty(config):
-    # now test with no block chain params
+    # now test with no block chain network
     ocean = Ocean()
 
     assert(ocean)
 
     account = ocean.get_account(config.accounts[0].as_dict)
-    assert(account)
 
-    with pytest.raises(ValueError):
+    # account should be None, since no network
+    assert(not account)
+
+    # error in register since account is None
+    with pytest.raises(TypeError):
         info = ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
 
     assert(not ocean.search_operations('test search text') is None)
     accounts = ocean.accounts
     assert(len(accounts) == 0)
+    
     assert(ocean.keeper_url == None)
     assert(ocean.contracts_path == None)
     assert(ocean.gas_limit == 0)

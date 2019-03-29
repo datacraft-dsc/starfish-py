@@ -152,8 +152,11 @@ class Ocean():
 
         >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         """
-        return Account(self, address, password)
-
+        account = Account(self, address, password)
+        if account.is_valid:
+            return account
+        return None
+        
     @property
     def accounts(self):
         """
