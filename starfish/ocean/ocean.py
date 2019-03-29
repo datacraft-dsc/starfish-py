@@ -39,14 +39,20 @@ class Ocean():
         from starfish.ocean import Ocean
         ocean = Ocean(keeper_url='http://localhost:8545', contracts_path= artifacts, gas_limit=1000)
 
+    or with no block chain network: ::
+
+        from starfish.ocean import Ocean
+        ocean = Ocean()
+
+
 
     You can provide these parameters in a dictionary or as individual parameters.
 
-    :param contracts_path: path to the contract files ( artifacts ).
-    :type contracts_path: str or None
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
     :type keeper_url: str or None
-    :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 30000 ).
+    :param contracts_path: path to the contract files ( artifacts ).
+    :type contracts_path: str or None
+    :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 0 ).
     :type gas_limit: int or string
     :param log_level: The log level to use for logging, the default is logging.DEBUG
     :type log_level: python logging level
@@ -156,7 +162,7 @@ class Ocean():
         if account.is_valid:
             return account
         return None
-        
+
     @property
     def accounts(self):
         """
