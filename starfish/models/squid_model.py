@@ -30,7 +30,8 @@ from squid_py.keeper.web3_provider import Web3Provider
 
 from squid_py.ddo.metadata import Metadata
 
-logger = logging.getLogger('ocean')
+
+logger = logging.getLogger('starfish')
 # from starfish import logger
 
 class SquidModel():
@@ -304,11 +305,16 @@ class SquidModel():
         :type: object or None
 
         """
-        local_account = self._ocean._web3.eth.account.create(password)
+        local_account = Web3Provider.get_web3().eth.account.create(password)
         # need to reload squid again so that it sees the new account
         # TODO: does not work at the moment, new account does not get
         # shown in squid
+        logger.info(f'new account address {local_account.address}')
         self._squid_ocean = self.get_squid_ocean()
+        account_list = Web3Provider.get_web3().eth.accounts
+        logger.info(f'current account list {account_list}')
+        account = self.get_account(local_account.address, password)
+        logger.info(f'found account {account}')
         return local_account.address
 
     def register_ddo(self, did, ddo, account):
