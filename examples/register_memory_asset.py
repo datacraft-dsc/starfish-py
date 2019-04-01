@@ -12,18 +12,11 @@ def main():
     You can pass 'log_level=logging.DEBUG' parameter to get full debug
     logging information.
     """
-    ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8545')
+    ocean = Ocean()
 
-    """
-    Get our first account - in test the account numbers are published
-    at https://docs.oceanprotocol.com/concepts/testnets/
-    """
-    account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+    # test account to regisetr
 
-    # Print out the account's ocean balance.
-    print('my account ocean balance:', account.ocean_balance)
-    print('my account ether balance:', account.ether_balance)
-
+    register_account = ocean.create_account('any old password')
     # Now create a memory asset
     asset = MemoryAsset(data='Some test data that I want to save for this asset')
 
@@ -34,10 +27,14 @@ def main():
     agent = MemoryAgent(ocean)
 
     # Register the memory asset.
-    listing = agent.register_asset(asset, account)
+    listing = agent.register_asset(asset, register_account)
 
     # Print out the listing did and listing data.
     print('memory listing', listing.did, listing.data)
+
+
+    purchase_account = ocean.create_account('purchase password')
+    purchase = listing.purchase(purchase_account)
 
 if __name__ == '__main__':
     main()

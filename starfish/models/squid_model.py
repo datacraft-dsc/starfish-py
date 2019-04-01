@@ -26,7 +26,7 @@ from squid_py.agreements.service_types import ServiceTypes
 from squid_py.agreements.register_service_agreement import register_service_agreement
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
-
+from squid_py.keeper.web3_provider import Web3Provider
 
 from squid_py.ddo.metadata import Metadata
 
@@ -295,6 +295,21 @@ class SquidModel():
         :type: tuple(eth,ocn)
         """
         return self._squid_ocean.accounts.balance(account)
+
+    def create_account(self, password):
+        """
+
+        :param str password: password of the new account
+        :return: None or squid account of the new account.
+        :type: object or None
+
+        """
+        local_account = self._ocean._web3.eth.account.create(password)
+        # need to reload squid again so that it sees the new account
+        # TODO: does not work at the moment, new account does not get
+        # shown in squid
+        self._squid_ocean = self.get_squid_ocean()
+        return local_account.address
 
     def register_ddo(self, did, ddo, account):
         """register a ddo object on the block chain for this agent"""

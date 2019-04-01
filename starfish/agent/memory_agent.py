@@ -41,13 +41,13 @@ class MemoryAgent(Agent):
             'purchase': {}
         }
 
-    def register_asset(self, asset, account):
+    def register_asset(self, asset, account = None):
         """
 
         Register a memory asset with the ocean network.
 
         :param dict metadata: metadata dictionary to store for this asset.
-        :param account: Ocean account to use to register this asset.
+        :param account: Optional, since an account is not assigned to an registered memory asset.
         :type account: :class:`.Account` object to use for registration.
 
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
@@ -57,20 +57,13 @@ class MemoryAgent(Agent):
 
             metadata = json.loads('my_metadata')
             # get your publisher account
-            account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = MemoryAgent(ocean)
-            listing = agent.register_asset(metadata, account)
+            listing = agent.register_asset(metadata)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
-
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
-
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
 
         did = id_to_did(secrets.token_hex(64))
         asset_did = did

@@ -7,6 +7,7 @@
 import unittest
 import os
 import logging
+import secrets
 
 from starfish import Ocean
 from squid_py import Ocean as SquidOcean
@@ -52,3 +53,9 @@ def test_account_list():
     accounts = ocean.accounts
     assert len(accounts) > 1
     assert publisher_account.is_address_equal((list(accounts)[0]))
+
+def test_account_creation():
+    ocean = Ocean(CONFIG_PARAMS)
+    password = secrets.token_hex(120)
+    account = ocean.create_account(password)
+    assert(account)

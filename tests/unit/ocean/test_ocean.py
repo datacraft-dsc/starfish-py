@@ -34,7 +34,7 @@ def test_ocean_init_empty(config):
     assert(not ocean.search_operations('test search text') is None)
     accounts = ocean.accounts
     assert(len(accounts) == 0)
-    
+
     assert(ocean.keeper_url == None)
     assert(ocean.contracts_path == None)
     assert(ocean.gas_limit == 0)
@@ -63,6 +63,11 @@ def test_get_account(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     assert(account)
 
+def test_create_account(ocean, config):
+    password = secrets.token_hex(32)
+    account = ocean.create_account(password)
+    assert(account)
+    
 def test_accounts(ocean, config):
     accounts = ocean.accounts
     assert(accounts)
