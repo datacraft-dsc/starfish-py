@@ -110,10 +110,12 @@ class Account():
         100
         """
         model = self._ocean.get_squid_model()
-        if not self._unlock_squid_account:
-            raise ValueError('You must unlock the account before requesting tokens')
+        if model:
+            if not self._unlock_squid_account:
+                raise ValueError('You must unlock the account before requesting tokens')
 
-        return model.request_tokens(self._unlock_squid_account, amount)
+            return model.request_tokens(self._unlock_squid_account, amount)
+        return 0
 
     def is_address_equal(self, address):
         """
@@ -178,7 +180,9 @@ class Account():
             return self._unlock_squid_account
 
         model = self._ocean.get_squid_model()
-        return model.get_account(self.as_checksum_address, self._password)
+        if model:
+            return model.get_account(self.as_checksum_address, self._password)
+        return None
 
     @property
     def address(self):
@@ -256,11 +260,12 @@ class Account():
 
         """
         model = self._ocean.get_squid_model()
-        squid_account = self._squid_account
-        if squid_account:
-            balance = model.get_account_balance(squid_account)
-            if balance:
-                return balance.ocn
+        if model:
+            squid_account = self._squid_account
+            if squid_account:
+                balance = model.get_account_balance(squid_account)
+                if balance:
+                    return balance.ocn
         return 0
 
     @property
@@ -277,11 +282,12 @@ class Account():
 
         """
         model = self._ocean.get_squid_model()
-        squid_account = self._squid_account
-        if squid_account:
-            balance = model.get_account_balance(self._squid_account)
-            if balance:
-                return balance.eth
+        if model:
+            squid_account = self._squid_account
+            if squid_account:
+                balance = model.get_account_balance(self._squid_account)
+                if balance:
+                    return balance.eth
         return 0
 
     def __str__(self):

@@ -40,6 +40,7 @@ def test_ocean_cli():
     stdout = cli.stdout.decode()
     assert 0 == cli.returncode
     lines = stdout.split('\n')
+    print(lines)
     num_accounts = 3
     assert (num_accounts + 3) == len(lines)
     if len(lines) == (num_accounts + 3):

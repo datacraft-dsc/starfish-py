@@ -14,59 +14,28 @@ from starfish import Ocean
 from starfish.agent import MemoryAgent
 from starfish.asset import MemoryAsset
 
-from starfish.logging import setup_logging
 
 
-CONFIG_PARAMS = {'contracts_path': 'artifacts', 'keeper_url': 'http://localhost:8545' }
+def _register_asset_for_sale(agent, metadata, account):
 
-PUBLISHER_ACCOUNT = { 'address': '0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password': 'node0'}
-PURCHASER_ACCOUNT = {'address': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'password': 'secret'}
-
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
-
-def _read_metadata():
-    # load in the sample metadata
-    assert METADATA_SAMPLE_PATH.exists(), "{} does not exist!".format(METADATA_SAMPLE_PATH)
-    metadata = None
-    with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
-        metadata = json.load(file_handle)
-
-    return metadata
-
-def _create_asset():
-    metadata = _read_metadata()
-    assert metadata
-
-    return MemoryAsset(metadata=metadata, data=secrets.token_hex(256))
-
-def _register_asset_for_sale(agent, account):
-
-    asset = _create_asset()
+    asset = MemoryAsset(metadata=metadata, data=secrets.token_hex(256))
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
     return listing
 
-def _log_event(event_name):
-    def _process_event(event):
-        logging.debug(f'Received event {event_name}: {event}')
-    return _process_event
-
-def test_asset():
+def test_asset(ocean, metadata, config):
 
     # create an ocean object
-    ocean = Ocean(CONFIG_PARAMS, log_level=logging.DEBUG)
-    assert ocean
-    assert ocean.accounts
 
-    agent = MemoryAgent(ocean)
+    agent = MemoryAgent(ocean, metadata)
     assert agent
 
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
 
@@ -77,7 +46,7 @@ def test_asset():
     assert listing.asset.did == listing_did
 
 
-    purchase_account = ocean.get_account(PURCHASER_ACCOUNT)
+    purchase_account = ocean.get_account(config.purchaser_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
@@ -90,23 +59,18 @@ def test_asset():
 
 
 
-def test_search_listing():
-
-    ocean = Ocean(CONFIG_PARAMS)
-    assert ocean
-    assert ocean.accounts
+def test_search_listing(ocean, metadata, config):
 
     agent = MemoryAgent(ocean)
 
     # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(PUBLISHER_ACCOUNT)
+    publisher_account = ocean.get_account(config.publisher_account)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    agent = MemoryAgent(ocean)
+
+    listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
-
-    metadata = _read_metadata()
-    assert metadata
 
     # choose a word from the description field
     text = metadata['base']['description']
