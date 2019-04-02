@@ -33,8 +33,5 @@ def main():
     print('memory listing', listing.did, listing.data)
 
 
-    purchase_account = ocean.create_account('purchase password')
-    purchase = listing.purchase(purchase_account)
-
 if __name__ == '__main__':
     main()
