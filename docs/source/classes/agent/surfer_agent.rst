@@ -1,7 +1,7 @@
-Listing Agent class
+Surfer Agent class
 ===================
 
-.. autoclass:: starfish.agent.ListingAgent
+.. autoclass:: starfish.agent.SurferAgent
     :members:
     :undoc-members:
     :show-inheritance:

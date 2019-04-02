@@ -12,21 +12,8 @@ First import the main starfish ocean library
 
 Next create an instance and a basic connection to the ocean network
 
->>> ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8545')
+>>> ocean = Ocean()
 
-Loading an account
-------------------
-
-Now we need to load an account and see how much ocean tokens and Etherum ether we have.
-We will always need some ether to be able to pay for the transaction costs to register and buy an asset
-on the Ethereum network. For our memory asset we do not need to use any ether, since
-the whole registration process will be done in memory instead on the block chain.
-
-Ocean tokens will only be needed when we buy an asset.
-
->>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
->>> print(account.ocean_balance, account.ether_balance)
-1067 1000000003718520260000000000
 
 Create a  Memory Asset
 ----------------------
@@ -61,7 +48,7 @@ a :class:.Listing object. The listing object will contain all of the information
 for selling the asset, such as price, where to obtain the asset, any samples, and more 
 information about the asset.
 
->>> listing = agent.register_asset(asset, account)
+>>> listing = agent.register_asset(asset)
 >>> print(listing.asset.did)
 did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
