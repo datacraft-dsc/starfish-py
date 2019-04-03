@@ -14,9 +14,12 @@ def main():
     """
     ocean = Ocean()
 
-    # test account to regisetr
-
+    # create a new test account to register
     register_account = ocean.create_account('any old password')
+    
+    # print the new account
+    print('my new register account', register_account)
+    
     # Now create a memory asset
     asset = MemoryAsset(data='Some test data that I want to save for this asset')
 
@@ -26,7 +29,7 @@ def main():
     # Create a new memory agent to do the work.
     agent = MemoryAgent(ocean)
 
-    # Register the memory asset.
+    # Register the memory asset, with the new account.
     listing = agent.register_asset(asset, register_account)
 
     # Print out the listing did and listing data.

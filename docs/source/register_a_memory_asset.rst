@@ -10,7 +10,7 @@ First import the main starfish ocean library
 
 >>> from starfish import Ocean
 
-Next create an instance and a basic connection to the ocean network
+Next create an instance of the ocean library with no connection to a network
 
 >>> ocean = Ocean()
 
@@ -31,6 +31,16 @@ Some test data that I want to save for this asset
 >>> print(asset.did)
 None
 
+Create a new Account
+--------------------
+We now need to create a new account. Since the Ocean is not connected to a block 
+chain network, then we can just create an account locally.
+
+>>> register_account = ocean.create_account('any old password')
+>>> print(register_account)
+Account: 1f1a46fde8bb3a2e2f6f5b0b3aaf9d3a981365c9
+
+
 Setup the Memory Agent
 ----------------------
 
@@ -48,7 +58,7 @@ a :class:.Listing object. The listing object will contain all of the information
 for selling the asset, such as price, where to obtain the asset, any samples, and more 
 information about the asset.
 
->>> listing = agent.register_asset(asset)
+>>> listing = agent.register_asset(asset, register_account)
 >>> print(listing.asset.did)
 did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
