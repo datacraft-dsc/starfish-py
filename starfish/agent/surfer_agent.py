@@ -8,6 +8,7 @@ In starfish-java, this is named as `RemoteAgent`
 import secrets
 import re
 import json
+import requests
 
 # from squid_py.did import id_to_did
 
@@ -158,6 +159,21 @@ class SurferAgent(Agent):
 
         return listing
 
+    @staticmethod
+    def get_ddo(did,resolver_url,auth):
+        """
+
+        Returns the DDO based on the DID. Uses the Surfer test resolver 
+        :param str DID: DID of the Surfer isntance
+        :return: the DDO of the Surfer instance
+        """
+        path='api/v1/test-resolver/' 
+        resp=requests.get(resolver_url+path+did,auth=auth)
+        if resp.status_code == 200:
+            return json.loads(resp.text)
+        else:
+            raise ValueError('unable to resolve DDO for did') 
+        
 
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
