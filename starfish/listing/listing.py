@@ -41,9 +41,6 @@ class Listing():
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
-
         return self._agent.purchase_asset(self, account)
 
     @property

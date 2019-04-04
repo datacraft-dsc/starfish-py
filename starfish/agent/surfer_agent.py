@@ -5,7 +5,6 @@ Surfer Agent class to provide basic functionality for Ocean Agents
 In starfish-java, this is named as `RemoteAgent`
 
 """
-
 import secrets
 import re
 import json
@@ -35,10 +34,10 @@ class SurferAgent(Agent):
     :param did: Optional did of the Surfer agent
 
     :param ddo: Optional ddo of the surfer agent, if not provided the agent
-will automatically get the DDO from the network based on the DID.
+        will automatically get the DDO from the network based on the DID.
 
     :param options: Optional opitions, only `authorization` is used to access the
-Surfer server.
+        Surfer server.
 
     """
     endPointName = 'metadata-storage'

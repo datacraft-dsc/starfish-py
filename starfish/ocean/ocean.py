@@ -4,6 +4,7 @@ Ocean class to access the Ocean eco system.
 
 """
 import logging
+import secrets
 
 from web3 import (
     Web3,
@@ -74,6 +75,7 @@ class Ocean():
         self._gas_limit = kwargs.get('gas_limit', 0)
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
+        self.__web3 = None
         # For development, we use the HTTPProvider Web3 interface
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
@@ -85,6 +87,7 @@ class Ocean():
         # only use squid or simiiar if we have the keeper url setup
         if self._keeper_url:
             self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
+
 
     def register_update_agent_service(self, service_name, endpoint_url, account, did=None):
         """
@@ -162,6 +165,31 @@ class Ocean():
         if account.is_valid:
             return account
         return None
+
+    def create_account(self, password):
+        """
+        Create a new account object on the connected network. If the ocean object is
+        not connected to a network, then a test address will be created
+
+        :param password: optional password to save with the account
+        :type password: str or None
+
+        :return: return the :class:`Account` object or None if the account can not be used.
+        :type: :class:`Account` or None
+
+        >>> account = ocean.create_account('my_password')
+        """
+        account = None
+        squid_model = self.get_squid_model()
+        if squid_model:
+            local_address = squid_model.create_account(password)
+            if local_address:
+                account = Account(self, local_address, password)
+        else:
+            address = secrets.token_hex(20)
+            account = Account(self, address, password)
+
+        return account
 
     @property
     def accounts(self):

@@ -23,7 +23,8 @@ class MockSquidModel():
                 if address.lower() == test_account.test_address.lower():
                     account = Mock()
                     account.address = address
-                    account.password = password
+                    if password:
+                        account.password = password
                     return account
         return None
 
@@ -51,7 +52,11 @@ class MockSquidModel():
                 balance.ocn = test_account.test_tokens
                 return balance
         return 0
-        
+
+    def create_account(self, password = None):
+        address = unitTestConfig.create_account(password)
+        return self.get_account(address, password)
+
     def request_tokens(self, account, value):
         found_account = self.get_account(account.address)
         if found_account.address == account.address:

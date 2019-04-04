@@ -14,5 +14,9 @@ class UnitTestConfig():
             account = UnitTestAccount()
             self.accounts[index] = account
 
+    def create_account(self, password):
+        account = UnitTestAccount(password)
+        self.accounts[len(self.accounts)] = account
+        return account.test_address
 
 unitTestConfig = UnitTestConfig()
