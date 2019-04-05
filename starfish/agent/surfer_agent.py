@@ -9,6 +9,7 @@ import secrets
 import re
 import json
 import requests
+import string
 
 # from squid_py.did import id_to_did
 
@@ -70,11 +71,10 @@ class SurferAgent(Agent):
             self._ddo = model.resolve_did_to_ddo(self._did)
 
 
-    def register_asset(self, asset, account=None):
+    def register_asset(self, asset, account=None ):
         """
 
-        Register a memory asset with the ocean network (surfer)
-        FIXME BELOW
+        Register an asset with the ocean network (surfer)
 
         :type asset: :class:`.Asset` object to register
         :param account: This is not used for this agent, so for compatibility it is left in
@@ -118,6 +118,7 @@ class SurferAgent(Agent):
 
         listing = None
         endpoint = model.get_endpoint('metadata', SurferAgent.endPointName)
+        print(' endpoint '+endpoint)
         register_data = model.register_asset(asset.metadata, endpoint)
         if register_data:
             asset_id = register_data['asset_id']
@@ -159,22 +160,6 @@ class SurferAgent(Agent):
 
         return listing
 
-    @staticmethod
-    def get_ddo(did,resolver_url,auth):
-        """
-
-        Returns the DDO based on the DID. Uses the Surfer test resolver 
-        :param str DID: DID of the Surfer isntance
-        :return: the DDO of the Surfer instance
-        """
-        path='api/v1/test-resolver/' 
-        resp=requests.get(resolver_url+path+did,auth=auth)
-        if resp.status_code == 200:
-            return json.loads(resp.text)
-        else:
-            raise ValueError('unable to resolve DDO for did') 
-        
-
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
 
@@ -197,10 +182,15 @@ class SurferAgent(Agent):
             ddo = self._ddo
 
         # TODO: check that the ddo is valid with the did
+        if self._authorization is None:
+            options = {
+                'authorization': authorization
+            }
+        else:
+            options = {
+                'authorization': self._authorization
+            }
 
-        options = {
-            'authorization': authorization
-        }
         return SurferModel(self._ocean, did, ddo, options)
 
     @staticmethod
@@ -217,3 +207,11 @@ class SurferAgent(Agent):
         """
         data = did_parse(did)
         return data['path'] and data['id_hex']
+
+    @staticmethod
+    def generate_metadata():
+        return {"name": "string", "description": "string", "type": "dataset",
+                "dateCreated": "2018-11-26T13:27:45.542Z",
+                "tags": ["string"],
+                "contentType": "string",
+                "links": [{"name": "string", "type": "download", "url": "string"}]}

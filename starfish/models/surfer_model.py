@@ -43,26 +43,21 @@ class SurferModel():
         """
         result = None
         metadata_text = json.dumps(metadata)
-        asset_id = SurferModel.get_asset_id_from_metadata(metadata_text)
-        saved_asset_id = self.save_metadata(asset_id, metadata_text, endpoint)
-        if asset_id == saved_asset_id:
-            result = {
-                'asset_id': asset_id,
+        saved_asset_id = self.save_metadata(metadata_text, endpoint)
+        result = {
+                'asset_id': saved_asset_id.decode('utf-8'),
                 'metadata_text': metadata_text,
             }
         return result
 
-    def save_metadata(self, asset_id, metadata_text, endpoint):
+    def save_metadata(self, metadata_text, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = endpoint + '/' + asset_id
+        url = endpoint 
         logger.debug(f'metadata save url {url}')
-        response = SurferModel._http_client.put(url, data=metadata_text, headers=self._headers)
+        response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            if response.content == asset_id:
-                return asset_id
-            logger.warning(f'on asset save ( {asset_id} ) surfer returned an invalid asset id ({response.content})')
-            return None
-        logger.warning(f'metadata asset save {asset_id} response returned {response}')
+            logger.warning(f'metadata asset response returned {response.content}')
+            return response.content
         return None
 
     def read_asset(self, asset_id, endpoint):
@@ -94,10 +89,9 @@ class SurferModel():
         #    logger:warning(f'unknown service endpoint name {name}')
 
         if self._ddo and base_uri:
-            service = self._ddo.get_service(service_type)
-            if service:
-                endpoints = service.endpoints
-                return endpoints[0] + base_uri
+            endpoint = [i['serviceEndpoint'] for i in self._ddo['service'] if i['type']=='Ocean.Meta.v1'][0]
+            print(endpoint)
+            return endpoint
         return None
 
     @property
