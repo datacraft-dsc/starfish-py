@@ -30,5 +30,7 @@ def test_get_ddo(ocean, metadata, config):
     assert surfer is not None
 
     asset=Asset(SurferAgent.generate_metadata())
-    regd_asset=surfer.register_asset(asset)
-    assert regd_asset is not None
+    listing = surfer.register_asset(asset)
+    assert listing is not None
+    assert 64==len(listing.listing_id)
+    print(listing)

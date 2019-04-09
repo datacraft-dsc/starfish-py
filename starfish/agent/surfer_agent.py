@@ -70,7 +70,6 @@ class SurferAgent(Agent):
             model = SquidModel(ocean)
             self._ddo = model.resolve_did_to_ddo(self._did)
 
-
     def register_asset(self, asset, account=None ):
         """
 
@@ -117,21 +116,18 @@ class SurferAgent(Agent):
         model = self._get_surferModel()
 
         listing = None
-        endpoint = model.get_endpoint('metadata', SurferAgent.endPointName)
-        print(' endpoint '+endpoint)
-        register_data = model.register_asset(asset.metadata, endpoint)
+        register_data = model.register_asset(asset.metadata)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            listing = Listing(self, did, asset, self._ddo)
+            listing_id=model.create_listing(asset_id)
+            listing = Listing(self, did, asset, self._ddo, listing_id)
         return listing
-
-
 
     def get_listing(self, did):
         """
-
+        this method is deprecated, as register_asset returns a listing.
         Return an listing on the listing's DID.
 
         :param str did: DID of the listing, this includes the did of the Surfer Agent Server.

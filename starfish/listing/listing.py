@@ -17,12 +17,13 @@ class Listing():
         :param data: data of the listing
         :type data: dict
     """
-    def __init__(self, agent, did, asset, data):
+    def __init__(self, agent, did, asset, data, listing_id=None):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
         self._did = did
         self._asset = asset
         self._data = data
+        self._listing_id=listing_id
 
 
     def purchase(self, account):
@@ -68,6 +69,15 @@ class Listing():
         :type: dict or None
         """
         return self._data
+
+    @property
+    def listing_id(self):
+        """
+
+        :return: the listing id
+        :type: str or None
+        """
+        return self._listing_id
 
     @property
     def asset(self):
