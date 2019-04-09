@@ -54,7 +54,7 @@ class SurferModel():
 
     def save_metadata(self, metadata_text, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = endpoint 
+        url = endpoint
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
@@ -70,7 +70,7 @@ class SurferModel():
             logger.warning(f'listing response returned {response.content}')
             return response.content.decode('utf-8').strip('\"')
         return None
-       
+    
     def read_asset(self, asset_id, endpoint):
         """read the metadata from a service agent using the asset_id"""
 
@@ -97,9 +97,9 @@ class SurferModel():
             svc_type = 'Ocean.Meta.v1'
         elif name == 'listing':
             svc_type = 'Ocean.Market.v1'
-        else: 
-            logger:warning(f'unknown service endpoint name {name}')
-            raise ValueError('unknown service endpoint name') 
+        else:
+            logger.warning(f'unknown service endpoint name {name}')
+            raise ValueError('unknown service endpoint name')
 
         if self._ddo:
             endpoint = [i['serviceEndpoint'] for i in self._ddo['service'] if i['type']==svc_type][0]

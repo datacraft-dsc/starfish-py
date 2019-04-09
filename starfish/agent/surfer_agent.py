@@ -8,10 +8,6 @@ In starfish-java, this is named as `RemoteAgent`
 import secrets
 import re
 import json
-import requests
-import string
-
-# from squid_py.did import id_to_did
 
 from starfish.account import Account
 from starfish.agent import Agent
