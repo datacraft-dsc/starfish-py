@@ -31,6 +31,11 @@ class IntegrationTestConfig():
         for item in items:
             self.squid_config[item[0]] = item[1]
 
+        self.surfer_username=config.get('surfer', 'username')
+        self.surfer_password=config.get('surfer', 'password')
+        self.surfer_url=config.get('surfer', 'surfer_url')
+        self.authorization='QWxhZGRpbjpPcGVuU2VzYW1l'
+
 
 integrationTestConfig = IntegrationTestConfig()
 

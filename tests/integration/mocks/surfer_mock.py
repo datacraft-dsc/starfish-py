@@ -43,6 +43,9 @@ class SurferMock(object):
     def get(self, url, data=None, headers=None):
         return self._route('get', url, data, headers)
 
+    def post(self, url, json=None, headers=None):
+        return self._route('post', url, json, headers)
+
     def metadata_api(self, method_type, path_items, data):
         if method_type == 'put':
             asset_id = ''

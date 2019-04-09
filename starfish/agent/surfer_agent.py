@@ -9,8 +9,6 @@ import secrets
 import re
 import json
 
-# from squid_py.did import id_to_did
-
 from starfish.account import Account
 from starfish.agent import Agent
 from starfish.asset import MemoryAsset
@@ -68,12 +66,10 @@ class SurferAgent(Agent):
             model = SquidModel(ocean)
             self._ddo = model.resolve_did_to_ddo(self._did)
 
-
-    def register_asset(self, asset, account=None):
+    def register_asset(self, asset, account=None ):
         """
 
-        Register a memory asset with the ocean network (surfer)
-        FIXME BELOW
+        Register an asset with the ocean network (surfer)
 
         :type asset: :class:`.Asset` object to register
         :param account: This is not used for this agent, so for compatibility it is left in
@@ -116,20 +112,18 @@ class SurferAgent(Agent):
         model = self._get_surferModel()
 
         listing = None
-        endpoint = model.get_endpoint('metadata', SurferAgent.endPointName)
-        register_data = model.register_asset(asset.metadata, endpoint)
+        register_data = model.register_asset(asset.metadata)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            listing = Listing(self, did, asset, self._ddo)
+            listing_id=model.create_listing(asset_id)
+            listing = Listing(self, did, asset, self._ddo, listing_id)
         return listing
-
-
 
     def get_listing(self, did):
         """
-
+        this method is deprecated, as register_asset returns a listing.
         Return an listing on the listing's DID.
 
         :param str did: DID of the listing, this includes the did of the Surfer Agent Server.
@@ -158,7 +152,6 @@ class SurferAgent(Agent):
 
         return listing
 
-
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
 
@@ -181,10 +174,15 @@ class SurferAgent(Agent):
             ddo = self._ddo
 
         # TODO: check that the ddo is valid with the did
+        if self._authorization is None:
+            options = {
+                'authorization': authorization
+            }
+        else:
+            options = {
+                'authorization': self._authorization
+            }
 
-        options = {
-            'authorization': authorization
-        }
         return SurferModel(self._ocean, did, ddo, options)
 
     @staticmethod
@@ -201,3 +199,11 @@ class SurferAgent(Agent):
         """
         data = did_parse(did)
         return data['path'] and data['id_hex']
+
+    @staticmethod
+    def generate_metadata():
+        return {"name": "string", "description": "string", "type": "dataset",
+                "dateCreated": "2018-11-26T13:27:45.542Z",
+                "tags": ["string"],
+                "contentType": "string",
+                "links": [{"name": "string", "type": "download", "url": "string"}]}
