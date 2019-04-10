@@ -2,7 +2,8 @@ from unittest.mock import Mock
 import pytest
 import secrets
 
-from squid_py.ddo.ddo import DDO
+from starfish.ddo.starfish_ddo import StarfishDDO
+
 from squid_py.did import (
     id_to_did,
     did_to_id_bytes,
@@ -33,7 +34,7 @@ class MockSquidModel():
         did = id_to_did(secrets.token_hex(32))
 
         # create a new DDO
-        ddo = DDO(did)
+        ddo = StarfishDDO(did)
         # add a signature
         private_key_pem = ddo.add_signature()
         # add the service endpoint with the meta data
