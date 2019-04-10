@@ -1,6 +1,6 @@
 
 import logging
-from base64 import b64decode, b64encode
+from base64 import b64encode
 from Cryptodome.PublicKey import RSA
 
 from starfish.ddo.authentication import Authentication
@@ -8,14 +8,14 @@ from starfish.ddo.authentication import Authentication
 
 from squid_py.ddo.ddo import DDO
 from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
-from squid_py.ddo.constants import DID_DDO_CONTEXT_URL, KEY_PAIR_MODULUS_BIT
-from squid_py.ddo.public_key_rsa import AUTHENTICATION_TYPE_RSA, PUBLIC_KEY_TYPE_RSA, PublicKeyRSA
+from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT
+from squid_py.ddo.public_key_rsa import AUTHENTICATION_TYPE_RSA, PublicKeyRSA
 
 
 logger = logging.getLogger('ddo')
 
 class StarfishDDO(DDO):
-    
+
     def add_authentication(self, key_id, authentication_type=None):
         """
         Add a authentication public key id and type to the list of authentications.
@@ -81,7 +81,7 @@ class StarfishDDO(DDO):
         :param public_key: Public key, PublicKeyHex
         """
         if did == None:
-            self._public_keys.append(public_key)            
+            self._public_keys.append(public_key)
         else:
             logger.debug(f'Adding public key {public_key} to the did {did}')
             self._public_keys.append(
@@ -103,7 +103,7 @@ class StarfishDDO(DDO):
         authentication = self._authentications[authorisation_index]
         if not authentication:
             raise IndexError
-        
+
         if authentication.is_public_key():
             sign_key = authentication.get_public_key()
         else:

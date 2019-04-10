@@ -167,7 +167,7 @@ class SquidModel():
         if service_agreement:
             logger.info(f'purchase invoke operation ')
             service_definition_id=service_agreement.sa_definition_id
-            
+
             service_agreement_id,signature = agreements.prepare(ddo.did, service_definition_id, account)
             asset = agreements._asset_resolver.resolve(did)
 
