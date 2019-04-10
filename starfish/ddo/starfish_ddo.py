@@ -9,7 +9,7 @@ from starfish.ddo.authentication import Authentication
 from squid_py.ddo.ddo import DDO
 from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
 from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT
-from squid_py.ddo.public_key_rsa import AUTHENTICATION_TYPE_RSA, PublicKeyRSA
+from squid_py.ddo.public_key_rsa import PublicKeyRSA
 
 
 logger = logging.getLogger('ddo')
