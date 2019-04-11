@@ -21,8 +21,7 @@ from starfish.logging import setup_logging
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
-from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
-from squid_py.keeper.event_listener import EventListener
+from squid_py.keeper import Keeper
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 from tests.integration.mocks.brizo_mock import BrizoMock
@@ -61,11 +60,7 @@ def purchase_asset(ocean, metadata, config):
 
     # check to see if the sla template has been registered, this is only run on
     # new networks, especially during a travis test run..
-    model = SquidModel(ocean)
-    if not model.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
-        model.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, publisher_account._squid_account)
-
-
+    agent.init_network(publisher_account)
 
     listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
@@ -90,35 +85,47 @@ def purchase_asset(ocean, metadata, config):
 
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
+    model = SquidModel(ocean)
     BrizoMock.ocean_instance = model.get_squid_ocean()
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
 
+    keeper = Keeper.get_instance()
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    _filter = {'agreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
+    agreement_id = purchase_asset.purchase_id
 
-    EventListener('ServiceExecutionAgreement', 'AgreementInitialized', filters=_filter).listen_once(
-        _log_event('AgreementInitialized'),
+    event = keeper.escrow_access_secretstore_template.subscribe_agreement_created(
+        agreement_id,
         20,
-        blocking=True
+        _log_event(keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
+        (),
+        wait=True
     )
-    EventListener('AccessConditions', 'AccessGranted', filters=_filter).listen_once(
-        _log_event('AccessGranted'),
-        20,
-        blocking=True
-    )
-    event = EventListener('ServiceExecutionAgreement', 'AgreementFulfilled', filters=_filter).listen_once(
-        _log_event('AgreementFulfilled'),
-        20,
-        blocking=True
-    )
+    assert event, 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
 
-    assert event, 'No event received for ServiceAgreement Fulfilled.'
-    assert Web3.toHex(event.args['agreementId']) == purchase_asset.purchase_id
+    event = keeper.lock_reward_condition.subscribe_condition_fulfilled(
+        agreement_id,
+        20,
+        _log_event(keeper.lock_reward_condition.FULFILLED_EVENT),
+        (),
+        wait=True
+    )
+    assert event, 'no event for LockRewardCondition.Fulfilled'
+
+    event = keeper.escrow_reward_condition.subscribe_condition_fulfilled(
+        agreement_id,
+        10,
+        _log_event(keeper.escrow_reward_condition.FULFILLED_EVENT),
+        (),
+        wait=True
+    )
+    assert event, 'no event for EscrowReward.Fulfilled'
+
+    assert Web3.toHex(event.args['_agreementId']) == agreement_id
 
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)

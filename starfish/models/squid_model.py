@@ -7,25 +7,21 @@ import secrets
 
 from web3 import Web3
 
-from squid_py.agreements.utils import (
-    get_sla_template_path,
-    register_service_agreement_template
-)
+from starfish.ddo.starfish_ddo import StarfishDDO
+
+
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
     id_to_did,
     did_to_id_bytes,
 )
-from squid_py.ddo.ddo import DDO
 from squid_py.keeper import Keeper
 
 from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
-from squid_py.agreements.register_service_agreement import register_service_agreement
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
 from squid_py.keeper.web3_provider import Web3Provider
 
 from squid_py.ddo.metadata import Metadata
@@ -60,7 +56,7 @@ class SquidModel():
             did = id_to_did(secrets.token_hex(32))
 
         # create a new DDO
-        ddo = DDO(did)
+        ddo = StarfishDDO(did)
         # add a signature
         private_key_pem = ddo.add_signature()
         # add the service endpoint with the meta data
@@ -157,24 +153,25 @@ class SquidModel():
         """
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
-        ments=self._squid_ocean.agreements
+        agreements=self._squid_ocean.agreements
         did=ddo.did
         if service_agreement:
             logger.info(f'purchase invoke operation ')
             service_definition_id=service_agreement.sa_definition_id
-            service_agreement_id,signature = ments.prepare(ddo.did, service_definition_id, account)
-            asset = ments._asset_resolver.resolve(did)
+
+            service_agreement_id,signature = agreements.prepare(ddo.did, service_definition_id, account)
+            asset = agreements._asset_resolver.resolve(did)
 
             service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
             service_def = asset.find_service_by_id(service_definition_id).as_dictionary()
 
             # Must approve token transfer for this purchase
 
-            ments._approve_token_transfer(service_agreement.get_price(), account)
+            agreements._approve_token_transfer(service_agreement.get_price(), account)
             # subscribe to events related to this agreement_id before sending the request.
             logger.debug(f'Registering service agreement with id: {service_agreement_id}')
 
-            register_service_agreement( ments._config.storage_path,
+            register_service_agreement( agreements._config.storage_path,
                                         account,
                                         service_agreement_id,
                                         did,
@@ -230,8 +227,8 @@ class SquidModel():
 
         :param account: Account to use to create the SLA template if it does not exist
         """
-        if not self.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
-            return self.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, account)
+#        if not self.is_service_agreement_template_registered(ACCESS_SERVICE_TEMPLATE_ID):
+#            return self.register_service_agreement_template(ACCESS_SERVICE_TEMPLATE_ID, account)
         return False
 
     def _as_config_dict(self, options=None):

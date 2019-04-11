@@ -18,8 +18,7 @@ from starfish.logging import setup_logging
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
-from squid_py.agreements.service_types import ACCESS_SERVICE_TEMPLATE_ID
-from squid_py.keeper.event_listener import EventListener
+from squid_py.keeper import Keeper
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 from tests.integration.mocks.koi_mock import KoiMock
@@ -80,33 +79,44 @@ def test_invoke(ocean, metadata, config):
     KoiMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(KoiMock)
 
+    keeper = Keeper.get_instance()
+
     # test purchase an asset
     # this purchase does not automatically fire a consume() request as no callback is registered
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+    agreement_id = purchase_asset.purchase_id
+    
+    event = keeper.escrow_access_secretstore_template.subscribe_agreement_created(
+        agreement_id,
+        20,
+        _log_event(keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
+        (),
+        wait=True
+    )
+    assert event, 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
 
-    _filter = {'agreementId': Web3.toBytes(hexstr=purchase_asset.purchase_id)}
-    pid=purchase_asset.purchase_id
-    logging.info(f' invoke test purchase id {pid}')
-    EventListener('ServiceExecutionAgreement', 'AgreementInitialized', filters=_filter).listen_once(
-        _log_event('AgreementInitialized'),
+    event = keeper.lock_reward_condition.subscribe_condition_fulfilled(
+        agreement_id,
         20,
-        blocking=True
+        _log_event(keeper.lock_reward_condition.FULFILLED_EVENT),
+        (),
+        wait=True
     )
-    EventListener('AccessConditions', 'AccessGranted', filters=_filter).listen_once(
-        _log_event('AccessGranted'),
-        20,
-        blocking=True
-    )
-    event = EventListener('ServiceExecutionAgreement', 'AgreementFulfilled', filters=_filter).listen_once(
-        _log_event('AgreementFulfilled'),
-        20,
-        blocking=True
-    )
+    assert event, 'no event for LockRewardCondition.Fulfilled'
 
-    assert event, 'No event received for ServiceAgreement Fulfilled.'
-    assert Web3.toHex(event.args['agreementId']) == purchase_asset.purchase_id
+    event = keeper.escrow_reward_condition.subscribe_condition_fulfilled(
+        agreement_id,
+        10,
+        _log_event(keeper.escrow_reward_condition.FULFILLED_EVENT),
+        (),
+        wait=True
+    )
+    assert event, 'no event for EscrowReward.Fulfilled'
+
+
+    assert Web3.toHex(event.args['_agreementId']) == agreement_id
     # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
 
     # This test does not work with the current barge
