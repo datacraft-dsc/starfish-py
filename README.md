@@ -79,8 +79,13 @@ Python 3.6
 
 1. Run the all tests
 
-    ```
+    ```bash
     python3 -m pytest tests
+
+    # or
+
+    python3 setup.py test
+
     ```
 
 ## Documentation
