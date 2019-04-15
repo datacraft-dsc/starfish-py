@@ -3,31 +3,26 @@
         "name": "UK Weather information 2011",
         "type": "dataset",
         "description": "Weather information of UK including temperature and humidity",
-        "size": "3.1gb",
         "dateCreated": "2012-10-10T17:00:000Z",
         "author": "Met Office",
         "license": "CC-BY",
         "copyrightHolder": "Met Office",
-        "encoding": "UTF-8",
-        "compression": "",
-        "contentType": "text/csv",
         "workExample": "Text PDF",
-        "language": "en",
         "categories": ["white-papers"],
-        "tags": "weather, uk, 2011, temperature, humidity",
+        "tags": ["weather, uk, 2011, temperature, humidity"],
         "price": 10,
         "checksum": "000000000000000000000000000000000000000000000000000",
         "files": [
             {
                 "url": "https://testocnfiles.blob.core.windows.net/testfiles/testzkp.pdf",
                 "checksum": "efb2c764274b745f5fc37f97c6b0e761",
-                "contentLength": "4535431",
+                "contentLength": 4535431,
                 "resourceId": "access-log2018-02-13-15-17-29-18386C502CAEA932"
             },
             {
                 "url": "s3://ocean-test-osmosis-data-plugin-dataseeding-1537375953/data.txt",
                 "checksum": "efb2c764274b745f5fc37f97c6b0e761",
-                "contentLength": "4535431",
+                "contentLength": 4535431,
                 "resourceId": "access-log2018-02-13-15-17-29-18386C502CAEA932"
             },
             {
@@ -36,14 +31,23 @@
         ],
         "links": [
             {
-                "sample1": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-daily/"
-            },
-
-            {
-                "sample2": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-averages-25km/"
+              "name": "example model",
+              "url": "https://drive.google.com/open?id=1uuz50RGiAW8YxRcWeQVgQglZpyAebgSM"
             },
             {
-                "fieldsDescription": "http://data.ceda.ac.uk/badc/ukcp09/"
+              "name": "example code",
+              "type": "example code",
+              "url": "https://github.com/slothkong/CNN_classification_10_monkey_species"
+            },
+            {
+              "url": "https://s3.amazonaws.com/datacommons/links/discovery/n5151.jpg",
+              "name": "n5151.jpg",
+              "type": "discovery"
+            },
+            {
+              "url": "https://s3.amazonaws.com/datacommons/links/sample/sample.zip",
+              "name": "sample.zip",
+              "type": "sample"
             }
         ]
     },

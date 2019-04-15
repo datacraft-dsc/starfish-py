@@ -11,7 +11,10 @@ from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import Agent
 from starfish.listing import Listing
-from starfish.asset import SquidAsset
+from starfish.asset import (
+    SquidAsset,
+    Asset,
+ )
 from starfish.purchase import Purchase
 from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
@@ -118,9 +121,6 @@ class SquidAgent(Agent):
 
         """
 
-        if not isinstance(asset, SquidAsset):
-            raise TypeError('You need to pass a SquidAsset object')
-
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
@@ -141,6 +141,20 @@ class SquidAgent(Agent):
 
         return listing
 
+
+    def validate_asset(self, asset):
+        model = self.squid_model
+
+        if not asset:
+            raise ValueError('asset must be an object')
+        if not isinstance(asset, Asset):
+            raise ValueErrer('asset must be a type of Asset object')
+        if not asset.metadata:
+            raise ValueError('Metadata must have a value')
+        if not isinstance(asset.metadata, dict):
+            raise ValueError('Metadat must be a dict')
+
+        return model.validate_asset_metadata(asset.metadata)
 
     def get_listing(self, did):
         """
@@ -313,7 +327,7 @@ class SquidAgent(Agent):
                 'secret_store_url': self._secret_store_url,
                 'storage_path': self._storage_path,
             }
-            self._model = SquidModel(self._ocean, options)
+            self._model = self._ocean.get_squid_model(options)
         return self._model
 
     @staticmethod
