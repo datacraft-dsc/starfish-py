@@ -54,7 +54,7 @@ class MockSquidModel():
         # if self.register_ddo(did, ddo, account._squid_account):
         return [did, ddo, private_key_pem]
 
-    def validate_asset_metadata(self, metadata):
+    def validate_metadata(self, metadata):
         """
 
         Validate the metadata with plesto

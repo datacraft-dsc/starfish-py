@@ -154,7 +154,7 @@ class SquidAgent(Agent):
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
-        return model.validate_asset_metadata(asset.metadata)
+        return model.validate_metadata(asset.metadata)
 
     def get_listing(self, did):
         """

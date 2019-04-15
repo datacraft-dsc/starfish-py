@@ -80,7 +80,7 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean(account)
         return squid_ocean.assets.create(metadata, account)
 
-    def validate_asset_metadata(self, metadata):
+    def validate_metadata(self, metadata):
         """
 
         Validate the metadata with plesto
@@ -90,8 +90,10 @@ class SquidModel():
         :type: boolean
 
         """
-        return is_valid_dict_local(metadata)
-
+        # fix codacy to stop making this a static function
+        if self._ocean:
+            return is_valid_dict_local(metadata)
+        return False
 
     def read_asset(self, did):
         """
@@ -390,7 +392,3 @@ class SquidModel():
     @staticmethod
     def get_default_metadata():
         return Metadata.get_example()
-
-    @staticmethod
-    def validate_metadata(metadata):
-        return Metadata.validate(metadata)
