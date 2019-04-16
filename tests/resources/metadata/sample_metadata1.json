@@ -9,7 +9,7 @@
         "copyrightHolder": "Met Office",
         "workExample": "Text PDF",
         "categories": ["white-papers"],
-        "tags": ["weather, uk, 2011, temperature, humidity"],
+        "tags": ["weather", "uk", "2011", "temperature", "humidity"],
         "price": 10,
         "checksum": "000000000000000000000000000000000000000000000000000",
         "files": [
