@@ -26,6 +26,8 @@ from squid_py.keeper.web3_provider import Web3Provider
 
 from squid_py.ddo.metadata import Metadata
 
+from plecos import is_valid_dict_local
+
 
 logger = logging.getLogger('starfish')
 # from starfish import logger
@@ -77,6 +79,21 @@ class SquidModel():
         """
         squid_ocean = self.get_squid_ocean(account)
         return squid_ocean.assets.create(metadata, account)
+
+    def validate_metadata(self, metadata):
+        """
+
+        Validate the metadata with plesto
+
+        :param dict metadata: metadata to validate
+        :return: True if the metadata is valid
+        :type: boolean
+
+        """
+        # fix codacy to stop making this a static function
+        if self._ocean:
+            return is_valid_dict_local(metadata)
+        return False
 
     def read_asset(self, did):
         """
@@ -375,7 +392,3 @@ class SquidModel():
     @staticmethod
     def get_default_metadata():
         return Metadata.get_example()
-
-    @staticmethod
-    def validate_metadata(metadata):
-        return Metadata.validate(metadata)

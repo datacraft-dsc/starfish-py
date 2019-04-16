@@ -227,5 +227,5 @@ class Ocean():
 
     def get_squid_model(self, options=None):
         if self.__squid_model_class:
-            return self.__squid_model_class(self)
+            return self.__squid_model_class(self, options)
         return None
