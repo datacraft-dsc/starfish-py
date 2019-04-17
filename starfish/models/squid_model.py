@@ -23,7 +23,6 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.keeper import Keeper
 
 from squid_py.ddo.metadata import Metadata
 
@@ -167,10 +166,7 @@ class SquidModel():
         Wait for a purchase to complete
 
         """
-        result = 'No events found'
-        keeper = Keeper.get_instance()
-
-        event = keeper.escrow_access_secretstore_template.subscribe_agreement_created(
+        event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
             purchase_id,
             timeoutSeconds,
             SquidModel.log_event(keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
@@ -180,7 +176,7 @@ class SquidModel():
         if not event:
             return 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
 
-        event = keeper.lock_reward_condition.subscribe_condition_fulfilled(
+        event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
             timeoutSeconds,
             SquidModel.log_event(keeper.lock_reward_condition.FULFILLED_EVENT),
@@ -190,7 +186,7 @@ class SquidModel():
         if not event:
             return 'no event for LockRewardCondition.Fulfilled'
 
-        event = keeper.escrow_reward_condition.subscribe_condition_fulfilled(
+        event = self._keeper.escrow_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
             timeoutSeconds,
             SquidModel.log_event(keeper.escrow_reward_condition.FULFILLED_EVENT),

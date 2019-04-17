@@ -16,6 +16,7 @@ class Agent():
         self._ocean = ocean
 
 
+    @abstractmethod
     def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
         """
 
