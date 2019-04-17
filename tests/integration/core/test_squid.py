@@ -76,7 +76,6 @@ def test_asset(ocean, metadata, config):
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
 
-    keeper = Keeper.get_instance()
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
