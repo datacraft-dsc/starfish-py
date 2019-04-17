@@ -169,7 +169,7 @@ class SquidModel():
         event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
             purchase_id,
             timeoutSeconds,
-            SquidModel.log_event(keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
+            SquidModel.log_event(self._keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
             (),
             wait=True
         )
@@ -179,7 +179,7 @@ class SquidModel():
         event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
             timeoutSeconds,
-            SquidModel.log_event(keeper.lock_reward_condition.FULFILLED_EVENT),
+            SquidModel.log_event(self._keeper.lock_reward_condition.FULFILLED_EVENT),
             (),
             wait=True
         )
@@ -189,7 +189,7 @@ class SquidModel():
         event = self._keeper.escrow_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
             timeoutSeconds,
-            SquidModel.log_event(keeper.escrow_reward_condition.FULFILLED_EVENT),
+            SquidModel.log_event(self._keeper.escrow_reward_condition.FULFILLED_EVENT),
             (),
             wait=True
         )
