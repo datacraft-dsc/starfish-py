@@ -46,6 +46,21 @@ class Purchase(APurchase):
 
         return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
 
+    def is_completed(self, account):
+        """
+
+        Currently the same as `is_purchase_valid`, but renamed to be more meaningfull
+        with the `wait_for_completion` method.
+
+        :param account: account that made the purchase
+        :type account: :class: `.Account`
+
+        :return: boolean True if the purchase has completed and finished, else
+        False if the purchase is invalid or the has not finished.
+
+        """
+        return self.is_purchase_valid(account)
+
     def wait_for_completion(self, timeoutSeconds=60):
         """
 

@@ -19,7 +19,6 @@ from starfish.logging import setup_logging
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
-from squid_py.keeper import Keeper
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 
@@ -82,8 +81,12 @@ def test_asset(ocean, metadata, config):
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+    assert(not purchase_asset.is_completed(purchase_account))
+
     error_message = purchase_asset.wait_for_completion()
     assert(error_message == True)
+
+    assert(purchase_asset.is_completed(purchase_account))
 
     # assert Web3.toHex(event.args['_agreementId']) == agreement_id
     # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
