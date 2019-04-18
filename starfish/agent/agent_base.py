@@ -17,6 +17,7 @@ class AgentBase(ABC):
     def __init__(self, ocean):
         """init the the Ocean Object Base with the ocean instance"""
         self._ocean = ocean
+        super().__init__()
 
     @abstractmethod
     def register_asset(self, asset, account):

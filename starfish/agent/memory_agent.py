@@ -178,7 +178,7 @@ class MemoryAgent(AgentBase):
             + We assume that the following templates below will always be used.
 
         """
-        return
+        return True
 
     def is_access_granted_for_asset(self, asset, purchase_id, account):
         """

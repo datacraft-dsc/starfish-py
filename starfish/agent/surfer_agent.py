@@ -121,6 +121,16 @@ class SurferAgent(AgentBase):
             listing = Listing(self, did, asset, self._ddo, listing_id)
         return listing
 
+    def validate_asset(self, asset):
+        """
+
+        Validate an asset
+
+        :param asset: Asset to validate.
+        :return: True if the asset is valid
+        """
+        pass
+        
     def get_listing(self, did):
         """
         this method is deprecated, as register_asset returns a listing.
@@ -151,6 +161,88 @@ class SurferAgent(AgentBase):
             raise ValueError(f'Invalid did "{did}" for an asset')
 
         return listing
+
+    def search_listings(self, text, sort=None, offset=100, page=0):
+        """
+
+        Search the off chain storage for an asset with the givien 'text'
+
+        :param str text: Test to search all metadata items for.
+        :param sort: sort the results ( defaults: None, no sort).
+        :type sort: str or None
+        :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
+        :param int page: Returns the page number based on the offset.
+
+        :return: a list of assets objects found using the search.
+        :type: list of DID strings
+
+        For example::
+
+            # return the 300 -> 399 records in the search for the text 'weather' in the metadata.
+            my_result = agent.search_registered_assets('weather', None, 100, 3)
+
+        """
+        pass
+
+    def purchase_asset(self, listing, account):
+        """
+
+        Purchase an asset using it's listing and an account.
+
+        :param listing: Listing to use for the purchase.
+        :type listing: :class:`.Listing`
+        :param account: Ocean account to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+
+        """
+        pass
+
+    def is_access_granted_for_asset(self, asset, purchase_id, account):
+        """
+
+        Check to see if the account and purchase_id have access to the assed data.
+
+
+        :param asset: Asset to check for access.
+        :type asset: :class:`.Asset` object
+        :param str purchase_id: purchase id that was used to purchase the asset.
+        :param account: Ocean account to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+
+        :return: True if the asset can be accessed and consumed.
+        :type: boolean
+        """
+        return False
+
+    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+        """
+
+            Wait for completion of the purchase
+
+            TODO: issues here...
+            + No method as yet to pass back paramaters and values during the purchase process
+            + We assume that the following templates below will always be used.
+
+        """
+        pass
+
+    def consume_asset(self, listing, purchase_id, account, download_path ):
+        """
+        Consume the asset and download the data. The actual payment to the asset
+        provider will be made at this point.
+
+        :param listing: Listing that was used to make the purchase.
+        :type listing: :class:`.Listing`
+        :param str purchase_id: purchase id that was used to purchase the asset.
+        :param account: Ocean account that was used to purchase the asset.
+        :type account: :class:`.Account` object to use for registration.
+        :param str download_path: path to store the asset data.
+
+        :return: True if the asset has been consumed and downloaded
+        :type: boolean
+
+        """
+        return False
 
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
