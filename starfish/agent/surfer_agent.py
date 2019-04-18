@@ -10,7 +10,7 @@ import re
 import json
 
 from starfish.account import Account
-from starfish.agent import Agent
+from starfish.agent import AgentBase
 from starfish.asset import MemoryAsset
 from starfish.models.surfer_model import SurferModel
 from starfish.models.squid_model import SquidModel
@@ -22,7 +22,7 @@ from starfish.listing import Listing
 
 from squid_py.ddo.ddo import DDO
 
-class SurferAgent(Agent):
+class SurferAgent(AgentBase):
     """
 
     Surfer Agent class allows to register, list, purchase and consume assets.
@@ -42,7 +42,7 @@ class SurferAgent(Agent):
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocean object"""
-        Agent.__init__(self, ocean)
+        AgentBase.__init__(self, ocean)
         self._did = did
         self._ddo = ddo
 

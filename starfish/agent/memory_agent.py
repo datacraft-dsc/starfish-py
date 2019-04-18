@@ -11,14 +11,14 @@ import json
 from squid_py.did import id_to_did
 
 from starfish.account import Account
-from starfish.agent import Agent
+from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import Asset
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
 
 
-class MemoryAgent(Agent):
+class MemoryAgent(AgentBase):
     """
 
     Memory Agent class allows to register, list, purchase and consume assets.
@@ -30,7 +30,7 @@ class MemoryAgent(Agent):
 
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
-        Agent.__init__(self, ocean)
+        AgentBase.__init__(self, ocean)
 
         if args and isinstance(args[0], dict):
             kwargs = args[0]
@@ -80,6 +80,16 @@ class MemoryAgent(Agent):
             listing = Listing(self, did, asset, listingdata)
 
         return listing
+
+    def validate_asset(self, asset):
+        """
+
+        Validate an asset
+
+        :param asset: Asset to validate.
+        :return: True if the asset is valid
+        """
+        return not asset is None
 
 
     def get_listing(self, did):
@@ -157,6 +167,18 @@ class MemoryAgent(Agent):
             self._memory['purchase'][purchase_id] = (purchase, account.address)
 
         return purchase
+
+    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+        """
+
+            Wait for completion of the purchase
+
+            TODO: issues here...
+            + No method as yet to pass back paramaters and values during the purchase process
+            + We assume that the following templates below will always be used.
+
+        """
+        return
 
     def is_access_granted_for_asset(self, asset, purchase_id, account):
         """
