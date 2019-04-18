@@ -24,7 +24,7 @@ class ListingBase(ABC):
         self._asset = asset
         self._data = data
         self._listing_id=listing_id
-        super().__init__()        
+        super().__init__()
 
     @abstractmethod
     def purchase(self, account):
