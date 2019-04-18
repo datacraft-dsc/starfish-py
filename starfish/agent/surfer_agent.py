@@ -130,7 +130,7 @@ class SurferAgent(AgentBase):
         :return: True if the asset is valid
         """
         pass
-        
+
     def get_listing(self, did):
         """
         this method is deprecated, as register_asset returns a listing.
