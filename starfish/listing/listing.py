@@ -98,3 +98,11 @@ class Listing():
         :type: boolean
         """
         return self._did is None or self._did is None or self._asset is None
+
+    def __str__(self):
+        s = 'Listing: agent=' + self.agent.__class__.__name__ + ', '
+        s += 'did=' + self.did + ', '
+        s += 'asset=' + self.asset.__class__.__name__ + ', '
+        s += 'listing_id=' + self.listing_id + ', '
+        s += 'data=' + str(self.data)
+        return s
