@@ -52,7 +52,10 @@ def test_asset(ocean, metadata, config):
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+
     assert purchase_asset.is_purchased
+    assert(purchase_asset.wait_for_completion())
+    assert(purchase_asset.is_completed(purchase_account))
     assert purchase_asset.is_purchase_valid(purchase_account)
 
     purchase_asset.consume(purchase_account, '')

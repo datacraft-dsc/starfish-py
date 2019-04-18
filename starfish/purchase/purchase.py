@@ -46,6 +46,36 @@ class Purchase(APurchase):
 
         return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
 
+    def is_completed(self, account):
+        """
+
+        Currently the same as `is_purchase_valid`, but renamed to be more meaningfull
+        with the `wait_for_completion` method.
+
+        :param account: account that made the purchase
+        :type account: :class: `.Account`
+
+        :return: boolean True if the purchase has completed and finished, else
+        False if the purchase is invalid or the has not finished.
+
+        """
+        return self.is_purchase_valid(account)
+
+    def wait_for_completion(self, timeoutSeconds=60):
+        """
+
+        Some purchases ( squid ), require to wait for the smart contracts to complete
+        This method will call the underlying agent to wait for the purchase to complete
+
+        :param integer timeoutSeconds: Optional seconds to waif to purchase to complete. Default: 60 seconds
+        :return: True if successfull or an error message if failed
+        :type: string or boolean
+
+        """
+        if not self.is_purchased:
+            raise TypeError('You need to purchase this asset before waiting')
+        return self._agent.purchase_wait_for_completion(self._purchase_id, timeoutSeconds)
+
     def consume(self, account, download_path):
         """
 
