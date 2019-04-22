@@ -71,10 +71,14 @@ class Purchase(PurchaseBase):
         :return: True if successfull or an error message if failed
         :type: string or boolean
 
+        :raises OceanPurchaseError: if the correct events are not received
+
         """
         if not self.is_purchased:
-            raise TypeError('You need to purchase this asset before waiting')
+            raise StarfishPurchaseError('You need to purchase this asset before waiting')
+
         return self._agent.purchase_wait_for_completion(self._purchase_id, timeoutSeconds)
+
 
     def consume(self, account, download_path):
         """

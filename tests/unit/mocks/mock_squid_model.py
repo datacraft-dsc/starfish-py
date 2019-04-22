@@ -4,6 +4,7 @@ import secrets
 import json
 
 from starfish.ddo.starfish_ddo import StarfishDDO
+from starfish.models.squid_model import SquidModelPurchaseError
 
 from squid_py.did import (
     id_to_did,
@@ -103,7 +104,7 @@ class MockSquidModel():
     def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
         if purchase_id:
             return True
-        return 'Cannot wait'
+        raise SquidModelPurchaseError('test squid model purchase wait error')
 
     def consume_asset(self, ddo, service_agreement_id, account, download_path):
         service = ddo.get_service(TEST_SERVICE_NAME)
