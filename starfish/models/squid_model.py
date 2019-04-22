@@ -32,6 +32,9 @@ from plecos import is_valid_dict_local
 logger = logging.getLogger('starfish')
 # from starfish import logger
 
+# to keep the squid_model seperate, we will issue a seperate purchase exception just
+# from this class
+
 class SquidModelPurchaseError(Exception):
     """ Raised when a purchase event has failed to complete """
 

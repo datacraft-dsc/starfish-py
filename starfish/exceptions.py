@@ -12,4 +12,4 @@ class OceanCommandLineError(Exception):
     """ raised on command line errors """
 
 class StarfishPurchaseError(Exception):
-    """ Raised when a purchase event has failed to complete """
+    """ Raised when a purchase events have failed to complete """
