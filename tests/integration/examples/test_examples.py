@@ -16,5 +16,4 @@ def test_register_memory_asset():
 
 def test_surfer_memory_asset():
     from examples.surfer_memory_asset import main
-    # Todo: Surfer example is not working standalone
-    # main()
+    main()

@@ -37,3 +37,11 @@ class Listing(ListingBase):
             raise TypeError('You need to pass an Account object')
 
         return self._agent.purchase_asset(self, account)
+
+    def __str__(self):
+        s = 'Listing: agent=' + self._agent.__class__.__name__ + ', '
+        s += 'did=' + self._did + ', '
+        s += 'asset=' + self._asset.__class__.__name__ + ', '
+        s += 'listing_id=' + self._listing_id + ', '
+        s += 'data=' + str(self._data)
+        return s

@@ -34,7 +34,7 @@ class SurferAgent(AgentBase):
     :param ddo: Optional ddo of the surfer agent, if not provided the agent
         will automatically get the DDO from the network based on the DID.
 
-    :param options: Optional opitions, only `authorization` is used to access the
+    :param options: Optional options, only `authorization` is used to access the
         Surfer server.
 
     """
@@ -89,26 +89,6 @@ class SurferAgent(AgentBase):
                 print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
-
-        # NOTE: use _http_client as per tests/helpers/koi_client.py
-        # initialized with https://docs.python.org/3/library/http.client.html
-        # and surfer config using http://localhost:8080
-        # Consider ocean.registerLocalDID(surferDID,ddoString);
-        # as per src/test/java/sg/dex/starfish/samples/SurferConfig.java
-
-        # TODO register asset metadata
-        # http://localhost:8080/api-docs/index.html#!/Meta_API/post_api_v1_meta_data
-        # curl $args --header 'Content-Type: application/json' \
-        #   --header 'Accept: application/json' \
-        #   -o "$assetidfile" -d @"$metadatafile" $url/api/v1/meta/data \
-        # asset_id = contents of assetidfile without quotes
-
-        # TODO register asset
-        # http://localhost:8080/api-docs/index.html#!/Storage_API/post_api_v1_assets_id
-        # curl $args --header 'Accept: application/json' \
-        #   --form file=@"$asset" $url/api/v1/assets/$assetid ; then
-        # WHERE $asset is asset.data, $assetid = asset_id
-
         model = self._get_surferModel()
 
         listing = None
@@ -117,8 +97,8 @@ class SurferAgent(AgentBase):
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            listing_id=model.create_listing(asset_id)
-            listing = Listing(self, did, asset, self._ddo, listing_id)
+            data = model.create_listing(asset_id)
+            listing = Listing(self, did, asset, data, data['id'])
         return listing
 
     def validate_asset(self, asset):

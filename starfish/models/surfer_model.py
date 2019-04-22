@@ -15,6 +15,12 @@ SURFER_BASE_URI = '/api/v1'
 
 class SurferModel():
     _http_client = requests
+    services = {'metadata': 'Ocean.Meta.v1',
+                'storage': 'Ocean.Storage.v1',
+                'invoke': 'Ocean.Invoke.v1',
+                'market': 'Ocean.Market.v1',
+                'trust': 'Ocean.Trust.v1',
+                'auth': 'Ocean.Auth.v1'}
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
@@ -26,8 +32,8 @@ class SurferModel():
 
         self._headers = {'content-type': 'application/json'}
         authorization = options.get('authorization')
-        if authorization:
-            self._headers['Authorization'] = f'Basic {authorization}'
+        if authorization: # this is an OAuth2 token
+            self._headers['Authorization'] = f'token {authorization}'
 
     def register_asset(self, metadata):
         """
@@ -44,10 +50,9 @@ class SurferModel():
         result = None
         metadata_text = json.dumps(metadata)
         endpoint = self.get_endpoint('metadata')
- 
         saved_asset_id = self.save_metadata(metadata_text, endpoint)
         result = {
-                'asset_id': saved_asset_id.decode('utf-8'),
+                'asset_id': saved_asset_id,
                 'metadata_text': metadata_text,
             }
         return result
@@ -58,19 +63,29 @@ class SurferModel():
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            logger.warning(f'metadata asset response returned {response.content}')
-            return response.content
+            json = response.json()
+            logger.warning(f'metadata asset response returned {json}')
+            return json
+        else:
+            msg = f'metadata asset response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
         return None
 
     def create_listing(self,asset_id):
-        endpoint = self.get_endpoint('metadata')
+        endpoint = self.get_endpoint('market') + '/listings'
         metadata_text={'assetid':asset_id}
         response = SurferModel._http_client.post(endpoint, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            logger.warning(f'listing response returned {response.content}')
-            return response.content.decode('utf-8').strip('\"')
+            json = response.json()
+            logger.warning('listing response returned: ' + str(json))
+            return json
+        else:
+            msg = f'listing response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
         return None
-    
+
     def read_asset(self, asset_id, endpoint):
         """read the metadata from a service agent using the asset_id"""
 
@@ -91,20 +106,24 @@ class SurferModel():
                 logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
 
-    def get_endpoint(self, name ):
+    def get_endpoint(self, name):
         """return the endpoint based on the name of the service"""
-        if name == 'metadata':
-            svc_type = 'Ocean.Meta.v1'
-        elif name == 'listing':
-            svc_type = 'Ocean.Market.v1'
+        if name in SurferModel.services:
+            srv_type = SurferModel.services[name]
         else:
-            logger.warning(f'unknown service endpoint name {name}')
-            raise ValueError('unknown service endpoint name')
+            msg = f'unknown surfer endpoint service: {name}'
+            logger.error(msg)
+            raise ValueError(msg)
 
+        endpoint = None
         if self._ddo:
-            endpoint = [i['serviceEndpoint'] for i in self._ddo['service'] if i['type']==svc_type][0]
-            return endpoint
-        return None
+            service = self._ddo.get_service(srv_type)
+            endpoint = service.endpoints.service
+        if not endpoint:
+            msg = f'unable to find surfer endpoint for {name} = {srv_type}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return endpoint
 
     @property
     def ddo(self):
@@ -154,3 +173,28 @@ class SurferModel():
         """Set the http client to something other than the default `requests`"""
         SurferModel._http_client = http_client
 
+    @staticmethod
+    def get_authorization_token(surfer_url, surfer_username, surfer_password):
+        """Get a surfer authorization token (create one if needed).
+        Throws exception on error."""
+        token_url = surfer_url + SURFER_BASE_URI + '/auth/token'
+        r = requests.get(token_url, auth=(surfer_username, surfer_password))
+        token = None
+        if r.status_code == 200:
+            tokens = r.json()
+            if len(tokens) > 0:
+                token = tokens[-1]
+            else: # need to create a token
+                r = requests.post(token_url, auth=(surfer_username, surfer_password))
+                if r.status_code == 200:
+                    token = r.json()
+                else:
+                    msg = f'unable to create token, status {r.status_code}'
+                    logger.error(msg)
+                    raise ValueError(msg)
+        else:
+            msg = f'unable to get tokens, status {r.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        logger.debug(f'using surfer token {token}')
+        return token

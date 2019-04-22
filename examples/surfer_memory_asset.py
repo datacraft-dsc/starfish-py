@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 
+from squid_py.ddo.ddo import DDO
 from starfish import Ocean
 from starfish.asset import MemoryAsset
 from starfish.agent import SurferAgent
-
+from starfish.models.surfer_model import SurferModel
 
 def main():
     """
@@ -13,22 +15,12 @@ def main():
     You can pass 'log_level=logging.DEBUG' parameter to get full debug
     logging information.
     """
-    ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8545')
-
-    """
-    Get our first account - in test the account numbers are published
-    at https://docs.oceanprotocol.com/concepts/testnets/
-    """
-    # account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
-
-    # Print out the account's ocean balance.
-    # print('my account ocean balance:', account.ocean_balance)
-    # print('my account ether balance:', account.ether_balance)
+    ocean = Ocean(log_level=logging.DEBUG)
 
     # Now create a memory asset
     asset = MemoryAsset(data='Some test data that I want to save for this asset')
 
-    # NOTE: In surfer
+    # NOTE: In starfish-java
     # MemoryAsset extends ADataAsset
     #   ADataAsset extends AAsset implements DataAsset
     #     AAsset implements Asset
@@ -44,7 +36,19 @@ def main():
     print(metadata_json)
 
     # Create a new memory agent to do the work.
-    agent = SurferAgent(ocean)
+    surfer_url = 'http://localhost:8080'
+    surfer_ddo = DDO()
+    surfer_ddo.add_service(SurferModel.services['metadata'],
+                           surfer_url + '/api/v1/meta/data', None)
+    surfer_ddo.add_service(SurferModel.services['market'],
+                           surfer_url + '/api/v1/market', None)
+    surfer_username = 'test'
+    surfer_password = 'foobar'
+    authorization = SurferModel.get_authorization_token(surfer_url,
+                                                        surfer_username,
+                                                        surfer_password)
+    surfer_options = {'authorization': authorization}
+    agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
 
     # Register the memory asset.
     # NOTE: In surfer the agent is a RemoteAgent and
