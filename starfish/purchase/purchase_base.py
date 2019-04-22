@@ -1,11 +1,11 @@
 
 """
-    Basic Purchase class
+    Base Purchase class
 """
 from abc import ABC, abstractmethod
 
 
-class APurchase(ABC):
+class PurchaseBase(ABC):
 
     def __init__(self, agent, listing, purchase_id):
         """init the the Purchase Object Base with the agent instance"""

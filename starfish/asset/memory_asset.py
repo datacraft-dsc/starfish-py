@@ -2,9 +2,10 @@
     Memory Asset
 """
 
-from starfish.asset import Asset
+from starfish.asset.asset_base import AssetBase
+from starfish.asset.squid_asset import SquidAsset
 
-class MemoryAsset(Asset):
+class MemoryAsset(AssetBase):
     """
 
     Memory asset can be used to try out assets without accessing any file system
@@ -20,7 +21,7 @@ class MemoryAsset(Asset):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = Asset.generate_metadata()
+            metadata = SquidAsset.generate_metadata()
             metadata['name'] = 'MemoryAsset'
             metadata['description'] = 'Memory Asset'
             metadata['size'] = len(data)
@@ -28,7 +29,7 @@ class MemoryAsset(Asset):
                 metadata['contentType'] = 'text/plain; charset=utf-8'
             else:
                 metadata['contentType'] = 'application/octet-stream'
-        Asset.__init__(self, metadata, did)
+        AssetBase.__init__(self, metadata, did)
         self._data = data
 
     @property
@@ -41,4 +42,3 @@ class MemoryAsset(Asset):
         :type: str or byte
         """
         return self._data
-

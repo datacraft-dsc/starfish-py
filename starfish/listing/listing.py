@@ -3,9 +3,10 @@
    Listing class
 """
 
+from starfish.listing.listing_base import ListingBase
 from starfish.account import Account
 
-class Listing():
+class Listing(ListingBase):
     """
         Create a Listing object
 
@@ -17,13 +18,6 @@ class Listing():
         :param data: data of the listing
         :type data: dict
     """
-    def __init__(self, agent, did, asset, data, listing_id=None):
-        """init the the Listing Object Base with the agent instance"""
-        self._agent = agent
-        self._did = did
-        self._asset = asset
-        self._data = data
-        self._listing_id=listing_id
 
 
     def purchase(self, account):
@@ -43,58 +37,3 @@ class Listing():
             raise TypeError('You need to pass an Account object')
 
         return self._agent.purchase_asset(self, account)
-
-    @property
-    def agent(self):
-        """
-
-        :return: Agent object that created this listing
-        :type: :class:`.SquidAgent`
-        """
-        return self._agent
-
-    @property
-    def did(self):
-        """
-        :return: did of the listing
-        :type: string
-        """
-        return self._did
-
-    @property
-    def data(self):
-        """
-
-        :return: data of the listing
-        :type: dict or None
-        """
-        return self._data
-
-    @property
-    def listing_id(self):
-        """
-
-        :return: the listing id
-        :type: str or None
-        """
-        return self._listing_id
-
-    @property
-    def asset(self):
-        """
-
-        :return: asset held by the listing
-        :type: :class:`.Asset`
-        """
-        return self._asset
-
-    @property
-    def is_empty(self):
-        """
-
-        Checks to see if this Listinng is empty.
-
-        :return: True if this listing is empty else False.
-        :type: boolean
-        """
-        return self._did is None or self._did is None or self._asset is None

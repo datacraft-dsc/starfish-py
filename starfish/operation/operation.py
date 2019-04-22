@@ -4,13 +4,13 @@
 """
 
 import logging
-from starfish.operation.aoperation import AOperation
+from starfish.operation.operation_base import OperationBase
 logger = logging.getLogger('ocean')
 from collections import ChainMap
 import requests
 import json
 
-class Operation(AOperation):
+class Operation(OperationBase):
     """
 
     This class returns an operation that can be invoked on a remote Ocean Invoke server

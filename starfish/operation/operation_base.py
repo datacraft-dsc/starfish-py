@@ -5,7 +5,7 @@ Operation class
 from abc import ABC, abstractmethod
 
 
-class AOperation(ABC):
+class OperationBase(ABC):
 
     def __init__(self, agent,did):
         """init the the Operation with the agent instance"""

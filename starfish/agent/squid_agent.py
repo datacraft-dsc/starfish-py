@@ -9,7 +9,7 @@ Agent class to provide basic functionality for all Ocean Agents
 import logging
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
-from starfish.agent import Agent
+from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
     SquidAsset,
@@ -23,7 +23,7 @@ from squid_py.brizo.brizo_provider import BrizoProvider
 import sys,traceback
 logger = logging.getLogger('ocean')
 
-class SquidAgent(Agent):
+class SquidAgent(AgentBase):
     """
 
     Squid Agent class allows to register and list asset listings.
@@ -69,7 +69,7 @@ class SquidAgent(Agent):
 
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
-        Agent.__init__(self, ocean)
+        AgentBase.__init__(self, ocean)
         self._model = None
 
         if args and isinstance(args[0], dict):
@@ -144,6 +144,13 @@ class SquidAgent(Agent):
 
 
     def validate_asset(self, asset):
+        """
+
+        Validate an asset
+
+        :param asset: Asset to validate.
+        :return: True if the asset is valid
+        """
         model = self.squid_model
 
         if not asset:
