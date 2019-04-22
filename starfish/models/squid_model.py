@@ -160,6 +160,44 @@ class SquidModel():
 
         return service_agreement_id
 
+    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+        """
+
+        Wait for a purchase to complete
+
+        """
+        event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
+            purchase_id,
+            timeoutSeconds,
+            SquidModel.log_event(self._keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
+            (),
+            wait=True
+        )
+        if not event:
+            return 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
+
+        event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
+            purchase_id,
+            timeoutSeconds,
+            SquidModel.log_event(self._keeper.lock_reward_condition.FULFILLED_EVENT),
+            (),
+            wait=True
+        )
+        if not event:
+            return 'no event for LockRewardCondition.Fulfilled'
+
+        event = self._keeper.escrow_reward_condition.subscribe_condition_fulfilled(
+            purchase_id,
+            timeoutSeconds,
+            SquidModel.log_event(self._keeper.escrow_reward_condition.FULFILLED_EVENT),
+            (),
+            wait=True
+        )
+        if not event:
+            return 'no event for EscrowReward.Fulfilled'
+
+        return True
+
     def purchase_operation(self, ddo, account):
         """
         Purchase an invoke operation
@@ -392,3 +430,9 @@ class SquidModel():
     @staticmethod
     def get_default_metadata():
         return Metadata.get_example()
+
+    @staticmethod
+    def log_event(event_name):
+        def _process_event(event):
+            logging.debug(f'Received event {event_name}: {event}')
+        return _process_event

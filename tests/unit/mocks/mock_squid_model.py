@@ -100,6 +100,11 @@ class MockSquidModel():
         self._purchase_assets[service_agreement_id] = ddo.did
         return service_agreement_id
 
+    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+        if purchase_id:
+            return True
+        return 'Cannot wait'
+
     def consume_asset(self, ddo, service_agreement_id, account, download_path):
         service = ddo.get_service(TEST_SERVICE_NAME)
         assert(service)

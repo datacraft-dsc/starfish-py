@@ -9,7 +9,7 @@ Agent class to provide basic functionality for all Ocean Agents
 import logging
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
-from starfish.agent import Agent
+from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
     SquidAsset,
@@ -19,10 +19,11 @@ from starfish.purchase import Purchase
 from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
+
 import sys,traceback
 logger = logging.getLogger('ocean')
 
-class SquidAgent(Agent):
+class SquidAgent(AgentBase):
     """
 
     Squid Agent class allows to register and list asset listings.
@@ -68,7 +69,7 @@ class SquidAgent(Agent):
 
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
-        Agent.__init__(self, ocean)
+        AgentBase.__init__(self, ocean)
         self._model = None
 
         if args and isinstance(args[0], dict):
@@ -143,6 +144,13 @@ class SquidAgent(Agent):
 
 
     def validate_asset(self, asset):
+        """
+
+        Validate an asset
+
+        :param asset: Asset to validate.
+        :return: True if the asset is valid
+        """
         model = self.squid_model
 
         if not asset:
@@ -252,6 +260,19 @@ class SquidAgent(Agent):
         model = self.squid_model
         return model.is_access_granted_for_asset(asset.did, purchase_id, account._squid_account)
 
+
+    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+        """
+
+            Wait for completion of the purchase
+
+            TODO: issues here...
+            + No method as yet to pass back paramaters and values during the purchase process
+            + We assume that the following templates below will always be used.
+
+        """
+        model = self.squid_model
+        return model.purchase_wait_for_completion(purchase_id, timeoutSeconds)
 
     def consume_asset(self, listing, purchase_id, account, download_path ):
         """

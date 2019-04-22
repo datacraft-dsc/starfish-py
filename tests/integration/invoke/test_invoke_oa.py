@@ -21,7 +21,6 @@ from starfish.logging import setup_logging
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
-from squid_py.keeper import Keeper
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 from tests.integration.mocks.brizo_mock import BrizoMock
@@ -40,11 +39,6 @@ def _register_asset_for_sale(agent, metadata, account):
     assert listing
     assert listing.asset.did
     return listing
-
-def _log_event(event_name):
-    def _process_event(event):
-        logging.debug(f'Received event {event_name}: {event}')
-    return _process_event
 
 def purchase_asset(ocean, metadata, config):
 
@@ -90,42 +84,17 @@ def purchase_asset(ocean, metadata, config):
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
 
-    keeper = Keeper.get_instance()
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    agreement_id = purchase_asset.purchase_id
+    assert(not purchase_asset.is_completed(purchase_account))
 
-    event = keeper.escrow_access_secretstore_template.subscribe_agreement_created(
-        agreement_id,
-        20,
-        _log_event(keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
-        (),
-        wait=True
-    )
-    assert event, 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
+    error_message = purchase_asset.wait_for_completion()
+    assert(error_message == True)
 
-    event = keeper.lock_reward_condition.subscribe_condition_fulfilled(
-        agreement_id,
-        20,
-        _log_event(keeper.lock_reward_condition.FULFILLED_EVENT),
-        (),
-        wait=True
-    )
-    assert event, 'no event for LockRewardCondition.Fulfilled'
-
-    event = keeper.escrow_reward_condition.subscribe_condition_fulfilled(
-        agreement_id,
-        10,
-        _log_event(keeper.escrow_reward_condition.FULFILLED_EVENT),
-        (),
-        wait=True
-    )
-    assert event, 'no event for EscrowReward.Fulfilled'
-
-    assert Web3.toHex(event.args['_agreementId']) == agreement_id
+    assert(purchase_asset.is_completed(purchase_account))
 
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid(purchase_account)

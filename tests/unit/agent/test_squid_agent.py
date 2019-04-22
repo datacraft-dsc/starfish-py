@@ -96,6 +96,10 @@ def test_is_access_granted_for_asset(ocean, metadata, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
     assert(agent.is_access_granted_for_asset(asset, purchase.purchase_id, account))
 
+def test_purchase_wait_for_completion(ocean, metadata, config):
+    purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
+    assert(agent.purchase_wait_for_completion(purchase.purchase_id, 30) == True)
+
 def test_consume_asset(ocean, metadata, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
     assert(agent.consume_asset(listing, purchase.purchase_id, account, TEST_DOWNLOAD_PATH))
