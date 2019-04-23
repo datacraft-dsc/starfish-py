@@ -77,7 +77,7 @@ setup(
     install_requires=install_requirements,
     license="Apache Software License 2.0",
     long_description=readme,
-    long_description_content_type='text/x-rst',
+    long_description_content_type='text/markdown',
     include_package_data=True,
     keywords='starfish-py',
     name='starfish-py',
