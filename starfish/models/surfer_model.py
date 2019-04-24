@@ -7,9 +7,6 @@ import requests
 from web3 import Web3
 
 from squid_py.did_resolver.did_resolver import DIDResolver
-from squid_py.did import (
-    did_to_id,
-)
 
 from starfish import logger
 
@@ -17,8 +14,8 @@ from starfish import logger
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': { 
-        'type': 'Ocean.Meta.v1', 
+    'metadata': {
+        'type': 'Ocean.Meta.v1',
         'uri': f'{SURFER_BASE_URI}/meta/data',
     },
     'storage': {
@@ -87,7 +84,7 @@ class SurferModel():
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            
+
             json = response.json()
             logger.debug(f'metadata asset response returned {json}')
             return json
@@ -116,8 +113,8 @@ class SurferModel():
         url = f'{endpoint}/{asset_id}'
         logger.debug(f'uploading data to {url}')
         files = { 'file':  ( asset_id, io.BytesIO(data.encode()), 'application/octet-stream') }
-        headers = { 
-            'Authorization': self._headers['Authorization'] 
+        headers = {
+            'Authorization': self._headers['Authorization']
         }
         response = SurferModel._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
@@ -251,15 +248,15 @@ class SurferModel():
         """
         Return a dict list of services available for this surfer
         in the format::
-        
+
             {'name': service name, 'type': service_type, 'url': service endpoint url}
-            
+
         """
         result = []
         for name, service in SUPPORTED_SERVICES.items():
             service_uri = service['uri']
-            result.append({ 
-                'name': name, 
+            result.append({
+                'name': name,
                 'type': service['type'],
                 'url': f'{url}{service_uri}',
             })

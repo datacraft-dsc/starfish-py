@@ -164,7 +164,7 @@ class StarfishDDO(DDO):
             data['proof'] = self._proof
 
         return data
-        
+
     def _hash_text_list(self):
         """Return a list of all of the hash text."""
         hash_text = []

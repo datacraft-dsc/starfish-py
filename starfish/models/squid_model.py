@@ -24,7 +24,6 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.did_resolver.did_resolver import DIDResolver
 
 from squid_py.ddo.metadata import Metadata
 
@@ -357,12 +356,10 @@ class SquidModel():
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
 
-        assert(isinstance(ddo_text, str), 'ddo_text must be string')
-        squid_ocean = self.get_squid_ocean(account)
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
         # did_bytes = did_to_id_bytes(did)
-        receipt = self._squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)        
-        
+        receipt = self._squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)
+
         # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
         return receipt

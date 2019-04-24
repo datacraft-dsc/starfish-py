@@ -119,7 +119,7 @@ class Ocean():
 
         if not isinstance(ddo, str):
             raise TypeError('You need to pass a DDO as a string')
-            
+
         # call the squid model to do the actual registration writing the ddo to the block chain
         model = self.get_squid_model()
         if model:
@@ -128,16 +128,16 @@ class Ocean():
 
     def resolve_did(self, did):
         """
-        
+
         Return the resolved did written on the block chain
         if no value found then return None
-        
+
         :param str did: did to resolve
         :return: ddo or url as a string
         :type: string
-        
+
         """
-        
+
         model = self.get_squid_model()
         if model:
             return model.resolve_did(did)

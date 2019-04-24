@@ -106,9 +106,9 @@ class SurferAgent(AgentBase):
 
         if self._did is None:
             raise ValueError('The agent must have a valid did')
-            
+
         listing = None
-        
+
         register_data = model.register_asset(asset.metadata)
         if register_data:
             asset_id = register_data['asset_id']
@@ -129,16 +129,16 @@ class SurferAgent(AgentBase):
         pass
 
     def upload_asset(self, asset):
-        
+
         if not isinstance(asset, MemoryAsset):
             raise TypeError('Only MemoryAssets are supported')
         if not asset.data:
             raise ValueError('No data to upload')
-            
-        model = self._get_surferModel()        
+
+        model = self._get_surferModel()
         return model.upload_asset_data(remove_0x_prefix(asset.asset_id), asset.data)
-        
-        
+
+
     def get_listing(self, did):
         """
         this method is deprecated, as register_asset returns a listing.
@@ -305,12 +305,12 @@ class SurferAgent(AgentBase):
         """
         Generate a DDO for the surfer url. This DDO will contain the supported
         endpoints for the surfer
-        
+
         :param str url: URL of the remote surfer agent
         :return: created DDO object assigned to the url of the remote surfer agent service
         :type: :class:.`DDO`
         """
-        
+
         did = SquidModel.generate_did()
         services = SurferModel.get_supported_services(url)
         ddo = StarfishDDO(did)
@@ -320,7 +320,7 @@ class SurferAgent(AgentBase):
         # add a signature
         private_key_pem = ddo.add_signature()
         # add the static proof
-        ddo.add_proof(0, private_key_pem)            
+        ddo.add_proof(0, private_key_pem)
 
         return ddo
 

@@ -45,8 +45,8 @@ def did_parse(did):
 def did_generate_random():
     did_id = secrets.token_hex(32)
     return f'did:{OCEAN_DID_METHOD}:{did_id}'
-    
-    
+
+
 def did_to_asset_id(did):
     data = did_parse(did)
     asset_id = None
