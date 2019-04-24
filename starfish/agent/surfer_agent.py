@@ -17,6 +17,7 @@ from starfish.models.squid_model import SquidModel
 from starfish.asset import Asset
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
+from squid_py.ddo.ddo import DDO
 
 
 
@@ -271,6 +272,23 @@ class SurferAgent(AgentBase):
         """
         data = did_parse(did)
         return data['path'] and data['id_hex']
+
+    @staticmethod
+    def generate_ddo(url):
+        """
+        Generate a DDO for the surfer url. This DDO will contain the supported
+        endpoints for the surfer
+        
+        :param str url: URL of the remote surfer agent
+        :return: created DDO object assigned to the url of the remote surfer agent service
+        :type: :class:.`DDO`
+        """
+        
+        services = SurferModel.get_supported_services(url)
+        ddo = DDO()
+        for service in services:
+            ddo.add_service(service['type'], service['url'], None)
+        return ddo
 
     @staticmethod
     def generate_metadata():

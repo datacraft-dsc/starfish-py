@@ -37,11 +37,7 @@ def main():
 
     # Create a new memory agent to do the work.
     surfer_url = 'http://localhost:8080'
-    surfer_ddo = DDO()
-    surfer_ddo.add_service(SurferModel.services['metadata'],
-                           surfer_url + '/api/v1/meta/data', None)
-    surfer_ddo.add_service(SurferModel.services['market'],
-                           surfer_url + '/api/v1/market', None)
+    surfer_ddo = SurferAgent.generate_ddo(surfer_url)
     surfer_username = 'test'
     surfer_password = 'foobar'
     authorization = SurferModel.get_authorization_token(surfer_url,

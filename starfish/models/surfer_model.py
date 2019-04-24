@@ -13,14 +13,17 @@ from starfish import logger
 # default base URI for this version surfer
 SURFER_BASE_URI = '/api/v1'
 
+SUPPORTED_SERVICES = {
+    'metadata': 'Ocean.Meta.v1',
+    'storage': 'Ocean.Storage.v1',
+    'invoke': 'Ocean.Invoke.v1',
+    'market': 'Ocean.Market.v1',
+    'trust': 'Ocean.Trust.v1',
+    'auth': 'Ocean.Auth.v1'
+}
+
 class SurferModel():
     _http_client = requests
-    services = {'metadata': 'Ocean.Meta.v1',
-                'storage': 'Ocean.Storage.v1',
-                'invoke': 'Ocean.Invoke.v1',
-                'market': 'Ocean.Market.v1',
-                'trust': 'Ocean.Trust.v1',
-                'auth': 'Ocean.Auth.v1'}
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
@@ -63,6 +66,7 @@ class SurferModel():
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
+            
             json = response.json()
             logger.warning(f'metadata asset response returned {json}')
             return json
@@ -108,21 +112,25 @@ class SurferModel():
 
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service"""
-        if name in SurferModel.services:
-            srv_type = SurferModel.services[name]
+        if name in SUPPORTED_SERVICES:
+            service_type = SUPPORTED_SERVICES[name]
         else:
-            msg = f'unknown surfer endpoint service: {name}'
-            logger.error(msg)
-            raise ValueError(msg)
+            message = f'unknown surfer endpoint service: {name}'
+            logger.error(message)
+            raise ValueError(message)
 
         endpoint = None
         if self._ddo:
-            service = self._ddo.get_service(srv_type)
+            service = self._ddo.get_service(service_type)
+            if not service:
+                message = f'unable to find surfer endpoint service type {service_type}'
+                logger.error(message)
+                raise ValueError(message)
             endpoint = service.endpoints.service
         if not endpoint:
-            msg = f'unable to find surfer endpoint for {name} = {srv_type}'
-            logger.error(msg)
-            raise ValueError(msg)
+            message = f'unable to find surfer endpoint for {name} = {service_type}'
+            logger.error(message)
+            raise ValueError(message)
         return endpoint
 
     @property
@@ -198,3 +206,22 @@ class SurferModel():
             raise ValueError(msg)
         logger.debug(f'using surfer token {token}')
         return token
+
+    @staticmethod
+    def get_supported_services(url):
+        """
+        Return a dict list of services available for this surfer
+        in the format::
+        
+            {'name': service name, 'type': service_type, 'url': service endpoint url}
+            
+        """
+        result = []
+        for name, service_type in SUPPORTED_SERVICES.items():
+            result.append( { 
+                'name': name, 
+                'type': service_type,
+                'url': f'{url}{SURFER_BASE_URI}{name}'
+                }
+            )
+        return result
