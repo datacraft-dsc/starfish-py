@@ -6,6 +6,8 @@ import tempfile
 
 from starfish.agent.squid_agent import SquidAgent
 from starfish.asset.asset import Asset
+from starfish.exceptions import StarfishPurchaseError
+
 from tests.unit.mocks.mock_squid_model import MockSquidModel
 
 
@@ -98,7 +100,10 @@ def test_is_access_granted_for_asset(ocean, metadata, config):
 
 def test_purchase_wait_for_completion(ocean, metadata, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
-    assert(agent.purchase_wait_for_completion(purchase.purchase_id, 30) == True)
+    assert(agent.purchase_wait_for_completion(purchase.purchase_id, 30))
+    # test raised error if purchase failed
+    with pytest.raises(StarfishPurchaseError):
+        agent.purchase_wait_for_completion(None, 30)
 
 def test_consume_asset(ocean, metadata, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)

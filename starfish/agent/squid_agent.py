@@ -16,6 +16,8 @@ from starfish.asset import (
     Asset,
  )
 from starfish.purchase import Purchase
+from starfish.exceptions import StarfishPurchaseError
+from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
@@ -264,15 +266,30 @@ class SquidAgent(AgentBase):
     def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
         """
 
-            Wait for completion of the purchase
+        Wait for completion of the purchase
 
-            TODO: issues here...
-            + No method as yet to pass back paramaters and values during the purchase process
-            + We assume that the following templates below will always be used.
+        TODO: issues here...
+        + No method as yet to pass back paramaters and values during the purchase process
+        + We assume that the following templates below will always be used.
+
+
+        :param integer timeoutSeconds: Optional seconds to waif to purchase to complete. Default: 60 seconds
+        :return: True if successfull or an error message if failed
+        :type: string or boolean
+
+        :raises OceanPurchaseError: if the correct events are not received
 
         """
         model = self.squid_model
-        return model.purchase_wait_for_completion(purchase_id, timeoutSeconds)
+
+        try:
+            model.purchase_wait_for_completion(purchase_id, timeoutSeconds)
+        except SquidModelPurchaseError as purchaseError:
+            raise StarfishPurchaseError(purchaseError)
+        except Exception as e:
+            raise e
+        return True
+
 
     def consume_asset(self, listing, purchase_id, account, download_path ):
         """

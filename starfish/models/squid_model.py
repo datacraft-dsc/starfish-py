@@ -32,6 +32,13 @@ from plecos import is_valid_dict_local
 logger = logging.getLogger('starfish')
 # from starfish import logger
 
+# to keep the squid_model seperate, we will issue a seperate purchase exception just
+# from this class
+
+class SquidModelPurchaseError(Exception):
+    """ Raised when a purchase event has failed to complete """
+
+
 class SquidModel():
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
@@ -174,7 +181,7 @@ class SquidModel():
             wait=True
         )
         if not event:
-            return 'no event for EscrowAccessSecretStoreTemplate.AgreementCreated'
+            raise SquidModelPurchaseError('no event for EscrowAccessSecretStoreTemplate.AgreementCreated')
 
         event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
@@ -184,7 +191,7 @@ class SquidModel():
             wait=True
         )
         if not event:
-            return 'no event for LockRewardCondition.Fulfilled'
+            raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
         event = self._keeper.escrow_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
@@ -194,7 +201,7 @@ class SquidModel():
             wait=True
         )
         if not event:
-            return 'no event for EscrowReward.Fulfilled'
+            raise SquidModelPurchaseError('no event for EscrowReward.Fulfilled')
 
         return True
 
