@@ -14,12 +14,30 @@ from starfish import logger
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': 'Ocean.Meta.v1',
-    'storage': 'Ocean.Storage.v1',
-    'invoke': 'Ocean.Invoke.v1',
-    'market': 'Ocean.Market.v1',
-    'trust': 'Ocean.Trust.v1',
-    'auth': 'Ocean.Auth.v1'
+    'metadata': { 
+        'type': 'Ocean.Meta.v1', 
+        'uri': f'{SURFER_BASE_URI}/meta/data',
+    },
+    'storage': {
+        'type': 'Ocean.Storage.v1',
+        'uri': f'{SURFER_BASE_URI}/assets',
+    },
+    'invoke': {
+        'type': 'Ocean.Invoke.v1',
+        'uri': f'{SURFER_BASE_URI}/data',
+    },
+    'market': {
+        'type': 'Ocean.Market.v1',
+        'uri': f'{SURFER_BASE_URI}/market',
+    },
+    'trust': {
+        'type': 'Ocean.Trust.v1',
+        'uri': f'{SURFER_BASE_URI}/trust',
+    },
+    'auth': {
+        'type': 'Ocean.Auth.v1',
+        'uri': f'{SURFER_BASE_URI}/auth',
+    },
 }
 
 class SurferModel():
@@ -113,7 +131,8 @@ class SurferModel():
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service"""
         if name in SUPPORTED_SERVICES:
-            service_type = SUPPORTED_SERVICES[name]
+            service = SUPPORTED_SERVICES[name]
+            service_type = service['type']
         else:
             message = f'unknown surfer endpoint service: {name}'
             logger.error(message)
@@ -217,11 +236,11 @@ class SurferModel():
             
         """
         result = []
-        for name, service_type in SUPPORTED_SERVICES.items():
-            result.append( { 
+        for name, service in SUPPORTED_SERVICES.items():
+            service_uri = service['uri']
+            result.append({ 
                 'name': name, 
-                'type': service_type,
-                'url': f'{url}{SURFER_BASE_URI}{name}'
-                }
-            )
+                'type': service['type'],
+                'url': f'{url}{service_uri}',
+            })
         return result
