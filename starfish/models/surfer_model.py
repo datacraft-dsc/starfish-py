@@ -1,12 +1,15 @@
 """
     SurferModel - Model to access the Surfer Services
 """
+import io
 import json
 import requests
 from web3 import Web3
 
 from squid_py.did_resolver.did_resolver import DIDResolver
-from squid_py.ddo.ddo import DDO
+from squid_py.did import (
+    did_to_id,
+)
 
 from starfish import logger
 
@@ -86,7 +89,7 @@ class SurferModel():
         if response and response.status_code == requests.codes.ok:
             
             json = response.json()
-            logger.warning(f'metadata asset response returned {json}')
+            logger.debug(f'metadata asset response returned {json}')
             return json
         else:
             msg = f'metadata asset response failed: {response.status_code}'
@@ -104,6 +107,23 @@ class SurferModel():
             return json
         else:
             msg = f'listing response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def upload_asset_data(self, asset_id, data):
+        endpoint = self.get_endpoint('storage')
+        url = f'{endpoint}/{asset_id}'
+        logger.debug(f'uploading data to {url}')
+        files = { 'file':  ( asset_id, io.BytesIO(data.encode()), 'application/octet-stream') }
+        headers = { 
+            'Authorization': self._headers['Authorization'] 
+        }
+        response = SurferModel._http_client.post(url, files=files, headers=headers)
+        if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
+            return True
+        else:
+            msg = f'upload asset response failed: {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         return None

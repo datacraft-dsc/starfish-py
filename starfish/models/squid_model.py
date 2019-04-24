@@ -15,6 +15,7 @@ from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
     id_to_did,
     did_to_id_bytes,
+    DID,
 )
 from squid_py.keeper import Keeper
 
@@ -424,3 +425,7 @@ class SquidModel():
         def _process_event(event):
             logging.debug(f'Received event {event_name}: {event}')
         return _process_event
+
+    @staticmethod
+    def generate_did():
+        return DID.did()

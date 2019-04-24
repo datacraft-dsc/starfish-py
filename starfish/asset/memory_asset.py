@@ -21,7 +21,7 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = SquidAsset.generate_metadata()
+            metadata = {}
             metadata['name'] = 'MemoryAsset'
             metadata['description'] = 'Memory Asset'
             metadata['size'] = len(data)
