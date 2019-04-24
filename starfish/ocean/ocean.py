@@ -100,13 +100,13 @@ class Ocean():
         :type string: JSON string of a DDO
         :param account: account to use as the owner of the registration.
         :type account: :class:`.Account`
-        :return: the receipt of the block chain transactonS
+        :return: the receipt of the block chain transaction
         :type: string
 
         For example::
 
             # register the public surfer on the block chain
-            receipt = ocean.register_agent(did, ddo.as_text, register_account)
+            receipt = ocean.register_did(did, ddo.as_text(), register_account)
 
         TODO: Need to split this up into two calls, one to add, other to update
         """
@@ -132,11 +132,15 @@ class Ocean():
         Return the resolved did written on the block chain
         if no value found then return None
         
+        :param str did: did to resolve
+        :return: ddo or url as a string
+        :type: string
+        
         """
         
         model = self.get_squid_model()
         if model:
-            return model.resolve_ddo(did)
+            return model.resolve_did(did)
         return None
 
     def search_operations(self, text, limit=10):

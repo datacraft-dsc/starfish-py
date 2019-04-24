@@ -367,7 +367,7 @@ class SquidModel():
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
         return receipt
 
-    def resolve_ddo(self, did):
+    def resolve_did(self, did):
         """resolve a DID to a given DDO, return the DDO if found"""
 
         did_bytes = did_to_id_bytes(did)
