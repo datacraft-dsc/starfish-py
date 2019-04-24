@@ -3,17 +3,12 @@
 """
 
 import logging
-import secrets
 
 from web3 import Web3
-
-from starfish.ddo.starfish_ddo import StarfishDDO
-
 
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
-    id_to_did,
     did_to_id_bytes,
     DID,
 )

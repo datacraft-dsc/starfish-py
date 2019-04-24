@@ -3,7 +3,6 @@
 """
 
 from starfish.asset.asset_base import AssetBase
-from starfish.asset.squid_asset import SquidAsset
 
 class MemoryAsset(AssetBase):
     """

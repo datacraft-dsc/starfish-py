@@ -3,7 +3,6 @@
 import json
 import logging
 
-from squid_py.ddo.ddo import DDO
 from starfish import Ocean
 from starfish.asset import MemoryAsset
 from starfish.agent import SurferAgent
