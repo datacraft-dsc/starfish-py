@@ -89,29 +89,24 @@ class Ocean():
             self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
 
 
-    def register_update_agent_service(self, service_name, endpoint_url, account, did=None):
+    def register_did(self, did, ddo, account):
         """
 
         Register this agent service with a DDO on the block chain.
 
-        :param str service_name: service name of the agent service to register.
-        :param str endpoint_url: URL of the agents service to add to the DDO to register.
+        :param did: DID to use to register for this ddo.
+        :type did: str or None
+        :param ddo: DDO to save for the registration. This is a JSON string of a DDO
+        :type string: JSON string of a DDO
         :param account: account to use as the owner of the registration.
         :type account: :class:`.Account`
-        :param did: Optional DID to use to update the registration for this agent, you must use the same account as the when you did the original registartion.
-        :type did: str or None
-        :return: a tuple of (DID, DDO, private_pem).
-
-        | *DID*: of the registerered agent.
-        | *DDO*: record writtern to the block chain as part of the registration.
-        | *private_pem*: private PEM used to sign the DDO.
-
+        :return: the receipt of the block chain transactonS
         :type: string
 
         For example::
 
             # register the public surfer on the block chain
-            did, ddo, key_pem = ocean.register_agent('surfer', 'https://market_surfer.io', ocean.accounts[0])
+            receipt = ocean.register_agent(did, ddo.as_text, register_account)
 
         TODO: Need to split this up into two calls, one to add, other to update
         """
@@ -122,10 +117,26 @@ class Ocean():
         if not account.is_valid:
             raise ValueError('You must pass a valid account')
 
+        if not isinstance(ddo, str):
+            raise TypeError('You need to pass a DDO as a string')
+            
         # call the squid model to do the actual registration writing the ddo to the block chain
         model = self.get_squid_model()
         if model:
-            return model.register_agent(service_name, endpoint_url, account, did)
+            return model.register_ddo(did, ddo, account)
+        return None
+
+    def resolve_did(self, did):
+        """
+        
+        Return the resolved did written on the block chain
+        if no value found then return None
+        
+        """
+        
+        model = self.get_squid_model()
+        if model:
+            return model.resolve_ddo(did)
         return None
 
     def search_operations(self, text, limit=10):

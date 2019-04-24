@@ -23,6 +23,7 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
+from squid_py.did_resolver.did_resolver import DIDResolver
 
 from squid_py.ddo.metadata import Metadata
 
@@ -50,24 +51,6 @@ class SquidModel():
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
-
-
-    def register_agent(self, service_name, endpoint_url, account, did=None):
-        if did is None:
-            # if no did then we need to create a new one
-            did = id_to_did(secrets.token_hex(32))
-
-        # create a new DDO
-        ddo = StarfishDDO(did)
-        # add a signature
-        private_key_pem = ddo.add_signature()
-        # add the service endpoint with the meta data
-        ddo.add_service(service_name, endpoint_url)
-        # add the static proof
-        ddo.add_proof(0, private_key_pem)
-        if self.register_ddo(did, ddo, account._squid_account):
-            return [did, ddo, private_key_pem]
-        return None
 
     def register_asset(self, metadata, account):
         """
@@ -369,22 +352,27 @@ class SquidModel():
         logger.info(f'found account {account}')
         return local_account.address
 
-    def register_ddo(self, did, ddo, account):
+    def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
 
-        ddo_text = ddo.as_text()
+        assert(isinstance(ddo_text, str), 'ddo_text must be string')
+        squid_ocean = self.get_squid_ocean(account)
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
-        did_id = did_to_id_bytes(did)
-        return self._keeper.did_registry.register_attribute(did_id, checksum, ddo_text, account.address)
+        # did_bytes = did_to_id_bytes(did)
+        receipt = self._squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)        
+        
+        # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
+        # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
+        return receipt
 
-    def resolve_did_to_ddo(self, did):
+    def resolve_ddo(self, did):
         """resolve a DID to a given DDO, return the DDO if found"""
-        did_resolver = DIDResolver(self._ocean._web3, self._keeper.did_registry)
-        resolved = did_resolver.resolve(did)
-        if resolved and resolved.is_ddo:
-            ddo = DDO(json_text=resolved.value)
-            return ddo
+
+        did_bytes = did_to_id_bytes(did)
+        data = self._keeper.did_registry.get_registered_attribute(did_bytes)
+        if data:
+            return data['value']
         return None
 
     @property

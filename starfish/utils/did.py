@@ -3,6 +3,7 @@ DID utils
 
 """
 
+import secrets
 import re
 from urllib.parse import urlparse
 from web3 import Web3
@@ -40,3 +41,7 @@ def did_parse(did):
         result['id_hex'] = result['id']
 
     return result
+
+def did_generate_random():
+    did_id = secrets.token_hex(32)
+    return f'did:{OCEAN_DID_METHOD}:{did_id}'

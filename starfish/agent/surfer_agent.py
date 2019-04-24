@@ -17,7 +17,8 @@ from starfish.models.squid_model import SquidModel
 from starfish.asset import Asset
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
-from squid_py.ddo.ddo import DDO
+from starfish.ddo.starfish_ddo import StarfishDDO
+
 
 
 
@@ -285,7 +286,7 @@ class SurferAgent(AgentBase):
         """
         
         services = SurferModel.get_supported_services(url)
-        ddo = DDO()
+        ddo = StarfishDDO()
         for service in services:
             ddo.add_service(service['type'], service['url'], None)
         return ddo
