@@ -43,9 +43,6 @@ def test_invoke(ocean, metadata, config):
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
-    # check to see if the sla template has been registered, this is only run on
-    agent.init_network(publisher_account)
-
     listing = _register_asset_for_sale(agent, metadata, publisher_account)
     assert listing
     assert publisher_account
