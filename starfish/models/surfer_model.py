@@ -145,16 +145,16 @@ class SurferModel():
                 logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
 
+
     def get_endpoint(self, name):
-        """return the endpoint based on the name of the service"""
-        if name in SUPPORTED_SERVICES:
-            service = SUPPORTED_SERVICES[name]
-            service_type = service['type']
-        else:
-            message = f'unknown surfer endpoint service: {name}'
+        """return the endpoint based on the name of the service or service type"""
+        supported_service = SurferModel.find_supported_service(name)
+        if supported_service is None:
+            message = f'unknown surfer endpoint service name or type: {name}'
             logger.error(message)
             raise ValueError(message)
 
+        service_type = supported_service['type']
         endpoint = None
         if self._ddo:
             service = self._ddo.get_service(service_type)
@@ -182,7 +182,6 @@ class SurferModel():
     @property
     def register_name(self):
         return self._register_name
-
 
     @staticmethod
     def is_metadata_valid(asset_id, metadata_text):
@@ -244,7 +243,18 @@ class SurferModel():
         return token
 
     @staticmethod
-    def get_supported_services(url):
+    def find_supported_service(search_name_type):
+        """ return the supported service record if the name or service type is found
+        else return None """
+        for name, service in SUPPORTED_SERVICES.items():
+            if service['type'] == search_name_type:
+                return service
+            if name == search_name_type:
+                return service
+        return None
+
+    @staticmethod
+    def generate_service_endpoints(url):
         """
         Return a dict list of services available for this surfer
         in the format::
