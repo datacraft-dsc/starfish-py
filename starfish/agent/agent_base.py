@@ -4,7 +4,7 @@
 """
 
 from abc import ABC, abstractmethod
-
+from starfish import Ocean
 
 class AgentBase(ABC):
     """
@@ -16,7 +16,11 @@ class AgentBase(ABC):
     """
     def __init__(self, ocean):
         """init the the Ocean Object Base with the ocean instance"""
+
+        if not isinstance(ocean, Ocean):
+            raise ValueError('You must pass a valid Ocean object')
         self._ocean = ocean
+
         super().__init__()
 
     @abstractmethod
