@@ -67,6 +67,13 @@ class MockSquidModel():
         """
         return is_valid_dict_local(metadata)
 
+    def register_ddo(self, did, ddo, account):
+        self._ddo_list[did] = ddo
+        return secrets.token_hex(32)
+        
+    def resolve_did(self, did):
+        return self._ddo_list[did]
+        
     def register_asset(self, metadata, account ):
         did = id_to_did(secrets.token_hex(32))
         self._metadata[did] = metadata

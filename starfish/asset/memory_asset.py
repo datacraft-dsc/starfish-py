@@ -3,7 +3,6 @@
 """
 
 from starfish.asset.asset_base import AssetBase
-from starfish.asset.squid_asset import SquidAsset
 
 class MemoryAsset(AssetBase):
     """
@@ -21,7 +20,7 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = SquidAsset.generate_metadata()
+            metadata = {}
             metadata['name'] = 'MemoryAsset'
             metadata['description'] = 'Memory Asset'
             metadata['size'] = len(data)

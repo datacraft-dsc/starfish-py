@@ -4,6 +4,7 @@ import secrets
 
 from starfish import Ocean
 from starfish.account import Account
+from starfish.agent import SurferAgent
 
 def test_ocean_init(config):
     ocean = Ocean(
@@ -29,7 +30,7 @@ def test_ocean_init_empty(config):
 
     # error in register since account is None
     with pytest.raises(TypeError):
-        info = ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
+        info = ocean.register_did('did', 'ddo', account)
 
     assert(not ocean.search_operations('test search text') is None)
     accounts = ocean.accounts
@@ -44,15 +45,15 @@ def test_register_update_agent_service(ocean, config):
 
     account = ocean.get_account(config.accounts[0].as_dict)
 
+    ddo = SurferAgent.generate_ddo(config.surfer_url)
     with pytest.raises(TypeError):
-        ocean.register_update_agent_service('service-name', 'http://endpoint:8080', None)
+        ocean.register_did(ddo.did, ddo.as_text, None)
 
-    info = ocean.register_update_agent_service('service-name', 'http://endpoint:8080', account)
-    assert(info)
-    assert(len(info) == 3)
-    assert(info[0])
-    assert(type(info[1]).__name__ == 'StarfishDDO')
-    assert(isinstance(info[2], bytes))
+    with pytest.raises(TypeError):
+        ocean.register_did(ddo.did, {}, account)
+
+    reciept = ocean.register_did(ddo.did, ddo.as_text(), account)
+    assert(reciept)
 
 def test_search_operations(ocean):
     assert(not ocean.search_operations('test search text') is None)

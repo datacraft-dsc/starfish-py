@@ -7,8 +7,9 @@ from starfish.ddo.authentication import Authentication
 
 
 from squid_py.ddo.ddo import DDO
+
 from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
-from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT
+from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL
 from squid_py.ddo.public_key_rsa import PublicKeyRSA
 
 
@@ -129,6 +130,40 @@ class StarfishDDO(DDO):
             'creator': sign_key.get_id(),
             'signatureValue': b64encode(signature).decode('utf-8'),
         }
+
+    def as_dictionary(self, is_proof=True):
+        """
+        Return the DDO as a JSON dict.
+        :param if is_proof: if False then do not include the 'proof' element.
+        :return: dict
+        """
+        if self._created is None:
+            self._created = DDO._get_timestamp()
+
+        data = {
+            '@context': DID_DDO_CONTEXT_URL,
+            'id': self._did,
+            'created': self._created,
+        }
+        if self._public_keys:
+            values = []
+            for public_key in self._public_keys:
+                values.append(public_key.as_dictionary())
+            data['publicKey'] = values
+        if self._authentications:
+            values = []
+            for authentication in self._authentications:
+                values.append(authentication.as_dictionary())
+            data['authentication'] = values
+        if self._services:
+            values = []
+            for service in self._services:
+                values.append(service.as_dictionary())
+            data['service'] = values
+        if self._proof and is_proof:
+            data['proof'] = self._proof
+
+        return data
 
     def _hash_text_list(self):
         """Return a list of all of the hash text."""

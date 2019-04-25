@@ -6,6 +6,8 @@ import logging
 from tests.integration.libs.integration_test_config import integrationTestConfig
 
 from starfish import Ocean
+from starfish.agent import SurferAgent
+
 
 
 
@@ -21,3 +23,16 @@ def ocean():
 @pytest.fixture(scope="module")
 def config():
     return integrationTestConfig
+
+
+@pytest.fixture(scope="module")
+def surfer_agent():
+    
+
+    ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
+    options = {
+        'url': integrationTestConfig.surfer_url,
+        'username': integrationTestConfig.surfer_username,
+        'password': integrationTestConfig.surfer_password
+    }
+    return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)

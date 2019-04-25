@@ -3,11 +3,9 @@
 import json
 import logging
 
-from squid_py.ddo.ddo import DDO
 from starfish import Ocean
 from starfish.asset import MemoryAsset
 from starfish.agent import SurferAgent
-from starfish.models.surfer_model import SurferModel
 
 def main():
     """
@@ -37,17 +35,12 @@ def main():
 
     # Create a new memory agent to do the work.
     surfer_url = 'http://localhost:8080'
-    surfer_ddo = DDO()
-    surfer_ddo.add_service(SurferModel.services['metadata'],
-                           surfer_url + '/api/v1/meta/data', None)
-    surfer_ddo.add_service(SurferModel.services['market'],
-                           surfer_url + '/api/v1/market', None)
-    surfer_username = 'test'
-    surfer_password = 'foobar'
-    authorization = SurferModel.get_authorization_token(surfer_url,
-                                                        surfer_username,
-                                                        surfer_password)
-    surfer_options = {'authorization': authorization}
+    surfer_ddo = SurferAgent.generate_ddo(surfer_url)
+    surfer_options = {
+        'url': surfer_url,
+        'username': 'test',
+        'password':  'foobar',
+    }
     agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
 
     # Register the memory asset.

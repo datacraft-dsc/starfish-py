@@ -3,6 +3,7 @@ DID utils
 
 """
 
+import secrets
 import re
 from urllib.parse import urlparse
 from web3 import Web3
@@ -40,3 +41,17 @@ def did_parse(did):
         result['id_hex'] = result['id']
 
     return result
+
+def did_generate_random():
+    did_id = secrets.token_hex(32)
+    return f'did:{OCEAN_DID_METHOD}:{did_id}'
+
+
+def did_to_asset_id(did):
+    data = did_parse(did)
+    asset_id = None
+    if data['id_hex']:
+        asset_id = data['id_hex']
+    if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path'] ):
+        asset_id = '0x' + data['path']
+    return asset_id

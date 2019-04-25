@@ -8,6 +8,7 @@ In starfish-java, this is named as `RemoteAgent`
 import secrets
 import re
 import json
+from eth_utils import remove_0x_prefix
 
 from starfish.account import Account
 from starfish.agent import AgentBase
@@ -17,6 +18,8 @@ from starfish.models.squid_model import SquidModel
 from starfish.asset import Asset
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
+from starfish.ddo.starfish_ddo import StarfishDDO
+
 
 
 
@@ -50,6 +53,14 @@ class SurferAgent(AgentBase):
             options = {}
 
         self._authorization = options.get('authorization')
+        if self._authorization is None and 'url' in options and 'username' in options:
+            # if no authorization, then we may need to create one
+            self._authorization = SurferModel.get_authorization_token(
+                options['url'],
+                options['username'],
+                options.get('password', '')
+            )
+
 
         if did is None or isinstance(did, str):
             self._did = did
@@ -58,6 +69,8 @@ class SurferAgent(AgentBase):
 
         if ddo is None or isinstance(ddo, DDO) or isinstance(ddo, dict):
             self._ddo = ddo
+            if self._did is None:
+                self._did = ddo.did
         else:
             raise ValueEror('ddo must be a DOD object or type dict')
 
@@ -91,7 +104,11 @@ class SurferAgent(AgentBase):
         """
         model = self._get_surferModel()
 
+        if self._did is None:
+            raise ValueError('The agent must have a valid did')
+
         listing = None
+
         register_data = model.register_asset(asset.metadata)
         if register_data:
             asset_id = register_data['asset_id']
@@ -110,6 +127,17 @@ class SurferAgent(AgentBase):
         :return: True if the asset is valid
         """
         pass
+
+    def upload_asset(self, asset):
+
+        if not isinstance(asset, MemoryAsset):
+            raise TypeError('Only MemoryAssets are supported')
+        if not asset.data:
+            raise ValueError('No data to upload')
+
+        model = self._get_surferModel()
+        return model.upload_asset_data(remove_0x_prefix(asset.asset_id), asset.data)
+
 
     def get_listing(self, did):
         """
@@ -271,6 +299,30 @@ class SurferAgent(AgentBase):
         """
         data = did_parse(did)
         return data['path'] and data['id_hex']
+
+    @staticmethod
+    def generate_ddo(url):
+        """
+        Generate a DDO for the surfer url. This DDO will contain the supported
+        endpoints for the surfer
+
+        :param str url: URL of the remote surfer agent
+        :return: created DDO object assigned to the url of the remote surfer agent service
+        :type: :class:.`DDO`
+        """
+
+        did = SquidModel.generate_did()
+        services = SurferModel.get_supported_services(url)
+        ddo = StarfishDDO(did)
+        for service in services:
+            ddo.add_service(service['type'], service['url'], None)
+
+        # add a signature
+        private_key_pem = ddo.add_signature()
+        # add the static proof
+        ddo.add_proof(0, private_key_pem)
+
+        return ddo
 
     @staticmethod
     def generate_metadata():
