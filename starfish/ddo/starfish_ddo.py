@@ -18,6 +18,19 @@ logger = logging.getLogger('ddo')
 
 class StarfishDDO(DDO):
 
+    def set_service_endpoint(self, service_type, value):
+        """
+
+        Set the default service endpoint with a new value
+
+        :param service_type: Type of service to set
+        :param value: value to set as the new value
+
+        """
+        service = self.get_service(service_type)
+        if service:
+            service._service_endpoint = value
+
     def add_authentication(self, key_id, authentication_type=None):
         """
         Add a authentication public key id and type to the list of authentications.
