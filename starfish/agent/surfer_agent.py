@@ -133,7 +133,7 @@ class SurferAgent(AgentBase):
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
             data = model.create_listing(asset_id)
-            listing = Listing(self, did, asset, data, data['id'])
+            listing = Listing(self, data['id'], asset, data)
         return listing
 
     def validate_asset(self, asset):
@@ -177,7 +177,7 @@ class SurferAgent(AgentBase):
                 metadata = json.loads(read_metadata['metadata_text'])
                 did = f'{self._did}/{asset_id}'
                 asset = MemoryAsset(metadata, did)
-                listing = Listing(self, did, asset, data, data['id'])
+                listing = Listing(self, data['id'], asset, data)
         return listing
 
     def update_listing(self, listing):

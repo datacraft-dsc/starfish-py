@@ -11,19 +11,18 @@ class ListingBase(ABC):
 
         :param agent: agent object that created the listing.
         :type agent: :class:`.Agent` object to assign to this Listing
-        :param str did: did of the listing, this can be the did of the underling asset.
+        :param str listing_id: id of the listing.
         :param asset: the core asset for this listing
         :type asset: :class:`.Asset` object
         :param data: data of the listing
         :type data: dict
     """
-    def __init__(self, agent, did, asset, data, listing_id=None):
+    def __init__(self, agent, listing_id, asset, data):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
-        self._did = did
+        self._listing_id=listing_id
         self._asset = asset
         self._data = data
-        self._listing_id=listing_id
         super().__init__()
 
     @abstractmethod
@@ -50,14 +49,6 @@ class ListingBase(ABC):
         :type: :class:`.SquidAgent`
         """
         return self._agent
-
-    @property
-    def did(self):
-        """
-        :return: did of the listing
-        :type: string
-        """
-        return self._did
 
     @property
     def data(self):
@@ -95,4 +86,4 @@ class ListingBase(ABC):
         :return: True if this listing is empty else False.
         :type: boolean
         """
-        return self._did is None or self._did is None or self._asset is None
+        return self._listing_id is None or self._asset is None

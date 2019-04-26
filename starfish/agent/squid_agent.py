@@ -151,27 +151,24 @@ class SquidAgent(AgentBase):
 
         return model.validate_metadata(asset.metadata)
 
-    def get_listing(self, did):
+    def get_listing(self, listing_id):
         """
+        Return an listing from the given listing_id.
 
-        Return an listing on the listing's DID.
+        :param str listing_id: Id of the listing.
 
-        :param str did: DID of the listing.
-
-        :return: a registered asset given a DID of the asset
-        :type: :class:`.SquidAsset` class
+        :return: a registered listing given a Id of the listing
+        :type: :class:`.Listing` class
 
         """
         listing = None
-        if SquidAgent.is_did_valid(did):
-            model = self.squid_model
-            ddo = model.read_asset(did)
+        model = self.squid_model
 
-            if ddo:
-                asset = SquidAsset(ddo.metadata, ddo.did)
-                listing = Listing(self, ddo.did, asset, ddo)
-        else:
-            raise ValueError(f'Invalid did "{did}" for an asset')
+        ddo = model.read_asset(listing_id)
+
+        if ddo:
+            asset = SquidAsset(ddo.metadata, ddo.did)
+            listing = Listing(self, listing_id, asset, ddo)
 
         return listing
 
