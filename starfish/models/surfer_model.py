@@ -69,20 +69,19 @@ class SurferModel():
         :type: dict
         """
         result = None
-        metadata_text = json.dumps(metadata)
         endpoint = self.get_endpoint('metadata')
-        saved_asset_id = self.save_metadata(metadata_text, endpoint)
+        saved_asset_id = self.save_metadata(metadata, endpoint)
         result = {
                 'asset_id': saved_asset_id,
-                'metadata_text': metadata_text,
+                'metadata': metadata,
             }
         return result
 
-    def save_metadata(self, metadata_text, endpoint):
+    def save_metadata(self, metadata, endpoint):
         """save metadata to the agent server, using the asset_id and metadata"""
         url = endpoint
         logger.debug(f'metadata save url {url}')
-        response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
+        response = SurferModel._http_client.post(url, json=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
 
             json = response.json()
@@ -125,7 +124,7 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
-    def read_asset(self, asset_id, endpoint):
+    def read_metadata(self, asset_id, endpoint):
         """read the metadata from a service agent using the asset_id"""
 
         result = None
@@ -140,7 +139,7 @@ class SurferModel():
                 }
                 # convert to str if bytes
                 if isinstance(result['metadata_text'], bytes):
-                    result['metadat_text'] = response.content.encode('utf-8')
+                    result['metadata_text'] = response.content.decode('utf-8')
             else:
                 logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result

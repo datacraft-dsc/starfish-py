@@ -177,7 +177,7 @@ class SurferAgent(AgentBase):
             agent_did = 'did:op:' + data['id']
             model = self._get_surferModel(agent_did)
             endpoint = model.get_endpoint('metadata')
-            result_data = model.read_asset(asset_id, endpoint)
+            result_data = model.read_metadata(asset_id, endpoint)
 
             if result_data:
                 metadata = json.loads(result_data['metadata_text'])

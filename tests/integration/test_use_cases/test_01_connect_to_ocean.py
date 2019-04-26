@@ -1,7 +1,11 @@
 """
 
 
-test_01_connect_to_ocean
+    test_01_connect_to_ocean
+
+
+    As a developer working with Ocean,
+    I need a way to connect to the Ocean Network
 
 """
 
@@ -24,9 +28,9 @@ def test_01_connect_to_surfer(ocean, config):
     assert(did)
     ddo = {
         'name': 'Test ddo',
-        'value': secrets.token_hex(64) 
+        'value': secrets.token_hex(64)
     }
-    
+
     ocean.register_did(did, json.dumps(ddo), publisher_account)
     resolve_ddo = ocean.resolve_did(did)
     assert(resolve_ddo)
