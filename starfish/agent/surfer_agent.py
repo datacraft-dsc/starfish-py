@@ -212,6 +212,7 @@ class SurferAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
+        # TODO: implement search listing in surfer
         pass
 
     def purchase_asset(self, listing, account):
