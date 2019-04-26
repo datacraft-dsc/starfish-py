@@ -69,17 +69,16 @@ class SurferModel():
         :type: dict
         """
         result = None
-        endpoint = self.get_endpoint('metadata')
-        saved_asset_id = self.save_metadata(metadata, endpoint)
+        saved_asset_id = self.save_metadata(metadata)
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
             }
         return result
 
-    def save_metadata(self, metadata, endpoint):
+    def save_metadata(self, metadata):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = endpoint
+        url = self.get_endpoint('metadata')
         logger.debug(f'metadata save url {url}')
         response = SurferModel._http_client.post(url, json=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
@@ -94,13 +93,39 @@ class SurferModel():
         return None
 
     def create_listing(self,asset_id):
-        endpoint = self.get_endpoint('market') + '/listings'
+        endpoint = self.get_endpoint('market')
+        url = f'{endpoint}/listings'
         metadata_text={'assetid':asset_id}
-        response = SurferModel._http_client.post(endpoint, json=metadata_text, headers=self._headers)
+        response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             json = response.json()
             logger.warning('listing response returned: ' + str(json))
             return json
+        else:
+            msg = f'listing response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def get_listing(self, listing_id):
+        endpoint = self.get_endpoint('market')
+        url = f'{endpoint}/listings/{listing_id}'
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            data = response.json()
+            return data
+        else:
+            msg = f'listing response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def update_listing(self, listing_id, data):
+        endpoint = self.get_endpoint('market')
+        url = f'{endpoint}/listings/{listing_id}'
+        response = SurferModel._http_client.put(url, json=data, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            return True
         else:
             msg = f'listing response failed: {response.status_code}'
             logger.error(msg)
@@ -124,24 +149,24 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
-    def read_metadata(self, asset_id, endpoint):
+    def read_metadata(self, asset_id):
         """read the metadata from a service agent using the asset_id"""
 
         result = None
-        if endpoint:
-            url = endpoint + '/' + asset_id
-            logger.debug(f'metadata read url {url}')
-            response = SurferModel._http_client.get(url, headers=self._headers)
-            if response and response.status_code == requests.codes.ok:
-                result = {
-                    'asset_id': asset_id,
-                    'metadata_text': response.content
-                }
-                # convert to str if bytes
-                if isinstance(result['metadata_text'], bytes):
-                    result['metadata_text'] = response.content.decode('utf-8')
-            else:
-                logger.warning(f'metadata asset read {asset_id} response returned {response}')
+        endpoint = self.get_endpoint('metadata')
+        url = f'{endpoint}/{asset_id}'
+        logger.debug(f'metadata read url {url}')
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            result = {
+                'asset_id': asset_id,
+                'metadata_text': response.content
+            }
+            # convert to str if bytes
+            if isinstance(result['metadata_text'], bytes):
+                result['metadata_text'] = response.content.decode('utf-8')
+        else:
+            logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
 
 

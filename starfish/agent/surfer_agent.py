@@ -157,36 +157,40 @@ class SurferAgent(AgentBase):
         return model.upload_asset_data(remove_0x_prefix(asset.asset_id), asset.data)
 
 
-    def get_listing(self, did):
+    def get_listing(self, listing_id):
         """
-        this method is deprecated, as register_asset returns a listing.
-        Return an listing on the listing's DID.
+        Return an listing on the listings id.
 
-        :param str did: DID of the listing, this includes the did of the Surfer Agent Server.
+        :param str listing_id: Id of the listing.
 
-        :return: a registered asset given a DID of the asset
+        :return: a listing object
         :type: :class:`.Asset` class
 
         """
+        model = self._get_surferModel()
         listing = None
-        if SurferAgent.is_did_valid(did):
-
-            data = did_parse(did)
-
-            asset_id = data['path']
-            agent_did = 'did:op:' + data['id']
-            model = self._get_surferModel(agent_did)
-            endpoint = model.get_endpoint('metadata')
-            result_data = model.read_metadata(asset_id, endpoint)
-
-            if result_data:
-                metadata = json.loads(result_data['metadata_text'])
+        data = model.get_listing(listing_id)
+        if data:
+            asset_id = data['assetid']
+            read_metadata = model.read_metadata(asset_id)
+            if read_metadata:
+                metadata = json.loads(read_metadata['metadata_text'])
+                did = f'{self._did}/{asset_id}'
                 asset = MemoryAsset(metadata, did)
-                listing = Listing(self, did, asset, self._ddo)
-        else:
-            raise ValueError(f'Invalid did "{did}" for an asset')
-
+                listing = Listing(self, did, asset, data, data['id'])
         return listing
+
+    def update_listing(self, listing):
+        """
+
+        Update the listing to the agent server.
+
+        :param listing: Listing object to update
+        :type listing: :class:`.Listing` class
+
+        """
+        model = self._get_surferModel()
+        return model.update_listing(listing.listing_id, listing.data)
 
     def search_listings(self, text, sort=None, offset=100, page=0):
         """

@@ -22,7 +22,7 @@ def test_07_metadata_access(ocean, surfer_agent, metadata):
     assert(not listing is None)
     did = listing.did
     assert(did)
-    store_listing = surfer_agent.get_listing(did)
+    store_listing = surfer_agent.get_listing(listing.listing_id)
     assert(store_listing)
     assert(store_listing.asset.asset_id)
     assert(store_listing.asset.metadata)
