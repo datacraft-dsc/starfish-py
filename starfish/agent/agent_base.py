@@ -64,15 +64,15 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def get_listing(self, did):
+    def get_listing(self, listing_id):
         """
 
-        Return an listing on the listing's DID.
+        Return an listing from the given listing_id.
 
-        :param str did: DID of the listing.
+        :param str listing_id: Id of the listing.
 
-        :return: a registered asset given a DID of the asset
-        :type: :class:`.SquidAsset` class
+        :return: a registered listing given a Id of the listing
+        :type: :class:`.Listing` class
 
         """
         pass
