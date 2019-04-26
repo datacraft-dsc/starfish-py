@@ -11,11 +11,25 @@ from squid_py.ddo.ddo import DDO
 from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
 from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL
 from squid_py.ddo.public_key_rsa import PublicKeyRSA
+from squid_py.ddo.service import Service
 
 
 logger = logging.getLogger('ddo')
 
 class StarfishDDO(DDO):
+
+    def set_service_endpoint(self, service_type, value):
+        """
+
+        Set the default service endpoint with a new value
+
+        :param service_type: Type of service to set
+        :param value: value to set as the new value
+
+        """
+        service = self.get_service(service_type)
+        if service:
+            service._service_endpoint = value
 
     def add_authentication(self, key_id, authentication_type=None):
         """
@@ -165,6 +179,34 @@ class StarfishDDO(DDO):
 
         return data
 
+    def _read_dict(self, dictionary):
+        """Import a JSON dict into this DDO."""
+        values = dictionary
+        self._did = values['id']
+        self._created = values.get('created', None)
+        if 'publicKey' in values:
+            self._public_keys = []
+            for value in values['publicKey']:
+                if isinstance(value, str):
+                    value = json.loads(value)
+                self._public_keys.append(DDO.create_public_key_from_json(value))
+        if 'authentication' in values:
+            self._authentications = []
+            for value in values['authentication']:
+                if isinstance(value, str):
+                    value = json.loads(value)
+                self._authentications.append(StarfishDDO.create_authentication_from_json(value))
+        if 'service' in values:
+            self._services = []
+            for value in values['service']:
+                if isinstance(value, str):
+                    value = json.loads(value)
+                service = Service.from_json(value)
+                service.set_did(self._did)
+                self._services.append(service)
+        if 'proof' in values:
+            self._proof = values['proof']
+
     def _hash_text_list(self):
         """Return a list of all of the hash text."""
         hash_text = []
@@ -196,3 +238,19 @@ class StarfishDDO(DDO):
         if not hash_text:
             raise ValueError
         return hash_text
+
+    @staticmethod
+    def create_authentication_from_json(values):
+        """Create authentitaciton object from a JSON string."""
+        key_id = values.get('publicKey')
+        authentication_type = values.get('type')
+        if not key_id:
+            raise ValueError(
+                f'Invalid authentication definition, "publicKey" is missing: {values}')
+        if isinstance(key_id, dict):
+            public_key = DDO.create_public_key_from_json(key_id)
+            authentication = Authentication(public_key, public_key.get_authentication_type())
+        else:
+            authentication = Authentication(key_id, authentication_type)
+
+        return authentication

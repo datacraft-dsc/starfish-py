@@ -13,7 +13,7 @@ from eth_utils import remove_0x_prefix
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.asset import MemoryAsset
-from starfish.models.surfer_model import SurferModel
+from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
 from starfish.models.squid_model import SquidModel
 from starfish.asset import Asset
 from starfish.utils.did import did_parse
@@ -41,16 +41,52 @@ class SurferAgent(AgentBase):
         Surfer server.
 
     """
-    endPointName = 'metadata-storage'
+    services = SUPPORTED_SERVICES
+
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocean object"""
         AgentBase.__init__(self, ocean)
-        self._did = did
-        self._ddo = ddo
+        self._did = None
+        self._ddo = None
 
         if options is None:
             options = {}
+
+        # set the DID
+        if did is None or isinstance(did, str):
+            self._did = did
+        else:
+            raise ValueError('did must be a string or None')
+
+        # set the DDO
+        if isinstance(ddo, dict):
+            self._ddo = StarfishDDO(dictionary=ddo)
+        elif isinstance(ddo, str):
+            self._ddo = StarfishDDO(json_text=ddo)
+        elif isinstance(ddo, StarfishDDO):
+            self._ddo = ddo
+        elif ddo is None:
+            if self._did:
+                self._ddo = self._resolve_ddo_from_did(self._did)
+        else:
+            raise ValueError('ddo can be one of the following: None, StarfishDDO object or type dict')
+
+        # incase the user just sends a ddo without a did
+        if self._did is None and self._ddo:
+            self._did = self._ddo.did
+
+
+        # if DID and no DDO then try to load in the registered DDO, using squid
+        if self._did and not self._ddo:
+            model = SquidModel(ocean)
+            ddo_text = model.resolve_did_to_ddo(self._did)
+            if not ddo_text:
+                raise ValueError(f'cannot find registered agent at {did}')
+            self._ddo = StarfishDDO(json_text=ddo_text)
+
+        if self._did is None and self._ddo:
+            self._did = self._ddo.did
 
         self._authorization = options.get('authorization')
         if self._authorization is None and 'url' in options and 'username' in options:
@@ -60,24 +96,6 @@ class SurferAgent(AgentBase):
                 options['username'],
                 options.get('password', '')
             )
-
-
-        if did is None or isinstance(did, str):
-            self._did = did
-        else:
-            raise ValueError('did must be a type string')
-
-        if ddo is None or isinstance(ddo, DDO) or isinstance(ddo, dict):
-            self._ddo = ddo
-            if self._did is None:
-                self._did = ddo.did
-        else:
-            raise ValueEror('ddo must be a DOD object or type dict')
-
-        # if DID then try to load in the linked DDO, using squid
-        if self._did and not self._ddo:
-            model = SquidModel(ocean)
-            self._ddo = model.resolve_did_to_ddo(self._did)
 
     def register_asset(self, asset, account=None ):
         """
@@ -158,7 +176,7 @@ class SurferAgent(AgentBase):
             asset_id = data['path']
             agent_did = 'did:op:' + data['id']
             model = self._get_surferModel(agent_did)
-            endpoint = model.get_endpoint('metadata', SurferAgent.endPointName)
+            endpoint = model.get_endpoint('metadata')
             result_data = model.read_asset(asset_id, endpoint)
 
             if result_data:
@@ -252,6 +270,19 @@ class SurferAgent(AgentBase):
         """
         return False
 
+    def get_endpoint(self, name):
+        """
+
+        Return the endpoint of the service available for this agent
+        :param str name: name or type of the service, e.g. 'metadata', 'storage', 'Ocean.Meta.v1'
+        """
+        model = self._get_surferModel()
+        supported_service = SurferModel.find_supported_service(name)
+        if supported_service is None:
+            raise ValueError(f'This agent does not support the following service name or type {name}')
+        return model.get_endpoint(name)
+
+
     def _get_surferModel(self, did=None, ddo=None, authorization=None):
         """
 
@@ -285,6 +316,34 @@ class SurferAgent(AgentBase):
 
         return SurferModel(self._ocean, did, ddo, options)
 
+    def _resolve_ddo_from_did(self, did):
+        model = SquidModel(self._ocean)
+        ddo_text = model.resolve_did(self._did)
+        if not ddo_text:
+            raise ValueError(f'cannot find registered agent at {did}')
+        return StarfishDDO(json_text=ddo_text)
+
+    @property
+    def did(self):
+        """
+
+        Return the did for this surfer agent.
+
+        :return: did of the registered agent
+        :type: string
+        """
+        return self._did
+    @property
+    def ddo(self):
+        """
+
+        Return the registered DDO for this agent
+
+        :return: DDO registered for this agent
+        :type: :class:`.StarfishDDO`
+        """
+        return self._ddo
+
     @staticmethod
     def is_did_valid(did):
         """
@@ -312,10 +371,10 @@ class SurferAgent(AgentBase):
         """
 
         did = SquidModel.generate_did()
-        services = SurferModel.get_supported_services(url)
+        service_endpoints = SurferModel.generate_service_endpoints(url)
         ddo = StarfishDDO(did)
-        for service in services:
-            ddo.add_service(service['type'], service['url'], None)
+        for service_endpoint in service_endpoints:
+            ddo.add_service(service_endpoint['type'], service_endpoint['url'], None)
 
         # add a signature
         private_key_pem = ddo.add_signature()
