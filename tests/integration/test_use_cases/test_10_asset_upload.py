@@ -1,8 +1,8 @@
 """
     test_10_asset_upload
 
-    As a developer working with Ocean,
-    I need a way to create a valid service agreement that I can offer to others for puchase
+    As a developer working with an Ocean marketplace,
+    I need a way to upload my asset with a service agreement
 
 """
 
