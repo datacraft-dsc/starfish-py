@@ -8,7 +8,7 @@ import secrets
 import re
 import json
 
-from squid_py.did import id_to_did
+from squid_py.did import id_to_did, did_to_id
 
 from starfish.account import Account
 from starfish.agent import AgentBase
@@ -36,7 +36,7 @@ class MemoryAgent(AgentBase):
             kwargs = args[0]
 
         self._memory = {
-            'listingdata': {},
+            'listing_data': {},
             'asset': {},
             'purchase': {}
         }
@@ -65,19 +65,19 @@ class MemoryAgent(AgentBase):
 
         """
 
-        did = id_to_did(secrets.token_hex(64))
-        asset_did = did
-        listingdata = {
-            'did': did,
+        asset_did = id_to_did(secrets.token_hex(64))
+        listing_id = did_to_id(asset_did)
+        listing_data = {
+            'listing_id': listing_id,
             'asset_did': asset_did
         }
-        self._memory['listingdata'][did] = listingdata
+        self._memory['listing_data'][listing_id] = listing_data
         self._memory['asset'][asset_did] = asset
 
         listing = None
-        if listingdata:
+        if listing_data:
             asset.set_did(asset_did)
-            listing = Listing(self, did, asset, listingdata)
+            listing = Listing(self, listing_id, asset, listing_data)
 
         return listing
 
@@ -92,27 +92,24 @@ class MemoryAgent(AgentBase):
         return not asset is None
 
 
-    def get_listing(self, did):
+    def get_listing(self, listing_id):
         """
 
-        Return an listing on the listing's DID.
+        Return an listing from the given listing_id.
 
-        :param str did: DID of the listing.
+        :param str listing_id: Id of the listing.
 
-        :return: a registered asset given a DID of the asset
-        :type: :class:`.Asset` class
+        :return: a registered listing given a Id of the listing
+        :type: :class:`.Listing` class
 
         """
         listing = None
-        if MemoryAgent.is_did_valid(did):
-            if did in self._memory['listingdata']:
-                listingdata = self._memory['listingdata'][did]
-                if listingdata:
-                    asset_did = listingdata['asset_did']
-                    asset = self._memory['asset'][asset_did]
-                    listing = Listing(self, did, asset, listingdata)
-        else:
-            raise ValueError(f'Invalid did "{did}" for an asset')
+        if listing_id in self._memory['listing_data']:
+            listing_data = self._memory['listing_data'][listing_id]
+            if listing_data:
+                asset_did = listing_data['asset_did']
+                asset = self._memory['asset'][asset_did]
+                listing = Listing(self, listing_id, asset, listing_data)
 
         return listing
 
@@ -140,11 +137,11 @@ class MemoryAgent(AgentBase):
         listing_items = None
         for asset_did, asset in self._memory['asset'].items():
             if re.search(text, json.dumps(asset.metadata)):
-                for did, listing in self._memory['listingdata'].items():
+                for listing_id, listing in self._memory['listing_data'].items():
                     if listing['asset_did'] == asset_did:
                         if listing_items is None:
                             listing_items = {}
-                        listing_items[did] = listing
+                        listing_items[listing_id] = listing
 
         return listing_items
 

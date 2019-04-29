@@ -1,6 +1,10 @@
 """
     test_04_agent_registration
 
+
+    As a developer building or managing an Ocean Agent,
+    I need to be able to register my Agent on the network and obtain an Agent ID
+
 """
 
 from starfish.agent import SurferAgent

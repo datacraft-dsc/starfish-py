@@ -78,7 +78,7 @@ def main():
     listing = agent.register_asset(asset, account)
 
     # Print out the listing did and listing data.
-    print('the listing', listing.did, listing.data)
+    print('the listing', listing.listing_id, listing.data)
 
 if __name__ == '__main__':
     main()

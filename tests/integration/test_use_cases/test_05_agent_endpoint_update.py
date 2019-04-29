@@ -1,6 +1,10 @@
 """
     test_05_agent_endpoint_update
 
+
+    As a developer managing a Ocean Agent,
+    I need to be able to update service endpoints for my Agent
+ 
 """
 
 import re

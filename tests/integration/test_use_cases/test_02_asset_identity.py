@@ -1,6 +1,10 @@
 """
     test_02_asset_identity
 
+
+    As a developer working with Ocean,
+    I need a stable identifier (Asset ID) for an arbitrary asset in the Ocean ecosystem
+
 """
 
 import secrets

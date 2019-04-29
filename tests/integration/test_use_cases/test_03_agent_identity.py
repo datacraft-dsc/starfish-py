@@ -1,6 +1,11 @@
 """
     test_03_agent_identity
 
+
+    As a developer working with Ocean,
+    I need a stable identifier (Agent ID) for an arbitrary Agent in the Ocean ecosystem
+    This test class with validate the DID and DDO format and and their data
+
 """
 
 import secrets

@@ -61,7 +61,7 @@ def test_init(ocean):
 def test_register_asset(ocean, metadata, config):
     listing, agent, asset = _register_asset(ocean, metadata, config)
     assert(listing)
-    assert(listing.did)
+    assert(listing.listing_id)
 
 def test_validate_asset(ocean, metadata):
     agent = SquidAgent(ocean, TEST_INIT_PARMS)
@@ -71,18 +71,18 @@ def test_validate_asset(ocean, metadata):
 
 def test_get_listing(ocean, metadata, config):
     listing, agent, asset = _register_asset(ocean, metadata, config)
-    found_listing = agent.get_listing(listing.did)
+    found_listing = agent.get_listing(listing.listing_id)
     assert(found_listing)
-    assert(found_listing.did == listing.did)
+    assert(found_listing.listing_id == listing.listing_id)
 
 def test_search_listings(ocean, metadata, config):
     listing, agent, asset = _register_asset(ocean, metadata, config)
-    listing_dids = agent.search_listings(metadata['base']['author'])
-    assert(listing_dids)
-    assert(len(listing_dids) > 0)
+    listing_ids = agent.search_listings(metadata['base']['author'])
+    assert(listing_ids)
+    assert(len(listing_ids) > 0)
     is_found = False
-    for did in listing_dids:
-        if did == listing.did:
+    for listing_id in listing_ids:
+        if listing_id == listing.listing_id:
             is_found = True
             break
     assert(is_found)

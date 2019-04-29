@@ -39,11 +39,11 @@ def test_asset(ocean, metadata, config):
     assert listing
     assert publisher_account
 
-    listing_did = listing.asset.did
+    listing_id = listing.listing_id
     # start to test getting the asset from storage
-    listing = agent.get_listing(listing_did)
+    listing = agent.get_listing(listing_id)
     assert listing
-    assert listing.asset.did == listing_did
+    assert listing.listing_id == listing_id
 
 
     purchase_account = ocean.get_account(config.purchaser_account)

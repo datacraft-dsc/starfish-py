@@ -38,10 +38,37 @@ class Listing(ListingBase):
 
         return self._agent.purchase_asset(self, account)
 
+    def set_published(self, value):
+        """
+
+        Set the published value
+
+        :params boolean value: Published value True or False
+
+        """
+        if self._data and isinstance(self._data, dict) and 'status' in self._data:
+            if value:
+                self._data['status'] = 'published'
+            else:
+                self._data['status'] = 'unpublished'
+
+    @property
+    def is_published(self):
+        """
+
+        Return a True if this listing is published
+
+        :return: True of False if this listing is published
+        :type: boolean
+
+        """
+        if self._data and isinstance(self._data, dict) and 'status' in self._data:
+            return self._data['status'] == 'published'
+        return False
+
     def __str__(self):
         s = 'Listing: agent=' + self._agent.__class__.__name__ + ', '
-        s += 'did=' + self._did + ', '
-        s += 'asset=' + self._asset.__class__.__name__ + ', '
         s += 'listing_id=' + self._listing_id + ', '
+        s += 'asset=' + self._asset.__class__.__name__ + ', '
         s += 'data=' + str(self._data)
         return s

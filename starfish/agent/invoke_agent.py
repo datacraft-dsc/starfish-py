@@ -34,14 +34,17 @@ class InvokeAgent:
     def get_operation(self,did):
         return Operation(self,did)
 
-    def get_listing(self, did):
+    def get_listing(self, listing_id):
         """
 
-        Return an listing on the listing's DID-will be supported in future.
+        Return an listing from the given listing_id.
+
+        :param str listing_id: Id of the listing.
+
+        :return: a registered listing given a Id of the listing
+        :type: :class:`.Listing` class
 
         """
-        pass
-
 
     def purchase(self, listing, account):
         """
