@@ -215,7 +215,7 @@ class SurferAgent(AgentBase):
         # TODO: implement search listing in surfer
         pass
 
-    def purchase_asset(self, listing, account, id=None, status=None,
+    def purchase_asset(self, listing, account, purchase_id=None, status=None,
                        info=None, agreement=None):
         """
 
@@ -225,8 +225,8 @@ class SurferAgent(AgentBase):
         :type listing: :class:`.Listing`
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
-        :param id: purchase id (optional)
-        :type id: str or None
+        :param purchase_id: purchase id (optional)
+        :type purchase_id: str or None
         :param status: purchase status (optional)
         :type status: str or None
         :param info: purchase info (optional)
@@ -236,8 +236,8 @@ class SurferAgent(AgentBase):
         """
         model = self._get_surferModel()
         purchase = {'listingid': listing.listing_id}
-        if id:
-            purchase['id'] = id
+        if purchase_id:
+            purchase['id'] = purchase_id
         if status:
             purchase['status'] = status
         if info:
