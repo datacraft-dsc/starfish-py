@@ -215,7 +215,8 @@ class SurferAgent(AgentBase):
         # TODO: implement search listing in surfer
         pass
 
-    def purchase_asset(self, listing, account):
+    def purchase_asset(self, listing, account, purchase_id=None, status=None,
+                       info=None, agreement=None):
         """
 
         Purchase an asset using it's listing and an account.
@@ -224,9 +225,27 @@ class SurferAgent(AgentBase):
         :type listing: :class:`.Listing`
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
+        :param purchase_id: purchase id (optional)
+        :type purchase_id: str or None
+        :param status: purchase status (optional)
+        :type status: str or None
+        :param info: purchase info (optional)
+        :type info: dict or None
+        :param agreement: purchase agreement (optional)
+        :type agreement: dict or None
 
         """
-        pass
+        model = self._get_surferModel()
+        purchase = {'listingid': listing.listing_id}
+        if purchase_id:
+            purchase['id'] = purchase_id
+        if status:
+            purchase['status'] = status
+        if info:
+            purchase['info'] = info
+        if agreement:
+            purchase['agreement'] = agreement
+        return model.purchase_asset(purchase)
 
     def is_access_granted_for_asset(self, asset, purchase_id, account):
         """

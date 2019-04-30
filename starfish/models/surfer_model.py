@@ -169,6 +169,21 @@ class SurferModel():
             logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
 
+    def purchase_asset(self, purchase):
+        """record purchase"""
+        url = self.get_endpoint('market') + '/purchases'
+        logger.debug(f'market url for purchases {url}')
+        response = SurferModel._http_client.post(url, json=purchase, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+
+            json = response.json()
+            logger.debug(f'purchase response returned {json}')
+            return json
+        else:
+            msg = f'purchase response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
 
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service or service type"""
