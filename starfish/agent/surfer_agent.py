@@ -233,7 +233,7 @@ class SurferAgent(AgentBase):
         :type info: dict or None
         :param agreement: purchase agreement (optional)
         :type agreement: dict or None
-        
+
         """
         model = self._get_surferModel()
         purchase = {'listingid': listing.listing_id}
