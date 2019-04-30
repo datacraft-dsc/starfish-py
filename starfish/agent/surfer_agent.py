@@ -157,6 +157,21 @@ class SurferAgent(AgentBase):
         return model.upload_asset_data(remove_0x_prefix(asset.asset_id), asset.data)
 
 
+    def download_asset(self, asset_id):
+        """
+        Download an asset
+
+        :param str asset_id: Id of the Asset.
+
+        :return: an Asset
+        :type: :class:`.Asset` class
+
+        """
+        model = self._get_surferModel()
+        asset = model.download_asset(asset_id)
+        # FIXME promote to MemoryAsset as in get_listing
+        return asset
+
     def get_listing(self, listing_id):
         """
         Return an listing on the listings id.
@@ -179,6 +194,28 @@ class SurferAgent(AgentBase):
                 asset = MemoryAsset(metadata, did)
                 listing = Listing(self, data['id'], asset, data)
         return listing
+
+    def get_listings(self):
+        """
+        Returns all listings
+
+        :return: List of listing objects
+
+        """
+        model = self._get_surferModel()
+        listings = []
+        listings_data = model.get_listings()
+        if listings_data:
+            for data in listings_data:
+                asset_id = data['assetid']
+                read_metadata = model.read_metadata(asset_id)
+                if read_metadata:
+                    metadata = json.loads(read_metadata['metadata_text'])
+                    did = f'{self._did}/{asset_id}'
+                    asset = MemoryAsset(metadata, did)
+                    listing = Listing(self, data['id'], asset, data)
+                    listings.append(listing)
+        return listings
 
     def update_listing(self, listing):
         """

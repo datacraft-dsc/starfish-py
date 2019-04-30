@@ -1,5 +1,5 @@
 """
-    test_14_create_purchase
+    test_17_asset_purchase
 
     As a developer working with an Ocean marketplace,
     I want to record a purchase.
@@ -13,12 +13,12 @@ import json
 from starfish.asset import MemoryAsset
 
 
-def test_14_create_purchase(ocean, config, surfer_agent, metadata):
+def test_17_asset_purchase(ocean, config, surfer_agent, metadata):
     test_data = secrets.token_hex(1024)
     asset = MemoryAsset(metadata=metadata, data=test_data)
     listing = surfer_agent.register_asset(asset)
     listing.set_published(True)
-    logging.debug("create_purchase for listingid: " + listing.listing_id)
+    logging.debug("create_purchase for listing_id: " + listing.listing_id)
     purchaser_account = ocean.get_account(config.purchaser_account)
     purchaser_account.unlock()
     purchase = surfer_agent.purchase_asset(listing, purchaser_account)

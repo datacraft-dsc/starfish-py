@@ -107,6 +107,29 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
+    def download_asset(self, asset_id):
+        endpoint = self.get_endpoint('storage')
+        url = f'{endpoint}/assets/{asset_id}'
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            # FIXME must check for a non empty response here
+            # https://2.python-requests.org/en/master/user/quickstart/#response-content
+            # else response.json() will fail in
+            # venv/lib/python3.7/site-packages/requests/models.py:897: in json
+            #     return complexjson.loads(self.text, **kwargs)
+            # /usr/lib/python3.7/json/__init__.py:348: in loads
+            #     return _default_decoder.decode(s)
+            # /usr/lib/python3.7/json/decoder.py:337: in decode
+            #     obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+            # data = response.json()
+            data = None
+            return data
+        else:
+            msg = f'GET assets response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'
@@ -115,7 +138,20 @@ class SurferModel():
             data = response.json()
             return data
         else:
-            msg = f'listing response failed: {response.status_code}'
+            msg = f'GET listings response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def get_listings(self):
+        endpoint = self.get_endpoint('market')
+        url = f'{endpoint}/listings'
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            data = response.json()
+            return data
+        else:
+            msg = f'GET listings response failed: {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -127,7 +163,7 @@ class SurferModel():
         if response and response.status_code == requests.codes.ok:
             return True
         else:
-            msg = f'listing response failed: {response.status_code}'
+            msg = f'PUT listings response failed: {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -182,6 +218,10 @@ class SurferModel():
         else:
             msg = f'purchase response failed: {response.status_code}'
             logger.error(msg)
+            # NOTE surfer may return error information in additon to a 500
+            if response:
+                json = response.json()
+                logger.error(f'purchase response returned {json}')
             raise ValueError(msg)
         return None
 
