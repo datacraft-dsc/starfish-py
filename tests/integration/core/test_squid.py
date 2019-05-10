@@ -75,7 +75,6 @@ def test_asset(ocean, metadata, config):
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
-    print('purchase_asset', purchase_asset)
 
     assert(not purchase_asset.is_completed(purchase_account))
 
