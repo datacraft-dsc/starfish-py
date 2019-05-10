@@ -2,6 +2,7 @@ from unittest.mock import Mock
 import pytest
 import secrets
 import json
+from web3 import Web3
 
 from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.models.squid_model import SquidModelPurchaseError
@@ -11,12 +12,17 @@ from squid_py.did import (
     did_to_id_bytes,
 )
 from squid_py.agreements.service_types import ServiceTypes
+from squid_py.keeper.keeper import Keeper
 from plecos import is_valid_dict_local
 
 
 from tests.unit.libs.unit_test_config import unitTestConfig
 
 TEST_SERVICE_NAME = 'service_data'
+
+class MockKeeper():
+    def sign_hash(self, text, publisher_account):
+        return Web3.sha3(text=text + publisher_account.address)
 
 
 class MockSquidModel():
@@ -88,7 +94,10 @@ class MockSquidModel():
         ddo.add_service(TEST_SERVICE_NAME, self._options['aquarius_url'])
         ddo.add_service(ServiceTypes.METADATA, '', {'metadata': metadata})
         # add the static proof
-        ddo.add_proof(0, private_key_pem)
+        
+        mockKeeper = MockKeeper()
+    
+        ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
         # if self.register_ddo(did, ddo, account._squid_account):
         self._ddo_list[did] = ddo
         return ddo

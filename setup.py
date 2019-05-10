@@ -14,7 +14,7 @@ with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
 install_requirements = [
-    'squid-py==0.5.11',
+    'squid-py==0.6.4',
     'plecos==0.7.2',
     'coloredlogs',
     'eciespy',
