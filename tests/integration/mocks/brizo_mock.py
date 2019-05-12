@@ -28,9 +28,9 @@ class BrizoMock(object):
         if not self.account:
             self.account = BrizoMock.publisher_account
 
-
-        self.ocean_instance.agreements.subscribe_events(
-            self.account.address, self._handle_agreement_created)
+# next version of brizo
+#        self.ocean_instance.agreements.subscribe_events(
+#            self.account.address, self._handle_agreement_created)
 
         print("Brizo mock created")
         
