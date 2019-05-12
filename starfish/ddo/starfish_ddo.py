@@ -117,7 +117,7 @@ class StarfishDDO(DDO):
             'creator': publisher_account.address,
             'signatureValue': keeper.sign_hash(text, publisher_account),
         }
-        
+
     def add_proof(self, authorisation_index, private_key=None, signature_text=None):
         """Add a proof to the DDO, based on the public_key id/index and signed with the private key
         add a static proof to the DDO, based on one of the public keys."""
