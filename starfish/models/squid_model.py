@@ -93,7 +93,7 @@ class SquidModel():
         """
         return self._squid_ocean.assets.resolve(did)
 
-    def search_assets(self, text, sort=None, offset=100, page=0):
+    def search_assets(self, text, sort=None, offset=100, page=1):
         """
         Search assets from the squid API.
         """
@@ -141,7 +141,7 @@ class SquidModel():
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            service_agreement_id = squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account)
+            service_agreement_id = squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account, auto_consume=False)
 
         return service_agreement_id
 

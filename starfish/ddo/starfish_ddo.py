@@ -1,7 +1,9 @@
 
 import logging
 from base64 import b64encode
+from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
+from Cryptodome.Signature import PKCS1_v1_5
 
 from starfish.ddo.authentication import Authentication
 
@@ -9,8 +11,8 @@ from starfish.ddo.authentication import Authentication
 from squid_py.ddo.ddo import DDO
 
 from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
-from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL
-from squid_py.ddo.public_key_rsa import PublicKeyRSA
+from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL, PROOF_TYPE
+from squid_py.ddo.public_key_rsa import PublicKeyRSA, PUBLIC_KEY_TYPE_RSA
 from squid_py.ddo.service import Service
 
 
@@ -103,6 +105,19 @@ class StarfishDDO(DDO):
                 PublicKeyBase(did, **{"owner": public_key, "type": "EthereumECDSAKey"}))
 
 
+    def add_proof_keeper(self, text, publisher_account, keeper):
+        """Add a proof to the DDO, based on the public_key id/index and signed with the private key
+        add a static proof to the DDO, based on one of the public keys."""
+
+        # just incase clear out the current static proof property
+        self._proof = None
+        self._proof = {
+            'type': PROOF_TYPE,
+            'created': DDO._get_timestamp(),
+            'creator': publisher_account.address,
+            'signatureValue': keeper.sign_hash(text, publisher_account),
+        }
+
     def add_proof(self, authorisation_index, private_key=None, signature_text=None):
         """Add a proof to the DDO, based on the public_key id/index and signed with the private key
         add a static proof to the DDO, based on one of the public keys."""
@@ -136,7 +151,7 @@ class StarfishDDO(DDO):
         # just incase clear out the current static proof property
         self._proof = None
 
-        signature = DDO.sign_text(signature_text, private_key, sign_key.get_type())
+        signature = StarfishDDO.sign_text(signature_text, private_key, sign_key.get_type())
 
         self._proof = {
             'type': sign_key.get_type(),
@@ -231,8 +246,9 @@ class StarfishDDO(DDO):
 
         if self._services:
             for service in self._services:
+                print(service.type, service.endpoints[0])
                 hash_text.append(service.type)
-                hash_text.extend(service.endpoints)
+                hash_text.extend(service.endpoints[0])
 
         # if no data can be found to hash then raise an error
         if not hash_text:
@@ -254,3 +270,14 @@ class StarfishDDO(DDO):
             authentication = Authentication(key_id, authentication_type)
 
         return authentication
+
+    @staticmethod
+    def sign_text(text, private_key, sign_type=PUBLIC_KEY_TYPE_RSA):
+        """Sign some text using the private key provided."""
+        if sign_type == PUBLIC_KEY_TYPE_RSA:
+            signer = PKCS1_v1_5.new(RSA.import_key(private_key))
+            text_hash = SHA256.new(text.encode('utf-8'))
+            signed_text = signer.sign(text_hash)
+            return signed_text
+
+        raise NotImplementedError

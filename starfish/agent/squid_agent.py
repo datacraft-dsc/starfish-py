@@ -173,7 +173,7 @@ class SquidAgent(AgentBase):
         return listing
 
 
-    def search_listings(self, text, sort=None, offset=100, page=0):
+    def search_listings(self, text, sort=None, offset=100, page=1):
         """
 
         Search the off chain storage for an asset with the givien 'text'
@@ -182,7 +182,7 @@ class SquidAgent(AgentBase):
         :param sort: sort the results ( defaults: None, no sort).
         :type sort: str or None
         :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
-        :param int page: Returns the page number based on the offset.
+        :param int page: Returns the page number based on the offset ( defaults: 1 ).
 
         :return: a list of assets objects found using the search.
         :type: list of DID strings
