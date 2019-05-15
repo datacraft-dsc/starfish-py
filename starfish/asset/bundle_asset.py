@@ -23,14 +23,68 @@ class BundleAsset(AssetBase):
             metadata = {}
             metadata['name'] = 'BundleAsset'
             metadata['description'] = 'Bundle Asset'
-            metadata['size'] = len(data)
-            if isinstance(data, str):
-                metadata['contentType'] = 'text/plain; charset=utf-8'
-            else:
-                metadata['contentType'] = 'application/octet-stream'
         AssetBase.__init__(self, metadata, did)
+        self._asset_list = []
         self._data = data
 
+    def add(self, asset):
+        """
+        
+        Add an asset to the bundle. Any asset object
+        
+        :param asset: asset to add to the bundle collection
+        :type asset: :class:`.Asset` object
+        
+        :return: index of the new asset in the list
+        :type: int
+
+        """
+        if not isinstance(asset, AssetBase):
+            raise TypeError('You need to pass an Asset object')
+        
+        self._asset_list.append(asset)
+        return(self.count - 1)
+
+    def get_asset(self, index):
+        """
+        
+        Return the asset in the bundle based on it's index number
+        
+        :param int index: index of the asset
+        
+        :return: asset is returned
+        :type: :class:`.Asset` object 
+        
+        :raises: IndexError if index is out of range
+        """
+        if index < 0 and index > self.count:
+            raise IndexError('Invalid asset index in asset bundle')
+        return self._asset_list[index]
+        
+    def __iter__(self):
+        self._iter_index = 0
+        return self
+    
+    def __next__(self):
+        if self._iter_index < self.count:
+            index = self._iter_index
+            asset = self._asset_list[index]
+            self._iter_index += 1
+            return index, asset
+        else:
+            raise StopIteration
+            
+    @property
+    def count(self):
+        """
+        
+        Return the number of assets in this bundle
+        
+        :return: count of assets
+        :type: int
+        """
+        return len(self._asset_list)
+        
     @property
     def data(self):
         """
