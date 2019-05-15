@@ -57,10 +57,22 @@ class BundleAsset(AssetBase):
         
         :raises: IndexError if index is out of range
         """
-        if index < 0 and index > self.count:
+        if index < 0 and index >= self.count:
             raise IndexError('Invalid asset index in asset bundle')
         return self._asset_list[index]
         
+    def remove(self, index):
+        if index < 0 and index >= self.count:
+            raise ValueError('Invalid asset index in asset bundle')
+        return self._asset_list.pop(index)
+        
+    def pop(self, index=None):
+        if index is None:
+            index = self.count - 1
+        if index < 0 and index >= self.count:
+            raise ValueError('Invalid asset index in asset bundle')
+        return self._asset_list.pop(index)
+
     def __iter__(self):
         self._iter_index = 0
         return self
