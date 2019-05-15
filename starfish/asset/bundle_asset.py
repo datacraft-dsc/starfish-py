@@ -53,7 +53,7 @@ class BundleAsset(AssetBase):
         :param int index: index of the asset
         
         :return: asset is returned
-        :type: :class:`.Asset` object 
+        :type: :class:`.Asset` object
         
         :raises: IndexError if index is out of range
         """
@@ -62,22 +62,56 @@ class BundleAsset(AssetBase):
         return self._asset_list[index]
         
     def remove(self, index):
+        """
+        
+        Remove an asset from the bundle
+        
+        :param int index: index of the asset to remove
+        :return: the removed asset
+        :type: :class:`.Asset` object
+
+        """
         if index < 0 and index >= self.count:
             raise ValueError('Invalid asset index in asset bundle')
         return self._asset_list.pop(index)
         
     def pop(self, index=None):
+        """
+        
+        pop an asset from the bundle
+        
+        :param int index: index of the asset to pop, can be empty to remove the last item
+        :return: the poped asset
+        :type: :class:`.Asset` object
+
+        """
         if index is None:
             index = self.count - 1
         if index < 0 and index >= self.count:
             raise ValueError('Invalid asset index in asset bundle')
         return self._asset_list.pop(index)
 
+
     def __iter__(self):
+        """
+        
+        Iterator method. This allows you to do the following::
+        
+            for index, asset in bundle:
+                print('my assets in the bundle are', index, asset)
+        """
         self._iter_index = 0
         return self
     
     def __next__(self):
+        """
+        
+        Provide the __next__ method of a iterator.
+        
+        :return: index, asset
+        :type: int, :class:.`Asset` object
+        
+        """
         if self._iter_index < self.count:
             index = self._iter_index
             asset = self._asset_list[index]
