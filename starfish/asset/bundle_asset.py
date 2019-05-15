@@ -74,6 +74,9 @@ class BundleAsset(AssetBase):
         else:
             raise StopIteration
             
+    def __getitem__(self, key):
+        return self._asset_list[key]
+        
     @property
     def count(self):
         """
