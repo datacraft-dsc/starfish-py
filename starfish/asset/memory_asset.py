@@ -3,6 +3,7 @@
 """
 
 from starfish.asset.asset_base import AssetBase
+from starfish.metadata import Metadata
 
 class MemoryAsset(AssetBase):
     """
@@ -20,14 +21,13 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = {}
-            metadata['name'] = 'MemoryAsset'
-            metadata['description'] = 'Memory Asset'
-            metadata['size'] = len(data)
-            if isinstance(data, str):
-                metadata['contentType'] = 'text/plain; charset=utf-8'
-            else:
-                metadata['contentType'] = 'application/octet-stream'
+            metadata = Metadata('MemoryAsset', 'MemoryAsset')
+        else:
+            metadata = Metadata(metadata)
+#            if isinstance(data, str):
+#                metadata['contentType'] = 'text/plain; charset=utf-8'
+#            else:
+#                metadata['contentType'] = 'application/octet-stream'
         AssetBase.__init__(self, metadata, did)
         self._data = data
 
@@ -41,3 +41,5 @@ class MemoryAsset(AssetBase):
         :type: str or byte
         """
         return self._data
+
+    

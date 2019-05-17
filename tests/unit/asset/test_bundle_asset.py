@@ -21,10 +21,13 @@ def test_init(metadata):
 def test_bundle_asset_iteration(ocean, metadata, config):
     bundle = BundleAsset()
     asset_list = {}
+    
+    assert(bundle.is_bundle)
     # add a set of memory assets
     for index in range(0, TEST_ASSET_COUNT):
         test_data = secrets.token_hex(1024)
         asset_list[index] = MemoryAsset(metadata=metadata, data=test_data)
+        assert(not asset_list[index].is_bundle)
         assert(index == bundle.add(asset_list[index]))
 
     # using the iterator
@@ -36,6 +39,12 @@ def test_bundle_asset_iteration(ocean, metadata, config):
     for index in range(0, bundle.count):
         asset = bundle[index]
         assert(index >=0 and index < TEST_ASSET_COUNT)
+        assert(asset.data == asset_list[index].data)
+
+    # using the items list of assets
+    for asset in bundle.items:
+        assert(asset)
+        index = bundle.items.index(asset)
         assert(asset.data == asset_list[index].data)
         
     # test pop

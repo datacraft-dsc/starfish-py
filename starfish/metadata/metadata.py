@@ -1,7 +1,6 @@
 """
-    Metadata class to handle the asset storage and addressing.
+    Metadata class to handle asset metadata.
 
-    **Currently this is in development**
 
 """
 
@@ -16,25 +15,34 @@ class Metadata():
     :type metadata: dict
 
     """
-    def __init__(self, agent, metadata):
+    def __init__(self, name=None, asset_type=None, **kwargs):
         """
-        init an asset class with the following:
+        init the metadata class
         """
-        self._agent = agent
-        self._metadata = metadata
+        
+        self._valid_fields = ['name', 'type', 'description', 'dateCreated',
+        'author', 'license', 'copyrightHolder', 'links', 'inLanguage', 
+        'tags', 'additionalInformation', 'files' ]
 
-    @property
-    def agent(self):
-        """
-        :return: Agent object
-        :type: :class:`.AgentObject`
-        """
-        return self._agent
+        self._data = {}
 
-    @property
-    def data(self):
-        """
-        :return: metadata of the asset
-        :type: dict
-        """
-        return self._metadata
+        if isinstance(name, dict):
+            for name_value, value in name.items():
+                self.__setitem__(name_value, value)
+        elif isinstance(name, str):
+            self.name = name
+        else:
+            raise ValueError('You need to pass the meta name as a string or dict')
+            
+        self.asset_type = asset_type
+
+
+
+    def __setitem__(self, name, value):
+        if name in self._valid_fields:
+            self._data[name] = value
+ 
+    def __getitem__(self, name):
+        if name in self._data:
+            return self._data[name]
+        return None
