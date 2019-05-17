@@ -21,13 +21,20 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = Metadata('MemoryAsset', 'MemoryAsset')
+
+#            metadata = Metadata('MemoryAsset', 'MemoryAsset')
+            metadata = {
+                'name': 'MemoryAsset',
+                'type': 'MemoryAsset',
+                'author': 'memory asset'
+            }
         else:
-            metadata = Metadata(metadata)
-#            if isinstance(data, str):
-#                metadata['contentType'] = 'text/plain; charset=utf-8'
-#            else:
-#                metadata['contentType'] = 'application/octet-stream'
+#            metadata = Metadata(metadata)
+
+            if isinstance(data, str):
+                metadata['contentType'] = 'text/plain; charset=utf-8'
+            else:
+                metadata['contentType'] = 'application/octet-stream'
         AssetBase.__init__(self, metadata, did)
         self._data = data
 
@@ -41,5 +48,3 @@ class MemoryAsset(AssetBase):
         :type: str or byte
         """
         return self._data
-
-    
