@@ -28,9 +28,6 @@ class MemoryAsset(AssetBase):
                 'type': 'MemoryAsset',
                 'author': 'memory asset'
             }
-        else:
-#            metadata = Metadata(metadata)
-
             if isinstance(data, str):
                 metadata['contentType'] = 'text/plain; charset=utf-8'
             else:
