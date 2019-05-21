@@ -20,10 +20,13 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = {}
-            metadata['name'] = 'MemoryAsset'
-            metadata['description'] = 'Memory Asset'
-            metadata['size'] = len(data)
+
+#            metadata = Metadata('MemoryAsset', 'MemoryAsset')
+            metadata = {
+                'name': 'MemoryAsset',
+                'type': 'MemoryAsset',
+                'author': 'memory asset'
+            }
             if isinstance(data, str):
                 metadata['contentType'] = 'text/plain; charset=utf-8'
             else:

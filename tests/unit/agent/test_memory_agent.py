@@ -44,7 +44,7 @@ def test_get_listing(ocean, metadata, config):
 
 def test_search_listings(ocean, metadata, config):
     listing, agent, asset = _register_asset(ocean, metadata, config)
-    listing_ids = agent.search_listings(metadata['base']['author'])
+    listing_ids = agent.search_listings(metadata['base']['name'])
     assert(listing_ids)
     assert(len(listing_ids) > 0)
     is_found = False
