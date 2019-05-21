@@ -19,9 +19,9 @@ class Metadata():
         """
         init the metadata class
         """
-        
+
         self._valid_fields = ['name', 'type', 'description', 'dateCreated',
-        'author', 'license', 'copyrightHolder', 'links', 'inLanguage', 
+        'author', 'license', 'copyrightHolder', 'links', 'inLanguage',
         'tags', 'additionalInformation', 'files' ]
 
         self._data = {}
@@ -33,15 +33,13 @@ class Metadata():
             self.name = name
         else:
             raise ValueError('You need to pass the meta name as a string or dict')
-            
+
         self.asset_type = asset_type
-
-
 
     def __setitem__(self, name, value):
         if name in self._valid_fields:
             self._data[name] = value
- 
+
     def __getitem__(self, name):
         if name in self._data:
             return self._data[name]

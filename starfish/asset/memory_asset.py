@@ -3,7 +3,6 @@
 """
 
 from starfish.asset.asset_base import AssetBase
-from starfish.metadata import Metadata
 
 class MemoryAsset(AssetBase):
     """

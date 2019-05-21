@@ -59,15 +59,15 @@ class AssetBase(ABC):
     @property
     def data(self):
         return None
-        
+
     @property
     def is_bundle(self):
         """
-        
+
         Return True if this asset is a bundle asset and can contain sub assets ( Asset Bundle )
 
         :return: True if sub assets can be held within this asset
         :type: boolean
-        
+
         """
         return False
