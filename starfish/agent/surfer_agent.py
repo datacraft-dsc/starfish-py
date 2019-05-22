@@ -195,6 +195,26 @@ class SurferAgent(AgentBase):
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
+    def get_asset(self, asset_id):
+        """
+        
+        This is for compatability for Surfer calls to get an asset directly from Surfer
+        
+        :param str asset_id: Id of the asset to read
+        
+        :return: an asset class
+        :type: :class:`.AssetBase` class
+        
+        """
+        asset = None
+        model = self._get_surferModel()        
+        read_metadata = model.read_metadata(asset_id)
+        if read_metadata:
+            metadata = json.loads(read_metadata['metadata_text'])
+            did = f'{self._did}/{asset_id}'
+            asset = BaseAsset(metadata, did)
+        return asset
+        
     def get_listings(self):
         """
         Returns all listings
