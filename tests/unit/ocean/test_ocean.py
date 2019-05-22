@@ -8,6 +8,7 @@ from starfish.agent import SurferAgent
 
 def test_ocean_init(config):
     ocean = Ocean(
+        network='nile',
         keeper_url=config.keeper_url,
         contracts_path=config.contracts_path,
         gas_limit=config.gas_limit,

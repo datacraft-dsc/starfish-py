@@ -7,25 +7,25 @@ from starfish import Ocean
 from starfish.asset import SquidAsset
 from starfish.agent import SquidAgent
 
-
 """
 
 The full set of parameters needed to access the 'ocean' network servers
-and configuration information.
+and configuration information on the Nile test network.
 
 """
-SQUID_AGENT_CONFIG_PARAMS = {
+SQUID_AGENT_CONFIG_PARAMS = {    
     'aquarius_url': 'http://localhost:5000',
     'brizo_url': 'http://localhost:8030',
     'secret_store_url': 'http://localhost:12001',
     'parity_url': 'http://localhost:9545',
-    'storage_path': 'squid_py.db',
+    'storage_path': 'squid_py.db',    
 }
 
 """
 Test sample metadata to load in for an asset.
 """
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'examples' / 'sample_data' / 'sample_metadata.json'
+MY_ACCOUNT_PASSWORD = 'test_account_password'
 
 def read_sample_metadata():
     """
@@ -56,6 +56,7 @@ def main():
     Get our first test publisher account - in test the account numbers are published
     at https://github.com/DEX-Company/barge
     """
+
     account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'node0')
 
     # Print out the account's ocean balance.
@@ -71,9 +72,10 @@ def main():
     # Print the squid asset out.
     print('my asset:', asset.metadata)
 
+
     # Create a new `Squid` agent to do the work on the block chain.
     agent = SquidAgent(ocean, SQUID_AGENT_CONFIG_PARAMS)
-
+    
     # Register the asset, on the block chain and with the metadata storage.
     listing = agent.register_asset(asset, account)
 

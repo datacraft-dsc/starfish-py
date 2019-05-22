@@ -246,7 +246,6 @@ class StarfishDDO(DDO):
 
         if self._services:
             for service in self._services:
-                print(service.type, service.endpoints[0])
                 hash_text.append(service.type)
                 hash_text.extend(service.endpoints[0])
 

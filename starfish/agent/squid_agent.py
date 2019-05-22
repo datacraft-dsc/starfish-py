@@ -81,7 +81,7 @@ class SquidAgent(AgentBase):
         self._brizo_url = kwargs.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = kwargs.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
-
+        
     def register_asset(self, asset, account):
         """
 

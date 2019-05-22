@@ -333,6 +333,7 @@ class SquidModel():
         # need to reload squid again so that it sees the new account
         # TODO: does not work at the moment, new account does not get
         # shown in squid
+        
         logger.info(f'new account address {local_account.address}')
         self._squid_ocean = self.get_squid_ocean()
         account_list = Web3Provider.get_web3().eth.accounts
