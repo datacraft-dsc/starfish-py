@@ -34,6 +34,7 @@ class BrizoMock(object):
         model = ocean.get_squid_model()
         self._ocean_instance = model.get_squid_ocean(account)
         self._is_event_subscribed = False
+        
         for i in range(0, 2):
             self._ocean_instance.agreements.subscribe_events(
                 self._account.address,
