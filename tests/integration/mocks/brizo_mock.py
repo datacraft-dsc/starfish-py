@@ -33,11 +33,12 @@ class BrizoMock(object):
 #        events_manager = EventsManager.get_instance(Keeper.get_instance())
         model = ocean.get_squid_model()
         self._ocean_instance = model.get_squid_ocean(account)
-        self._ocean_instance.agreements.subscribe_events(
-            self._account.address,
-            self._handle_agreement_created
-        )
         self._is_event_subscribed = False
+        for i in range(0, 2):
+            self._ocean_instance.agreements.subscribe_events(
+                self._account.address,
+                self._handle_agreement_created
+                )
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
