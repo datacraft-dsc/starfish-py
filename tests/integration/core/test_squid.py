@@ -20,9 +20,6 @@ from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.brizo.brizo import Brizo
-
-from tests.integration.mocks.brizo_mock import BrizoMock
 
 
 def _register_asset_for_sale(agent, metadata, account):
@@ -34,7 +31,7 @@ def _register_asset_for_sale(agent, metadata, account):
     return listing
 
 
-def test_asset(ocean, metadata, config):
+def test_asset(ocean, metadata, config, brizo_mock):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -58,9 +55,6 @@ def test_asset(ocean, metadata, config):
     purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
-
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
@@ -68,12 +62,7 @@ def test_asset(ocean, metadata, config):
     time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    model = agent.squid_model
-    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
-    BrizoMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(BrizoMock)
-    BrizoProvider.get_brizo()
-    time.sleep(1)
+    brizo_mock.set_account(publisher_account._squid_account)
 
 
     # test purchase an asset

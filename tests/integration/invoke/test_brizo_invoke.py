@@ -32,7 +32,7 @@ def _register_asset_for_sale(agent, metadata, account):
     assert listing.asset.did
     return listing
 
-def test_invoke(ocean, metadata, config):
+def test_invoke(ocean, metadata, config, brizo_mock):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -65,13 +65,7 @@ def test_invoke(ocean, metadata, config):
     time.sleep(2)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    #Use the Koi server, and therefore use the Koi client instead of Brizo.py
-    model = agent.squid_model
-    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
-    BrizoMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(BrizoMock)
-    BrizoProvider.get_brizo()
-    time.sleep(1)
+    brizo_mock.set_account(publisher_account._squid_account)
 
 
     # test purchase an asset

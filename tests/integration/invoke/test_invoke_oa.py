@@ -40,7 +40,7 @@ def _register_asset_for_sale(agent, metadata, account):
     assert listing.asset.did
     return listing
 
-def purchase_asset(ocean, metadata, config):
+def purchase_asset(ocean, metadata, config, brizo_mock):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -73,15 +73,7 @@ def purchase_asset(ocean, metadata, config):
     time.sleep(2)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
-    model = SquidModel(ocean)
-    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
-    BrizoMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(BrizoMock)
-    BrizoProvider.get_brizo()
-    time.sleep(1)
-
+    brizo_mock.set_account(publisher_account._squid_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)

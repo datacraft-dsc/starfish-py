@@ -21,23 +21,20 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
-    publisher_account = None
     ocean_instance = None
 
     def __init__(self, ocean_instance=None, account=None):
-        self.ocean_instance = ocean_instance
-        if not self.ocean_instance:
-            self.ocean_instance = BrizoMock.ocean_instance
+        self._ocean_instance = ocean_instance
+        if not self._ocean_instance:
+            self._ocean_instance = BrizoMock.ocean_instance
 
-        self.account = account
-        if not self.account:
-            self.account = BrizoMock.publisher_account
 
-        self.ocean_instance.agreements.subscribe_events(
-            self.account.address,
+    def set_account(self, account):
+        self._account = account
+        self._ocean_instance.agreements.subscribe_events(
+            self._account.address,
             self._handle_agreement_created
         )
-
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
@@ -46,8 +43,8 @@ class BrizoMock(object):
 
         print(f'Start handle_agreement_created: event_args={event.args}')
         config = ConfigProvider.get_config()
-        ocean = self.ocean_instance
-        provider_account = self.account
+        ocean = self._ocean_instance
+        provider_account = self._account
         assert provider_account.address == event.args['_accessProvider']
 
         did = id_to_did(event.args['_did'])
@@ -85,7 +82,7 @@ class BrizoMock(object):
             agreement_id,
             signature,
             account_address,
-            self.account
+            self._account
         )
         return True
 
@@ -109,9 +106,9 @@ class BrizoMock(object):
         :return:
         """
         logger.info(f'invoke endpoint with this url: {service_endpoint}')
-            
-        return invoke_payload['params'] 
-        
+
+        return invoke_payload['params']
+
     @staticmethod
     def get_brizo_url(config):
         return Brizo.get_brizo_url(config)
