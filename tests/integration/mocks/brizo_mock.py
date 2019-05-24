@@ -14,6 +14,7 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.keeper.web3_provider import Web3Provider
 from squid_py.keeper import Keeper
+from squid_py.keeper.events_manager import EventsManager
 
 from starfish.logging import setup_logging
 
@@ -25,22 +26,25 @@ class BrizoMock(object):
 
     def __init__(self, ocean_instance=None, account=None):
         self._ocean_instance = None
+        self._is_event_subscribed = False
 
     def subscribe(self, ocean, account):
         self._account = account
+#        events_manager = EventsManager.get_instance(Keeper.get_instance())
         model = ocean.get_squid_model()
         self._ocean_instance = model.get_squid_ocean(account)
         self._ocean_instance.agreements.subscribe_events(
             self._account.address,
             self._handle_agreement_created
         )
-        time.sleep(1)
+        self._is_event_subscribed = False
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
         if not event or not event.args:
             return
 
+        self._is_event_subscribed = True
         print(f'Start handle_agreement_created: event_args={event.args}')
         config = ConfigProvider.get_config()
         ocean = self._ocean_instance
@@ -72,6 +76,10 @@ class BrizoMock(object):
             condition_ids
         )
         # print(f'handle_agreement_created() -- done registering event listeners.')
+
+    @property
+    def is_event_subscribed(self):
+        return self._is_event_subscribed
 
     def initialize_service_agreement(self, did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
