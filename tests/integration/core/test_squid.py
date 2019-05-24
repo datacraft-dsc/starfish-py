@@ -66,8 +66,10 @@ def test_asset(ocean, metadata, config, brizo_mock):
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
-    assert brizo_mock.is_event_subscribed
     assert purchase_asset
+
+    if not brizo_mock.is_event_subscribed:
+        brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
     assert(not purchase_asset.is_completed(purchase_account))
 
