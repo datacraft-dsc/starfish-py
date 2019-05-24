@@ -1,6 +1,5 @@
 import pathlib
 import configparser
-from starfish.models.surfer_model import SurferModel
 
 CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'config.ini'
 
@@ -35,7 +34,6 @@ class IntegrationTestConfig():
         self.surfer_username=config.get('surfer', 'username')
         self.surfer_password=config.get('surfer', 'password')
         self.surfer_url=config.get('surfer', 'surfer_url')
-        self.authorization=SurferModel.get_authorization_token(self.surfer_url, self.surfer_username, self.surfer_password)
 
 
 integrationTestConfig = IntegrationTestConfig()

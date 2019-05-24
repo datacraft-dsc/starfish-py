@@ -1,13 +1,18 @@
 import os
 import logging
 import json
-# import responses
 
 from unittest.mock import Mock
+from eth_utils import add_0x_prefix
 
 from squid_py import ConfigProvider
 from squid_py.brizo.brizo import Brizo
 from squid_py.did import id_to_did, did_to_id
+from squid_py.agreements.register_service_agreement import register_service_agreement_publisher
+from squid_py.agreements.service_agreement import ServiceAgreement
+from squid_py.agreements.service_types import ServiceTypes
+from squid_py.keeper.web3_provider import Web3Provider
+from squid_py.keeper import Keeper
 
 from starfish.logging import setup_logging
 
@@ -28,13 +33,14 @@ class BrizoMock(object):
         if not self.account:
             self.account = BrizoMock.publisher_account
 
-# next version of brizo
-#        self.ocean_instance.agreements.subscribe_events(
-#            self.account.address, self._handle_agreement_created)
+        self.ocean_instance.agreements.subscribe_events(
+            self.account.address,
+            self._handle_agreement_created
+        )
 
-        print("Brizo mock created")
-        
+
     def _handle_agreement_created(self, event, *_):
+#        print('_handle_agreement_created ', event)
         if not event or not event.args:
             return
 
@@ -42,9 +48,10 @@ class BrizoMock(object):
         config = ConfigProvider.get_config()
         ocean = self.ocean_instance
         provider_account = self.account
-        assert provider_account.address == event.args["_accessProvider"]
-        did = id_to_did(event.args["_did"])
-        agreement_id = Web3Provider.get_web3().toHex(event.args["_agreementId"])
+        assert provider_account.address == event.args['_accessProvider']
+
+        did = id_to_did(event.args['_did'])
+        agreement_id = Web3Provider.get_web3().toHex(event.args['_agreementId'])
 
         ddo = ocean.assets.resolve(did)
         sa = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
@@ -52,12 +59,13 @@ class BrizoMock(object):
         condition_ids = sa.generate_agreement_condition_ids(
             agreement_id=agreement_id,
             asset_id=add_0x_prefix(did_to_id(did)),
-            consumer_address=event.args["_accessConsumer"],
+            consumer_address=event.args['_accessConsumer'],
             publisher_address=ddo.publisher,
             keeper=Keeper.get_instance())
+
         register_service_agreement_publisher(
             config.storage_path,
-            event.args["_accessConsumer"],
+            event.args['_accessConsumer'],
             agreement_id,
             did,
             sa,
@@ -66,7 +74,7 @@ class BrizoMock(object):
             provider_account,
             condition_ids
         )
-        print(f'handle_agreement_created() -- done registering event listeners.')
+        # print(f'handle_agreement_created() -- done registering event listeners.')
 
     def initialize_service_agreement(self, did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
@@ -83,7 +91,7 @@ class BrizoMock(object):
 
     @staticmethod
     def consume_service(service_agreement_id, service_endpoint, account_address, files,
-                        destination_folder):
+                        destination_folder, *_, **__):
         for f in files:
             with open(os.path.join(destination_folder, os.path.basename(f['url'])), 'w') as of:
                 of.write(f'mock data {service_agreement_id}.{service_endpoint}.{account_address}')

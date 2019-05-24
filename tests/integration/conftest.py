@@ -7,6 +7,7 @@ from tests.integration.libs.integration_test_config import integrationTestConfig
 
 from starfish import Ocean
 from starfish.agent import SurferAgent
+from starfish.models.surfer_model import SurferModel
 
 
 
@@ -28,6 +29,7 @@ def config():
 @pytest.fixture(scope="module")
 def surfer_agent(ocean):
 
+    integrationTestConfig.authorization=SurferModel.get_authorization_token(self.surfer_url, self.surfer_username, self.surfer_password)
 
     ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
     options = {

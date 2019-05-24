@@ -4,6 +4,7 @@
 
 import logging
 import time
+import json
 
 from web3 import Web3
 
@@ -51,7 +52,9 @@ class SquidModel():
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
 
-        self._squid_ocean = self.get_squid_ocean()
+        self._squid_ocean_signature = None
+        self._squid_ocean = None
+        squid_ocean = self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
@@ -140,10 +143,16 @@ class SquidModel():
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
         squid_ocean = self.get_squid_ocean(account)
+
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            service_agreement_id = squid_ocean.assets.order(ddo.did, service_agreement.sa_definition_id, account, auto_consume=False)
+            service_agreement_id = squid_ocean.assets.order(
+                ddo.did,
+                service_agreement.sa_definition_id,
+                account,
+                auto_consume=False
+            )
 
         return service_agreement_id
 
@@ -170,6 +179,7 @@ class SquidModel():
             (),
             wait=True
         )
+        print('LockRewardCondition.Fulfilled ', event)
         if not event:
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
@@ -177,8 +187,7 @@ class SquidModel():
         timeout_time = time.time() + timeout_seconds
         while self.is_access_granted_for_asset(did, purchase_id, address) is not True and timeout_time > time.time():
             time.sleep(1)
-            print('.')
-        
+
         return self.is_access_granted_for_asset(did, purchase_id, address)
 
     def purchase_operation(self, ddo, account):
@@ -254,14 +263,11 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        document_id = did_to_id(did)
-        result = self._keeper.access_secret_store_condition.check_permissions(document_id, account_address)
-        print(did, document_id, account_address, result)
         return self._squid_ocean.agreements.is_access_granted(agreement_id, did, account_address)
 
     def get_purchase_address(self, agreement_id):
         return self._keeper.escrow_access_secretstore_template.get_agreement_consumer(agreement_id)
-        
+
     def _as_config_dict(self, options=None):
         """
 
@@ -386,13 +392,22 @@ class SquidModel():
         """
 
         options = {}
+        signature = None
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
+            signature = Web3.sha3(text=json.dumps(options))
 
-        config_params = self._as_config_dict(options)
-        config = SquidConfig(options_dict=config_params)
-        return SquidOcean(config)
+        if self._squid_ocean_signature != signature:
+            self._squid_ocean = None
+            self._squid_ocean_signature = signature
+
+        if not self._squid_ocean:
+            config_params = self._as_config_dict(options)
+            config = SquidConfig(options_dict=config_params)
+#            print('creating new instance of squid ocean', self._squid_ocean_signature)
+            self._squid_ocean = SquidOcean(config)
+        return self._squid_ocean
 
     @staticmethod
     def get_service_agreement_from_ddo(ddo):

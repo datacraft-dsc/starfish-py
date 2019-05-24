@@ -83,6 +83,7 @@ class Ocean():
 
         # default not to use squid
         self.__squid_model_class = None
+        self.__squid_model = None
 
         # only use squid or simiiar if we have the keeper url setup
         if self._keeper_url:
@@ -242,5 +243,7 @@ class Ocean():
 
     def get_squid_model(self, options=None):
         if self.__squid_model_class:
-            return self.__squid_model_class(self, options)
+            if not self.__squid_model:
+                self.__squid_model = self.__squid_model_class(self, options)
+            return self.__squid_model
         return None

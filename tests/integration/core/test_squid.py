@@ -55,9 +55,11 @@ def test_asset(ocean, metadata, config):
     assert listing
     assert listing.asset.did == listing_did
 
-
     purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
+
+    # since Brizo does not work outside in the barge , we need to start
+    # brizo as a dumy client to do the brizo work...
 
     purchase_account.unlock()
 
@@ -66,12 +68,13 @@ def test_asset(ocean, metadata, config):
     time.sleep(2)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
     model = agent.squid_model
-    BrizoMock.ocean_instance = model.get_squid_ocean()
+    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
+    BrizoProvider.get_brizo()
+#    time.sleep(1)
+
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
