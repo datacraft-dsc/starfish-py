@@ -133,7 +133,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, purchase_id, asset, account, timeoutSeconds):
         """
 
             Wait for completion of the purchase

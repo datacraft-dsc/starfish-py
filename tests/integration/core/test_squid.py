@@ -26,6 +26,7 @@ from tests.integration.mocks.brizo_mock import BrizoMock
 
 
 def _register_asset_for_sale(agent, metadata, account):
+    metadata['base']['price'] = 42
     asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
@@ -78,7 +79,7 @@ def test_asset(ocean, metadata, config):
 
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))

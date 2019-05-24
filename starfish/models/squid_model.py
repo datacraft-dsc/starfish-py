@@ -3,6 +3,7 @@
 """
 
 import logging
+import time
 
 from web3 import Web3
 
@@ -10,6 +11,7 @@ from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
     did_to_id_bytes,
+    did_to_id,
     DID,
 )
 from squid_py.keeper import Keeper
@@ -110,7 +112,7 @@ class SquidModel():
         """
         :return: Owner of the registered service level agreement template, if not registered then return None
         """
-        return self._squid_ocean._keeper.service_agreement.get_template_owner(template_id)
+        return self._keeper.service_agreement.get_template_owner(template_id)
 
     def register_service_agreement_template(self, template_id, account):
         """
@@ -122,10 +124,10 @@ class SquidModel():
         """
         template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
-            self._squid_ocean._keeper.service_agreement,
+            self._keeper.service_agreement,
             account,
             template,
-            self._squid_ocean._keeper.network_name
+            self._keeper.network_name
         )
         return template
 
@@ -145,7 +147,7 @@ class SquidModel():
 
         return service_agreement_id
 
-    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, purchase_id, did, address, timeout_seconds):
         """
 
         Wait for a purchase to complete
@@ -153,7 +155,7 @@ class SquidModel():
         """
         event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
             purchase_id,
-            timeoutSeconds,
+            timeout_seconds,
             SquidModel.log_event(self._keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
             (),
             wait=True
@@ -163,7 +165,7 @@ class SquidModel():
 
         event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
-            timeoutSeconds,
+            timeout_seconds,
             SquidModel.log_event(self._keeper.lock_reward_condition.FULFILLED_EVENT),
             (),
             wait=True
@@ -171,17 +173,13 @@ class SquidModel():
         if not event:
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
-        event = self._keeper.escrow_reward_condition.subscribe_condition_fulfilled(
-            purchase_id,
-            timeoutSeconds,
-            SquidModel.log_event(self._keeper.escrow_reward_condition.FULFILLED_EVENT),
-            (),
-            wait=True
-        )
-        if not event:
-            raise SquidModelPurchaseError('no event for EscrowReward.Fulfilled')
-
-        return True
+        i = 0
+        timeout_time = time.time() + timeout_seconds
+        while self.is_access_granted_for_asset(did, purchase_id, address) is not True and timeout_time > time.time():
+            time.sleep(1)
+            print('.')
+        
+        return self.is_access_granted_for_asset(did, purchase_id, address)
 
     def purchase_operation(self, ddo, account):
         """
@@ -243,7 +241,7 @@ class SquidModel():
         if service_agreement:
             squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
 
-    def is_access_granted_for_asset(self, did, service_agreement_id, account):
+    def is_access_granted_for_asset(self, did, agreement_id, account):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used
         to purchase this asset
@@ -256,8 +254,14 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        return self._squid_ocean.agreements.is_access_granted(service_agreement_id, did, account_address)
+        document_id = did_to_id(did)
+        result = self._keeper.access_secret_store_condition.check_permissions(document_id, account_address)
+        print(did, document_id, account_address, result)
+        return self._squid_ocean.agreements.is_access_granted(agreement_id, did, account_address)
 
+    def get_purchase_address(self, agreement_id):
+        return self._keeper.escrow_access_secretstore_template.get_agreement_consumer(agreement_id)
+        
     def _as_config_dict(self, options=None):
         """
 
