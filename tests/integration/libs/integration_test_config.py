@@ -10,7 +10,6 @@ class IntegrationTestConfig():
         config.read(CONFIG_FILE_PATH)
         self.keeper_url = config.get('ocean', 'keeper_url')
         self.contracts_path = config.get('ocean', 'contracts_path')
-        self.surfer_url = config.get('ocean', 'surfer_url')
         self.gas_limit = config.get('ocean', 'gas_limit')
 
         self.publisher_account = {

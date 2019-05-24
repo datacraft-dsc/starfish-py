@@ -263,7 +263,9 @@ class SquidAgent(AgentBase):
 
         """
         model = self.squid_model
-
+        if not purchase_id:
+            raise ValueError('Please provide a valid purhase id')
+            
         try:
             model.purchase_wait_for_completion(purchase_id, asset.did, account._squid_account, timeoutSeconds)
         except SquidModelPurchaseError as purchaseError:

@@ -76,9 +76,11 @@ def purchase_asset(ocean, metadata, config):
     # since Brizo does not work outside in the barge , we need to start
     # brizo as a dumy client to do the brizo work...
     model = SquidModel(ocean)
-    BrizoMock.ocean_instance = model.get_squid_ocean()
+    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
+    BrizoProvider.get_brizo()
+    time.sleep(1)
 
 
     # test purchase an asset
@@ -87,7 +89,7 @@ def purchase_asset(ocean, metadata, config):
 
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))
@@ -97,7 +99,7 @@ def purchase_asset(ocean, metadata, config):
     return purchase_asset.purchase_id,listing_did
 
 
-def test_invoke_with_sa(ocean, metadata, config):
+def _test_invoke_with_sa(ocean, metadata, config):
 
     said,did=purchase_asset(ocean, metadata, config)
     assert said

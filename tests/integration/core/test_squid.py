@@ -65,7 +65,7 @@ def test_asset(ocean, metadata, config):
 
     purchase_account.request_tokens(10)
 
-    time.sleep(2)
+    time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     model = agent.squid_model
@@ -73,7 +73,7 @@ def test_asset(ocean, metadata, config):
     BrizoMock.publisher_account = publisher_account._squid_account
     BrizoProvider.set_brizo_class(BrizoMock)
     BrizoProvider.get_brizo()
-#    time.sleep(1)
+    time.sleep(1)
 
 
     # test purchase an asset

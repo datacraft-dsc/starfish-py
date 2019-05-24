@@ -97,6 +97,22 @@ class BrizoMock(object):
                 of.write(f'mock data {service_agreement_id}.{service_endpoint}.{account_address}')
 
     @staticmethod
+    def invoke_service(service_agreement_id, service_endpoint, account_address, invoke_payload):
+        """
+        Call the Koi endpoint to get access to the different files that form the asset.
+
+        :param service_agreement_id: Service Agreement Id, str
+        :param service_endpoint: Url to consume, str
+        :param account_address: ethereum address of the consumer signing this agreement, hex-str
+        :param files: List containing the files to be consumed, list
+        :param destination_folder: Path, str
+        :return:
+        """
+        logger.info(f'invoke endpoint with this url: {service_endpoint}')
+            
+        return invoke_payload['params'] 
+        
+    @staticmethod
     def get_brizo_url(config):
         return Brizo.get_brizo_url(config)
 

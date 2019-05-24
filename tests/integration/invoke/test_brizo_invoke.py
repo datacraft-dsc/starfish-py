@@ -21,6 +21,7 @@ from squid_py.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 from tests.integration.mocks.koi_mock import KoiMock
+from tests.integration.mocks.brizo_mock import BrizoMock
 
 
 def _register_asset_for_sale(agent, metadata, account):
@@ -66,9 +67,12 @@ def test_invoke(ocean, metadata, config):
 
     #Use the Koi server, and therefore use the Koi client instead of Brizo.py
     model = agent.squid_model
-    KoiMock.ocean_instance = model.get_squid_ocean()
-    KoiMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(KoiMock)
+    BrizoMock.ocean_instance = model.get_squid_ocean(purchase_account)
+    BrizoMock.publisher_account = publisher_account._squid_account
+    BrizoProvider.set_brizo_class(BrizoMock)
+    BrizoProvider.get_brizo()
+    time.sleep(1)
+
 
     # test purchase an asset
     # this purchase does not automatically fire a consume() request as no callback is registered
@@ -77,7 +81,7 @@ def test_invoke(ocean, metadata, config):
 
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))

@@ -29,7 +29,11 @@ def config():
 @pytest.fixture(scope="module")
 def surfer_agent(ocean):
 
-    integrationTestConfig.authorization=SurferModel.get_authorization_token(self.surfer_url, self.surfer_username, self.surfer_password)
+    integrationTestConfig.authorization=SurferModel.get_authorization_token(
+        integrationTestConfig.surfer_url, 
+        integrationTestConfig.surfer_username, 
+        integrationTestConfig.surfer_password
+    )
 
     ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
     options = {
