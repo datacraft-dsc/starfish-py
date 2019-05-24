@@ -71,6 +71,7 @@ def test_invoke(ocean, metadata, config, brizo_mock):
     # test purchase an asset
     # this purchase does not automatically fire a consume() request as no callback is registered
     purchase_asset = listing.purchase(purchase_account)
+    assert brizo_mock.is_event_subscribed
     assert purchase_asset
 
     assert(not purchase_asset.is_completed(purchase_account))
