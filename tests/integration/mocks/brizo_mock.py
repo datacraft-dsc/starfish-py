@@ -1,6 +1,7 @@
 import os
 import logging
 import json
+import time
 
 from unittest.mock import Mock
 from eth_utils import add_0x_prefix
@@ -35,6 +36,7 @@ class BrizoMock(object):
             self._account.address,
             self._handle_agreement_created
         )
+        time.sleep(1)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
