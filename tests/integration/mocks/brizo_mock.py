@@ -22,16 +22,14 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
-    ocean_instance = None
 
     def __init__(self, ocean_instance=None, account=None):
-        self._ocean_instance = ocean_instance
-        if not self._ocean_instance:
-            self._ocean_instance = BrizoMock.ocean_instance
+        self._ocean_instance = None
 
-
-    def set_account(self, account):
+    def subscribe(self, ocean, account):
         self._account = account
+        model = ocean.get_squid_model()
+        self._ocean_instance = model.get_squid_ocean(account)
         self._ocean_instance.agreements.subscribe_events(
             self._account.address,
             self._handle_agreement_created

@@ -62,7 +62,7 @@ def test_asset(ocean, metadata, config, brizo_mock):
     time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    brizo_mock.set_account(publisher_account._squid_account)
+    brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
 
     # test purchase an asset

@@ -26,9 +26,7 @@ def ocean():
     return ocean
 
 @pytest.fixture(scope="module")
-def brizo_mock(ocean):
-    model = ocean.get_squid_model()
-    BrizoMock.ocean_instance = model.get_squid_ocean()
+def brizo_mock():
     BrizoProvider.set_brizo_class(BrizoMock)
     mock = BrizoProvider.get_brizo()
     return mock
