@@ -54,7 +54,7 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
-        
+
         # make sure we have a instance of squid ocean created before starting
         self._squid_ocean = self.get_squid_ocean()
 
