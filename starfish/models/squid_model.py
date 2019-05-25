@@ -54,8 +54,9 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
-        squid_ocean = self.get_squid_ocean()
-        assert squid_ocean
+        
+        # make sure we have a instance of squid ocean created before starting
+        self._squid_ocean = self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
@@ -260,7 +261,7 @@ class SquidModel():
         to purchase this asset
         """
         squid_ocean = self.get_squid_ocean()
-        
+
         account_address = None
         if isinstance(account, object):
             account_address = account.address
@@ -348,7 +349,7 @@ class SquidModel():
 
         """
 #        squid_ocean = self.get_squid_ocean()
-        
+
         local_account = Web3Provider.get_web3().eth.account.create(password)
         # need to reload squid again so that it sees the new account
         # TODO: does not work at the moment, new account does not get
