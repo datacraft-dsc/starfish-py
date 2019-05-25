@@ -54,7 +54,6 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
-        squid_ocean = self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
@@ -183,7 +182,6 @@ class SquidModel():
         if not event:
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
-        i = 0
         timeout_time = time.time() + timeout_seconds
         while self.is_access_granted_for_asset(did, purchase_id, address) is not True and timeout_time > time.time():
             time.sleep(1)
