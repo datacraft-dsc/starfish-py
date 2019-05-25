@@ -41,6 +41,7 @@ class BrizoMock(object):
             self._handle_agreement_created
             )
         events_manager.agreement_listener.start_watching()
+        time.sleep(0.5)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
