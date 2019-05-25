@@ -54,6 +54,8 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
+        squid_ocean = self.get_squid_ocean()
+        assert squid_ocean
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
@@ -95,13 +97,15 @@ class SquidModel():
         :type: dict or None
 
         """
-        return self._squid_ocean.assets.resolve(did)
+        squid_ocean = self.get_squid_ocean()
+        return squid_ocean.assets.resolve(did)
 
     def search_assets(self, text, sort=None, offset=100, page=1):
         """
         Search assets from the squid API.
         """
-        ddo_list = self._squid_ocean.assets.search(text, sort, offset, page)
+        squid_ocean = self.get_squid_ocean()
+        ddo_list = squid_ocean.assets.search(text, sort, offset, page)
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
@@ -196,9 +200,11 @@ class SquidModel():
 
         :return: service_agreement_id of the purchase or None if no purchase could be made
         """
+        squid_ocean = self.get_squid_ocean()
+
         service_agreement_id = None
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
-        agreements=self._squid_ocean.agreements
+        agreements=squid_ocean.agreements
         did=ddo.did
         if service_agreement:
             logger.info(f'purchase invoke operation ')
@@ -253,6 +259,8 @@ class SquidModel():
         Return true if we have access to the asset's data using the service_agreement_id and account used
         to purchase this asset
         """
+        squid_ocean = self.get_squid_ocean()
+        
         account_address = None
         if isinstance(account, object):
             account_address = account.address
@@ -261,7 +269,7 @@ class SquidModel():
         else:
             raise TypeError(f'You need to pass an account object or account address')
 
-        return self._squid_ocean.agreements.is_access_granted(agreement_id, did, account_address)
+        return squid_ocean.agreements.is_access_granted(agreement_id, did, account_address)
 
     def get_purchase_address(self, agreement_id):
         return self._keeper.escrow_access_secretstore_template.get_agreement_consumer(agreement_id)
@@ -318,7 +326,8 @@ class SquidModel():
         :return: number of tokens requested and added to the account
         :type: number
         """
-        return self._squid_ocean.accounts.request_tokens(account, value)
+        squid_ocean = self.get_squid_ocean()
+        return squid_ocean.accounts.request_tokens(account, value)
 
     def get_account_balance(self, account):
         """
@@ -327,7 +336,8 @@ class SquidModel():
         :return: ethereum and ocean balance of the account
         :type: tuple(eth,ocn)
         """
-        return self._squid_ocean.accounts.balance(account)
+        squid_ocean = self.get_squid_ocean()
+        return squid_ocean.accounts.balance(account)
 
     def create_account(self, password):
         """
@@ -337,12 +347,13 @@ class SquidModel():
         :type: object or None
 
         """
+#        squid_ocean = self.get_squid_ocean()
+        
         local_account = Web3Provider.get_web3().eth.account.create(password)
         # need to reload squid again so that it sees the new account
         # TODO: does not work at the moment, new account does not get
         # shown in squid
         logger.info(f'new account address {local_account.address}')
-        self._squid_ocean = self.get_squid_ocean()
         account_list = Web3Provider.get_web3().eth.accounts
         logger.info(f'current account list {account_list}')
         account = self.get_account(local_account.address, password)
@@ -352,10 +363,10 @@ class SquidModel():
     def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
-
+        squid_ocean = self.get_squid_ocean()
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
         # did_bytes = did_to_id_bytes(did)
-        receipt = self._squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)
+        receipt = squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)
 
         # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
@@ -372,7 +383,8 @@ class SquidModel():
 
     @property
     def accounts(self):
-        return self._squid_ocean.accounts.list()
+        squid_ocean = self.get_squid_ocean()
+        return squid_ocean.accounts.list()
 
     @property
     def aquarius_url(self):
