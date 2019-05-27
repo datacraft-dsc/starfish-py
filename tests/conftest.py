@@ -2,7 +2,6 @@ import pytest
 import pathlib
 import json
 
-
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'tests' / 'resources' / 'metadata' / 'sample_metadata1.json'
 
 @pytest.fixture(scope="module")

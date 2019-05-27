@@ -117,7 +117,7 @@ class MockSquidModel():
         self._purchase_assets[service_agreement_id] = ddo.did
         return service_agreement_id
 
-    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset, purchase_id, account, timeoutSeconds):
         if purchase_id:
             return True
         raise SquidModelPurchaseError('test squid model purchase wait error')

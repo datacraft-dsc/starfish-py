@@ -33,7 +33,7 @@ Startup a local ocean test node (``barge``)
 
         git clone https://github.com/DEX-Company/barge.git
         cd barge
-        git checkout tags/dex-2019-02-18
+        git checkout tags/dex-2019-05-24
         ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
 
     So you should now have two folders::

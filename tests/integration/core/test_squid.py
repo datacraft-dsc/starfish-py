@@ -20,12 +20,10 @@ from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.brizo.brizo import Brizo
-
-from tests.integration.mocks.brizo_mock import BrizoMock
 
 
 def _register_asset_for_sale(agent, metadata, account):
+    metadata['base']['price'] = 42
     asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
@@ -33,7 +31,7 @@ def _register_asset_for_sale(agent, metadata, account):
     return listing
 
 
-def test_asset(ocean, metadata, config):
+def test_asset(ocean, metadata, config, brizo_mock):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -54,7 +52,6 @@ def test_asset(ocean, metadata, config):
     assert listing
     assert listing.asset.did == listing_did
 
-
     purchase_account = ocean.get_account(config.purchaser_account)
     logging.info(f'purchase_account {purchase_account.ocean_balance}')
 
@@ -62,23 +59,21 @@ def test_asset(ocean, metadata, config):
 
     purchase_account.request_tokens(10)
 
-    time.sleep(2)
+    time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
-    model = agent.squid_model
-    BrizoMock.ocean_instance = model.get_squid_ocean()
-    BrizoMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(BrizoMock)
+    brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+    if not brizo_mock.is_event_subscribed:
+        brizo_mock.subscribe(ocean, publisher_account._squid_account)
+
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))
