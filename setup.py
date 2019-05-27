@@ -14,8 +14,12 @@ with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
 install_requirements = [
+<<<<<<< HEAD
     'squid-py==0.5.13',
     'keeper-contracts==0.9.0', 
+=======
+    'squid-py==0.6.5',
+>>>>>>> feature/dex-2019-05-24
     'plecos==0.7.2',
     'coloredlogs',
     'eciespy',

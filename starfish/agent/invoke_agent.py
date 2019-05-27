@@ -26,10 +26,11 @@ class InvokeAgent:
         """
         returns a list of operations and their associated DIDs.
         """
-        r=requests.get(self._koi_url+'operations')
-        j=json.loads(r.text)
-        self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
-        return self.operations
+        return []
+#        r=requests.get(self._koi_url+'operations')
+#        j=json.loads(r.text)
+#        self.operations=dict(zip([i['name'] for i in j],[i['did'] for i in j]))
+#        return self.operations
 
     def get_operation(self,did):
         return Operation(self,did)

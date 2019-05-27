@@ -245,7 +245,7 @@ class SquidAgent(AgentBase):
         return model.is_access_granted_for_asset(asset.did, purchase_id, account._squid_account)
 
 
-    def purchase_wait_for_completion(self, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, purchase_id, asset, account, timeoutSeconds):
         """
 
         Wait for completion of the purchase
@@ -263,9 +263,11 @@ class SquidAgent(AgentBase):
 
         """
         model = self.squid_model
+        if not purchase_id:
+            raise ValueError('Please provide a valid purhase id')
 
         try:
-            model.purchase_wait_for_completion(purchase_id, timeoutSeconds)
+            model.purchase_wait_for_completion(purchase_id, asset.did, account._squid_account, timeoutSeconds)
         except SquidModelPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
