@@ -12,7 +12,10 @@ from eth_utils import remove_0x_prefix
 
 from starfish.account import Account
 from starfish.agent import AgentBase
-from starfish.asset import MemoryAsset
+from starfish.asset import (
+    MemoryAsset,
+    AssetBase,
+)
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
 from starfish.models.squid_model import SquidModel
 from starfish.asset import Asset
@@ -212,7 +215,7 @@ class SurferAgent(AgentBase):
         if read_metadata:
             metadata = json.loads(read_metadata['metadata_text'])
             did = f'{self._did}/{asset_id}'
-            asset = BaseAsset(metadata, did)
+            asset = AssetBase(metadata, did)
         return asset
         
     def get_listings(self):
