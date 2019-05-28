@@ -21,6 +21,7 @@ from squid_py.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 from tests.integration.mocks.koi_mock import KoiMock
+from tests.integration.mocks.brizo_mock import BrizoMock
 
 
 def _register_asset_for_sale(agent, metadata, account):
@@ -31,7 +32,7 @@ def _register_asset_for_sale(agent, metadata, account):
     assert listing.asset.did
     return listing
 
-def test_invoke(ocean, metadata, config):
+def test_invoke(ocean, metadata, config, brizo_mock):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -61,23 +62,23 @@ def test_invoke(ocean, metadata, config):
 
     purchase_account.request_tokens(10)
 
-    time.sleep(2)
+    time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    #Use the Koi server, and therefore use the Koi client instead of Brizo.py
-    model = agent.squid_model
-    KoiMock.ocean_instance = model.get_squid_ocean()
-    KoiMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(KoiMock)
+    brizo_mock.subscribe(ocean, publisher_account._squid_account)
+
 
     # test purchase an asset
     # this purchase does not automatically fire a consume() request as no callback is registered
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+    if not brizo_mock.is_event_subscribed:
+        brizo_mock.subscribe(ocean, publisher_account._squid_account)
+
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))

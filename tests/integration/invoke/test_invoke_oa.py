@@ -40,7 +40,7 @@ def _register_asset_for_sale(agent, metadata, account):
     assert listing.asset.did
     return listing
 
-def purchase_asset(ocean, metadata, config):
+def purchase_asset(ocean, metadata, config, brizo_mock):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -73,21 +73,18 @@ def purchase_asset(ocean, metadata, config):
     time.sleep(2)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    # since Brizo does not work outside in the barge , we need to start
-    # brizo as a dumy client to do the brizo work...
-    model = SquidModel(ocean)
-    BrizoMock.ocean_instance = model.get_squid_ocean()
-    BrizoMock.publisher_account = publisher_account._squid_account
-    BrizoProvider.set_brizo_class(BrizoMock)
-
+    brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
+    if not brizo_mock.is_event_subscribed:
+        brizo_mock.subscribe(ocean, publisher_account._squid_account)
+
     assert(not purchase_asset.is_completed(purchase_account))
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 
     assert(purchase_asset.is_completed(purchase_account))
@@ -97,7 +94,7 @@ def purchase_asset(ocean, metadata, config):
     return purchase_asset.purchase_id,listing_did
 
 
-def test_invoke_with_sa(ocean, metadata, config):
+def _test_invoke_with_sa(ocean, metadata, config):
 
     said,did=purchase_asset(ocean, metadata, config)
     assert said

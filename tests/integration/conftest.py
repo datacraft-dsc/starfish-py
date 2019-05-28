@@ -8,10 +8,10 @@ from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
 from starfish import Ocean
 from starfish.agent import SurferAgent
+from starfish.models.surfer_model import SurferModel
 
 CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'config.ini'
 INVOKE_CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'invoke_config.ini'
-
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +22,14 @@ def ocean():
             gas_limit=integrationTestConfig.gas_limit,
             log_level=logging.WARNING
     )
-    return result
+
+    return ocean
+
+@pytest.fixture(scope="module")
+def brizo_mock():
+    BrizoProvider.set_brizo_class(BrizoMock)
+    mock = BrizoProvider.get_brizo()
+    return mock
 
 @pytest.fixture(scope="module")
 def config():
@@ -41,6 +48,11 @@ def surfer_agent(ocean):
     }
     return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
 
+    integrationTestConfig.authorization=SurferModel.get_authorization_token(
+        integrationTestConfig.surfer_url,
+        integrationTestConfig.surfer_username,
+        integrationTestConfig.surfer_password
+    )
 
 @pytest.fixture(scope="module")
 def invoke_config():
