@@ -9,8 +9,11 @@ from starfish.asset.asset import Asset
 
 
 def create_asset_from_metadata(metadata, did=None):
-    asset_type = metadata['type']
-    print(metadata)
+    asset_type = ''
+    try:
+        asset_type = metadata['type']
+    except:
+        pass
     if asset_type == 'memory':
         return MemoryAsset(metadata, did)
     elif asset_type == 'bundle':
@@ -20,4 +23,3 @@ def create_asset_from_metadata(metadata, did=None):
     elif asset_type == 'operation':
         return InvokeAsset(metadata, did)
     return AssetBase(metadata, did)
-            
