@@ -5,6 +5,7 @@ Ocean class to access the Ocean eco system.
 """
 import logging
 import secrets
+from starfish.utils.artifacts import find_contract_path
 
 from web3 import (
     Web3,
@@ -49,9 +50,11 @@ class Ocean():
 
     You can provide these parameters in a dictionary or as individual parameters.
 
+    :param network: name of the network to connect too. This can be 'development', 'nile' or 'kovan'
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
     :type keeper_url: str or None
     :param contracts_path: path to the contract files ( artifacts ).
+    If not prodived then the network name will be used to search for the correct artifact files.
     :type contracts_path: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 0 ).
     :type gas_limit: int or string
@@ -70,8 +73,12 @@ class Ocean():
         if args and isinstance(args[0], dict):
             kwargs = args[0]
 
+        self._network_name = kwargs.get('network', None)
         self._keeper_url = kwargs.get('keeper_url', None)
         self._contracts_path = kwargs.get('contracts_path', None)
+        if self._contracts_path is None and self._network_name:
+            self._contracts_path = find_contract_path(self._network_name)
+
         self._gas_limit = kwargs.get('gas_limit', 0)
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
@@ -184,8 +191,7 @@ class Ocean():
 
     def create_account(self, password):
         """
-        Create a new account object on the connected network. If the ocean object is
-        not connected to a network, then a test address will be created
+        Create a test account object on the connected network.
 
         :param password: optional password to save with the account
         :type password: str or None
@@ -195,16 +201,16 @@ class Ocean():
 
         >>> account = ocean.create_account('my_password')
         """
+
         account = None
-        squid_model = self.get_squid_model()
-        if squid_model:
-            local_address = squid_model.create_account(password)
-            if local_address:
-                account = Account(self, local_address, password)
+        model = self.get_squid_model()
+        if model:
+            address = model.create_account(password)
+            if address:
+                account = Account(self, address, password)
         else:
             address = secrets.token_hex(20)
             account = Account(self, address, password)
-
         return account
 
     @property
@@ -247,3 +253,4 @@ class Ocean():
                 self.__squid_model = self.__squid_model_class(self, options)
             return self.__squid_model
         return None
+

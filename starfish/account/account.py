@@ -5,6 +5,7 @@ Account class to provide basic functionality for all Ocean Accounts
 """
 
 from starfish.models.squid_model import SquidModel
+from web3 import Web3
 
 class Account():
     """
@@ -265,7 +266,7 @@ class Account():
             if squid_account:
                 balance = model.get_account_balance(squid_account)
                 if balance:
-                    return balance.ocn
+                    return Web3.fromWei(balance.ocn, 'ether')
         return 0
 
     @property
@@ -287,7 +288,7 @@ class Account():
             if squid_account:
                 balance = model.get_account_balance(self._squid_account)
                 if balance:
-                    return balance.eth
+                    return Web3.fromWei(balance.eth, 'ether')
         return 0
 
     def __str__(self):

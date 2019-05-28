@@ -62,7 +62,7 @@ def test_invoke(ocean, metadata, config, brizo_mock):
 
     purchase_account.request_tokens(10)
 
-    time.sleep(2)
+    time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     brizo_mock.subscribe(ocean, publisher_account._squid_account)
