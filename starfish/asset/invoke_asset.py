@@ -1,9 +1,9 @@
 """
-    Asset
+    Inovke Asset
 """
 
 from starfish.asset.asset_base import AssetBase
 
-
-class Asset(AssetBase):
+class InvokeAsset(AssetBase):
     pass
+            

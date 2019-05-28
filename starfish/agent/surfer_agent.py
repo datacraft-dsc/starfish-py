@@ -15,6 +15,7 @@ from starfish.agent import AgentBase
 from starfish.asset import (
     MemoryAsset,
     AssetBase,
+    create_asset_from_metadata,
 )
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
 from starfish.models.squid_model import SquidModel
@@ -194,7 +195,7 @@ class SurferAgent(AgentBase):
             if read_metadata:
                 metadata = json.loads(read_metadata['metadata_text'])
                 did = f'{self._did}/{asset_id}'
-                asset = MemoryAsset(metadata, did)
+                asset = create_asset_from_metadata(metadata, did)
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
@@ -215,7 +216,7 @@ class SurferAgent(AgentBase):
         if read_metadata:
             metadata = json.loads(read_metadata['metadata_text'])
             did = f'{self._did}/{asset_id}'
-            asset = AssetBase(metadata, did)
+            asset = create_asset_from_metadata(metadata, did)
         return asset
         
     def get_listings(self):

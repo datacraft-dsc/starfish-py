@@ -5,6 +5,7 @@
 
 from abc import ABC, abstractmethod
 from starfish import Ocean
+from starfish.asset import Asset
 
 class AgentBase(ABC):
     """

@@ -10,7 +10,7 @@ import secrets
 import logging
 import json
 
-from starfish.asset import MemoryAsset
+from starfish.asset import InvokeAsset
 
 PRIME_NUMBER_INVOKE_ASSET_ID = "8d658b5b09ade5526aecf669e4291c07d88e9791420c09c51d2f922f721858d1"
 
@@ -23,3 +23,4 @@ def test_19_asset_download(surfer_agent):
     # we need to call get_asset instead
     invoke_asset = surfer_agent.get_asset(PRIME_NUMBER_INVOKE_ASSET_ID)
     assert(invoke_asset)
+    assert(isinstance(invoke_asset, InvokeAsset))

@@ -40,7 +40,6 @@ def config():
 
 @pytest.fixture(scope="module")
 def surfer_agent(ocean):
-    print(ocean)
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
 
     ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
