@@ -15,9 +15,9 @@ before_install:
 - bash -x start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > start_ocean.log
   &
 - cd ..
-- sleep 15
+- sleep 60
 - scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-- bash -x docker run -p 3000:3000 --env SURFER_URL=http://172.15.0.22:8080 canaradex/koi-clj:v0.1.1 2>&1 > koi.log
+- docker run -p 3000:3000 --env SURFER_URL=http://172.15.0.22:8080 canaradex/koi-clj:v0.1.1 2>&1 > koi.log
   &
 install: pip install -U tox-travis
 script: tox
