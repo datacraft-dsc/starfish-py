@@ -53,8 +53,8 @@ class Ocean():
     :param network: name of the network to connect too. This can be 'development', 'nile' or 'kovan'
     :param keeper_url: url to the keeper node ( http://localhost:8545 ).
     :type keeper_url: str or None
-    :param contracts_path: path to the contract files ( artifacts ).
-    If not prodived then the network name will be used to search for the correct artifact files.
+    :param contracts_path: path to the contract files ( artifacts ). 
+        If not prodived then the network name will be used to search for the correct artifact files.
     :type contracts_path: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 0 ).
     :type gas_limit: int or string

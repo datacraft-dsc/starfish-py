@@ -27,3 +27,4 @@ Contents
     classes/asset
     classes/listing
     classes/purchase
+    classes/job

@@ -3,7 +3,7 @@ Agent Classes
 
 .. toctree::
 
-    agent/agent
+    agent/agent_base
     agent/invoke_agent
     agent/memory_agent
     agent/squid_agent
