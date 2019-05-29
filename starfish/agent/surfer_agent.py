@@ -265,7 +265,7 @@ class SurferAgent(AgentBase):
             job = Job(job_id, status, results)
         return job
 
-    def wait_for_job(self, job_id, timeout_seconds=60, sleep_seconds=1):
+    def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
         """
         
         Wait for a job to complete, with optional timeout seconds

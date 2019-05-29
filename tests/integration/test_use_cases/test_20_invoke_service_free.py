@@ -68,7 +68,7 @@ def test_20_prime_number_async(surfer_agent):
     assert(job.status == 'completed' or job.status == 'scheduled')
     
     # test wait_for_job
-    job = surfer_agent.wait_for_job(job_id)
+    job = surfer_agent.job_wait_for_completion(job_id)
     assert(job)
     assert(isinstance(job, Job))
     assert(job.status == 'succeeded' or job.status == 'completed')
@@ -128,7 +128,7 @@ def test_20_to_hash_async(surfer_agent):
 
     
     # test wait_for_job
-    job = surfer_agent.wait_for_job(job_id)
+    job = surfer_agent.job_wait_for_completion(job_id)
     assert(job)
     assert(isinstance(job, Job))
     assert(job.status == 'completed')
