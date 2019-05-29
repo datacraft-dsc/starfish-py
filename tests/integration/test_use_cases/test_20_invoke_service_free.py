@@ -58,7 +58,12 @@ def test_20_prime_number_async(surfer_agent):
 
     job_id = response['jobid']
     
+    # test get_job
+    job = surfer_agent.get_job(job_id)
+    assert(job)
+    assert(isinstance(job, Job))
     
+    # test wait_for_job
     job = surfer_agent.wait_for_job(job_id)
     assert(job)
     assert(isinstance(job, Job))

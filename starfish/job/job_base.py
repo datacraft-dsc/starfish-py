@@ -1,0 +1,62 @@
+
+"""
+   Job Base class
+"""
+
+from abc import ABC, abstractmethod
+
+class JobBase(ABC):
+    """
+        Create a Job object
+
+        :param agent: agent object that created the listing.
+        :type agent: :class:`.Agent` object to assign to this Listing
+        :param str job_id: id of the job.
+    """
+    def __init__(self, job_id, status=None, results=None):
+        """
+        
+        init the the Job Object Base with the agent instance
+        
+        :param int job_id: id of the job
+        :param str status: status of the job
+        :param dict results: dict or None for the results
+        """
+        self._job_id = job_id
+        self._status = status
+        self._results = results
+        super().__init__()
+
+    @property
+    def is_finished(self):
+        return self._status and self._status != 'scheduled'
+        
+    @property
+    def job_id(self):
+        """
+        Return the job id
+        
+        :return: Job id
+        :type: int
+        """
+        return self._job_id
+
+    @property
+    def status(self):
+        """
+        Return the status for this job
+        
+        :return: status
+        :type: str
+        """
+        return self._status
+
+    @property
+    def results(self):
+        """
+        Return the results for this job
+        
+        :return: results
+        :type: dict or None
+        """
+        return self._results
