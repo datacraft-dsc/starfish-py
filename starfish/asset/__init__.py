@@ -9,12 +9,19 @@ from starfish.asset.asset import Asset
 
 
 def create_asset_from_metadata(metadata, did=None):
-    asset_type = ''
-    try:
-        asset_type = metadata['type']
-    except:
-        pass
-    if asset_type == 'memory':
+    """
+    Create a new asset class based on the metadata. Once created assign 
+    the metadata to the asset and also the optional did
+    
+    :param dict metadata: metadata to test and create the correct asset object
+    :param str did: optional did to assign to the asset
+    
+    :return: Return an asset class based on the metadata type
+    """
+    
+    asset_type = AssetBase.get_asset_type(metadata)
+
+    if asset_type == 'memory' or asset_type == 'data':
         return MemoryAsset(metadata, did)
     elif asset_type == 'bundle':
         return BundleAsset(metadata, did)
@@ -22,4 +29,4 @@ def create_asset_from_metadata(metadata, did=None):
         return SquidAsset(metadata, did)
     elif asset_type == 'operation':
         return OperationAsset(metadata, did)
-    return AssetBase(metadata, did)
+    return Asset(metadata, did)
