@@ -15,9 +15,9 @@ class JobBase(ABC):
     """
     def __init__(self, job_id, status=None, results=None):
         """
-        
+
         init the the Job Object Base with the agent instance
-        
+
         :param int job_id: id of the job
         :param str status: status of the job
         :param dict results: dict or None for the results
@@ -29,13 +29,15 @@ class JobBase(ABC):
 
     @property
     def is_finished(self):
-        return self._status and self._status != 'scheduled'
-        
+        if self._status:
+            return not (self._status == 'scheduled' or self._status == 'running')
+        return False
+
     @property
     def job_id(self):
         """
         Return the job id
-        
+
         :return: Job id
         :type: int
         """
@@ -45,7 +47,7 @@ class JobBase(ABC):
     def status(self):
         """
         Return the status for this job
-        
+
         :return: status
         :type: str
         """
@@ -55,7 +57,7 @@ class JobBase(ABC):
     def results(self):
         """
         Return the results for this job
-        
+
         :return: results
         :type: dict or None
         """
