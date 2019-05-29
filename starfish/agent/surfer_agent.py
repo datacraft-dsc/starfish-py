@@ -15,6 +15,7 @@ from starfish.agent import AgentBase
 from starfish.asset import (
     MemoryAsset,
     AssetBase,
+    OperationAsset,
     create_asset_from_metadata,
 )
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
@@ -212,10 +213,11 @@ class SurferAgent(AgentBase):
         """
         asset = None
         model = self._get_surferModel()        
-        read_metadata = model.read_metadata(asset_id)
+        clean_asset_id = remove_0x_prefix(asset_id)
+        read_metadata = model.read_metadata(clean_asset_id)
         if read_metadata:
             metadata = json.loads(read_metadata['metadata_text'])
-            did = f'{self._did}/{asset_id}'
+            did = f'{self._did}/{clean_asset_id}'
             asset = create_asset_from_metadata(metadata, did)
         return asset
         
@@ -355,6 +357,33 @@ class SurferAgent(AgentBase):
         """
         return False
 
+    def invoke_result(self, asset, params=None, is_async=False):
+        """
+        
+        Call an operation asset with params to execute a remote call.
+        
+        :param asset: Operation asset to use for this invoke call
+        :type asset: :class:`.OperationAsset`
+        :param dict params: Parameters to send to the invoke call
+        
+        :return: Return a dict of the result.
+        :type: dict
+        
+        
+        """
+        
+        if not isinstance(asset, OperationAsset):
+            raise ValueError('Asset is not a OperationAsset')
+            
+        mode_type = 'async' if is_async else 'sync'
+        if not asset.is_mode(mode_type):
+            raise TypeError(f'This operation asset does not support {mode_type}')
+        if not params:
+            params = {}
+        model = self._get_surferModel()
+        response = model.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
+        return response
+        
     def get_endpoint(self, name):
         """
 
@@ -445,12 +474,14 @@ class SurferAgent(AgentBase):
         return data['path'] and data['id_hex']
 
     @staticmethod
-    def generate_ddo(url):
+    def generate_ddo(url, services=None):
         """
         Generate a DDO for the surfer url. This DDO will contain the supported
         endpoints for the surfer
 
         :param str url: URL of the remote surfer agent
+        :param dict services: Optional dict of services urls that are not assigned to the main url.
+
         :return: created DDO object assigned to the url of the remote surfer agent service
         :type: :class:.`DDO`
         """
@@ -459,7 +490,11 @@ class SurferAgent(AgentBase):
         service_endpoints = SurferModel.generate_service_endpoints(url)
         ddo = StarfishDDO(did)
         for service_endpoint in service_endpoints:
-            ddo.add_service(service_endpoint['type'], service_endpoint['url'], None)
+            service_name = service_endpoint['name']
+            url = service_endpoint['url']
+            if services and service_name in services:
+                url = services[service_name]
+            ddo.add_service(service_endpoint['type'], url, None)
 
         # add a signature
         private_key_pem = ddo.add_signature()

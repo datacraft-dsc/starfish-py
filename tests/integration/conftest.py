@@ -47,7 +47,12 @@ def config():
 def surfer_agent(ocean):
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
 
-    ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
+    ddo_options = None
+    if integrationTestConfig.koi_url:
+        ddo_options = {
+            'invoke': f'{integrationTestConfig.koi_url}/api/v1/invoke',
+        }
+    ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url, ddo_options)
     options = {
         'url': integrationTestConfig.surfer_url,
         'username': integrationTestConfig.surfer_username,
@@ -57,21 +62,5 @@ def surfer_agent(ocean):
             integrationTestConfig.surfer_username,
             integrationTestConfig.surfer_password
         )
-    }
-    return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
-
-@pytest.fixture(scope="module")
-def invoke_config():
-    integrationTestConfig = IntegrationTestConfig(INVOKE_CONFIG_FILE_PATH)
-    return integrationTestConfig
-
-@pytest.fixture(scope="module")
-def invoke_surfer_agent(ocean):
-    integrationTestConfig = IntegrationTestConfig(INVOKE_CONFIG_FILE_PATH)
-    ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url)
-    options = {
-        'url': integrationTestConfig.surfer_url,
-        'username': integrationTestConfig.surfer_username,
-        'password': integrationTestConfig.surfer_password
     }
     return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
