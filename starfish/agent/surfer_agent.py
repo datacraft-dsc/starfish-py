@@ -265,13 +265,14 @@ class SurferAgent(AgentBase):
             job = Job(job_id, status, results)
         return job
 
-    def wait_for_job(self, job_id, timeout_seconds=60):
+    def wait_for_job(self, job_id, timeout_seconds=60, sleep_seconds=1):
         """
         
         Wait for a job to complete, with optional timeout seconds
         
         :param int job_id: Job id to wait for completion
         :param int timeout_seconds: optional time in seconds to wait for job to complete, defaults to 60 seconds
+        :param int sleep_seconds; optional number of seconds to sleep between polling the job status, == 0 no sleeping
         
         :return: Job object if finished, else False for timed out
         :type: :.class:`.Job` class or False
@@ -282,7 +283,8 @@ class SurferAgent(AgentBase):
             job = self.get_job(job_id)
             if job.is_finished:
                 return job
-            time.sleep(1)
+            if sleep_seconds > 0:
+                time.sleep(sleep_seconds)
         return False
 
     def update_listing(self, listing):
