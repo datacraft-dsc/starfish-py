@@ -13,15 +13,14 @@ from starfish.agent import SurferAgent
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
-
-def test_05_agent_endpoint_query(ocean, surfer_agent):
+def test_06_agent_endpoint_query(ocean, surfer_agent):
 
     endpoint = surfer_agent.get_endpoint('metadata')
     assert(re.search('/meta/data', endpoint))
     endpoint = surfer_agent.get_endpoint('storage')
     assert(re.search('/assets', endpoint))
     endpoint = surfer_agent.get_endpoint('invoke')
-    assert(re.search('/data$', endpoint))
+    assert(re.search('/api/v1$', endpoint))
     endpoint = surfer_agent.get_endpoint('market')
     assert(re.search('/market$', endpoint))
     endpoint = surfer_agent.get_endpoint('trust')

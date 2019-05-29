@@ -57,10 +57,5 @@ def surfer_agent(ocean):
         'url': integrationTestConfig.surfer_url,
         'username': integrationTestConfig.surfer_username,
         'password': integrationTestConfig.surfer_password,
-        'authorization': SurferModel.get_authorization_token(
-            integrationTestConfig.surfer_url,
-            integrationTestConfig.surfer_username,
-            integrationTestConfig.surfer_password
-        )
     }
     return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)

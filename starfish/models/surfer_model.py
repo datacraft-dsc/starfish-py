@@ -24,7 +24,7 @@ SUPPORTED_SERVICES = {
     },
     'invoke': {
         'type': 'Ocean.Invoke.v1',
-        'uri': f'{SURFER_BASE_URI}/data',
+        'uri': f'{SURFER_BASE_URI}/invoke',
     },
     'market': {
         'type': 'Ocean.Market.v1',
