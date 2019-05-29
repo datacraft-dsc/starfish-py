@@ -60,3 +60,11 @@ class JobBase(ABC):
         :type: dict or None
         """
         return self._results
+
+    def __str__(self):
+        text = 'job:'
+        if self._status:
+            text += f'{self._status}'
+        if self._results:
+            text += f' = {self._results}'
+        return text
