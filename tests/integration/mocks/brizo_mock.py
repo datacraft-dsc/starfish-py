@@ -24,23 +24,26 @@ logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
 
+    
     def __init__(self, ocean_instance=None, account=None):
         self._ocean_instance = None
         self._is_event_subscribed = False
+        self._ddo_records = {}
 
-    def subscribe(self, ocean, account):
+    def subscribe(self, ocean, account, did, ddo):
         self._account = account
         model = ocean.get_squid_model()
         self._ocean_instance = model.get_squid_ocean(account)
         self._is_event_subscribed = False
 
+        self._ddo_records[did] = ddo
         events_manager = EventsManager.get_instance(Keeper.get_instance())
         events_manager.stop_all_listeners()
         time.sleep(0.5)
         events_manager.agreement_listener._event_filters = dict()
         self._ocean_instance.agreements.subscribe_events(
             self._account.address,
-            self._handle_agreement_created
+            self._handle_agreement_created,
         )
         time.sleep(0.5)
 
@@ -60,7 +63,8 @@ class BrizoMock(object):
         did = id_to_did(event.args['_did'])
         agreement_id = Web3Provider.get_web3().toHex(event.args['_agreementId'])
 
-        ddo = ocean.assets.resolve(did)
+        ddo = self._ddo_records[did]
+        #ddo = ocean.assets.resolve(did)
         sa = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
 
         condition_ids = sa.generate_agreement_condition_ids(
