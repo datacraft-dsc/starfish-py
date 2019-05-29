@@ -50,7 +50,7 @@ def surfer_agent(ocean):
     ddo_options = None
     if integrationTestConfig.koi_url:
         ddo_options = {
-            'invoke': f'{integrationTestConfig.koi_url}/api/v1/invoke',
+            'invoke': f'{integrationTestConfig.koi_url}/api/v1',
         }
     ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url, ddo_options)
     options = {

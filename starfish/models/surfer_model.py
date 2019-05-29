@@ -37,11 +37,12 @@ SUPPORTED_SERVICES = {
     'auth': {
         'type': 'Ocean.Auth.v1',
         'uri': f'{SURFER_BASE_URI}/auth',
-    },
+    },    
 }
 
-INVOKE_SYNC_METHOD = ''
-INVOKE_ASYNC_METHOD = 'async'
+INVOKE_SYNC_METHOD = '/invoke'
+INVOKE_ASYNC_METHOD = '/invokeasync'
+INVOKE_JOB_METHOD = '/jobs'
 
 class SurferModel():
     _http_client = requests
@@ -248,6 +249,19 @@ class SurferModel():
             return json
         else:
             msg = f'invoke response failed: {response.status_code} {response.text}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def get_job(self, job_id):
+        endpoint = self.get_endpoint('invoke')
+        url = f'{endpoint}{INVOKE_JOB_METHOD}/{job_id}'
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            data = response.json()
+            return data
+        else:
+            msg = f'GET job response failed: {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         return None

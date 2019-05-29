@@ -8,6 +8,8 @@ In starfish-java, this is named as `RemoteAgent`
 import secrets
 import re
 import json
+import time
+
 from eth_utils import remove_0x_prefix
 
 from starfish.account import Account
@@ -20,9 +22,9 @@ from starfish.asset import (
 )
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
 from starfish.models.squid_model import SquidModel
-from starfish.asset import Asset
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
+from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
@@ -242,6 +244,46 @@ class SurferAgent(AgentBase):
                     listing = Listing(self, data['id'], asset, data)
                     listings.append(listing)
         return listings
+
+    def get_job(self, job_id):
+        """
+        
+        Get a job from the invoke service ( koi )
+        
+        :param str job_id: Id of the job to get
+        
+        :return: a job class
+        :type: :class:`.Job` class
+        
+        """
+        job = None
+        model = self._get_surferModel()
+        data = model.get_job(job_id)
+        if data:
+            status = data.get('status', None)
+            results = data.get('results', None)
+            job = Job(job_id, status, results)
+        return job
+
+    def wait_for_job(self, job_id, timeout_seconds=60):
+        """
+        
+        Wait for a job to complete, with optional timeout seconds
+        
+        :param int job_id: Job id to wait for completion
+        :param int timeout_seconds: optional time in seconds to wait for job to complete, defaults to 60 seconds
+        
+        :return: Job object if finished, else False for timed out
+        :type: :.class:`.Job` class or False
+        
+        """
+        timeout_time = time.time() + timeout_seconds
+        while timeout_time > time.time():
+            job = self.get_job(job_id)
+            if job.is_finished:
+                return job
+            time.sleep(1)
+        return False
 
     def update_listing(self, listing):
         """
