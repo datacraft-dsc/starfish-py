@@ -23,7 +23,7 @@ install: pip install -U tox-travis
 script: tox
 after_script:
 - cat koi.log
-- grep koi start_ocean.log
+- grep koi barge/start_ocean.log
 deploy:
 - provider: pypi
   distributions: sdist bdist_wheel
