@@ -84,14 +84,40 @@ class Ocean():
         self.__web3 = None
         self._network_name = kwargs.get('network', None)
 
-        # For development, we use the HTTPProvider Web3 interface
+        self._contracts_path = kwargs.get('contracts_path', None)
+
+
+        self._gas_limit = kwargs.get('gas_limit', 0)
+
+        # default not to use squid
+        self.__squid_model_class = None
+        self.__squid_model = None
+
+        
+        if self._keeper_url:
+            self.__web3 = Web3(HTTPProvider(self._keeper_url))
+            self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
+            if kwargs.get('connect', True):
+                self.connect()
+
+
+    def connect(self, keeper_url=None, network_name=None, contracts_path=None):
+        """
+        Normally you do not need to call this, since the ocean class will connect automatically 
+        using the provided keeper url and contracts path
+        """
+        if keeper_url:
+            self._keeper_url = keeper_url
+        if network_name:
+            self._network_name = network_name
+        if contracts_path:
+            self._contracts_path = contracts_path
+            
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
             if not self._network_name:
                 self._network_name = self._get_network_name()
-
-        self._contracts_path = kwargs.get('contracts_path', None)
-
+        
         # check to see if the contracts path actually contain contracts for this network
         if self._contracts_path and not is_contract_type_exists(self._network_name, self._contracts_path):
             # if not then find the correct contracts path
@@ -102,18 +128,9 @@ class Ocean():
         if self._contracts_path is None and self._network_name :
             self._contracts_path = find_contract_path(self._network_name)
 
-        self._gas_limit = kwargs.get('gas_limit', 0)
         logging.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
-
-        # default not to use squid
-        self.__squid_model_class = None
-        self.__squid_model = None
-
-        # only use squid or simiiar if we have the keeper url setup
-        if self._keeper_url:
-            self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
-
-
+            
+        
     def register_did(self, did, ddo, account):
         """
 
@@ -268,6 +285,10 @@ class Ocean():
     def network_name(self):
         return self._network_name
 
+    @property
+    def is_connected(self):
+        return not self.__web3 is None
+        
     def _get_network_name(self):
         network_id = int(self.__web3.version.network)
         return Keeper.get_network_name(network_id)
