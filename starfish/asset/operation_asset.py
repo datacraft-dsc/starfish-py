@@ -25,23 +25,22 @@ class OperationAsset(AssetBase):
                 'author': 'operation asset'
             }
         AssetBase.__init__(self, metadata, did)
-        
+
         if not self.is_asset_type('operation'):
             raise ValueError('The metadata type is not a valid type for this asset')
-            
+
 
     def is_mode(self, mode_type):
         """
-        
+
         Check to see if this operation supports the mode provided.
-        
+
         :param str mode_type: Mode type to check to see if this operation supports
         :return: Return True if this mode is supported
         :type: boolean
-        
+
         """
         try:
             return mode_type in self._metadata['operation']['modes']
         except:
-            pass
-        return False
+            raise ValueError('Metadata does not contain operation->modes structure')

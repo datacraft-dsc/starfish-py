@@ -10,15 +10,15 @@ from starfish.asset.asset import Asset
 
 def create_asset_from_metadata(metadata, did=None):
     """
-    Create a new asset class based on the metadata. Once created assign 
+    Create a new asset class based on the metadata. Once created assign
     the metadata to the asset and also the optional did
-    
+
     :param dict metadata: metadata to test and create the correct asset object
     :param str did: optional did to assign to the asset
-    
+
     :return: Return an asset class based on the metadata type
     """
-    
+
     asset_type = AssetBase.get_asset_type(metadata)
 
     if asset_type == 'memory' or asset_type == 'data':

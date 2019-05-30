@@ -45,7 +45,6 @@ class BrizoMock(object):
             self._account.address,
             self._handle_agreement_created,
         )
-        time.sleep(0.5)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)

@@ -3,7 +3,7 @@
    Job Base class
 """
 
-from abc import ABC, abstractmethod
+from abc import ABC
 
 class JobBase(ABC):
     """

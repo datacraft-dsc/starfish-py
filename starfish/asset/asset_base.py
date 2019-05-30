@@ -36,18 +36,18 @@ class AssetBase(ABC):
 
     def is_asset_type(self, type_name):
         """
-        
+
         Returns if this metadata has the correct type
-        
+
         :param str type_name: name of the asset type stored in the metadata
-        
+
         :return: True if the metadata type is equal to type_name
         :type: boolean
-        
+
         """
         asset_type = AssetBase.get_asset_type(self._metadata)
         return asset_type == type_name
-        
+
     @property
     def did(self):
         """
@@ -90,10 +90,10 @@ class AssetBase(ABC):
     @staticmethod
     def get_asset_type(metadata):
         asset_type = ''
-        try:
-            asset_type = metadata['type']
-        except:
-            pass
-        if asset_type == '' and 'base' in metadata:
-            asset_type = 'squid'
+        if isinstance(metadata, dict):
+            if 'type' in metadata:
+                asset_type = metadata['type']
+            else:
+                if 'base' in metadata:
+                    asset_type = 'squid'
         return asset_type

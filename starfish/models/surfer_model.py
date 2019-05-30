@@ -37,7 +37,7 @@ SUPPORTED_SERVICES = {
     'auth': {
         'type': 'Ocean.Auth.v1',
         'uri': f'{SURFER_BASE_URI}/auth',
-    },    
+    },
 }
 
 INVOKE_SYNC_METHOD = '/invoke'
@@ -232,11 +232,11 @@ class SurferModel():
 
     def invoke(self, asset_id, params, is_async=False):
         """
-        
+
         call the invoke based on the asset_id without leading 0x
         """
         endpoint = self.get_endpoint('invoke')
-        
+
         if is_async:
             url = f'{endpoint}{INVOKE_ASYNC_METHOD}/{asset_id}'
         else:

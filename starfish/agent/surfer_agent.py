@@ -16,7 +16,6 @@ from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.asset import (
     MemoryAsset,
-    AssetBase,
     OperationAsset,
     create_asset_from_metadata,
 )
@@ -204,17 +203,17 @@ class SurferAgent(AgentBase):
 
     def get_asset(self, asset_id):
         """
-        
+
         This is for compatability for Surfer calls to get an asset directly from Surfer
-        
+
         :param str asset_id: Id of the asset to read
-        
+
         :return: an asset class
         :type: :class:`.AssetBase` class
-        
+
         """
         asset = None
-        model = self._get_surferModel()        
+        model = self._get_surferModel()
         clean_asset_id = remove_0x_prefix(asset_id)
         read_metadata = model.read_metadata(clean_asset_id)
         if read_metadata:
@@ -222,7 +221,7 @@ class SurferAgent(AgentBase):
             did = f'{self._did}/{clean_asset_id}'
             asset = create_asset_from_metadata(metadata, did)
         return asset
-        
+
     def get_listings(self):
         """
         Returns all listings
@@ -247,14 +246,14 @@ class SurferAgent(AgentBase):
 
     def get_job(self, job_id):
         """
-        
+
         Get a job from the invoke service ( koi )
-        
+
         :param str job_id: Id of the job to get
-        
+
         :return: a job class
         :type: :class:`starfish.job.Job` class
-        
+
         """
         job = None
         model = self._get_surferModel()
@@ -267,16 +266,16 @@ class SurferAgent(AgentBase):
 
     def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
         """
-        
+
         Wait for a job to complete, with optional timeout seconds.
-        
+
         :param int job_id: Job id to wait for completion
         :param int timeout_seconds: optional time in seconds to wait for job to complete, defaults to 60 seconds
         :param int sleep_seconds: optional number of seconds to sleep between polling the job status, == 0 no sleeping
-        
+
         :return: Job object if finished, else False for timed out
         :type: :class:`starfish.job.Job` class or False
-        
+
         """
         timeout_time = time.time() + timeout_seconds
         while timeout_time > time.time():
@@ -403,22 +402,22 @@ class SurferAgent(AgentBase):
 
     def invoke_result(self, asset, params=None, is_async=False):
         """
-        
+
         Call an operation asset with params to execute a remote call.
-        
+
         :param asset: Operation asset to use for this invoke call
         :type asset: :class:`.OperationAsset`
         :param dict params: Parameters to send to the invoke call
-        
+
         :return: Return a dict of the result.
         :type: dict
-        
-        
+
+
         """
-        
+
         if not isinstance(asset, OperationAsset):
             raise ValueError('Asset is not a OperationAsset')
-            
+
         mode_type = 'async' if is_async else 'sync'
         if not asset.is_mode(mode_type):
             raise TypeError(f'This operation asset does not support {mode_type}')
@@ -427,7 +426,7 @@ class SurferAgent(AgentBase):
         model = self._get_surferModel()
         response = model.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
         return response
-        
+
     def get_endpoint(self, name):
         """
 
