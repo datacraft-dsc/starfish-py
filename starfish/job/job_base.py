@@ -13,7 +13,7 @@ class JobBase(ABC):
         :type agent: :class:`.Agent` object to assign to this Listing
         :param str job_id: id of the job.
     """
-    
+
     IsWorkingStatusList = [
         'scheduled',
         'running',
