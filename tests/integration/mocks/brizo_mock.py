@@ -45,6 +45,9 @@ class BrizoMock(object):
             self._account.address,
             self._handle_agreement_created,
         )
+        # at the moment we need to do this sleep or the event handle below
+        # is not called. Not sure why?
+        time.sleep(0.5)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
@@ -63,6 +66,9 @@ class BrizoMock(object):
         agreement_id = Web3Provider.get_web3().toHex(event.args['_agreementId'])
 
         ddo = self._ddo_records[did]
+        # calling the resolve calls the squid_py.aquarius module.
+        # The module calls a http request session object created outside of this thread
+        # and so can cause crashes
         #ddo = ocean.assets.resolve(did)
         sa = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
 
