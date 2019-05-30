@@ -76,9 +76,6 @@ def test_invoke(ocean, metadata, config, brizo_mock):
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    if not brizo_mock.is_event_subscribed:
-        brizo_mock.subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
-
     assert(not purchase_asset.is_completed(purchase_account))
 
     error_message = purchase_asset.wait_for_completion(purchase_account)

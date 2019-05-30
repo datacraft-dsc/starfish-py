@@ -39,7 +39,7 @@ class BrizoMock(object):
         self._ddo_records[did] = ddo
         events_manager = EventsManager.get_instance(Keeper.get_instance())
         events_manager.stop_all_listeners()
-        time.sleep(0.5)
+        time.sleep(1)
         events_manager.agreement_listener._event_filters = dict()
         self._ocean_instance.agreements.subscribe_events(
             self._account.address,
@@ -47,7 +47,7 @@ class BrizoMock(object):
         )
         # at the moment we need to do this sleep or the event handle below
         # is not called. Not sure why?
-        time.sleep(0.5)
+        time.sleep(1)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
