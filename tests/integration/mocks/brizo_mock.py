@@ -24,7 +24,7 @@ logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
 
-    
+
     def __init__(self, ocean_instance=None, account=None):
         self._ocean_instance = None
         self._is_event_subscribed = False
@@ -59,7 +59,6 @@ class BrizoMock(object):
             self._is_event_subscribed = True
             print(f'Start handle_agreement_created: event_args={event.args}')
             config = ConfigProvider.get_config()
-            ocean = self._ocean_instance
             provider_account = self._account
             assert provider_account.address == event.args['_accessProvider']
 
