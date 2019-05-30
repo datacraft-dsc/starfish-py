@@ -5,7 +5,10 @@ Ocean class to access the Ocean eco system.
 """
 import logging
 import secrets
-from starfish.utils.artifacts import find_contract_path
+from starfish.utils.artifacts import (
+    find_contract_path,
+    is_contract_type_exists,
+)
 
 from web3 import (
     Web3,
@@ -17,6 +20,7 @@ from starfish.models.squid_model import SquidModel
 
 from starfish.logging import setup_logging
 
+from squid_py.keeper import Keeper
 
 class Ocean():
     """
@@ -73,20 +77,31 @@ class Ocean():
         if args and isinstance(args[0], dict):
             kwargs = args[0]
 
-        self._network_name = kwargs.get('network', None)
-        self._keeper_url = kwargs.get('keeper_url', None)
-        self._contracts_path = kwargs.get('contracts_path', None)
-        if self._contracts_path is None and self._network_name:
-            self._contracts_path = find_contract_path(self._network_name)
-
-        self._gas_limit = kwargs.get('gas_limit', 0)
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
+
+        self._keeper_url = kwargs.get('keeper_url', None)
 
         self.__web3 = None
         # For development, we use the HTTPProvider Web3 interface
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
+            self._network_name = self._get_network_name()
 
+        self._network_name = kwargs.get('network', self._network_name)
+        self._contracts_path = kwargs.get('contracts_path', None)
+
+        # check to see if the contracts path actually contain contracts for this network
+        if self._contracts_path and not is_contract_type_exists(self._network_name, self._contracts_path):
+            # if not then find the correct contracts path
+            self._contracts_path = find_contract_path(self._network_name)
+            logging.info(f'Changing contracts path to {self._contracts_path}')
+
+        # if no contracts path then search for the contract for this network
+        if self._contracts_path is None and self._network_name :
+            self._contracts_path = find_contract_path(self._network_name)
+
+        self._gas_limit = kwargs.get('gas_limit', 0)
+        logging.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
 
         # default not to use squid
         self.__squid_model_class = None
@@ -247,10 +262,17 @@ class Ocean():
     def gas_limit(self):
         return self._gas_limit
 
+    @property
+    def network_name(self):
+        return self._network_name
+
+    def _get_network_name(self):
+        network_id = int(self.__web3.version.network)
+        return Keeper.get_network_name(network_id)
+
     def get_squid_model(self, options=None):
         if self.__squid_model_class:
             if not self.__squid_model:
                 self.__squid_model = self.__squid_model_class(self, options)
             return self.__squid_model
         return None
-
