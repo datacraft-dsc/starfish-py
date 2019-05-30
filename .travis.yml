@@ -17,7 +17,7 @@ before_install:
 - cd ..
 - sleep 240
 - scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-- docker run -p 3000:3000 --env SURFER_URL=http://172.15.0.22:8080 --network="ocean_backend" --ip="172.15.0.21" canaradex/koi-clj:v0.1.1 2>&1 koi.log
+- docker run -p 3000:3000 --env SURFER_URL=http://172.15.0.22:8080 --network="ocean_backend" --ip="172.15.0.21" canaradex/koi-clj:v0.1.1
   &
 install: pip install -U tox-travis
 script: tox
