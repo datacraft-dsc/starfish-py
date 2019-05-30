@@ -82,12 +82,14 @@ class Ocean():
         self._keeper_url = kwargs.get('keeper_url', None)
 
         self.__web3 = None
+        self._network_name = kwargs.get('network', None)
+
         # For development, we use the HTTPProvider Web3 interface
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
-            self._network_name = self._get_network_name()
+            if not self._network_name:
+                self._network_name = self._get_network_name()
 
-        self._network_name = kwargs.get('network', self._network_name)
         self._contracts_path = kwargs.get('contracts_path', None)
 
         # check to see if the contracts path actually contain contracts for this network
