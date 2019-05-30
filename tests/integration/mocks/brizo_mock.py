@@ -93,7 +93,9 @@ class BrizoMock(object):
             )
             print(f'handle_agreement_created() -- done registering event listeners.')
         except e as Exception:
-            print(f'error on exception {e}')
+            message = f'error with exception {e}'
+            print(message)
+            logging.error(message)
             raise
 
     @property
