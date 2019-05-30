@@ -13,6 +13,12 @@ class JobBase(ABC):
         :type agent: :class:`.Agent` object to assign to this Listing
         :param str job_id: id of the job.
     """
+    
+    IsWorkingStatusList = [
+        'scheduled',
+        'running',
+        'accepted'
+    ]
     def __init__(self, job_id, status=None, results=None):
         """
 
@@ -30,7 +36,7 @@ class JobBase(ABC):
     @property
     def is_finished(self):
         if self._status:
-            return not (self._status == 'scheduled' or self._status == 'running')
+            return not self._status in JobBase.IsWorkingStatusList
         return False
 
     @property
