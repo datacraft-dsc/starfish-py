@@ -8,7 +8,7 @@ logger = logging.getLogger('ocean')
 
 def is_contract_type_exists(network_name, path):
     for filename in os.listdir(path):
-        if re.match(f'\w+\.{network_name}\.json', filename):
+        if re.match(fr'\w+\.{network_name}\.json', filename):
             return True
     return False
 

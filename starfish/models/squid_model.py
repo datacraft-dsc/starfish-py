@@ -22,6 +22,7 @@ from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
+from squid_py.keeper.contract_handler import ContractHandler
 
 from squid_py.ddo.metadata import Metadata
 
@@ -46,6 +47,7 @@ class SquidModel():
         if not isinstance(options, dict):
             options = {}
 
+
         self._aquarius_url = options.get('aquarius_url', 'http://localhost:5000')
         self._brizo_url = options.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
@@ -54,6 +56,12 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
+
+        # clear out any old connections to a different network
+        # this means removing the static web3 connection in squid
+        Web3Provider._web3 = None
+        # and the list of contracts for the old network
+        ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
         self._squid_ocean = self.get_squid_ocean()
@@ -183,7 +191,6 @@ class SquidModel():
             (),
             wait=True
         )
-        print('LockRewardCondition.Fulfilled ', event)
         if not event:
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
@@ -316,7 +323,7 @@ class SquidModel():
         """
         for account in self.accounts:
             if account.address == address:
-                account.password=password
+                account.password = password
                 return account
 
     def request_tokens(self, account, value):
@@ -417,7 +424,6 @@ class SquidModel():
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)
-#            print('creating new instance of squid ocean', self._squid_ocean_signature)
             self._squid_ocean = SquidOcean(config)
         return self._squid_ocean
 

@@ -12,6 +12,7 @@ def test_ocean_init(config):
         keeper_url=config.keeper_url,
         contracts_path=config.contracts_path,
         gas_limit=config.gas_limit,
+        connect=False
     )
     assert(ocean)
     assert(ocean.keeper_url == config.keeper_url)

@@ -60,7 +60,7 @@ def test_address(ocean, config):
 
 def test_as_checksum_address(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
-    assert(account.as_checksum_address == ocean._web3.toChecksumAddress(config.accounts[0].test_address))
+    assert(account.as_checksum_address == Web3.toChecksumAddress(config.accounts[0].test_address))
 
 def test_password(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)

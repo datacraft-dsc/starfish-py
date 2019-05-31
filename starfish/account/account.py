@@ -132,7 +132,7 @@ class Account():
         >>> account.is_address_equal('0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e')
         True
         """
-        return self.as_checksum_address == self._ocean._web3.toChecksumAddress(address)
+        return self.as_checksum_address == Web3.toChecksumAddress(address)
 
     @property
     def ocean(self):
@@ -215,7 +215,7 @@ class Account():
 
         """
         if self._address:
-            return self._ocean._web3.toChecksumAddress(self._address.lower())
+            return Web3.toChecksumAddress(self._address.lower())
         return None
 
     @property

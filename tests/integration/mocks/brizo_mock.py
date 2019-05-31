@@ -47,7 +47,7 @@ class BrizoMock(object):
         )
         # at the moment we need to do this sleep or the event handle below
         # is not called. Not sure why?
-        # time.sleep(1)
+        time.sleep(1)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
