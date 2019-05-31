@@ -22,6 +22,7 @@ from starfish.logging import setup_logging
 
 from squid_py.keeper import Keeper
 
+
 class Ocean():
     """
     .. _Asset class: asset.html
@@ -74,32 +75,22 @@ class Ocean():
         init the basic Ocean class for the connection and contract info
 
         """
+        self.__web3 = None
+        self.__squid_model = None
+
         if args and isinstance(args[0], dict):
             kwargs = args[0]
 
         setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
         self._keeper_url = kwargs.get('keeper_url', None)
-
-        self.__web3 = None
         self._network_name = kwargs.get('network', None)
-
         self._contracts_path = kwargs.get('contracts_path', None)
-
-
         self._gas_limit = kwargs.get('gas_limit', 0)
+        self.__squid_model_class = kwargs.get('squid_model_class', None)
 
-        # default not to use squid
-        self.__squid_model_class = None
-        self.__squid_model = None
-
-        
-        if self._keeper_url:
-            self.__web3 = Web3(HTTPProvider(self._keeper_url))
-            self.__squid_model_class = kwargs.get('squid_model_class', SquidModel)
-            if kwargs.get('connect', True):
-                self.connect()
-
+        if self._keeper_url and kwargs.get('connect', True):
+            self.connect()
 
     def connect(self, keeper_url=None, network_name=None, contracts_path=None):
         """
@@ -115,6 +106,9 @@ class Ocean():
             
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
+            # set the default squid model class if not set already
+            if self.__squid_model_class is None:
+                self.__squid_model_class = SquidModel
             if not self._network_name:
                 self._network_name = self._get_network_name()
         
@@ -129,7 +123,7 @@ class Ocean():
             self._contracts_path = find_contract_path(self._network_name)
 
         logging.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
-            
+
         
     def register_did(self, did, ddo, account):
         """
@@ -287,7 +281,7 @@ class Ocean():
 
     @property
     def is_connected(self):
-        return not self.__web3 is None
+        return not self.__web3
         
     def _get_network_name(self):
         network_id = int(self.__web3.version.network)

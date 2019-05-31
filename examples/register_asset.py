@@ -65,7 +65,9 @@ def read_sample_metadata():
 
 def main():
     """ Create a new Ocean instance. logging information. """
-    ocean = Ocean(contracts_path='artifacts', keeper_url=CONFIG['keeper_url'])
+    
+    ocean = Ocean(keeper_url=CONFIG['keeper_url'])
+    
     """
     If you wish to see what's happening behind the scenes, you can pass
     'log_level=logging.DEBUG' parameter to get full debug instead.
@@ -79,6 +81,7 @@ def main():
     at https://github.com/DEX-Company/barge
     """
 
+    print('config data', CONFIG)
     account = ocean.get_account(CONFIG['account'])
 
     # Print out the account's ocean balance.
