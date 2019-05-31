@@ -182,7 +182,6 @@ class Account():
 
         model = self._ocean.get_squid_model()
         if model:
-            print(self.as_checksum_address, self._password)
             return model.get_account(self.as_checksum_address, self._password)
         return None
 
