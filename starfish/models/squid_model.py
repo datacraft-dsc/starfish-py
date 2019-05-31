@@ -56,7 +56,7 @@ class SquidModel():
 
         self._squid_ocean_signature = None
         self._squid_ocean = None
-        
+
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
         Web3Provider._web3 = None

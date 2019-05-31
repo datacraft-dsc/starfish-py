@@ -94,7 +94,7 @@ class Ocean():
 
     def connect(self, keeper_url=None, network_name=None, contracts_path=None):
         """
-        Normally you do not need to call this, since the ocean class will connect automatically 
+        Normally you do not need to call this, since the ocean class will connect automatically
         using the provided keeper url and contracts path
         """
         if keeper_url:
@@ -103,7 +103,7 @@ class Ocean():
             self._network_name = network_name
         if contracts_path:
             self._contracts_path = contracts_path
-            
+
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
             # set the default squid model class if not set already
@@ -111,7 +111,7 @@ class Ocean():
                 self.__squid_model_class = SquidModel
             if not self._network_name:
                 self._network_name = self._get_network_name()
-        
+
         # check to see if the contracts path actually contain contracts for this network
         if self._contracts_path and not is_contract_type_exists(self._network_name, self._contracts_path):
             # if not then find the correct contracts path
@@ -124,7 +124,7 @@ class Ocean():
 
         logging.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
 
-        
+
     def register_did(self, did, ddo, account):
         """
 
@@ -282,7 +282,7 @@ class Ocean():
     @property
     def is_connected(self):
         return not self.__web3
-        
+
     def _get_network_name(self):
         network_id = int(self.__web3.version.network)
         return Keeper.get_network_name(network_id)
