@@ -20,9 +20,11 @@ class BundleAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-            metadata = {}
-            metadata['name'] = 'BundleAsset'
-            metadata['description'] = 'Bundle Asset'
+            metadata = {
+                'type': 'bundle',
+                'name': 'BundleAsset',
+                'description': 'Bundle Asset',
+            }
         AssetBase.__init__(self, metadata, did)
         self._assets = {}
         self._data = data
@@ -157,3 +159,4 @@ class BundleAsset(AssetBase):
 
         """
         return True
+

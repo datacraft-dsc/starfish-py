@@ -8,16 +8,22 @@ In starfish-java, this is named as `RemoteAgent`
 import secrets
 import re
 import json
+import time
+
 from eth_utils import remove_0x_prefix
 
 from starfish.account import Account
 from starfish.agent import AgentBase
-from starfish.asset import MemoryAsset
+from starfish.asset import (
+    MemoryAsset,
+    OperationAsset,
+    create_asset_from_metadata,
+)
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
 from starfish.models.squid_model import SquidModel
-from starfish.asset import Asset
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
+from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
@@ -191,9 +197,30 @@ class SurferAgent(AgentBase):
             if read_metadata:
                 metadata = json.loads(read_metadata['metadata_text'])
                 did = f'{self._did}/{asset_id}'
-                asset = MemoryAsset(metadata, did)
+                asset = create_asset_from_metadata(metadata, did)
                 listing = Listing(self, data['id'], asset, data)
         return listing
+
+    def get_asset(self, asset_id):
+        """
+
+        This is for compatability for Surfer calls to get an asset directly from Surfer
+
+        :param str asset_id: Id of the asset to read
+
+        :return: an asset class
+        :type: :class:`.AssetBase` class
+
+        """
+        asset = None
+        model = self._get_surferModel()
+        clean_asset_id = remove_0x_prefix(asset_id)
+        read_metadata = model.read_metadata(clean_asset_id)
+        if read_metadata:
+            metadata = json.loads(read_metadata['metadata_text'])
+            did = f'{self._did}/{clean_asset_id}'
+            asset = create_asset_from_metadata(metadata, did)
+        return asset
 
     def get_listings(self):
         """
@@ -216,6 +243,48 @@ class SurferAgent(AgentBase):
                     listing = Listing(self, data['id'], asset, data)
                     listings.append(listing)
         return listings
+
+    def get_job(self, job_id):
+        """
+
+        Get a job from the invoke service ( koi )
+
+        :param str job_id: Id of the job to get
+
+        :return: a job class
+        :type: :class:`starfish.job.Job` class
+
+        """
+        job = None
+        model = self._get_surferModel()
+        data = model.get_job(job_id)
+        if data:
+            status = data.get('status', None)
+            results = data.get('results', None)
+            job = Job(job_id, status, results)
+        return job
+
+    def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
+        """
+
+        Wait for a job to complete, with optional timeout seconds.
+
+        :param int job_id: Job id to wait for completion
+        :param int timeout_seconds: optional time in seconds to wait for job to complete, defaults to 60 seconds
+        :param int sleep_seconds: optional number of seconds to sleep between polling the job status, == 0 no sleeping
+
+        :return: Job object if finished, else False for timed out
+        :type: :class:`starfish.job.Job` class or False
+
+        """
+        timeout_time = time.time() + timeout_seconds
+        while timeout_time > time.time():
+            job = self.get_job(job_id)
+            if job.is_finished:
+                return job
+            if sleep_seconds > 0:
+                time.sleep(sleep_seconds)
+        return False
 
     def update_listing(self, listing):
         """
@@ -331,6 +400,33 @@ class SurferAgent(AgentBase):
         """
         return False
 
+    def invoke_result(self, asset, params=None, is_async=False):
+        """
+
+        Call an operation asset with params to execute a remote call.
+
+        :param asset: Operation asset to use for this invoke call
+        :type asset: :class:`.OperationAsset`
+        :param dict params: Parameters to send to the invoke call
+
+        :return: Return a dict of the result.
+        :type: dict
+
+
+        """
+
+        if not isinstance(asset, OperationAsset):
+            raise ValueError('Asset is not a OperationAsset')
+
+        mode_type = 'async' if is_async else 'sync'
+        if not asset.is_mode(mode_type):
+            raise TypeError(f'This operation asset does not support {mode_type}')
+        if not params:
+            params = {}
+        model = self._get_surferModel()
+        response = model.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
+        return response
+
     def get_endpoint(self, name):
         """
 
@@ -421,12 +517,14 @@ class SurferAgent(AgentBase):
         return data['path'] and data['id_hex']
 
     @staticmethod
-    def generate_ddo(url):
+    def generate_ddo(url, services=None):
         """
         Generate a DDO for the surfer url. This DDO will contain the supported
         endpoints for the surfer
 
         :param str url: URL of the remote surfer agent
+        :param dict services: Optional dict of services urls that are not assigned to the main url.
+
         :return: created DDO object assigned to the url of the remote surfer agent service
         :type: :class:.`DDO`
         """
@@ -435,7 +533,11 @@ class SurferAgent(AgentBase):
         service_endpoints = SurferModel.generate_service_endpoints(url)
         ddo = StarfishDDO(did)
         for service_endpoint in service_endpoints:
-            ddo.add_service(service_endpoint['type'], service_endpoint['url'], None)
+            service_name = service_endpoint['name']
+            url = service_endpoint['url']
+            if services and service_name in services:
+                url = services[service_name]
+            ddo.add_service(service_endpoint['type'], url, None)
 
         # add a signature
         private_key_pem = ddo.add_signature()

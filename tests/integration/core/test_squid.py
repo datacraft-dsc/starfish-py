@@ -62,14 +62,14 @@ def test_asset(ocean, metadata, config, brizo_mock):
     time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    brizo_mock.subscribe(ocean, publisher_account._squid_account)
+    model = ocean.get_squid_model()
+    ddo = model._squid_ocean.assets.resolve(listing.asset.did)
+
+    brizo_mock.subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
-
-    if not brizo_mock.is_event_subscribed:
-        brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
     assert(not purchase_asset.is_completed(purchase_account))
 

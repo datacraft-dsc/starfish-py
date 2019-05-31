@@ -1,13 +1,12 @@
-import pathlib
+
 import configparser
 
-CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'config.ini'
 
 class IntegrationTestConfig():
-    def __init__(self):
+    def __init__(self, filename):
 
         config = configparser.ConfigParser()
-        config.read(CONFIG_FILE_PATH)
+        config.read(filename)
         self.keeper_url = config.get('ocean', 'keeper_url')
         self.contracts_path = config.get('ocean', 'contracts_path')
         self.gas_limit = config.get('ocean', 'gas_limit')
@@ -34,5 +33,6 @@ class IntegrationTestConfig():
         self.surfer_password=config.get('surfer', 'password')
         self.surfer_url=config.get('surfer', 'surfer_url')
 
+        self.koi_url=config.get('invoke', 'koi_url')
 
-integrationTestConfig = IntegrationTestConfig()
+

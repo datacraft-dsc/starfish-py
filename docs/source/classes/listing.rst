@@ -1,7 +1,7 @@
-Listing class
-=============
+Listing Classes
+===============
 
-.. autoclass:: starfish.listing.Listing
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
+
+    listing/listing_base
+    listing/listing

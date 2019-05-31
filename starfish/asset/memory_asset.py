@@ -20,11 +20,9 @@ class MemoryAsset(AssetBase):
     """
     def __init__(self, metadata=None, did=None, data=None):
         if metadata is None:
-
-#            metadata = Metadata('MemoryAsset', 'MemoryAsset')
             metadata = {
                 'name': 'MemoryAsset',
-                'type': 'MemoryAsset',
+                'type': 'data',
                 'author': 'memory asset'
             }
             if isinstance(data, str):

@@ -24,7 +24,7 @@ SUPPORTED_SERVICES = {
     },
     'invoke': {
         'type': 'Ocean.Invoke.v1',
-        'uri': f'{SURFER_BASE_URI}/data',
+        'uri': f'{SURFER_BASE_URI}/invoke',
     },
     'market': {
         'type': 'Ocean.Market.v1',
@@ -39,6 +39,10 @@ SUPPORTED_SERVICES = {
         'uri': f'{SURFER_BASE_URI}/auth',
     },
 }
+
+INVOKE_SYNC_METHOD = '/invoke'
+INVOKE_ASYNC_METHOD = '/invokeasync'
+INVOKE_JOB_METHOD = '/jobs'
 
 class SurferModel():
     _http_client = requests
@@ -99,7 +103,7 @@ class SurferModel():
         response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             json = response.json()
-            logger.warning('listing response returned: ' + str(json))
+            logger.debug('listing response returned: ' + str(json))
             return json
         else:
             msg = f'listing response failed: {response.status_code}'
@@ -225,6 +229,44 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
+
+    def invoke(self, asset_id, params, is_async=False):
+        """
+
+        call the invoke based on the asset_id without leading 0x
+        """
+        endpoint = self.get_endpoint('invoke')
+
+        if is_async:
+            url = f'{endpoint}{INVOKE_ASYNC_METHOD}/{asset_id}'
+        else:
+            url = f'{endpoint}{INVOKE_SYNC_METHOD}/{asset_id}'
+        print(f'request {url}')
+        response = SurferModel._http_client.post(url, json=params, headers=self._headers)
+        if response and (response.status_code == requests.codes.ok or response.status_code == 201):
+            json = response.json()
+            logger.debug('invoke response returned: ' + str(json))
+            return json
+        else:
+            msg = f'invoke response failed: {response.status_code} {response.text}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def get_job(self, job_id):
+        endpoint = self.get_endpoint('invoke')
+        url = f'{endpoint}{INVOKE_JOB_METHOD}/{job_id}'
+        response = SurferModel._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            data = response.json()
+            return data
+        else:
+            msg = f'GET job response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service or service type"""
         supported_service = SurferModel.find_supported_service(name)
@@ -247,6 +289,7 @@ class SurferModel():
             logger.error(message)
             raise ValueError(message)
         return endpoint
+
 
     @property
     def ddo(self):

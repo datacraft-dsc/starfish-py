@@ -24,64 +24,78 @@ logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
 
+
     def __init__(self, ocean_instance=None, account=None):
         self._ocean_instance = None
         self._is_event_subscribed = False
+        self._ddo_records = {}
 
-    def subscribe(self, ocean, account):
+    def subscribe(self, ocean, account, did, ddo):
         self._account = account
         model = ocean.get_squid_model()
         self._ocean_instance = model.get_squid_ocean(account)
         self._is_event_subscribed = False
 
+        self._ddo_records[did] = ddo
         events_manager = EventsManager.get_instance(Keeper.get_instance())
         events_manager.stop_all_listeners()
-        time.sleep(0.5)
+        time.sleep(1)
         events_manager.agreement_listener._event_filters = dict()
         self._ocean_instance.agreements.subscribe_events(
             self._account.address,
-            self._handle_agreement_created
+            self._handle_agreement_created,
         )
-        time.sleep(0.5)
+        # at the moment we need to do this sleep or the event handle below
+        # is not called. Not sure why?
+        # time.sleep(1)
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
-        if not event or not event.args:
-            print('no handle created')
-            return
+        try:
+            if not event or not event.args:
+                print('no handle created')
+                return
 
-        self._is_event_subscribed = True
-        print(f'Start handle_agreement_created: event_args={event.args}')
-        config = ConfigProvider.get_config()
-        ocean = self._ocean_instance
-        provider_account = self._account
-        assert provider_account.address == event.args['_accessProvider']
+            self._is_event_subscribed = True
+            print(f'Start handle_agreement_created: event_args={event.args}')
+            config = ConfigProvider.get_config()
+            provider_account = self._account
+            assert provider_account.address == event.args['_accessProvider']
 
-        did = id_to_did(event.args['_did'])
-        agreement_id = Web3Provider.get_web3().toHex(event.args['_agreementId'])
+            did = id_to_did(event.args['_did'])
+            agreement_id = Web3Provider.get_web3().toHex(event.args['_agreementId'])
 
-        ddo = ocean.assets.resolve(did)
-        sa = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
+            ddo = self._ddo_records[did]
+            # calling the resolve calls the squid_py.aquarius module.
+            # The module calls a http request session object created outside of this thread
+            # and so can cause crashes
+            #ddo = ocean.assets.resolve(did)
+            sa = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
 
-        condition_ids = sa.generate_agreement_condition_ids(
-            agreement_id=agreement_id,
-            asset_id=add_0x_prefix(did_to_id(did)),
-            consumer_address=event.args['_accessConsumer'],
-            publisher_address=ddo.publisher,
-            keeper=Keeper.get_instance())
+            condition_ids = sa.generate_agreement_condition_ids(
+                agreement_id=agreement_id,
+                asset_id=add_0x_prefix(did_to_id(did)),
+                consumer_address=event.args['_accessConsumer'],
+                publisher_address=ddo.publisher,
+                keeper=Keeper.get_instance())
 
-        register_service_agreement_publisher(
-            config.storage_path,
-            event.args['_accessConsumer'],
-            agreement_id,
-            did,
-            sa,
-            sa.service_definition_id,
-            sa.get_price(),
-            provider_account,
-            condition_ids
-        )
-        # print(f'handle_agreement_created() -- done registering event listeners.')
+            register_service_agreement_publisher(
+                config.storage_path,
+                event.args['_accessConsumer'],
+                agreement_id,
+                did,
+                sa,
+                sa.service_definition_id,
+                sa.get_price(),
+                provider_account,
+                condition_ids
+            )
+            print(f'handle_agreement_created() -- done registering event listeners.')
+        except e as Exception:
+            message = f'error with exception {e}'
+            print(message)
+            logging.error(message)
+            raise
 
     @property
     def is_event_subscribed(self):
