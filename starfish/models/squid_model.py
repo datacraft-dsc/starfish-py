@@ -191,7 +191,6 @@ class SquidModel():
             (),
             wait=True
         )
-        print('LockRewardCondition.Fulfilled ', event)
         if not event:
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
@@ -323,7 +322,6 @@ class SquidModel():
         :type: object or None
         """
         for account in self.accounts:
-            print(account.address)
             if account.address == address:
                 account.password = password
                 return account
@@ -426,8 +424,6 @@ class SquidModel():
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)
-#            print('creating new instance of squid ocean', self._squid_ocean_signature)
-            print('get squid ocean ', config.keeper_url)
             self._squid_ocean = SquidOcean(config)
         return self._squid_ocean
 
