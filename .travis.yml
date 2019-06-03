@@ -9,7 +9,8 @@ addons:
 services:
 - docker
 before_install:
-- scripts/setup_for_remote_barge.sh
+- export BARGE_HOST=http://52.187.164.74
+- scripts/setup_for_remote_barge.sh http://52.187.164.74:8090
 install: pip install -U tox-travis
 script: tox
 deploy:
