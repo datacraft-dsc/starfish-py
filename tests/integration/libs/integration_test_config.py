@@ -34,5 +34,3 @@ class IntegrationTestConfig():
         self.surfer_url=config.get('surfer', 'surfer_url')
 
         self.koi_url=config.get('invoke', 'koi_url')
-
-

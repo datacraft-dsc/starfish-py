@@ -47,7 +47,6 @@ class SquidModel():
         if not isinstance(options, dict):
             options = {}
 
-
         self._aquarius_url = options.get('aquarius_url', 'http://localhost:5000')
         self._brizo_url = options.get('brizo_url', 'http://localhost:8030')
         self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
