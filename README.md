@@ -46,30 +46,22 @@ Python 3.6
 1. Run the unit tests, without any supporting software/libraries outside of starfish
 
     ```
-    python3 -m pytest tests/unit
+    pytest tests/unit
     ```
 
-1. Create the local testing environment using [barge](https://github.com/DEX-Company/barge).
+1. To run the full test using the current remote implementation of [barge](https://github.com/DEX-Company/barge).
+   
+   ```bash
+   export BARGE_URL=http://52.187.164.74
+   scripts/setup_for_remote_barge.sh $BARGE_URL
+   ```
 
-    In a sepearte terminal session you need to clone and checkout the correct taged
-    version of ```barge``` repository, by doing the following:
-    ```
-    git clone https://github.com/DEX-Company/barge.git
-    cd barge
-    git checkout tags/dex-2019-05-24
-    ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
-    ```
+1. Or to run barge locally on the same machine.
 
-1. Copy keeper artifacts
-
-    A bash script is available to copy keeper artifacts into this file directly from a running docker image. This script needs to run in the root of the project.
-    The script waits until the keeper contracts are deployed, and then copies the artifacts.
-
-    ```
-    ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-    ```
-
-    The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
+   ```bash
+   export BARGE_URL=http://localhost
+   scripts/setup_for_local_barge.sh
+   ```
 
 1. Run the integration tests
 
@@ -80,12 +72,7 @@ Python 3.6
 1. Run the all tests
 
     ```bash
-    python3 -m pytest tests
-
-    # or
-
-    python3 setup.py test
-
+    pytest tests
     ```
 
 ## Documentation
