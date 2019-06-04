@@ -9,6 +9,7 @@ addons:
 services:
 - docker
 before_install:
+# NOTE: if you change the barge_url, you also need to change the url in tox
 - scripts/setup_for_remote_barge.sh http://52.187.164.74
 install: pip install -U tox-travis
 script: tox

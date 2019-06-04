@@ -35,17 +35,29 @@ Python 3.6
 
 ## Development
 
+1. Clone this repo
+
+    ```bash
+    clone https://github.com/DEX-Company/starfish-py.git
+    cd starfish-py
+    ```
+    
 1. Set up a virtual environment
 
-1. Install requirements
-
+    ```bash
+    virtualenv venv
+    source venv/bin/activate
     ```
+
+1. Install package requirements for starfish
+
+    ```bash
     pip install -r requirements_dev.txt
     ```
 
 1. Run the unit tests, without any supporting software/libraries outside of starfish
 
-    ```
+    ```bash
     pytest tests/unit
     ```
 
@@ -66,7 +78,7 @@ Python 3.6
 1. Run the integration tests
 
     ```
-    python3 -m pytest tests/integration
+    pytest tests/integration
     ```
 
 1. Run the all tests
@@ -93,7 +105,7 @@ and [python-style-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/
 ## Testing
 
 Automatic tests are setup via Travis, executing `tox`.
-Our test use pytest framework.
+Our test use pytest framework. The testing uses the remote barge server to test with
 
 ## New Version
 
