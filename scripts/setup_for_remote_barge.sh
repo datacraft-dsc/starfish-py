@@ -3,10 +3,9 @@
 # wait for barge artifact files
 
 ARTIFACT_FOLDER="artifacts"
-REMOTE_BARGE=http://52.187.164.74:8090
-if [ ! -z $1 ]; then
-    REMOTE_BARGE=$1
-fi
+
+BARGE_URL="${1:-http://localhost}"
+REMOTE_BARGE="$BARGE_URL:8090"
 
 if [ -d $ARTIFACT_FOLDER ]; then
     rm -rf $ARTIFACT_FOLDER
