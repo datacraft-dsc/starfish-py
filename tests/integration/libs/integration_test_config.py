@@ -1,12 +1,21 @@
 
-import configparser
+import os
+
+from configparser import (
+    ConfigParser,
+    ExtendedInterpolation,
+)
 
 
 class IntegrationTestConfig():
     def __init__(self, filename):
 
-        config = configparser.ConfigParser()
+        config = ConfigParser(interpolation=ExtendedInterpolation())
         config.read(filename)
+
+        if 'BARGE_URL' in os.environ:
+            config.set('test', 'barge_url', os.environ['BARGE_URL'])
+
         self.keeper_url = config.get('ocean', 'keeper_url')
         self.contracts_path = config.get('ocean', 'contracts_path')
         self.gas_limit = config.get('ocean', 'gas_limit')
@@ -34,5 +43,3 @@ class IntegrationTestConfig():
         self.surfer_url=config.get('surfer', 'surfer_url')
 
         self.koi_url=config.get('invoke', 'koi_url')
-
-
