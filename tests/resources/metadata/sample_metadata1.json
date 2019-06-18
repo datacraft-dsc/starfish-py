@@ -3,14 +3,14 @@
         "name": "UK Weather information 2011",
         "type": "dataset",
         "description": "Weather information of UK including temperature and humidity",
-        "dateCreated": "2012-10-10T17:00:000Z",
+        "dateCreated": "2012-10-10T17:00:00Z",
         "author": "Met Office",
         "license": "CC-BY",
         "copyrightHolder": "Met Office",
         "workExample": "Text PDF",
         "categories": ["white-papers"],
         "tags": ["weather", "uk", "2011", "temperature", "humidity"],
-        "price": 10,
+        "price": "10",
         "checksum": "000000000000000000000000000000000000000000000000000",
         "files": [
             {

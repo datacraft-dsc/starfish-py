@@ -23,7 +23,7 @@ from squid_py.brizo.brizo_provider import BrizoProvider
 
 
 def _register_asset_for_sale(agent, metadata, account):
-    metadata['base']['price'] = 42
+    metadata['base']['price'] = "42"
     asset = SquidAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
@@ -65,7 +65,7 @@ def test_asset(ocean, metadata, config, brizo_mock):
     model = ocean.get_squid_model()
     ddo = model._squid_ocean.assets.resolve(listing.asset.did)
 
-    brizo_mock.subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
+    BrizoProvider.get_brizo().subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)

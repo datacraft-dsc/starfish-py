@@ -8,6 +8,7 @@ import json
 
 from web3 import Web3
 
+from squid_py.config_provider import ConfigProvider
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
@@ -164,7 +165,6 @@ class SquidModel():
                 account,
                 auto_consume=False
             )
-
         return service_agreement_id
 
     def purchase_wait_for_completion(self, purchase_id, did, address, timeout_seconds):
@@ -304,7 +304,8 @@ class SquidModel():
             'resources': {
                 'aquarius.url': self._aquarius_url,
                 'brizo.url': self._brizo_url,
-                'storage.path': self._storage_path
+                'storage.path': self._storage_path,
+                'downloads.path': '',
             }
         }
         if options:
@@ -423,7 +424,8 @@ class SquidModel():
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)
-            self._squid_ocean = SquidOcean(config)
+            ConfigProvider.set_config(config)
+            self._squid_ocean = SquidOcean()
         return self._squid_ocean
 
     @staticmethod
