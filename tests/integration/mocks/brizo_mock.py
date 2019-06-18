@@ -23,25 +23,24 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
-    
-    ocean_instance = None
-
 
     def __init__(self, ocean_instance=None, account=None):
-        BrizoMock.ocean_instance = ocean_instance
+        self._ocean_instance = ocean_instance
         self._is_event_subscribed = False
         self._ddo_records = {}
 
     def subscribe(self, ocean, account, did, ddo):
         self._account = account
         model = ocean.get_squid_model()
-#        self._ocean_instance = model.get_squid_ocean(account)
-        BrizoMock.ocean_instance = model.get_squid_ocean(account)
-        
+        self._ocean_instance = model.get_squid_ocean(account)
         self._is_event_subscribed = False
 
+
         self._ddo_records[did] = ddo
-        
+        self._ocean_instance.agreements.watch_provider_events(self._account)
+        time.sleep(1)
+
+        """
         events_manager = EventsManager.get_instance(Keeper.get_instance())
         events_manager.stop_all_listeners()
         time.sleep(1)
@@ -50,11 +49,11 @@ class BrizoMock(object):
             self._account.address,
             self._handle_agreement_created,
         )
-        
+
         # at the moment we need to do this sleep or the event handle below
         # is not called. Not sure why?
         # time.sleep(1)
- 
+        """
 
     def _handle_agreement_created(self, event, *_):
 #        print('_handle_agreement_created ', event)
@@ -78,24 +77,16 @@ class BrizoMock(object):
             # and so can cause crashes
             #ddo = ocean.assets.resolve(did)
             service_agreement = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
-            """
+
             condition_ids = sa.generate_agreement_condition_ids(
                 agreement_id=agreement_id,
                 asset_id=add_0x_prefix(did_to_id(did)),
                 consumer_address=event.args['_accessConsumer'],
                 publisher_address=ddo.publisher,
                 keeper=Keeper.get_instance())
-            """
-            
-            service_agreement_id, signature = BrizoMock.ocean_instance.agreements.prepare(did, service_agreement.sa_definition_id, provider_account)
-            BrizoMock.ocean_instance.agreements.send(
-                did,
-                service_agreement_id,
-                service_agreement.sa_definition_id,
-                signature,
-                provider_account,
-                service_agreement.purchase_endpoint
-            )
+
+
+
             print(f'handle_agreement_created() -- done registering event listeners.')
         except e as Exception:
             message = f'error with exception {e}'
@@ -107,11 +98,11 @@ class BrizoMock(object):
     def is_event_subscribed(self):
         return self._is_event_subscribed
 
-    @staticmethod
+
     def initialize_service_agreement(did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
         print(f'BrizoMock.initialize_service_agreement: purchase_endpoint={purchase_endpoint}')
-        BrizoMock.ocean_instance.agreements.create(
+        self._ocean_instance.agreements.create(
             did,
             service_definition_id,
             agreement_id,

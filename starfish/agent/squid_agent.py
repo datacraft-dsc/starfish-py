@@ -139,7 +139,6 @@ class SquidAgent(AgentBase):
         :param asset: Asset to validate.
         :return: True if the asset is valid
         """
-        model = self.squid_model
 
         if not asset:
             raise ValueError('asset must be an object')
@@ -150,6 +149,7 @@ class SquidAgent(AgentBase):
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
+        model = self.squid_model
         return model.validate_metadata(asset.metadata)
 
     def get_listing(self, listing_id):

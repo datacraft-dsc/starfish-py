@@ -27,7 +27,7 @@ from squid_py.keeper.contract_handler import ContractHandler
 
 from squid_py.ddo.metadata import Metadata
 
-from plecos import is_valid_dict_local
+from plecos import is_valid_dict_local, validate_dict_local
 
 
 logger = logging.getLogger('starfish')
@@ -90,9 +90,13 @@ class SquidModel():
         :type: boolean
 
         """
-        # fix codacy to stop making this a static function
+        print('******************************* start validate ', metadata)
         if self._ocean:
-            return is_valid_dict_local(metadata)
+            if is_valid_dict_local(metadata):
+                return True
+            else:
+                validator = validate_dict_local(metadata)
+                print(validator)
         return False
 
     def read_asset(self, did):
