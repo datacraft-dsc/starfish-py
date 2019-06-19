@@ -41,7 +41,7 @@ class SquidModelPurchaseError(Exception):
 
 
 class SquidModel():
-    
+
 
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
