@@ -66,7 +66,7 @@ class SquidModel():
         ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
-        squid_ocean = self.get_squid_ocean()
+        self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
