@@ -73,6 +73,8 @@ def test_asset(ocean, metadata, config, brizo_mock):
 
     assert(not purchase_asset.is_completed(purchase_account))
 
+    BrizoProvider.get_brizo().subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
+
     error_message = purchase_asset.wait_for_completion(purchase_account)
     assert(error_message == True)
 

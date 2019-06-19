@@ -41,9 +41,13 @@ class SquidModelPurchaseError(Exception):
 
 
 class SquidModel():
+    
+
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
+        self._squid_ocean = None
+        self._squid_ocean_signature = None
 
         if not isinstance(options, dict):
             options = {}
@@ -54,8 +58,6 @@ class SquidModel():
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
 
-        self._squid_ocean_signature = None
-        self._squid_ocean = None
 
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
@@ -64,7 +66,7 @@ class SquidModel():
         ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
-        self._squid_ocean = self.get_squid_ocean()
+        squid_ocean = self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
