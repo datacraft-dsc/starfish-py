@@ -36,7 +36,7 @@ class BrizoMock(object):
         events_manager.stop_all_listeners()
 
         self._ocean_instance.agreements.watch_provider_events(self._account)
-        time.sleep(1)
+        time.sleep(2)
 
 
     def initialize_service_agreement(did, agreement_id, service_definition_id,
