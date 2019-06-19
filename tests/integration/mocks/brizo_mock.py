@@ -38,7 +38,7 @@ class BrizoMock(object):
 
         self._ddo_records[did] = ddo
         self._ocean_instance.agreements.watch_provider_events(self._account)
-        time.sleep(1)
+        time.sleep(2)
 
         """
         events_manager = EventsManager.get_instance(Keeper.get_instance())
