@@ -29,7 +29,7 @@ class SquidAsset(AssetBase):
             'type': "dataset",
             'description': "Introduce the main concepts and vision behind ocean protocol",
             'size': "1mb",
-            'dateCreated': "2012-10-10T17:00:000Z",
+            'dateCreated': "2012-10-10T17:00:00Z",
             'author': "Ocean Protocol Foundation Ltd.",
             'license': "CC-BY",
             'copyrightHolder': "Ocean Protocol Foundation Ltd.",
@@ -40,7 +40,7 @@ class SquidAsset(AssetBase):
             'inLanguage': "en",
             'categories': ["white-papers"],
             'tags': "data exchange sharing curation bonding curve",
-            'price': 23,
+            'price': "23",
             'files': [
                 {
                     "url": "https://testocnfiles.blob.core.windows.net/testfiles/testzkp.pdf",

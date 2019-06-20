@@ -32,7 +32,7 @@ NILE_CONFIG = {
     'squid_agent': {
         'aquarius_url': 'https://nginx-aquarius.dev-ocean.com',
         'brizo_url': 'https://nginx-brizo.dev-ocean.com',
-        'secret_store_url': 'https://secret-store-nile-test.dev-ocean.com',
+        'secret_store_url': 'https://secret-store.dev-ocean.com',
         'parity_url': 'https://nile.dev-ocean.com',
         'storage_path': 'squid_py.db',
     },

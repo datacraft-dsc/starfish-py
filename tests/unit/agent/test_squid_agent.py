@@ -66,6 +66,7 @@ def test_register_asset(ocean, metadata, config):
 def test_validate_asset(ocean, metadata):
     agent = SquidAgent(ocean, TEST_INIT_PARMS)
     assert(agent)
+#    metadata['base']['dateCreated'] = '2012-10-10T17:00:000Z'
     asset = Asset(metadata)
     assert(agent.validate_asset(asset))
 

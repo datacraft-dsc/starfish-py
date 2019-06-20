@@ -13,7 +13,7 @@ from squid_py.did import (
 )
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.keeper.keeper import Keeper
-from plecos import is_valid_dict_local
+from plecos import is_valid_dict_local, validate_dict_local
 
 
 from tests.unit.libs.unit_test_config import unitTestConfig
@@ -71,15 +71,21 @@ class MockSquidModel():
         :type: boolean
 
         """
-        return is_valid_dict_local(metadata)
+        if is_valid_dict_local(metadata):
+            return True
+        else:
+            validator = validate_dict_local(metadata)
+            print(validator)
+
+        return False
 
     def register_ddo(self, did, ddo, account):
         self._ddo_list[did] = ddo
         return secrets.token_hex(32)
-        
+
     def resolve_did(self, did):
         return self._ddo_list[did]
-        
+
     def register_asset(self, metadata, account ):
         did = id_to_did(secrets.token_hex(32))
         self._metadata[did] = metadata
@@ -94,9 +100,9 @@ class MockSquidModel():
         ddo.add_service(TEST_SERVICE_NAME, self._options['aquarius_url'])
         ddo.add_service(ServiceTypes.METADATA, '', {'metadata': metadata})
         # add the static proof
-        
+
         mockKeeper = MockKeeper()
-    
+
         ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
         # if self.register_ddo(did, ddo, account._squid_account):
         self._ddo_list[did] = ddo

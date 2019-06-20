@@ -8,6 +8,7 @@ import json
 
 from web3 import Web3
 
+from squid_py.config_provider import ConfigProvider
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
 from squid_py.did import (
@@ -26,7 +27,7 @@ from squid_py.keeper.contract_handler import ContractHandler
 
 from squid_py.ddo.metadata import Metadata
 
-from plecos import is_valid_dict_local
+from plecos import is_valid_dict_local, validate_dict_local
 
 
 logger = logging.getLogger('starfish')
@@ -40,9 +41,13 @@ class SquidModelPurchaseError(Exception):
 
 
 class SquidModel():
+
+
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
+        self._squid_ocean = None
+        self._squid_ocean_signature = None
 
         if not isinstance(options, dict):
             options = {}
@@ -53,8 +58,6 @@ class SquidModel():
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
 
-        self._squid_ocean_signature = None
-        self._squid_ocean = None
 
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
@@ -63,7 +66,7 @@ class SquidModel():
         ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
-        self._squid_ocean = self.get_squid_ocean()
+        self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
         self._keeper = Keeper.get_instance()
@@ -89,9 +92,13 @@ class SquidModel():
         :type: boolean
 
         """
-        # fix codacy to stop making this a static function
+        print('******************************* start validate ', metadata)
         if self._ocean:
-            return is_valid_dict_local(metadata)
+            if is_valid_dict_local(metadata):
+                return True
+            else:
+                validator = validate_dict_local(metadata)
+                print(validator)
         return False
 
     def read_asset(self, did):
@@ -164,7 +171,6 @@ class SquidModel():
                 account,
                 auto_consume=False
             )
-
         return service_agreement_id
 
     def purchase_wait_for_completion(self, purchase_id, did, address, timeout_seconds):
@@ -304,7 +310,8 @@ class SquidModel():
             'resources': {
                 'aquarius.url': self._aquarius_url,
                 'brizo.url': self._brizo_url,
-                'storage.path': self._storage_path
+                'storage.path': self._storage_path,
+                'downloads.path': '',
             }
         }
         if options:
@@ -423,7 +430,8 @@ class SquidModel():
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)
-            self._squid_ocean = SquidOcean(config)
+            ConfigProvider.set_config(config)
+            self._squid_ocean = SquidOcean()
         return self._squid_ocean
 
     @staticmethod

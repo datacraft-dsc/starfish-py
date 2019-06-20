@@ -9,12 +9,12 @@ from eth_utils import add_0x_prefix
 from squid_py import ConfigProvider
 from squid_py.brizo.brizo import Brizo
 from squid_py.did import id_to_did, did_to_id
-from squid_py.agreements.register_service_agreement import register_service_agreement_publisher
 from squid_py.agreements.service_agreement import ServiceAgreement
 from squid_py.agreements.service_types import ServiceTypes
 from squid_py.keeper.web3_provider import Web3Provider
 from squid_py.keeper import Keeper
 from squid_py.keeper.events_manager import EventsManager
+from squid_py.agreements.manager import AgreementsManager
 
 from starfish.logging import setup_logging
 
@@ -24,9 +24,8 @@ logging.getLogger("web3").setLevel(logging.WARNING)
 
 class BrizoMock(object):
 
-
     def __init__(self, ocean_instance=None, account=None):
-        self._ocean_instance = None
+        self._ocean_instance = ocean_instance
         self._is_event_subscribed = False
         self._ddo_records = {}
 
@@ -79,8 +78,14 @@ class BrizoMock(object):
                 publisher_address=ddo.publisher,
                 keeper=Keeper.get_instance())
 
-            register_service_agreement_publisher(
-                config.storage_path,
+            events_manager = EventsManager.get_instance(Keeper.get_instance())
+            agreements_manager = AgreementsManager(
+                config,
+                Keeper.get_instance(),
+                events_manager,
+                config.storage_path
+            )
+            agreements_manager.register_publisher(
                 event.args['_accessConsumer'],
                 agreement_id,
                 did,
@@ -96,15 +101,15 @@ class BrizoMock(object):
             print(message)
             logging.error(message)
             raise
-
+            
     @property
     def is_event_subscribed(self):
         return self._is_event_subscribed
-
-    def initialize_service_agreement(self, did, agreement_id, service_definition_id,
+            
+    def initialize_service_agreement(did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
         print(f'BrizoMock.initialize_service_agreement: purchase_endpoint={purchase_endpoint}')
-        self.ocean_instance.agreements.create(
+        self._ocean_instance.agreements.create(
             did,
             service_definition_id,
             agreement_id,
