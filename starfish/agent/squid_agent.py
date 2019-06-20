@@ -20,7 +20,7 @@ from starfish.asset import (
 from starfish.purchase import Purchase
 from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
-from starfish.operation.squid_operation import SquidOperation
+# from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
 
@@ -254,7 +254,7 @@ class SquidAgent(AgentBase):
 
         ##avoid calling the default purchase (ocean.assets.order...), which uses callbacks
         ## to consume an asset
-        metadata=listing.asset.metadata
+#        metadata=listing.asset.metadata
 #        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
 #        invokable=not(invoke_endpoint == "asset")
 #        if invokable==True:
