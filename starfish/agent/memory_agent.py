@@ -41,7 +41,7 @@ class MemoryAgent(AgentBase):
             'purchase': {}
         }
 
-    def register_asset(self, asset, listing_data, account = None):
+    def register_asset(self, asset, listing_data, account=None):
         """
 
         Register a memory asset with the ocean network.
