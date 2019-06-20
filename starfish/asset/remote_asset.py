@@ -16,7 +16,7 @@ class RemoteAsset(AssetBase):
     :type metadata: None or dict
     :param did: Optional did of the asset if it's registered
     :type did: None or str
-    :param str filename: filename of the asset to register 
+    :param str filename: filename of the asset to register
 
     """
     def __init__(self, metadata=None, did=None, url=None):

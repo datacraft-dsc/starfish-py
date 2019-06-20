@@ -103,12 +103,13 @@ class SurferAgent(AgentBase):
                 options.get('password', '')
             )
 
-    def register_asset(self, asset, account=None ):
+    def register_asset(self, asset, listing_data=None, account=None ):
         """
 
         Register an asset with the ocean network (surfer)
 
         :type asset: :class:`.Asset` object to register
+        :param listing_data: Not used at the moment
         :param account: This is not used for this agent, so for compatibility it is left in
         :type account: :class:`.Account` object to use for registration.
 
