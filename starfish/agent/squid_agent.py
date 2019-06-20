@@ -142,6 +142,10 @@ class SquidAgent(AgentBase):
             
         model = self.squid_model
             
+        
+        if not 'dateCreated' in listing_data:
+            listing_data['dateCreated'] = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+            
         metadata = {
             'base': listing_data,
         }

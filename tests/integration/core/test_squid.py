@@ -27,12 +27,12 @@ from squid_py.brizo.brizo_provider import BrizoProvider
 
 
 TEST_LISTING_DATA = {
-        'name': 'Test file asset',
-        'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
-        'author': 'Test starfish',
-        'license': 'Closed',
-        'price': '1000000000000'
-    }
+    'name': 'Test file asset',
+    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'author': 'Test starfish',
+    'license': 'Closed',
+    'price': '1000000000000'
+}
 
 def _register_asset_for_sale(agent, resources, account):
     
@@ -67,7 +67,7 @@ def test_asset_remote_register(ocean, config, resources):
     print(listing.data.as_text())
     
     
-def test_asset(ocean, metadata, config, brizo_mock, resources):
+def test_asset(ocean, config, brizo_mock, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -126,7 +126,7 @@ def test_asset(ocean, metadata, config, brizo_mock, resources):
 
 
 
-def test_search_listing(ocean, metadata, config, resources):
+def test_search_listing(ocean, config, resources):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -140,7 +140,7 @@ def test_search_listing(ocean, metadata, config, resources):
     assert publisher_account
 
     # choose a word from the description field
-    text = metadata['base']['description']
+    text = TEST_LISTING_DATA['author']
     words = text.split(' ')
     word = words[0]
 
