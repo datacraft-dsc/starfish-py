@@ -5,8 +5,9 @@ Agent class to provide basic functionality for all Ocean Agents
 """
 
 
-
+import datetime
 import logging
+
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import AgentBase
@@ -23,13 +24,14 @@ from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-import sys,traceback
 logger = logging.getLogger('ocean')
 
 
 ALLOWED_FILE_META_ITEMS = [
     'index',
     'url',
+    'encoding',
+    'compression',
     'checksum',
     'checksumType',
     'contentLength',
@@ -157,7 +159,6 @@ class SquidAgent(AgentBase):
                 if not name in ALLOWED_FILE_META_ITEMS:
                     delete_list.append(name)
             for name in delete_list:
-                print('deleting', name)
                 del item[name]
 
         ddo = model.register_asset(metadata, account._squid_account)

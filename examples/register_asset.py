@@ -5,7 +5,7 @@ import pathlib
 import logging
 
 from starfish import Ocean
-from starfish.asset import SquidAsset
+from starfish.asset import RemoteAsset
 from starfish.agent import SquidAgent
 
 """
@@ -21,7 +21,7 @@ LOCAL_CONFIG = {
         'aquarius_url': 'http://localhost:5000',
         'brizo_url': 'http://localhost:8030',
         'secret_store_url': 'http://localhost:12001',
-        'parity_url': 'http://localhost:9545',
+        'parity_url': 'http://localhost:8545',
         'storage_path': 'squid_py.db',
     },
     'account': ('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'node0')
@@ -40,7 +40,7 @@ NILE_CONFIG = {
 
 }
 
-CONFIG = NILE_CONFIG
+CONFIG = LOCAL_CONFIG
 
 
 """
@@ -49,19 +49,6 @@ Test sample metadata to load in for an asset.
 METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'examples' / 'sample_data' / 'sample_metadata.json'
 MY_ACCOUNT_PASSWORD = 'test_account_password'
 
-def read_sample_metadata():
-    """
-    Reads the sample metadata from the 'sample_data' folder within the examples.
-    """
-    if not METADATA_SAMPLE_PATH.exists():
-        print(f'{METADATA_SAMPLE_PATH} does not exist!')
-        return None
-
-    metadata = None
-    with open(METADATA_SAMPLE_PATH, 'r') as file_handle:
-        metadata = json.load(file_handle)
-
-    return metadata
 
 def main():
     """ Create a new Ocean instance. logging information. """
@@ -88,21 +75,22 @@ def main():
     print('my account ocean balance:', account.ocean_balance)
     print('my account ether balance:', account.ether_balance)
 
-    # Load in our sample metadata
-    metadata = read_sample_metadata()
-
+    # create a listing specifying the information about the asset
+    listing_data = {
+        'name': 'The white paper',
+        'author': 'Ocean Protocol',
+        'license': 'CC0: Public Domain',
+        'price': '0'
+    }
     # Now create a squid asset using the metadata we have just loaded
-    asset = SquidAsset(metadata)
-
-    # Print the squid asset out.
-    print('my asset:', asset.metadata)
+    asset = RemoteAsset(url='https://oceanprotocol.com/tech-whitepaper.pdf')
 
 
     # Create a new `Squid` agent to do the work on the block chain.
     agent = SquidAgent(ocean, CONFIG['squid_agent'])
 
     # Register the asset, on the block chain and with the metadata storage.
-    listing = agent.register_asset(asset, account)
+    listing = agent.register_asset(asset, listing_data, account)
 
     # Print out the listing did and listing data.
     print('the listing', listing.listing_id, listing.data)
