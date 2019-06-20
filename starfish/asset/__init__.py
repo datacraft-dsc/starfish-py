@@ -5,6 +5,8 @@ from starfish.asset.memory_asset import MemoryAsset
 from starfish.asset.squid_asset import SquidAsset
 from starfish.asset.bundle_asset import BundleAsset
 from starfish.asset.operation_asset import OperationAsset
+from starfish.asset.file_asset import FileAsset
+from starfish.asset.remote_asset import RemoteAsset
 from starfish.asset.asset import Asset
 
 
@@ -29,4 +31,8 @@ def create_asset_from_metadata(metadata, did=None):
         return SquidAsset(metadata, did)
     elif asset_type == 'operation':
         return OperationAsset(metadata, did)
+    elif asset_type == 'file':
+        return FileAsset(metadata, did)
+    elif asset_type == 'remote':
+        return RemoteAsset(metadata, did)
     return Asset(metadata, did)

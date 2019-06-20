@@ -3,6 +3,7 @@
 
 """
 
+import datetime
 import pathlib
 import json
 import logging
@@ -12,7 +13,10 @@ from web3 import Web3
 from starfish import Ocean
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
-from starfish.asset import SquidAsset
+from starfish.asset import (
+    FileAsset,
+    RemoteAsset,
+)
 
 from starfish.logging import setup_logging
 
@@ -22,16 +26,48 @@ from squid_py.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 
-def _register_asset_for_sale(agent, metadata, account):
-    metadata['base']['price'] = "42"
-    asset = SquidAsset(metadata)
-    listing = agent.register_asset(asset, account=account)
+TEST_LISTING_DATA = {
+        'name': 'Test file asset',
+        'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'author': 'Test starfish',
+        'license': 'Closed',
+        'price': '1000000000000'
+    }
+
+def _register_asset_for_sale(agent, resources, account):
+    
+    asset = FileAsset(filename=resources.asset_file)
+    listing = agent.register_asset(asset, TEST_LISTING_DATA, account=account)
     assert listing
     assert listing.asset.did
     return listing
 
 
-def test_asset(ocean, metadata, config, brizo_mock):
+def test_asset_file_register(ocean, config, resources):
+    publisher_account = ocean.get_account(config.publisher_account)
+    
+    agent = SquidAgent(ocean, config.squid_config)
+    assert agent
+    
+    asset = FileAsset(filename=resources.asset_file)
+    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    assert(listing)
+    
+
+def test_asset_remote_register(ocean, config, resources):
+    publisher_account = ocean.get_account(config.publisher_account)
+    
+    agent = SquidAgent(ocean, config.squid_config)
+    assert agent
+    
+    asset = RemoteAsset(url=resources.asset_remote)
+
+    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    assert(listing)
+    print(listing.data.as_text())
+    
+    
+def test_asset(ocean, metadata, config, brizo_mock, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -42,7 +78,7 @@ def test_asset(ocean, metadata, config, brizo_mock):
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
-    listing = _register_asset_for_sale(agent, metadata, publisher_account)
+    listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
@@ -90,7 +126,7 @@ def test_asset(ocean, metadata, config, brizo_mock):
 
 
 
-def test_search_listing(ocean, metadata, config):
+def test_search_listing(ocean, metadata, config, resources):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -99,7 +135,7 @@ def test_search_listing(ocean, metadata, config):
     publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
 
-    listing = _register_asset_for_sale(agent, metadata, publisher_account)
+    listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
