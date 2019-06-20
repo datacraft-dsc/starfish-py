@@ -112,7 +112,7 @@ class SquidAgent(AgentBase):
         :type: :class:`.Listing` class
 
         At the moment only support FileAsset
-        
+
         For example::
 
             metadata = json.loads('my_metadata')
@@ -141,13 +141,13 @@ class SquidAgent(AgentBase):
 
         if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset)):
             raise TypeError('This agent only supports a FileAsset or RemoteAsset')
-            
+
         model = self.squid_model
-            
-        
+
+
         if not 'dateCreated' in listing_data:
             listing_data['dateCreated'] = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
-            
+
         metadata = {
             'base': listing_data,
         }
@@ -255,14 +255,14 @@ class SquidAgent(AgentBase):
         ##avoid calling the default purchase (ocean.assets.order...), which uses callbacks
         ## to consume an asset
         metadata=listing.asset.metadata
-        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
-        invokable=not(invoke_endpoint == "asset")
-        if invokable==True:
-            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
-            purchase = SquidOperation(self, listing, service_agreement_id)
-        else:
-            service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
-            purchase = Purchase(self, listing, service_agreement_id)
+#        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
+#        invokable=not(invoke_endpoint == "asset")
+#        if invokable==True:
+#            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
+#            purchase = SquidOperation(self, listing, service_agreement_id)
+#        else:
+        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
 

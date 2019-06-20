@@ -1,13 +1,16 @@
 
+import datetime
 import pytest
 import secrets
 import tempfile
 
 
 from starfish.agent.squid_agent import SquidAgent
-from starfish.asset.asset import Asset
+from starfish.asset import (
+    Asset,
+    RemoteAsset,
+)
 from starfish.exceptions import StarfishPurchaseError
-
 from tests.unit.mocks.mock_squid_model import MockSquidModel
 
 
@@ -21,17 +24,28 @@ TEST_INIT_PARMS = {
     'storage_path': 'test_squid_path',
 }
 
-def _register_asset(ocean, metadata, config):
+
+TEST_LISTING_DATA = {
+    'name': 'Test file asset',
+    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'author': 'Test starfish',
+    'license': 'Closed',
+    'price': '1000000000000',
+    'checksum': '00000000000000000000000000000000',
+}
+
+
+def _register_asset(ocean, resources, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
-    asset = Asset(metadata)
+    asset = RemoteAsset(url=resources.asset_remote)
     assert(asset)
-    listing = agent.register_asset(asset, account)
+    listing = agent.register_asset(asset, TEST_LISTING_DATA, account)
     return (listing, agent, asset)
 
-def _purchase_asset(ocean, metadata, config):
-    listing, agent, asset = _register_asset(ocean, metadata, config)
+def _purchase_asset(ocean, resources, config):
+    listing, agent, asset = _register_asset(ocean, resources, config)
     account = ocean.get_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     return purchase, listing, agent, asset, account
@@ -58,8 +72,8 @@ def test_init(ocean):
     assert(agent.squid_model.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
     assert(agent.squid_model.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
 
-def test_register_asset(ocean, metadata, config):
-    listing, agent, asset = _register_asset(ocean, metadata, config)
+def test_register_asset(ocean, resources, config):
+    listing, agent, asset = _register_asset(ocean, resources, config)
     assert(listing)
     assert(listing.listing_id)
 
@@ -70,15 +84,15 @@ def test_validate_asset(ocean, metadata):
     asset = Asset(metadata)
     assert(agent.validate_asset(asset))
 
-def test_get_listing(ocean, metadata, config):
-    listing, agent, asset = _register_asset(ocean, metadata, config)
+def test_get_listing(ocean, resources, config):
+    listing, agent, asset = _register_asset(ocean, resources, config)
     found_listing = agent.get_listing(listing.listing_id)
     assert(found_listing)
     assert(found_listing.listing_id == listing.listing_id)
 
-def test_search_listings(ocean, metadata, config):
-    listing, agent, asset = _register_asset(ocean, metadata, config)
-    listing_ids = agent.search_listings(metadata['base']['author'])
+def test_search_listings(ocean, resources, config):
+    listing, agent, asset = _register_asset(ocean, resources, config)
+    listing_ids = agent.search_listings(TEST_LISTING_DATA['author'])
     assert(listing_ids)
     assert(len(listing_ids) > 0)
     is_found = False
@@ -88,26 +102,26 @@ def test_search_listings(ocean, metadata, config):
             break
     assert(is_found)
 
-def test_purchase_asset(ocean, metadata, config):
-    listing, agent, asset = _register_asset(ocean, metadata, config)
+def test_purchase_asset(ocean, resources, config):
+    listing, agent, asset = _register_asset(ocean, resources, config)
     account = ocean.get_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 
 
-def test_is_access_granted_for_asset(ocean, metadata, config):
-    purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
+def test_is_access_granted_for_asset(ocean, resources, config):
+    purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
     assert(agent.is_access_granted_for_asset(asset, purchase.purchase_id, account))
 
-def test_purchase_wait_for_completion(ocean, metadata, config):
-    purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
+def test_purchase_wait_for_completion(ocean, resources, config):
+    purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
     assert(agent.purchase_wait_for_completion(purchase.purchase_id, asset, account, 30))
     # test raised error if purchase failed
     with pytest.raises(ValueError):
         agent.purchase_wait_for_completion(None, asset, account, 30)
 
-def test_consume_asset(ocean, metadata, config):
-    purchase, listing, agent, asset, account = _purchase_asset(ocean, metadata, config)
+def test_consume_asset(ocean, resources, config):
+    purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
     assert(agent.consume_asset(listing, purchase.purchase_id, account, TEST_DOWNLOAD_PATH))
 
 def test_is_did_valid():
