@@ -179,6 +179,10 @@ class SurferAgent(AgentBase):
         # FIXME promote to MemoryAsset as in get_listing
         return asset
 
+    def get_download_url(self, asset_id):
+        model = self._get_surferModel()
+        return model.get_download_url(asset_id)
+        
     def get_listing(self, listing_id):
         """
         Return an listing on the listings id.

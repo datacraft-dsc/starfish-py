@@ -112,8 +112,7 @@ class SurferModel():
         return None
 
     def download_asset(self, asset_id):
-        endpoint = self.get_endpoint('storage')
-        url = f'{endpoint}/assets/{asset_id}'
+        url = self.get_download_url(asset_id)
         response = SurferModel._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             # FIXME must check for a non empty response here
@@ -134,6 +133,11 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
+    def get_download_url(self, asset_id):
+        endpoint = self.get_endpoint('storage')
+        url = f'{endpoint}/assets/{asset_id}'
+        return url
+        
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'

@@ -19,6 +19,7 @@ from starfish.asset import (
 )
 
 from starfish.logging import setup_logging
+from tests.integration.libs.helpers import setup_squid_purchase
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
@@ -67,7 +68,7 @@ def test_asset_remote_register(ocean, config, resources):
     print(listing.data.as_text())
     
     
-def test_asset(ocean, config, brizo_mock, resources):
+def test_asset(ocean, config, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -98,10 +99,7 @@ def test_asset(ocean, config, brizo_mock, resources):
     time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    model = ocean.get_squid_model()
-    ddo = model._squid_ocean.assets.resolve(listing.asset.did)
-
-    BrizoProvider.get_brizo().subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
+    setup_squid_purchase(ocean, listing, publisher_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)

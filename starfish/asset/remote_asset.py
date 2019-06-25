@@ -32,7 +32,7 @@ class RemoteAsset(AssetBase):
 
         mime = MimeTypes()
         mime_type = mime.guess_type(self.url)
-        if mime_type:
+        if mime_type and mime_type[0]:
             self._metadata['contentType'] = mime_type[0]
 
     @property
