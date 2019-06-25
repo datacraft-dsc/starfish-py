@@ -26,11 +26,19 @@ def main():
     # Print the memory asset out
     print('my asset:', asset.data)
 
+    # create a listing specifying the information about the asset
+    listing_data = {
+        'name': 'The white paper',
+        'author': 'Ocean Protocol',
+        'license': 'CC0: Public Domain',
+        'price': '0'
+    }
+
     # Create a new memory agent to do the work.
     agent = MemoryAgent(ocean)
 
     # Register the memory asset, with the new account.
-    listing = agent.register_asset(asset, register_account)
+    listing = agent.register_asset(asset, listing_data, register_account)
 
     # Print out the listing did and listing data.
     print('memory listing', listing.listing_id, listing.data)

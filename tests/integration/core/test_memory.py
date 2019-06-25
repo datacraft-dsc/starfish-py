@@ -3,6 +3,7 @@
 
 """
 
+import datetime
 import pathlib
 import json
 import logging
@@ -15,27 +16,36 @@ from starfish.agent import MemoryAgent
 from starfish.asset import MemoryAsset
 
 
+TEST_LISTING_DATA = {
+    'name': 'Test memory asset',
+    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'author': 'Test starfish',
+    'license': 'Closed',
+    'price': '1000000000000',
+    'checksum': '00000000000000000000000000000000',
+}
 
-def _register_asset_for_sale(agent, metadata, account):
 
-    asset = MemoryAsset(metadata=metadata, data=secrets.token_hex(256))
-    listing = agent.register_asset(asset, account=account)
+def _register_asset_for_sale(agent, account):
+
+    asset = MemoryAsset(data=secrets.token_hex(256))
+    listing = agent.register_asset(asset, TEST_LISTING_DATA, account=account)
     assert listing
     assert listing.asset.did
     return listing
 
-def test_asset(ocean, metadata, config):
+def test_asset(ocean, config):
 
     # create an ocean object
 
-    agent = MemoryAgent(ocean, metadata)
+    agent = MemoryAgent(ocean)
     assert agent
 
 
     # test node has the account #0 unlocked
     publisher_account = ocean.get_account(config.publisher_account)
 
-    listing = _register_asset_for_sale(agent, metadata, publisher_account)
+    listing = _register_asset_for_sale(agent, publisher_account)
     assert listing
     assert publisher_account
 
@@ -62,7 +72,7 @@ def test_asset(ocean, metadata, config):
 
 
 
-def test_search_listing(ocean, metadata, config):
+def test_search_listing(ocean, config):
 
     agent = MemoryAgent(ocean)
 
@@ -71,12 +81,12 @@ def test_search_listing(ocean, metadata, config):
 
     agent = MemoryAgent(ocean)
 
-    listing = _register_asset_for_sale(agent, metadata, publisher_account)
+    listing = _register_asset_for_sale(agent, publisher_account)
     assert listing
     assert publisher_account
 
     # choose a word from the description field
-    text = metadata['base']['description']
+    text = TEST_LISTING_DATA['author']
     words = text.split(' ')
     word = words[0]
 

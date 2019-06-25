@@ -41,7 +41,7 @@ class MemoryAgent(AgentBase):
             'purchase': {}
         }
 
-    def register_asset(self, asset, account = None):
+    def register_asset(self, asset, listing_data, account=None):
         """
 
         Register a memory asset with the ocean network.
@@ -53,24 +53,13 @@ class MemoryAgent(AgentBase):
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
 
-        For example::
-
-            metadata = json.loads('my_metadata')
-            # get your publisher account
-            agent = MemoryAgent(ocean)
-            listing = agent.register_asset(metadata)
-
-            if listing:
-                print(f'registered my listing asset for sale with the did {listing.did}')
-
         """
 
         asset_did = id_to_did(secrets.token_hex(64))
         listing_id = did_to_id(asset_did)
-        listing_data = {
-            'listing_id': listing_id,
-            'asset_did': asset_did
-        }
+        listing_data['listing_id'] = listing_id,
+        listing_data['asset_did'] = asset_did
+
         self._memory['listing_data'][listing_id] = listing_data
         self._memory['asset'][asset_did] = asset
 
@@ -135,13 +124,11 @@ class MemoryAgent(AgentBase):
 
         """
         listing_items = None
-        for asset_did, asset in self._memory['asset'].items():
-            if re.search(text, json.dumps(asset.metadata)):
-                for listing_id, listing in self._memory['listing_data'].items():
-                    if listing['asset_did'] == asset_did:
-                        if listing_items is None:
-                            listing_items = {}
-                        listing_items[listing_id] = listing
+        for listing_id, listing_data in self._memory['listing_data'].items():
+            if re.search(text, json.dumps(listing_data)):
+                if listing_items is None:
+                    listing_items = {}
+                listing_items[listing_id] = listing_data
 
         return listing_items
 

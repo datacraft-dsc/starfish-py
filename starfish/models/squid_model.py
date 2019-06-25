@@ -92,7 +92,6 @@ class SquidModel():
         :type: boolean
 
         """
-        print('******************************* start validate ', metadata)
         if self._ocean:
             if is_valid_dict_local(metadata):
                 return True

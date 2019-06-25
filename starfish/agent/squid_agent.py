@@ -5,25 +5,39 @@ Agent class to provide basic functionality for all Ocean Agents
 """
 
 
-
+import datetime
 import logging
+
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
-    SquidAsset,
+    FileAsset,
+    RemoteAsset,
     Asset,
  )
 from starfish.purchase import Purchase
 from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
-from starfish.operation.squid_operation import SquidOperation
+# from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-import sys,traceback
 logger = logging.getLogger('ocean')
+
+
+ALLOWED_FILE_META_ITEMS = [
+    'index',
+    'url',
+    'encoding',
+    'compression',
+    'checksum',
+    'checksumType',
+    'contentLength',
+    'resourceId',
+    'contentType',
+]
 
 class SquidAgent(AgentBase):
     """
@@ -83,18 +97,21 @@ class SquidAgent(AgentBase):
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
         self._parity_url = kwargs.get('parity_url', self._ocean.keeper_url)
 
-    def register_asset(self, asset, account):
+    def register_asset(self, asset, listing_data, account):
         """
 
         Register a squid asset with the ocean network.
 
-        :param asset: the SquidAsset to register, at the moment only a SquidAsset can be used.
-        :type asset: :class:`.SquidAsset` object to register
+        :param asset: the asset to register, at the moment only a SquidAsset can be used.
+        :type asset: :class:`.FileAsset`, or :class:`.RemoteAsset` object to register
+        :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
 
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
+
+        At the moment only support FileAsset
 
         For example::
 
@@ -102,8 +119,8 @@ class SquidAgent(AgentBase):
             # get your publisher account
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
-            asset = SquidAsset(metadata)
-            listing = agent.register_asset(asset, account)
+            asset = FileAsset(filename='Testfile.txt')
+            listing = agent.register_asset(asset, {'price': '100000000'}, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
@@ -119,9 +136,32 @@ class SquidAgent(AgentBase):
         if not account.is_password:
             raise ValueError('You must set the account password')
 
+        if not isinstance(listing_data, dict):
+            raise TypeError('You must provide some listing data as dict')
+
+        if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset)):
+            raise TypeError('This agent only supports a FileAsset or RemoteAsset')
+
         model = self.squid_model
 
-        ddo = model.register_asset(asset.metadata, account._squid_account)
+
+        if not 'dateCreated' in listing_data:
+            listing_data['dateCreated'] = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+        metadata = {
+            'base': listing_data,
+        }
+        metadata['base']['files'] = [asset.metadata]
+        metadata['base']['files'][0]['index'] = 0
+        for item in metadata['base']['files']:
+            delete_list = []
+            for name in item.keys():
+                if not name in ALLOWED_FILE_META_ITEMS:
+                    delete_list.append(name)
+            for name in delete_list:
+                del item[name]
+
+        ddo = model.register_asset(metadata, account._squid_account)
 
         listing = None
         if ddo:
@@ -168,7 +208,7 @@ class SquidAgent(AgentBase):
         ddo = model.read_asset(listing_id)
 
         if ddo:
-            asset = SquidAsset(ddo.metadata, ddo.did)
+            asset = Asset(ddo.metadata, ddo.did)
             listing = Listing(self, listing_id, asset, ddo)
 
         return listing
@@ -214,15 +254,15 @@ class SquidAgent(AgentBase):
 
         ##avoid calling the default purchase (ocean.assets.order...), which uses callbacks
         ## to consume an asset
-        metadata=listing.asset.metadata
-        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
-        invokable=not(invoke_endpoint == "asset")
-        if invokable==True:
-            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
-            purchase = SquidOperation(self, listing, service_agreement_id)
-        else:
-            service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
-            purchase = Purchase(self, listing, service_agreement_id)
+#        metadata=listing.asset.metadata
+#        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
+#        invokable=not(invoke_endpoint == "asset")
+#        if invokable==True:
+#            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
+#            purchase = SquidOperation(self, listing, service_agreement_id)
+#        else:
+        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
 

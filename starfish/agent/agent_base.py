@@ -24,13 +24,14 @@ class AgentBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def register_asset(self, asset, account):
+    def register_asset(self, asset, listing_data, account):
         """
 
         Register a squid asset with the ocean network.
 
         :param asset: the SquidAsset to register, at the moment only a SquidAsset can be used.
         :type asset: :class:`.SquidAsset` object to register
+        :param dict listing_data: data providing listing information for the asset.
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
 
@@ -39,12 +40,16 @@ class AgentBase(ABC):
 
         For example::
 
-           metadata = json.loads('my_metadata')
            # get your publisher account
            account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
            agent = SquidAgent(ocean)
-           asset = SquidAsset(metadata)
-           listing = agent.register_asset(asset, account)
+           asset = FileAsset(filename='my_file.csv')
+           listing_data = {
+                'name': 'My data',
+                'price': '1000000',
+           }
+
+           listing = agent.register_asset(asset, listing_data, account)
 
            if listing:
                print(f'registered my listing asset for sale with the did {listing.did}')

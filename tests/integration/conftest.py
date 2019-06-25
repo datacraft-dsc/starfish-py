@@ -15,9 +15,8 @@ from starfish.models.surfer_model import SurferModel
 
 from tests.integration.mocks.brizo_mock import BrizoMock
 
-CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'config.ini'
-INVOKE_CONFIG_FILE_PATH = pathlib.Path.cwd() / 'tests' / 'integration' / 'invoke_config.ini'
-
+INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
+CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
 
 @pytest.fixture(scope="module")
 def ocean():
@@ -41,7 +40,6 @@ def brizo_mock():
 def config():
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
     return integrationTestConfig
-
 
 @pytest.fixture(scope="module")
 def surfer_agent(ocean):

@@ -28,11 +28,6 @@ def main():
     # Print the memory asset out
     print('my asset:', asset.data)
 
-    # Print the memory asset metadata out
-    print('my asset metadata:')
-    metadata_json = json.dumps(asset.metadata, sort_keys=True, indent=2)
-    print(metadata_json)
-
     # Create a new memory agent to do the work.
     surfer_url = 'http://52.187.164.74:8080'
     surfer_ddo = SurferAgent.generate_ddo(surfer_url)
