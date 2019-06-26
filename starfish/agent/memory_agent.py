@@ -147,7 +147,7 @@ class MemoryAgent(AgentBase):
 
         purchase_id = secrets.token_hex(64)
         if purchase_id:
-            purchase = Purchase(self, listing, purchase_id)
+            purchase = Purchase(self, listing, purchase_id, account)
             self._memory['purchase'][purchase_id] = (purchase, account.address)
 
         return purchase

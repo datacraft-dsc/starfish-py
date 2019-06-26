@@ -48,16 +48,16 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    assert(not purchase_asset.is_completed(purchase_account))
+    assert(not purchase_asset.is_completed)
 
-    error_message = purchase_asset.wait_for_completion(purchase_account)
+    error_message = purchase_asset.wait_for_completion()
     assert(error_message == True)
 
-    assert(purchase_asset.is_completed(purchase_account))
+    assert(purchase_asset.is_completed)
 
 
     assert(purchase_asset.is_purchased)
-    assert(purchase_asset.is_purchase_valid(purchase_account))
+    assert(purchase_asset.is_purchase_valid)
 
 
     model = ocean.get_squid_model()

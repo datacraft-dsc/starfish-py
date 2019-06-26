@@ -20,17 +20,15 @@ class Purchase(PurchaseBase):
 
     """
 
-    def __init__(self, agent, listing, purchase_id):
+    def __init__(self, agent, listing, purchase_id, account):
         """init the the Purchase Object Base with the agent instance"""
-        super().__init__(agent,listing,purchase_id)
+        super().__init__(agent, listing, purchase_id, account)
 
-    def is_purchase_valid(self, account):
+    @property
+    def is_purchase_valid(self):
         """
 
         Test to see if this purchased asset can be accessed and is valid.
-
-        :param account: account to used to check to see if this asset is purchased and has access using this account.
-        :type account: :class:`.Account`
 
         :return: boolean value if this asset has been purchased
         :type: boolean
@@ -38,30 +36,22 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             return False
 
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
+        return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, self._account)
 
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
-
-        return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, account)
-
-    def is_completed(self, account):
+    @property
+    def is_completed(self):
         """
 
         Currently the same as `is_purchase_valid`, but renamed to be more meaningfull
             with the `wait_for_completion` method.
 
-        :param account: account that made the purchase
-        :type account: :class: `.Account`
-
         :return: boolean True if the purchase has completed and finished, else
             False if the purchase is invalid or the has not finished.
 
         """
-        return self.is_purchase_valid(account)
+        return self.is_purchase_valid
 
-    def wait_for_completion(self, account, timeout_seconds=60):
+    def wait_for_completion(self, timeout_seconds=60):
         """
 
         Some purchases ( squid ), require to wait for the smart contracts to complete
@@ -77,10 +67,10 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             raise StarfishPurchaseError('You need to purchase this asset before waiting')
 
-        return self._agent.purchase_wait_for_completion(self._purchase_id, self._listing.asset, account, timeout_seconds)
+        return self._agent.purchase_wait_for_completion(self._purchase_id, self._listing.asset, self._account, timeout_seconds)
 
 
-    def consume(self, account, download_path):
+    def consume(self, download_path):
         """
 
         Consume a purchased asset. This call will try to download the asset data.
@@ -88,8 +78,6 @@ class Purchase(PurchaseBase):
         You can call the :func:`is_purchased` property before hand to check that you
         have already purchased this asset.
 
-        :param account: account to used to consume this asset.
-        :type account: :class:`.Account`
         :param str download_path: Path to download the asset files too.
 
         :return: data returned from the asset , or False
@@ -99,13 +87,7 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             return False
 
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
-
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
-
-        return self._agent.consume_asset(self._listing, self._purchase_id, account, download_path)
+        return self._agent.consume_asset(self._listing, self._purchase_id, self._account, download_path)
 
     @property
     def get_type(self):
@@ -117,4 +99,4 @@ class Purchase(PurchaseBase):
         :return: True if this asset is a purchased asset.
         :type: boolean
         """
-        return not self._purchase_id is None
+        return not (self._purchase_id is None or self._account is None)

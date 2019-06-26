@@ -96,12 +96,12 @@ def test_asset(ocean, config, resources):
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    assert(not purchase_asset.is_completed(purchase_account))
+    assert(not purchase_asset.is_completed)
 
-    error_message = purchase_asset.wait_for_completion(purchase_account)
+    error_message = purchase_asset.wait_for_completion()
     assert(error_message == True)
 
-    assert(purchase_asset.is_completed(purchase_account))
+    assert(purchase_asset.is_completed)
 
     # assert Web3.toHex(event.args['_agreementId']) == agreement_id
     # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
@@ -109,9 +109,9 @@ def test_asset(ocean, config, resources):
     # This test does not work with the current barge
 
     assert purchase_asset.is_purchased
-    assert purchase_asset.is_purchase_valid(purchase_account)
+    assert purchase_asset.is_purchase_valid
 
-    purchase_asset.consume(purchase_account, config.squid_config['download_path'])
+    purchase_asset.consume(config.squid_config['download_path'])
 
 
 

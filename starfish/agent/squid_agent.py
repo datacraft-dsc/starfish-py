@@ -250,7 +250,7 @@ class SquidAgent(AgentBase):
 #            purchase = SquidOperation(self, listing, service_agreement_id)
 #        else:
         service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
-        purchase = Purchase(self, listing, service_agreement_id)
+        purchase = Purchase(self, listing, service_agreement_id, account)
 
         return purchase
 

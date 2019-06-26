@@ -16,25 +16,15 @@ from starfish.agent import MemoryAgent
 from starfish.asset import MemoryAsset
 
 
-TEST_LISTING_DATA = {
-    'name': 'Test memory asset',
-    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'author': 'Test starfish',
-    'license': 'Closed',
-    'price': '1000000000000',
-    'checksum': '00000000000000000000000000000000',
-}
-
-
-def _register_asset_for_sale(agent, account):
+def _register_asset_for_sale(agent, resources, account):
 
     asset = MemoryAsset(data=secrets.token_hex(256))
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, account=account)
+    listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert listing
     assert listing.asset.did
     return listing
 
-def test_asset(ocean, config):
+def test_asset(ocean, resources, config):
 
     # create an ocean object
 
@@ -45,7 +35,7 @@ def test_asset(ocean, config):
     # test node has the account #0 unlocked
     publisher_account = ocean.get_account(config.publisher_account)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
@@ -63,16 +53,16 @@ def test_asset(ocean, config):
     assert purchase_asset
 
 
-    assert purchase_asset.is_purchased
-    assert(purchase_asset.wait_for_completion(purchase_account))
-    assert(purchase_asset.is_completed(purchase_account))
-    assert purchase_asset.is_purchase_valid(purchase_account)
+    assert(purchase_asset.is_purchased)
+    assert(purchase_asset.wait_for_completion())
+    assert(purchase_asset.is_completed)
+    assert(purchase_asset.is_purchase_valid)
 
-    purchase_asset.consume(purchase_account, '')
+    purchase_asset.consume('')
 
 
 
-def test_search_listing(ocean, config):
+def test_search_listing(ocean, resources, config):
 
     agent = MemoryAgent(ocean)
 
@@ -81,12 +71,12 @@ def test_search_listing(ocean, config):
 
     agent = MemoryAgent(ocean)
 
-    listing = _register_asset_for_sale(agent, publisher_account)
+    listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
     # choose a word from the description field
-    text = TEST_LISTING_DATA['author']
+    text = resources.listing_data['author']
     words = text.split(' ')
     word = words[0]
 
