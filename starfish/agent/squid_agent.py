@@ -146,7 +146,7 @@ class SquidAgent(AgentBase):
             raise TypeError('This agent only supports a FileAsset or RemoteAsset')
 
         model = self.squid_model
-        metadata = self._convert_listing_asset_to_metadata(asset, listing_data)
+        metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
 
         ddo = model.register_asset(metadata, account._squid_account)
 
@@ -327,13 +327,15 @@ class SquidAgent(AgentBase):
             asset = RemoteAsset(file_list[0], listing.ddo.did)
         return asset
 
-    def _convert_listing_asset_to_metadata(self, asset, listing_data):
+    @staticmethod
+    def _convert_listing_asset_to_metadata(asset, listing_data):
         """
         For squid we need to create a single metadata record from a listing_data and asset/s
         """
         metadata = {
             MetadataBase.KEY: {
                 'name': 'Asset',
+                'type': 'dataset',
                 'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
                 'author': 'Author',
                 'license': 'closed',

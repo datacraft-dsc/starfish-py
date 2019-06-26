@@ -15,12 +15,12 @@ class PurchaseBase(ABC):
         self._account = account
         super().__init__()
 
-    @abstractmethod
+    @property
     def is_purchase_valid(self):
         """
 
         """
-        pass
+        return False
 
     @property
     def agent(self):

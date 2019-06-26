@@ -372,7 +372,8 @@ class SquidModel():
         account_address = Web3Provider.get_web3().personal.newAccount(password)
         return account_address
 
-    def transfer_ether(self, from_account, to_address, amount):
+    @staticmethod
+    def transfer_ether(from_account, to_address, amount):
         tx_hash = Web3Provider.get_web3().personal.sendTransaction( {
             'from': from_account.address,
             'to': to_address,

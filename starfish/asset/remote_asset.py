@@ -4,6 +4,7 @@
 
 from starfish.asset.asset_base import AssetBase
 from mimetypes import MimeTypes
+from urllib.parse import urlparse
 
 
 class RemoteAsset(AssetBase):
@@ -30,13 +31,11 @@ class RemoteAsset(AssetBase):
         AssetBase.__init__(self, 'remote', metadata, did)
         self._url = metadata.get('url', url)
 
-        try:
+        if self._url and urlparse(self._url):
             mime = MimeTypes()
             mime_type = mime.guess_type(self._url)
             if mime_type and mime_type[0]:
                 self._metadata['contentType'] = mime_type[0]
-        except Exception:
-            pass
 
     @property
     def url(self):
