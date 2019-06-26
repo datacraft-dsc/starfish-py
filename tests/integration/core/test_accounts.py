@@ -50,7 +50,7 @@ def test_account_list(ocean, config):
     assert(len(accounts) > 1)
     assert(publisher_account.is_address_equal((list(accounts)[0])))
 
-def test_account_creation_and_transfer(ocean, config):
+def _disable_test_account_creation_and_transfer(ocean, config):
     password = secrets.token_hex(120)
     account = ocean.create_account(password)
     assert(account)
