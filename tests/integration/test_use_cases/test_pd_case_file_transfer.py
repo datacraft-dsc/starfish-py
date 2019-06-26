@@ -56,24 +56,35 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     assert(not purchase.is_completed)
 
+    # wait for completion of purchase
     error_message = purchase.wait_for_completion()
     assert(error_message == True)
 
+    # check to see if purchased
     assert(purchase.is_completed)
 
 
     assert(purchase.is_purchased)
     assert(purchase.is_purchase_valid)
 
+    # get the purchased asset from squid
     purchase_asset = purchase.consume
     assert(purchase_asset)
         
-    print(purchase_asset.url)
+    #get the surfer_did and asset_id from the 'url'
     assert(purchase_asset.url)
     surfer_did, asset_id = surfer_agent.decode_asset_did(purchase_asset.url)
-    download_url = surfer_agent.get_asset_store_url(asset_id)
+    assert(surfer_did)
+    assert(asset_id)
     
-    store_asset = surfer_agent.download_asset(asset_id, download_url)
-    assert(store_asset)
-    assert(store_asset.is_asset_type('data'))
-    assert(store_asset.data == store_data)
+    # get the actual URL of the surfer, and asset storage component
+    download_url = surfer_agent.get_asset_store_url(asset_id)
+    assert(download_url)
+    
+    # download the asset from storage
+    new_asset_store = surfer_agent.download_asset(asset_id, download_url)
+    assert(new_asset_store)
+    assert(new_asset_store.is_asset_type('data'))
+    
+    # final check stored asset data is == to original data put up for sale
+    assert(new_asset_store.data == store_data)
