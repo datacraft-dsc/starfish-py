@@ -267,14 +267,14 @@ class SquidModel():
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             result = json.loads(squid_ocean.secret_store.decrypt(
-                    ddo.asset_id, 
-                    ddo.metadata['base']['encryptedFiles'], 
+                    ddo.asset_id,
+                    ddo.metadata['base']['encryptedFiles'],
                     account
             ))
-            
+
 #        squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
         return result
-        
+
     def is_access_granted_for_asset(self, did, agreement_id, account):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used
@@ -371,7 +371,7 @@ class SquidModel():
         """
         account_address = Web3Provider.get_web3().personal.newAccount(password)
         return account_address
-        
+
     def transfer_ether(self, from_account, to_address, amount):
         tx_hash = Web3Provider.get_web3().personal.sendTransaction( {
             'from': from_account.address,
@@ -379,11 +379,11 @@ class SquidModel():
             'value': amount,
         }, from_account.password)
         return Web3Provider.get_web3().eth.waitForTransactionReceipt(tx_hash)
-        
+
     def transfer_tokens(self, from_account, to_address, amount):
         tokens = OceanTokens(self._keeper.get_instance())
         return tokens.transfer(to_address, amount, from_account)
-    
+
     def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain

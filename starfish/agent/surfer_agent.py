@@ -136,7 +136,7 @@ class SurferAgent(AgentBase):
 
         if not isinstance(listing_data, dict):
             raise ValueError('You must provide a dict as the listing data')
-            
+
         listing = None
 
         register_data = model.register_asset(asset.metadata)
@@ -189,7 +189,7 @@ class SurferAgent(AgentBase):
     def get_asset_store_url(self, asset_id):
         model = self._get_surferModel()
         return model.get_asset_store_url(remove_0x_prefix(asset_id))
-        
+
     def get_listing(self, listing_id):
         """
         Return an listing on the listings id.
@@ -532,7 +532,7 @@ class SurferAgent(AgentBase):
     def decode_asset_did(did):
         data = did_parse(did)
         return data['id'], data['path']
-        
+
     @staticmethod
     def generate_ddo(url, services=None):
         """

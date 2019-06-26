@@ -16,7 +16,7 @@ class PurchaseBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def is_purchase_valid(self, account):
+    def is_purchase_valid(self):
         """
 
         """

@@ -129,7 +129,7 @@ class SurferModel():
         endpoint = self.get_endpoint('storage')
         url = f'{endpoint}/{asset_id}'
         return url
-        
+
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'

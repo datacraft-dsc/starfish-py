@@ -15,7 +15,6 @@ class SquidAsset(AssetBase):
     :type did: None or str
 
     """
-    
+
     def __init__(self, metadata=None, did=None, filename=None):
         AssetBase.__init__(self, 'squid', metadata, did)
-

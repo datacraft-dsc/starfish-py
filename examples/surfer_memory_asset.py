@@ -36,14 +36,14 @@ def main():
         'username': 'test',
         'password':  'foobar',
     }
-    
+
     # create a listing specifying the information about the asset
     listing_data = {
         'name': 'The white paper',
         'author': 'Ocean Protocol',
         'license': 'CC0: Public Domain',
         'price': '0'
-    }    
+    }
     agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
 
     # Register the memory asset.

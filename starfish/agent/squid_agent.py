@@ -358,7 +358,7 @@ class SquidAgent(AgentBase):
         # for asset file we need to set the url
         if asset.is_asset_type('file'):
             metadata['base']['files'][0]['url'] = asset.metadata['filename']
-            
+
         for item in metadata['base']['files']:
             delete_list = []
             for name in item.keys():
