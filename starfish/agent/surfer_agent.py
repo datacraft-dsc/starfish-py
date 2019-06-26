@@ -17,6 +17,7 @@ from starfish.agent import AgentBase
 from starfish.asset import (
     MemoryAsset,
     OperationAsset,
+    FileAsset,
     create_asset_from_metadata,
 )
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
@@ -159,33 +160,35 @@ class SurferAgent(AgentBase):
 
     def upload_asset(self, asset):
 
-        if not isinstance(asset, MemoryAsset):
-            raise TypeError('Only MemoryAssets are supported')
+        if not (isinstance(asset, MemoryAsset) or isinstance(asset, FileAsset)):
+            raise TypeError('Only MemoryAsset or FileAsset are supported')
         if not asset.data:
             raise ValueError('No data to upload')
 
         model = self._get_surferModel()
-        return model.upload_asset_data(remove_0x_prefix(asset.asset_id), asset.data)
+        url = self.get_asset_store_url(asset.asset_id)
+        return model.upload_asset_data(url, asset.asset_id, asset.data)
 
 
-    def download_asset(self, asset_id):
+    def download_asset(self, asset_id, url):
         """
         Download an asset
 
-        :param str asset_id: Id of the Asset.
+        :param str url: url of the asset_id.
 
         :return: an Asset
-        :type: :class:`.Asset` class
+        :type: :class:`.MemoryAsset` class
 
         """
         model = self._get_surferModel()
-        asset = model.download_asset(asset_id)
-        # FIXME promote to MemoryAsset as in get_listing
+        data = model.download_asset(url)
+        store_asset = self.get_asset(asset_id)
+        asset = MemoryAsset(store_asset.metadata, store_asset.did, data=data)
         return asset
 
-    def get_download_url(self, asset_id):
+    def get_asset_store_url(self, asset_id):
         model = self._get_surferModel()
-        return model.get_download_url(asset_id)
+        return model.get_asset_store_url(remove_0x_prefix(asset_id))
         
     def get_listing(self, listing_id):
         """
@@ -391,7 +394,7 @@ class SurferAgent(AgentBase):
         """
         pass
 
-    def consume_asset(self, listing, purchase_id, account, download_path ):
+    def consume_asset(self, listing, purchase_id, account):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -525,6 +528,11 @@ class SurferAgent(AgentBase):
         data = did_parse(did)
         return data['path'] and data['id_hex']
 
+    @staticmethod
+    def decode_asset_did(did):
+        data = did_parse(did)
+        return data['id'], data['path']
+        
     @staticmethod
     def generate_ddo(url, services=None):
         """

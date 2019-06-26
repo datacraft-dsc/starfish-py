@@ -70,7 +70,8 @@ class Purchase(PurchaseBase):
         return self._agent.purchase_wait_for_completion(self._purchase_id, self._listing.asset, self._account, timeout_seconds)
 
 
-    def consume(self, download_path):
+    @property
+    def consume(self):
         """
 
         Consume a purchased asset. This call will try to download the asset data.
@@ -87,7 +88,7 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             return False
 
-        return self._agent.consume_asset(self._listing, self._purchase_id, self._account, download_path)
+        return self._agent.consume_asset(self._listing, self._purchase_id, self._account)
 
     @property
     def get_type(self):

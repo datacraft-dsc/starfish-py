@@ -16,15 +16,21 @@ from starfish.asset import (
     FileAsset,
     RemoteAsset,
 )
-
 from tests.integration.libs.helpers import setup_squid_purchase
 
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
     
+    # take copy of the stored data to compare later
+    with open(resources.asset_file, 'rb') as fp:
+        store_data = fp.read()
+        
     # save the asset file to surfer
     asset_store = FileAsset(filename=resources.asset_file)
     listing_store = surfer_agent.register_asset(asset_store, resources.listing_data)
     assert(listing_store)
+    
+    # now upload to the storage
+    surfer_agent.upload_asset(asset_store)
     
     # now register the asset link to surfer in squid
     publisher_account = ocean.get_account(config.publisher_account)
@@ -45,33 +51,29 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     setup_squid_purchase(ocean, listing, publisher_account)
 
     # purchase the linked remote asset
-    purchase_asset = listing.purchase(purchase_account)
-    assert purchase_asset
+    purchase = listing.purchase(purchase_account)
+    assert(purchase)
 
-    assert(not purchase_asset.is_completed)
+    assert(not purchase.is_completed)
 
-    error_message = purchase_asset.wait_for_completion()
+    error_message = purchase.wait_for_completion()
     assert(error_message == True)
 
-    assert(purchase_asset.is_completed)
+    assert(purchase.is_completed)
 
 
-    assert(purchase_asset.is_purchased)
-    assert(purchase_asset.is_purchase_valid)
+    assert(purchase.is_purchased)
+    assert(purchase.is_purchase_valid)
 
-
-    model = ocean.get_squid_model()
-    squid_ocean = model.get_squid_ocean(purchase_account)
-    ddo = squid_ocean.assets.resolve(listing.asset.did)
-    files_str = squid_ocean.secret_store.decrypt(
-            ddo.asset_id, 
-            ddo.encrypted_files, 
-            purchase_account._squid_account
-    )
-    print(files_str)
+    purchase_asset = purchase.consume
+    assert(purchase_asset)
+        
+    print(purchase_asset.url)
+    assert(purchase_asset.url)
+    surfer_did, asset_id = surfer_agent.decode_asset_did(purchase_asset.url)
+    download_url = surfer_agent.get_asset_store_url(asset_id)
     
-    
-    logging.debug("asset_download for listingid: " + listing_store.listing_id + " = asset_id: " +  asset_store.asset_id)
-    asset2 = surfer_agent.download_asset(asset_store.asset_id)
-    logging.debug("download_asset response: " + str(asset2))
-    # assert(asset2)
+    store_asset = surfer_agent.download_asset(asset_id, download_url)
+    assert(store_asset)
+    assert(store_asset.is_asset_type('data'))
+    assert(store_asset.data == store_data)

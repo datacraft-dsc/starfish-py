@@ -14,7 +14,6 @@ from starfish.exceptions import StarfishPurchaseError
 from tests.unit.mocks.mock_squid_model import MockSquidModel
 
 
-TEST_DOWNLOAD_PATH = tempfile.gettempdir()
 VALID_DID = 'did:op:' + secrets.token_hex(64)
 INVALID_DID = 'did:ox:' + secrets.token_hex(128)
 TEST_INIT_PARMS = {
@@ -111,7 +110,7 @@ def test_purchase_wait_for_completion(ocean, resources, config):
 
 def test_consume_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.consume_asset(listing, purchase.purchase_id, account, TEST_DOWNLOAD_PATH))
+    assert(agent.consume_asset(listing, purchase.purchase_id, account))
 
 def test_is_did_valid():
     assert(SquidAgent.is_did_valid(VALID_DID))

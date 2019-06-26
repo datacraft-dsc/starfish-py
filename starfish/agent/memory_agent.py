@@ -186,7 +186,7 @@ class MemoryAgent(AgentBase):
 
         return False
 
-    def consume_asset(self, listing, purchase_id, account, download_path):
+    def consume_asset(self, listing, purchase_id, account):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -196,7 +196,6 @@ class MemoryAgent(AgentBase):
         :param str purchase_id: purchase id that was used to purchase the asset.
         :param account: Ocean account that was used to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
-        :param str download_path: path to store the asset data.
 
         :return: True if the asset has been consumed and downloaded
         :type: boolean

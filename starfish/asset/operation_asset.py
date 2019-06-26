@@ -24,7 +24,7 @@ class OperationAsset(AssetBase):
                 'type': 'operation',
                 'author': 'operation asset'
             }
-        AssetBase.__init__(self, metadata, did)
+        AssetBase.__init__(self, 'operation', metadata, did)
 
         if not self.is_asset_type('operation'):
             raise ValueError('The metadata type is not a valid type for this asset')

@@ -111,7 +111,8 @@ def test_asset(ocean, config, resources):
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid
 
-    purchase_asset.consume(config.squid_config['download_path'])
+    remote_asset = purchase_asset.consume
+    assert(remote_asset)
 
 
 

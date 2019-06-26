@@ -58,7 +58,7 @@ def test_asset(ocean, resources, config):
     assert(purchase_asset.is_completed)
     assert(purchase_asset.is_purchase_valid)
 
-    purchase_asset.consume('')
+    assert(purchase_asset.consume)
 
 
 

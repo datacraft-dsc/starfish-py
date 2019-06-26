@@ -256,16 +256,24 @@ class SquidModel():
         return service_agreement_id
 
 
-    def consume_asset(self, ddo, service_agreement_id, account, download_path):
+    def consume_asset(self, ddo, service_agreement_id, account):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
+        result = None
         squid_ocean = self.get_squid_ocean(account)
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
-
+            result = json.loads(squid_ocean.secret_store.decrypt(
+                    ddo.asset_id, 
+                    ddo.metadata['base']['encryptedFiles'], 
+                    account
+            ))
+            
+#        squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
+        return result
+        
     def is_access_granted_for_asset(self, did, agreement_id, account):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used

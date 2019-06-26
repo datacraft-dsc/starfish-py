@@ -23,7 +23,7 @@ from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.ddo.metadata import (
-    MetadataBase, 
+    MetadataBase,
     AdditionalInfoMeta,
 )
 
@@ -147,7 +147,7 @@ class SquidAgent(AgentBase):
 
         model = self.squid_model
         metadata = self._convert_listing_asset_to_metadata(asset, listing_data)
-        
+
         ddo = model.register_asset(metadata, account._squid_account)
 
         listing = None
@@ -304,7 +304,7 @@ class SquidAgent(AgentBase):
         return True
 
 
-    def consume_asset(self, listing, purchase_id, account, download_path ):
+    def consume_asset(self, listing, purchase_id, account):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -316,18 +316,22 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account` object to use for registration.
         :param str download_path: path to store the asset data.
 
-        :return: True if the asset has been consumed and downloaded
-        :type: boolean
+        :return: RemoteAsset object if you have purchased this asset
+        :type: :class:`.RemoteAsset`
 
         """
+        asset = None
         model = self.squid_model
-        return model.consume_asset(listing.ddo, purchase_id, account._squid_account, download_path)
+        file_list = model.consume_asset(listing.ddo, purchase_id, account._squid_account)
+        if file_list:
+            asset = RemoteAsset(file_list[0], listing.ddo.did)
+        return asset
 
     def _convert_listing_asset_to_metadata(self, asset, listing_data):
         """
         For squid we need to create a single metadata record from a listing_data and asset/s
         """
-        metadata = { 
+        metadata = {
             MetadataBase.KEY: {
                 'name': 'Asset',
                 'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
@@ -343,14 +347,18 @@ class SquidAgent(AgentBase):
                 metadata[MetadataBase.KEY][name] = value
             else:
                 metadata[AdditionalInfoMeta.KEY][name] = value
-                            
+
         # make sure we are sending a price value as string for squid
         metadata[MetadataBase.KEY]['price'] = str(metadata[MetadataBase.KEY]['price'])
-            
+
 
         # validate and setup the files ( aka asset )
         metadata['base']['files'] = [asset.metadata]
         metadata['base']['files'][0]['index'] = 0
+        # for asset file we need to set the url
+        if asset.is_asset_type('file'):
+            metadata['base']['files'][0]['url'] = asset.metadata['filename']
+            
         for item in metadata['base']['files']:
             delete_list = []
             for name in item.keys():
@@ -360,8 +368,8 @@ class SquidAgent(AgentBase):
                 metadata[AdditionalInfoMeta.KEY][f'file_{name}'] = item[name]
                 del item[name]
         return metadata
-        
-        
+
+
     @staticmethod
     def invoke_operation(listing, purchase_id, account, payload):
         """

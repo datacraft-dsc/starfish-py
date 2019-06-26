@@ -131,7 +131,7 @@ class MockSquidModel():
             return True
         raise SquidModelPurchaseError('test squid model purchase wait error')
 
-    def consume_asset(self, ddo, service_agreement_id, account, download_path):
+    def consume_asset(self, ddo, service_agreement_id, account):
         service = ddo.get_service(TEST_SERVICE_NAME)
         assert(service)
         service_dict = service.as_dictionary()
@@ -140,7 +140,7 @@ class MockSquidModel():
         did = self._purchase_assets[service_agreement_id]
         if not did in self._metadata:
             return False
-        return self._metadata[did]
+        return self._metadata[did]['base']['files']
 
 
     def is_access_granted_for_asset(self, did, service_agreement_id, account):

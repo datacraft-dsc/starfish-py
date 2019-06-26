@@ -27,17 +27,17 @@ class FileAsset(AssetBase):
                 'author': 'File Asset',
                 'contentType': 'application/octet-stream',
             }
-        AssetBase.__init__(self, metadata, did)
-        self._filename = filename
-        if not os.path.exists(filename):
-            raise NotFoundErr(f'File {filename} not found')
-
-        mime = MimeTypes()
-        mime_type = mime.guess_type(f'file://{self._filename}')
-        if mime_type:
-            self._metadata['contentType'] = mime_type[0]
-        self._metadata['contentLength'] = os.path.getsize(self._filename)
-        self._metadata['url'] = os.path.basename(self._filename)
+        AssetBase.__init__(self, 'file', metadata, did)
+        if filename:
+            self._filename = filename
+            if not os.path.exists(filename):
+                raise NotFoundErr(f'File {filename} not found')
+            mime = MimeTypes()
+            mime_type = mime.guess_type(f'file://{self._filename}')
+            if mime_type:
+                self._metadata['contentType'] = mime_type[0]
+            self._metadata['contentLength'] = os.path.getsize(self._filename)
+            self._metadata['filename'] = os.path.basename(self._filename)
 
     @property
     def filename(self):
@@ -49,3 +49,10 @@ class FileAsset(AssetBase):
         :type: str or byte
         """
         return self._filename
+
+    @property
+    def data(self):
+        if os.path.exists(self._filename):
+            with open(self._filename, 'r') as fp:
+                return fp.read()
+
