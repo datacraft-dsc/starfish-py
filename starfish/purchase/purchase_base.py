@@ -16,13 +16,6 @@ class PurchaseBase(ABC):
         super().__init__()
 
     @property
-    def is_purchase_valid(self):
-        """
-
-        """
-        return False
-
-    @property
     def agent(self):
         """
         :return: Agent object
@@ -59,6 +52,15 @@ class PurchaseBase(ABC):
     def is_purchased(self):
         """
         :return: True if this asset is a purchased asset.
+        :type: boolean
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def is_purchase_valid(self):
+        """
+        :return: True if this asset is a valid purchase.
         :type: boolean
         """
         pass
