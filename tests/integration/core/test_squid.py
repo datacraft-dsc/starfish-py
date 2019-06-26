@@ -26,19 +26,10 @@ from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-
-TEST_LISTING_DATA = {
-    'name': 'Test file asset',
-    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'author': 'Test starfish',
-    'license': 'Closed',
-    'price': '1000000000000'
-}
-
 def _register_asset_for_sale(agent, resources, account):
     
     asset = FileAsset(filename=resources.asset_file)
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, account=account)
+    listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert listing
     assert listing.asset.did
     return listing
@@ -51,7 +42,7 @@ def test_asset_file_register(ocean, config, resources):
     assert agent
     
     asset = FileAsset(filename=resources.asset_file)
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
     
 
@@ -63,9 +54,9 @@ def test_asset_remote_register(ocean, config, resources):
     
     asset = RemoteAsset(url=resources.asset_remote)
 
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
-    print(listing.data.as_text())
+    print(listing.ddo.as_text())
     
     
 def test_asset(ocean, config, resources):
@@ -138,7 +129,7 @@ def test_search_listing(ocean, config, resources):
     assert publisher_account
 
     # choose a word from the description field
-    text = TEST_LISTING_DATA['author']
+    text = resources.listing_data['author']
     words = text.split(' ')
     word = words[0]
 

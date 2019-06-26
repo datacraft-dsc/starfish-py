@@ -20,9 +20,12 @@ from starfish.asset import (
 from starfish.purchase import Purchase
 from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
-# from starfish.operation.squid_operation import SquidOperation
 from starfish.utils.did import did_parse
 from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.ddo.metadata import (
+    MetadataBase, 
+    AdditionalInfoMeta,
+)
 
 logger = logging.getLogger('ocean')
 
@@ -143,30 +146,14 @@ class SquidAgent(AgentBase):
             raise TypeError('This agent only supports a FileAsset or RemoteAsset')
 
         model = self.squid_model
-
-
-        if not 'dateCreated' in listing_data:
-            listing_data['dateCreated'] = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
-
-        metadata = {
-            'base': listing_data,
-        }
-        metadata['base']['files'] = [asset.metadata]
-        metadata['base']['files'][0]['index'] = 0
-        for item in metadata['base']['files']:
-            delete_list = []
-            for name in item.keys():
-                if not name in ALLOWED_FILE_META_ITEMS:
-                    delete_list.append(name)
-            for name in delete_list:
-                del item[name]
-
+        metadata = self._convert_listing_asset_to_metadata(asset, listing_data)
+        
         ddo = model.register_asset(metadata, account._squid_account)
 
         listing = None
         if ddo:
             asset.set_did(ddo.did)
-            listing = Listing(self, ddo.did, asset, ddo)
+            listing = Listing(self, ddo.did, asset, listing_data, ddo)
 
         return listing
 
@@ -209,7 +196,8 @@ class SquidAgent(AgentBase):
 
         if ddo:
             asset = Asset(ddo.metadata, ddo.did)
-            listing = Listing(self, listing_id, asset, ddo)
+            listing_data = ddo.metadata.get('base', None)
+            listing = Listing(self, listing_id, asset, listing_data, ddo)
 
         return listing
 
@@ -261,7 +249,7 @@ class SquidAgent(AgentBase):
 #            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
 #            purchase = SquidOperation(self, listing, service_agreement_id)
 #        else:
-        service_agreement_id = model.purchase_asset(listing.data, account._squid_account)
+        service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
         purchase = Purchase(self, listing, service_agreement_id)
 
         return purchase
@@ -333,8 +321,47 @@ class SquidAgent(AgentBase):
 
         """
         model = self.squid_model
-        return model.consume_asset(listing.data, purchase_id, account._squid_account, download_path)
+        return model.consume_asset(listing.ddo, purchase_id, account._squid_account, download_path)
 
+    def _convert_listing_asset_to_metadata(self, asset, listing_data):
+        """
+        For squid we need to create a single metadata record from a listing_data and asset/s
+        """
+        metadata = { 
+            MetadataBase.KEY: {
+                'name': 'Asset',
+                'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+                'author': 'Author',
+                'license': 'closed',
+                'price': '0',
+                'files': {}
+            },
+            AdditionalInfoMeta.KEY: {}
+        }
+        for name, value in listing_data.items():
+            if name in MetadataBase.REQUIRED_VALUES_KEYS:
+                metadata[MetadataBase.KEY][name] = value
+            else:
+                metadata[AdditionalInfoMeta.KEY][name] = value
+                            
+        # make sure we are sending a price value as string for squid
+        metadata[MetadataBase.KEY]['price'] = str(metadata[MetadataBase.KEY]['price'])
+            
+
+        # validate and setup the files ( aka asset )
+        metadata['base']['files'] = [asset.metadata]
+        metadata['base']['files'][0]['index'] = 0
+        for item in metadata['base']['files']:
+            delete_list = []
+            for name in item.keys():
+                if not name in ALLOWED_FILE_META_ITEMS:
+                    delete_list.append(name)
+            for name in delete_list:
+                metadata[AdditionalInfoMeta.KEY][f'file_{name}'] = item[name]
+                del item[name]
+        return metadata
+        
+        
     @staticmethod
     def invoke_operation(listing, purchase_id, account, payload):
         """

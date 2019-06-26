@@ -24,24 +24,13 @@ TEST_INIT_PARMS = {
     'storage_path': 'test_squid_path',
 }
 
-
-TEST_LISTING_DATA = {
-    'name': 'Test file asset',
-    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'author': 'Test starfish',
-    'license': 'Closed',
-    'price': '1000000000000',
-    'checksum': '00000000000000000000000000000000',
-}
-
-
 def _register_asset(ocean, resources, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
     asset = RemoteAsset(url=resources.asset_remote)
     assert(asset)
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, account)
+    listing = agent.register_asset(asset, resources.listing_data, account)
     return (listing, agent, asset)
 
 def _purchase_asset(ocean, resources, config):
@@ -92,7 +81,7 @@ def test_get_listing(ocean, resources, config):
 
 def test_search_listings(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    listing_ids = agent.search_listings(TEST_LISTING_DATA['author'])
+    listing_ids = agent.search_listings(resources.listing_data['author'])
     assert(listing_ids)
     assert(len(listing_ids) > 0)
     is_found = False

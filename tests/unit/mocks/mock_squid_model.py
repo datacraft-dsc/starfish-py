@@ -103,6 +103,9 @@ class MockSquidModel():
 
         mockKeeper = MockKeeper()
 
+        if not 'checksum' in metadata['base']:
+            metadata['base']['checksum'] = did
+            
         ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
         # if self.register_ddo(did, ddo, account._squid_account):
         self._ddo_list[did] = ddo

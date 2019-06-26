@@ -19,25 +19,18 @@ from starfish.asset import (
 
 from tests.integration.libs.helpers import setup_squid_purchase
 
-TEST_LISTING_DATA = {
-    'name': 'Test file asset',
-    'author': 'Test starfish',
-    'license': 'Closed',
-    'price': '1000000000000'
-}
-
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
     
     # save the asset file to surfer
     asset_store = FileAsset(filename=resources.asset_file)
-    listing_store = surfer_agent.register_asset(asset_store)
+    listing_store = surfer_agent.register_asset(asset_store, resources.listing_data)
     assert(listing_store)
     
     # now register the asset link to surfer in squid
     publisher_account = ocean.get_account(config.publisher_account)
     download_link = asset_store.did
     asset_sale = RemoteAsset(url=download_link)
-    listing = squid_agent.register_asset(asset_sale, TEST_LISTING_DATA, account=publisher_account)
+    listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)
 
 

@@ -15,15 +15,15 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 
-def test_08_asset_registration(surfer_agent, metadata):
+def test_08_asset_registration(resources, surfer_agent):
     test_data = secrets.token_hex(1024)
-    asset1 = MemoryAsset(metadata=metadata, data=test_data)
-    listing1 = surfer_agent.register_asset(asset1)
+    asset1 = MemoryAsset(data=test_data)
+    listing1 = surfer_agent.register_asset(asset1, resources.listing_data)
     assert(listing1)
     assert(listing1.asset)
 
-    asset2 = MemoryAsset(metadata=metadata, data=test_data)
-    listing2 = surfer_agent.register_asset(asset2)
+    asset2 = MemoryAsset(data=test_data)
+    listing2 = surfer_agent.register_asset(asset2, resources.listing_data)
     assert(listing2)
     assert(listing2.asset)
 

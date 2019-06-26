@@ -103,13 +103,14 @@ class SurferAgent(AgentBase):
                 options.get('password', '')
             )
 
-    def register_asset(self, asset, listing_data=None, account=None ):
+    def register_asset(self, asset, listing_data, account=None ):
         """
 
         Register an asset with the ocean network (surfer)
 
+        :param asset: asset object to register
         :type asset: :class:`.Asset` object to register
-        :param listing_data: Not used at the moment
+        :param dict listing_data:  Listing inforamiton to give for this asset
         :param account: This is not used for this agent, so for compatibility it is left in
         :type account: :class:`.Account` object to use for registration.
 
@@ -118,10 +119,10 @@ class SurferAgent(AgentBase):
 
         For example::
 
-            metadata = json.loads('my_metadata')
-            asset = MemoryAsset(metadata)
+            asset = MemoryAsset(data='Some test data')
+            listing_data = { 'price': 10000, 'description': 'my data is for sale' }
             agent = SurferAgent(ocean)
-            listing = agent.register_asset(asset, account)
+            listing = agent.register_asset(asset,listing_data, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
@@ -132,6 +133,9 @@ class SurferAgent(AgentBase):
         if self._did is None:
             raise ValueError('The agent must have a valid did')
 
+        if not isinstance(listing_data, dict):
+            raise ValueError('You must provide a dict as the listing data')
+            
         listing = None
 
         register_data = model.register_asset(asset.metadata)
@@ -139,7 +143,7 @@ class SurferAgent(AgentBase):
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            data = model.create_listing(asset_id)
+            data = model.create_listing(asset_id, listing_data)
             listing = Listing(self, data['id'], asset, data)
         return listing
 

@@ -36,6 +36,14 @@ def main():
         'username': 'test',
         'password':  'foobar',
     }
+    
+    # create a listing specifying the information about the asset
+    listing_data = {
+        'name': 'The white paper',
+        'author': 'Ocean Protocol',
+        'license': 'CC0: Public Domain',
+        'price': '0'
+    }    
     agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
 
     # Register the memory asset.
@@ -43,7 +51,7 @@ def main():
     # public class RemoteAgent extends AAgent implements Invokable {
     #    public RemoteAsset registerAsset(Asset a) {
     # Whereas in python we return a listing
-    ra = agent.register_asset(asset)
+    ra = agent.register_asset(asset, listing_data)
 
     # Print out the remote asset
     print('surfer remote asset', ra)

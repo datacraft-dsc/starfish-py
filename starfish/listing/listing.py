@@ -16,6 +16,7 @@ class Listing(ListingBase):
         :param asset: the core asset for this listing
         :type asset: :class:`.Asset` object
         :param data: data of the listing
+        :param ddo: Optional ddo for the listing
         :type data: dict
     """
 
