@@ -3,7 +3,6 @@
     Basic Purchase class
 """
 
-from starfish.account import Account
 from starfish.purchase.purchase_base import PurchaseBase
 
 class Purchase(PurchaseBase):
@@ -23,20 +22,6 @@ class Purchase(PurchaseBase):
     def __init__(self, agent, listing, purchase_id, account):
         """init the the Purchase Object Base with the agent instance"""
         super().__init__(agent, listing, purchase_id, account)
-
-    @property
-    def is_purchase_valid(self):
-        """
-
-        Test to see if this purchased asset can be accessed and is valid.
-
-        :return: boolean value if this asset has been purchased
-        :type: boolean
-        """
-        if not self.is_purchased:
-            return False
-
-        return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, self._account)
 
     @property
     def is_completed(self):
@@ -101,3 +86,17 @@ class Purchase(PurchaseBase):
         :type: boolean
         """
         return not (self._purchase_id is None or self._account is None)
+
+    @property
+    def is_purchase_valid(self):
+        """
+
+        Test to see if this purchased asset can be accessed and is valid.
+
+        :return: boolean value if this asset has been purchased
+        :type: boolean
+        """
+        if not self.is_purchased:
+            return False
+
+        return self._agent.is_access_granted_for_asset(self._listing.asset, self._purchase_id, self._account)

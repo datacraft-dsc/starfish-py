@@ -361,6 +361,7 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean()
         return squid_ocean.accounts.balance(account)
 
+    @staticmethod
     def create_account(self, password):
         """
 

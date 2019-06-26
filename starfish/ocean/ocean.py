@@ -4,7 +4,6 @@ Ocean class to access the Ocean eco system.
 
 """
 import logging
-import secrets
 from starfish.utils.artifacts import (
     find_contract_path,
     is_contract_type_exists,
