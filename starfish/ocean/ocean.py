@@ -236,9 +236,6 @@ class Ocean():
             address = model.create_account(password)
             if address:
                 account = Account(self, address, password)
-        else:
-            address = secrets.token_hex(20)
-            account = Account(self, address, password)
         return account
 
     @property

@@ -24,6 +24,7 @@ from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
 from squid_py.keeper.contract_handler import ContractHandler
+from squid_py.ocean.ocean_tokens import OceanTokens
 
 from squid_py.ddo.metadata import Metadata
 
@@ -368,20 +369,21 @@ class SquidModel():
         :type: object or None
 
         """
-#        squid_ocean = self.get_squid_ocean()
-
-        local_account = Web3Provider.get_web3().eth.account.create(password)
-        # need to reload squid again so that it sees the new account
-        # TODO: does not work at the moment, new account does not get
-        # shown in squid
-
-        logger.info(f'new account address {local_account.address}')
-        account_list = Web3Provider.get_web3().eth.accounts
-        logger.info(f'current account list {account_list}')
-        account = self.get_account(local_account.address, password)
-        logger.info(f'found account {account}')
-        return local_account.address
-
+        account_address = Web3Provider.get_web3().personal.newAccount(password)
+        return account_address
+        
+    def transfer_ether(self, from_account, to_address, amount):
+        tx_hash = Web3Provider.get_web3().personal.sendTransaction( {
+            'from': from_account.address,
+            'to': to_address,
+            'value': amount,
+        }, from_account.password)
+        return Web3Provider.get_web3().eth.waitForTransactionReceipt(tx_hash)
+        
+    def transfer_tokens(self, from_account, to_address, amount):
+        tokens = OceanTokens(self._keeper.get_instance())
+        return tokens.transfer(to_address, amount, from_account)
+    
     def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
