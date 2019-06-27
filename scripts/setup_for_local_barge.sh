@@ -9,7 +9,7 @@ until [ $RETRY -gt 5 ]; do
     sleep 240
     echo "Waiting for keeper contracts to be build"
     ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-    SURFER_FAIL=`grep 'ocean_surfer.*exited' barge/barge.log`
+    SURFER_FAIL=`egrep '_surfer.*exited' barge/barge.log`
     echo $SURFER_FAIL
     if [ -z "$SURFER_FAIL" ]; then
         RETRY=10
@@ -20,5 +20,6 @@ until [ $RETRY -gt 5 ]; do
         docker kill $(docker ps -a -q)
         ((RETRY++))
     fi
+    cat barge/barge.log
 done
-./scripts/wait_for_surfer.sh http://localhost:8080
+# ./scripts/wait_for_surfer.sh http://localhost:8080
