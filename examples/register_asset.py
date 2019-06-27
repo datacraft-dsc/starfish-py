@@ -40,7 +40,7 @@ NILE_CONFIG = {
 
 }
 
-CONFIG = LOCAL_CONFIG
+CONFIG = NILE_CONFIG
 
 
 """
@@ -52,9 +52,9 @@ MY_ACCOUNT_PASSWORD = 'test_account_password'
 
 def main():
     """ Create a new Ocean instance. logging information. """
-    
+
     ocean = Ocean(keeper_url=CONFIG['keeper_url'])
-    
+
     """
     If you wish to see what's happening behind the scenes, you can pass
     'log_level=logging.DEBUG' parameter to get full debug instead.
