@@ -6,4 +6,4 @@ git checkout dex-2019-06-17
 cd ..
 sleep 240
 ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-./scripts/wait_for_surfer.sh http://locahost:8080
+./scripts/wait_for_surfer.sh http://localhost:8080
