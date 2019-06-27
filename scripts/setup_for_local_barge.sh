@@ -20,6 +20,8 @@ until [ $DOCKER_RETRY -gt 10 ]; do
         echo "Stopping all docker containers"
         docker kill $(docker ps -a -q)
         sudo systemctl restart docker
+        echo "running docker containers"
+        docker container ls
         ((DOCKER_RETRY++))
         BARGE_DELAY=60
     fi
