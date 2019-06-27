@@ -8,7 +8,7 @@ until [ $RETRY -gt 5 ]; do
     cd ..
     sleep 120
     SURFER_FAIL=`grep 'ocean_surfer.*exited' barge/barge.log`
-    if [ ! -z SURFER_FAIL ]; then
+    if [ ! -z $SURFER_FAIL ]; then
         echo "surfer failed to startup"
         echo "Stoping all docker containers"
         docker kill $(docker ps -a -q)
