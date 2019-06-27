@@ -13,7 +13,6 @@ before_install:
 # - scripts/setup_for_remote_barge.sh $BARGE_URL
 - export BARGE_URL=http://localhost
 - scripts/setup_for_local_barge.sh
-- scripts/wait_for_surfer.sh ${BARGE_URL}:8080
 
 install: pip install -U tox-travis
 script: tox
