@@ -12,7 +12,6 @@ until [ $RETRY -gt 5 ]; do
     echo "Waiting for keeper contracts to be build"
     ./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
     SURFER_FAIL=`egrep 'ocean_surfer.*exited' barge/barge.log`
-    echo $SURFER_FAIL
     if [ -z "$SURFER_FAIL" ]; then
         RETRY=10
         echo "surfer is running"
@@ -27,4 +26,3 @@ until [ $RETRY -gt 5 ]; do
     cat barge/barge.log
     echo "------------------------ End Barge Log -------------------------"
 done
-# ./scripts/wait_for_surfer.sh http://localhost:8080
