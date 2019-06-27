@@ -3,7 +3,7 @@ python:
 - '3.6'
 - '3.7'
 dist: xenial
-sudo: false
+sudo: true
 addons:
   ssh_known_hosts: shrimp.octet.services
 services:
