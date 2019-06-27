@@ -38,8 +38,8 @@ class IntegrationTestConfig():
         for item in items:
             self.squid_config[item[0]] = item[1]
 
-        self.surfer_username=config.get('surfer', 'username')
-        self.surfer_password=config.get('surfer', 'password')
-        self.surfer_url=config.get('surfer', 'surfer_url')
+        self.surfer_username=config.get('surfer agent', 'username')
+        self.surfer_password=config.get('surfer agent', 'password')
+        self.surfer_url=config.get('surfer agent', 'surfer_url')
 
-        self.koi_url=config.get('invoke', 'koi_url')
+        self.koi_url=config.get('invoke agent', 'koi_url')
