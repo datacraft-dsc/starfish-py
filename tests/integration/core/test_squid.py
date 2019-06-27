@@ -111,7 +111,7 @@ def test_asset(ocean, config, resources):
     assert purchase_asset.is_purchased
     assert purchase_asset.is_purchase_valid
 
-    remote_asset = purchase_asset.consume
+    remote_asset = purchase_asset.consume_asset
     assert(remote_asset)
 
 

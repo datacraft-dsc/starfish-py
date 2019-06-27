@@ -69,7 +69,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     assert(purchase.is_purchase_valid)
 
     # get the purchased asset from squid
-    purchase_asset = purchase.consume
+    purchase_asset = purchase.consume_asset
     assert(purchase_asset)
 
     #get the surfer_did and asset_id from the 'url'

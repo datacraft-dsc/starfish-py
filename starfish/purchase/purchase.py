@@ -56,7 +56,7 @@ class Purchase(PurchaseBase):
 
 
     @property
-    def consume(self):
+    def consume_asset(self):
         """
 
         Consume a purchased asset. This call will try to download the asset data.
