@@ -124,7 +124,7 @@ class SquidModel():
             ddo_list = squid_ocean.assets.search(text, sort, offset, page)
         elif isinstance(text, dict):
             print(f'using asset query {text}')
-            ddo_list = squid_ocean.assets.query(text, sort, offset, page)
+            ddo_list = squid_ocean.assets.query({'query': text}, sort, offset, page)
         else:
             ddo_list = None
         return ddo_list

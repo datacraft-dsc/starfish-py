@@ -371,7 +371,7 @@ class SquidAgent(AgentBase):
             AdditionalInfoMeta.KEY: {}
         }
         for name, value in listing_data.items():
-            if name in MetadataBase.REQUIRED_VALUES_KEYS:
+            if name in MetadataBase.VALUES_KEYS:
                 metadata[MetadataBase.KEY][name] = value
             else:
                 metadata[AdditionalInfoMeta.KEY][name] = value

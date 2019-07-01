@@ -40,28 +40,18 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
         'license': 'Closed',
         'price': 100,
         'extra_data': json.dumps({
-        'id': unique_pd_case_id,
-        'valid_check': valid_check,
+            'id': unique_pd_case_id,
+            'valid_check': valid_check,
         }),
         'tags': [pd_test_case_tag],
-        'categories': [pd_test_case_tag],
     }
-    print(listing_data)
     asset_sale = RemoteAsset(url=dummy_url)
-    # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
-    # listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
-    # assert(listing)
+    # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, listing_data))
+    listing = squid_agent.register_asset(asset_sale, listing_data, account=publisher_account)
+    assert(listing)
 
-    listing_items = squid_agent.search_listings({
-#         'query': {'tags': [pd_test_case_tag]}
-        'query': {'type': 'dataset'}
-    })
+    listing_items = squid_agent.search_listings({'tags': [pd_test_case_tag]})
 
-    # listing_items = squid_agent.search_listings(pd_test_case_tag)
-
-
+    assert(len(listing_items) >= 1)
     for listing in listing_items:
-        if 'tags' in listing.data and pd_test_case_tag in listing.data['tags'] :
-            print(listing.data.tags)
-        else:
-            print('listing failed')
+        assert('tags' in listing.data and pd_test_case_tag in listing.data['tags'])
