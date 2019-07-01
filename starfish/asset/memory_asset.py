@@ -29,7 +29,7 @@ class MemoryAsset(AssetBase):
                 metadata['contentType'] = 'text/plain; charset=utf-8'
             else:
                 metadata['contentType'] = 'application/octet-stream'
-        AssetBase.__init__(self, metadata, did)
+        AssetBase.__init__(self, 'data', metadata, did)
         self._data = data
 
     @property

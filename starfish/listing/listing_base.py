@@ -15,14 +15,16 @@ class ListingBase(ABC):
         :param asset: the core asset for this listing
         :type asset: :class:`.Asset` object
         :param data: data of the listing
+        :param ddo: Optional DDO object for this listing
         :type data: dict
     """
-    def __init__(self, agent, listing_id, asset, data):
+    def __init__(self, agent, listing_id, asset, data, ddo=None):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
         self._listing_id=listing_id
         self._asset = asset
         self._data = data
+        self._ddo = ddo
         super().__init__()
 
     @abstractmethod
@@ -58,6 +60,15 @@ class ListingBase(ABC):
         :type: dict or None
         """
         return self._data
+
+    @property
+    def ddo(self):
+        """
+
+        :return: ddo of the listing
+        :type: dict or None
+        """
+        return self._ddo
 
     @property
     def listing_id(self):

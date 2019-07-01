@@ -6,14 +6,14 @@ import pathlib
 
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
-from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.brizo.brizo import Brizo
 
 from starfish import Ocean
-from starfish.agent import SurferAgent
-from starfish.models.surfer_model import SurferModel
+from starfish.agent import (
+    SurferAgent,
+    SquidAgent,
+)
 
-from tests.integration.mocks.brizo_mock import BrizoMock
+from starfish.models.surfer_model import SurferModel
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
@@ -29,12 +29,6 @@ def ocean():
     )
 
     return ocean
-
-@pytest.fixture(scope="module")
-def brizo_mock():
-    BrizoProvider.set_brizo_class(BrizoMock)
-    mock = BrizoProvider.get_brizo()
-    return mock
 
 @pytest.fixture(scope="module")
 def config():
@@ -57,3 +51,8 @@ def surfer_agent(ocean):
         'password': integrationTestConfig.surfer_password,
     }
     return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
+
+@pytest.fixture(scope="module")
+def squid_agent(ocean):
+    integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
+    return SquidAgent(ocean, integrationTestConfig.squid_config)

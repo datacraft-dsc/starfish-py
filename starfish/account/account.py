@@ -118,6 +118,58 @@ class Account():
             return model.request_tokens(self._unlock_squid_account, amount)
         return 0
 
+    def transfer_ether(self, to_account, amount_ether):
+        """
+
+        Transfer ether from this account to another account
+
+        :param to_account: To account object or account address
+        :type to_account: str for an account address or :class:'.Account` object
+
+        ;param amount_ether: amount in ether to transfer
+        :return: number of ether transfered
+
+        """
+
+        amount_wei = Web3.toWei(amount_ether, 'ether')
+        to_address = to_account
+        if isinstance(to_account, Account):
+            to_address = to_account.address
+
+        model = self._ocean.get_squid_model()
+        if model:
+            if not self._unlock_squid_account:
+                raise ValueError('You must unlock the account before requesting tokens')
+
+            return model.transfer_ether(self._unlock_squid_account, to_address, amount_wei)
+        return 0
+
+    def transfer_token(self, to_account, amount_token):
+        """
+
+        Transfer ocean tokens from this account to another account
+
+        :param to_account: To account object or account address
+        :type to_account: str for an account address or :class:'.Account` object
+
+        ;param amount_ether: amount in ocean tokens to transfer
+        :return: number of tokens transfered
+
+        """
+
+        amount_vodka = Web3.toWei(amount_token, 'ether')
+        to_address = to_account
+        if isinstance(to_account, Account):
+            to_address = to_account.address
+
+        model = self._ocean.get_squid_model()
+        if model:
+            if not self._unlock_squid_account:
+                raise ValueError('You must unlock the account before requesting tokens')
+
+            return model.transfer_tokens(self._unlock_squid_account, to_address, amount_vodka)
+        return 0
+
     def is_address_equal(self, address):
         """
 

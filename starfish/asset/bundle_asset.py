@@ -25,7 +25,7 @@ class BundleAsset(AssetBase):
                 'name': 'BundleAsset',
                 'description': 'Bundle Asset',
             }
-        AssetBase.__init__(self, metadata, did)
+        AssetBase.__init__(self, 'bundle', metadata, did)
         self._assets = {}
         self._data = data
 

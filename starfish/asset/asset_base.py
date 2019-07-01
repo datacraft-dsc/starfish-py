@@ -16,11 +16,12 @@ class AssetBase(ABC):
     :type did: None or str
 
     """
-    def __init__(self, metadata, did=None):
+    def __init__(self, asset_type, metadata, did=None):
         """
         init an asset class
         """
         self._metadata = metadata
+        self._metadata['type'] = asset_type
         self._did = did
         super().__init__()
 
@@ -73,6 +74,10 @@ class AssetBase(ABC):
     @property
     def data(self):
         return None
+
+    @property
+    def params(self):
+        return params
 
     @property
     def is_bundle(self):

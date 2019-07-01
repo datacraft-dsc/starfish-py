@@ -87,52 +87,48 @@ class SurferModel():
         response = SurferModel._http_client.post(url, json=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
 
-            json = response.json()
-            logger.debug(f'metadata asset response returned {json}')
-            return json
+            data = response.json()
+            logger.debug(f'metadata asset response returned {data}')
+            return data
         else:
             msg = f'metadata asset response failed: {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         return None
 
-    def create_listing(self,asset_id):
+    def create_listing(self, asset_id, listing_data):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings'
-        metadata_text={'assetid':asset_id}
-        response = SurferModel._http_client.post(url, json=metadata_text, headers=self._headers)
+        data = {
+            'assetid': asset_id,
+            'info': listing_data,
+        }
+        response = SurferModel._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            json = response.json()
-            logger.debug('listing response returned: ' + str(json))
-            return json
+            data = response.json()
+            logger.debug('listing response returned: ' + str(data))
+            return data
         else:
-            msg = f'listing response failed: {response.status_code}'
+            msg = f'listing response failed: {response.status_code} {response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
 
-    def download_asset(self, asset_id):
-        endpoint = self.get_endpoint('storage')
-        url = f'{endpoint}/assets/{asset_id}'
+    def download_asset(self, url):
         response = SurferModel._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            # FIXME must check for a non empty response here
-            # https://2.python-requests.org/en/master/user/quickstart/#response-content
-            # else response.json() will fail in
-            # venv/lib/python3.7/site-packages/requests/models.py:897: in json
-            #     return complexjson.loads(self.text, **kwargs)
-            # /usr/lib/python3.7/json/__init__.py:348: in loads
-            #     return _default_decoder.decode(s)
-            # /usr/lib/python3.7/json/decoder.py:337: in decode
-            #     obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-            # data = response.json()
-            data = None
+            data = response.content
             return data
         else:
-            msg = f'GET assets response failed: {response.status_code}'
+            msg = f'GET assets response failed: {response.status_code} {response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
+
+    def get_asset_store_url(self, asset_id):
+        endpoint = self.get_endpoint('storage')
+        url = f'{endpoint}/{asset_id}'
+        return url
 
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
@@ -172,9 +168,7 @@ class SurferModel():
             raise ValueError(msg)
         return None
 
-    def upload_asset_data(self, asset_id, data):
-        endpoint = self.get_endpoint('storage')
-        url = f'{endpoint}/{asset_id}'
+    def upload_asset_data(self, url, asset_id, data):
         logger.debug(f'uploading data to {url}')
         files = { 'file':  ( asset_id, io.BytesIO(data.encode()), 'application/octet-stream') }
         headers = {

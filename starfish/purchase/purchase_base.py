@@ -7,25 +7,19 @@ from abc import ABC, abstractmethod
 
 class PurchaseBase(ABC):
 
-    def __init__(self, agent, listing, purchase_id):
+    def __init__(self, agent, listing, purchase_id, account):
         """init the the Purchase Object Base with the agent instance"""
         self._agent = agent
         self._listing = listing
         self._purchase_id = purchase_id
+        self._account = account
         super().__init__()
-
-    @abstractmethod
-    def is_purchase_valid(self, account):
-        """
-
-        """
-        pass
 
     @property
     def agent(self):
         """
         :return: Agent object
-        :type: :class:`.AgentObject`
+        :type: :class:`.Agent`
         """
         return self._agent
 
@@ -33,7 +27,7 @@ class PurchaseBase(ABC):
     def listing(self):
         """
         :return: Listing object
-        :type: :class:`.ListingObject'`
+        :type: :class:`.Listing'`
         """
         return self._listing
 
@@ -46,10 +40,27 @@ class PurchaseBase(ABC):
         return self._purchase_id
 
     @property
+    def account(self):
+        """
+        :return: account that is doing the purchase
+        :type: :class:`.Account`
+        """
+        return self._account
+
+    @property
     @abstractmethod
     def is_purchased(self):
         """
         :return: True if this asset is a purchased asset.
+        :type: boolean
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def is_purchase_valid(self):
+        """
+        :return: True if this asset is a valid purchase.
         :type: boolean
         """
         pass

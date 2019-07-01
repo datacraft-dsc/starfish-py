@@ -4,7 +4,6 @@ Ocean class to access the Ocean eco system.
 
 """
 import logging
-import secrets
 from starfish.utils.artifacts import (
     find_contract_path,
     is_contract_type_exists,
@@ -236,9 +235,6 @@ class Ocean():
             address = model.create_account(password)
             if address:
                 account = Account(self, address, password)
-        else:
-            address = secrets.token_hex(20)
-            account = Account(self, address, password)
         return account
 
     @property

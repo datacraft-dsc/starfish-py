@@ -13,10 +13,10 @@ import json
 from starfish.asset import MemoryAsset
 
 
-def test_14_view_asset_listing(surfer_agent, metadata):
+def test_14_view_asset_listing(resources, surfer_agent):
     test_data = "Test listing searching by listing id"
-    asset = MemoryAsset(metadata=metadata, data=test_data)
-    listing = surfer_agent.register_asset(asset)
+    asset = MemoryAsset(data=test_data)
+    listing = surfer_agent.register_asset(asset, resources.listing_data)
     listing.set_published(True)
     logging.debug("view_asset_listing for listing_id: " + listing.listing_id)
     listing2 = surfer_agent.get_listing(listing.listing_id)

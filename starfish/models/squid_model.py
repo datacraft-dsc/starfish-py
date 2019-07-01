@@ -24,6 +24,7 @@ from squid_py.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.keeper.web3_provider import Web3Provider
 from squid_py.keeper.contract_handler import ContractHandler
+from squid_py.ocean.ocean_tokens import OceanTokens
 
 from squid_py.ddo.metadata import Metadata
 
@@ -256,15 +257,23 @@ class SquidModel():
         return service_agreement_id
 
 
-    def consume_asset(self, ddo, service_agreement_id, account, download_path):
+    def consume_asset(self, ddo, service_agreement_id, account):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
         """
+        result = None
         squid_ocean = self.get_squid_ocean(account)
         service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
         if service_agreement:
-            squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
+            result = json.loads(squid_ocean.secret_store.decrypt(
+                    ddo.asset_id,
+                    ddo.metadata['base']['encryptedFiles'],
+                    account
+            ))
+
+#        squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
+        return result
 
     def is_access_granted_for_asset(self, did, agreement_id, account):
         """
@@ -352,7 +361,8 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean()
         return squid_ocean.accounts.balance(account)
 
-    def create_account(self, password):
+    @staticmethod
+    def create_account(password):
         """
 
         :param str password: password of the new account
@@ -360,19 +370,21 @@ class SquidModel():
         :type: object or None
 
         """
-#        squid_ocean = self.get_squid_ocean()
+        account_address = Web3Provider.get_web3().personal.newAccount(password)
+        return account_address
 
-        local_account = Web3Provider.get_web3().eth.account.create(password)
-        # need to reload squid again so that it sees the new account
-        # TODO: does not work at the moment, new account does not get
-        # shown in squid
+    @staticmethod
+    def transfer_ether(from_account, to_address, amount):
+        tx_hash = Web3Provider.get_web3().personal.sendTransaction( {
+            'from': from_account.address,
+            'to': to_address,
+            'value': amount,
+        }, from_account.password)
+        return Web3Provider.get_web3().eth.waitForTransactionReceipt(tx_hash)
 
-        logger.info(f'new account address {local_account.address}')
-        account_list = Web3Provider.get_web3().eth.accounts
-        logger.info(f'current account list {account_list}')
-        account = self.get_account(local_account.address, password)
-        logger.info(f'found account {account}')
-        return local_account.address
+    def transfer_tokens(self, from_account, to_address, amount):
+        tokens = OceanTokens(self._keeper.get_instance())
+        return tokens.transfer(to_address, amount, from_account)
 
     def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""

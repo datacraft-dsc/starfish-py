@@ -19,25 +19,17 @@ from starfish.asset import (
 )
 
 from starfish.logging import setup_logging
+from tests.integration.libs.helpers import setup_squid_purchase
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
 
-
-TEST_LISTING_DATA = {
-    'name': 'Test file asset',
-    'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'author': 'Test starfish',
-    'license': 'Closed',
-    'price': '1000000000000'
-}
-
 def _register_asset_for_sale(agent, resources, account):
     
     asset = FileAsset(filename=resources.asset_file)
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, account=account)
+    listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert listing
     assert listing.asset.did
     return listing
@@ -50,7 +42,7 @@ def test_asset_file_register(ocean, config, resources):
     assert agent
     
     asset = FileAsset(filename=resources.asset_file)
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
     
 
@@ -62,12 +54,12 @@ def test_asset_remote_register(ocean, config, resources):
     
     asset = RemoteAsset(url=resources.asset_remote)
 
-    listing = agent.register_asset(asset, TEST_LISTING_DATA, publisher_account)
+    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
-    print(listing.data.as_text())
+    print(listing.ddo.as_text())
     
     
-def test_asset(ocean, config, brizo_mock, resources):
+def test_asset(ocean, config, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
@@ -98,21 +90,18 @@ def test_asset(ocean, config, brizo_mock, resources):
     time.sleep(1)
     logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    model = ocean.get_squid_model()
-    ddo = model._squid_ocean.assets.resolve(listing.asset.did)
-
-    BrizoProvider.get_brizo().subscribe(ocean, publisher_account._squid_account, listing.asset.did, ddo)
+    setup_squid_purchase(ocean, listing, publisher_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
     assert purchase_asset
 
-    assert(not purchase_asset.is_completed(purchase_account))
+    assert(not purchase_asset.is_completed)
 
-    error_message = purchase_asset.wait_for_completion(purchase_account)
+    error_message = purchase_asset.wait_for_completion()
     assert(error_message == True)
 
-    assert(purchase_asset.is_completed(purchase_account))
+    assert(purchase_asset.is_completed)
 
     # assert Web3.toHex(event.args['_agreementId']) == agreement_id
     # assert len(os.listdir(consumer_ocean_instance.config.downloads_path)) == downloads_path_elements + 1
@@ -120,9 +109,10 @@ def test_asset(ocean, config, brizo_mock, resources):
     # This test does not work with the current barge
 
     assert purchase_asset.is_purchased
-    assert purchase_asset.is_purchase_valid(purchase_account)
+    assert purchase_asset.is_purchase_valid
 
-    purchase_asset.consume(purchase_account, config.squid_config['download_path'])
+    remote_asset = purchase_asset.consume_asset
+    assert(remote_asset)
 
 
 
@@ -140,7 +130,7 @@ def test_search_listing(ocean, config, resources):
     assert publisher_account
 
     # choose a word from the description field
-    text = TEST_LISTING_DATA['author']
+    text = resources.listing_data['author']
     words = text.split(' ')
     word = words[0]
 

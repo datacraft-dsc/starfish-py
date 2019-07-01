@@ -13,10 +13,10 @@ import json
 from starfish.asset import MemoryAsset
 
 
-def test_17_asset_purchase(ocean, config, surfer_agent, metadata):
+def test_17_asset_purchase(ocean, resources, config, surfer_agent):
     test_data = secrets.token_hex(1024)
-    asset = MemoryAsset(metadata=metadata, data=test_data)
-    listing = surfer_agent.register_asset(asset)
+    asset = MemoryAsset(data=test_data)
+    listing = surfer_agent.register_asset(asset, resources.listing_data)
     listing.set_published(True)
     logging.debug("create_purchase for listing_id: " + listing.listing_id)
     purchaser_account = ocean.get_account(config.purchaser_account)
