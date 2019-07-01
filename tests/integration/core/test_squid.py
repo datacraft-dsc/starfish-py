@@ -27,7 +27,7 @@ from squid_py.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
 
 def _register_asset_for_sale(agent, resources, account):
-    
+
     asset = FileAsset(filename=resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert listing
@@ -37,28 +37,28 @@ def _register_asset_for_sale(agent, resources, account):
 
 def test_asset_file_register(ocean, config, resources):
     publisher_account = ocean.get_account(config.publisher_account)
-    
+
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
-    
+
     asset = FileAsset(filename=resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
-    
+
 
 def test_asset_remote_register(ocean, config, resources):
     publisher_account = ocean.get_account(config.publisher_account)
-    
+
     agent = SquidAgent(ocean, config.squid_config)
     assert agent
-    
+
     asset = RemoteAsset(url=resources.asset_remote)
 
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
     print(listing.ddo.as_text())
-    
-    
+
+
 def test_asset(ocean, config, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -136,7 +136,7 @@ def test_search_listing(ocean, config, resources):
 
     # should return at least 1 or more assets
     logging.info(f'search word is {word}')
-    searchResult = agent.search_listings(word)
-    assert searchResult
+    search_result = agent.search_listings(word)
+    assert(search_result)
 
-    assert(len(searchResult) > 1)
+    assert(len(search_result) > 1)

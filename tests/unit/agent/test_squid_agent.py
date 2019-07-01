@@ -80,11 +80,12 @@ def test_get_listing(ocean, resources, config):
 
 def test_search_listings(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    listing_ids = agent.search_listings(resources.listing_data['author'])
-    assert(listing_ids)
-    assert(len(listing_ids) > 0)
+    listing_items = agent.search_listings(resources.listing_data['author'])
+    assert(listing_items)
+    assert(len(listing_items) > 0)
     is_found = False
-    for listing_id in listing_ids:
+    listing_id = listing.listing_id
+    for listing in listing_items:
         if listing_id == listing.listing_id:
             is_found = True
             break
@@ -95,7 +96,6 @@ def test_purchase_asset(ocean, resources, config):
     account = ocean.get_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
-
 
 def test_is_access_granted_for_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
