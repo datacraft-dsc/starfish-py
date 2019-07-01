@@ -476,7 +476,3 @@ class SquidModel():
     @staticmethod
     def generate_did():
         return DID.did()
-
-    @staticmethod
-    def get_listing_id_from_ddo(ddo):
-        return did_to_id(ddo.did)

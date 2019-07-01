@@ -232,7 +232,7 @@ class SquidAgent(AgentBase):
         for ddo in ddo_list:
             asset = Asset(ddo.metadata, ddo.did)
             listing_data = ddo.metadata.get('base', None)
-            listing_id = model.get_listing_id_from_ddo(ddo)
+            listing_id = ddo.did
             listing = Listing(self, listing_id, asset, listing_data, ddo)
             result.append(listing)
 

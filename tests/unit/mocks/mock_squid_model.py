@@ -2,12 +2,14 @@ from unittest.mock import Mock
 import pytest
 import secrets
 import json
+import re
 from web3 import Web3
 
 from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.models.squid_model import SquidModelPurchaseError
 
 from squid_py.did import (
+    did_to_id,
     id_to_did,
     did_to_id_bytes,
 )
@@ -105,14 +107,20 @@ class MockSquidModel():
 
         if not 'checksum' in metadata['base']:
             metadata['base']['checksum'] = did
-            
+
         ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
         # if self.register_ddo(did, ddo, account._squid_account):
         self._ddo_list[did] = ddo
         return ddo
 
     def search_assets(self, text, sort=None, offset=100, page=0):
-        return self._ddo_list
+        result = []
+        for ddo in self._ddo_list.values():
+            metadata_text = json.dumps(ddo.metadata)
+            if re.search(text, metadata_text):
+                result.append(ddo)
+
+        return result
 
     def read_asset(self, did):
         return self._ddo_list[did]
