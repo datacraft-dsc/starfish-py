@@ -207,7 +207,8 @@ class SquidAgent(AgentBase):
 
         Search the off chain storage for an asset with the givien 'text'
 
-        :param str text: Test to search all metadata items for.
+        :param str, dict text: Test to search all metadata items for. If the field is a string
+        then the search will be a basic search, else a dict then a query will be performed
         :param sort: sort the results ( defaults: None, no sort).
         :type sort: str or None
         :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
@@ -223,8 +224,19 @@ class SquidAgent(AgentBase):
 
         """
         model = self.squid_model
-        ddo_list = model.search_assets(text, sort, offset, page)
-        return ddo_list
+        if isinstance(text, str) or isinstance(text, dict):
+            ddo_list = model.search_assets(text, sort, offset, page)
+        else:
+            raise ValueError('You can only pass a str or dict for the search text')
+        result = []
+        for ddo in ddo_list:
+            asset = Asset(ddo.metadata, ddo.did)
+            listing_data = ddo.metadata.get('base', None)
+            listing_id = model.get_listing_id_from_ddo(ddo)
+            listing = Listing(self, listing_id, asset, listing_data, ddo)
+            result.append(listing)
+
+        return result
 
     def purchase_asset(self, listing, account):
         """
@@ -318,6 +330,20 @@ class SquidAgent(AgentBase):
 
         :return: RemoteAsset object if you have purchased this asset
         :type: :class:`.RemoteAsset`
+
+        Possible query items allowed are as follows:::
+
+            'price'
+            'license'
+            'categories'
+            'tags'
+            'type'
+            'updateFrequency'
+            'created'
+            'dateCreated'
+            'datePublished'
+            'sample'
+            'text'
 
         """
         asset = None

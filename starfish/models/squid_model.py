@@ -120,7 +120,13 @@ class SquidModel():
         Search assets from the squid API.
         """
         squid_ocean = self.get_squid_ocean()
-        ddo_list = squid_ocean.assets.search(text, sort, offset, page)
+        if isinstance(text, str):
+            ddo_list = squid_ocean.assets.search(text, sort, offset, page)
+        elif isinstance(text, dict):
+            print(f'using asset query {text}')
+            ddo_list = squid_ocean.assets.query(text, sort, offset, page)
+        else:
+            ddo_list = None
         return ddo_list
 
     def is_service_agreement_template_registered(self, template_id):
@@ -470,3 +476,7 @@ class SquidModel():
     @staticmethod
     def generate_did():
         return DID.did()
+
+    @staticmethod
+    def get_listing_id_from_ddo(ddo):
+        return did_to_id(ddo.did)
