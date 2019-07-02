@@ -232,6 +232,12 @@ class SquidAgent(AgentBase):
         for ddo in ddo_list:
             asset = Asset(ddo.metadata, ddo.did)
             listing_data = ddo.metadata.get('base', None)
+            # put back additional fields that cannot be saved with the squid
+            # main metadata
+            info = ddo.metadata.get('additionalInformation', None)
+            if info and isinstance(info, dict):
+                for name, value in info.items():
+                    listing_data[name] = value
             listing_id = ddo.did
             listing = Listing(self, listing_id, asset, listing_data, ddo)
             result.append(listing)
