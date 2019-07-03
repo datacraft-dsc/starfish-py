@@ -19,12 +19,16 @@ class BundleAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None, data=None):
+        default_metadata = {
+            'type': 'bundle',
+            'name': 'BundleAsset',
+            'contentType': 'application/octet-stream',
+        }
         if metadata is None:
-            metadata = {
-                'type': 'bundle',
-                'name': 'BundleAsset',
-                'description': 'Bundle Asset',
-            }
+            metadata = default_metadata
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
         AssetBase.__init__(self, 'bundle', metadata, did)
         self._assets = {}
         self._data = data

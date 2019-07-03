@@ -20,13 +20,18 @@ class FileAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None, filename=None):
+        default_metadata = {
+            'name': 'FileAsset',
+            'type': 'file',
+            'author': 'File Asset',
+            'contentType': 'application/octet-stream',
+        }
         if metadata is None:
-            metadata = {
-                'name': 'FileAsset',
-                'type': 'file',
-                'author': 'File Asset',
-                'contentType': 'application/octet-stream',
-            }
+            metadata = default_metadata
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+
         AssetBase.__init__(self, 'file', metadata, did)
         if filename:
             self._filename = filename

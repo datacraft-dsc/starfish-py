@@ -39,10 +39,10 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
         'author': 'pd_test_case asset listing',
         'license': 'Closed',
         'price': 100,
-        'extra_data': json.dumps({
+        'extra_data': {
             'id': unique_pd_case_id,
             'valid_check': valid_check,
-        }),
+        },
         'tags': [pd_test_case_tag],
     }
     asset_sale = RemoteAsset(url=dummy_url)
@@ -54,5 +54,8 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     assert(len(listing_items) >= 1)
     for listing in listing_items:
-        print(listing.data)
         assert('tags' in listing.data and pd_test_case_tag in listing.data['tags'])
+        assert(listing.data['extra_data'])
+        assert(isinstance(listing.data['extra_data'], dict))
+        if listing.data['extra_data']['id'] == unique_pd_case_id:
+            assert(listing.data['extra_data']['valid_check'] == valid_check)

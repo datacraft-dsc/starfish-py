@@ -22,3 +22,7 @@ class UnitTestAccount():
     @property
     def as_list(self):
         return [self.test_address, self.test_password]
+
+    @property
+    def address(self):
+        return self.test_address
