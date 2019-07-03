@@ -99,5 +99,4 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     # check the resource id in the purchased asset
     assert('resourceId' in purchase_asset.metadata)
     asset_file_path = base64.b64decode(purchase_asset.metadata['resourceId']).decode('utf-8')
-    print(asset_file_path)
     assert(str(resources.asset_file) == asset_file_path)

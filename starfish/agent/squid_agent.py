@@ -362,9 +362,8 @@ class SquidAgent(AgentBase):
         # main metadata
         info = ddo.metadata.get(AdditionalInfoMeta.KEY, None)
         if info and isinstance(info, dict):
-            print('info', info)
             for name, value in info.items():
-                # on decoding the 'extra_data' field is not converted from json to dict
+                # for convinience we will try to decode 'extra_data' field as a json to dict
                 try:
                     if name == 'extra_data' and isinstance(value, str):
                         value = json.loads(value)
