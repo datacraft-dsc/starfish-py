@@ -20,7 +20,7 @@ class RemoteAsset(AssetBase):
     :param str filename: filename of the asset to register
 
     """
-    def __init__(self, metadata=None, did=None, url=None):
+    def __init__(self, metadata={}, did=None, url=None):
         default_metadata = {
             'name': 'RemoteAsset',
             'type': 'remote',
@@ -30,7 +30,7 @@ class RemoteAsset(AssetBase):
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
         metadata = AssetBase.merge_metadata(metadata, default_metadata)
-            
+
         AssetBase.__init__(self, 'remote', metadata, did)
         self._url = metadata.get('url', url)
 

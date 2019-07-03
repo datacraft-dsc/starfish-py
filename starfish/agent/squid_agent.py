@@ -372,7 +372,7 @@ class SquidAgent(AgentBase):
                     pass
                 listing_data[name] = value
         return listing_data
-        
+
     @staticmethod
     def _convert_listing_asset_to_metadata(asset, listing_data):
         """

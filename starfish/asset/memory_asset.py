@@ -18,7 +18,7 @@ class MemoryAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None, data=None):
+    def __init__(self, metadata={}, did=None, data=None):
         default_metadata = {
             'name': 'MemoryAsset',
             'type': 'data',
@@ -27,11 +27,12 @@ class MemoryAsset(AssetBase):
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
         metadata = AssetBase.merge_metadata(metadata, default_metadata)
-        
-        if isinstance(data, str):
-            metadata['contentType'] = 'text/plain; charset=utf-8'
-        else:
-            metadata['contentType'] = 'application/octet-stream'
+
+        if data:
+            if isinstance(data, str):
+                metadata['contentType'] = 'text/plain; charset=utf-8'
+            else:
+                metadata['contentType'] = 'application/octet-stream'
         AssetBase.__init__(self, 'data', metadata, did)
         self._data = data
 

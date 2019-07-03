@@ -65,23 +65,23 @@ def _disable_test_account_creation_and_transfer(ocean, config):
     assert(search_account)
     assert(account.ether_balance == 0)
     assert(account.ocean_balance == 0)
-    
+
     # test ether transfer
     publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
     publisher_account.transfer_ether(account.address, 3)
     assert(account.ether_balance == 3)
-    
+
     # test ocean token request
     account.unlock()
     account.request_tokens(7)
     assert(account.ocean_balance == 7)
-    
+
     # test transfer ocean tokens
     publisher_account = ocean.get_account(config.publisher_account)
     publisher_account.unlock()
     publisher_account.transfer_token(account.address, 5)
     assert(account.ocean_balance == 12)
-    
-    
-    
+
+
+

@@ -37,7 +37,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     publisher_account = ocean.get_account(config.publisher_account)
     download_link = asset_store.did
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
-    
+
     asset_sale = RemoteAsset(metadata={'resourceId': resourceId}, url=download_link)
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
     listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
@@ -95,7 +95,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     # final check stored asset data is == to original data put up for sale
     assert(new_asset_store.data == store_data)
-    
+
     # check the resource id in the purchased asset
     assert('resourceId' in purchase_asset.metadata)
     asset_file_path = base64.b64decode(purchase_asset.metadata['resourceId']).decode('utf-8')

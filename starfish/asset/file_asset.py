@@ -29,7 +29,7 @@ class FileAsset(AssetBase):
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
         metadata = AssetBase.merge_metadata(metadata, default_metadata)
-                        
+
         AssetBase.__init__(self, 'file', metadata, did)
         if filename:
             self._filename = filename

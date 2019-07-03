@@ -98,7 +98,7 @@ class AssetBase(ABC):
             if not name in metadata:
                 metadata[name] = default_metadata[name]
         return metadata
-        
+
     @staticmethod
     def get_asset_type(metadata):
         asset_type = ''

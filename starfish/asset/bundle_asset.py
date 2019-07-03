@@ -18,7 +18,7 @@ class BundleAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None, data=None):
+    def __init__(self, metadata={}, did=None, data=None):
         default_metadata = {
             'type': 'bundle',
             'name': 'BundleAsset',
