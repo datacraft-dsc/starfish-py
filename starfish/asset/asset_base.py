@@ -96,7 +96,7 @@ class AssetBase(ABC):
     def merge_metadata(metadata, default_metadata):
         for name, value in default_metadata.items():
             if not name in metadata:
-                metadata[name] = default_metadata[name]
+                metadata[name] = value
         return metadata
 
     @staticmethod

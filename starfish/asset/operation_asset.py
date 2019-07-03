@@ -17,11 +17,13 @@ class OperationAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata={}, did=None):
+    def __init__(self, metadata=None, did=None):
         default_metadata = {
             'name': 'OperationAsset',
             'type': 'operation',
         }
+        if metadata is None:
+            metadata = default_metadata
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
         metadata = AssetBase.merge_metadata(metadata, default_metadata)

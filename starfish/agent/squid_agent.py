@@ -367,7 +367,7 @@ class SquidAgent(AgentBase):
                 try:
                     if name == 'extra_data' and isinstance(value, str):
                         value = json.loads(value)
-                except json.decoder.JSONDecodeError as e:
+                except json.decoder.JSONDecodeError:
                     pass
                 listing_data[name] = value
         return listing_data
