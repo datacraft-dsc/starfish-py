@@ -21,13 +21,16 @@ class RemoteAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None, url=None):
-        if metadata is None:
-            metadata = {
-                'name': 'RemoteAsset',
-                'type': 'remote',
-                'contentType': 'application/octet-stream',
-                'url': url,
-            }
+        default_metadata = {
+            'name': 'RemoteAsset',
+            'type': 'remote',
+            'contentType': 'application/octet-stream',
+            'url': url,
+        }
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+            
         AssetBase.__init__(self, 'remote', metadata, did)
         self._url = metadata.get('url', url)
 

@@ -19,14 +19,17 @@ class FileAsset(AssetBase):
     :param str filename: filename of the asset to register
 
     """
-    def __init__(self, metadata=None, did=None, filename=None):
-        if metadata is None:
-            metadata = {
-                'name': 'FileAsset',
-                'type': 'file',
-                'author': 'File Asset',
-                'contentType': 'application/octet-stream',
-            }
+    def __init__(self, metadata={}, did=None, filename=None):
+        default_metadata = {
+            'name': 'FileAsset',
+            'type': 'file',
+            'author': 'File Asset',
+            'contentType': 'application/octet-stream',
+        }
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+                        
         AssetBase.__init__(self, 'file', metadata, did)
         if filename:
             self._filename = filename

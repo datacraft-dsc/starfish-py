@@ -7,6 +7,7 @@ Agent class to provide basic functionality for all Ocean Agents
 
 import datetime
 import logging
+import json
 
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
@@ -38,8 +39,8 @@ ALLOWED_FILE_META_ITEMS = [
     'checksum',
     'checksumType',
     'contentLength',
-    'resourceId',
     'contentType',
+    'resourceId',
 ]
 
 class SquidAgent(AgentBase):
@@ -196,7 +197,8 @@ class SquidAgent(AgentBase):
 
         if ddo:
             asset = Asset(ddo.metadata, ddo.did)
-            listing_data = ddo.metadata.get('base', None)
+            listing_data = self._convert_ddo_to_listing_data(ddo)
+            listing_id = ddo.did
             listing = Listing(self, listing_id, asset, listing_data, ddo)
 
         return listing
@@ -231,13 +233,7 @@ class SquidAgent(AgentBase):
         result = []
         for ddo in ddo_list:
             asset = Asset(ddo.metadata, ddo.did)
-            listing_data = ddo.metadata.get('base', None)
-            # put back additional fields that cannot be saved with the squid
-            # main metadata
-            info = ddo.metadata.get('additionalInformation', None)
-            if info and isinstance(info, dict):
-                for name, value in info.items():
-                    listing_data[name] = value
+            listing_data = self._convert_ddo_to_listing_data(ddo)
             listing_id = ddo.did
             listing = Listing(self, listing_id, asset, listing_data, ddo)
             result.append(listing)
@@ -360,6 +356,24 @@ class SquidAgent(AgentBase):
         return asset
 
     @staticmethod
+    def _convert_ddo_to_listing_data(ddo):
+        listing_data = ddo.metadata.get('base', None)
+        # put back additional fields that cannot be saved with the squid
+        # main metadata
+        info = ddo.metadata.get(AdditionalInfoMeta.KEY, None)
+        if info and isinstance(info, dict):
+            print('info', info)
+            for name, value in info.items():
+                # on decoding the 'extra_data' field is not converted from json to dict
+                try:
+                    if name == 'extra_data' and isinstance(value, str):
+                        value = json.loads(value)
+                except json.decoder.JSONDecodeError as e:
+                    pass
+                listing_data[name] = value
+        return listing_data
+        
+    @staticmethod
     def _convert_listing_asset_to_metadata(asset, listing_data):
         """
         For squid we need to create a single metadata record from a listing_data and asset/s
@@ -384,7 +398,6 @@ class SquidAgent(AgentBase):
 
         # make sure we are sending a price value as string for squid
         metadata[MetadataBase.KEY]['price'] = str(metadata[MetadataBase.KEY]['price'])
-
 
         # validate and setup the files ( aka asset )
         metadata['base']['files'] = [asset.metadata]

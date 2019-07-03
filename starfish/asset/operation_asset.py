@@ -18,12 +18,14 @@ class OperationAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None):
-        if metadata is None:
-            metadata = {
-                'name': 'OperationAsset',
-                'type': 'operation',
-                'author': 'operation asset'
-            }
+        default_metadata = {
+            'name': 'OperationAsset',
+            'type': 'operation',
+        }
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+            
         AssetBase.__init__(self, 'operation', metadata, did)
 
         if not self.is_asset_type('operation'):

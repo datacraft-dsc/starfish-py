@@ -54,5 +54,6 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     assert(len(listing_items) >= 1)
     for listing in listing_items:
-        print(listing.data)
         assert('tags' in listing.data and pd_test_case_tag in listing.data['tags'])
+        assert(listing.data['extra_data'])
+        assert(isinstance(listing.data['extra_data'], dict))

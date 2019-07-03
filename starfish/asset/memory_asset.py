@@ -19,16 +19,19 @@ class MemoryAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None, data=None):
-        if metadata is None:
-            metadata = {
-                'name': 'MemoryAsset',
-                'type': 'data',
-                'author': 'memory asset'
-            }
-            if isinstance(data, str):
-                metadata['contentType'] = 'text/plain; charset=utf-8'
-            else:
-                metadata['contentType'] = 'application/octet-stream'
+        default_metadata = {
+            'name': 'MemoryAsset',
+            'type': 'data',
+            'contentType': 'application/octet-stream',
+        }
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+        
+        if isinstance(data, str):
+            metadata['contentType'] = 'text/plain; charset=utf-8'
+        else:
+            metadata['contentType'] = 'application/octet-stream'
         AssetBase.__init__(self, 'data', metadata, did)
         self._data = data
 

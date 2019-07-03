@@ -93,6 +93,13 @@ class AssetBase(ABC):
 
 
     @staticmethod
+    def merge_metadata(metadata, default_metadata):
+        for name, value in default_metadata.items():
+            if not name in metadata:
+                metadata[name] = default_metadata[name]
+        return metadata
+        
+    @staticmethod
     def get_asset_type(metadata):
         asset_type = ''
         if isinstance(metadata, dict):
