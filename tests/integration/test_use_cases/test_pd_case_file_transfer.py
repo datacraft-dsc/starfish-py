@@ -43,8 +43,8 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)
 
+    # now re-read the listing to make sure that we get the same result and listing data
     listing = squid_agent.get_listing(listing.listing_id)
-    print(listing.data)
 
     # now start the purchase part
     # setup the purchase account

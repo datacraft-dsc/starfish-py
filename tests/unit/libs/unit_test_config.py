@@ -12,12 +12,11 @@ class UnitTestConfig():
     accounts = {}
     def __init__(self):
         for index in range(0, 8):
-            account = UnitTestAccount()
-            self.accounts[index] = account
+            self.create_account(secrets.token_hex(32))
 
     def create_account(self, password):
         account = UnitTestAccount(password)
         self.accounts[len(self.accounts)] = account
-        return account.test_address
+        return account.address
 
 unitTestConfig = UnitTestConfig()
