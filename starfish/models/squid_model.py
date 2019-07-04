@@ -163,7 +163,7 @@ class SquidModel():
         return template
 
     @staticmethod
-    def get_asset_purchase_ids(self, did):
+    def get_asset_purchase_ids(did):
         """
         Return a list of purchase id's that have been issued for an asset did
         """

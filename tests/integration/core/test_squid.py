@@ -85,16 +85,19 @@ def test_asset(ocean, config, resources):
     listing = agent.get_listing(listing_did)
     assert(listing)
     assert(listing.asset.did == listing_did)
+    
+
 
     purchase_account = ocean.get_account(config.purchaser_account)
     logger.info(f'purchase_account {purchase_account.ocean_balance}')
+
+    # test is_purchased for an account only
+    assert(not listing.is_purchased(purchase_account))
 
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
 
-    # test is_purchased for an account only
-    assert(not listing.is_purchased(purchase_account))
 
     time.sleep(1)
     logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
