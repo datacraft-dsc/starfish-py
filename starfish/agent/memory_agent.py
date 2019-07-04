@@ -164,7 +164,7 @@ class MemoryAgent(AgentBase):
         """
         return True
 
-    def is_access_granted_for_asset(self, asset, purchase_id, account):
+    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
@@ -172,9 +172,9 @@ class MemoryAgent(AgentBase):
 
         :param asset: Asset to check for access.
         :type asset: :class:`.Asset` object
-        :param str purchase_id: purchase id that was used to purchase the asset.
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
+        :param str purchase_id: purchase id that was used to purchase the asset.
 
         :return: True if the asset can be accessed and consumed.
         :type: boolean
@@ -186,7 +186,21 @@ class MemoryAgent(AgentBase):
 
         return False
 
-    def consume_asset(self, listing, purchase_id, account):
+    def get_asset_purchase_ids(self, asset):
+        """
+        
+        Returns as list of purchase id's that have been used for this asset
+
+        :param asset: Asset to return purchase details.
+        :type asset: :class:`.Asset` object
+        
+        :return: list of purchase ids
+        :type: list
+        
+        """
+        return []
+
+    def consume_asset(self, listing, account, purchase_id):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.

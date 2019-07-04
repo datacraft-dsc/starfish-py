@@ -60,8 +60,7 @@ def main():
     'log_level=logging.DEBUG' parameter to get full debug instead.
 
     ocean = Ocean(contracts_path='artifacts',
-                    keeper_url='http://localhost:8545',
-                    log_level=logging.DEBUG
+                    keeper_url='http://localhost:8545'
     )
 
     Get our first test publisher account - in test the account numbers are published

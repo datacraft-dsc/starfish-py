@@ -27,6 +27,7 @@ from squid_py.keeper.contract_handler import ContractHandler
 from squid_py.ocean.ocean_tokens import OceanTokens
 
 from squid_py.ddo.metadata import Metadata
+from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
 
 from plecos import is_valid_dict_local, validate_dict_local
 
@@ -40,6 +41,10 @@ logger = logging.getLogger('starfish.squid_model')
 class SquidModelPurchaseError(Exception):
     """ Raised when a purchase event has failed to complete """
 
+
+class AgreementStoreManagerExtra(AgreementStoreManager):
+   def get_agreement_ids_for_did(self, did):
+        return self.contract_concise.getAgreementIdsForDID(did)    
 
 class SquidModel():
 
@@ -157,6 +162,15 @@ class SquidModel():
         )
         return template
 
+    def get_asset_purchase_ids(self, did):
+        result = []
+        squid_ocean = self.get_squid_ocean()
+        manager = AgreementStoreManagerExtra.get_instance()
+        id_list = manager.get_agreement_ids_for_did(did_to_id(did))
+        for value in id_list:
+            result.append(Web3.toHex(value))
+        return result
+        
     def purchase_asset(self, ddo, account):
         """
         Purchase an asset with the agent storage server
@@ -178,7 +192,7 @@ class SquidModel():
             )
         return service_agreement_id
 
-    def purchase_wait_for_completion(self, purchase_id, did, address, timeout_seconds):
+    def purchase_wait_for_completion(self, did, address, purchase_id, timeout_seconds):
         """
 
         Wait for a purchase to complete
@@ -205,10 +219,10 @@ class SquidModel():
             raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
 
         timeout_time = time.time() + timeout_seconds
-        while self.is_access_granted_for_asset(did, purchase_id, address) is not True and timeout_time > time.time():
+        while self.is_access_granted_for_asset(did, address, purchase_id) is not True and timeout_time > time.time():
             time.sleep(1)
 
-        return self.is_access_granted_for_asset(did, purchase_id, address)
+        return self.is_access_granted_for_asset(did, address, purchase_id)
 
     def purchase_operation(self, ddo, account):
         """
@@ -262,7 +276,7 @@ class SquidModel():
         return service_agreement_id
 
 
-    def consume_asset(self, ddo, service_agreement_id, account):
+    def consume_asset(self, ddo, account, service_agreement_id):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
 
@@ -280,7 +294,7 @@ class SquidModel():
 #        squid_ocean.assets.consume(service_agreement_id, ddo.did, service_agreement.sa_definition_id, account, download_path)
         return result
 
-    def is_access_granted_for_asset(self, did, agreement_id, account):
+    def is_access_granted_for_asset(self, did, account, agreement_id):
         """
         Return true if we have access to the asset's data using the service_agreement_id and account used
         to purchase this asset

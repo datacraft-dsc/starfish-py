@@ -63,11 +63,11 @@ def test_purchase_asset(ocean, resources, config):
 
 def test_is_access_granted_for_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.is_access_granted_for_asset(asset, purchase.purchase_id, account))
+    assert(agent.is_access_granted_for_asset(asset, account, purchase.purchase_id,))
 
 def test_consume_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.consume_asset(listing, purchase.purchase_id, account))
+    assert(agent.consume_asset(listing, account, purchase.purchase_id,))
 
 def test_is_did_valid():
     assert(MemoryAgent.is_did_valid(VALID_DID))

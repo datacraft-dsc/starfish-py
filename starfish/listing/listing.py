@@ -39,6 +39,23 @@ class Listing(ListingBase):
 
         return self._agent.purchase_asset(self, account)
 
+    def is_purchased(self, account):
+        """
+        
+        Return true if the account has already purchased this listing/asset
+
+        :param account: account to test for this purchase of this asset.
+        :type account: :class:`.Account`
+        
+        :return: result if has purchased this asset
+        :type: boolean
+        
+        """
+        if not isinstance(account, Account):
+            raise TypeError('You need to pass an Account object')
+
+        return self._agent.is_access_granted_for_asset(self.asset, account)
+        
     def set_published(self, value):
         """
 
@@ -67,6 +84,10 @@ class Listing(ListingBase):
             return self._data['status'] == 'published'
         return False
 
+    @property
+    def get_purchase_ids(self):
+        return self._agent.get_asset_purchase_ids(self.asset)
+        
     def __str__(self):
         s = 'Listing: agent=' + self._agent.__class__.__name__ + ', '
         s += 'listing_id=' + self._listing_id + ', '
