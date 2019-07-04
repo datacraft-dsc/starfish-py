@@ -38,6 +38,18 @@ class MemoryAsset(AssetBase):
         AssetBase.__init__(self, 'data', metadata, did)
         self._data = data
 
+    def save(self, filename):
+        """
+        Saves the data in the memory asset to a file.
+        
+        :param str filename: Filename to save the data.
+        
+        """
+        
+        if self._data:
+            with open(filename, 'wb') as fp:
+                fp.write(self._data)
+        
     @property
     def data(self):
         """
