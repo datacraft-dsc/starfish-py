@@ -4,6 +4,7 @@ Ocean class to access the Ocean eco system.
 
 """
 import logging
+
 from starfish.utils.artifacts import (
     find_contract_path,
     is_contract_type_exists,
@@ -16,11 +17,10 @@ from web3 import (
 
 from starfish.account import Account
 from starfish.models.squid_model import SquidModel
-
-from starfish.logging import setup_logging
-
 from squid_py.keeper import Keeper
 
+
+logger = logging.getLogger('starfish.ocean')
 
 class Ocean():
     """
@@ -62,8 +62,6 @@ class Ocean():
     :type contracts_path: str or None
     :param gas_limit: The amount of gas you are willing to spend on each block chain transaction ( 0 ).
     :type gas_limit: int or string
-    :param log_level: The log level to use for logging, the default is logging.DEBUG
-    :type log_level: python logging level
 
     """
 
@@ -79,8 +77,6 @@ class Ocean():
 
         if args and isinstance(args[0], dict):
             kwargs = args[0]
-
-        setup_logging(level = kwargs.get('log_level', logging.WARNING))
 
         self._keeper_url = kwargs.get('keeper_url', None)
         self._network_name = kwargs.get('network', None)
@@ -115,13 +111,13 @@ class Ocean():
         if self._contracts_path and not is_contract_type_exists(self._network_name, self._contracts_path):
             # if not then find the correct contracts path
             self._contracts_path = find_contract_path(self._network_name)
-            logging.info(f'Changing contracts path to {self._contracts_path}')
+            logger.debug(f'Changing contracts path to {self._contracts_path}')
 
         # if no contracts path then search for the contract for this network
         if self._contracts_path is None and self._network_name :
             self._contracts_path = find_contract_path(self._network_name)
 
-        logging.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
+        logger.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
 
 
     def register_did(self, did, ddo, account):

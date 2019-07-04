@@ -16,11 +16,10 @@ from squid_py.keeper import Keeper
 from squid_py.keeper.events_manager import EventsManager
 from squid_py.agreements.manager import AgreementsManager
 
-from starfish.logging import setup_logging
+logging.getLogger('urllib3').setLevel(logging.WARNING)
+logging.getLogger('web3').setLevel(logging.WARNING)
 
-setup_logging(level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("web3").setLevel(logging.WARNING)
+logger = logging.getLogger('test.mocks.brizo_mock')
 
 class BrizoMock(object):
 
@@ -99,7 +98,7 @@ class BrizoMock(object):
         except e as Exception:
             message = f'error with exception {e}'
             print(message)
-            logging.error(message)
+            logger.error(message)
             raise
             
     @property

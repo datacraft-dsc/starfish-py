@@ -6,7 +6,7 @@
 import logging
 from starfish.account import Account
 from starfish.purchase.purchase_base import PurchaseBase
-logger = logging.getLogger('ocean')
+logger = logging.getLogger('starfish.squid_operation')
 
 class SquidOperation(PurchaseBase):
     """

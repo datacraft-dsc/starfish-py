@@ -31,7 +31,7 @@ from squid_py.ddo.metadata import Metadata
 from plecos import is_valid_dict_local, validate_dict_local
 
 
-logger = logging.getLogger('starfish')
+logger = logging.getLogger('starfish.squid_model')
 # from starfish import logger
 
 # to keep the squid_model seperate, we will issue a seperate purchase exception just

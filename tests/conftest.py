@@ -2,6 +2,7 @@ import pytest
 import pathlib
 import json
 import datetime
+import logging
 from unittest.mock import Mock
 
 RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
@@ -9,6 +10,9 @@ METADATA_SAMPLE_FILE = RESOURCES_PATH / 'metadata' / 'sample_metadata1.json'
 TEST_ASSET_FILE = RESOURCES_PATH / 'test_asset_file.txt'
 TEST_ASSET_REMOTE = 'https://oceanprotocol.com/tech-whitepaper.pdf'
 
+
+# set debug logging
+logging.basicConfig(level=logging.DEBUG)
 
 
 TEST_LISTING_DATA = {

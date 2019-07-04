@@ -18,13 +18,14 @@ from starfish.asset import (
     RemoteAsset,
 )
 
-from starfish.logging import setup_logging
 from tests.integration.libs.helpers import setup_squid_purchase
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
+
+logger = logging.getLogger('test.core.test_squid')
 
 def _register_asset_for_sale(agent, resources, account):
 
@@ -81,14 +82,14 @@ def test_asset(ocean, config, resources):
     assert listing.asset.did == listing_did
 
     purchase_account = ocean.get_account(config.purchaser_account)
-    logging.info(f'purchase_account {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account {purchase_account.ocean_balance}')
 
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
 
     time.sleep(1)
-    logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     setup_squid_purchase(ocean, listing, publisher_account)
 
@@ -135,7 +136,7 @@ def test_search_listing(ocean, config, resources):
     word = words[0]
 
     # should return at least 1 or more assets
-    logging.info(f'search word is {word}')
+    logger.info(f'search word is {word}')
     search_result = agent.search_listings(word)
     assert(search_result)
 

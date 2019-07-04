@@ -4,7 +4,7 @@ import re
 import os
 import sys
 
-logger = logging.getLogger('ocean')
+logger = logging.getLogger('starfish.artifacts')
 
 def is_contract_type_exists(network_name, path):
     for filename in os.listdir(path):

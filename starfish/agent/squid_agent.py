@@ -28,7 +28,7 @@ from squid_py.ddo.metadata import (
     AdditionalInfoMeta,
 )
 
-logger = logging.getLogger('ocean')
+logger = logging.getLogger('starfish.squid_agent')
 
 
 ALLOWED_FILE_META_ITEMS = [
