@@ -9,8 +9,6 @@ from starfish.agent import MemoryAgent
 def main():
     """
     Create a new Ocean instance.
-    You can pass 'log_level=logging.DEBUG' parameter to get full debug
-    logging information.
     """
     ocean = Ocean()
 

@@ -5,10 +5,11 @@
 
 import logging
 from starfish.operation.operation_base import OperationBase
-logger = logging.getLogger('ocean')
 from collections import ChainMap
 import requests
 import json
+
+logger = logging.getLogger('starfish.operiation')
 
 class Operation(OperationBase):
     """

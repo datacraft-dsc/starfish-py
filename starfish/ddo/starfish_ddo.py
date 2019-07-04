@@ -16,7 +16,7 @@ from squid_py.ddo.public_key_rsa import PublicKeyRSA, PUBLIC_KEY_TYPE_RSA
 from squid_py.ddo.service import Service
 
 
-logger = logging.getLogger('ddo')
+logger = logging.getLogger('starfish.ddo')
 
 class StarfishDDO(DDO):
 

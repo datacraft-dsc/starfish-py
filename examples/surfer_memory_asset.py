@@ -10,10 +10,8 @@ from starfish.agent import SurferAgent
 def main():
     """
     Create a new Ocean instance.
-    You can pass 'log_level=logging.DEBUG' parameter to get full debug
-    logging information.
     """
-    ocean = Ocean(log_level=logging.DEBUG)
+    ocean = Ocean()
 
     # Now create a memory asset
     asset = MemoryAsset(data='Some test data that I want to save for this asset')

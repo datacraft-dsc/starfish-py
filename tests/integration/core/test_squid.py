@@ -8,6 +8,9 @@ import pathlib
 import json
 import logging
 import time
+import secrets
+import pytest
+
 from web3 import Web3
 
 from starfish import Ocean
@@ -17,29 +20,33 @@ from starfish.asset import (
     FileAsset,
     RemoteAsset,
 )
+from starfish.exceptions import StarfishAssetNotFound
 
-from starfish.logging import setup_logging
 from tests.integration.libs.helpers import setup_squid_purchase
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
 from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.aquarius.aquarius import Aquarius
+from squid_py.ddo.ddo import DDO
+
+logger = logging.getLogger('test.core.test_squid')
 
 def _register_asset_for_sale(agent, resources, account):
 
     asset = FileAsset(filename=resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, account=account)
-    assert listing
-    assert listing.asset.did
-    return listing
+    assert(listing)
+    assert(listing.asset.did)
+    return(listing)
 
 
 def test_asset_file_register(ocean, config, resources):
     publisher_account = ocean.get_account(config.publisher_account)
 
     agent = SquidAgent(ocean, config.squid_config)
-    assert agent
+    assert(agent)
 
     asset = FileAsset(filename=resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
@@ -50,19 +57,18 @@ def test_asset_remote_register(ocean, config, resources):
     publisher_account = ocean.get_account(config.publisher_account)
 
     agent = SquidAgent(ocean, config.squid_config)
-    assert agent
+    assert(agent)
 
     asset = RemoteAsset(url=resources.asset_remote)
 
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
-    print(listing.ddo.as_text())
 
 
 def test_asset(ocean, config, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
-    assert agent
+    assert(agent)
 
 
     # test node has the account #0 unlocked
@@ -71,30 +77,36 @@ def test_asset(ocean, config, resources):
     publisher_account.request_tokens(20)
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
-    assert listing
-    assert publisher_account
+    assert(listing)
+    assert(publisher_account)
 
     listing_did = listing.asset.did
     # start to test getting the asset from storage
     listing = agent.get_listing(listing_did)
-    assert listing
-    assert listing.asset.did == listing_did
+    assert(listing)
+    assert(listing.asset.did == listing_did)
+    
+
 
     purchase_account = ocean.get_account(config.purchaser_account)
-    logging.info(f'purchase_account {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account {purchase_account.ocean_balance}')
+
+    # test is_purchased for an account only
+    assert(not listing.is_purchased(purchase_account))
 
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
 
+
     time.sleep(1)
-    logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     setup_squid_purchase(ocean, listing, publisher_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
-    assert purchase_asset
+    assert(purchase_asset)
 
     assert(not purchase_asset.is_completed)
 
@@ -108,9 +120,19 @@ def test_asset(ocean, config, resources):
 
     # This test does not work with the current barge
 
-    assert purchase_asset.is_purchased
-    assert purchase_asset.is_purchase_valid
+    assert(purchase_asset.is_purchased)
+    assert(purchase_asset.is_purchase_valid)
 
+
+    # test getting a list of purchase ids from a listing
+    purchase_ids = listing.get_purchase_ids
+    assert(purchase_ids)
+    assert(len(purchase_ids) == 1)
+    assert(purchase_ids[0] == purchase_asset.purchase_id)
+    
+    # test is_purchased for an account only
+    assert(listing.is_purchased(purchase_account))
+    
     remote_asset = purchase_asset.consume_asset
     assert(remote_asset)
 
@@ -135,8 +157,50 @@ def test_search_listing(ocean, config, resources):
     word = words[0]
 
     # should return at least 1 or more assets
-    logging.info(f'search word is {word}')
+    logger.info(f'search word is {word}')
     search_result = agent.search_listings(word)
     assert(search_result)
 
     assert(len(search_result) > 1)
+
+def test_get_listing(ocean, config, resources):
+    agent = SquidAgent(ocean, config.squid_config)
+    # test node has the account #0 unlocked
+    publisher_account = ocean.get_account(config.publisher_account)
+    publisher_account.unlock()
+
+    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    assert listing
+    assert publisher_account
+
+    found_listing = agent.get_listing(listing.listing_id)
+    assert(found_listing)
+    
+    # now test for an asset in aquarius but not on the block chain network
+    
+    aquarius = Aquarius(config.squid_config['aquarius_url'])
+    ddo = aquarius.get_asset_ddo(listing.listing_id)
+    dummy_listing_id = f'did:op:{secrets.token_hex(32)}'
+    ddo_dict = ddo.as_dictionary()
+    ddo_dict['id'] = dummy_listing_id
+    dummy_ddo = DDO(dictionary=ddo_dict)
+    aquarius.publish_asset_ddo(dummy_ddo)
+    
+    ddo = aquarius.get_asset_ddo(dummy_listing_id)
+    assert(ddo.did == dummy_listing_id)
+    
+    # the final test, the asset did is in aquarius, but the did -> url is not on the block chain
+    with pytest.raises(StarfishAssetNotFound):
+        dummy_listing = agent.get_listing(dummy_listing_id)
+
+    # now try to purchase an invalid asset with no block chain DID
+    purchase_account = ocean.get_account(config.purchaser_account)
+
+    listing_list = agent.search_listings({'tags': ['starfish']})
+    assert(listing_list)    
+    for listing in listing_list:
+        assert(listing)
+        if listing.listing_id == dummy_listing_id:
+            with pytest.raises(StarfishAssetNotFound):
+                listing.purchase(purchase_account)
+        

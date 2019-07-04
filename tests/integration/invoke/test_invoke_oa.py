@@ -17,8 +17,6 @@ from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import SquidAsset
 
-from starfish.logging import setup_logging
-
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
@@ -31,6 +29,8 @@ from starfish import (
     logger
 )
 from starfish.agent.invoke_agent import InvokeAgent
+
+logger = logging.getLogger('test.invoke_oa')
 
 
 def _register_asset_for_sale(agent, metadata, account):
@@ -62,16 +62,16 @@ def purchase_asset(ocean, metadata, config, brizo_mock):
     assert listing
     assert listing.asset.did == listing_did
     ld=listing.data
-    logging.info(f' listing.data is {ld}')
+    logger.info(f' listing.data is {ld}')
     purchase_account = ocean.get_account(config.purchaser_account)
-    logging.info(f'purchase_account {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account {purchase_account.ocean_balance}')
 
     purchase_account.unlock()
 
     purchase_account.request_tokens(10)
 
     time.sleep(2)
-    logging.info(f'purchase_account after token request {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
     brizo_mock.subscribe(ocean, publisher_account._squid_account)
 
@@ -120,6 +120,6 @@ def _test_invoke_with_sa(ocean, metadata, config):
         'did':did,
         'url':url,
         'consumerAddress':config.purchaser_account['address']})
-    logging.info(f' invoke returns {res}')
+    logger.info(f' invoke returns {res}')
     # TO DO: This needs testing again, since koi fails on calling invoke in the current barge.
     # assert res['hash']==hashval

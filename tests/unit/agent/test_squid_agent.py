@@ -99,18 +99,18 @@ def test_purchase_asset(ocean, resources, config):
 
 def test_is_access_granted_for_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.is_access_granted_for_asset(asset, purchase.purchase_id, account))
+    assert(agent.is_access_granted_for_asset(asset, account, purchase.purchase_id, ))
 
 def test_purchase_wait_for_completion(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.purchase_wait_for_completion(purchase.purchase_id, asset, account, 30))
+    assert(agent.purchase_wait_for_completion(asset, account, purchase.purchase_id, 30))
     # test raised error if purchase failed
     with pytest.raises(ValueError):
-        agent.purchase_wait_for_completion(None, asset, account, 30)
+        agent.purchase_wait_for_completion(asset, account, None, 30)
 
 def test_consume_asset(ocean, resources, config):
     purchase, listing, agent, asset, account = _purchase_asset(ocean, resources, config)
-    assert(agent.consume_asset(listing, purchase.purchase_id, account))
+    assert(agent.consume_asset(listing, account,  purchase.purchase_id))
 
 def test_is_did_valid():
     assert(SquidAgent.is_did_valid(VALID_DID))

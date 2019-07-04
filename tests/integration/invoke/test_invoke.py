@@ -14,10 +14,7 @@ from starfish import (
 )
 from starfish.agent.invoke_agent import InvokeAgent
 
-from starfish.logging import setup_logging
-
-setup_logging(level=logging.DEBUG)
-
+logger = logging.getLogger('test.invoke')
 
 # koi is not working with the current version of keeper 0.9.0
 

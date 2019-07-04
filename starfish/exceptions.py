@@ -13,3 +13,6 @@ class OceanCommandLineError(Exception):
 
 class StarfishPurchaseError(Exception):
     """ Raised when a purchase events have failed to complete """
+
+class StarfishAssetNotFound(Exception):
+    """ Raised when an asset is not found """

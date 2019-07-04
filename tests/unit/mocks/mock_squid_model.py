@@ -134,12 +134,12 @@ class MockSquidModel():
         self._purchase_assets[service_agreement_id] = ddo.did
         return service_agreement_id
 
-    def purchase_wait_for_completion(self, asset, purchase_id, account, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
         if purchase_id:
             return True
         raise SquidModelPurchaseError('test squid model purchase wait error')
 
-    def consume_asset(self, ddo, service_agreement_id, account):
+    def consume_asset(self, ddo, account, service_agreement_id):
         service = ddo.get_service(TEST_SERVICE_NAME)
         assert(service)
         service_dict = service.as_dictionary()
@@ -151,7 +151,7 @@ class MockSquidModel():
         return self._metadata[did]['base']['files']
 
 
-    def is_access_granted_for_asset(self, did, service_agreement_id, account):
+    def is_access_granted_for_asset(self, did, account, service_agreement_id=None):
         if did in self._metadata and service_agreement_id in self._purchase_assets:
             return True
         return False

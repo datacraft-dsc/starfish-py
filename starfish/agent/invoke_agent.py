@@ -4,12 +4,12 @@ Agent class for Invokable Ocean Agents
 
 """
 
-
 import logging
 import json
 from starfish.operation.operation import Operation
-logger = logging.getLogger('ocean')
 import requests
+
+logger = logging.getLogger('starfish.invoke_agent')
 
 class InvokeAgent:
     """

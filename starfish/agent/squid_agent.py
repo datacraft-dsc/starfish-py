@@ -22,13 +22,17 @@ from starfish.purchase import Purchase
 from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
+from starfish.exceptions import StarfishAssetNotFound
+
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.ddo.metadata import (
     MetadataBase,
     AdditionalInfoMeta,
 )
+from squid_py.exceptions import OceanDIDNotFound
 
-logger = logging.getLogger('ocean')
+
+logger = logging.getLogger('starfish.squid_agent')
 
 
 ALLOWED_FILE_META_ITEMS = [
@@ -189,11 +193,16 @@ class SquidAgent(AgentBase):
         :return: a registered listing given a Id of the listing
         :type: :class:`.Listing` class
 
+        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
+        aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
         model = self.squid_model
 
-        ddo = model.read_asset(listing_id)
+        try:
+            ddo = model.read_asset(listing_id)
+        except OceanDIDNotFound as e:
+            raise StarfishAssetNotFound(e)
 
         if ddo:
             asset = Asset(ddo.metadata, ddo.did)
@@ -250,25 +259,23 @@ class SquidAgent(AgentBase):
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
 
+        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
+        aquarius or the DID of the asset is not on the network ( Block chain )
+
         """
         purchase = None
         model = self.squid_model
 
-        ##avoid calling the default purchase (ocean.assets.order...), which uses callbacks
-        ## to consume an asset
-#        metadata=listing.asset.metadata
-#        invoke_endpoint=metadata["base"].get("invoke_endpoint","asset")
-#        invokable=not(invoke_endpoint == "asset")
-#        if invokable==True:
-#            service_agreement_id = model.purchase_operation(listing.data, account._squid_account)
-#            purchase = SquidOperation(self, listing, service_agreement_id)
-#        else:
-        service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
+        try:
+            service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
+        except OceanDIDNotFound as e:
+            raise StarfishAssetNotFound(e)
+
         purchase = Purchase(self, listing, service_agreement_id, account)
 
         return purchase
 
-    def is_access_granted_for_asset(self, asset, purchase_id, account):
+    def is_access_granted_for_asset(self, asset, account, purchase_id=None ):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
@@ -276,19 +283,44 @@ class SquidAgent(AgentBase):
 
         :param asset: Asset to check for access.
         :type asset: :class:`.Asset` object
-        :param str purchase_id: purchase id that was used to purchase the asset.
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
+        :param str purchase_id: Optional purchase id that was used to purchase the asset.
 
         :return: True if the asset can be accessed and consumed.
         :type: boolean
         """
 
         model = self.squid_model
-        return model.is_access_granted_for_asset(asset.did, purchase_id, account._squid_account)
+
+        if purchase_id:
+            return model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
+        else:
+            purchase_id_list = model.get_asset_purchase_ids(asset.did)
+            for purchase_id in purchase_id_list:
+                if model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
+                    return True
+        return False
+
+    def get_asset_purchase_ids(self, asset):
+        """
+
+        Returns as list of purchase id's that have been used for this asset
+
+        :param asset: Asset to return purchase details.
+        :type asset: :class:`.Asset` object
+
+        :return: list of purchase ids
+        :type: list
+
+        """
+        model = self.squid_model
+
+        return model.get_asset_purchase_ids(asset.did)
 
 
-    def purchase_wait_for_completion(self, purchase_id, asset, account, timeoutSeconds):
+
+    def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
         """
 
         Wait for completion of the purchase
@@ -310,7 +342,7 @@ class SquidAgent(AgentBase):
             raise ValueError('Please provide a valid purhase id')
 
         try:
-            model.purchase_wait_for_completion(purchase_id, asset.did, account._squid_account, timeoutSeconds)
+            model.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
         except SquidModelPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
@@ -318,7 +350,7 @@ class SquidAgent(AgentBase):
         return True
 
 
-    def consume_asset(self, listing, purchase_id, account):
+    def consume_asset(self, listing, account, purchase_id):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -350,7 +382,7 @@ class SquidAgent(AgentBase):
         """
         asset = None
         model = self.squid_model
-        file_list = model.consume_asset(listing.ddo, purchase_id, account._squid_account)
+        file_list = model.consume_asset(listing.ddo, account._squid_account, purchase_id)
         if file_list:
             asset = RemoteAsset(file_list[0], listing.ddo.did)
         return asset
@@ -417,15 +449,15 @@ class SquidAgent(AgentBase):
 
 
     @staticmethod
-    def invoke_operation(listing, purchase_id, account, payload):
+    def invoke_operation(listing, account, purchase_id, payload):
         """
         Invoke the operation
 
         :param listing: Listing that was used to make the purchase.
         :type listing: :class:`.Listing`
-        :param str purchase_id: purchase id that was used to purchase the asset.
         :param account: Ocean account that was used to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
+        :param str purchase_id: purchase id that was used to purchase the asset.
         :param str payload: params required for the operation
 
         :return: True if the operation was invoked
