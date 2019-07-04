@@ -188,15 +188,15 @@ class MemoryAgent(AgentBase):
 
     def get_asset_purchase_ids(self, asset):
         """
-        
+
         Returns as list of purchase id's that have been used for this asset
 
         :param asset: Asset to return purchase details.
         :type asset: :class:`.Asset` object
-        
+
         :return: list of purchase ids
         :type: list
-        
+
         """
         return []
 

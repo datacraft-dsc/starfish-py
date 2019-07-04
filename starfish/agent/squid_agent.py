@@ -193,7 +193,7 @@ class SquidAgent(AgentBase):
         :return: a registered listing given a Id of the listing
         :type: :class:`.Listing` class
 
-        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in 
+        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
         aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
@@ -259,7 +259,7 @@ class SquidAgent(AgentBase):
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
 
-        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in 
+        :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
         aquarius or the DID of the asset is not on the network ( Block chain )
 
         """
@@ -292,7 +292,7 @@ class SquidAgent(AgentBase):
         """
 
         model = self.squid_model
-        
+
         if purchase_id:
             return model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
         else:
@@ -304,15 +304,15 @@ class SquidAgent(AgentBase):
 
     def get_asset_purchase_ids(self, asset):
         """
-        
+
         Returns as list of purchase id's that have been used for this asset
 
         :param asset: Asset to return purchase details.
         :type asset: :class:`.Asset` object
-        
+
         :return: list of purchase ids
         :type: list
-        
+
         """
         model = self.squid_model
 

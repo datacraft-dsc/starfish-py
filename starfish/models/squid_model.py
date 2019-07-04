@@ -44,7 +44,7 @@ class SquidModelPurchaseError(Exception):
 
 class AgreementStoreManagerExtra(AgreementStoreManager):
    def get_agreement_ids_for_did(self, did):
-        return self.contract_concise.getAgreementIdsForDID(did)    
+        return self.contract_concise.getAgreementIdsForDID(did)
 
 class SquidModel():
 
@@ -163,14 +163,16 @@ class SquidModel():
         return template
 
     def get_asset_purchase_ids(self, did):
+        """
+        Return a list of purchase id's that have been issued for an asset did
+        """
         result = []
-        squid_ocean = self.get_squid_ocean()
         manager = AgreementStoreManagerExtra.get_instance()
         id_list = manager.get_agreement_ids_for_did(did_to_id(did))
         for value in id_list:
             result.append(Web3.toHex(value))
         return result
-        
+
     def purchase_asset(self, ddo, account):
         """
         Purchase an asset with the agent storage server
