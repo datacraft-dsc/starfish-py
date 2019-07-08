@@ -14,7 +14,7 @@ from squid_py.agreements.service_types import ServiceTypes
 from squid_py.keeper.web3_provider import Web3Provider
 from squid_py.keeper import Keeper
 from squid_py.keeper.events_manager import EventsManager
-from squid_py.agreements.manager import AgreementsManager
+# from squid_py.agreements.manager import AgreementsManager
 
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 logging.getLogger('web3').setLevel(logging.WARNING)
@@ -27,7 +27,7 @@ class BrizoMock(object):
         self._ocean_instance = ocean_instance
         self._is_event_subscribed = False
         self._ddo_records = {}
-
+    """
     def subscribe(self, ocean, account, did, ddo):
         self._account = account
         model = ocean.get_squid_model()
@@ -100,11 +100,13 @@ class BrizoMock(object):
             print(message)
             logger.error(message)
             raise
-            
+
     @property
     def is_event_subscribed(self):
         return self._is_event_subscribed
-            
+
+    """
+
     def initialize_service_agreement(did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
         print(f'BrizoMock.initialize_service_agreement: purchase_endpoint={purchase_endpoint}')

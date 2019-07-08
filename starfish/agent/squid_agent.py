@@ -387,6 +387,20 @@ class SquidAgent(AgentBase):
             asset = RemoteAsset(file_list[0], listing.ddo.did)
         return asset
 
+    def watch_provider_events(self, account):
+        """
+
+        The provider or publisher needs to watch the events on the block chain, to
+        then setup the agreement contracts on the block chain when the consume
+        first starts to make the initial consume request ( payment to escrow ).
+
+        :param account: Account to watch for payment events for the provider of the asset
+        :type account: :class:`.Account`
+
+        """
+        model = self.squid_model
+        model.watch_provider_events(account)
+
     @staticmethod
     def _convert_ddo_to_listing_data(ddo):
         listing_data = ddo.metadata.get('base', None)

@@ -22,8 +22,6 @@ from starfish.asset import (
 )
 from starfish.exceptions import StarfishAssetNotFound
 
-from tests.integration.libs.helpers import setup_squid_purchase
-
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
 
@@ -85,7 +83,7 @@ def test_asset(ocean, config, resources):
     listing = agent.get_listing(listing_did)
     assert(listing)
     assert(listing.asset.did == listing_did)
-    
+
 
 
     purchase_account = ocean.get_account(config.purchaser_account)
@@ -102,7 +100,8 @@ def test_asset(ocean, config, resources):
     time.sleep(1)
     logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
-    setup_squid_purchase(ocean, listing, publisher_account)
+
+    agent.watch_provider_events(publisher_account)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
@@ -129,10 +128,10 @@ def test_asset(ocean, config, resources):
     assert(purchase_ids)
     assert(len(purchase_ids) == 1)
     assert(purchase_ids[0] == purchase_asset.purchase_id)
-    
+
     # test is_purchased for an account only
     assert(listing.is_purchased(purchase_account))
-    
+
     remote_asset = purchase_asset.consume_asset
     assert(remote_asset)
 
@@ -175,20 +174,25 @@ def test_get_listing(ocean, config, resources):
 
     found_listing = agent.get_listing(listing.listing_id)
     assert(found_listing)
-    
+
     # now test for an asset in aquarius but not on the block chain network
-    
+
     aquarius = Aquarius(config.squid_config['aquarius_url'])
     ddo = aquarius.get_asset_ddo(listing.listing_id)
-    dummy_listing_id = f'did:op:{secrets.token_hex(32)}'
+    dummy_listing_id = f'did:op:{generate_new_id()}'
     ddo_dict = ddo.as_dictionary()
     ddo_dict['id'] = dummy_listing_id
+    # fix squid index bug in service list ?
+    index = 0
+    for service in ddo_dict['service']:
+        ddo_dict['service'][index]['serviceDefinitionId'] = index
+
     dummy_ddo = DDO(dictionary=ddo_dict)
     aquarius.publish_asset_ddo(dummy_ddo)
-    
+
     ddo = aquarius.get_asset_ddo(dummy_listing_id)
     assert(ddo.did == dummy_listing_id)
-    
+
     # the final test, the asset did is in aquarius, but the did -> url is not on the block chain
     with pytest.raises(StarfishAssetNotFound):
         dummy_listing = agent.get_listing(dummy_listing_id)
@@ -197,10 +201,9 @@ def test_get_listing(ocean, config, resources):
     purchase_account = ocean.get_account(config.purchaser_account)
 
     listing_list = agent.search_listings({'tags': ['starfish']})
-    assert(listing_list)    
+    assert(listing_list)
     for listing in listing_list:
         assert(listing)
         if listing.listing_id == dummy_listing_id:
             with pytest.raises(StarfishAssetNotFound):
                 listing.purchase(purchase_account)
-        

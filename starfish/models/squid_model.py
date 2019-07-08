@@ -429,6 +429,11 @@ class SquidModel():
             return data['value']
         return None
 
+    def watch_provider_events(self, account):
+        """ called by the publisher to watch payment request events for the published assets """
+        squid_ocean = self.get_squid_ocean(account)
+        squid_ocean.agreements.watch_provider_events(account._squid_account)
+
     @property
     def accounts(self):
         squid_ocean = self.get_squid_ocean()

@@ -15,7 +15,6 @@ from starfish.asset import (
     FileAsset,
     RemoteAsset,
 )
-from tests.integration.libs.helpers import setup_squid_purchase
 
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
 
@@ -47,6 +46,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     }
     asset_sale = RemoteAsset(url=dummy_url)
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, listing_data))
+
     listing = squid_agent.register_asset(asset_sale, listing_data, account=publisher_account)
     assert(listing)
 

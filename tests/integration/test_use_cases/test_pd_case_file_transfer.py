@@ -17,7 +17,6 @@ from starfish.asset import (
     FileAsset,
     RemoteAsset,
 )
-from tests.integration.libs.helpers import setup_squid_purchase
 
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
 
@@ -54,7 +53,8 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     # request the tokens to buy the asset
     purchase_account.request_tokens(10)
 
-    setup_squid_purchase(ocean, listing, publisher_account)
+    squid_agent.watch_provider_events(publisher_account)
+
 
     # purchase the linked remote asset
     purchase = listing.purchase(purchase_account)
