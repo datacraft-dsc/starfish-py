@@ -7,8 +7,8 @@ Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user acce
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/starfish-py.svg)](https://travis-ci.com/DEX-Company/starfish-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Squid Version](https://img.shields.io/badge/squid--py-v0.6.11-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.6.11)
-[![Barge Version](https://img.shields.io/badge/barge-dex--2019--06--17-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-06-17)
+[![Squid Version](https://img.shields.io/badge/squid--py-v0.6.15-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.6.15)
+[![Barge Version](https://img.shields.io/badge/barge-dex--2019--08--08-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-08-08)
 
 ---
 
@@ -41,7 +41,7 @@ Python 3.6
     clone https://github.com/DEX-Company/starfish-py.git
     cd starfish-py
     ```
-    
+
 1. Set up a virtual environment
 
     ```bash
@@ -62,7 +62,7 @@ Python 3.6
     ```
 
 1. To run the full test using the current remote implementation of [barge](https://github.com/DEX-Company/barge).
-   
+
    ```bash
    export BARGE_URL=http://52.187.164.74
    scripts/setup_for_remote_barge.sh $BARGE_URL
@@ -96,7 +96,7 @@ Python 3.6
     ```
 
 The [documentation](https://shrimp.octet.services/starfish) for this repo is on the starfish doc site [shrimp server](https://shrimp.octet.services).
- 
+
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
