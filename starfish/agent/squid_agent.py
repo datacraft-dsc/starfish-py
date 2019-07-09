@@ -9,6 +9,8 @@ import datetime
 import logging
 import json
 
+from web3 import Web3
+
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import AgentBase
@@ -128,7 +130,7 @@ class SquidAgent(AgentBase):
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
             asset = FileAsset(filename='Testfile.txt')
-            listing = agent.register_asset(asset, {'price': '100000000'}, account)
+            listing = agent.register_asset(asset, {'price': 8}, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
@@ -205,11 +207,7 @@ class SquidAgent(AgentBase):
             raise StarfishAssetNotFound(e)
 
         if ddo:
-            asset = Asset(ddo.metadata, ddo.did)
-            listing_data = self._convert_ddo_to_listing_data(ddo)
-            listing_id = ddo.did
-            listing = Listing(self, listing_id, asset, listing_data, ddo)
-
+            listing = self._listing_from_ddo(ddo)
         return listing
 
 
@@ -241,10 +239,7 @@ class SquidAgent(AgentBase):
             raise ValueError('You can only pass a str or dict for the search text')
         result = []
         for ddo in ddo_list:
-            asset = Asset(ddo.metadata, ddo.did)
-            listing_data = self._convert_ddo_to_listing_data(ddo)
-            listing_id = ddo.did
-            listing = Listing(self, listing_id, asset, listing_data, ddo)
+            listing = self._listing_from_ddo(ddo)
             result.append(listing)
 
         return result
@@ -401,11 +396,27 @@ class SquidAgent(AgentBase):
         model = self.squid_model
         model.watch_provider_events(account)
 
+    def _listing_from_ddo(self, ddo):
+        listing_data, asset_metadata = self._convert_ddo_to_listing_data_asset_metadata(ddo)
+        asset = RemoteAsset(asset_metadata[0], ddo.did)
+        listing_id = ddo.did
+        listing = Listing(self, listing_id, asset, listing_data, ddo)
+        return listing
+
     @staticmethod
-    def _convert_ddo_to_listing_data(ddo):
-        listing_data = ddo.metadata.get('base', None)
+    def _convert_ddo_to_listing_data_asset_metadata(ddo):
+        listing_data = ddo.metadata.get(MetadataBase.KEY, None)
         # put back additional fields that cannot be saved with the squid
         # main metadata
+
+        # all starfish prices are in ocean tokens - so convert from Vodka's to Ocean
+        listing_data['price'] = Web3.fromWei(int(ddo.metadata[MetadataBase.KEY]['price']), 'ether')
+
+        asset_metadata = []
+        if listing_data['files']:
+            for file_data in listing_data['files']:
+                asset_metadata.append(file_data)
+
         info = ddo.metadata.get(AdditionalInfoMeta.KEY, None)
         if info and isinstance(info, dict):
             for name, value in info.items():
@@ -416,7 +427,7 @@ class SquidAgent(AgentBase):
                 except json.decoder.JSONDecodeError:
                     pass
                 listing_data[name] = value
-        return listing_data
+        return listing_data, asset_metadata
 
     @staticmethod
     def _convert_listing_asset_to_metadata(asset, listing_data):
@@ -441,8 +452,9 @@ class SquidAgent(AgentBase):
             else:
                 metadata[AdditionalInfoMeta.KEY][name] = value
 
-        # make sure we are sending a price value as string for squid
-        metadata[MetadataBase.KEY]['price'] = str(metadata[MetadataBase.KEY]['price'])
+
+        # make sure we are sending a price value as string for squid in vodka
+        metadata[MetadataBase.KEY]['price'] = str(Web3.toWei(metadata[MetadataBase.KEY]['price'], 'ether'))
 
         # validate and setup the files ( aka asset )
         metadata['base']['files'] = [asset.metadata]

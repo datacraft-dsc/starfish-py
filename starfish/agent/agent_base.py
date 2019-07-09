@@ -46,7 +46,7 @@ class AgentBase(ABC):
            asset = FileAsset(filename='my_file.csv')
            listing_data = {
                 'name': 'My data',
-                'price': '1000000',
+                'price': '4',
            }
 
            listing = agent.register_asset(asset, listing_data, account)

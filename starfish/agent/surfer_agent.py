@@ -121,7 +121,7 @@ class SurferAgent(AgentBase):
         For example::
 
             asset = MemoryAsset(data='Some test data')
-            listing_data = { 'price': 10000, 'description': 'my data is for sale' }
+            listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
             agent = SurferAgent(ocean)
             listing = agent.register_asset(asset,listing_data, account)
 
