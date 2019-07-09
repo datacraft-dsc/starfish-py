@@ -21,7 +21,7 @@ TEST_LISTING_DATA = {
     'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
     'author': 'Test starfish',
     'license': 'Closed',
-    'price': '1000000000000',
+    'price': 3.141592,              # price is in ocean tokens
     'extra_data': 'Some extra data',
     'tags': ['asset', 'sale', 'test', 'starfish'],
 }
@@ -46,4 +46,4 @@ def resources():
     data.listing_data = TEST_LISTING_DATA
     return data
 
-    
+

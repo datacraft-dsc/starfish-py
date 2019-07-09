@@ -14,6 +14,7 @@ import json
 import base64
 
 from starfish.asset import (
+    BundleAsset,
     FileAsset,
     RemoteAsset,
 )
@@ -76,11 +77,16 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     # get the purchased asset from squid
     purchase_asset = purchase.consume_asset
     assert(purchase_asset)
-    print(purchase_asset.metadata)
+    # this is a bundle asset with a collection of remote assets
+    assert(isinstance(purchase_asset, BundleAsset))
+
+    # we are only using the first asset, so get it from the bundle
+    remote_asset = purchase_asset.get_asset_at_index(0)
+    assert(isinstance(remote_asset, RemoteAsset))
 
     #get the surfer_did and asset_id from the 'url'
-    assert(purchase_asset.url)
-    surfer_did, asset_id = surfer_agent.decode_asset_did(purchase_asset.url)
+    assert(remote_asset.url)
+    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.url)
     assert(surfer_did)
     assert(asset_id)
 
@@ -97,6 +103,6 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     assert(new_asset_store.data == store_data)
 
     # check the resource id in the purchased asset
-    assert('resourceId' in purchase_asset.metadata)
-    asset_file_path = base64.b64decode(purchase_asset.metadata['resourceId']).decode('utf-8')
+    assert('resourceId' in remote_asset.metadata)
+    asset_file_path = base64.b64decode(remote_asset.metadata['resourceId']).decode('utf-8')
     assert(str(resources.asset_file) == asset_file_path)

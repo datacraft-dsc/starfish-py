@@ -8,6 +8,7 @@ import tempfile
 from starfish.agent.squid_agent import SquidAgent
 from starfish.asset import (
     Asset,
+    BundleAsset,
     RemoteAsset,
 )
 from starfish.exceptions import StarfishPurchaseError
@@ -64,6 +65,18 @@ def test_register_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
     assert(listing)
     assert(listing.listing_id)
+
+def test_register_bundle_asset(ocean, resources, config):
+    account = ocean.get_account(config.accounts[0].as_dict)
+    agent = SquidAgent(ocean)
+    assert(agent)
+    bundle_asset = BundleAsset()
+    for index in range(0, 5):
+        asset = RemoteAsset(url=resources.asset_remote)
+        assert(asset)
+        bundle_asset.add(f'name_{index}', asset)
+    listing = agent.register_asset(bundle_asset, resources.listing_data, account)
+    assert(listing)
 
 def test_validate_asset(ocean, metadata):
     agent = SquidAgent(ocean, TEST_INIT_PARMS)

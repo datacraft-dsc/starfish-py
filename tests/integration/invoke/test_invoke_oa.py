@@ -15,7 +15,7 @@ from starfish import (
 )
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
-from starfish.asset import SquidAsset
+from starfish.asset import RemoteAsset
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
@@ -34,7 +34,7 @@ logger = logging.getLogger('test.invoke_oa')
 
 
 def _register_asset_for_sale(agent, metadata, account):
-    asset = SquidAsset(metadata)
+    asset = RemoteAsset(metadata)
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did

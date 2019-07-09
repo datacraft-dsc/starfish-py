@@ -9,11 +9,14 @@ import datetime
 import logging
 import json
 
+from web3 import Web3
+
 from starfish.models.squid_model import SquidModel
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
+    BundleAsset,
     FileAsset,
     RemoteAsset,
     Asset,
@@ -111,7 +114,7 @@ class SquidAgent(AgentBase):
         Register a squid asset with the ocean network.
 
         :param asset: the asset to register, at the moment only a SquidAsset can be used.
-        :type asset: :class:`.FileAsset`, or :class:`.RemoteAsset` object to register
+        :type asset: :class:`.FileAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
@@ -128,7 +131,7 @@ class SquidAgent(AgentBase):
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
             asset = FileAsset(filename='Testfile.txt')
-            listing = agent.register_asset(asset, {'price': '100000000'}, account)
+            listing = agent.register_asset(asset, {'price': 8}, account)
 
             if listing:
                 print(f'registered my listing asset for sale with the did {listing.did}')
@@ -147,8 +150,8 @@ class SquidAgent(AgentBase):
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')
 
-        if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset)):
-            raise TypeError('This agent only supports a FileAsset or RemoteAsset')
+        if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset) or isinstance(asset, BundleAsset)):
+            raise TypeError('This agent only supports a FileAsset, RemoteAsset or BundleAsset')
 
         model = self.squid_model
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
@@ -205,11 +208,7 @@ class SquidAgent(AgentBase):
             raise StarfishAssetNotFound(e)
 
         if ddo:
-            asset = Asset(ddo.metadata, ddo.did)
-            listing_data = self._convert_ddo_to_listing_data(ddo)
-            listing_id = ddo.did
-            listing = Listing(self, listing_id, asset, listing_data, ddo)
-
+            listing = self._listing_from_ddo(ddo)
         return listing
 
 
@@ -241,10 +240,7 @@ class SquidAgent(AgentBase):
             raise ValueError('You can only pass a str or dict for the search text')
         result = []
         for ddo in ddo_list:
-            asset = Asset(ddo.metadata, ddo.did)
-            listing_data = self._convert_ddo_to_listing_data(ddo)
-            listing_id = ddo.did
-            listing = Listing(self, listing_id, asset, listing_data, ddo)
+            listing = self._listing_from_ddo(ddo)
             result.append(listing)
 
         return result
@@ -352,6 +348,7 @@ class SquidAgent(AgentBase):
 
     def consume_asset(self, listing, account, purchase_id):
         """
+
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
 
@@ -362,29 +359,18 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account` object to use for registration.
         :param str download_path: path to store the asset data.
 
-        :return: RemoteAsset object if you have purchased this asset
-        :type: :class:`.RemoteAsset`
-
-        Possible query items allowed are as follows:::
-
-            'price'
-            'license'
-            'categories'
-            'tags'
-            'type'
-            'updateFrequency'
-            'created'
-            'dateCreated'
-            'datePublished'
-            'sample'
-            'text'
+        :return: BunleAsset object if you have purchased this asset, which contains one or more RemoteAssets
+        :type: :class:`.BundleAsset`
 
         """
         asset = None
         model = self.squid_model
         file_list = model.consume_asset(listing.ddo, account._squid_account, purchase_id)
         if file_list:
-            asset = RemoteAsset(file_list[0], listing.ddo.did)
+            asset = BundleAsset(did=listing.ddo.did)
+            for index, file_item in enumerate(file_list):
+                asset_item = RemoteAsset(file_item, listing.ddo.did)
+                asset.add(f'file_{index}', asset_item)
         return asset
 
     def watch_provider_events(self, account):
@@ -401,11 +387,32 @@ class SquidAgent(AgentBase):
         model = self.squid_model
         model.watch_provider_events(account)
 
+    def _listing_from_ddo(self, ddo):
+        """ convert a ddo to a listing that contains a BundleAsset """
+
+        listing_data, asset_metadata = self._convert_ddo_to_listing_data_asset_metadata(ddo)
+        asset = BundleAsset(did=ddo.did)
+        for index, asset_metadata_item in enumerate(asset_metadata):
+            asset.add(f'file_{index}', RemoteAsset(metadata=asset_metadata_item, did=ddo.did))
+        listing_id = ddo.did
+        listing = Listing(self, listing_id, asset, listing_data, ddo)
+        return listing
+
     @staticmethod
-    def _convert_ddo_to_listing_data(ddo):
-        listing_data = ddo.metadata.get('base', None)
+    def _convert_ddo_to_listing_data_asset_metadata(ddo):
+        listing_data = ddo.metadata.get(MetadataBase.KEY, None)
         # put back additional fields that cannot be saved with the squid
         # main metadata
+
+        # first copy the price from the network as the '' price ( in vodka's )
+        listing_data['price_vodka'] = int(listing_data['price'])
+        # all starfish prices are in ocean tokens - so convert from Vodka's to Ocean tokens
+        listing_data['price'] = Web3.fromWei(int(ddo.metadata[MetadataBase.KEY]['price_vodka']), 'ether')
+        asset_metadata = []
+        if listing_data['files']:
+            for file_data in listing_data['files']:
+                asset_metadata.append(file_data)
+
         info = ddo.metadata.get(AdditionalInfoMeta.KEY, None)
         if info and isinstance(info, dict):
             for name, value in info.items():
@@ -416,7 +423,7 @@ class SquidAgent(AgentBase):
                 except json.decoder.JSONDecodeError:
                     pass
                 listing_data[name] = value
-        return listing_data
+        return listing_data, asset_metadata
 
     @staticmethod
     def _convert_listing_asset_to_metadata(asset, listing_data):
@@ -431,7 +438,7 @@ class SquidAgent(AgentBase):
                 'author': 'Author',
                 'license': 'closed',
                 'price': '0',
-                'files': {}
+                'files': []
             },
             AdditionalInfoMeta.KEY: {}
         }
@@ -441,15 +448,24 @@ class SquidAgent(AgentBase):
             else:
                 metadata[AdditionalInfoMeta.KEY][name] = value
 
-        # make sure we are sending a price value as string for squid
-        metadata[MetadataBase.KEY]['price'] = str(metadata[MetadataBase.KEY]['price'])
 
-        # validate and setup the files ( aka asset )
-        metadata['base']['files'] = [asset.metadata]
-        metadata['base']['files'][0]['index'] = 0
-        # for asset file we need to set the url
-        if asset.is_asset_type('file'):
-            metadata['base']['files'][0]['url'] = asset.metadata['filename']
+        # make sure we are sending a price value as string for squid in vodka
+        metadata[MetadataBase.KEY]['price'] = str(Web3.toWei(metadata[MetadataBase.KEY]['price'], 'ether'))
+
+        def append_asset_file(metadata, asset):
+            metadata['base']['files'].append(asset.metadata)
+            index = len(metadata['base']['files']) - 1
+            metadata['base']['files'][index]['index'] = index
+            if asset.is_asset_type('file'):
+                metadata['base']['files'][index]['url'] = asset.metadata['filename']
+
+        if isinstance(asset, BundleAsset):
+            for _, asset_item in asset:
+                if not (isinstance(asset_item, FileAsset) or isinstance(asset_item, RemoteAsset)):
+                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type FileAsset or RemoteAsset')
+                append_asset_file(metadata, asset_item)
+        else:
+            append_asset_file(metadata, asset)
 
         for item in metadata['base']['files']:
             delete_list = []

@@ -106,6 +106,7 @@ class AssetBase(ABC):
             if 'type' in metadata:
                 asset_type = metadata['type']
             else:
+                # if from squid then it's always a bundle
                 if 'base' in metadata:
-                    asset_type = 'squid'
+                    asset_type = 'bundle'
         return asset_type
