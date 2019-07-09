@@ -18,7 +18,7 @@ class BundleAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None, data=None):
+    def __init__(self, metadata=None, did=None):
         default_metadata = {
             'type': 'bundle',
             'name': 'BundleAsset',
@@ -31,7 +31,6 @@ class BundleAsset(AssetBase):
         metadata = AssetBase.merge_metadata(metadata, default_metadata)
         AssetBase.__init__(self, 'bundle', metadata, did)
         self._assets = {}
-        self._data = data
 
     def add(self, name, asset):
         """
@@ -121,17 +120,9 @@ class BundleAsset(AssetBase):
     def __getitem__(self, name):
         return self._assets[name]
 
-
-    @property
-    def data(self):
-        """
-
-        Return the asset data
-
-        :return: the asset data
-        :type: str or byte
-        """
-        return self._data
+    def get_asset_at_index(self, index):
+        """ return the asset based on the index of available assets """
+        return list(self._assets.values())[index]
 
     @property
     def asset_count(self):

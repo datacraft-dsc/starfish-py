@@ -21,10 +21,10 @@ from starfish.asset import (
 def test_create_asset_from_metadata(metadata):
     asset = create_asset_from_metadata(metadata)
     assert(asset)
-    assert(isinstance(asset, RemoteAsset))
+    assert(isinstance(asset, BundleAsset))
 
     type_list = [
-        ( 'bundle', BundleAsset ), 
+        ( 'bundle', BundleAsset ),
         ( 'data', MemoryAsset ),
         ( 'memory', MemoryAsset ),
         ( 'operation', OperationAsset ),
