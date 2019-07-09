@@ -9,19 +9,19 @@ import json
 
 from starfish.asset import (
     create_asset_from_metadata,
-    AssetBase,
-    MemoryAsset,
-    SquidAsset,
-    BundleAsset,
-    OperationAsset,
     Asset,
+    AssetBase,
+    BundleAsset,
+    MemoryAsset,
+    OperationAsset,
+    RemoteAsset,
 )
 
 
 def test_create_asset_from_metadata(metadata):
     asset = create_asset_from_metadata(metadata)
     assert(asset)
-    assert(isinstance(asset, SquidAsset))
+    assert(isinstance(asset, RemoteAsset))
 
     type_list = [
         ( 'bundle', BundleAsset ), 

@@ -106,6 +106,7 @@ class AssetBase(ABC):
             if 'type' in metadata:
                 asset_type = metadata['type']
             else:
+                # if from squid at the moment always set to a RemoteAsset
                 if 'base' in metadata:
-                    asset_type = 'squid'
+                    asset_type = 'remote'
         return asset_type

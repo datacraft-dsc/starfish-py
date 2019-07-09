@@ -7,11 +7,11 @@ import secrets
 import logging
 import json
 
-from starfish.asset import SquidAsset
+from starfish.asset import RemoteAsset
 
 
 def test_init(metadata):
-    asset = SquidAsset(metadata)
+    asset = RemoteAsset(metadata)
     assert(asset)
-    assert(isinstance(asset, SquidAsset))
+    assert(isinstance(asset, RemoteAsset))
 
