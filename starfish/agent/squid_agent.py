@@ -460,8 +460,7 @@ class SquidAgent(AgentBase):
                 metadata['base']['files'][index]['url'] = asset.metadata['filename']
 
         if isinstance(asset, BundleAsset):
-            index = 0
-            for asset_name, asset_item in asset:
+            for _, asset_item in asset:
                 if not (isinstance(asset_item, FileAsset) or isinstance(asset_item, RemoteAsset)):
                     raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type FileAsset or RemoteAsset')
                 append_asset_file(metadata, asset_item)
