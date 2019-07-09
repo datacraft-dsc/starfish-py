@@ -37,7 +37,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
         'description': 'Test asset for sale - not for public purchase',
         'author': 'pd_test_case asset listing',
         'license': 'Closed',
-        'price': 7cd,
+        'price': 3.141592,
         'extra_data': {
             'id': unique_pd_case_id,
             'valid_check': valid_check,

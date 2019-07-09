@@ -409,9 +409,10 @@ class SquidAgent(AgentBase):
         # put back additional fields that cannot be saved with the squid
         # main metadata
 
-        # all starfish prices are in ocean tokens - so convert from Vodka's to Ocean
-        listing_data['price'] = Web3.fromWei(int(ddo.metadata[MetadataBase.KEY]['price']), 'ether')
-
+        # first copy the price from the network as the '' price ( in vodka's )
+        listing_data['price_vodka'] = int(listing_data['price'])
+        # all starfish prices are in ocean tokens - so convert from Vodka's to Ocean tokens
+        listing_data['price'] = Web3.fromWei(int(ddo.metadata[MetadataBase.KEY]['price_vodka']), 'ether')
         asset_metadata = []
         if listing_data['files']:
             for file_data in listing_data['files']:
