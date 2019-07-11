@@ -58,5 +58,5 @@ class FileAsset(AssetBase):
     @property
     def data(self):
         if os.path.exists(self._filename):
-            with open(self._filename, 'rd') as fp:
+            with open(self._filename, 'rb') as fp:
                 return fp.read()
