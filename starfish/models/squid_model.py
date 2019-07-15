@@ -31,6 +31,8 @@ from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
 
 from plecos import is_valid_dict_local, validate_dict_local
 
+from starfish.models.starfish_events_manager import StarfishEventsManager
+
 
 logger = logging.getLogger('starfish.squid_model')
 # from starfish import logger
@@ -432,7 +434,11 @@ class SquidModel():
     def watch_provider_events(self, account):
         """ called by the publisher to watch payment request events for the published assets """
         squid_ocean = self.get_squid_ocean(account)
-        squid_ocean.agreements.watch_provider_events(account._squid_account)
+
+        events_manager = StarfishEventsManager.get_instance(
+            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+        events_manager.start_agreement_events_monitor()
+
 
     @property
     def accounts(self):
