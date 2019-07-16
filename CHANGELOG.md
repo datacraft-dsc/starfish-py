@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.4.9
+
+*  Allow the watch event list to check for valid consumer address before starting agreement ( simple white listing on asset purchase).
+*  Changed accounts to only support 'hosted' accounts for squid, but allow for local and host account setup.
+
 ### Release v0.4.8
 
 *  Remove SquidAsset
