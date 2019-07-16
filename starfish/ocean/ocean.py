@@ -145,8 +145,8 @@ class Ocean():
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
+        if not account.is_hosted:
+            raise ValueError('You must pass a valid hosted account')
 
         if not isinstance(ddo, str):
             raise TypeError('You need to pass a DDO as a string')
@@ -195,26 +195,25 @@ class Ocean():
 
     def get_account(self, address, password=None):
         """
-        Get an account object based on it's address
+        Get an account object based on it's address. This just returns the account object, the
+        account can be hosted or local
 
         :param address: address of the account, if dict then use the fields, `address` and `password`.
         :type address: str, list or dict
         :param password: optional password to save with the account
         :type password: str or None
 
-        :return: return the :class:`Account` object or None if the account can not be used.
+        :return: return the :class:`Account` object.
         :type: :class:`Account` or None
 
         >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         """
         account = Account(self, address, password)
-        if account.is_valid:
-            return account
-        return None
+        return account
 
-    def create_account(self, password):
+    def create_account_host(self, password):
         """
-        Create a test account object on the connected network.
+        Create a account object on the hosted node on the connected network.
 
         :param password: optional password to save with the account
         :type password: str or None
@@ -222,13 +221,13 @@ class Ocean():
         :return: return the :class:`Account` object or None if the account can not be used.
         :type: :class:`Account` or None
 
-        >>> account = ocean.create_account('my_password')
+        >>> account = ocean.create_account_host('my_password')
         """
 
         account = None
         model = self.get_squid_model()
         if model:
-            address = model.create_account(password)
+            address = model.create_account_host(password)
             if address:
                 account = Account(self, address, password)
         return account
@@ -236,6 +235,8 @@ class Ocean():
     @property
     def accounts(self):
         """
+
+        Return a list of hosted accounts
         :return: a list of :class:`.Account` objects
         :type: list of :class:`Account` objects
 

@@ -11,7 +11,7 @@ def test_init(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     assert(account)
     assert(account.address)
-    
+
     account = ocean.get_account(config.accounts[0].as_tuple)
     assert(account)
     assert(account.address)
@@ -46,9 +46,9 @@ def test_is_address_equal(ocean, config):
     assert(account.is_address_equal(config.accounts[0].test_address))
 
 
-def test_is_valid(ocean, config):
+def test_is_hosted(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
-    assert(account.is_valid)
+    assert(account.is_hosted)
 
 def test_is_password(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
@@ -82,5 +82,5 @@ def test_ocean_balance(ocean, config):
 
 def test_ether_balance(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
-    assert(account.is_valid)
+    assert(account.is_hosted)
     assert(Web3.toWei(account.ether_balance, 'ether') == config.accounts[0].test_ether)

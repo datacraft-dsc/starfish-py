@@ -54,7 +54,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     # request the tokens to buy the asset
     purchase_account.request_tokens(10)
 
-    squid_agent.watch_provider_events(publisher_account)
+    squid_agent.start_agreement_events_monitor(publisher_account)
 
 
     # purchase the linked remote asset

@@ -31,6 +31,8 @@ from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
 
 from plecos import is_valid_dict_local, validate_dict_local
 
+from starfish.models.starfish_events_manager import StarfishEventsManager
+
 
 logger = logging.getLogger('starfish.squid_model')
 # from starfish import logger
@@ -352,9 +354,9 @@ class SquidModel():
 
         return data
 
-    def get_account(self, address, password=None):
+    def get_account_host(self, address, password=None):
         """
-        :return: sqiud account object if the address is found, else None
+        :return: account object if the address is found on the host node, else None
         :type: object or None
         """
         for account in self.accounts:
@@ -384,8 +386,10 @@ class SquidModel():
         return squid_ocean.accounts.balance(account)
 
     @staticmethod
-    def create_account(password):
+    def create_account_host(password):
         """
+
+        Create a hosted account on the block chain node
 
         :param str password: password of the new account
         :return: None or squid account of the new account.
@@ -429,10 +433,24 @@ class SquidModel():
             return data['value']
         return None
 
-    def watch_provider_events(self, account):
+    def start_agreement_events_monitor(self, account, callback=None):
         """ called by the publisher to watch payment request events for the published assets """
         squid_ocean = self.get_squid_ocean(account)
-        squid_ocean.agreements.watch_provider_events(account._squid_account)
+
+        events_manager = StarfishEventsManager.get_instance(
+            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+
+        events_manager.start_agreement_events_monitor(callback)
+
+    def stop_agreement_events_monitor(self):
+        """ called by the publisher to watch payment request events for the published assets """
+        squid_ocean = self.get_squid_ocean(account)
+
+        events_manager = StarfishEventsManager.get_instance(
+            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+
+        events_manager.stop_agreement_events_monitor()
+
 
     @property
     def accounts(self):

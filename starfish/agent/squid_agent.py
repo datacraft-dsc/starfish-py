@@ -141,8 +141,8 @@ class SquidAgent(AgentBase):
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_valid:
-            raise ValueError('You must pass a valid account')
+        if not account.is_hosted:
+            raise ValueError('You must pass a hosted account')
 
         if not account.is_password:
             raise ValueError('You must set the account password')
@@ -373,7 +373,7 @@ class SquidAgent(AgentBase):
                 asset.add(f'file_{index}', asset_item)
         return asset
 
-    def watch_provider_events(self, account):
+    def start_agreement_events_monitor(self, account, callback=None):
         """
 
         The provider or publisher needs to watch the events on the block chain, to
@@ -385,7 +385,11 @@ class SquidAgent(AgentBase):
 
         """
         model = self.squid_model
-        model.watch_provider_events(account)
+        model.start_agreement_events_monitor(account, callback)
+
+    def stop_agreement_events_monitor(self):
+        model = self.squid_model
+        model.start_agreement_events_monitor()
 
     def _listing_from_ddo(self, ddo):
         """ convert a ddo to a listing that contains a BundleAsset """

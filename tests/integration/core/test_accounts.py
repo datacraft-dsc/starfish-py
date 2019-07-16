@@ -33,7 +33,7 @@ def test_account_get_squid_account(ocean, config):
     assert(account)
     squid_account = account._squid_account
     assert(squid_account)
-    assert(account.is_valid)
+    assert(account.is_hosted)
 
 def test_account_get_balance(ocean, config):
     account = ocean.get_account(config.publisher_account)

@@ -170,7 +170,11 @@ class SurferModel():
 
     def upload_asset_data(self, url, asset_id, data):
         logger.debug(f'uploading data to {url}')
-        files = { 'file':  ( asset_id, io.BytesIO(data.encode()), 'application/octet-stream') }
+        data_bytes = data
+        if not isinstance(data_bytes, bytes):
+            data_bytes = data.encode()
+
+        files = { 'file':  ( asset_id, io.BytesIO(data_bytes), 'application/octet-stream') }
         headers = {
             'Authorization': self._headers['Authorization']
         }
