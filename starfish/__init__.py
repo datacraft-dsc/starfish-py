@@ -9,7 +9,7 @@
 """
 
 __author__ = """DEX.sg"""
-__version__ = '0.4.9'
+__version__ = '0.4.10'
 
 import logging
 
