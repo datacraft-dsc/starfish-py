@@ -63,6 +63,11 @@ def test_asset_remote_register(ocean, config, resources):
     assert(listing)
 
 
+def is_purchase_allowed(did, agreement_id, publish_account, conusmer_account):
+
+    logger.debug(f'is purchase allowed {did}, {agreement_id}, {publish_account}, {conusmer_account}')
+    return True
+
 def test_asset(ocean, config, resources):
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -101,7 +106,7 @@ def test_asset(ocean, config, resources):
     logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
 
 
-    agent.watch_provider_events(publisher_account)
+    agent.start_agreement_events_monitor(publisher_account, is_purchase_allowed)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchase_account)
@@ -134,7 +139,6 @@ def test_asset(ocean, config, resources):
 
     remote_asset = purchase_asset.consume_asset
     assert(remote_asset)
-
 
 
 def test_search_listing(ocean, config, resources):

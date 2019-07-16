@@ -431,13 +431,23 @@ class SquidModel():
             return data['value']
         return None
 
-    def watch_provider_events(self, account):
+    def start_agreement_events_monitor(self, account, callback=None):
         """ called by the publisher to watch payment request events for the published assets """
         squid_ocean = self.get_squid_ocean(account)
 
         events_manager = StarfishEventsManager.get_instance(
             squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
-        events_manager.start_agreement_events_monitor()
+
+        events_manager.start_agreement_events_monitor(callback)
+
+    def stop_agreement_events_monitor(self):
+        """ called by the publisher to watch payment request events for the published assets """
+        squid_ocean = self.get_squid_ocean(account)
+
+        events_manager = StarfishEventsManager.get_instance(
+            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+
+        events_manager.stop_agreement_events_monitor()
 
 
     @property
