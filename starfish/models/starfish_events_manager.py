@@ -230,39 +230,38 @@ class StarfishEventsManager:
             logger.debug(f'agreement event not for my address {self._account.address}, event provider address {event.args["_accessProvider"]}')
             return
         agreement_id = None
-#        try:
-        agreement_id = self._web3.toHex(event.args["_agreementId"])
-        ids = self.db.get_agreement_ids()
-        if ids:
-            # logger.info(f'got agreement ids: #{agreement_id}#, ##{ids}##, \nid in ids: {agreement_id in ids}')
-            if agreement_id in ids:
-                logger.debug(f'handle_agreement_created: skipping service agreement {agreement_id} '
-                             f'because it already been processed before.')
-                return
+        try:
+            agreement_id = self._web3.toHex(event.args["_agreementId"])
+            ids = self.db.get_agreement_ids()
+            if ids:
+                # logger.info(f'got agreement ids: #{agreement_id}#, ##{ids}##, \nid in ids: {agreement_id in ids}')
+                if agreement_id in ids:
+                    logger.debug(f'handle_agreement_created: skipping service agreement {agreement_id} '
+                                 f'because it already been processed before.')
+                    return
 
-        logger.debug(f'Start handle_agreement_created (agreementId {agreement_id}): event_args={event.args}')
+            logger.debug(f'Start handle_agreement_created (agreementId {agreement_id}): event_args={event.args}')
 
-        did = id_to_did(event.args["_did"])
+            did = id_to_did(event.args["_did"])
 
-        is_valid = True
-        if not self._is_valid_callback is None:
-            print(f'calling is_valid_callback, {self._is_valid_callback}')
-            is_valid = self._is_valid_callback(did, agreement_id, self._account.address, event.args['_accessConsumer'])
+            is_valid = True
+            if not self._is_valid_callback:
+                is_valid = self._is_valid_callback(did, agreement_id, self._account.address, event.args['_accessConsumer'])
 
-        if is_valid:
-            unfulfilled_conditions = ['lockReward', 'accessSecretStore', 'escrowReward']
-            self.process_condition_events(
-                agreement_id, unfulfilled_conditions, did, event.args['_accessConsumer'],
-                event.blockNumber, new_agreement=True
-            )
+            if is_valid:
+                unfulfilled_conditions = ['lockReward', 'accessSecretStore', 'escrowReward']
+                self.process_condition_events(
+                    agreement_id, unfulfilled_conditions, did, event.args['_accessConsumer'],
+                    event.blockNumber, new_agreement=True
+                )
 
-            logger.debug(f'handle_agreement_created()  (agreementId {agreement_id}) -- '
-                         f'done registering event listeners.')
-        else:
-            logger.debug('processing events denied by is_valid_callback')
-            print('not Valid', ( '*' * 120))
-#        except Exception as e:
-#            logger.error(f'Error in handle_agreement_created (agreementId {agreement_id}): {e}', exc_info=1)
+                logger.debug(f'handle_agreement_created()  (agreementId {agreement_id}) -- '
+                             f'done registering event listeners.')
+            else:
+                logger.debug('processing events denied by is_valid_callback')
+
+        except Exception as e:
+            logger.error(f'Error in handle_agreement_created (agreementId {agreement_id}): {e}', exc_info=1)
 
     def _last_condition_fulfilled(self, _, agreement_id, cond_name_to_id):
         # update db, escrow reward status to fulfilled
