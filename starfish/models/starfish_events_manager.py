@@ -194,7 +194,11 @@ class StarfishEventsManager:
         self.process_pending_agreements(agreements, conditions)
 
     def run_monitor(self):
-        self.do_first_check()
+        try:
+            self.do_first_check()
+        except Exception as e:
+            logger.debug(f'Error processing event: {str(e)}')
+
         while True:
             try:
                 if not self._monitor_is_on:
@@ -244,21 +248,14 @@ class StarfishEventsManager:
 
             did = id_to_did(event.args["_did"])
 
-            is_valid = True
-            if not self._is_valid_callback:
-                is_valid = self._is_valid_callback(did, agreement_id, self._account.address, event.args['_accessConsumer'])
+            unfulfilled_conditions = ['lockReward', 'accessSecretStore', 'escrowReward']
+            self.process_condition_events(
+                agreement_id, unfulfilled_conditions, did, event.args['_accessConsumer'],
+                event.blockNumber, new_agreement=True
+            )
 
-            if is_valid:
-                unfulfilled_conditions = ['lockReward', 'accessSecretStore', 'escrowReward']
-                self.process_condition_events(
-                    agreement_id, unfulfilled_conditions, did, event.args['_accessConsumer'],
-                    event.blockNumber, new_agreement=True
-                )
-
-                logger.debug(f'handle_agreement_created()  (agreementId {agreement_id}) -- '
-                             f'done registering event listeners.')
-            else:
-                logger.debug('processing events denied by is_valid_callback')
+            logger.debug(f'handle_agreement_created()  (agreementId {agreement_id}) -- '
+                         f'done registering event listeners.')
 
         except Exception as e:
             logger.error(f'Error in handle_agreement_created (agreementId {agreement_id}): {e}', exc_info=1)
@@ -275,6 +272,12 @@ class StarfishEventsManager:
 
     def process_condition_events(self, agreement_id, conditions, did,
                                  consumer_address, block_number, new_agreement=True):
+
+        # check the callback, if set then
+        if not self._is_valid_callback:
+            is_valid = self._is_valid_callback(did, agreement_id, self._account.address, consumer_address)
+            if not is_valid:
+                return
 
         ddo = DIDResolver(self._keeper.did_registry).resolve(did)
         service_agreement = ServiceAgreement.from_ddo(ServiceTypes.ASSET_ACCESS, ddo)
