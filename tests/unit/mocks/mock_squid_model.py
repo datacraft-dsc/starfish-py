@@ -36,7 +36,7 @@ class MockSquidModel():
         self._ddo_list = {}
         self._purchase_assets={}
 
-    def get_account(self, address, password=None):
+    def get_account_host(self, address, password=None):
         if address:
             for index in unitTestConfig.accounts:
                 test_account = unitTestConfig.accounts[index]
@@ -166,12 +166,12 @@ class MockSquidModel():
                 return balance
         return 0
 
-    def create_account(self, password = None):
+    def create_account_host(self, password = None):
         address = unitTestConfig.create_account(password)
-        return self.get_account(address, password)
+        return self.get_account_host(address, password)
 
     def request_tokens(self, account, value):
-        found_account = self.get_account(account.address)
+        found_account = self.get_account_host(account.address)
         if found_account.address == account.address:
             return value
         return 0

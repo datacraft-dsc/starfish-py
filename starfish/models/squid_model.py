@@ -354,9 +354,9 @@ class SquidModel():
 
         return data
 
-    def get_account(self, address, password=None):
+    def get_account_host(self, address, password=None):
         """
-        :return: sqiud account object if the address is found, else None
+        :return: account object if the address is found on the host node, else None
         :type: object or None
         """
         for account in self.accounts:
@@ -386,8 +386,10 @@ class SquidModel():
         return squid_ocean.accounts.balance(account)
 
     @staticmethod
-    def create_account(password):
+    def create_account_host(password):
         """
+
+        Create a hosted account on the block chain node
 
         :param str password: password of the new account
         :return: None or squid account of the new account.

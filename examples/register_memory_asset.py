@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import secrets
 
 from starfish import Ocean
 from starfish.asset import MemoryAsset
@@ -12,8 +13,8 @@ def main():
     """
     ocean = Ocean()
 
-    # create a new test account to register
-    register_account = ocean.create_account('any old password')
+    # create a dummy test account to register
+    register_account = ocean.get_account(f'0x{secrets.token_hex(20)}', 'any old password')
 
     # print the new account
     print('my new register account', register_account)

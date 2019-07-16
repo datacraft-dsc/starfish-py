@@ -198,14 +198,14 @@ class Account():
         return self._ocean
 
     @property
-    def is_valid(self):
+    def is_hosted(self):
         """
 
-        Return True if this account is registered in the Ocean network
+        Return True if this account is registered in the Ocean network, on the block chain node
         :return: True if this account address is valid
         :type: boolean
 
-        >>> account.is_valid
+        >>> account.is_hosted
         True
         """
         squid_account = self._squid_account
@@ -223,7 +223,7 @@ class Account():
     def _squid_account(self):
         """
 
-        Return the squid account object used for squid services
+        Return the squid account object used for squid services, curretly only hosted accounts can be used
         :return: The squid account object
         :type: object
 
@@ -234,7 +234,7 @@ class Account():
 
         model = self._ocean.get_squid_model()
         if model:
-            return model.get_account(self.as_checksum_address, self._password)
+            return model.get_account_host(self.as_checksum_address, self._password)
         return None
 
     @property
