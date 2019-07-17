@@ -8,6 +8,7 @@ Agent class to provide basic functionality for all Ocean Agents
 import datetime
 import logging
 import json
+import math
 
 from web3 import Web3
 
@@ -25,7 +26,10 @@ from starfish.purchase import Purchase
 from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
-from starfish.exceptions import StarfishAssetNotFound
+from starfish.exceptions import (
+    StarfishAssetNotFound,
+    StarfishPurchaseError
+)
 
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.ddo.metadata import (
@@ -263,6 +267,12 @@ class SquidAgent(AgentBase):
         model = self.squid_model
 
         try:
+            if 'price' in listing.data:
+                account_balance = account.ocean_balance
+                asset_price = listing.data['price']
+                if account_balance < asset_price:
+                    raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} which is not enougth to purchase the asset at a price of {asset_price}')
+
             service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
@@ -454,7 +464,8 @@ class SquidAgent(AgentBase):
 
 
         # make sure we are sending a price value as string for squid in vodka
-        metadata[MetadataBase.KEY]['price'] = str(Web3.toWei(metadata[MetadataBase.KEY]['price'], 'ether'))
+        price_value = Web3.toWei(metadata[MetadataBase.KEY]['price'], 'ether')
+        metadata[MetadataBase.KEY]['price'] = str(price_value)
 
         def append_asset_file(metadata, asset):
             metadata['base']['files'].append(asset.metadata)

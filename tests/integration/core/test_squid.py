@@ -20,7 +20,10 @@ from starfish.asset import (
     FileAsset,
     RemoteAsset,
 )
-from starfish.exceptions import StarfishAssetNotFound
+from starfish.exceptions import (
+    StarfishAssetNotFound,
+    StarfishPurchaseError
+)
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
@@ -211,3 +214,23 @@ def test_get_listing(ocean, config, resources):
         if listing.listing_id == dummy_listing_id:
             with pytest.raises(StarfishAssetNotFound):
                 listing.purchase(purchase_account)
+
+def test_insufficient_funds(ocean, config, resources):
+    publisher_account = ocean.get_account(config.publisher_account)
+
+    agent = SquidAgent(ocean, config.squid_config)
+    assert(agent)
+
+    asset = FileAsset(filename=resources.asset_file)
+    listing_data = resources.listing_data.copy()
+    listing_data['price'] = 83454.2345
+    listing = agent.register_asset(asset, listing_data, publisher_account)
+    assert(listing)
+
+    listing_did = listing.asset.did
+    # start to test getting the asset from storage
+    listing = agent.get_listing(listing_did)
+
+    purchase_account = ocean.get_account(config.purchaser_account)
+    with pytest.raises(StarfishPurchaseError):
+        purchase_asset = listing.purchase(purchase_account)

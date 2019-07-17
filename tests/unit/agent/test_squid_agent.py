@@ -3,6 +3,7 @@ import datetime
 import pytest
 import secrets
 import tempfile
+import math
 
 
 from starfish.agent.squid_agent import SquidAgent
@@ -129,3 +130,16 @@ def test_is_did_valid():
     assert(SquidAgent.is_did_valid(VALID_DID))
     # FIXME: This should be invalid
     assert( SquidAgent.is_did_valid(INVALID_DID))
+
+def test_price_out_of_range(ocean, resources, config):
+    account = ocean.get_account(config.accounts[0].as_dict)
+    agent = SquidAgent(ocean)
+    assert(agent)
+    asset = RemoteAsset(url=resources.asset_remote)
+    assert(asset)
+    resources.listing_data['price'] = -1
+    with pytest.raises(ValueError):
+        listing = agent.register_asset(asset, resources.listing_data, account)
+    resources.listing_data['price'] = math.pow(2, 197)
+    with pytest.raises(ValueError):
+        listing = agent.register_asset(asset, resources.listing_data, account)
