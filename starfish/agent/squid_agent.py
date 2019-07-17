@@ -8,7 +8,6 @@ Agent class to provide basic functionality for all Ocean Agents
 import datetime
 import logging
 import json
-import math
 
 from web3 import Web3
 
@@ -23,7 +22,6 @@ from starfish.asset import (
     Asset,
  )
 from starfish.purchase import Purchase
-from starfish.exceptions import StarfishPurchaseError
 from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
 from starfish.exceptions import (
