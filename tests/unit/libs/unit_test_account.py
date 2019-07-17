@@ -8,8 +8,8 @@ class UnitTestAccount():
             self.test_password = password
         else:
             self.test_password = secrets.token_hex(32)
-        self.test_ether = secrets.randbelow(10000000)
-        self.test_tokens = secrets.randbelow(10000000)
+        self.test_ether = 1 + secrets.randbelow(100)
+        self.test_tokens = 5 + secrets.randbelow(100)
 
     @property
     def as_tuple(self):

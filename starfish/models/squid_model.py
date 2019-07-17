@@ -203,6 +203,7 @@ class SquidModel():
         Wait for a purchase to complete
 
         """
+
         event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
             purchase_id,
             timeout_seconds,
