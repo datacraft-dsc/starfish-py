@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.4.11
+
+*   Add account balance and asset price check before purchasing an asset
+
 ### Release v0.4.9
 
 *   Allow the watch event list to check for valid consumer address before starting agreement ( simple white listing on asset purchase).

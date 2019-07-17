@@ -108,6 +108,7 @@ def test_search_listings(ocean, resources, config):
 def test_purchase_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
     account = ocean.get_account(config.accounts[1].as_dict)
+    print(account.ocean_balance)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 

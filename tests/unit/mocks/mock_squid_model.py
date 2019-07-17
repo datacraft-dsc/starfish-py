@@ -161,8 +161,8 @@ class MockSquidModel():
             test_account = unitTestConfig.accounts[index]
             if account.address.lower() == test_account.test_address.lower():
                 balance = Mock()
-                balance.eth = test_account.test_ether
-                balance.ocn = test_account.test_tokens
+                balance.eth = Web3.toWei(test_account.test_ether, 'ether')
+                balance.ocn = Web3.toWei(test_account.test_tokens, 'ether')
                 return balance
         return 0
 
