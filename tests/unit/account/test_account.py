@@ -77,10 +77,10 @@ def test_set_password(ocean, config):
 
 def test_ocean_balance(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
-    assert(Web3.toWei(account.ocean_balance, 'ether') == config.accounts[0].test_tokens)
+    assert(account.ocean_balance == config.accounts[0].test_tokens)
 
 
 def test_ether_balance(ocean, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     assert(account.is_hosted)
-    assert(Web3.toWei(account.ether_balance, 'ether') == config.accounts[0].test_ether)
+    assert(account.ether_balance == config.accounts[0].test_ether)
