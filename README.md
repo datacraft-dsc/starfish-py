@@ -27,7 +27,7 @@
 
 ## About
 
-Starfish is an open-sourced developer toolkit for the data economy. Available in flavours of Java, Python, Clojure and JavaScript*, it allows developers, data scientists and enterprises to create, interact, integrate and manage a data supply line through standardised and simple-to-use APIs.
+Starfish is an open-sourced developer toolkit for the data economy. Available in flavours of Java, Python, and Clojure, it allows developers, data scientists and enterprises to create, interact, integrate and manage a data supply line through standardised and simple-to-use APIs.
 
 Based on an underlying data ecosystem standard, Starfish provides high-level APIs for common tasks within the data economy, for example, registering/publishing an asset, for subsequent use in a data supply line. In this case, an asset can be any data set, model or data service. The high-level API also allows developers to invoke operation on an asset, e.g. computing a predictive model or anonymising sensitive personal information, among other capabilities. 
 
@@ -36,7 +36,7 @@ Starfish works with blockchain networks, such as Ocean Protocol, and common web 
 Starfish-py provides user access and tools to work with the Ocean Protocol Network, delegating certain functions via the python library squid-py.
 
 While we strive to deliver code at a high quality, please note, that there exist parts of the library that still need thorough testing.
-Contributions -- whether it is in the form of new features, better documentation or tests -- are welcome.
+Contributions – whether it is in the form of new features, better documentation or tests – are welcome.
 
 ## Prerequisites
 
