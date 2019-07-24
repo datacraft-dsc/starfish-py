@@ -33,14 +33,10 @@ Based on an underlying data ecosystem standard, Starfish provides high-level API
 
 Starfish works with blockchain networks, such as Ocean Protocol, and common web services through agents, allowing unprecedented flexibility in asset discovery and data supply line management.
 
-Starfish-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
+Starfish-py provides user access and tools to work with the Ocean Protocol Network, delegating certain functions via the python library squid-py.
 
 While we strive to deliver code at a high quality, please note, that there exist parts of the library that still need thorough testing.
 Contributions -- whether it is in the form of new features, better documentation or tests -- are welcome.
-
-## Features
-
-Currently only provides basic account balance information
 
 ## Prerequisites
 
