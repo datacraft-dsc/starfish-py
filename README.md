@@ -1,8 +1,6 @@
-[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://dex.sg)
 
 # starfish-py
 
-Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
 
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/starfish-py.svg)](https://travis-ci.com/DEX-Company/starfish-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
@@ -14,20 +12,35 @@ Floating on the surface of the Ocean. Ocean-py (Ocean Python) provides user acce
 
 ## Table of Contents
 
+  - [About](#about)
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Quickstart](#quickstart)
   - [Environment variables](#environment-variables)
-  - [Code style](#code-style)
   - [Testing](#testing)
   - [New Version](#new-version)
+  - [Mailing Lists](#mailing-list)
+  - [Maintainers](#maintainers)
   - [License](#license)
 
 ---
 
+## About
+
+Starfish is an open-sourced developer toolkit for the data economy. Available in flavours of Java, Python, Clojure and JavaScript*, it allows developers, data scientists and enterprises to create, interact, integrate and manage a data supply line through standardised and simple-to-use APIs.
+
+Based on an underlying data ecosystem standard, Starfish provides high-level APIs for common tasks within the data economy, for example, registering/publishing an asset, for subsequent use in a data supply line. In this case, an asset can be any data set, model or data service. The high-level API also allows developers to invoke operation on an asset, e.g. computing a predictive model or anonymising sensitive personal information, among other capabilities. 
+
+Starfish works with blockchain networks, such as Ocean Protocol, and common web services through agents, allowing unprecedented flexibility in asset discovery and data supply line management.
+
+Starfish-py (Ocean Python) provides user access and tools to the Ocean Protocol Network, via the python library squid-py.
+
+While we strive to deliver code at a high quality, please note, that there exist parts of the library that still need thorough testing.
+Contributions -- whether it is in the form of new features, better documentation or tests -- are welcome.
+
 ## Features
 
-Currently only provide basic account balance information
+Currently only provides basic account balance information
 
 ## Prerequisites
 
@@ -90,6 +103,7 @@ Python 3.6
 ## Documentation
 
 1. Build Sphinx documentation
+    
     To build the Syphinx auto documentation, you need to do the following:
     ```bash
     make docs
@@ -97,10 +111,6 @@ Python 3.6
 
 The [documentation](https://shrimp.octet.services/starfish) for this repo is on the starfish doc site [shrimp server](https://shrimp.octet.services).
 
-## Code style
-
-The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
-and [python-style-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-style-guide.md).
 
 ## Testing
 
@@ -110,6 +120,16 @@ Our test use pytest framework. The testing uses the remote barge server to test 
 ## New Version
 
 The `bumpversion.sh` script helps to bump the project version. You can execute the script using as first argument {major|minor|patch} to bump accordingly the version.
+
+## Mailing Lists
+
+  * [developer@dex.sg][starfish-qa] -- General questions regarding the usage of Starfish.
+
+
+## Maintainers
+
+ [Developer Dex team][developer@dex.sg]
+
 
 ## License
 
