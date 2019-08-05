@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Register an Asset &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="starfish_py module" href="modules/starfish.html" />
+    <link rel="prev" title="Register a Memory Asset" href="register_a_memory_asset.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_a_memory_asset.html">Register a Memory Asset</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Register an Asset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-an-account">Loading an account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-an-asset">Create an Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-the-squid-agent">Setup the Squid Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#register-the-asset">Register the Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-example-to-register-an-asset">Full example to register an Asset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/agent.html">Agent Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Register an Asset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/register_asset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="register-an-asset">
+<h1>Register an Asset<a class="headerlink" href="#register-an-asset" title="Permalink to this headline">¶</a></h1>
+<p>This is to show how to register an asset on the Ocean network.</p>
+<p>We assume that you have already setup a test <cite>barge</cite> in ‘Getting Started’.</p>
+<div class="section" id="creating-a-new-ocean-instance">
+<h2>Creating a new <cite>Ocean</cite> instance<a class="headerlink" href="#creating-a-new-ocean-instance" title="Permalink to this headline">¶</a></h2>
+<p>First import the main starfish ocean library, and the logging library</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
+</pre></div>
+</div>
+<p>Next create an instance and a basic connection to the ocean network, with
+some extra logging so you can see what is happening.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">contracts_path</span><span class="o">=</span><span class="s1">&#39;artifacts&#39;</span><span class="p">,</span> <span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">,</span> <span class="n">log_info</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-an-account">
+<h2>Loading an account<a class="headerlink" href="#loading-an-account" title="Permalink to this headline">¶</a></h2>
+<p>Now we need to load an account and see how much ocean tokens and Etherum ether we have.
+We will always need some ether to be able to pay for the transaction costs to register and buy an asset
+on the Ethereum network. For our test Ocean network, we will use some ethereum for registering an asset, but
+no ocean tokens, since we are not purchasing an asset yet.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span><span class="p">)</span>
+<span class="go">1067 1000000003718520260000000000</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-an-asset">
+<h2>Create an Asset<a class="headerlink" href="#create-an-asset" title="Permalink to this headline">¶</a></h2>
+<p>We now want to create an Ocean asset to register on the block chain, and store it’s metadata
+with the meta storage service.</p>
+<p>First we need to load in a sample metadata.</p>
+<p>Then use this metadata to register an asset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">SquidAsset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asset</span> <span class="o">=</span> <span class="n">SquidAsset</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let see what’s in the memory asset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now see if the asset has a DID?
+&gt;&gt;&gt; print(asset.did)
+None</p>
+</div>
+<div class="section" id="setup-the-squid-agent">
+<h2>Setup the Squid Agent<a class="headerlink" href="#setup-the-squid-agent" title="Permalink to this headline">¶</a></h2>
+<p>We now need an agent to register and manage our Asset. The agents
+task is to do the actual work of registration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">SquidAgent</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">SquidAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">SQUID_AGENT_PARAMETERS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="register-the-asset">
+<h2>Register the Asset<a class="headerlink" href="#register-the-asset" title="Permalink to this headline">¶</a></h2>
+<p>Now we can register the asset with the ocean account. This will return
+a :class:.Listing object. The listing object will contain all of the information
+for selling the asset, such as price, where to obtain the asset, any samples, and more
+information about the asset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+<span class="go">did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="full-example-to-register-an-asset">
+<h2>Full example to register an Asset<a class="headerlink" href="#full-example-to-register-an-asset" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
+<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">RemoteAsset</span>
+<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">SquidAgent</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">The full set of parameters needed to access the &#39;ocean&#39; network servers</span>
+<span class="sd">and configuration information on the Nile test network.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">LOCAL_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;keeper_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;squid_agent&#39;</span><span class="p">:</span>  <span class="p">{</span>
+        <span class="s1">&#39;aquarius_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:5000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;brizo_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:8030&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;secret_store_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:12001&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;parity_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;storage_path&#39;</span><span class="p">:</span> <span class="s1">&#39;squid_py.db&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;account&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">NILE_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;keeper_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://nile.dev-ocean.com&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;squid_agent&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;aquarius_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://aquarius.nile.dev-ocean.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;brizo_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://brizo.nile.dev-ocean.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;secret_store_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://secret-store.dev-ocean.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;parity_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://nile.dev-ocean.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;storage_path&#39;</span><span class="p">:</span> <span class="s1">&#39;squid_py.db&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;account&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0x413c9ba0a05b8a600899b41b0c62dd661e689354&#39;</span><span class="p">,</span> <span class="s1">&#39;ocean_secret&#39;</span><span class="p">),</span>
+
+<span class="p">}</span>
+
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="n">LOCAL_CONFIG</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Test sample metadata to load in for an asset.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">METADATA_SAMPLE_PATH</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;examples&#39;</span> <span class="o">/</span> <span class="s1">&#39;sample_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;sample_metadata.json&#39;</span>
+<span class="n">MY_ACCOUNT_PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;test_account_password&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Create a new Ocean instance. logging information. &quot;&quot;&quot;</span>
+
+    <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;keeper_url&#39;</span><span class="p">])</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If you wish to see what&#39;s happening behind the scenes, you can pass</span>
+<span class="sd">    &#39;log_level=logging.DEBUG&#39; parameter to get full debug instead.</span>
+
+<span class="sd">    ocean = Ocean(contracts_path=&#39;artifacts&#39;,</span>
+<span class="sd">                    keeper_url=&#39;http://localhost:8545&#39;</span>
+<span class="sd">    )</span>
+
+<span class="sd">    Get our first test publisher account - in test the account numbers are published</span>
+<span class="sd">    at https://github.com/DEX-Company/barge</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;config data&#39;</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">)</span>
+    <span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;account&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Print out the account&#39;s ocean balance.</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my account ocean balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my account ether balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span><span class="p">)</span>
+
+    <span class="c1"># create a listing specifying the information about the asset</span>
+    <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;The white paper&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Ocean Protocol&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
+    <span class="p">}</span>
+    <span class="c1"># Now create a squid asset using the metadata we have just loaded</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">RemoteAsset</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://oceanprotocol.com/tech-whitepaper.pdf&#39;</span><span class="p">)</span>
+
+
+    <span class="c1"># Create a new `Squid` agent to do the work on the block chain.</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">SquidAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;squid_agent&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Register the asset, on the block chain and with the metadata storage.</span>
+    <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+
+    <span class="c1"># Print out the listing did and listing data.</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;the listing&#39;</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">listing_id</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules/starfish.html" class="btn btn-neutral float-right" title="starfish_py module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="register_a_memory_asset.html" class="btn btn-neutral float-left" title="Register a Memory Asset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

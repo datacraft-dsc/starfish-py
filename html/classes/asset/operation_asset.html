@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Operation Asset class &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Listing Classes" href="../listing.html" />
+    <link rel="prev" title="Bundle Asset class" href="bundle_asset.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_a_memory_asset.html">Register a Memory Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">Agent Classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../asset.html">Asset Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="module.html">Asset Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asset_base.html">Asset Base class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_asset.html">Memory Asset class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundle_asset.html">Bundle Asset class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Operation Asset class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../asset.html">Asset Classes</a> &raquo;</li>
+        
+      <li>Operation Asset class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/classes/asset/operation_asset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="operation-asset-class">
+<h1>Operation Asset class<a class="headerlink" href="#operation-asset-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="starfish.asset.OperationAsset">
+<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">OperationAsset</code><span class="sig-paren">(</span><em class="sig-param">metadata=None</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code></p>
+<p>Operation asset can be used to perform a invokable service</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Optional dictionary metadata to provide for the asset
+if non used then the class will generate a default metadata based on the data provided</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Optional did of the asset if it’s registered</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="starfish.asset.OperationAsset.is_mode">
+<code class="sig-name descname">is_mode</code><span class="sig-paren">(</span><em class="sig-param">mode_type</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset.is_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check to see if this operation supports the mode provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Mode type to check to see if this operation supports</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return True if this mode is supported</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../listing.html" class="btn btn-neutral float-right" title="Listing Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bundle_asset.html" class="btn btn-neutral float-left" title="Bundle Asset class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Register a Memory Asset &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Register an Asset" href="register_asset.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Register a Memory Asset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-memory-asset">Create a  Memory Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-account">Create a new Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-the-memory-agent">Setup the Memory Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#register-the-asset">Register the Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-program">Example program</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/agent.html">Agent Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Register a Memory Asset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/register_a_memory_asset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="register-a-memory-asset">
+<h1>Register a Memory Asset<a class="headerlink" href="#register-a-memory-asset" title="Permalink to this headline">¶</a></h1>
+<p>This is the most simplest example, to register an in memory asset.</p>
+<div class="section" id="creating-a-new-ocean-instance">
+<h2>Creating a new <cite>Ocean</cite> instance<a class="headerlink" href="#creating-a-new-ocean-instance" title="Permalink to this headline">¶</a></h2>
+<p>First import the main starfish ocean library</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
+</pre></div>
+</div>
+<p>Next create an instance of the ocean library with no connection to a network</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-memory-asset">
+<h2>Create a  Memory Asset<a class="headerlink" href="#create-a-memory-asset" title="Permalink to this headline">¶</a></h2>
+<p>For a first test we can try out a basic memory asset to see how the library works.
+An asset is a an object containing data that can be sold to another party.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">MemoryAsset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asset</span> <span class="o">=</span> <span class="n">MemoryAsset</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let see what’s in the memory asset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Some test data that I want to save for this asset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+<span class="go">None</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-new-account">
+<h2>Create a new Account<a class="headerlink" href="#create-a-new-account" title="Permalink to this headline">¶</a></h2>
+<p>We now need to create a new account. Since the Ocean is not connected to a block
+chain network, then we can just create an account locally.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">register_account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">create_account</span><span class="p">(</span><span class="s1">&#39;any old password&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">register_account</span><span class="p">)</span>
+<span class="go">Account: 1f1a46fde8bb3a2e2f6f5b0b3aaf9d3a981365c9</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-the-memory-agent">
+<h2>Setup the Memory Agent<a class="headerlink" href="#setup-the-memory-agent" title="Permalink to this headline">¶</a></h2>
+<p>We now need an agent to register and manage our memory asset. The agents
+task is to do the actual work of registration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">MemoryAgent</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">MemoryAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="register-the-asset">
+<h2>Register the Asset<a class="headerlink" href="#register-the-asset" title="Permalink to this headline">¶</a></h2>
+<p>Now we can register the asset with the ocean account. This will return
+a :class:.Listing object. The listing object will contain all of the information
+for selling the asset, such as price, where to obtain the asset, any samples, and more
+information about the asset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">register_account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+<span class="go">did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-program">
+<h2>Example program<a class="headerlink" href="#example-program" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">secrets</span>
+
+<span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
+<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">MemoryAsset</span>
+<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">MemoryAgent</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new Ocean instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
+
+    <span class="c1"># create a dummy test account to register</span>
+    <span class="n">register_account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;0x{secrets.token_hex(20)}&#39;</span><span class="p">,</span> <span class="s1">&#39;any old password&#39;</span><span class="p">)</span>
+
+    <span class="c1"># print the new account</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my new register account&#39;</span><span class="p">,</span> <span class="n">register_account</span><span class="p">)</span>
+
+    <span class="c1"># Now create a memory asset</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">MemoryAsset</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Print the memory asset out</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my asset:&#39;</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># create a listing specifying the information about the asset</span>
+    <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;The white paper&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Ocean Protocol&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Create a new memory agent to do the work.</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">MemoryAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
+
+    <span class="c1"># Register the memory asset, with the new account.</span>
+    <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">register_account</span><span class="p">)</span>
+
+    <span class="c1"># Print out the listing did and listing data.</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;memory listing&#39;</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">listing_id</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="register_asset.html" class="btn btn-neutral float-right" title="Register an Asset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>starfish.operation.squid_operation module &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../register_a_memory_asset.html">Register a Memory Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/account.html">Account class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/agent.html">Agent Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/asset.html">Asset Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>starfish.operation.squid_operation module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/starfish.operation.squid_operation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-starfish.operation.squid_operation">
+<span id="starfish-operation-squid-operation-module"></span><h1>starfish.operation.squid_operation module<a class="headerlink" href="#module-starfish.operation.squid_operation" title="Permalink to this headline">¶</a></h1>
+<p>Operation class</p>
+<dl class="class">
+<dt id="starfish.operation.squid_operation.SquidOperation">
+<em class="property">class </em><code class="sig-prename descclassname">starfish.operation.squid_operation.</code><code class="sig-name descname">SquidOperation</code><span class="sig-paren">(</span><em class="sig-param">agent</em>, <em class="sig-param">listing</em>, <em class="sig-param">purchase_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.operation.squid_operation.SquidOperation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.purchase.purchase_base.PurchaseBase</span></code></p>
+<p>This class is returned by purchasing an invokable asset uning the <code class="xref py py-func docutils literal notranslate"><span class="pre">Listing.purchase()</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>agent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Agent</span></code>) – agent that was used create this object.</p></li>
+<li><p><strong>listing</strong> (<a class="reference internal" href="../classes/listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a>) – Listing used to purchase this asset.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – purchase_id used to buy this asset.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="starfish.operation.squid_operation.SquidOperation.get_type">
+<em class="property">property </em><code class="sig-name descname">get_type</code><a class="headerlink" href="#starfish.operation.squid_operation.SquidOperation.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.operation.squid_operation.SquidOperation.invoke">
+<code class="sig-name descname">invoke</code><span class="sig-paren">(</span><em class="sig-param">account</em>, <em class="sig-param">payload</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.operation.squid_operation.SquidOperation.invoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call invoke</p>
+<p>You can call the <a class="reference internal" href="#starfish.operation.squid_operation.SquidOperation.is_purchased" title="starfish.operation.squid_operation.SquidOperation.is_purchased"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_purchased()</span></code></a> property before hand to check that you
+have already purchased this asset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>account</strong> (<a class="reference internal" href="../classes/account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a>) – account to used to consume this asset.</p></li>
+<li><p><strong>payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Json payload that the invoke operation needs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data returned from the asset , or False</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)">object</a> or False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.operation.squid_operation.SquidOperation.is_purchase_valid">
+<code class="sig-name descname">is_purchase_valid</code><span class="sig-paren">(</span><em class="sig-param">account</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.operation.squid_operation.SquidOperation.is_purchase_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to see if this purchased asset can be accessed and is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>account</strong> (<a class="reference internal" href="../classes/account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a>) – account to used to check to see if this asset is purchased and has access using this account.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean value if this asset has been purchased</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.operation.squid_operation.SquidOperation.is_purchased">
+<em class="property">property </em><code class="sig-name descname">is_purchased</code><a class="headerlink" href="#starfish.operation.squid_operation.SquidOperation.is_purchased" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if this asset is a purchased asset.</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

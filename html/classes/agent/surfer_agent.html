@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Surfer Agent class &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Asset Classes" href="../asset.html" />
+    <link rel="prev" title="Squid Agent class" href="squid_agent.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_a_memory_asset.html">Register a Memory Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../agent.html">Agent Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agent_base.html">Agent Base class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invoke_agent.html">Invoke Agent class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_agent.html">Memory Agent class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="squid_agent.html">Squid Agent class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Surfer Agent class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../asset.html">Asset Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../agent.html">Agent Classes</a> &raquo;</li>
+        
+      <li>Surfer Agent class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/classes/agent/surfer_agent.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="surfer-agent-class">
+<h1>Surfer Agent class<a class="headerlink" href="#surfer-agent-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="starfish.agent.SurferAgent">
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">SurferAgent</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">did=None</em>, <em class="sig-param">ddo=None</em>, <em class="sig-param">options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
+<p>Surfer Agent class allows to register, list, purchase and consume assets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ocean</strong> (<a class="reference internal" href="../ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a>) – Ocean object that is being used.</p></li>
+<li><p><strong>did</strong> – Optional did of the Surfer agent</p></li>
+<li><p><strong>ddo</strong> – Optional ddo of the surfer agent, if not provided the agent
+will automatically get the DDO from the network based on the DID.</p></li>
+<li><p><strong>options</strong> – Optional options, only <cite>authorization</cite> is used to access the
+Surfer server.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.consume_asset">
+<code class="sig-name descname">consume_asset</code><span class="sig-paren">(</span><em class="sig-param">listing</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consume the asset and download the data. The actual payment to the asset
+provider will be made at this point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a>) – Listing that was used to make the purchase.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
+<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account that was used to purchase the asset.</p></li>
+<li><p><strong>download_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to store the asset data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the asset has been consumed and downloaded</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.ddo">
+<em class="property">property </em><code class="sig-name descname">ddo</code><a class="headerlink" href="#starfish.agent.SurferAgent.ddo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the registered DDO for this agent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>DDO registered for this agent</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../api/starfish.ddo.starfish_ddo.html#starfish.ddo.starfish_ddo.StarfishDDO" title="starfish.ddo.starfish_ddo.StarfishDDO"><code class="xref py py-class docutils literal notranslate"><span class="pre">StarfishDDO</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.decode_asset_did">
+<em class="property">static </em><code class="sig-name descname">decode_asset_did</code><span class="sig-paren">(</span><em class="sig-param">did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.decode_asset_did" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.did">
+<em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.agent.SurferAgent.did" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the did for this surfer agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>did of the registered agent</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.download_asset">
+<code class="sig-name descname">download_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em>, <em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.download_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download an asset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – url of the asset_id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an Asset</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../asset/memory_asset.html#starfish.asset.MemoryAsset" title="starfish.asset.MemoryAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryAsset</span></code></a> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.generate_ddo">
+<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">services=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a DDO for the surfer url. This DDO will contain the supported
+endpoints for the surfer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – URL of the remote surfer agent</p></li>
+<li><p><strong>services</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Optional dict of services urls that are not assigned to the main url.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>created DDO object assigned to the url of the remote surfer agent service</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>:class:.`DDO`</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.generate_metadata">
+<em class="property">static </em><code class="sig-name descname">generate_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.generate_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_asset">
+<code class="sig-name descname">get_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is for compatability for Surfer calls to get an asset directly from Surfer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Id of the asset to read</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an asset class</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_asset_purchase_ids">
+<code class="sig-name descname">get_asset_purchase_ids</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_asset_purchase_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns as list of purchase id’s that have been used for this asset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – Asset to return purchase details.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of purchase ids</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_asset_store_url">
+<code class="sig-name descname">get_asset_store_url</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_asset_store_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_endpoint">
+<code class="sig-name descname">get_endpoint</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the endpoint of the service available for this agent
+:param str name: name or type of the service, e.g. ‘metadata’, ‘storage’, ‘Ocean.Meta.v1’</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_job">
+<code class="sig-name descname">get_job</code><span class="sig-paren">(</span><em class="sig-param">job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a job from the invoke service ( koi )</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Id of the job to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a job class</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../job/job.html#starfish.job.Job" title="starfish.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.job.Job</span></code></a> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_listing">
+<code class="sig-name descname">get_listing</code><span class="sig-paren">(</span><em class="sig-param">listing_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an listing on the listings id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>listing_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Id of the listing.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a listing object</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.get_listings">
+<code class="sig-name descname">get_listings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.get_listings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all listings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of listing objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.invoke_result">
+<code class="sig-name descname">invoke_result</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">params=None</em>, <em class="sig-param">is_async=False</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.invoke_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call an operation asset with params to execute a remote call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>asset</strong> (<a class="reference internal" href="../asset/operation_asset.html#starfish.asset.OperationAsset" title="starfish.asset.OperationAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperationAsset</span></code></a>) – Operation asset to use for this invoke call</p></li>
+<li><p><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Parameters to send to the invoke call</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return a dict of the result.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.is_access_granted_for_asset">
+<code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check to see if the account and purchase_id have access to the assed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – Asset to check for access.</p></li>
+<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to purchase the asset.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the asset can be accessed and consumed.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.is_did_valid">
+<em class="property">static </em><code class="sig-name descname">is_did_valid</code><span class="sig-paren">(</span><em class="sig-param">did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.is_did_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if the DID string is a valid DID for this type of address for an asset.
+This method only checks the syntax of the DID, it does not resolve the DID
+to see if it is assigned to a valid Asset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – DID string to check to see if it is in a valid format.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the DID is in the format ‘did:op:xxxxx/yyyy’</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.job_wait_for_completion">
+<code class="sig-name descname">job_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param">job_id</em>, <em class="sig-param">timeout_seconds=60</em>, <em class="sig-param">sleep_seconds=1</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.job_wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for a job to complete, with optional timeout seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Job id to wait for completion</p></li>
+<li><p><strong>timeout_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – optional time in seconds to wait for job to complete, defaults to 60 seconds</p></li>
+<li><p><strong>sleep_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – optional number of seconds to sleep between polling the job status, == 0 no sleeping</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Job object if finished, else False for timed out</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../job/job.html#starfish.job.Job" title="starfish.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.job.Job</span></code></a> class or False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.purchase_asset">
+<code class="sig-name descname">purchase_asset</code><span class="sig-paren">(</span><em class="sig-param">listing</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id=None</em>, <em class="sig-param">status=None</em>, <em class="sig-param">info=None</em>, <em class="sig-param">agreement=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.purchase_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Purchase an asset using it’s listing and an account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a>) – Listing to use for the purchase.</p></li>
+<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to purchase the asset.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – purchase id (optional)</p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – purchase status (optional)</p></li>
+<li><p><strong>info</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – purchase info (optional)</p></li>
+<li><p><strong>agreement</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – purchase agreement (optional)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.purchase_wait_for_completion">
+<code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id</em>, <em class="sig-param">timeoutSeconds</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for completion of the purchase</p>
+<p>TODO: issues here…
++ No method as yet to pass back paramaters and values during the purchase process
++ We assume that the following templates below will always be used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.register_asset">
+<code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">listing_data</em>, <em class="sig-param">account=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.register_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an asset with the ocean network (surfer)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object to register) – asset object to register</p></li>
+<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Listing inforamiton to give for this asset</p></li>
+<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – This is not used for this agent, so for compatibility it is left in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new <a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> object that has been registered, if failure then return None.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">MemoryAsset</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
+<span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
+<span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span><span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">listing</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.search_listings">
+<code class="sig-name descname">search_listings</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">sort=None</em>, <em class="sig-param">offset=100</em>, <em class="sig-param">page=0</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.search_listings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the off chain storage for an asset with the givien ‘text’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Test to search all metadata items for.</p></li>
+<li><p><strong>sort</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – sort the results ( defaults: None, no sort).</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Return the result from with the maximum record count ( defaults: 100 ).</p></li>
+<li><p><strong>page</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Returns the page number based on the offset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of assets objects found using the search.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of DID strings</p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># return the 300 -&gt; 399 records in the search for the text &#39;weather&#39; in the metadata.</span>
+<span class="n">my_result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">search_registered_assets</span><span class="p">(</span><span class="s1">&#39;weather&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="starfish.agent.SurferAgent.services">
+<code class="sig-name descname">services</code><em class="property"> = {'auth': {'type': 'Ocean.Auth.v1', 'uri': '/api/v1/auth'}, 'invoke': {'type': 'Ocean.Invoke.v1', 'uri': '/api/v1/invoke'}, 'market': {'type': 'Ocean.Market.v1', 'uri': '/api/v1/market'}, 'metadata': {'type': 'Ocean.Meta.v1', 'uri': '/api/v1/meta/data'}, 'storage': {'type': 'Ocean.Storage.v1', 'uri': '/api/v1/assets'}, 'trust': {'type': 'Ocean.Trust.v1', 'uri': '/api/v1/trust'}}</em><a class="headerlink" href="#starfish.agent.SurferAgent.services" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.update_listing">
+<code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param">listing</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.update_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the listing to the agent server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class) – Listing object to update</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.upload_asset">
+<code class="sig-name descname">upload_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.upload_asset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SurferAgent.validate_asset">
+<code class="sig-name descname">validate_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SurferAgent.validate_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate an asset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asset</strong> – Asset to validate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the asset is valid</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../asset.html" class="btn btn-neutral float-right" title="Asset Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="squid_agent.html" class="btn btn-neutral float-left" title="Squid Agent class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

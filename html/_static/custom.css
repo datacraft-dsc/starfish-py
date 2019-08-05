@@ -1,0 +1,14 @@
+@import url("alabaster.css");
+
+a.reference {
+    text-decoration: none;
+    border-bottom: none;
+}
+
+a.reference:hover {
+    border-bottom: none;
+}
+
+pre, highlight { 
+    background: #F0F0F0;
+}

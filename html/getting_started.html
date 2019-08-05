@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; starfish-py 0.4.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Register a Memory Asset" href="register_a_memory_asset.html" />
+    <link rel="prev" title="starfish-py API Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> starfish-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.11
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-the-library">Install the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#startup-a-local-ocean-test-node-barge">Startup a local ocean test node (<code class="docutils literal notranslate"><span class="pre">barge</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copy-keeper-artifacts">Copy keeper artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-unit-tests">Run the unit tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="register_a_memory_asset.html">Register a Memory Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/agent.html">Agent Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/job.html">Job Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">starfish-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-the-library">
+<h2>Install the library<a class="headerlink" href="#install-the-library" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>First you need to clone and download the latest version of starfish-py.
+Then you need to use <code class="docutils literal notranslate"><span class="pre">virtualvenv</span></code> to create a python enrivornment to work with.</p>
+<p>For example you can do something like this below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/DEX-Company/starfish-py.git</span>
+<span class="go">cd starfish-py</span>
+<span class="go">virtualvenv venv</span>
+<span class="go">source venv/bin/activate</span>
+<span class="go">pip install -r requirements_dev.txt</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="startup-a-local-ocean-test-node-barge">
+<h2>Startup a local ocean test node (<code class="docutils literal notranslate"><span class="pre">barge</span></code>)<a class="headerlink" href="#startup-a-local-ocean-test-node-barge" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Create the local testing environment using the <a class="reference external" href="https://github.com/DEX-Company/barge">barge</a> repo.</p>
+<p>In a separate terminal session you need to clone and checkout the correct tagged
+version of <code class="docutils literal notranslate"><span class="pre">barge</span></code> repository, by doing the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/DEX-Company/barge.git</span>
+<span class="go">cd barge</span>
+<span class="go">git checkout tags/dex-2019-08-08</span>
+<span class="go">./start_ocean.sh --no-brizo --no-pleuston --local-spree-node</span>
+</pre></div>
+</div>
+<p>So you should now have two folders:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">myProjects</span><span class="o">/--|</span>
+             <span class="o">|--&gt;</span> <span class="n">barge</span><span class="o">/</span>
+             <span class="o">|--&gt;</span> <span class="n">starfish</span><span class="o">-</span><span class="n">py</span><span class="o">/</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="copy-keeper-artifacts">
+<h2>Copy keeper artifacts<a class="headerlink" href="#copy-keeper-artifacts" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A bash script is available to copy keeper artifacts into this file directly from a running docker image. This script needs to run in the root of the project.
+The script waits until the keeper contracts are deployed, and then copies the artifacts.</p>
+<p>using the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd starfish-py</span>
+<span class="go">./scripts/wait_for_migration_and_extract_keeper_artifacts.sh</span>
+</pre></div>
+</div>
+<p>The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.</p>
+</div></blockquote>
+</div>
+<div class="section" id="run-the-unit-tests">
+<h2>Run the unit tests<a class="headerlink" href="#run-the-unit-tests" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Now you can run the tests by running the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 setup.py test</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="register_a_memory_asset.html" class="btn btn-neutral float-right" title="Register a Memory Asset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="starfish-py API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright starfish-py contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
