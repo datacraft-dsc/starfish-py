@@ -29,7 +29,7 @@
 
 Starfish is an open-sourced developer toolkit for the data economy. Available in flavours of Java, Python, and Clojure, it allows developers, data scientists and enterprises to create, interact, integrate and manage a data supply line through standardised and simple-to-use APIs.
 
-Based on an underlying data ecosystem standard, Starfish provides high-level APIs for common tasks within the data economy, for example, registering/publishing an asset, for subsequent use in a data supply line. In this case, an asset can be any data set, model or data service. The high-level API also allows developers to invoke operation on an asset, e.g. computing a predictive model or anonymising sensitive personal information, among other capabilities. 
+Based on an underlying data ecosystem standard, Starfish provides high-level APIs for common tasks within the data economy, for example, registering/publishing an asset, for subsequent use in a data supply line. In this case, an asset can be any data set, model or data service. The high-level API also allows developers to invoke operation on an asset, e.g. computing a predictive model or anonymising sensitive personal information, among other capabilities.
 
 Starfish works with blockchain networks, such as Ocean Protocol, and common web services through agents, allowing unprecedented flexibility in asset discovery and data supply line management.
 
@@ -99,13 +99,13 @@ Python 3.6
 ## Documentation
 
 1. Build Sphinx documentation
-    
+
     To build the Syphinx auto documentation, you need to do the following:
     ```bash
     make docs
     ```
 
-The [documentation](https://shrimp.octet.services/starfish) for this repo is on the starfish doc site [shrimp server](https://shrimp.octet.services).
+The [documentation](https://dex-company.github.io/starfish-py) for this repo.
 
 
 ## Testing
