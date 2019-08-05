@@ -19,9 +19,6 @@ install: pip install -U tox-travis
 
 script: tox
 
-before_deploy:
-- make docs
-
 deploy:
 - provider: pypi
   distributions: sdist bdist_wheel
