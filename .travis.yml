@@ -26,21 +26,13 @@ deploy:
     tags: true
     repo: DEX-Company/starfish-py
     python: 3.6
-- provider: script
+- provider: pages
+  local_dir: docs/build/html
   skip_cleanup: true
-  script: bash scripts/deployDocs.sh shrimp.octet.services docs_deploy
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
   on:
     tags: true
-    repo: DEX-Company/starfish-py
-    all_branches: true
-#    - branch: feature/deploy-docs
-#    - branch: develop
-    python: 3.6
-- provider: script
-  skip_cleanup: true
-  script: bash scripts/deployDocs.sh shrimp.octet.services docs_deploy dev
-  on:
-    tags: false
     repo: DEX-Company/starfish-py
     all_branches: true
     python: 3.6
