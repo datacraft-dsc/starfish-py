@@ -10,8 +10,6 @@ services:
 - docker
 
 before_install:
-# - export BARGE_URL=http://52.187.164.74
-# - scripts/setup_for_remote_barge.sh $BARGE_URL
 - export BARGE_URL=http://localhost
 - scripts/setup_for_local_barge.sh
 
@@ -35,8 +33,7 @@ deploy:
   github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep_history: true
   on:
-    branch: fix/docs
-#    tags: true
-#    repo: DEX-Company/starfish-py
+    branch: develop
+    tags: true
 #    all_branches: true
     python: 3.6
