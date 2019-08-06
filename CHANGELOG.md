@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.5.0
+
+*   Removed FileAsset, RemoteAsset. Replaced with DataAsset
+
 ### Release v0.4.11
 
 *   Add account balance and asset price check before purchasing an asset
