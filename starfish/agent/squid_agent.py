@@ -115,7 +115,7 @@ class SquidAgent(AgentBase):
 
         Register a squid asset with the ocean network.
 
-        :param asset: the asset to register, at the moment only a SquidAsset can be used.
+        :param asset: the asset to register, at the moment only a Asset can be used.
         :type asset: :class:`.FileAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
@@ -199,7 +199,7 @@ class SquidAgent(AgentBase):
         :type: :class:`.Listing` class
 
         :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
-        aquarius or the DID of the asset is not on the network ( Block chain )
+            aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
         model = self.squid_model
@@ -220,7 +220,7 @@ class SquidAgent(AgentBase):
         Search the off chain storage for an asset with the givien 'text'
 
         :param str, dict text: Test to search all metadata items for. If the field is a string
-        then the search will be a basic search, else a dict then a query will be performed
+            then the search will be a basic search, else a dict then a query will be performed
         :param sort: sort the results ( defaults: None, no sort).
         :type sort: str or None
         :param int offset: Return the result from with the maximum record count ( defaults: 100 ).
@@ -258,7 +258,7 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account` object to use for registration.
 
         :raise: :class:`.StarfishAssetNotFound` if the asset is not found in
-        aquarius or the DID of the asset is not on the network ( Block chain )
+            aquarius or the DID of the asset is not on the network ( Block chain )
 
         """
         purchase = None

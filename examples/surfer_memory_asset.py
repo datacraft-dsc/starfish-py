@@ -27,7 +27,7 @@ def main():
     print('my asset:', asset.data)
 
     # Create a new memory agent to do the work.
-    surfer_url = 'http://52.187.164.74:8080'
+    surfer_url = 'http://localhost:8080'
     surfer_ddo = SurferAgent.generate_ddo(surfer_url)
     surfer_options = {
         'url': surfer_url,
