@@ -12,7 +12,7 @@ from starfish.asset import (
     DataAsset,
 )
 from starfish.exceptions import StarfishPurchaseError
-from tests.unit.mocks.mock_squid_model import MockSquidModel
+from tests.unit.mocks.mock_squid_agent_adapter import MockSquidAgentAdapter
 
 
 VALID_DID = 'did:op:' + secrets.token_hex(64)
@@ -43,11 +43,11 @@ def test_init(ocean):
 
     agent = SquidAgent(ocean, TEST_INIT_PARMS)
     assert(agent)
-    assert isinstance(agent.squid_model, MockSquidModel)
-    assert(agent.squid_model.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
-    assert(agent.squid_model.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
-    assert(agent.squid_model.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
-    assert(agent.squid_model.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
+    assert isinstance(agent.get_adapter, MockSquidAgentAdapter)
+    assert(agent.get_adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
+    assert(agent.get_adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
+    assert(agent.get_adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
+    assert(agent.get_adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
 
     agent = SquidAgent(ocean,
         aquarius_url = TEST_INIT_PARMS['aquarius_url'],
@@ -56,10 +56,10 @@ def test_init(ocean):
         storage_path = TEST_INIT_PARMS['storage_path']
     )
     assert(agent)
-    assert(agent.squid_model.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
-    assert(agent.squid_model.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
-    assert(agent.squid_model.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
-    assert(agent.squid_model.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
+    assert(agent.get_adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
+    assert(agent.get_adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
+    assert(agent.get_adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
+    assert(agent.get_adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
 
 def test_register_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)

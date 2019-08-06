@@ -19,8 +19,8 @@ from starfish.asset import (
     OperationAsset,
     create_asset_from_metadata,
 )
-from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
-from starfish.models.squid_model import SquidModel
+from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from starfish.utils.did import did_parse
 from starfish.listing import Listing
 from starfish.job import Job
@@ -85,8 +85,8 @@ class SurferAgent(AgentBase):
 
         # if DID and no DDO then try to load in the registered DDO, using squid
         if self._did and not self._ddo:
-            model = SquidModel(ocean)
-            ddo_text = model.resolve_did_to_ddo(self._did)
+            squid_adapter = SquidAgentAdapter(ocean)
+            ddo_text = squid_adapter.resolve_did_to_ddo(self._did)
             if not ddo_text:
                 raise ValueError(f'cannot find registered agent at {did}')
             self._ddo = StarfishDDO(json_text=ddo_text)
@@ -97,7 +97,7 @@ class SurferAgent(AgentBase):
         self._authorization = options.get('authorization')
         if self._authorization is None and 'url' in options and 'username' in options:
             # if no authorization, then we may need to create one
-            self._authorization = SurferModel.get_authorization_token(
+            self._authorization = SurferAgentAdapter.get_authorization_token(
                 options['url'],
                 options['username'],
                 options.get('password', '')
@@ -106,7 +106,7 @@ class SurferAgent(AgentBase):
     def register_asset(self, asset, listing_data, account=None ):
         """
 
-        Register an asset with the ocean network (surfer)
+        Register an asset with Surfer
 
         :param asset: asset object to register
         :type asset: :class:`.DataAsset` object to register
@@ -128,7 +128,7 @@ class SurferAgent(AgentBase):
                 print(f'registered my listing asset for sale with the did {listing.did}')
 
         """
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
 
         if self._did is None:
             raise ValueError('The agent must have a valid did')
@@ -138,12 +138,12 @@ class SurferAgent(AgentBase):
 
         listing = None
 
-        register_data = model.register_asset(asset.metadata)
+        register_data = adapter.register_asset(asset.metadata)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            data = model.create_listing(asset_id, listing_data)
+            data = adapter.create_listing(asset_id, listing_data)
             listing = Listing(self, data['id'], asset, data)
         return listing
 
@@ -164,9 +164,9 @@ class SurferAgent(AgentBase):
         if not asset.data:
             raise ValueError('No data to upload')
 
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
         url = self.get_asset_store_url(asset.asset_id)
-        return model.upload_asset_data(url, asset.asset_id, asset.data)
+        return adapter.upload_asset_data(url, asset.asset_id, asset.data)
 
 
     def download_asset(self, asset_id, url):
@@ -179,15 +179,15 @@ class SurferAgent(AgentBase):
         :type: :class:`.MemoryAsset` class
 
         """
-        model = self._get_surferModel()
-        data = model.download_asset(url)
+        adapter = self._get_adapter()
+        data = adapter.download_asset(url)
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(store_asset.metadata, store_asset.did, data=data)
         return asset
 
     def get_asset_store_url(self, asset_id):
-        model = self._get_surferModel()
-        return model.get_asset_store_url(remove_0x_prefix(asset_id))
+        adapter = self._get_adapter()
+        return adapter.get_asset_store_url(remove_0x_prefix(asset_id))
 
     def get_listing(self, listing_id):
         """
@@ -199,12 +199,12 @@ class SurferAgent(AgentBase):
         :type: :class:`.Asset` class
 
         """
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
         listing = None
-        data = model.get_listing(listing_id)
+        data = adapter.get_listing(listing_id)
         if data:
             asset_id = data['assetid']
-            read_metadata = model.read_metadata(asset_id)
+            read_metadata = adapter.read_metadata(asset_id)
             if read_metadata:
                 metadata = json.loads(read_metadata['metadata_text'])
                 did = f'{self._did}/{asset_id}'
@@ -224,9 +224,9 @@ class SurferAgent(AgentBase):
 
         """
         asset = None
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
         clean_asset_id = remove_0x_prefix(asset_id)
-        read_metadata = model.read_metadata(clean_asset_id)
+        read_metadata = adapter.read_metadata(clean_asset_id)
         if read_metadata:
             metadata = json.loads(read_metadata['metadata_text'])
             did = f'{self._did}/{clean_asset_id}'
@@ -240,13 +240,13 @@ class SurferAgent(AgentBase):
         :return: List of listing objects
 
         """
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
         listings = []
-        listings_data = model.get_listings()
+        listings_data = adapter.get_listings()
         if listings_data:
             for data in listings_data:
                 asset_id = data['assetid']
-                read_metadata = model.read_metadata(asset_id)
+                read_metadata = adapter.read_metadata(asset_id)
                 if read_metadata:
                     metadata = json.loads(read_metadata['metadata_text'])
                     did = f'{self._did}/{asset_id}'
@@ -267,8 +267,8 @@ class SurferAgent(AgentBase):
 
         """
         job = None
-        model = self._get_surferModel()
-        data = model.get_job(job_id)
+        adapter = self._get_adapter()
+        data = adapter.get_job(job_id)
         if data:
             status = data.get('status', None)
             results = data.get('results', None)
@@ -306,8 +306,8 @@ class SurferAgent(AgentBase):
         :type listing: :class:`.Listing` class
 
         """
-        model = self._get_surferModel()
-        return model.update_listing(listing.listing_id, listing.data)
+        adapter = self._get_adapter()
+        return adapter.update_listing(listing.listing_id, listing.data)
 
     def search_listings(self, text, sort=None, offset=100, page=0):
         """
@@ -352,7 +352,7 @@ class SurferAgent(AgentBase):
         :type agreement: dict or None
 
         """
-        model = self._get_surferModel()
+        adapter = self._get_adapter()
         purchase = {'listingid': listing.listing_id}
         if purchase_id:
             purchase['id'] = purchase_id
@@ -362,7 +362,7 @@ class SurferAgent(AgentBase):
             purchase['info'] = info
         if agreement:
             purchase['agreement'] = agreement
-        return model.purchase_asset(purchase)
+        return adapter.purchase_asset(purchase)
 
     def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
@@ -448,8 +448,8 @@ class SurferAgent(AgentBase):
             raise TypeError(f'This operation asset does not support {mode_type}')
         if not params:
             params = {}
-        model = self._get_surferModel()
-        response = model.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
+        adapter = self._get_adapter()
+        response = adapter.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
         return response
 
     def get_endpoint(self, name):
@@ -458,17 +458,17 @@ class SurferAgent(AgentBase):
         Return the endpoint of the service available for this agent
         :param str name: name or type of the service, e.g. 'metadata', 'storage', 'Ocean.Meta.v1'
         """
-        model = self._get_surferModel()
-        supported_service = SurferModel.find_supported_service(name)
+        adapter = self._get_adapter()
+        supported_service = SurferAgentAdapter.find_supported_service(name)
         if supported_service is None:
             raise ValueError(f'This agent does not support the following service name or type {name}')
-        return model.get_endpoint(name)
+        return adapter.get_endpoint(name)
 
 
-    def _get_surferModel(self, did=None, ddo=None, authorization=None):
+    def _get_adapter(self, did=None, ddo=None, authorization=None):
         """
 
-        Return a new SurferModel object based on the did.
+        Return a new SurferAgentAdapter object based on the did.
         If did == None then use the loaded did in this class.
         else check to see if the did != self._did, if not then load in the ddo as well
         """
@@ -477,8 +477,8 @@ class SurferAgent(AgentBase):
         # data from a different source, so load in the ddo
         if did and did != self._did and ddo is None:
             if self._did and not self._ddo:
-                model = SquidModel(ocean)
-                ddo = model.resolve_did_to_ddo(self._did)
+                squid_adapter = SquidAgentAdapter(ocean)
+                ddo = squid_adapter.resolve_did_to_ddo(self._did)
 
         if did is None:
             did = self._did
@@ -496,11 +496,11 @@ class SurferAgent(AgentBase):
                 'authorization': self._authorization
             }
 
-        return SurferModel(self._ocean, did, ddo, options)
+        return SurferAgentAdapter(self._ocean, did, ddo, options)
 
     def _resolve_ddo_from_did(self, did):
-        model = SquidModel(self._ocean)
-        ddo_text = model.resolve_did(self._did)
+        squid_adapter = SquidAgentAdapter(self._ocean)
+        ddo_text = squid_adapter.resolve_did(self._did)
         if not ddo_text:
             raise ValueError(f'cannot find registered agent at {did}')
         return StarfishDDO(json_text=ddo_text)
@@ -559,8 +559,8 @@ class SurferAgent(AgentBase):
         :type: :class:.`DDO`
         """
 
-        did = SquidModel.generate_did()
-        service_endpoints = SurferModel.generate_service_endpoints(url)
+        did = SquidAgentAdapter.generate_did()
+        service_endpoints = SurferAgentAdapter.generate_service_endpoints(url)
         ddo = StarfishDDO(did)
         for service_endpoint in service_endpoints:
             service_name = service_endpoint['name']

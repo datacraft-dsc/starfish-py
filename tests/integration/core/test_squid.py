@@ -14,7 +14,6 @@ import pytest
 from web3 import Web3
 
 from starfish import Ocean
-from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import DataAsset
 

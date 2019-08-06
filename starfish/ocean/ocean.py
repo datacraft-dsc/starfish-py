@@ -16,7 +16,7 @@ from web3 import (
 )
 
 from starfish.account import Account
-from starfish.models.squid_model import SquidModel
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from squid_py.keeper import Keeper
 
 
@@ -73,7 +73,7 @@ class Ocean():
 
         """
         self.__web3 = None
-        self.__squid_model = None
+        self.__squid_agent_adapter = None
 
         if args and isinstance(args[0], dict):
             kwargs = args[0]
@@ -82,7 +82,7 @@ class Ocean():
         self._network_name = kwargs.get('network', None)
         self._contracts_path = kwargs.get('contracts_path', None)
         self._gas_limit = kwargs.get('gas_limit', 0)
-        self.__squid_model_class = kwargs.get('squid_model_class', None)
+        self.__squid_agent_adapter_class = kwargs.get('squid_agent_adapter_class', None)
 
         if self._keeper_url and kwargs.get('connect', True):
             self.connect()
@@ -101,9 +101,9 @@ class Ocean():
 
         if self._keeper_url:
             self.__web3 = Web3(HTTPProvider(self._keeper_url))
-            # set the default squid model class if not set already
-            if self.__squid_model_class is None:
-                self.__squid_model_class = SquidModel
+            # set the default squid adapter class if not set already
+            if self.__squid_agent_adapter_class is None:
+                self.__squid_agent_adapter_class = SquidAgentAdapter
             if not self._network_name:
                 self._network_name = self._get_network_name()
 
@@ -151,10 +151,10 @@ class Ocean():
         if not isinstance(ddo, str):
             raise TypeError('You need to pass a DDO as a string')
 
-        # call the squid model to do the actual registration writing the ddo to the block chain
-        model = self.get_squid_model()
-        if model:
-            return model.register_ddo(did, ddo, account)
+        # call the squid adapter to do the actual registration writing the ddo to the block chain
+        adapter = self.get_squid_agent_adapter()
+        if adapter:
+            return adapter.register_ddo(did, ddo, account)
         return None
 
     def resolve_did(self, did):
@@ -169,9 +169,9 @@ class Ocean():
 
         """
 
-        model = self.get_squid_model()
-        if model:
-            return model.resolve_did(did)
+        adapter = self.get_squid_agent_adapter()
+        if adapter:
+            return adapter.resolve_did(did)
         return None
 
     def search_operations(self, text, limit=10):
@@ -225,9 +225,9 @@ class Ocean():
         """
 
         account = None
-        model = self.get_squid_model()
-        if model:
-            address = model.create_account_host(password)
+        adapter = self.get_squid_agent_adapter()
+        if adapter:
+            address = adapter.create_account_host(password)
             if address:
                 account = Account(self, address, password)
         return account
@@ -243,10 +243,10 @@ class Ocean():
         >>> ocean.accounts
         {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish.account.Account object at 0x10456c080>, ...
         """
-        model = self.get_squid_model()
+        adapter = self.get_squid_agent_adapter()
         accounts = {}
-        if model:
-            for squid_account in model.accounts:
+        if adapter:
+            for squid_account in adapter.accounts:
                 account = Account(self, squid_account.address)
                 accounts[account.address] = account
         return accounts
@@ -280,8 +280,8 @@ class Ocean():
         network_id = int(self.__web3.version.network)
         return Keeper.get_network_name(network_id)
 
-    def get_squid_model(self, options=None):
-        if self.__squid_model_class:
-            self.__squid_model = self.__squid_model_class(self, options)
-            return self.__squid_model
+    def get_squid_agent_adapter(self, options=None):
+        if self.__squid_agent_adapter_class:
+            self.__squid_agent_adapter = self.__squid_agent_adapter_class(self, options)
+            return self.__squid_agent_adapter
         return None

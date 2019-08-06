@@ -4,6 +4,7 @@
 
 *   Removed FileAsset, RemoteAsset. Replaced with DataAsset
 *   Cleanup documentation
+*   Renamed Squid/Surfer Models to Squid/Surfer Agent Adapters
 
 ### Release v0.4.11
 

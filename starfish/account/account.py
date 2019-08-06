@@ -4,7 +4,7 @@ Account class to provide basic functionality for all Ocean Accounts
 
 """
 
-from starfish.models.squid_model import SquidModel
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from web3 import Web3
 
 class Account():
@@ -110,12 +110,12 @@ class Account():
         >>> account.request_tokens(100)
         100
         """
-        model = self._ocean.get_squid_model()
-        if model:
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
             if not self._unlock_squid_account:
                 raise ValueError('You must unlock the account before requesting tokens')
 
-            return model.request_tokens(self._unlock_squid_account, amount)
+            return adapter.request_tokens(self._unlock_squid_account, amount)
         return 0
 
     def transfer_ether(self, to_account, amount_ether):
@@ -136,12 +136,12 @@ class Account():
         if isinstance(to_account, Account):
             to_address = to_account.address
 
-        model = self._ocean.get_squid_model()
-        if model:
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
             if not self._unlock_squid_account:
                 raise ValueError('You must unlock the account before requesting tokens')
 
-            return model.transfer_ether(self._unlock_squid_account, to_address, amount_wei)
+            return adapter.transfer_ether(self._unlock_squid_account, to_address, amount_wei)
         return 0
 
     def transfer_token(self, to_account, amount_token):
@@ -162,12 +162,12 @@ class Account():
         if isinstance(to_account, Account):
             to_address = to_account.address
 
-        model = self._ocean.get_squid_model()
-        if model:
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
             if not self._unlock_squid_account:
                 raise ValueError('You must unlock the account before requesting tokens')
 
-            return model.transfer_tokens(self._unlock_squid_account, to_address, amount_vodka)
+            return adapter.transfer_tokens(self._unlock_squid_account, to_address, amount_vodka)
         return 0
 
     def is_address_equal(self, address):
@@ -232,9 +232,9 @@ class Account():
         if self._unlock_squid_account:
             return self._unlock_squid_account
 
-        model = self._ocean.get_squid_model()
-        if model:
-            return model.get_account_host(self.as_checksum_address, self._password)
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
+            return adapter.get_account_host(self.as_checksum_address, self._password)
         return None
 
     @property
@@ -312,11 +312,11 @@ class Account():
         101
 
         """
-        model = self._ocean.get_squid_model()
-        if model:
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
             squid_account = self._squid_account
             if squid_account:
-                balance = model.get_account_balance(squid_account)
+                balance = adapter.get_account_balance(squid_account)
                 if balance:
                     return Web3.fromWei(balance.ocn, 'ether')
         return 0
@@ -334,11 +334,11 @@ class Account():
         1000000001867769600000000000
 
         """
-        model = self._ocean.get_squid_model()
-        if model:
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
             squid_account = self._squid_account
             if squid_account:
-                balance = model.get_account_balance(self._squid_account)
+                balance = adapter.get_account_balance(self._squid_account)
                 if balance:
                     return Web3.fromWei(balance.eth, 'ether')
         return 0

@@ -13,7 +13,6 @@ from starfish import (
     Ocean,
     logger
 )
-from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
 from starfish.asset import DataAsset
 

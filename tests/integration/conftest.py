@@ -13,8 +13,6 @@ from starfish.agent import (
     SquidAgent,
 )
 
-from starfish.models.surfer_model import SurferModel
-
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
 

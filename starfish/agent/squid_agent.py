@@ -12,7 +12,10 @@ import re
 
 from web3 import Web3
 
-from starfish.models.squid_model import SquidModel
+from starfish.middleware.squid_agent_adapter import (
+    SquidAgentAdapter,
+    SquidAgentAdapterPurchaseError
+)
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
@@ -21,7 +24,6 @@ from starfish.asset import (
     DataAsset,
  )
 from starfish.purchase import Purchase
-from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
 from starfish.exceptions import (
     StarfishAssetNotFound,
@@ -98,7 +100,7 @@ class SquidAgent(AgentBase):
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
         AgentBase.__init__(self, ocean)
-        self._model = None
+        self._adapter = None
 
         if args and isinstance(args[0], dict):
             kwargs = args[0]
@@ -154,10 +156,10 @@ class SquidAgent(AgentBase):
         if not (isinstance(asset, DataAsset) or isinstance(asset, BundleAsset)):
             raise TypeError('This agent only supports a DataAsset or BundleAsset')
 
-        model = self.squid_model
+        adapter = self.get_adapter
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
 
-        ddo = model.register_asset(metadata, account._squid_account)
+        ddo = adapter.register_asset(metadata, account._squid_account)
 
         listing = None
         if ddo:
@@ -185,8 +187,8 @@ class SquidAgent(AgentBase):
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
-#        model = self.squid_model
-#        return model.validate_metadata(asset.metadata)
+#        adapter = self.get_adapter
+#        return adapter.validate_metadata(asset.metadata)
         return True
 
     def get_listing(self, listing_id):
@@ -202,10 +204,10 @@ class SquidAgent(AgentBase):
             aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
-        model = self.squid_model
+        adapter = self.get_adapter
 
         try:
-            ddo = model.read_asset(listing_id)
+            ddo = adapter.read_asset(listing_id)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
 
@@ -235,9 +237,9 @@ class SquidAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
         if isinstance(text, str) or isinstance(text, dict):
-            ddo_list = model.search_assets(text, sort, offset, page)
+            ddo_list = adapter.search_assets(text, sort, offset, page)
         else:
             raise ValueError('You can only pass a str or dict for the search text')
         result = []
@@ -262,7 +264,7 @@ class SquidAgent(AgentBase):
 
         """
         purchase = None
-        model = self.squid_model
+        adapter = self.get_adapter
 
         try:
             if 'price' in listing.data:
@@ -271,7 +273,7 @@ class SquidAgent(AgentBase):
                 if account_balance < asset_price:
                     raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} which is not enougth to purchase the asset at a price of {asset_price}')
 
-            service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
+            service_agreement_id = adapter.purchase_asset(listing.ddo, account._squid_account)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
 
@@ -295,14 +297,14 @@ class SquidAgent(AgentBase):
         :type: boolean
         """
 
-        model = self.squid_model
+        adapter = self.get_adapter
 
         if purchase_id:
-            return model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
+            return adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
         else:
-            purchase_id_list = model.get_asset_purchase_ids(asset.did)
+            purchase_id_list = adapter.get_asset_purchase_ids(asset.did)
             for purchase_id in purchase_id_list:
-                if model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
+                if adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
                     return True
         return False
 
@@ -318,9 +320,9 @@ class SquidAgent(AgentBase):
         :type: list
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
 
-        return model.get_asset_purchase_ids(asset.did)
+        return adapter.get_asset_purchase_ids(asset.did)
 
 
 
@@ -341,13 +343,13 @@ class SquidAgent(AgentBase):
         :raises OceanPurchaseError: if the correct events are not received
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
         if not purchase_id:
             raise ValueError('Please provide a valid purhase id')
 
         try:
-            model.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
-        except SquidModelPurchaseError as purchaseError:
+            adapter.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
+        except SquidAgentAdapterPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
             raise e
@@ -372,8 +374,8 @@ class SquidAgent(AgentBase):
 
         """
         asset = None
-        model = self.squid_model
-        file_list = model.consume_asset(listing.ddo, account._squid_account, purchase_id)
+        adapter = self.get_adapter
+        file_list = adapter.consume_asset(listing.ddo, account._squid_account, purchase_id)
         if file_list:
             asset = BundleAsset.create('SquidAssetBundle', did=listing.ddo.did)
             for index, file_item in enumerate(file_list):
@@ -392,12 +394,12 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account`
 
         """
-        model = self.squid_model
-        model.start_agreement_events_monitor(account, callback)
+        adapter = self.get_adapter
+        adapter.start_agreement_events_monitor(account, callback)
 
     def stop_agreement_events_monitor(self):
-        model = self.squid_model
-        model.start_agreement_events_monitor()
+        adapter = self.get_adapter
+        adapter.start_agreement_events_monitor()
 
     def _listing_from_ddo(self, ddo):
         """ convert a ddo to a listing that contains a BundleAsset """
@@ -521,7 +523,7 @@ class SquidAgent(AgentBase):
             files = ddo.metadata['base']['encryptedFiles']
             logger.info(f'encrypted contentUrls: {files}')
             files = files if isinstance(files, str) else files[0]
-            sa = SquidModel.get_service_agreement_from_ddo(ddo)
+            sa = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
             service_url = sa.service_endpoint
             if not service_url:
                 logger.error(
@@ -540,14 +542,14 @@ class SquidAgent(AgentBase):
 
 
     @property
-    def squid_model(self):
+    def get_adapter(self):
         """
 
-        Return an instance of the squid model, for access to the squid library layer
-        :return: squid model object
+        Return an instance of the squid ageent adapter, for access to the squid library layer
+        :return: squid Agent Adapter object
         """
 
-        if not self._model:
+        if not self._adapter:
             options = {
                 'aquarius_url': self._aquarius_url,
                 'brizo_url': self._brizo_url,
@@ -555,8 +557,8 @@ class SquidAgent(AgentBase):
                 'parity_url': self._parity_url,
                 'storage_path': self._storage_path,
             }
-            self._model = self._ocean.get_squid_model(options)
-        return self._model
+            self._adapter = self._ocean.get_squid_agent_adapter(options)
+        return self._adapter
 
     @staticmethod
     def is_did_valid(did):
