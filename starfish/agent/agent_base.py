@@ -29,8 +29,8 @@ class AgentBase(ABC):
 
         Register a squid asset with the ocean network.
 
-        :param asset: the SquidAsset to register, at the moment only a SquidAsset can be used.
-        :type asset: :class:`.SquidAsset` object to register
+        :param asset: the Asset to register, at the moment only a Asset can be used.
+        :type asset: :class:`.AssetBase` object to register
         :param dict listing_data: data providing listing information for the asset.
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
