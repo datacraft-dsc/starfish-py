@@ -9,28 +9,26 @@ class BundleAsset(AssetBase):
 
     Bundle asset can be used to hold many assets
 
-    :param data: data string or byte text to save as the asset
-    :type data: str or byte array
-    :param metadata: Optional dictionary metadata to provide for the asset
-        if non used then the class will generate a default metadata based on the data provided
-    :type metadata: None or dict
+    :param metadata: Dictionary metadata to provide for the asset
+    :type metadata: dict
     :param did: Optional did of the asset if it's registered
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None):
-        default_metadata = {
-            'type': 'bundle',
-            'name': 'BundleAsset',
-            'contentType': 'application/octet-stream',
-        }
-        if metadata is None:
-            metadata = default_metadata
+    def __init__(self, metadata, did=None):
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
-        metadata = AssetBase.merge_metadata(metadata, default_metadata)
-        AssetBase.__init__(self, 'bundle', metadata, did)
+        AssetBase.__init__(self, metadata, did)
         self._assets = {}
+
+    @staticmethod
+    def create(name, did=None):
+        metadata = {
+            'name': name,
+            'type': 'bundle',
+            'contentType': 'application/octet-stream',
+        }
+        return BundleAsset(metadata, did)
 
     def add(self, name, asset):
         """

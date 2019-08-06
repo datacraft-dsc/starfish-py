@@ -1,12 +1,9 @@
 
 
 from starfish.asset.asset_base import AssetBase
-from starfish.asset.memory_asset import MemoryAsset
+from starfish.asset.data_asset import DataAsset
 from starfish.asset.bundle_asset import BundleAsset
 from starfish.asset.operation_asset import OperationAsset
-from starfish.asset.file_asset import FileAsset
-from starfish.asset.remote_asset import RemoteAsset
-from starfish.asset.asset import Asset
 
 
 def create_asset_from_metadata(metadata, did=None):
@@ -22,14 +19,15 @@ def create_asset_from_metadata(metadata, did=None):
 
     asset_type = AssetBase.get_asset_type(metadata)
 
-    if asset_type == 'memory' or asset_type == 'data':
-        return MemoryAsset(metadata, did)
-    elif asset_type == 'bundle':
+    if asset_type == 'bundle':
         return BundleAsset(metadata, did)
     elif asset_type == 'operation':
         return OperationAsset(metadata, did)
-    elif asset_type == 'file':
-        return FileAsset(metadata, did)
-    elif asset_type == 'remote':
-        return RemoteAsset(metadata, did)
+    elif asset_type == 'dataset':
+        return DataAsset(metadata, did)
+    else:
+        raise ValueError(f'Unknown asset type {asset_type}')
     return Asset(metadata, did)
+
+
+

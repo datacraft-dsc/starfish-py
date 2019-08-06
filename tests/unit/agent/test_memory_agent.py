@@ -6,7 +6,7 @@ import tempfile
 
 
 from starfish.agent.memory_agent import MemoryAgent
-from starfish.asset.memory_asset import MemoryAsset
+from starfish.asset.data_asset import DataAsset
 
 VALID_DID = 'did:op:' + secrets.token_hex(64)
 INVALID_DID = 'did:ox:' + secrets.token_hex(128)
@@ -16,7 +16,7 @@ def _register_asset(ocean, resources, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     agent = MemoryAgent(ocean)
     assert(agent)
-    asset = MemoryAsset(data=secrets.token_hex(1024))
+    asset = DataAsset.create('test memory agent asset', secrets.token_hex(1024))
     assert(asset)
     listing = agent.register_asset(asset, resources.listing_data, account)
     return (listing, agent, asset)

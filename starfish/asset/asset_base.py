@@ -16,12 +16,20 @@ class AssetBase(ABC):
     :type did: None or str
 
     """
-    def __init__(self, asset_type, metadata, did=None):
+    def __init__(self, metadata, did=None):
         """
         init an asset class
         """
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+
+        if not 'name' in metadata:
+            raise ValueError('metadata must contain a metadata name')
+
+        if not 'type' in metadata:
+            raise ValueError('metadata must contain a metadata type')
+
         self._metadata = metadata
-        self._metadata['type'] = asset_type
         self._did = did
         super().__init__()
 

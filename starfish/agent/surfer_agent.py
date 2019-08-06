@@ -15,9 +15,8 @@ from eth_utils import remove_0x_prefix
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.asset import (
-    MemoryAsset,
+    DataAsset,
     OperationAsset,
-    FileAsset,
     create_asset_from_metadata,
 )
 from starfish.models.surfer_model import SurferModel, SUPPORTED_SERVICES
@@ -110,7 +109,7 @@ class SurferAgent(AgentBase):
         Register an asset with the ocean network (surfer)
 
         :param asset: asset object to register
-        :type asset: :class:`.Asset` object to register
+        :type asset: :class:`.DataAsset` object to register
         :param dict listing_data:  Listing inforamiton to give for this asset
         :param account: This is not used for this agent, so for compatibility it is left in
         :type account: :class:`.Account` object to use for registration.
@@ -120,7 +119,7 @@ class SurferAgent(AgentBase):
 
         For example::
 
-            asset = MemoryAsset(data='Some test data')
+            asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
             agent = SurferAgent(ocean)
             listing = agent.register_asset(asset,listing_data, account)
@@ -160,8 +159,8 @@ class SurferAgent(AgentBase):
 
     def upload_asset(self, asset):
 
-        if not (isinstance(asset, MemoryAsset) or isinstance(asset, FileAsset)):
-            raise TypeError('Only MemoryAsset or FileAsset are supported')
+        if not isinstance(asset, DataAsset):
+            raise TypeError('Only DataAsset is supported')
         if not asset.data:
             raise ValueError('No data to upload')
 
@@ -183,7 +182,7 @@ class SurferAgent(AgentBase):
         model = self._get_surferModel()
         data = model.download_asset(url)
         store_asset = self.get_asset(asset_id)
-        asset = MemoryAsset(store_asset.metadata, store_asset.did, data=data)
+        asset = DataAsset(store_asset.metadata, store_asset.did, data=data)
         return asset
 
     def get_asset_store_url(self, asset_id):
@@ -251,7 +250,7 @@ class SurferAgent(AgentBase):
                 if read_metadata:
                     metadata = json.loads(read_metadata['metadata_text'])
                     did = f'{self._did}/{asset_id}'
-                    asset = MemoryAsset(metadata, did)
+                    asset = DataAsset(metadata, did)
                     listing = Listing(self, data['id'], asset, data)
                     listings.append(listing)
         return listings

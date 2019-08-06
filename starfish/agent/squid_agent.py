@@ -17,9 +17,7 @@ from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
     BundleAsset,
-    FileAsset,
-    RemoteAsset,
-    Asset,
+    DataAsset,
  )
 from starfish.purchase import Purchase
 from starfish.models.squid_model import SquidModelPurchaseError
@@ -116,7 +114,7 @@ class SquidAgent(AgentBase):
         Register a squid asset with the ocean network.
 
         :param asset: the asset to register, at the moment only a Asset can be used.
-        :type asset: :class:`.FileAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
+        :type asset: :class:`.DataAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
@@ -124,7 +122,7 @@ class SquidAgent(AgentBase):
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
 
-        At the moment only support FileAsset
+        At the moment only support :class:`.DataAsset` or :class:`.BundleAsset`
 
         For example::
 
@@ -132,7 +130,7 @@ class SquidAgent(AgentBase):
             # get your publisher account
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
-            asset = FileAsset(filename='Testfile.txt')
+            asset = DataAsset.create_from_file('My test asset', 'Testfile.txt')
             listing = agent.register_asset(asset, {'price': 8}, account)
 
             if listing:
@@ -152,8 +150,8 @@ class SquidAgent(AgentBase):
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')
 
-        if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset) or isinstance(asset, BundleAsset)):
-            raise TypeError('This agent only supports a FileAsset, RemoteAsset or BundleAsset')
+        if not (isinstance(asset, DataAsset) or isinstance(asset, BundleAsset)):
+            raise TypeError('This agent only supports a DataAsset or BundleAsset')
 
         model = self.squid_model
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
@@ -179,15 +177,16 @@ class SquidAgent(AgentBase):
 
         if not asset:
             raise ValueError('asset must be an object')
-        if not isinstance(asset, Asset):
-            raise ValueErrer('asset must be a type of Asset object')
+        if not isinstance(asset, DataAsset) or isinstance(asset, BundleAsset):
+            raise ValueErrer('asset must be a type of DataAsset or BundleAsset object')
         if not asset.metadata:
             raise ValueError('Metadata must have a value')
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
-        model = self.squid_model
-        return model.validate_metadata(asset.metadata)
+#        model = self.squid_model
+#        return model.validate_metadata(asset.metadata)
+        return True
 
     def get_listing(self, listing_id):
         """
@@ -312,7 +311,7 @@ class SquidAgent(AgentBase):
         Returns as list of purchase id's that have been used for this asset
 
         :param asset: Asset to return purchase details.
-        :type asset: :class:`.Asset` object
+        :type asset: :class:`.DataAsset` or :class:`.BundleAsset` object
 
         :return: list of purchase ids
         :type: list
@@ -375,9 +374,9 @@ class SquidAgent(AgentBase):
         model = self.squid_model
         file_list = model.consume_asset(listing.ddo, account._squid_account, purchase_id)
         if file_list:
-            asset = BundleAsset(did=listing.ddo.did)
+            asset = BundleAsset.create('SquidAssetBundle', did=listing.ddo.did)
             for index, file_item in enumerate(file_list):
-                asset_item = RemoteAsset(file_item, listing.ddo.did)
+                asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, listing.ddo.did)
                 asset.add(f'file_{index}', asset_item)
         return asset
 
@@ -403,9 +402,10 @@ class SquidAgent(AgentBase):
         """ convert a ddo to a listing that contains a BundleAsset """
 
         listing_data, asset_metadata = self._convert_ddo_to_listing_data_asset_metadata(ddo)
-        asset = BundleAsset(did=ddo.did)
-        for index, asset_metadata_item in enumerate(asset_metadata):
-            asset.add(f'file_{index}', RemoteAsset(metadata=asset_metadata_item, did=ddo.did))
+        asset = BundleAsset.create('SquidAssetBundle', did=ddo.did)
+        for index, file_item in enumerate(asset_metadata):
+            asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, ddo.did)
+            asset.add(f'file_{index}', asset_item)
         listing_id = ddo.did
         listing = Listing(self, listing_id, asset, listing_data, ddo)
         return listing
@@ -444,7 +444,7 @@ class SquidAgent(AgentBase):
         """
         metadata = {
             MetadataBase.KEY: {
-                'name': 'Asset',
+                'name': 'SquidAsset',
                 'type': 'dataset',
                 'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
                 'author': 'Author',
@@ -469,13 +469,13 @@ class SquidAgent(AgentBase):
             metadata['base']['files'].append(asset.metadata)
             index = len(metadata['base']['files']) - 1
             metadata['base']['files'][index]['index'] = index
-            if asset.is_asset_type('file'):
-                metadata['base']['files'][index]['url'] = asset.metadata['filename']
+            if asset.is_asset_type('dataset'):
+                metadata['base']['files'][index]['url'] = asset.data
 
         if isinstance(asset, BundleAsset):
             for _, asset_item in asset:
-                if not (isinstance(asset_item, FileAsset) or isinstance(asset_item, RemoteAsset)):
-                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type FileAsset or RemoteAsset')
+                if not (isinstance(asset_item, DataAsset)):
+                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type DataAsset')
                 append_asset_file(metadata, asset_item)
         else:
             append_asset_file(metadata, asset)
@@ -564,3 +564,10 @@ class SquidAgent(AgentBase):
         """
         data = did_parse(did)
         return not data['path']
+
+    @staticmethod
+    def create_data_asset_from_file_item(index, file_item, did):
+        metadata = file_item
+        metadata['name'] = f'SquidAsset_{index}'
+        return DataAsset(metadata, did=did, data=metadata['url'])
+
