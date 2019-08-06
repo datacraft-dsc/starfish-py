@@ -20,12 +20,18 @@ class OperationAsset(AssetBase):
     def __init__(self, metadata=None, did=None):
         AssetBase.__init__(self, metadata, did)
 
-    def create(name):
-        metadata = {
-            'name': name,
-            'type': 'operation',
-        }
-        return OperationAsset(metadata)
+    def create(name, metadata=None, did=None):
+        """
+
+        Create a new OperationAsset.
+
+        :param str name: Name of the asset
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+
+        """
+        metadata = AssetBase.generateMetadata(name, 'operation', metadata)
+        return OperationAsset(metadata, did)
 
     def is_mode(self, mode_type):
         """

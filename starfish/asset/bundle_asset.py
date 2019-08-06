@@ -22,12 +22,20 @@ class BundleAsset(AssetBase):
         self._assets = {}
 
     @staticmethod
-    def create(name, did=None):
-        metadata = {
-            'name': name,
-            'type': 'bundle',
-            'contentType': 'application/octet-stream',
-        }
+    def create(name, metadata=None, did=None):
+        """
+
+        Create a new empty BundleAsset
+
+        :param str name: Name of the asset to create
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+
+        :return: a new BundleAsset
+        :type: :class:`.BundleAsset`
+        """
+
+        metadata = AssetBase.generateMetadata(name, 'bundle', metadata)
         return BundleAsset(metadata, did)
 
     def add(self, name, asset):

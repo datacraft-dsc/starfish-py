@@ -13,12 +13,12 @@ from web3 import Web3
 
 from starfish import Ocean
 from starfish.agent import MemoryAgent
-from starfish.asset import MemoryAsset
+from starfish.asset import DataAsset
 
 
 def _register_asset_for_sale(agent, resources, account):
 
-    asset = MemoryAsset(data=secrets.token_hex(256))
+    asset = DataAsset.create('TestAsset', secrets.token_hex(256))
     listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert listing
     assert listing.asset.did

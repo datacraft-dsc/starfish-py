@@ -4,7 +4,7 @@ import json
 import logging
 
 from starfish import Ocean
-from starfish.asset import MemoryAsset
+from starfish.asset import DataAsset
 from starfish.agent import SurferAgent
 
 def main():
@@ -14,7 +14,7 @@ def main():
     ocean = Ocean()
 
     # Now create a memory asset
-    asset = MemoryAsset(data='Some test data that I want to save for this asset')
+    asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
 
     # NOTE: In starfish-java
     # MemoryAsset extends ADataAsset

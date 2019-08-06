@@ -5,7 +5,7 @@ import pathlib
 import logging
 
 from starfish import Ocean
-from starfish.asset import RemoteAsset
+from starfish.asset import DataAsset
 from starfish.agent import SquidAgent
 
 """
@@ -82,7 +82,7 @@ def main():
         'price': '0'
     }
     # Now create a squid asset using the metadata we have just loaded
-    asset = RemoteAsset(url='https://oceanprotocol.com/tech-whitepaper.pdf')
+    asset = DataAsset.create_from_url('my test asset', 'https://oceanprotocol.com/tech-whitepaper.pdf')
 
 
     # Create a new `Squid` agent to do the work on the block chain.

@@ -25,7 +25,7 @@ class DataAsset(AssetBase):
             raise ValueError('metadata must be a dict')
 
         if data:
-            if not isinstance(data, str) or isinstance(data, bytes):
+            if not (isinstance(data, str) or isinstance(data, bytes)):
                 raise ValueError('data can only be str or bytes')
 
         metadata['type'] = 'dataset'
@@ -34,63 +34,92 @@ class DataAsset(AssetBase):
         AssetBase.__init__(self, metadata, did)
 
     @staticmethod
-    def create(name, data, did=None):
-        metadata = {
-            'name': name,
-            'type': 'dataset',
-        }
+    def create(name, data, metadata=None, did=None):
+        """
+
+        Create a new DataAsset using string or bytes data.
+
+        :param str name: Name of the asset to create
+        :param str, bytes data: Data to assign to the asset
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+
+        :return: a new DataAsset
+        :type: :class:`.DataAsset`
+
+        """
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
         if isinstance(data, str):
             metadata['contentType'] = 'text/plain; charset=utf-8'
         elif isinstance(data, bytes):
             metadata['contentType'] = 'application/octet-stream'
         else:
             raise ValueError('data can only be str or bytes')
-        metadata['size'] = 0
-        if data:
-            metadata['size'] = len(data)
 
         return DataAsset(metadata, did, data=data)
 
     @staticmethod
-    def create_from_file(name, filename, did=None, is_read=True):
-        metadata = {
-            'name': name,
-            'type': 'dataset',
-        }
+    def create_from_file(name, filename, metadata=None, did=None, is_read=True):
+        """
+
+        Create a new DataAsset using a file or filename.
+
+        :param str name: Name of the asset to create
+        :param str filename: If the filename is assigned to a valid file,
+            the contents will be saved in the asset
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+        :param bool is_read: If True read the file contents in as asset data.
+
+        :return: a new DataAsset
+        :type: :class:`.DataAsset`
+
+        """
+
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+
+        metadata['filename'] = str(filename)
         data = None
         if os.path.exists(filename):
+            metadata['contentType'] = 'application/octet-stream'
             mime = MimeTypes()
-            mime_type = mime.guess_type(f'file://{self._filename}')
+            mime_type = mime.guess_type(f'file://{filename}')
             if mime_type:
                 metadata['contentType'] = mime_type[0]
-            metadata['contentLength'] = os.path.getsize(self._filename)
             if is_read:
+                metadata['contentLength'] = os.path.getsize(filename)
                 with open(filename, 'rb') as fp:
                     data = fp.read()
-        metadata['filename'] = os.path.basename(self._filename)
-        metadata['size'] = 0
-        if data:
-            metadata['size'] = len(data)
+                metadata['size'] = len(data)
 
         return DataAsset(metadata, did, data=data)
 
     @staticmethod
-    def create_from_url(name, url, did=None):
-        metadata = {
-            'name': name,
-            'type': 'dataset',
-        }
+    def create_from_url(name, url, metadata=None,  did=None):
+        """
+
+        Create a new DataAsset using a url.
+
+        :param str name: Name of the asset to create
+        :param str url: URL to assign to the asset
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+
+        :return: a new DataAsset
+        :type: :class:`.DataAsset`
+
+        """
+
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+        metadata['url'] = url
         if urlparse(url):
+            metadata['contentType'] = 'application/octet-stream'
             mime = MimeTypes()
             mime_type = mime.guess_type(url)
             if mime_type and mime_type[0]:
                 metadata['contentType'] = mime_type[0]
 
-        metadata['size'] = 0
-        if url:
-            metadata['size'] = len(url)
-
-        return DataAsset(metadata, did, data=url)
+        return DataAsset(metadata, did)
 
 
     def save_to_file(self, filename):

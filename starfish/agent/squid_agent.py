@@ -6,8 +6,9 @@ Agent class to provide basic functionality for all Ocean Agents
 
 
 import datetime
-import logging
 import json
+import logging
+import re
 
 from web3 import Web3
 
@@ -377,7 +378,7 @@ class SquidAgent(AgentBase):
             asset = BundleAsset.create('SquidAssetBundle', did=listing.ddo.did)
             for index, file_item in enumerate(file_list):
                 asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, listing.ddo.did)
-                asset.add(f'file_{index}', asset_item)
+                asset.add(asset_item.name, asset_item)
         return asset
 
     def start_agreement_events_monitor(self, account, callback=None):
@@ -405,7 +406,7 @@ class SquidAgent(AgentBase):
         asset = BundleAsset.create('SquidAssetBundle', did=ddo.did)
         for index, file_item in enumerate(asset_metadata):
             asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, ddo.did)
-            asset.add(f'file_{index}', asset_item)
+            asset.add(asset_item.name, asset_item)
         listing_id = ddo.did
         listing = Listing(self, listing_id, asset, listing_data, ddo)
         return listing
@@ -466,11 +467,17 @@ class SquidAgent(AgentBase):
         metadata[MetadataBase.KEY]['price'] = str(price_value)
 
         def append_asset_file(metadata, asset):
-            metadata['base']['files'].append(asset.metadata)
+            asset_metadata = asset.metadata
+            metadata['base']['files'].append(asset_metadata)
             index = len(metadata['base']['files']) - 1
             metadata['base']['files'][index]['index'] = index
-            if asset.is_asset_type('dataset'):
-                metadata['base']['files'][index]['url'] = asset.data
+            url = None
+            if 'url' in asset_metadata:
+                url = asset_metadata['url']
+            elif 'filename' in asset_metadata:
+                url = 'file://' + asset_metadata['filename']
+            if url:
+                metadata['base']['files'][index]['url'] = url
 
         if isinstance(asset, BundleAsset):
             for _, asset_item in asset:
@@ -567,7 +574,18 @@ class SquidAgent(AgentBase):
 
     @staticmethod
     def create_data_asset_from_file_item(index, file_item, did):
-        metadata = file_item
-        metadata['name'] = f'SquidAsset_{index}'
-        return DataAsset(metadata, did=did, data=metadata['url'])
+        metadata = {
+            'type': 'dataset',
+            'name': f'SquidAsset_{index}',
+        }
+
+        for name in ALLOWED_FILE_META_ITEMS:
+            if name in file_item:
+                metadata[name] = file_item[name]
+                if name == 'url':
+                    url = file_item['url']
+                    if re.match('^file://', url):
+                        metadata['filename'] = re.sub('^file://', '', url)
+
+        return DataAsset(metadata, did=did)
 

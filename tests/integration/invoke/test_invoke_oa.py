@@ -15,7 +15,7 @@ from starfish import (
 )
 from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
-from starfish.asset import RemoteAsset
+from starfish.asset import DataAsset
 
 from squid_py.agreements.service_factory import ServiceDescriptor
 from squid_py.utils.utilities import generate_new_id
@@ -33,14 +33,14 @@ from starfish.agent.invoke_agent import InvokeAgent
 logger = logging.getLogger('test.invoke_oa')
 
 
-def _register_asset_for_sale(agent, metadata, account):
-    asset = RemoteAsset(metadata)
+def _register_asset_for_sale(agent, account):
+    asset = DataAsset.create('TestAsset')
     listing = agent.register_asset(asset, account=account)
     assert listing
     assert listing.asset.did
     return listing
 
-def purchase_asset(ocean, metadata, config, brizo_mock):
+def purchase_asset(ocean, config, brizo_mock):
 
 
     agent = SquidAgent(ocean, config.squid_config)
@@ -52,7 +52,7 @@ def purchase_asset(ocean, metadata, config, brizo_mock):
     publisher_account.unlock()
     publisher_account.request_tokens(20)
 
-    listing = _register_asset_for_sale(agent, metadata, publisher_account)
+    listing = _register_asset_for_sale(agent, publisher_account)
     assert listing
     assert publisher_account
 
@@ -94,9 +94,9 @@ def purchase_asset(ocean, metadata, config, brizo_mock):
     return purchase_asset.purchase_id,listing_did
 
 
-def _test_invoke_with_sa(ocean, metadata, config):
+def _test_invoke_with_sa(ocean, config):
 
-    said,did=purchase_asset(ocean, metadata, config)
+    said,did=purchase_asset(ocean, config)
     assert said
     agent = InvokeAgent()
     assert agent

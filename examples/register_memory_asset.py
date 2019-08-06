@@ -3,7 +3,7 @@
 import secrets
 
 from starfish import Ocean
-from starfish.asset import MemoryAsset
+from starfish.asset import DataAsset
 from starfish.agent import MemoryAgent
 
 
@@ -20,7 +20,7 @@ def main():
     print('my new register account', register_account)
 
     # Now create a memory asset
-    asset = MemoryAsset(data='Some test data that I want to save for this asset')
+    asset = DataAsset.create('TestDummyAsset', 'Some test data that I want to save for this asset')
 
     # Print the memory asset out
     print('my asset:', asset.data)

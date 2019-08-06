@@ -9,7 +9,7 @@
 import secrets
 import json
 
-from starfish.asset import MemoryAsset
+from starfish.asset import DataAsset
 from starfish.agent import SurferAgent
 from starfish.ddo.starfish_ddo import StarfishDDO
 
@@ -17,7 +17,7 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 def test_07_metadata_access(ocean, resources, surfer_agent):
     test_data = secrets.token_hex(1024)
-    asset = MemoryAsset(data=test_data)
+    asset = DataAsset.create('TestAsset', test_data)
     listing = surfer_agent.register_asset(asset, resources.listing_data)
     assert(not listing is None)
     assert(listing.listing_id)
