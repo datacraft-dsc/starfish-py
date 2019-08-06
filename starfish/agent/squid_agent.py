@@ -476,6 +476,7 @@ class SquidAgent(AgentBase):
                 url = asset_metadata['url']
             elif 'filename' in asset_metadata:
                 url = 'file://' + asset_metadata['filename']
+                del asset_metadata['filename']
             if url:
                 metadata['base']['files'][index]['url'] = url
 

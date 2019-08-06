@@ -1,5 +1,5 @@
-Register an Asset
-=================
+Register asset on the Ocean Network
+===================================
 
 This is to show how to register an asset on the Ocean network.
 
@@ -16,7 +16,7 @@ First import the main starfish ocean library, and the logging library
 Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.
 
->>> ocean = Ocean(contracts_path='artifacts', keeper_url='http://localhost:8545', log_info=logging.DEBUG)
+>>> ocean = Ocean(keeper_url='http://localhost:8545')
 
 Loading an account
 ------------------
@@ -36,16 +36,16 @@ Create an Asset
 We now want to create an Ocean asset to register on the block chain, and store it's metadata
 with the meta storage service.
 
-First we need to load in a sample metadata.
+First we need to create a data asset, using the a URL of an actual asset. In this case
+we are going to use an image of a mantaray from the OceanProtocol web site.
 
-Then use this metadata to register an asset.
+>>> from starfish.asset import DataAsset
+>>> asset = DataAsset.create_from_url('MyAsset', 'https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg')
 
->>> from starfish.asset import SquidAsset
->>> asset = SquidAsset(metadata)
-
-Let see what's in the memory asset
+Let see what's in the data asset
 
 >>> print(asset.metadata)
+{'name': 'MyAsset', 'type': 'dataset', 'url': 'https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg', 'contentType': 'image/svg+xml'}
 
 Now see if the asset has a DID?
 >>> print(asset.did)
@@ -54,7 +54,7 @@ None
 Setup the Squid Agent
 ---------------------
 
-We now need an agent to register and manage our Asset. The agents 
+We now need an agent to register and manage our Asset. The agents
 task is to do the actual work of registration.
 
 >>> from starfish.agent import SquidAgent
@@ -63,17 +63,23 @@ task is to do the actual work of registration.
 Register the Asset
 ------------------
 
-Now we can register the asset with the ocean account. This will return
+First we nee to setup some 'Listing data', this is the data that we wish to publish
+to anyone who wants to download or buy from us.
+
+>>> listing_data = {'name': 'Mantaray Pic', 'author': 'Ocean Protocol', 'license': 'CC0: Public Domain'}
+
+
+Now we can register the asset we have created earlier with the ocean account. This will return
 a :class:.Listing object. The listing object will contain all of the information
-for selling the asset, such as price, where to obtain the asset, any samples, and more 
+for selling the asset, such as price, where to obtain the asset, any samples, and more
 information about the asset.
 
->>> listing = agent.register_asset(asset, account)
+>>> listing = agent.register_asset(asset, listing_data, account)
 >>> print(listing.asset.did)
 did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
 
-Full example to register an Asset
----------------------------------------
-.. literalinclude:: ../../examples/register_asset.py
+Full example to register an Asset on the Ocean Network
+------------------------------------------------------
+.. literalinclude:: ../../examples/register_asset_squid.py
    :language: python

@@ -3,6 +3,7 @@
 ### Release v0.5.0
 
 *   Removed FileAsset, RemoteAsset. Replaced with DataAsset
+*   Cleanup documentation
 
 ### Release v0.4.11
 
