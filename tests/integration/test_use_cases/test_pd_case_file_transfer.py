@@ -15,8 +15,7 @@ import base64
 
 from starfish.asset import (
     BundleAsset,
-    FileAsset,
-    RemoteAsset,
+    DataAsset,
 )
 
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
@@ -26,7 +25,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
         store_data = fp.read()
 
     # save the asset file to surfer
-    asset_store = FileAsset(filename=resources.asset_file)
+    asset_store = DataAsset.create_from_file('TestAsset', resources.asset_file)
     listing_store = surfer_agent.register_asset(asset_store, resources.listing_data)
     assert(listing_store)
 
@@ -38,7 +37,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     download_link = asset_store.did
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
 
-    asset_sale = RemoteAsset(metadata={'resourceId': resourceId}, url=download_link)
+    asset_sale = DataAsset.create_from_url(url=download_link, extra_data={'resourceId': resourceId})
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
     listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)
@@ -82,11 +81,11 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     # we are only using the first asset, so get it from the bundle
     remote_asset = purchase_asset.get_asset_at_index(0)
-    assert(isinstance(remote_asset, RemoteAsset))
+    assert(isinstance(remote_asset, DataAsset))
 
     #get the surfer_did and asset_id from the 'url'
-    assert(remote_asset.url)
-    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.url)
+    assert(remote_asset.data)
+    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.data)
     assert(surfer_did)
     assert(asset_id)
 
@@ -97,7 +96,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     # download the asset from storage
     new_asset_store = surfer_agent.download_asset(asset_id, download_url)
     assert(new_asset_store)
-    assert(new_asset_store.is_asset_type('data'))
+    assert(new_asset_store.is_asset_type('dataset'))
 
     # final check stored asset data is == to original data put up for sale
     assert(new_asset_store.data == store_data)
