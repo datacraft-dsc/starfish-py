@@ -2,7 +2,7 @@
 
 ### Release v0.5.0
 
-*   Removed FileAsset, RemoteAsset. Replaced with DataAsset
+*   Removed FileAsset, MemoryAsset, RemoteAsset. Replaced with DataAsset
 *   Cleanup documentation
 *   Renamed Squid/Surfer Models to Squid/Surfer Agent Adapters
 
@@ -29,6 +29,7 @@
 *   New squid-agent method watch_provider_events
 
 ### Release v0.4.6
+
 *   Fixed logging, so that only in test we setup the log level
 *   Add a test to see if we have already purchased an asset in squid
 *   Add MemoryAsset.save method

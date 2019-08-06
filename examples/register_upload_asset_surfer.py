@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import json
-import logging
-
 from starfish import Ocean
 from starfish.asset import DataAsset
 from starfish.agent import SurferAgent
