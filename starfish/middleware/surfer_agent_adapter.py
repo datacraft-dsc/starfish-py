@@ -1,5 +1,5 @@
 """
-    SurferModel - Model to access the Surfer Services
+    SurferAgentAdapter - Adapter to access the Surfer Services
 """
 import io
 import json
@@ -44,7 +44,7 @@ INVOKE_SYNC_METHOD = '/invoke'
 INVOKE_ASYNC_METHOD = '/invokeasync'
 INVOKE_JOB_METHOD = '/jobs'
 
-class SurferModel():
+class SurferAgentAdapter():
     _http_client = requests
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
@@ -84,7 +84,7 @@ class SurferModel():
         """save metadata to the agent server, using the asset_id and metadata"""
         url = self.get_endpoint('metadata')
         logger.debug(f'metadata save url {url}')
-        response = SurferModel._http_client.post(url, json=metadata, headers=self._headers)
+        response = SurferAgentAdapter._http_client.post(url, json=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
 
             data = response.json()
@@ -103,7 +103,7 @@ class SurferModel():
             'assetid': asset_id,
             'info': listing_data,
         }
-        response = SurferModel._http_client.post(url, json=data, headers=self._headers)
+        response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
             logger.debug('listing response returned: ' + str(data))
@@ -115,7 +115,7 @@ class SurferModel():
         return None
 
     def download_asset(self, url):
-        response = SurferModel._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.content
             return data
@@ -133,7 +133,7 @@ class SurferModel():
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'
-        response = SurferModel._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
             return data
@@ -146,7 +146,7 @@ class SurferModel():
     def get_listings(self):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings'
-        response = SurferModel._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
             return data
@@ -159,7 +159,7 @@ class SurferModel():
     def update_listing(self, listing_id, data):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'
-        response = SurferModel._http_client.put(url, json=data, headers=self._headers)
+        response = SurferAgentAdapter._http_client.put(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             return True
         else:
@@ -178,7 +178,7 @@ class SurferModel():
         headers = {
             'Authorization': self._headers['Authorization']
         }
-        response = SurferModel._http_client.post(url, files=files, headers=headers)
+        response = SurferAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
@@ -194,7 +194,7 @@ class SurferModel():
         endpoint = self.get_endpoint('metadata')
         url = f'{endpoint}/{asset_id}'
         logger.debug(f'metadata read url {url}')
-        response = SurferModel._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             result = {
                 'asset_id': asset_id,
@@ -211,7 +211,7 @@ class SurferModel():
         """record purchase"""
         url = self.get_endpoint('market') + '/purchases'
         logger.debug(f'market url for purchases {url}')
-        response = SurferModel._http_client.post(url, json=purchase, headers=self._headers)
+        response = SurferAgentAdapter._http_client.post(url, json=purchase, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
 
             json = response.json()
@@ -240,7 +240,7 @@ class SurferModel():
         else:
             url = f'{endpoint}{INVOKE_SYNC_METHOD}/{asset_id}'
         print(f'request {url}')
-        response = SurferModel._http_client.post(url, json=params, headers=self._headers)
+        response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             json = response.json()
             logger.debug('invoke response returned: ' + str(json))
@@ -254,7 +254,7 @@ class SurferModel():
     def get_job(self, job_id):
         endpoint = self.get_endpoint('invoke')
         url = f'{endpoint}{INVOKE_JOB_METHOD}/{job_id}'
-        response = SurferModel._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
             return data
@@ -267,7 +267,7 @@ class SurferModel():
 
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service or service type"""
-        supported_service = SurferModel.find_supported_service(name)
+        supported_service = SurferAgentAdapter.find_supported_service(name)
         if supported_service is None:
             message = f'unknown surfer endpoint service name or type: {name}'
             logger.error(message)
@@ -314,7 +314,7 @@ class SurferModel():
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = SurferModel.get_asset_id_from_metadata(metadata_text)
+            metadata_id = SurferAgentAdapter.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug(f'metdata does not match {metadata_id} != {asset_id}')
             return metadata_id == asset_id
@@ -334,7 +334,7 @@ class SurferModel():
     @staticmethod
     def set_http_client(http_client):
         """Set the http client to something other than the default `requests`"""
-        SurferModel._http_client = http_client
+        SurferAgentAdapter._http_client = http_client
 
     @staticmethod
     def get_authorization_token(surfer_url, surfer_username, surfer_password):

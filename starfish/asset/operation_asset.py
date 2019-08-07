@@ -18,21 +18,20 @@ class OperationAsset(AssetBase):
 
     """
     def __init__(self, metadata=None, did=None):
-        default_metadata = {
-            'name': 'OperationAsset',
-            'type': 'operation',
-        }
-        if metadata is None:
-            metadata = default_metadata
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
-        metadata = AssetBase.merge_metadata(metadata, default_metadata)
+        AssetBase.__init__(self, metadata, did)
 
-        AssetBase.__init__(self, 'operation', metadata, did)
+    def create(name, metadata=None, did=None):
+        """
 
-        if not self.is_asset_type('operation'):
-            raise ValueError('The metadata type is not a valid type for this asset')
+        Create a new OperationAsset.
 
+        :param str name: Name of the asset
+        :param dict metadata: Optional metadata to add to the assets metadata
+        :param str did: Option DID to assign to this asset
+
+        """
+        metadata = AssetBase.generateMetadata(name, 'operation', metadata)
+        return OperationAsset(metadata, did)
 
     def is_mode(self, mode_type):
         """

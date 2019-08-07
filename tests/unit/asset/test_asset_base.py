@@ -18,38 +18,38 @@ ASSET_METADATA = {
 TEST_DID = 'did:op:' + secrets.token_hex(32)
 
 def test_init(metadata):
-    asset = AssetBase('test', ASSET_METADATA)
+    asset = AssetBase(ASSET_METADATA)
     assert(asset)
     assert(isinstance(asset, AssetBase))
 
 def test_metadata():
-    asset = AssetBase('test', ASSET_METADATA)
+    asset = AssetBase(ASSET_METADATA)
     assert(asset)
     assert(asset.metadata == ASSET_METADATA)
 
 def test_data():
-    asset = AssetBase('test', ASSET_METADATA, TEST_DID)
+    asset = AssetBase(ASSET_METADATA, TEST_DID)
     assert(asset)
     assert(asset.metadata == ASSET_METADATA)
     assert(asset.did == TEST_DID)
-      
+
 
 def test_is_asset_type():
-    asset = AssetBase('asset', ASSET_METADATA)
+    asset = AssetBase(ASSET_METADATA)
     assert(asset)
     assert(asset.is_asset_type('asset'))
     assert(not asset.is_asset_type('bad asset type'))
-    
+
 def test_asset_id():
-    asset = AssetBase('test', ASSET_METADATA, TEST_DID)
+    asset = AssetBase(ASSET_METADATA, TEST_DID)
     assert(asset)
     asset_id = did_to_id(TEST_DID)
     assert(asset.asset_id == f'0x{asset_id}')
-    
+
 
     path_did = 'did:op:' + secrets.token_hex(32)
     asset_id = did_to_id(TEST_DID)
-        
-    asset = AssetBase('test', ASSET_METADATA, f'{path_did}/{asset_id}')
+
+    asset = AssetBase(ASSET_METADATA, f'{path_did}/{asset_id}')
     assert(asset)
     assert(asset.asset_id == f'0x{asset_id}')

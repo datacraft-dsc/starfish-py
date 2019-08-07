@@ -10,12 +10,12 @@ import secrets
 import logging
 import json
 
-from starfish.asset import MemoryAsset
+from starfish.asset import DataAsset
 
 
 def test_17_asset_purchase(ocean, resources, config, surfer_agent):
     test_data = secrets.token_hex(1024)
-    asset = MemoryAsset(data=test_data)
+    asset = DataAsset.create('TestAsset', test_data)
     listing = surfer_agent.register_asset(asset, resources.listing_data)
     listing.set_published(True)
     logging.debug("create_purchase for listing_id: " + listing.listing_id)

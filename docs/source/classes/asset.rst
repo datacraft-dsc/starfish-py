@@ -5,6 +5,6 @@ Asset Classes
 
     asset/module
     asset/asset_base
-    asset/memory_asset
+    asset/data_asset
     asset/bundle_asset
     asset/operation_asset

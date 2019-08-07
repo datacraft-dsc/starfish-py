@@ -6,23 +6,24 @@ Agent class to provide basic functionality for all Ocean Agents
 
 
 import datetime
-import logging
 import json
+import logging
+import re
 
 from web3 import Web3
 
-from starfish.models.squid_model import SquidModel
+from starfish.middleware.squid_agent_adapter import (
+    SquidAgentAdapter,
+    SquidAgentAdapterPurchaseError
+)
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.asset import (
     BundleAsset,
-    FileAsset,
-    RemoteAsset,
-    Asset,
+    DataAsset,
  )
 from starfish.purchase import Purchase
-from starfish.models.squid_model import SquidModelPurchaseError
 from starfish.utils.did import did_parse
 from starfish.exceptions import (
     StarfishAssetNotFound,
@@ -99,7 +100,7 @@ class SquidAgent(AgentBase):
     def __init__(self, ocean, *args, **kwargs):
         """init a standard ocean object"""
         AgentBase.__init__(self, ocean)
-        self._model = None
+        self._adapter = None
 
         if args and isinstance(args[0], dict):
             kwargs = args[0]
@@ -116,7 +117,7 @@ class SquidAgent(AgentBase):
         Register a squid asset with the ocean network.
 
         :param asset: the asset to register, at the moment only a Asset can be used.
-        :type asset: :class:`.FileAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
+        :type asset: :class:`.DataAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
@@ -124,7 +125,7 @@ class SquidAgent(AgentBase):
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
 
-        At the moment only support FileAsset
+        At the moment only support :class:`.DataAsset` or :class:`.BundleAsset`
 
         For example::
 
@@ -132,7 +133,7 @@ class SquidAgent(AgentBase):
             # get your publisher account
             account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
             agent = SquidAgent(ocean)
-            asset = FileAsset(filename='Testfile.txt')
+            asset = DataAsset.create_from_file('My test asset', 'Testfile.txt')
             listing = agent.register_asset(asset, {'price': 8}, account)
 
             if listing:
@@ -152,13 +153,13 @@ class SquidAgent(AgentBase):
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')
 
-        if not (isinstance(asset, FileAsset) or isinstance(asset, RemoteAsset) or isinstance(asset, BundleAsset)):
-            raise TypeError('This agent only supports a FileAsset, RemoteAsset or BundleAsset')
+        if not (isinstance(asset, DataAsset) or isinstance(asset, BundleAsset)):
+            raise TypeError('This agent only supports a DataAsset or BundleAsset')
 
-        model = self.squid_model
+        adapter = self.get_adapter
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
 
-        ddo = model.register_asset(metadata, account._squid_account)
+        ddo = adapter.register_asset(metadata, account._squid_account)
 
         listing = None
         if ddo:
@@ -179,15 +180,16 @@ class SquidAgent(AgentBase):
 
         if not asset:
             raise ValueError('asset must be an object')
-        if not isinstance(asset, Asset):
-            raise ValueErrer('asset must be a type of Asset object')
+        if not isinstance(asset, DataAsset) or isinstance(asset, BundleAsset):
+            raise ValueErrer('asset must be a type of DataAsset or BundleAsset object')
         if not asset.metadata:
             raise ValueError('Metadata must have a value')
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
-        model = self.squid_model
-        return model.validate_metadata(asset.metadata)
+#        adapter = self.get_adapter
+#        return adapter.validate_metadata(asset.metadata)
+        return True
 
     def get_listing(self, listing_id):
         """
@@ -202,10 +204,10 @@ class SquidAgent(AgentBase):
             aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
-        model = self.squid_model
+        adapter = self.get_adapter
 
         try:
-            ddo = model.read_asset(listing_id)
+            ddo = adapter.read_asset(listing_id)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
 
@@ -235,9 +237,9 @@ class SquidAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
         if isinstance(text, str) or isinstance(text, dict):
-            ddo_list = model.search_assets(text, sort, offset, page)
+            ddo_list = adapter.search_assets(text, sort, offset, page)
         else:
             raise ValueError('You can only pass a str or dict for the search text')
         result = []
@@ -262,7 +264,7 @@ class SquidAgent(AgentBase):
 
         """
         purchase = None
-        model = self.squid_model
+        adapter = self.get_adapter
 
         try:
             if 'price' in listing.data:
@@ -271,7 +273,7 @@ class SquidAgent(AgentBase):
                 if account_balance < asset_price:
                     raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} which is not enougth to purchase the asset at a price of {asset_price}')
 
-            service_agreement_id = model.purchase_asset(listing.ddo, account._squid_account)
+            service_agreement_id = adapter.purchase_asset(listing.ddo, account._squid_account)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
 
@@ -295,14 +297,14 @@ class SquidAgent(AgentBase):
         :type: boolean
         """
 
-        model = self.squid_model
+        adapter = self.get_adapter
 
         if purchase_id:
-            return model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
+            return adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
         else:
-            purchase_id_list = model.get_asset_purchase_ids(asset.did)
+            purchase_id_list = adapter.get_asset_purchase_ids(asset.did)
             for purchase_id in purchase_id_list:
-                if model.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
+                if adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
                     return True
         return False
 
@@ -312,15 +314,15 @@ class SquidAgent(AgentBase):
         Returns as list of purchase id's that have been used for this asset
 
         :param asset: Asset to return purchase details.
-        :type asset: :class:`.Asset` object
+        :type asset: :class:`.DataAsset` or :class:`.BundleAsset` object
 
         :return: list of purchase ids
         :type: list
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
 
-        return model.get_asset_purchase_ids(asset.did)
+        return adapter.get_asset_purchase_ids(asset.did)
 
 
 
@@ -341,13 +343,13 @@ class SquidAgent(AgentBase):
         :raises OceanPurchaseError: if the correct events are not received
 
         """
-        model = self.squid_model
+        adapter = self.get_adapter
         if not purchase_id:
             raise ValueError('Please provide a valid purhase id')
 
         try:
-            model.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
-        except SquidModelPurchaseError as purchaseError:
+            adapter.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
+        except SquidAgentAdapterPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
             raise e
@@ -372,13 +374,13 @@ class SquidAgent(AgentBase):
 
         """
         asset = None
-        model = self.squid_model
-        file_list = model.consume_asset(listing.ddo, account._squid_account, purchase_id)
+        adapter = self.get_adapter
+        file_list = adapter.consume_asset(listing.ddo, account._squid_account, purchase_id)
         if file_list:
-            asset = BundleAsset(did=listing.ddo.did)
+            asset = BundleAsset.create('SquidAssetBundle', did=listing.ddo.did)
             for index, file_item in enumerate(file_list):
-                asset_item = RemoteAsset(file_item, listing.ddo.did)
-                asset.add(f'file_{index}', asset_item)
+                asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, listing.ddo.did)
+                asset.add(asset_item.name, asset_item)
         return asset
 
     def start_agreement_events_monitor(self, account, callback=None):
@@ -392,20 +394,21 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account`
 
         """
-        model = self.squid_model
-        model.start_agreement_events_monitor(account, callback)
+        adapter = self.get_adapter
+        adapter.start_agreement_events_monitor(account, callback)
 
     def stop_agreement_events_monitor(self):
-        model = self.squid_model
-        model.start_agreement_events_monitor()
+        adapter = self.get_adapter
+        adapter.start_agreement_events_monitor()
 
     def _listing_from_ddo(self, ddo):
         """ convert a ddo to a listing that contains a BundleAsset """
 
         listing_data, asset_metadata = self._convert_ddo_to_listing_data_asset_metadata(ddo)
-        asset = BundleAsset(did=ddo.did)
-        for index, asset_metadata_item in enumerate(asset_metadata):
-            asset.add(f'file_{index}', RemoteAsset(metadata=asset_metadata_item, did=ddo.did))
+        asset = BundleAsset.create('SquidAssetBundle', did=ddo.did)
+        for index, file_item in enumerate(asset_metadata):
+            asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, ddo.did)
+            asset.add(asset_item.name, asset_item)
         listing_id = ddo.did
         listing = Listing(self, listing_id, asset, listing_data, ddo)
         return listing
@@ -444,7 +447,7 @@ class SquidAgent(AgentBase):
         """
         metadata = {
             MetadataBase.KEY: {
-                'name': 'Asset',
+                'name': 'SquidAsset',
                 'type': 'dataset',
                 'dateCreated': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
                 'author': 'Author',
@@ -466,16 +469,25 @@ class SquidAgent(AgentBase):
         metadata[MetadataBase.KEY]['price'] = str(price_value)
 
         def append_asset_file(metadata, asset):
-            metadata['base']['files'].append(asset.metadata)
+            asset_metadata = asset.metadata
+            metadata['base']['files'].append(asset_metadata)
             index = len(metadata['base']['files']) - 1
             metadata['base']['files'][index]['index'] = index
-            if asset.is_asset_type('file'):
-                metadata['base']['files'][index]['url'] = asset.metadata['filename']
+            url = None
+            if 'url' in asset_metadata:
+                url = asset_metadata['url']
+            elif 'filename' in asset_metadata:
+                url = 'file://' + asset_metadata['filename']
+                del asset_metadata['filename']
+            if url:
+                metadata['base']['files'][index]['url'] = url
+            else:
+                raise ValueError(f'The DataAsset does not contain a "url" or "filename" metadata item')
 
         if isinstance(asset, BundleAsset):
             for _, asset_item in asset:
-                if not (isinstance(asset_item, FileAsset) or isinstance(asset_item, RemoteAsset)):
-                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type FileAsset or RemoteAsset')
+                if not (isinstance(asset_item, DataAsset)):
+                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type DataAsset')
                 append_asset_file(metadata, asset_item)
         else:
             append_asset_file(metadata, asset)
@@ -513,7 +525,7 @@ class SquidAgent(AgentBase):
             files = ddo.metadata['base']['encryptedFiles']
             logger.info(f'encrypted contentUrls: {files}')
             files = files if isinstance(files, str) else files[0]
-            sa = SquidModel.get_service_agreement_from_ddo(ddo)
+            sa = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
             service_url = sa.service_endpoint
             if not service_url:
                 logger.error(
@@ -532,14 +544,14 @@ class SquidAgent(AgentBase):
 
 
     @property
-    def squid_model(self):
+    def get_adapter(self):
         """
 
-        Return an instance of the squid model, for access to the squid library layer
-        :return: squid model object
+        Return an instance of the squid ageent adapter, for access to the squid library layer
+        :return: squid Agent Adapter object
         """
 
-        if not self._model:
+        if not self._adapter:
             options = {
                 'aquarius_url': self._aquarius_url,
                 'brizo_url': self._brizo_url,
@@ -547,8 +559,8 @@ class SquidAgent(AgentBase):
                 'parity_url': self._parity_url,
                 'storage_path': self._storage_path,
             }
-            self._model = self._ocean.get_squid_model(options)
-        return self._model
+            self._adapter = self._ocean.get_squid_agent_adapter(options)
+        return self._adapter
 
     @staticmethod
     def is_did_valid(did):
@@ -564,3 +576,21 @@ class SquidAgent(AgentBase):
         """
         data = did_parse(did)
         return not data['path']
+
+    @staticmethod
+    def create_data_asset_from_file_item(index, file_item, did):
+        metadata = {
+            'type': 'dataset',
+            'name': f'SquidAsset_{index}',
+        }
+
+        for name in ALLOWED_FILE_META_ITEMS:
+            if name in file_item:
+                metadata[name] = file_item[name]
+                if name == 'url':
+                    url = file_item['url']
+                    if re.match('^file://', url):
+                        metadata['filename'] = re.sub('^file://', '', url)
+
+        return DataAsset(metadata, did=did)
+

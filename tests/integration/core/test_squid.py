@@ -14,12 +14,9 @@ import pytest
 from web3 import Web3
 
 from starfish import Ocean
-from starfish.models.squid_model import SquidModel
 from starfish.agent import SquidAgent
-from starfish.asset import (
-    FileAsset,
-    RemoteAsset,
-)
+from starfish.asset import DataAsset
+
 from starfish.exceptions import (
     StarfishAssetNotFound,
     StarfishPurchaseError
@@ -36,7 +33,7 @@ logger = logging.getLogger('test.core.test_squid')
 
 def _register_asset_for_sale(agent, resources, account):
 
-    asset = FileAsset(filename=resources.asset_file)
+    asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, account=account)
     assert(listing)
     assert(listing.asset.did)
@@ -49,7 +46,7 @@ def test_asset_file_register(ocean, config, resources):
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-    asset = FileAsset(filename=resources.asset_file)
+    asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
 
@@ -60,7 +57,7 @@ def test_asset_remote_register(ocean, config, resources):
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-    asset = RemoteAsset(url=resources.asset_remote)
+    asset = DataAsset.create_from_url('TestAsset', resources.asset_remote)
 
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)
@@ -221,7 +218,7 @@ def test_insufficient_funds(ocean, config, resources):
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-    asset = FileAsset(filename=resources.asset_file)
+    asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
     listing_data = resources.listing_data.copy()
     listing_data['price'] = 83454.2345
     listing = agent.register_asset(asset, listing_data, publisher_account)

@@ -6,7 +6,7 @@ import re
 from web3 import Web3
 
 from starfish.ddo.starfish_ddo import StarfishDDO
-from starfish.models.squid_model import SquidModelPurchaseError
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapterPurchaseError
 
 from squid_py.did import (
     did_to_id,
@@ -27,7 +27,7 @@ class MockKeeper():
         return Web3.sha3(text=text + publisher_account.address)
 
 
-class MockSquidModel():
+class MockSquidAgentAdapter():
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
@@ -137,7 +137,7 @@ class MockSquidModel():
     def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
         if purchase_id:
             return True
-        raise SquidModelPurchaseError('test squid model purchase wait error')
+        raise SquidAgentAdapterPurchaseError('test squid agent adapter purchase wait error')
 
     def consume_asset(self, ddo, account, service_agreement_id):
         service = ddo.get_service(TEST_SERVICE_NAME)

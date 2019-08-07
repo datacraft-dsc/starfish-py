@@ -5,7 +5,7 @@ import pathlib
 import logging
 
 from starfish import Ocean
-from starfish.asset import RemoteAsset
+from starfish.asset import DataAsset
 from starfish.agent import SquidAgent
 
 """
@@ -43,29 +43,10 @@ NILE_CONFIG = {
 CONFIG = LOCAL_CONFIG
 
 
-"""
-Test sample metadata to load in for an asset.
-"""
-METADATA_SAMPLE_PATH = pathlib.Path.cwd() / 'examples' / 'sample_data' / 'sample_metadata.json'
-MY_ACCOUNT_PASSWORD = 'test_account_password'
-
-
 def main():
-    """ Create a new Ocean instance. logging information. """
 
+    # Create a new Ocean instance.
     ocean = Ocean(keeper_url=CONFIG['keeper_url'])
-
-    """
-    If you wish to see what's happening behind the scenes, you can pass
-    'log_level=logging.DEBUG' parameter to get full debug instead.
-
-    ocean = Ocean(contracts_path='artifacts',
-                    keeper_url='http://localhost:8545'
-    )
-
-    Get our first test publisher account - in test the account numbers are published
-    at https://github.com/DEX-Company/barge
-    """
 
     print('config data', CONFIG)
     account = ocean.get_account(CONFIG['account'])
@@ -79,20 +60,20 @@ def main():
         'name': 'The white paper',
         'author': 'Ocean Protocol',
         'license': 'CC0: Public Domain',
-        'price': '0'
+        'price': '10'
     }
-    # Now create a squid asset using the metadata we have just loaded
-    asset = RemoteAsset(url='https://oceanprotocol.com/tech-whitepaper.pdf')
+    # Now create a squid asset using a test URL
+    asset = DataAsset.create_from_url('my test asset', 'https://oceanprotocol.com/tech-whitepaper.pdf')
 
 
     # Create a new `Squid` agent to do the work on the block chain.
     agent = SquidAgent(ocean, CONFIG['squid_agent'])
 
-    # Register the asset, on the block chain and with the metadata storage.
+    # Register the asset, on the block chain.
     listing = agent.register_asset(asset, listing_data, account)
 
     # Print out the listing did and listing data.
-    print('the listing', listing.listing_id, listing.data)
+    print('the listing', listing.did, listing.data)
 
 if __name__ == '__main__':
     main()

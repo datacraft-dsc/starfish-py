@@ -16,12 +16,20 @@ class AssetBase(ABC):
     :type did: None or str
 
     """
-    def __init__(self, asset_type, metadata, did=None):
+    def __init__(self, metadata, did=None):
         """
         init an asset class
         """
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+
+        if not 'name' in metadata:
+            raise ValueError('metadata must contain a metadata name')
+
+        if not 'type' in metadata:
+            raise ValueError('metadata must contain a metadata type')
+
         self._metadata = metadata
-        self._metadata['type'] = asset_type
         self._did = did
         super().__init__()
 
@@ -72,12 +80,12 @@ class AssetBase(ABC):
         return None
 
     @property
-    def data(self):
-        return None
+    def name(self):
+        return self._metadata['name']
 
     @property
-    def params(self):
-        return params
+    def type_name(self):
+        return self._metadata['type']
 
     @property
     def is_bundle(self):
@@ -93,13 +101,6 @@ class AssetBase(ABC):
 
 
     @staticmethod
-    def merge_metadata(metadata, default_metadata):
-        for name, value in default_metadata.items():
-            if not name in metadata:
-                metadata[name] = value
-        return metadata
-
-    @staticmethod
     def get_asset_type(metadata):
         asset_type = ''
         if isinstance(metadata, dict):
@@ -110,3 +111,14 @@ class AssetBase(ABC):
                 if 'base' in metadata:
                     asset_type = 'bundle'
         return asset_type
+
+    @staticmethod
+    def generateMetadata(name, asset_type, metadata=None):
+        if metadata is None:
+            metadata = {}
+        if not isinstance(metadata, dict):
+            raise ValueError('The metadata has to be a dict')
+
+        metadata['name'] = name
+        metadata['type'] = asset_type
+        return metadata

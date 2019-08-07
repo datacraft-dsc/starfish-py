@@ -60,7 +60,7 @@ apidoc_excluded_paths = [
   'constants.py',
   'exceptions.py',
   'logging.py',
-  'models',
+  'middleware',
   'utils',
   'agent',
   'purchase',

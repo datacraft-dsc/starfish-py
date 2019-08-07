@@ -20,6 +20,15 @@ Install the library
         source venv/bin/activate
         pip install -r requirements_dev.txt
 
+Run the unit tests
+------------------
+
+    You can run the unit tests without any external access to the Ocean Protocol Network, by running the command:
+
+    .. code-block:: console
+
+        pytest tests/unit
+
 
 Startup a local ocean test node (``barge``)
 -------------------------------------------
@@ -59,11 +68,17 @@ Copy keeper artifacts
     The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
 
 
-Run the unit tests
+Run the full tests
 ------------------
 
-    Now you can run the tests by running the command:
+    Once you have the local barge running. You now have a local Ocean Protocol Network stack running. You can now run the interegration tests by running the command:
 
     .. code-block:: console
 
-        python3 setup.py test
+        pytest tests/intergration
+
+    or you can run the complete test suite by entering the command
+
+    .. code-block:: console
+
+        pytest tests

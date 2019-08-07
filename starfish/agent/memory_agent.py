@@ -13,7 +13,7 @@ from squid_py.did import id_to_did, did_to_id
 from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
-from starfish.asset import Asset
+from starfish.asset import DataAsset
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
 
@@ -191,8 +191,8 @@ class MemoryAgent(AgentBase):
 
         Returns as list of purchase id's that have been used for this asset
 
-        :param asset: Asset to return purchase details.
-        :type asset: :class:`.Asset` object
+        :param asset: DataAsset to return purchase details.
+        :type asset: :class:`.DataAsset` object
 
         :return: list of purchase ids
         :type: list

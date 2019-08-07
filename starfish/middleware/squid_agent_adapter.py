@@ -1,5 +1,5 @@
 """
-    SquidModel - Access squid services using the squid-py api
+    SquidAgentAdapter - Access squid services using the squid-py api
 """
 
 import logging
@@ -31,16 +31,16 @@ from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
 
 from plecos import is_valid_dict_local, validate_dict_local
 
-from starfish.models.starfish_events_manager import StarfishEventsManager
+from starfish.middleware.starfish_events_manager import StarfishEventsManager
 
 
-logger = logging.getLogger('starfish.squid_model')
+logger = logging.getLogger('starfish.squid_agent_adapter')
 # from starfish import logger
 
-# to keep the squid_model seperate, we will issue a seperate purchase exception just
+# to keep the squid_agent_adapter seperate, we will issue a seperate purchase exception just
 # from this class
 
-class SquidModelPurchaseError(Exception):
+class SquidAgentAdapterPurchaseError(Exception):
     """ Raised when a purchase event has failed to complete """
 
 
@@ -48,7 +48,7 @@ class AgreementStoreManagerExtra(AgreementStoreManager):
    def get_agreement_ids_for_did(self, did):
         return self.contract_concise.getAgreementIdsForDID(did)
 
-class SquidModel():
+class SquidAgentAdapter():
 
 
     def __init__(self, ocean, options=None):
@@ -187,7 +187,7 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean(account)
 
         service_agreement_id = None
-        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
+        service_agreement = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             service_agreement_id = squid_ocean.assets.order(
                 ddo.did,
@@ -207,22 +207,22 @@ class SquidModel():
         event = self._keeper.escrow_access_secretstore_template.subscribe_agreement_created(
             purchase_id,
             timeout_seconds,
-            SquidModel.log_event(self._keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
+            SquidAgentAdapter.log_event(self._keeper.escrow_access_secretstore_template.AGREEMENT_CREATED_EVENT),
             (),
             wait=True
         )
         if not event:
-            raise SquidModelPurchaseError('no event for EscrowAccessSecretStoreTemplate.AgreementCreated')
+            raise SquidAgentAdapterPurchaseError('no event for EscrowAccessSecretStoreTemplate.AgreementCreated')
 
         event = self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
             purchase_id,
             timeout_seconds,
-            SquidModel.log_event(self._keeper.lock_reward_condition.FULFILLED_EVENT),
+            SquidAgentAdapter.log_event(self._keeper.lock_reward_condition.FULFILLED_EVENT),
             (),
             wait=True
         )
         if not event:
-            raise SquidModelPurchaseError('no event for LockRewardCondition.Fulfilled')
+            raise SquidAgentAdapterPurchaseError('no event for LockRewardCondition.Fulfilled')
 
         timeout_time = time.time() + timeout_seconds
         while self.is_access_granted_for_asset(did, address, purchase_id) is not True and timeout_time > time.time():
@@ -241,7 +241,7 @@ class SquidModel():
         squid_ocean = self.get_squid_ocean()
 
         service_agreement_id = None
-        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
+        service_agreement = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
         agreements=squid_ocean.agreements
         did=ddo.did
         if service_agreement:
@@ -289,7 +289,7 @@ class SquidModel():
         """
         result = None
         squid_ocean = self.get_squid_ocean(account)
-        service_agreement = SquidModel.get_service_agreement_from_ddo(ddo)
+        service_agreement = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
         if service_agreement:
             result = json.loads(squid_ocean.secret_store.decrypt(
                     ddo.asset_id,
