@@ -52,7 +52,9 @@ class StarfishAgreementRecord:
 
 
 class StarfishEventsManager:
-    """Manage the main keeper events listeners necessary for processing service agreements.
+    """
+
+    Manage the main keeper events listeners necessary for processing service agreements.
 
     on init
         if not db or not db schema -> create db and schema

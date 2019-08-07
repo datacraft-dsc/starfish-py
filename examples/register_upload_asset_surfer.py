@@ -15,7 +15,7 @@ def main():
     # Print the asset data
     print('my asset:', asset.data)
 
-    # Create a new memory agent to do the work.
+    # Create a surfer agent to do the work.
     surfer_url = 'http://localhost:8080'
     surfer_ddo = SurferAgent.generate_ddo(surfer_url)
     surfer_options = {
@@ -34,7 +34,7 @@ def main():
     agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
 
     listing = agent.register_asset(asset, listing_data)
-    print(listing)
+    print(listing.did, listing.data)
 
     # now upload the asset data to Surfer
     agent.upload_asset(asset)

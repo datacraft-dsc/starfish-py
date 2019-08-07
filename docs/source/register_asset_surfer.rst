@@ -5,9 +5,11 @@ This is to show how to register an asset on Surfer.
 
 Surfer is a centralized server that allows the server url to be registered on the Ocean Network.
 
-Any asset registered with Surfer will not be written to the block chain.
+Any asset registered with Surfer will not be written to the block chain, but the returned
+DID will contain the SurferDID/asset_id. This can be resolved by using the Ocean Protocol network
+to obtain the asset.
 
-We assume that you have already setup a test `barge` in 'Getting Started'.
+We assume that you have already setup a test `barge` in 'Getting Started', with a running Surfer in Barge.
 
 Creating a new `Ocean` instance
 -------------------------------
@@ -15,7 +17,6 @@ Creating a new `Ocean` instance
 First import the main starfish ocean library, and the logging library
 
 >>> from starfish import Ocean
->>> import logging
 
 Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.
@@ -33,10 +34,16 @@ First we need to create a data asset, using some test data.
 >>> from starfish.asset import DataAsset
 >>> asset = DataAsset.create('MyAsset', 'Here is some test text that I want to save in Surfer service')
 
-Let see what's in the data asset
+Let see what's in the DataAsset metadata
 
 >>> print(asset.metadata)
 {'name': 'MyAsset', 'type': 'dataset', 'contentType': 'text/plain; charset=utf-8'}
+
+and what is in the DataAsset data property
+
+>>> print(asset.data)
+Here is some test text that I want to save in Surfer service
+
 
 Now see if the asset has a DID?
 
@@ -49,8 +56,32 @@ Setup the Surfer Agent
 We now need an agent to register and manage our Asset. The agents
 task is to do the actual work of registration.
 
+First we need to import the agent and setup it's configuration for the local test Barge.
+
 >>> from starfish.agent import SurferAgent
->>> agent = SquidAgent(ocean, SURFER_AGENT_PARAMETERS)
+>>> url = 'http://localhost:8080'
+>>> options = {
+        'url': url,
+        'username': 'test',
+        'password':  'foobar',
+    }
+
+Since this is probably the first time we are using Surfer, we need to register
+all of the services that Surfer supports on the Ocean Network. In our case
+the Ocean Network is going to be the local Barge.
+
+So first create a DDO record for the local Surfer service.
+
+>>> ddo = SurferAgent.generate_ddo(url)
+
+Lets see what the DID of the Surfer service is going to be?
+
+>>> print(ddo.did)
+did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c
+
+We can now create the Surfer agent using teh options provided
+
+>>> agent = SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
 
 Register the Asset
 ------------------
@@ -66,17 +97,32 @@ for selling the asset, such as price, where to obtain the asset, any samples, an
 information about the asset.
 
 >>> listing = agent.register_asset(asset, listing_data)
->>> print(listing.asset.did)
-did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
 
-You will notice that the asset url returned contains two id's. The first is the regisered DID on the
+We can find out what the listing id has been assigned to us by Surfer
+
+>>> print(listing.listing_id)
+a3392ea6f7b7301bb81c4fe58ad0959360d53662ce3a3d35589f9fbd0e276699
+
+Lets find out what the asset or listing DID
+
+>>> print(listing.did)
+did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5
+
+You will notice that the listing DID returned contains two id's. The first is the regisered DID on the
 Ocean Protocol block chain, the second id is the internall asset id registered on the Surfer.
+
+To check that the asset id is the same we can print out the asset id
+
+>>> print(listing.asset.asset_id)
+0x3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5
 
 Saving the Asset
 ----------------
 With Surfer we can now save the asset data. To do this we just need to call the `upload` method in the Surfer Agent.
 
 >>> agent.upload_asset(asset)
+True
+
 
 N.B. Rememeber you can only upload and download in asset with Surfer if you have regisetred it before hand.
 

@@ -72,11 +72,19 @@ def test_register_bundle_asset(ocean, resources, config):
     assert(agent)
     bundle_asset = BundleAsset.create('test bundle asset')
     for index in range(0, 5):
-        asset = DataAsset.create('test remote asset', resources.asset_remote)
+        asset = DataAsset.create_from_url('test remote asset', resources.asset_remote)
         assert(asset)
         bundle_asset.add(f'name_{index}', asset)
     listing = agent.register_asset(bundle_asset, resources.listing_data, account)
     assert(listing)
+
+def test_register_asset_invalid_data(ocean, resources, config):
+    account = ocean.get_account(config.accounts[0].as_dict)
+    agent = SquidAgent(ocean)
+    assert(agent)
+    asset = DataAsset.create('test remote asset', 'some data that is never going to be saved')
+    with pytest.raises(ValueError):
+        listing = agent.register_asset(asset, resources.listing_data, account)
 
 def test_validate_asset(ocean):
     agent = SquidAgent(ocean, TEST_INIT_PARMS)

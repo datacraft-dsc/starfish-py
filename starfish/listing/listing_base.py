@@ -89,6 +89,16 @@ class ListingBase(ABC):
         return self._asset
 
     @property
+    def did(self):
+        """
+
+        :return: asset held did
+        :type: str
+        """
+        if self._asset:
+            return self._asset.did
+
+    @property
     def is_empty(self):
         """
 

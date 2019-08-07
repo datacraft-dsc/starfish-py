@@ -481,6 +481,8 @@ class SquidAgent(AgentBase):
                 del asset_metadata['filename']
             if url:
                 metadata['base']['files'][index]['url'] = url
+            else:
+                raise ValueError(f'The DataAsset does not contain a "url" or "filename" metadata item')
 
         if isinstance(asset, BundleAsset):
             for _, asset_item in asset:

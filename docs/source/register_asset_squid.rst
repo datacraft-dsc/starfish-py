@@ -1,7 +1,7 @@
-Register asset on the Ocean Network
-===================================
+Register asset using Squid
+==========================
 
-This is to show how to register an asset on the Ocean network.
+This is to show how to register an asset on the Ocean Procotol network using the SquidAgent.
 
 We assume that you have already setup a test `barge` in 'Getting Started'.
 
@@ -11,7 +11,6 @@ Creating a new `Ocean` instance
 First import the main starfish ocean library, and the logging library
 
 >>> from starfish import Ocean
->>> import logging
 
 Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.
@@ -23,7 +22,9 @@ Loading an account
 
 Now we need to load an account and see how much ocean tokens and Etherum ether we have.
 We will always need some ether to be able to pay for the transaction costs to register and buy an asset
-on the Ethereum network. For our test Ocean network, we will use some ethereum for registering an asset, but
+on the Ethereum network.
+
+For our test Ocean network, we will use some ethereum for registering an asset, but
 no ocean tokens, since we are not purchasing an asset yet.
 
 >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'node0')
@@ -33,8 +34,7 @@ no ocean tokens, since we are not purchasing an asset yet.
 Create an Asset
 ---------------
 
-We now want to create an Ocean asset to register on the block chain, and store it's metadata
-with the meta storage service.
+We now want to create a Starfish asset to register on the block chain.
 
 First we need to create a data asset, using the a URL of an actual asset. In this case
 we are going to use an image of a mantaray from the OceanProtocol web site.
@@ -55,10 +55,18 @@ Setup the Squid Agent
 ---------------------
 
 We now need an agent to register and manage our Asset. The agents
-task is to do the actual work of registration.
+task is to do the actual work of registration. In this example we are going to
+use Squid to register this asset.
 
 >>> from starfish.agent import SquidAgent
->>> agent = SquidAgent(ocean, SQUID_AGENT_PARAMETERS)
+>>> config = {
+    'aquarius_url': 'http://localhost:5000',
+    'brizo_url': 'http://localhost:8030',
+    'secret_store_url': 'http://localhost:12001',
+    'parity_url': 'http://localhost:8545',
+    'storage_path': 'squid_py.db',
+}
+>>> agent = SquidAgent(ocean, config)
 
 Register the Asset
 ------------------
@@ -70,13 +78,22 @@ to anyone who wants to download or buy from us.
 
 
 Now we can register the asset we have created earlier with the ocean account. This will return
-a :class:.Listing object. The listing object will contain all of the information
-for selling the asset, such as price, where to obtain the asset, any samples, and more
-information about the asset.
+a :class:.Listing object. The listing object will contain all of the listing data we supplied.
+
 
 >>> listing = agent.register_asset(asset, listing_data, account)
+
+We can now view the returned listing. The listing id is the unique identifier that
+we can use to load the asset.
+
+>>> print(listing.listing_id)
+did:op:00b8348dcfdf4a29b4f973cd0ad43c1d1321c628acf6463597efd21052043e5c
+
+In fact the listing id for squid is the same as the asset id. You can see it is the same by getting the DID of the
+asset from the listing.
+
 >>> print(listing.asset.did)
-did:op:5caa87cc42bf4ef09a96cdc11ba5dccad3659c3618b272c8859d0c8ad4075876360ca948e17e15de6717b61c9d1562dfc3057d8cb8711b9c66702331295bc80e
+did:op:00b8348dcfdf4a29b4f973cd0ad43c1d1321c628acf6463597efd21052043e5c
 
 
 Full example to register an Asset on the Ocean Network
