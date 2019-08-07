@@ -438,6 +438,8 @@ class SquidAgent(AgentBase):
                 except json.decoder.JSONDecodeError:
                     pass
                 listing_data[name] = value
+
+        print('listing data', listing_data)
         return listing_data, asset_metadata
 
     @staticmethod
@@ -457,12 +459,16 @@ class SquidAgent(AgentBase):
             },
             AdditionalInfoMeta.KEY: {}
         }
+        if 'extra_data' in listing_data:
+            metadata[AdditionalInfoMeta.KEY]['extra_data'] = json.dumps(listing_data['extra_data'])
+            del listing_data['extra_data']
+
         for name, value in listing_data.items():
             if name in MetadataBase.VALUES_KEYS:
                 metadata[MetadataBase.KEY][name] = value
             else:
-                metadata[AdditionalInfoMeta.KEY][name] = value
-
+                if name != 'extra_data':
+                    metadata[AdditionalInfoMeta.KEY][name] = value
 
         # make sure we are sending a price value as string for squid in vodka
         price_value = Web3.toWei(metadata[MetadataBase.KEY]['price'], 'ether')

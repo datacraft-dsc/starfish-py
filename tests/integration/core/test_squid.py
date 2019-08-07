@@ -186,6 +186,10 @@ def test_get_listing(ocean, config, resources):
     dummy_listing_id = f'did:op:{generate_new_id()}'
     ddo_dict = ddo.as_dictionary()
     ddo_dict['id'] = dummy_listing_id
+    ddo_dict['publicKey'][0]['id'] = dummy_listing_id
+    ddo_dict['authentication'][0]['publicKey'] = dummy_listing_id
+    ddo_dict['created'] = ddo_dict['created'] + 'Z'
+    ddo_dict['service'][0]['metadata']['base']['dateCreated'] = ddo_dict['service'][0]['metadata']['base']['dateCreated'] + 'Z'
     # fix squid index bug in service list ?
     index = 0
     for service in ddo_dict['service']:

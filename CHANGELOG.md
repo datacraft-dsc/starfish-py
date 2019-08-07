@@ -2,6 +2,7 @@
 
 ### Release v0.5.0
 
+*   Upgrade to dex-2019-08-09
 *   Removed FileAsset, MemoryAsset, RemoteAsset. Replaced with DataAsset
 *   Cleanup documentation
 *   Renamed Squid/Surfer Models to Squid/Surfer Agent Adapters

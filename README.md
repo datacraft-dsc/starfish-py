@@ -5,8 +5,8 @@
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/starfish-py.svg)](https://travis-ci.com/DEX-Company/starfish-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Squid Version](https://img.shields.io/badge/squid--py-v0.6.15-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.6.15)
-[![Barge Version](https://img.shields.io/badge/barge-dex--2019--08--08-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-08-08)
+[![Squid Version](https://img.shields.io/badge/squid--py-v0.6.16-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.6.16)
+[![Barge Version](https://img.shields.io/badge/barge-dex--2019--08--09-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-08-09)
 
 ---
 
@@ -77,7 +77,7 @@ Python 3.6
    scripts/setup_for_remote_barge.sh $BARGE_URL
    ```
 
-1. Or to run barge locally on the same machine.
+  Or to run barge locally on the same machine.
 
    ```bash
    export BARGE_URL=http://localhost
