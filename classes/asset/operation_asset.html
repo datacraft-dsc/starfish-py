@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operation Asset class &mdash; starfish-py 0.4.11 documentation</title>
+  <title>Operation Asset class &mdash; starfish-py 0.5.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.4.11
+                0.5.0
               </div>
             
           
@@ -87,8 +87,9 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_a_memory_asset.html">Register a Memory Asset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_surfer.html">Register asset on Surfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
@@ -96,7 +97,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../asset.html">Asset Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="module.html">Asset Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="asset_base.html">Asset Base class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="memory_asset.html">Memory Asset class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_asset.html">Data Asset class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bundle_asset.html">Bundle Asset class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Operation Asset class</a></li>
 </ul>
@@ -186,6 +187,21 @@ if non used then the class will generate a default metadata based on the data pr
 </ul>
 </dd>
 </dl>
+<dl class="method">
+<dt id="starfish.asset.OperationAsset.create">
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">metadata=None</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new OperationAsset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Name of the asset</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Optional metadata to add to the assets metadata</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Option DID to assign to this asset</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="method">
 <dt id="starfish.asset.OperationAsset.is_mode">
 <code class="sig-name descname">is_mode</code><span class="sig-paren">(</span><em class="sig-param">mode_type</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset.is_mode" title="Permalink to this definition">¶</a></dt>

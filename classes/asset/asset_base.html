@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Base class &mdash; starfish-py 0.4.11 documentation</title>
+  <title>Asset Base class &mdash; starfish-py 0.5.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Memory Asset class" href="memory_asset.html" />
+    <link rel="next" title="Data Asset class" href="data_asset.html" />
     <link rel="prev" title="Asset Module" href="module.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.4.11
+                0.5.0
               </div>
             
           
@@ -87,8 +87,9 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_a_memory_asset.html">Register a Memory Asset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_surfer.html">Register asset on Surfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
@@ -96,7 +97,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../asset.html">Asset Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="module.html">Asset Module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Asset Base class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="memory_asset.html">Memory Asset class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_asset.html">Data Asset class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bundle_asset.html">Bundle Asset class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="operation_asset.html">Operation Asset class</a></li>
 </ul>
@@ -174,7 +175,7 @@
 <h1>Asset Base class<a class="headerlink" href="#asset-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.asset.AssetBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">AssetBase</code><span class="sig-paren">(</span><em class="sig-param">asset_type</em>, <em class="sig-param">metadata</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">AssetBase</code><span class="sig-paren">(</span><em class="sig-param">metadata</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -190,11 +191,6 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="starfish.asset.AssetBase.data">
-<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#starfish.asset.AssetBase.data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="starfish.asset.AssetBase.did">
 <em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.asset.AssetBase.did" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -206,6 +202,11 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="starfish.asset.AssetBase.generateMetadata">
+<em class="property">static </em><code class="sig-name descname">generateMetadata</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">asset_type</em>, <em class="sig-param">metadata=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.generateMetadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="starfish.asset.AssetBase.get_asset_type">
@@ -244,11 +245,6 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.asset.AssetBase.merge_metadata">
-<em class="property">static </em><code class="sig-name descname">merge_metadata</code><span class="sig-paren">(</span><em class="sig-param">metadata</em>, <em class="sig-param">default_metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.merge_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="starfish.asset.AssetBase.metadata">
 <em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#starfish.asset.AssetBase.metadata" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -262,8 +258,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.asset.AssetBase.params">
-<em class="property">property </em><code class="sig-name descname">params</code><a class="headerlink" href="#starfish.asset.AssetBase.params" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.asset.AssetBase.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#starfish.asset.AssetBase.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -274,6 +270,11 @@ So maybe a solution is that we have a ‘copy’ and
 set the did in the __init__ of the new class, to return a mutable copy of the
 same asset object.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="starfish.asset.AssetBase.type_name">
+<em class="property">property </em><code class="sig-name descname">type_name</code><a class="headerlink" href="#starfish.asset.AssetBase.type_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -287,7 +288,7 @@ same asset object.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="memory_asset.html" class="btn btn-neutral float-right" title="Memory Asset class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="data_asset.html" class="btn btn-neutral float-right" title="Data Asset class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="module.html" class="btn btn-neutral float-left" title="Asset Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

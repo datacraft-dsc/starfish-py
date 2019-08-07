@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>starfish-py API Documentation &mdash; starfish-py 0.4.11 documentation</title>
+  <title>starfish-py API Documentation &mdash; starfish-py 0.5.0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.4.11
+                0.5.0
               </div>
             
           
@@ -86,8 +86,9 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="register_a_memory_asset.html">Register a Memory Asset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_surfer.html">Register asset on Surfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
@@ -172,27 +173,36 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#install-the-library">Install the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#run-the-unit-tests">Run the unit tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#startup-a-local-ocean-test-node-barge">Startup a local ocean test node (<code class="docutils literal notranslate"><span class="pre">barge</span></code>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#copy-keeper-artifacts">Copy keeper artifacts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#run-the-unit-tests">Run the unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#run-the-full-tests">Run the full tests</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="register_a_memory_asset.html">Register a Memory Asset</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#create-a-memory-asset">Create a  Memory Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#create-a-new-account">Create a new Account</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#setup-the-memory-agent">Setup the Memory Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#register-the-asset">Register the Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_a_memory_asset.html#example-program">Example program</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="agents.html#agent-comparison">Agent Comparison</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="agents.html#squidagent">SquidAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agents.html#surferagent">SurferAgent</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset.html">Register an Asset</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#loading-an-account">Loading an account</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#create-an-asset">Create an Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#setup-the-squid-agent">Setup the Squid Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#register-the-asset">Register the Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register_asset.html#full-example-to-register-an-asset">Full example to register an Asset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#loading-an-account">Loading an account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#create-an-asset">Create an Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#setup-the-squid-agent">Setup the Squid Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#register-the-asset">Register the Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_squid.html#full-example-to-register-an-asset-on-the-ocean-network">Full example to register an Asset on the Ocean Network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_surfer.html">Register asset on Surfer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#create-an-asset">Create an Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#setup-the-surfer-agent">Setup the Surfer Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#register-the-asset">Register the Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#saving-the-asset">Saving the Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register_asset_surfer.html#full-example-to-register-and-upload-an-asset-on-surfer">Full example to register and upload an Asset on Surfer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
@@ -209,7 +219,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="classes/asset/module.html">Asset Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classes/asset/asset_base.html">Asset Base class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classes/asset/memory_asset.html">Memory Asset class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classes/asset/data_asset.html">Data Asset class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classes/asset/bundle_asset.html">Bundle Asset class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classes/asset/operation_asset.html">Operation Asset class</a></li>
 </ul>

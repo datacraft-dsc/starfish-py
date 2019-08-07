@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started &mdash; starfish-py 0.4.11 documentation</title>
+  <title>Getting Started &mdash; starfish-py 0.5.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Register a Memory Asset" href="register_a_memory_asset.html" />
+    <link rel="next" title="Starfish Agents" href="agents.html" />
     <link rel="prev" title="starfish-py API Documentation" href="index.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.4.11
+                0.5.0
               </div>
             
           
@@ -88,13 +88,15 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#install-the-library">Install the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-unit-tests">Run the unit tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#startup-a-local-ocean-test-node-barge">Startup a local ocean test node (<code class="docutils literal notranslate"><span class="pre">barge</span></code>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#copy-keeper-artifacts">Copy keeper artifacts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#run-the-unit-tests">Run the unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-full-tests">Run the full tests</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="register_a_memory_asset.html">Register a Memory Asset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset.html">Register an Asset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_surfer.html">Register asset on Surfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
@@ -184,6 +186,15 @@ Then you need to use <code class="docutils literal notranslate"><span class="pre
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="run-the-unit-tests">
+<h2>Run the unit tests<a class="headerlink" href="#run-the-unit-tests" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>You can run the unit tests without any external access to the Ocean Protocol Network, by running the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests/unit</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
 <div class="section" id="startup-a-local-ocean-test-node-barge">
 <h2>Startup a local ocean test node (<code class="docutils literal notranslate"><span class="pre">barge</span></code>)<a class="headerlink" href="#startup-a-local-ocean-test-node-barge" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -192,7 +203,7 @@ Then you need to use <code class="docutils literal notranslate"><span class="pre
 version of <code class="docutils literal notranslate"><span class="pre">barge</span></code> repository, by doing the following:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/DEX-Company/barge.git</span>
 <span class="go">cd barge</span>
-<span class="go">git checkout tags/dex-2019-08-08</span>
+<span class="go">git checkout tags/dex-2019-08-09</span>
 <span class="go">./start_ocean.sh --no-brizo --no-pleuston --local-spree-node</span>
 </pre></div>
 </div>
@@ -217,11 +228,15 @@ The script waits until the keeper contracts are deployed, and then copies the ar
 <p>The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.</p>
 </div></blockquote>
 </div>
-<div class="section" id="run-the-unit-tests">
-<h2>Run the unit tests<a class="headerlink" href="#run-the-unit-tests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="run-the-full-tests">
+<h2>Run the full tests<a class="headerlink" href="#run-the-full-tests" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Now you can run the tests by running the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 setup.py test</span>
+<div><p>Once you have the local barge running. You now have a local Ocean Protocol Network stack running. You can now run the interegration tests by running the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests/intergration</span>
+</pre></div>
+</div>
+<p>or you can run the complete test suite by entering the command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -236,7 +251,7 @@ The script waits until the keeper contracts are deployed, and then copies the ar
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="register_a_memory_asset.html" class="btn btn-neutral float-right" title="Register a Memory Asset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="agents.html" class="btn btn-neutral float-right" title="Starfish Agents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="starfish-py API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

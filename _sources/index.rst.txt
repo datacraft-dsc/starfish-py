@@ -18,8 +18,9 @@ Contents
     :glob:
 
     getting_started
-    register_a_memory_asset
-    register_asset
+    agents
+    register_asset_squid
+    register_asset_surfer
     modules/starfish
     classes/ocean
     classes/account

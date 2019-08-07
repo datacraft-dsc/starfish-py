@@ -20,6 +20,15 @@ Install the library
         source venv/bin/activate
         pip install -r requirements_dev.txt
 
+Run the unit tests
+------------------
+
+    You can run the unit tests without any external access to the Ocean Protocol Network, by running the command:
+
+    .. code-block:: console
+
+        pytest tests/unit
+
 
 Startup a local ocean test node (``barge``)
 -------------------------------------------
@@ -33,7 +42,7 @@ Startup a local ocean test node (``barge``)
 
         git clone https://github.com/DEX-Company/barge.git
         cd barge
-        git checkout tags/dex-2019-08-08
+        git checkout tags/dex-2019-08-09
         ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
 
     So you should now have two folders::
@@ -59,11 +68,17 @@ Copy keeper artifacts
     The artifacts contain the addresses of all the deployed contracts and their ABI definitions required to interact with them.
 
 
-Run the unit tests
+Run the full tests
 ------------------
 
-    Now you can run the tests by running the command:
+    Once you have the local barge running. You now have a local Ocean Protocol Network stack running. You can now run the interegration tests by running the command:
 
     .. code-block:: console
 
-        python3 setup.py test
+        pytest tests/intergration
+
+    or you can run the complete test suite by entering the command
+
+    .. code-block:: console
+
+        pytest tests
