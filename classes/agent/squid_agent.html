@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Squid Agent class &mdash; starfish-py 0.5.0 documentation</title>
+  <title>Squid Agent class &mdash; starfish-py 0.5.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.0
+                0.5.1
               </div>
             
           
@@ -194,6 +194,7 @@
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First import the classes</span>
 <span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">SquidAgent</span>
 <span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
+<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">RemoteDataAsset</span>
 
 <span class="c1"># create the ocean object</span>
 <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
@@ -211,8 +212,9 @@
 <span class="p">}</span>
 <span class="n">agent</span> <span class="o">=</span> <span class="n">SquidAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">my_config</span><span class="p">)</span>
 
+<span class="n">asset</span> <span class="o">=</span> <span class="n">RemoteDataAsset</span><span class="o">.</span><span class="n">create_with_url</span><span class="p">(</span><span class="s1">&#39;MyAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;http://my_asset_url.com&#39;</span><span class="p">)</span>
 <span class="c1"># register an asset data and listing info</span>
-<span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+<span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -346,6 +348,20 @@ to see if it is assigned to a valid Asset.</p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.SquidAgent.is_supported_asset">
+<em class="property">static </em><code class="sig-name descname">is_supported_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SquidAgent.is_supported_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the asset is a supported type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asset</strong> (<em>obj</em>) – Asset object to check to see if it is the correct type</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the type is supported</p>
 </dd>
 </dl>
 </dd></dl>
