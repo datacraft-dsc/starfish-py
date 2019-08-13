@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.5.1
+
+*   Add RemoteDataAsset
+*   For compatibility upgrade to dex-2019-09-13
+
 ### Release v0.5.0
 
 *   Upgrade to dex-2019-08-09

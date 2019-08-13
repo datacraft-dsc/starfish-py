@@ -16,6 +16,7 @@ import base64
 from starfish.asset import (
     BundleAsset,
     DataAsset,
+    RemoteDataAsset,
 )
 
 def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
@@ -36,7 +37,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     publisher_account = ocean.get_account(config.publisher_account)
     download_link = asset_store.did
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
-    asset_sale = DataAsset.create_from_url('SquidAsset', download_link, metadata={'resourceId': resourceId})
+    asset_sale = RemoteDataAsset.create_with_url('SquidAsset', download_link, metadata={'resourceId': resourceId})
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
     listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)
@@ -80,12 +81,12 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     # we are only using the first asset, so get it from the bundle
     remote_asset = purchase_asset.get_asset_at_index(0)
-    assert(isinstance(remote_asset, DataAsset))
+    assert(isinstance(remote_asset, RemoteDataAsset))
 
     #get the surfer_did and asset_id from the 'url'
-    assert(remote_asset.metadata['url'])
+    assert(remote_asset.url)
 
-    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.metadata['url'])
+    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.url)
     assert(surfer_did)
     assert(asset_id)
 

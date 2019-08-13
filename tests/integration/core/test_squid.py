@@ -15,7 +15,10 @@ from web3 import Web3
 
 from starfish import Ocean
 from starfish.agent import SquidAgent
-from starfish.asset import DataAsset
+from starfish.asset import (
+    DataAsset,
+    RemoteDataAsset,
+)
 
 from starfish.exceptions import (
     StarfishAssetNotFound,
@@ -57,7 +60,7 @@ def test_asset_remote_register(ocean, config, resources):
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-    asset = DataAsset.create_from_url('TestAsset', resources.asset_remote)
+    asset = RemoteDataAsset.create_with_url('TestAsset', resources.asset_remote)
 
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)

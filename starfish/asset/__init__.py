@@ -2,6 +2,7 @@
 
 from starfish.asset.asset_base import AssetBase
 from starfish.asset.data_asset import DataAsset
+from starfish.asset.remote_data_asset import RemoteDataAsset
 from starfish.asset.bundle_asset import BundleAsset
 from starfish.asset.operation_asset import OperationAsset
 
@@ -28,6 +29,3 @@ def create_asset_from_metadata(metadata, did=None):
     else:
         raise ValueError(f'Unknown asset type {asset_type}')
     return Asset(metadata, did)
-
-
-

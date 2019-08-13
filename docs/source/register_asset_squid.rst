@@ -39,8 +39,8 @@ We now want to create a Starfish asset to register on the block chain.
 First we need to create a data asset, using the a URL of an actual asset. In this case
 we are going to use an image of a mantaray from the OceanProtocol web site.
 
->>> from starfish.asset import DataAsset
->>> asset = DataAsset.create_from_url('MyAsset', 'https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg')
+>>> from starfish.asset import RemoteDataAsset
+>>> asset = DataAsset.create_with_url('MyAsset', 'https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg')
 
 Let see what's in the data asset
 
