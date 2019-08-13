@@ -3,7 +3,6 @@
 """
 import os
 from mimetypes import MimeTypes
-from urllib.parse import urlparse
 
 
 from starfish.asset.asset_base import AssetBase
@@ -94,34 +93,6 @@ class DataAsset(AssetBase):
 
         return DataAsset(metadata, did, data=data)
 
-    @staticmethod
-    def create_from_url(name, url, metadata=None,  did=None):
-        """
-
-        Create a new DataAsset using a url.
-
-        :param str name: Name of the asset to create
-        :param str url: URL to assign to the asset
-        :param dict metadata: Optional metadata to add to the assets metadata
-        :param str did: Option DID to assign to this asset
-
-        :return: a new DataAsset
-        :type: :class:`.DataAsset`
-
-        """
-
-        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
-        metadata['url'] = url
-        if urlparse(url):
-            metadata['contentType'] = 'application/octet-stream'
-            mime = MimeTypes()
-            mime_type = mime.guess_type(url)
-            if mime_type and mime_type[0]:
-                metadata['contentType'] = mime_type[0]
-
-        return DataAsset(metadata, did)
-
-
     def save_to_file(self, filename):
         """
         Saves the data in the data asset to a file.
@@ -137,4 +108,3 @@ class DataAsset(AssetBase):
     @property
     def data(self):
         return self._data
-

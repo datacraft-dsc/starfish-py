@@ -10,6 +10,7 @@ from starfish.agent.squid_agent import SquidAgent
 from starfish.asset import (
     BundleAsset,
     DataAsset,
+    RemoteDataAsset,
 )
 from starfish.exceptions import StarfishPurchaseError
 from tests.unit.mocks.mock_squid_agent_adapter import MockSquidAgentAdapter
@@ -28,7 +29,7 @@ def _register_asset(ocean, resources, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
-    asset = DataAsset.create_from_url('test url asset', resources.asset_remote)
+    asset = RemoteDataAsset.create('test url asset', resources.asset_remote)
     assert(asset)
     listing = agent.register_asset(asset, resources.listing_data, account)
     return (listing, agent, asset)
@@ -72,7 +73,7 @@ def test_register_bundle_asset(ocean, resources, config):
     assert(agent)
     bundle_asset = BundleAsset.create('test bundle asset')
     for index in range(0, 5):
-        asset = DataAsset.create_from_url('test remote asset', resources.asset_remote)
+        asset = RemoteDataAsset.create('test remote asset', resources.asset_remote)
         assert(asset)
         bundle_asset.add(f'name_{index}', asset)
     listing = agent.register_asset(bundle_asset, resources.listing_data, account)
@@ -89,7 +90,7 @@ def test_register_asset_invalid_data(ocean, resources, config):
 def test_validate_asset(ocean):
     agent = SquidAgent(ocean, TEST_INIT_PARMS)
     assert(agent)
-    asset = DataAsset.create_from_url('TestAsset', 'http://dex.sg')
+    asset = RemoteDataAsset.create('TestAsset', 'http://dex.sg')
     assert(agent.validate_asset(asset))
 
 def test_get_listing(ocean, resources, config):
@@ -141,7 +142,7 @@ def test_price_out_of_range(ocean, resources, config):
     account = ocean.get_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
-    asset = DataAsset.create_from_url('test squid asset with url', resources.asset_remote)
+    asset = RemoteDataAsset.create('test squid asset with url', resources.asset_remote)
     assert(asset)
     resources.listing_data['price'] = -1
     with pytest.raises(ValueError):

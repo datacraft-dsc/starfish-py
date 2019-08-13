@@ -22,6 +22,7 @@ from starfish.listing import Listing
 from starfish.asset import (
     BundleAsset,
     DataAsset,
+    RemoteDataAsset,
  )
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
@@ -76,6 +77,7 @@ class SquidAgent(AgentBase):
         # First import the classes
         from starfish.agent import SquidAgent
         from starfish import Ocean
+        from starfish.asset import RemoteDataAsset
 
         # create the ocean object
         ocean = Ocean()
@@ -93,8 +95,9 @@ class SquidAgent(AgentBase):
         }
         agent = SquidAgent(ocean, my_config)
 
+        asset = RemoteDataAsset.create('MyAsset', 'http://my_asset_url.com')
         # register an asset data and listing info
-        listing = agent.register(metadata, account)
+        listing = agent.register(asset, account)
     """
 
     def __init__(self, ocean, *args, **kwargs):
@@ -153,8 +156,8 @@ class SquidAgent(AgentBase):
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')
 
-        if not (isinstance(asset, DataAsset) or isinstance(asset, BundleAsset)):
-            raise TypeError('This agent only supports a DataAsset or BundleAsset')
+        if not SquidAgent.is_supported_asset(asset):
+            raise TypeError('This agent only supports a DataAsset, RemoteDataAsset or BundleAsset')
 
         adapter = self.get_adapter
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
@@ -180,8 +183,8 @@ class SquidAgent(AgentBase):
 
         if not asset:
             raise ValueError('asset must be an object')
-        if not isinstance(asset, DataAsset) or isinstance(asset, BundleAsset):
-            raise ValueErrer('asset must be a type of DataAsset or BundleAsset object')
+        if not SquidAgent.is_supported_asset(asset):
+            raise TypeError('asset must be a type of DataAsset, RemoteDataAsset or BundleAsset object')
         if not asset.metadata:
             raise ValueError('Metadata must have a value')
         if not isinstance(asset.metadata, dict):
@@ -598,5 +601,17 @@ class SquidAgent(AgentBase):
                     if re.match('^file://', url):
                         metadata['filename'] = re.sub('^file://', '', url)
 
-        return DataAsset(metadata, did=did)
+        return RemoteDataAsset(metadata, did=did)
 
+    @staticmethod
+    def is_supported_asset(asset):
+        """
+
+        Return True if the asset is a supported type.
+
+        :param obj asset: Asset object to check to see if it is the correct type
+
+        :return: True if the type is supported
+
+        """
+        return (isinstance(asset, DataAsset) or isinstance(asset, RemoteDataAsset) or isinstance(asset, BundleAsset))
