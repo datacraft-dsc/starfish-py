@@ -81,12 +81,12 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     # we are only using the first asset, so get it from the bundle
     remote_asset = purchase_asset.get_asset_at_index(0)
-    assert(isinstance(remote_asset, DataAsset))
+    assert(isinstance(remote_asset, RemoteDataAsset))
 
     #get the surfer_did and asset_id from the 'url'
-    assert(remote_asset.metadata['url'])
+    assert(remote_asset.url)
 
-    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.metadata['url'])
+    surfer_did, asset_id = surfer_agent.decode_asset_did(remote_asset.url)
     assert(surfer_did)
     assert(asset_id)
 
