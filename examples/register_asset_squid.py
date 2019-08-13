@@ -63,7 +63,7 @@ def main():
         'price': '10'
     }
     # Now create a squid asset using a test URL
-    asset = RemoteDataAsset.create('my test asset', 'https://oceanprotocol.com/tech-whitepaper.pdf')
+    asset = RemoteDataAsset.create_with_url('my test asset', 'https://oceanprotocol.com/tech-whitepaper.pdf')
 
 
     # Create a new `Squid` agent to do the work on the block chain.

@@ -95,7 +95,7 @@ class SquidAgent(AgentBase):
         }
         agent = SquidAgent(ocean, my_config)
 
-        asset = RemoteDataAsset.create('MyAsset', 'http://my_asset_url.com')
+        asset = RemoteDataAsset.create_with_url('MyAsset', 'http://my_asset_url.com')
         # register an asset data and listing info
         listing = agent.register(asset, account)
     """

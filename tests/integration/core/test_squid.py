@@ -60,7 +60,7 @@ def test_asset_remote_register(ocean, config, resources):
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-    asset = RemoteDataAsset.create('TestAsset', resources.asset_remote)
+    asset = RemoteDataAsset.create_with_url('TestAsset', resources.asset_remote)
 
     listing = agent.register_asset(asset, resources.listing_data, publisher_account)
     assert(listing)

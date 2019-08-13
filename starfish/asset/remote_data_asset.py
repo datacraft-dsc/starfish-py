@@ -13,7 +13,7 @@ from starfish.asset.data_asset import DataAsset
 class RemoteDataAsset(DataAsset):
 
     @staticmethod
-    def create(name, url, metadata=None, did=None):
+    def create_with_url(name, url, metadata=None, did=None):
         """
 
         Create a new RemoteDataAsset using a url.

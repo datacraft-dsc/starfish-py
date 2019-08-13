@@ -37,7 +37,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     publisher_account = ocean.get_account(config.publisher_account)
     download_link = asset_store.did
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
-    asset_sale = RemoteDataAsset.create('SquidAsset', download_link, metadata={'resourceId': resourceId})
+    asset_sale = RemoteDataAsset.create_with_url('SquidAsset', download_link, metadata={'resourceId': resourceId})
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
     listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)

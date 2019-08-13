@@ -6,5 +6,6 @@ Asset Classes
     asset/module
     asset/asset_base
     asset/data_asset
+    asset/remote_data_asset
     asset/bundle_asset
     asset/operation_asset
