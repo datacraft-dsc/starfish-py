@@ -1,6 +1,6 @@
 ## Change Log
 
-### Release v0.5.2 - not released
+### Release v0.5.2
 
 *   Code cleanup
 *   Correct tox and barge tag errors
