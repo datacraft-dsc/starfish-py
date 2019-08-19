@@ -6,7 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
 [![Squid Version](https://img.shields.io/badge/squid--py-v0.6.16-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.6.16)
-[![Barge Version](https://img.shields.io/badge/barge-dex--2019--08--13-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-08-13)
+[![Barge Version](https://img.shields.io/badge/barge-dex--2019--08--19-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-08-19)
 
 ---
 
