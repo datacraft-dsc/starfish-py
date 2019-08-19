@@ -442,7 +442,6 @@ class SquidAgent(AgentBase):
                     pass
                 listing_data[name] = value
 
-        print('listing data', listing_data)
         return listing_data, asset_metadata
 
     @staticmethod
