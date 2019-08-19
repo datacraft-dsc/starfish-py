@@ -3,6 +3,7 @@
 ### Release v0.5.2 - not released
 
 *   Code cleanup
+*   Correct tox and barge tag errors
 
 ### Release v0.5.1
 
