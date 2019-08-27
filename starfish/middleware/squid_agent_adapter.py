@@ -413,6 +413,9 @@ class SquidAgentAdapter():
         tokens = OceanTokens(self._keeper.get_instance())
         return tokens.transfer(to_address, amount, from_account)
 
+    def approve_tokens(self, spender_address, price, from_account):
+        return self._keeper.token.token_approve(spender_address, price, from_account)
+
     def register_ddo(self, did, ddo_text, account):
         """register a ddo object on the block chain for this agent"""
         # register/update the did->ddo to the block chain
