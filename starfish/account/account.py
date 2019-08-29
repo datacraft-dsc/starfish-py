@@ -322,6 +322,28 @@ class Account():
         return 0
 
     @property
+    def ocean_balance_raw(self):
+        """
+
+        Get the number of ocean tokens
+
+        :return: number of ocean tokens
+        :type: number
+
+        >>> account.ocean_balance_raw
+        101
+
+        """
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
+            squid_account = self._squid_account
+            if squid_account:
+                balance = adapter.get_account_balance(squid_account)
+                if balance:
+                    return balance.ocn
+        return 0
+
+    @property
     def ether_balance(self):
         """
 
