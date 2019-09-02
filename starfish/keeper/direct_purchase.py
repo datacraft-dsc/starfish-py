@@ -6,11 +6,11 @@ class DirectPurchase(ContractBase):
     """Class representing the Token contract."""
     CONTRACT_NAME = 'DirectPurchase'
 
-    def send_token_and_log(self, account_from, address_to, amount, reference1, reference2):
+    def send_token_and_log(self, account, address_to, amount, reference1, reference2):
         """
         Send tokens to address with tracking record in log.
 
-        :param address_from: Account address, Account
+        :param Account Account address and passowrd of the send from Account
         :param address_to: Account address, str
         :param amount: token amount, int
         :param reference1: reference in log, int256
@@ -21,6 +21,15 @@ class DirectPurchase(ContractBase):
         if not Web3Provider.get_web3().isChecksumAddress(address_to):
             address_to = Web3Provider.get_web3().toChecksumAddress(address_to)
 
-        tx_hash = self.contract_concise.sendTokenAndLog(address_to, amount, Web3.toBytes(reference1), Web3.toBytes(reference2), transact={'from': account_from.address})
-
+        tx_hash = self.send_transaction(
+            'sendTokenAndLog',
+            (address_to,
+             amount,
+             Web3.toBytes(reference1),
+             Web3.toBytes(reference2)
+             ),
+            transact={'from': account.address,
+                      'passphrase': account.password,
+            }
+        )
         return self.get_tx_receipt(tx_hash).status == 1

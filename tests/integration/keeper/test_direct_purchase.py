@@ -21,4 +21,5 @@ def test_direct_purchase(ocean, config, squid_agent):
     account_purchaser.unlock()
     purchase_contract.send_token_and_log(account_purchaser, account_publisher.address, TOKEN_AMOUNT_TO_TRANSFER, 3, 4)
 
-    assert(account_purchaser.ocean_balance_raw + TOKEN_AMOUNT_TO_TRANSFER == balance_purchaser and account_publisher.ocean_balance_raw - TOKEN_AMOUNT_TO_TRANSFER == balance_publisher)
+    assert(account_purchaser.ocean_balance_raw + TOKEN_AMOUNT_TO_TRANSFER == balance_purchaser
+        and account_publisher.ocean_balance_raw - TOKEN_AMOUNT_TO_TRANSFER == balance_publisher)
