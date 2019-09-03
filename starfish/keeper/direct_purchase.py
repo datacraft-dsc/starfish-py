@@ -50,6 +50,7 @@ class DirectPurchase(ContractBase):
         :return: bool
         """
         reference = Web3Provider.get_web3().toBytes(reference)
+        amount = Web3Provider.get_web3().toWei(amount, 'ether')
         events = EventListener(
             self.CONTRACT_NAME,
             self.TOKEN_SENT_EVENT_NAME,
