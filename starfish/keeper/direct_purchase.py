@@ -1,5 +1,4 @@
 from squid_py.keeper.contract_base import ContractBase
-from web3 import Web3
 from squid_py.keeper.web3_provider import Web3Provider
 
 class DirectPurchase(ContractBase):
@@ -28,8 +27,8 @@ class DirectPurchase(ContractBase):
             'sendTokenAndLog', (
                 address_to,
                 amount,
-                Web3.toBytes(reference1),
-                Web3.toBytes(reference2)
+                Web3Provider.get_web3().toBytes(reference1),
+                Web3Provider.get_web3().toBytes(reference2)
             ),
             transact={
                 'from': account.address,
