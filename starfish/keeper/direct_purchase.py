@@ -23,6 +23,8 @@ class DirectPurchase(ContractBase):
         if not Web3Provider.get_web3().isChecksumAddress(address_to):
             address_to = Web3Provider.get_web3().toChecksumAddress(address_to)
 
+        account.approve_tokens(self.address, amount)
+
         amount = Web3Provider.get_web3().toWei(amount, 'ether')
 
         tx_hash = self.send_transaction(

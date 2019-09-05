@@ -20,7 +20,6 @@ def test_direct_purchase(ocean, config, squid_agent):
     balance_purchaser = account_purchaser.ocean_balance
     balance_publisher = account_publisher.ocean_balance
 
-    adapter.approve_tokens(purchase_contract.address, TOKEN_AMOUNT_TO_TRANSFER, account_purchaser)
     purchase_contract.send_token_and_log(account_purchaser, account_publisher.address, TOKEN_AMOUNT_TO_TRANSFER, REFERENCE_1, REFERENCE_2)
 
     assert(account_purchaser.ocean_balance + TOKEN_AMOUNT_TO_TRANSFER == balance_purchaser
