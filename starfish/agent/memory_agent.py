@@ -8,7 +8,7 @@ import secrets
 import re
 import json
 
-from squid_py.did import id_to_did, did_to_id
+from ocean_utils.did import id_to_did, did_to_id
 
 from starfish.account import Account
 from starfish.agent import AgentBase

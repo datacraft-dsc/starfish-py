@@ -8,12 +8,9 @@ from eth_utils import add_0x_prefix
 
 from squid_py import ConfigProvider
 from squid_py.brizo.brizo import Brizo
-from squid_py.did import id_to_did, did_to_id
-from squid_py.agreements.service_agreement import ServiceAgreement
-from squid_py.agreements.service_types import ServiceTypes
-from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.keeper import Keeper
-from squid_py.keeper.events_manager import EventsManager
+from ocean_utils.did import id_to_did, did_to_id
+from ocean_utils.agreements.service_agreement import ServiceAgreement
+from ocean_utils.agreements.service_types import ServiceTypes
 # from squid_py.agreements.manager import AgreementsManager
 
 logging.getLogger('urllib3').setLevel(logging.WARNING)

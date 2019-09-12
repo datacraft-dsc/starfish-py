@@ -32,11 +32,11 @@ from starfish.exceptions import (
 )
 
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.ddo.metadata import (
+from ocean_utils.ddo.metadata import (
     MetadataBase,
     AdditionalInfoMeta,
 )
-from squid_py.exceptions import OceanDIDNotFound
+from ocean_keeper.exceptions import OceanDIDNotFound
 
 
 logger = logging.getLogger('starfish.squid_agent')

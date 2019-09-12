@@ -12,7 +12,6 @@ import secrets
 from starfish import Ocean, logger
 from squid_py import Ocean as SquidOcean
 from squid_py import Config as SquidConfig
-from squid_py.keeper.web3_provider import Web3Provider
 
 
 def test_account_load(ocean, config):

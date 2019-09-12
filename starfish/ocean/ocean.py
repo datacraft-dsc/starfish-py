@@ -17,7 +17,7 @@ from web3 import (
 
 from starfish.account import Account
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from squid_py.keeper import Keeper
+from squid_py.ocean.keeper import SquidKeeper
 
 
 logger = logging.getLogger('starfish.ocean')
@@ -278,7 +278,7 @@ class Ocean():
 
     def _get_network_name(self):
         network_id = int(self.__web3.version.network)
-        return Keeper.get_network_name(network_id)
+        return SquidKeeper.get_network_name(network_id)
 
     def get_squid_agent_adapter(self, options=None):
         if self.__squid_agent_adapter_class:

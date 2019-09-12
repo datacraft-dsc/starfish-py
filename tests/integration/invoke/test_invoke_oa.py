@@ -16,8 +16,8 @@ from starfish import (
 from starfish.agent import SquidAgent
 from starfish.asset import DataAsset
 
-from squid_py.agreements.service_factory import ServiceDescriptor
-from squid_py.utils.utilities import generate_new_id
+from ocean_utils.agreements.service_factory import ServiceDescriptor
+from ocean_utils.utils.utilities import generate_new_id
 from squid_py.brizo.brizo_provider import BrizoProvider
 from squid_py.brizo.brizo import Brizo
 from tests.integration.mocks.brizo_mock import BrizoMock

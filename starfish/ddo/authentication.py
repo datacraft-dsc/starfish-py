@@ -6,7 +6,7 @@
 import json
 import re
 
-from squid_py.ddo.public_key_base import PublicKeyBase
+from ocean_utils.ddo.public_key_base import PublicKeyBase
 
 
 class Authentication:

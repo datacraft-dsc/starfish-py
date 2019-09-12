@@ -8,13 +8,13 @@ from web3 import Web3
 from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapterPurchaseError
 
-from squid_py.did import (
+from ocean_utils.did import (
     did_to_id,
     id_to_did,
     did_to_id_bytes,
 )
-from squid_py.agreements.service_types import ServiceTypes
-from squid_py.keeper.keeper import Keeper
+from ocean_utils.agreements.service_types import ServiceTypes
+from squid_py.ocean.keeper import SquidKeeper
 from plecos import is_valid_dict_local, validate_dict_local
 
 

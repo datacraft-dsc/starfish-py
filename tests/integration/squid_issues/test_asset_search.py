@@ -10,10 +10,10 @@ import secrets
 from web3 import Web3
 
 from tests.integration.squid_issues.example_config import ExampleConfig
-from squid_py.accounts.account import Account
+from ocean_keeper.account import Account
 from squid_py import Ocean
 from squid_py import ConfigProvider
-from squid_py.ddo.ddo import DDO
+from ocean_utils.ddo.ddo import DDO
 
 def test_search_assets():
 

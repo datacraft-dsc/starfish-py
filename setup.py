@@ -14,14 +14,13 @@ with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
 install_requirements = [
-    'squid-py==0.6.16',
-    'plecos==0.7.8',
+    'squid-py==0.7.1',
+    'plecos',
     'coloredlogs',
     'eciespy',
     'pyopenssl',
     'PyJWT',  # not jwt
     'PyYAML==4.2b4',
-    'web3==4.5.0',
 ]
 
 setup_requirements = ['pytest-runner', ]

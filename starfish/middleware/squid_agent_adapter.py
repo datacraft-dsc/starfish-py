@@ -11,27 +11,26 @@ from web3 import Web3
 from squid_py.config_provider import ConfigProvider
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
-from squid_py.did import (
+from ocean_utils.did import (
     did_to_id_bytes,
     did_to_id,
     DID,
 )
-from squid_py.keeper import Keeper
+from squid_py.ocean.keeper import SquidKeeper
 
-from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
-from squid_py.agreements.service_agreement import ServiceAgreement
-from squid_py.agreements.service_types import ServiceTypes
+from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
+from ocean_utils.agreements.service_agreement import ServiceAgreement
+from ocean_utils.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.keeper.contract_handler import ContractHandler
+from ocean_keeper.web3_provider import Web3Provider
 from squid_py.ocean.ocean_tokens import OceanTokens
 
-from squid_py.ddo.metadata import Metadata
-from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
+from ocean_utils.ddo.metadata import Metadata
+from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
 
 from plecos import is_valid_dict_local, validate_dict_local
 
-from starfish.middleware.starfish_events_manager import StarfishEventsManager
+# from starfish.middleware.starfish_events_manager import StarfishEventsManager
 
 
 logger = logging.getLogger('starfish.squid_agent_adapter')
@@ -70,14 +69,12 @@ class SquidAgentAdapter():
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
         Web3Provider._web3 = None
-        # and the list of contracts for the old network
-        ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
         self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
-        self._keeper = Keeper.get_instance()
+        self._keeper = SquidKeeper.get_instance()
 
     def register_asset(self, metadata, account):
         """
