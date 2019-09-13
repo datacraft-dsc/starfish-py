@@ -22,15 +22,18 @@ class IntegrationTestConfig():
 
         self.publisher_account = {
             'address': config.get('publisher account', 'address'),
-            'password': config.get('publisher account', 'password')
+            'password': config.get('publisher account', 'password'),
+            'keyfile': config.get('publisher account', 'keyfile'),
         }
         self.purchaser_account = {
             'address': config.get('purchaser account', 'address'),
-            'password': config.get('purchaser account', 'password')
+            'password': config.get('purchaser account', 'password'),
+            'keyfile': config.get('purchaser account', 'keyfile'),
         }
         self.agent_account = {
             'address': config.get('agent account', 'address'),
-            'password': config.get('agent account', 'password')
+            'password': config.get('agent account', 'password'),
+            'keyfile': config.get('agent account', 'keyfile'),
         }
 
         items = config.items('squid agent')

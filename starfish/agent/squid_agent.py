@@ -147,11 +147,8 @@ class SquidAgent(AgentBase):
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_hosted:
-            raise ValueError('You must pass a hosted account')
-
-        if not account.is_password:
-            raise ValueError('You must set the account password')
+        if not account.is_valid:
+            raise ValueError('You must set the account address, password and keyfile')
 
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')

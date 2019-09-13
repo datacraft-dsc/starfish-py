@@ -8,6 +8,8 @@ import json
 
 from web3 import Web3
 
+from ocean_keeper.account import Account as SquidAccount
+
 from squid_py.config_provider import ConfigProvider
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
@@ -27,6 +29,9 @@ from squid_py.ocean.ocean_tokens import OceanTokens
 
 from ocean_utils.ddo.metadata import Metadata
 from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
+
+
+from ocean_events_handler.provider_events_monitor import ProviderEventsMonitor
 
 from plecos import is_valid_dict_local, validate_dict_local
 
@@ -349,29 +354,28 @@ class SquidAgentAdapter():
                 data['keeper-contracts']['parity.address'] = options['parity_address']
             if 'parity_password' in options:
                 data['keeper-contracts']['parity.password'] = options['parity_password']
+            if 'parity_keyfile' in options:
+                data['keeper-contracts']['parity.keyfile'] = options['parity_keyfile']
 
         return data
 
-    def get_account_host(self, address, password=None):
+    def get_account(self, address, password, keyfile):
         """
         :return: account object if the address is found on the host node, else None
         :type: object or None
         """
-        for account in self.accounts:
-            if account.address == address:
-                account.password = password
-                return account
+        return SquidAccount(address, password, keyfile)
 
     def request_tokens(self, account, value):
         """
         Request some ocean tokens
         :param object account: squid account to request
-        :param number value: amount of tokens to request
+        :param int value: amount of tokens to request
         :return: number of tokens requested and added to the account
         :type: number
         """
         squid_ocean = self.get_squid_ocean()
-        return squid_ocean.accounts.request_tokens(account, value)
+        return squid_ocean.accounts.request_tokens(value, account)
 
     def get_account_balance(self, account):
         """
@@ -435,10 +439,8 @@ class SquidAgentAdapter():
         """ called by the publisher to watch payment request events for the published assets """
         squid_ocean = self.get_squid_ocean(account)
 
-        events_manager = StarfishEventsManager.get_instance(
-            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
-
-        events_manager.start_agreement_events_monitor(callback)
+        monitor = ProviderEventsMonitor(squid_ocean._keeper, Web3Provider.get_web3(), squid_ocean._config.storage_path, account._squid_account)
+        monitor.start_agreement_events_monitor()
 
     def stop_agreement_events_monitor(self):
         """ called by the publisher to watch payment request events for the published assets """
@@ -472,15 +474,17 @@ class SquidAgentAdapter():
 
         options = {}
         signature = None
+        """
         if account:
             options['parity_address'] = account.address
             options['parity_password'] = account.password
+            options['parity_keyfile'] = account.keyfile
             signature = Web3.sha3(text=json.dumps(options))
 
         if self._squid_ocean_signature != signature:
             self._squid_ocean = None
             self._squid_ocean_signature = signature
-
+        """
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)

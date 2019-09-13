@@ -43,8 +43,7 @@ def _register_asset_for_sale(agent, resources, account):
     return(listing)
 
 
-def test_asset_file_register(ocean, config, resources):
-    publisher_account = ocean.get_account(config.publisher_account)
+def test_asset_file_register(ocean, config, resources, publisher_account):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
@@ -54,8 +53,7 @@ def test_asset_file_register(ocean, config, resources):
     assert(listing)
 
 
-def test_asset_remote_register(ocean, config, resources):
-    publisher_account = ocean.get_account(config.publisher_account)
+def test_asset_remote_register(ocean, config, resources, publisher_account):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
@@ -71,15 +69,11 @@ def is_purchase_allowed(did, agreement_id, publish_account, conusmer_account):
     logger.debug(f'is purchase allowed {did}, {agreement_id}, {publish_account}, {conusmer_account}')
     return True
 
-def test_asset(ocean, config, resources):
+def test_asset_purchase(ocean, config, resources, publisher_account, purchaser_account):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
 
-
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(config.publisher_account)
-    publisher_account.unlock()
     publisher_account.request_tokens(20)
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
@@ -94,25 +88,22 @@ def test_asset(ocean, config, resources):
 
 
 
-    purchase_account = ocean.get_account(config.purchaser_account)
-    logger.info(f'purchase_account {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account {purchaser_account.ocean_balance}')
 
     # test is_purchased for an account only
-    assert(not listing.is_purchased(purchase_account))
+    assert(not listing.is_purchased(purchaser_account))
 
-    purchase_account.unlock()
-
-    purchase_account.request_tokens(10)
+    purchaser_account.request_tokens(10)
 
 
     time.sleep(1)
-    logger.info(f'purchase_account after token request {purchase_account.ocean_balance}')
+    logger.info(f'purchase_account after token request {purchaser_account.ocean_balance}')
 
 
     agent.start_agreement_events_monitor(publisher_account, is_purchase_allowed)
 
     # test purchase an asset
-    purchase_asset = listing.purchase(purchase_account)
+    purchase_asset = listing.purchase(purchaser_account)
     assert(purchase_asset)
 
     assert(not purchase_asset.is_completed)
@@ -138,20 +129,17 @@ def test_asset(ocean, config, resources):
     assert(purchase_ids[0] == purchase_asset.purchase_id)
 
     # test is_purchased for an account only
-    assert(listing.is_purchased(purchase_account))
+    assert(listing.is_purchased(purchaser_account))
 
     remote_asset = purchase_asset.consume_asset
     assert(remote_asset)
 
 
-def test_search_listing(ocean, config, resources):
+def test_search_listing(ocean, config, resources, publisher_account):
 
 
     agent = SquidAgent(ocean, config.squid_config)
 
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(config.publisher_account)
-    publisher_account.unlock()
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
@@ -169,11 +157,8 @@ def test_search_listing(ocean, config, resources):
 
     assert(len(search_result) > 1)
 
-def test_get_listing(ocean, config, resources):
+def test_get_listing(ocean, config, resources, publisher_account):
     agent = SquidAgent(ocean, config.squid_config)
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(config.publisher_account)
-    publisher_account.unlock()
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
@@ -219,8 +204,7 @@ def test_get_listing(ocean, config, resources):
             with pytest.raises(StarfishAssetNotFound):
                 listing.purchase(purchase_account)
 
-def test_insufficient_funds(ocean, config, resources):
-    publisher_account = ocean.get_account(config.publisher_account)
+def test_insufficient_funds(ocean, config, resources, publisher_account):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)

@@ -31,7 +31,7 @@ class Account():
 
     """
 
-    def __init__(self, ocean, address, password=None):
+    def __init__(self, ocean, address, password=None, keyfile=None):
         """init a standard ocean agent"""
         self._ocean = ocean
         self._address = None
@@ -41,59 +41,18 @@ class Account():
         if isinstance(address, dict):
             self._address = address.get('address')
             self._password = address.get('password')
+            self._keyfile = address.get('keyfile')
         elif isinstance(address, (tuple, list)):
             self._address = address[0]
             if len(address) > 1:
                 self._password = address[1]
+            if len(address) > 2:
+                self._keyfile = address[2]
         elif isinstance(address, str):
             self._address = address
             self._password = password
+            self._keyfile = keyfile
 
-#        if isinstance(self._address, str):
-#            self._address = add_0x_prefix(self._address)
-
-    def unlock(self, password=None):
-        """
-
-        Unlock the account so that it can be used to spend tokens/gas
-
-        :param password: optional password to use to unlock this account, if none provided then the original password will be used.
-
-        :type password: str or None
-
-        >>> account.unlock('secret')
-        True
-
-        """
-        if password is None:
-            password = self._password
-
-        if password is None:
-            raise ValueError('You must provide an account password to unlock')
-
-        # clear out the onlocked account for squid
-        self._unlock_squid_account = None
-        self._unlock_squid_account = self._squid_account
-        if self._unlock_squid_account:
-            self._unlock_squid_account.password = password
-            return True
-        return False
-
-    def lock(self):
-        """
-
-        Lock the account, to stop access to this account for ethereum token transfer
-
-        :return: True if this account was unlocked, else False if the account was not locked.
-        :type: boolean
-
-        >>> account.lock()
-        True
-        """
-        if self._unlock_squid_account:
-            self._unlock_squid_account = None
-            return True
-        return False
 
     def request_tokens(self, amount):
         """
@@ -112,10 +71,10 @@ class Account():
         """
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-            if not self._unlock_squid_account:
-                raise ValueError('You must unlock the account before requesting tokens')
+#            if not self._unlock_squid_account:
+#                raise ValueError('You must unlock the account before requesting tokens')
 
-            return adapter.request_tokens(self._unlock_squid_account, amount)
+            return adapter.request_tokens(amount, self._squid_account)
         return 0
 
     def transfer_ether(self, to_account, amount_ether):
@@ -138,10 +97,10 @@ class Account():
 
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-            if not self._unlock_squid_account:
-                raise ValueError('You must unlock the account before requesting tokens')
+#            if not self._unlock_squid_account:
+#                raise ValueError('You must unlock the account before requesting tokens')
 
-            return adapter.transfer_ether(self._unlock_squid_account, to_address, amount_wei)
+            return adapter.transfer_ether(self._squid_account, to_address, amount_wei)
         return 0
 
     def transfer_token(self, to_account, amount_token):
@@ -164,10 +123,10 @@ class Account():
 
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-            if not self._unlock_squid_account:
-                raise ValueError('You must unlock the account before requesting tokens')
+#            if not self._unlock_squid_account:
+#                raise ValueError('You must unlock the account before requesting tokens')
 
-            return adapter.transfer_tokens(self._unlock_squid_account, to_address, amount_vodka)
+            return adapter.transfer_tokens(self._squid_account, to_address, amount_vodka)
         return 0
 
     def is_address_equal(self, address):
@@ -197,19 +156,6 @@ class Account():
         """
         return self._ocean
 
-    @property
-    def is_hosted(self):
-        """
-
-        Return True if this account is registered in the Ocean network, on the block chain node
-        :return: True if this account address is valid
-        :type: boolean
-
-        >>> account.is_hosted
-        True
-        """
-        squid_account = self._squid_account
-        return not squid_account is None
 
     @property
     def is_password(self):
@@ -229,12 +175,9 @@ class Account():
 
         """
 
-        if self._unlock_squid_account:
-            return self._unlock_squid_account
-
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-            return adapter.get_account_host(self.as_checksum_address, self._password)
+            return adapter.get_account(self.as_checksum_address, self._password, self._keyfile)
         return None
 
     @property
@@ -298,6 +241,14 @@ class Account():
         """
         self.lock()
         self._password = password
+
+    @property
+    def keyfile(self):
+        return self._keyfile
+
+    @property
+    def is_valid(self):
+        return self._address and self._password and self._keyfile
 
     @property
     def ocean_balance(self):
