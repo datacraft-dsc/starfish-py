@@ -36,7 +36,7 @@ class MockSquidAgentAdapter():
         self._ddo_list = {}
         self._purchase_assets={}
 
-    def get_account_host(self, address, password=None):
+    def get_account(self, address, password, keyfile):
         if address:
             for index in unitTestConfig.accounts:
                 test_account = unitTestConfig.accounts[index]
@@ -166,16 +166,13 @@ class MockSquidAgentAdapter():
                 return balance
         return 0
 
-    def create_account_host(self, password = None):
-        address = unitTestConfig.create_account(password)
-        return self.get_account_host(address, password)
-
-    def request_tokens(self, account, value):
-        found_account = self.get_account_host(account.address)
+    def request_tokens(self, value, account):
+        found_account = self.get_account(account.address, account.password, account.keyfile)
         if found_account.address == account.address:
             return value
         return 0
 
+    """
     @property
     def accounts(self):
         result = []
@@ -187,6 +184,7 @@ class MockSquidAgentAdapter():
             result.append(account)
 
         return result
+    """
 
     @property
     def options(self):

@@ -145,8 +145,8 @@ class Ocean():
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_hosted:
-            raise ValueError('You must pass a valid hosted account')
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
 
         if not isinstance(ddo, str):
             raise TypeError('You need to pass a DDO as a string')
@@ -193,7 +193,7 @@ class Ocean():
         ## To be implemented
         return []
 
-    def load_account(self, address, password, keyfile):
+    def load_account(self, address, password=None, keyfile=None):
         """
         Get an account object based on it's address, password and keyfile.
         This returns the account object, of the local account.

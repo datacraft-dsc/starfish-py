@@ -239,7 +239,6 @@ class Account():
         >>> account.password
         new secret
         """
-        self.lock()
         self._password = password
 
     @property

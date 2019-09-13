@@ -1,7 +1,7 @@
 #  Copyright 2018 Ocean Protocol Foundation
 #  SPDX-License-Identifier: Apache-2.0
 
-"""
+
 import logging
 import os
 import time
@@ -53,7 +53,7 @@ class StarfishAgreementRecord:
 
 
 class StarfishEventsManager:
-    ""
+    """
 
 
     Manage the main keeper events listeners necessary for processing service agreements.
@@ -77,7 +77,7 @@ class StarfishEventsManager:
                 update agreement condition status
 
 
-    ""
+    """
 
     _instance = None
 
@@ -334,4 +334,3 @@ class StarfishEventsManager:
                     (agreement_id, cond_to_id),
                     from_block=block_number
                 )
-"""

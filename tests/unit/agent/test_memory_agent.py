@@ -13,7 +13,7 @@ INVALID_DID = 'did:ox:' + secrets.token_hex(128)
 
 
 def _register_asset(ocean, resources, config):
-    account = ocean.get_account(config.accounts[0].as_dict)
+    account = ocean.load_account(config.accounts[0].as_dict)
     agent = MemoryAgent(ocean)
     assert(agent)
     asset = DataAsset.create('test memory agent asset', secrets.token_hex(1024))
@@ -23,7 +23,7 @@ def _register_asset(ocean, resources, config):
 
 def _purchase_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    account = ocean.get_account(config.accounts[1].as_dict)
+    account = ocean.load_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     return purchase, listing, agent, asset, account
 
@@ -56,7 +56,7 @@ def test_search_listings(ocean, resources, config):
 
 def test_purchase_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    account = ocean.get_account(config.accounts[1].as_dict)
+    account = ocean.load_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 
