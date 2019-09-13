@@ -55,7 +55,6 @@ class SquidAgentAdapter():
         """init a standard ocean object"""
         self._ocean = ocean
         self._squid_ocean = None
-        self._squid_ocean_signature = None
 
         if not isinstance(options, dict):
             options = {}
@@ -246,7 +245,7 @@ class SquidAgentAdapter():
             logger.info(f'purchase invoke operation ')
             service_definition_id=service_agreement.sa_definition_id
 
-            service_agreement_id,signature = agreements.prepare(ddo.did, service_definition_id, account)
+            service_agreement_id, signature = agreements.prepare(ddo.did, service_definition_id, account)
             asset = agreements._asset_resolver.resolve(did)
 
             service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
@@ -355,7 +354,8 @@ class SquidAgentAdapter():
 
         return data
 
-    def get_account(self, address, password, keyfile):
+    @staticmethod
+    def get_account(address, password, keyfile):
         """
         :return: account object if the address is found on the host node, else None
         :type: object or None
@@ -471,18 +471,6 @@ class SquidAgentAdapter():
         """
 
         options = {}
-        signature = None
-        """
-        if account:
-            options['parity_address'] = account.address
-            options['parity_password'] = account.password
-            options['parity_keyfile'] = account.keyfile
-            signature = Web3.sha3(text=json.dumps(options))
-
-        if self._squid_ocean_signature != signature:
-            self._squid_ocean = None
-            self._squid_ocean_signature = signature
-        """
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)
