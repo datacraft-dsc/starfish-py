@@ -100,7 +100,8 @@ def test_asset_purchase(ocean, config, resources, publisher_account, purchaser_a
     logger.info(f'purchase_account after token request {purchaser_account.ocean_balance}')
 
 
-    agent.start_agreement_events_monitor(publisher_account, is_purchase_allowed)
+#    agent.start_agreement_events_monitor(publisher_account, is_purchase_allowed)
+    agent.start_agreement_events_monitor(publisher_account, None)
 
     # test purchase an asset
     purchase_asset = listing.purchase(purchaser_account)
@@ -157,7 +158,7 @@ def test_search_listing(ocean, config, resources, publisher_account):
 
     assert(len(search_result) > 1)
 
-def test_get_listing(ocean, config, resources, publisher_account):
+def test_get_listing(ocean, config, resources, publisher_account, purchaser_account):
     agent = SquidAgent(ocean, config.squid_config)
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
@@ -194,7 +195,6 @@ def test_get_listing(ocean, config, resources, publisher_account):
         dummy_listing = agent.get_listing(dummy_listing_id)
 
     # now try to purchase an invalid asset with no block chain DID
-    purchase_account = ocean.get_account(config.purchaser_account)
 
     listing_list = agent.search_listings({'tags': ['starfish']})
     assert(listing_list)
@@ -202,9 +202,9 @@ def test_get_listing(ocean, config, resources, publisher_account):
         assert(listing)
         if listing.listing_id == dummy_listing_id:
             with pytest.raises(StarfishAssetNotFound):
-                listing.purchase(purchase_account)
+                listing.purchase(purchaser_account)
 
-def test_insufficient_funds(ocean, config, resources, publisher_account):
+def test_insufficient_funds(ocean, config, resources, publisher_account, purchaser_account):
 
     agent = SquidAgent(ocean, config.squid_config)
     assert(agent)
@@ -219,6 +219,5 @@ def test_insufficient_funds(ocean, config, resources, publisher_account):
     # start to test getting the asset from storage
     listing = agent.get_listing(listing_did)
 
-    purchase_account = ocean.get_account(config.purchaser_account)
     with pytest.raises(StarfishPurchaseError):
-        purchase_asset = listing.purchase(purchase_account)
+        purchase_asset = listing.purchase(purchaser_account)

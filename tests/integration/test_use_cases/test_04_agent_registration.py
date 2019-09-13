@@ -12,7 +12,7 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 
-def test_04_agent_register_and_resolve(ocean, config):
+def test_04_agent_register_and_resolve(ocean, config, publisher_account):
 
     ddo = SurferAgent.generate_ddo(config.surfer_url)
     options = {
@@ -21,8 +21,7 @@ def test_04_agent_register_and_resolve(ocean, config):
         'password': config.surfer_password
     }
 
-    register_account = ocean.get_account(config.publisher_account)
-    register_account.unlock()
+    register_account = publisher_account
 
     did = ddo.did
     assert(ocean.register_did(ddo.did, ddo.as_text(), register_account))

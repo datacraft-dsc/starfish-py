@@ -19,7 +19,8 @@ from starfish.asset import (
     RemoteDataAsset,
 )
 
-def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
+def test_pd_case_file_transfer(ocean, config, resources, surfer_agent,
+    squid_agent, publisher_account, purchaser_account):
 
     # take copy of the stored data to compare later
     with open(resources.asset_file, 'rb') as fp:
@@ -34,7 +35,6 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     surfer_agent.upload_asset(asset_store)
 
     # now register the asset link to surfer in squid
-    publisher_account = ocean.get_account(config.publisher_account)
     download_link = asset_store.did
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
     asset_sale = RemoteDataAsset.create_with_url('SquidAsset', download_link, metadata={'resourceId': resourceId})
@@ -47,17 +47,15 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
 
     # now start the purchase part
     # setup the purchase account
-    purchase_account = ocean.get_account(config.purchaser_account)
-    logging.info(f'purchase_account {purchase_account.ocean_balance}')
-    purchase_account.unlock()
+    logging.info(f'purchaser_account {purchaser_account.ocean_balance}')
     # request the tokens to buy the asset
-    purchase_account.request_tokens(10)
+    purchaser_account.request_tokens(10)
 
     squid_agent.start_agreement_events_monitor(publisher_account)
 
 
     # purchase the linked remote asset
-    purchase = listing.purchase(purchase_account)
+    purchase = listing.purchase(purchaser_account)
     assert(purchase)
 
     assert(not purchase.is_completed)

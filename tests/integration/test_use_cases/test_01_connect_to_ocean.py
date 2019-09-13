@@ -20,9 +20,7 @@ def test_01_connect_to_ocean(ocean, config):
     assert(ocean)
 
 
-def test_01_connect_to_surfer(ocean, config):
-    publisher_account = ocean.get_account(config.publisher_account)
-    publisher_account.unlock()
+def test_01_connect_to_surfer(ocean, config, publisher_account):
 
     did = did_generate_random()
     assert(did)
@@ -37,9 +35,7 @@ def test_01_connect_to_surfer(ocean, config):
     found_ddo = json.loads(resolve_ddo)
     assert(found_ddo == ddo)
 
-def test_01_connect_to_multiple_surfer(ocean, config):
-    publisher_account = ocean.get_account(config.publisher_account)
-    publisher_account.unlock()
+def test_01_connect_to_multiple_surfer(ocean, config, publisher_account):
 
     for index in range(0, 2):
         did = did_generate_random()

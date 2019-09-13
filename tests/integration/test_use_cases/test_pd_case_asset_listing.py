@@ -16,9 +16,7 @@ from starfish.asset import (
     RemoteDataAsset,
 )
 
-def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent):
-
-    publisher_account = ocean.get_account(config.publisher_account)
+def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent, publisher_account):
 
     # for the use case , we need to assign a unique id to the asset
     # so we know that it's from the publisher

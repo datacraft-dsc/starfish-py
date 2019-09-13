@@ -29,13 +29,9 @@ from squid_py.ocean.ocean_tokens import OceanTokens
 
 from ocean_utils.ddo.metadata import Metadata
 from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
-
-
-from ocean_events_handler.provider_events_monitor import ProviderEventsMonitor
-
 from plecos import is_valid_dict_local, validate_dict_local
 
-# from starfish.middleware.starfish_events_manager import StarfishEventsManager
+from starfish.middleware.starfish_events_manager import StarfishEventsManager
 
 
 logger = logging.getLogger('starfish.squid_agent_adapter')
@@ -419,8 +415,8 @@ class SquidAgentAdapter():
         # register/update the did->ddo to the block chain
         squid_ocean = self.get_squid_ocean()
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
-        # did_bytes = did_to_id_bytes(did)
-        receipt = squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)
+        did_bytes = did_to_id_bytes(did)
+        receipt = squid_ocean._keeper.did_registry.register(did_bytes, checksum, ddo_text, account._squid_account)
 
         # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
@@ -439,8 +435,10 @@ class SquidAgentAdapter():
         """ called by the publisher to watch payment request events for the published assets """
         squid_ocean = self.get_squid_ocean(account)
 
-        monitor = ProviderEventsMonitor(squid_ocean._keeper, Web3Provider.get_web3(), squid_ocean._config.storage_path, account._squid_account)
-        monitor.start_agreement_events_monitor()
+        events_manager = StarfishEventsManager.get_instance(
+            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+
+        events_manager.start_agreement_events_monitor(callback)
 
     def stop_agreement_events_monitor(self):
         """ called by the publisher to watch payment request events for the published assets """
