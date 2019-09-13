@@ -357,7 +357,7 @@ class SquidAgentAdapter():
     @staticmethod
     def get_account(address, password, keyfile):
         """
-        :return: account object if the address is found on the host node, else None
+        :return: Squid Account object, based on it's address, password and JSON keyfile
         :type: object or None
         """
         return SquidAccount(address, password, keyfile)
