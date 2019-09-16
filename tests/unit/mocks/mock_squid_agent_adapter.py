@@ -35,8 +35,9 @@ class MockSquidAgentAdapter():
         self._metadata = {}
         self._ddo_list = {}
         self._purchase_assets={}
+        self._account_list = {}
 
-    def get_account(self, address, password, keyfile):
+    def get_account(self, address, password=None, keyfile=None):
         if address:
             for index in unitTestConfig.accounts:
                 test_account = unitTestConfig.accounts[index]
@@ -45,6 +46,9 @@ class MockSquidAgentAdapter():
                     account.address = address
                     if password:
                         account.password = password
+                    if keyfile:
+                        account.keyfile = keyfile
+                    self._account_list[address] = account
                     return account
         return None
 
@@ -77,7 +81,6 @@ class MockSquidAgentAdapter():
             return True
         else:
             validator = validate_dict_local(metadata)
-            print(validator)
 
         return False
 
@@ -165,6 +168,13 @@ class MockSquidAgentAdapter():
                 balance.ocn = Web3.toWei(test_account.test_tokens, 'ether')
                 return balance
         return 0
+
+    @property
+    def accounts(self):
+        """
+        Not used at the moment
+        """
+        return self._account_list
 
     def request_tokens(self, value, account):
         found_account = self.get_account(account.address, account.password, account.keyfile)
