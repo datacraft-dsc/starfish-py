@@ -118,6 +118,23 @@ class Account():
             return adapter.request_tokens(self._unlock_squid_account, amount)
         return 0
 
+    def approve_tokens(self, spender_address, amount):
+        """
+        Approve some ocean tokens to be transfere from this account address by another Spender address
+
+        :param number amount: The amount of ocean tokens to approve
+        :param address spender_address: The address of spender
+        :return: boolean
+        """
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
+            if not self._unlock_squid_account:
+                raise ValueError('You must unlock the account before approving tokens')
+
+            amount = Web3.toWei(amount, 'ether')
+            return adapter.approve_tokens(spender_address, amount, self)
+        return False
+
     def transfer_ether(self, to_account, amount_ether):
         """
 
@@ -319,6 +336,28 @@ class Account():
                 balance = adapter.get_account_balance(squid_account)
                 if balance:
                     return Web3.fromWei(balance.ocn, 'ether')
+        return 0
+
+    @property
+    def ocean_balance_raw(self):
+        """
+
+        Get the number of ocean tokens
+
+        :return: number of ocean tokens
+        :type: number
+
+        >>> account.ocean_balance_raw
+        101
+
+        """
+        adapter = self._ocean.get_squid_agent_adapter()
+        if adapter:
+            squid_account = self._squid_account
+            if squid_account:
+                balance = adapter.get_account_balance(squid_account)
+                if balance:
+                    return balance.ocn
         return 0
 
     @property

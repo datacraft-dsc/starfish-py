@@ -4,7 +4,7 @@ DOCKER_RETRY=1
 BARGE_DELAY=240
 until [ $DOCKER_RETRY -gt 10 ]; do
     cd barge
-    git checkout tags/dex-2019-08-19
+    git checkout tags/dex-2019-09-03
     ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > barge.log &
     cd ..
     echo "sleeping for $BARGE_DELAY seconds"

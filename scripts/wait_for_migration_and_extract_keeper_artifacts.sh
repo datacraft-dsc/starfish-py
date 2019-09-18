@@ -18,7 +18,7 @@ until [ ${CONTRACTS_READY} -eq 0 ] || [ ${RETRY_COUNT} -eq 120 ]; do
     docker cp ${KEEPER_CONTRACTS_DOCKER_ID}:/keeper-contracts/artifacts/. ./${CONTRACT_FOLDER}/
     CONTRACT_FILES=(${CONTRACT_FOLDER}/*.json)
     # test for the ready file and a json file
-    if [ -f "${CONTRACT_FILES}" ] && [ -f "${CONTRACT_FOLDER}/ready" ]; then    
+    if [ -f "${CONTRACT_FILES}" ] && [ -f "${CONTRACT_FOLDER}/dex-ready" ]; then    
         CONTRACTS_READY=0
         break
     fi
