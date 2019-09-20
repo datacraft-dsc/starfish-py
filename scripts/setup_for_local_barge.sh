@@ -1,5 +1,8 @@
-git clone https://github.com/DEX-Company/barge.git
+#!/bin/bash
 
+BARGE_DELAY=120
+
+git clone https://github.com/DEX-Company/barge.git
 cd barge
 git checkout tags/dex-2019-08-19
 ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > barge.log &
