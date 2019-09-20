@@ -8,12 +8,12 @@ from Cryptodome.Signature import PKCS1_v1_5
 from starfish.ddo.authentication import Authentication
 
 
-from squid_py.ddo.ddo import DDO
+from ocean_utils.ddo.ddo import DDO
 
-from squid_py.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
-from squid_py.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL, PROOF_TYPE
-from squid_py.ddo.public_key_rsa import PublicKeyRSA, PUBLIC_KEY_TYPE_RSA
-from squid_py.ddo.service import Service
+from ocean_utils.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
+from ocean_utils.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL, PROOF_TYPE
+from ocean_utils.ddo.public_key_rsa import PublicKeyRSA, PUBLIC_KEY_TYPE_RSA
+from ocean_utils.ddo.service import Service
 
 
 logger = logging.getLogger('starfish.ddo')

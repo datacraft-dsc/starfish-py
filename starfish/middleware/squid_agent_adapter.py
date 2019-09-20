@@ -8,27 +8,27 @@ import json
 
 from web3 import Web3
 
+from ocean_keeper.account import Account as SquidAccount
+
 from squid_py.config_provider import ConfigProvider
 from squid_py.config import Config as SquidConfig
 from squid_py.ocean import Ocean as SquidOcean
-from squid_py.did import (
+from ocean_utils.did import (
     did_to_id_bytes,
     did_to_id,
     DID,
 )
-from squid_py.keeper import Keeper
+from squid_py.ocean.keeper import SquidKeeper
 
-from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
-from squid_py.agreements.service_agreement import ServiceAgreement
-from squid_py.agreements.service_types import ServiceTypes
+from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
+from ocean_utils.agreements.service_agreement import ServiceAgreement
+from ocean_utils.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.keeper.contract_handler import ContractHandler
+from ocean_keeper.web3_provider import Web3Provider
 from squid_py.ocean.ocean_tokens import OceanTokens
 
-from squid_py.ddo.metadata import Metadata
-from squid_py.keeper.agreements.agreement_manager import AgreementStoreManager
-
+from ocean_utils.ddo.metadata import Metadata
+from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
 from plecos import is_valid_dict_local, validate_dict_local
 
 from starfish.middleware.starfish_events_manager import StarfishEventsManager
@@ -55,7 +55,6 @@ class SquidAgentAdapter():
         """init a standard ocean object"""
         self._ocean = ocean
         self._squid_ocean = None
-        self._squid_ocean_signature = None
 
         if not isinstance(options, dict):
             options = {}
@@ -70,14 +69,12 @@ class SquidAgentAdapter():
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
         Web3Provider._web3 = None
-        # and the list of contracts for the old network
-        ContractHandler._contracts = dict()
 
         # make sure we have a instance of squid ocean created before starting
         self.get_squid_ocean()
 
         # to get past codacy static method 'register_agent'
-        self._keeper = Keeper.get_instance()
+        self._keeper = SquidKeeper.get_instance()
 
     def register_asset(self, metadata, account):
         """
@@ -248,7 +245,7 @@ class SquidAgentAdapter():
             logger.info(f'purchase invoke operation ')
             service_definition_id=service_agreement.sa_definition_id
 
-            service_agreement_id,signature = agreements.prepare(ddo.did, service_definition_id, account)
+            service_agreement_id, signature = agreements.prepare(ddo.did, service_definition_id, account)
             asset = agreements._asset_resolver.resolve(did)
 
             service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
@@ -352,29 +349,29 @@ class SquidAgentAdapter():
                 data['keeper-contracts']['parity.address'] = options['parity_address']
             if 'parity_password' in options:
                 data['keeper-contracts']['parity.password'] = options['parity_password']
+            if 'parity_keyfile' in options:
+                data['keeper-contracts']['parity.keyfile'] = options['parity_keyfile']
 
         return data
 
-    def get_account_host(self, address, password=None):
+    @staticmethod
+    def get_account(address, password, keyfile):
         """
-        :return: account object if the address is found on the host node, else None
+        :return: Squid Account object, based on it's address, password and JSON keyfile
         :type: object or None
         """
-        for account in self.accounts:
-            if account.address == address:
-                account.password = password
-                return account
+        return SquidAccount(address, password, keyfile)
 
     def request_tokens(self, account, value):
         """
         Request some ocean tokens
         :param object account: squid account to request
-        :param number value: amount of tokens to request
+        :param int value: amount of tokens to request
         :return: number of tokens requested and added to the account
         :type: number
         """
         squid_ocean = self.get_squid_ocean()
-        return squid_ocean.accounts.request_tokens(account, value)
+        return squid_ocean.accounts.request_tokens(value, account)
 
     def get_account_balance(self, account):
         """
@@ -421,8 +418,8 @@ class SquidAgentAdapter():
         # register/update the did->ddo to the block chain
         squid_ocean = self.get_squid_ocean()
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
-        # did_bytes = did_to_id_bytes(did)
-        receipt = squid_ocean._keeper.did_registry.register(did, checksum, ddo_text, account._squid_account)
+        did_bytes = did_to_id_bytes(did)
+        receipt = squid_ocean._keeper.did_registry.register(did_bytes, checksum, ddo_text, account._squid_account)
 
         # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
@@ -477,16 +474,6 @@ class SquidAgentAdapter():
         """
 
         options = {}
-        signature = None
-        if account:
-            options['parity_address'] = account.address
-            options['parity_password'] = account.password
-            signature = Web3.sha3(text=json.dumps(options))
-
-        if self._squid_ocean_signature != signature:
-            self._squid_ocean = None
-            self._squid_ocean_signature = signature
-
         if not self._squid_ocean:
             config_params = self._as_config_dict(options)
             config = SquidConfig(options_dict=config_params)

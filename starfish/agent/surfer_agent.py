@@ -29,7 +29,7 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 
-from squid_py.ddo.ddo import DDO
+from ocean_utils.ddo.ddo import DDO
 
 class SurferAgent(AgentBase):
     """

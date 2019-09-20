@@ -7,27 +7,21 @@ TOKEN_AMOUNT_TO_TRANSFER = 100
 REFERENCE_1 = 4
 REFERENCE_2 = 5
 
-def test_direct_purchase(ocean, config, squid_agent):
+def test_direct_purchase(ocean, config, squid_agent, publisher_account, purchaser_account):
     adapter = squid_agent.get_adapter
-    purchase_contract = DirectPurchase.get_instance()
-    account_purchaser = ocean.get_account(config.purchaser_account['address'])
-    account_publisher = ocean.get_account(config.publisher_account['address'])
-    account_purchaser.set_password(config.purchaser_account['password'])
-    account_purchaser.unlock()
+    purchaser_contract = DirectPurchase.get_instance()
 
-    account_purchaser.request_tokens(TOKEN_AMOUNT_TO_TRANSFER)
+    purchaser_account.request_tokens(TOKEN_AMOUNT_TO_TRANSFER)
 
-    balance_purchaser = account_purchaser.ocean_balance
-    balance_publisher = account_publisher.ocean_balance
+    purchaser_balance = purchaser_account.ocean_balance
+    publisher_balance = publisher_account.ocean_balance
 
-    purchase_contract.send_token_and_log(account_purchaser, account_publisher.address, TOKEN_AMOUNT_TO_TRANSFER, REFERENCE_1, REFERENCE_2)
+    purchaser_contract.send_token_and_log(purchaser_account, publisher_account.address, TOKEN_AMOUNT_TO_TRANSFER, REFERENCE_1, REFERENCE_2)
 
-    assert(account_purchaser.ocean_balance + TOKEN_AMOUNT_TO_TRANSFER == balance_purchaser
-        and account_publisher.ocean_balance - TOKEN_AMOUNT_TO_TRANSFER == balance_publisher)
+    assert(purchaser_account.ocean_balance + TOKEN_AMOUNT_TO_TRANSFER == purchaser_balance
+        and publisher_account.ocean_balance - TOKEN_AMOUNT_TO_TRANSFER == publisher_balance)
 
-def test_is_paid(ocean, config):
-    purchase_contract = DirectPurchase.get_instance()
-    account_purchaser = ocean.get_account(config.purchaser_account['address'])
-    account_publisher = ocean.get_account(config.publisher_account['address'])
-    isPaid = purchase_contract.check_is_paid(account_purchaser.address, account_publisher.address, TOKEN_AMOUNT_TO_TRANSFER, REFERENCE_2)
+def test_is_paid(ocean, config, publisher_account, purchaser_account):
+    purchaser_contract = DirectPurchase.get_instance()
+    isPaid = purchaser_contract.check_is_paid(purchaser_account.address, publisher_account.address, TOKEN_AMOUNT_TO_TRANSFER, REFERENCE_2)
     assert(isPaid)

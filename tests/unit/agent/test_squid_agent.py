@@ -26,7 +26,7 @@ TEST_INIT_PARMS = {
 }
 
 def _register_asset(ocean, resources, config):
-    account = ocean.get_account(config.accounts[0].as_dict)
+    account = ocean.load_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
     asset = RemoteDataAsset.create_with_url('test url asset', resources.asset_remote)
@@ -36,7 +36,7 @@ def _register_asset(ocean, resources, config):
 
 def _purchase_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    account = ocean.get_account(config.accounts[1].as_dict)
+    account = ocean.load_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     return purchase, listing, agent, asset, account
 
@@ -68,7 +68,7 @@ def test_register_asset(ocean, resources, config):
     assert(listing.listing_id)
 
 def test_register_bundle_asset(ocean, resources, config):
-    account = ocean.get_account(config.accounts[0].as_dict)
+    account = ocean.load_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
     bundle_asset = BundleAsset.create('test bundle asset')
@@ -80,7 +80,7 @@ def test_register_bundle_asset(ocean, resources, config):
     assert(listing)
 
 def test_register_asset_invalid_data(ocean, resources, config):
-    account = ocean.get_account(config.accounts[0].as_dict)
+    account = ocean.load_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
     asset = DataAsset.create('test remote asset', 'some data that is never going to be saved')
@@ -114,7 +114,7 @@ def test_search_listings(ocean, resources, config):
 
 def test_purchase_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)
-    account = ocean.get_account(config.accounts[1].as_dict)
+    account = ocean.load_account(config.accounts[1].as_dict)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 
@@ -139,7 +139,7 @@ def test_is_did_valid():
     assert( SquidAgent.is_did_valid(INVALID_DID))
 
 def test_price_out_of_range(ocean, resources, config):
-    account = ocean.get_account(config.accounts[0].as_dict)
+    account = ocean.load_account(config.accounts[0].as_dict)
     agent = SquidAgent(ocean)
     assert(agent)
     asset = RemoteDataAsset.create_with_url('test squid asset with url', resources.asset_remote)

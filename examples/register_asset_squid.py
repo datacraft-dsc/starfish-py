@@ -24,7 +24,7 @@ LOCAL_CONFIG = {
         'parity_url': 'http://localhost:8545',
         'storage_path': 'squid_py.db',
     },
-    'account': ('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'node0')
+    'account': ('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'node0', 'tests/resources/account_key_files/key_file_2.json')
 }
 
 NILE_CONFIG = {
@@ -49,7 +49,7 @@ def main():
     ocean = Ocean(keeper_url=CONFIG['keeper_url'])
 
     print('config data', CONFIG)
-    account = ocean.get_account(CONFIG['account'])
+    account = ocean.load_account(CONFIG['account'])
 
     # Print out the account's ocean balance.
     print('my account ocean balance:', account.ocean_balance)

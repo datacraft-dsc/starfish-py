@@ -24,16 +24,13 @@ def _register_asset_for_sale(agent, resources, account):
     assert listing.asset.did
     return listing
 
-def test_asset(ocean, resources, config):
+def test_asset(ocean, resources, config, publisher_account, purchaser_account):
 
     # create an ocean object
 
     agent = MemoryAgent(ocean)
     assert agent
 
-
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(config.publisher_account)
 
     listing = _register_asset_for_sale(agent, resources, publisher_account)
     assert listing
@@ -46,10 +43,8 @@ def test_asset(ocean, resources, config):
     assert listing.listing_id == listing_id
 
 
-    purchase_account = ocean.get_account(config.purchaser_account)
-
     # test purchase an asset
-    purchase_asset = listing.purchase(purchase_account)
+    purchase_asset = listing.purchase(purchaser_account)
     assert purchase_asset
 
 
@@ -62,12 +57,7 @@ def test_asset(ocean, resources, config):
 
 
 
-def test_search_listing(ocean, resources, config):
-
-    agent = MemoryAgent(ocean)
-
-    # test node has the account #0 unlocked
-    publisher_account = ocean.get_account(config.publisher_account)
+def test_search_listing(ocean, resources, config, publisher_account):
 
     agent = MemoryAgent(ocean)
 

@@ -14,8 +14,9 @@ with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
 install_requirements = [
-    'squid-py==0.6.16',
-    'plecos==0.7.8',
+    'squid-py==0.7.1',
+    'ocean-events-handler',
+    'plecos',
     'coloredlogs',
     'eciespy',
     'pyopenssl',

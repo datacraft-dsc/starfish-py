@@ -1,21 +1,23 @@
 #  Copyright 2018 Ocean Protocol Foundation
 #  SPDX-License-Identifier: Apache-2.0
 
+
 import logging
 import os
 import time
 from datetime import datetime
 from threading import Thread
 
-from squid_py.agreements.events import access_secret_store_condition, escrow_reward_condition
-from squid_py.agreements.service_agreement import ServiceAgreement
-from squid_py.agreements.service_agreement_template import ServiceAgreementTemplate
-from squid_py.agreements.service_types import ServiceTypes
-from squid_py.agreements.utils import get_sla_template_path
-from squid_py.data_store.agreements import AgreementsStorage
-from squid_py.did import id_to_did
-from squid_py.did_resolver.did_resolver import DIDResolver
-from squid_py.keeper.web3_provider import Web3Provider
+
+from ocean_events_handler.event_handlers import accessSecretStore, lockRewardCondition
+from ocean_utils.agreements.service_agreement import ServiceAgreement
+from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
+from ocean_utils.agreements.service_types import ServiceTypes
+from ocean_utils.agreements.utils import get_sla_template
+from ocean_events_handler.agreement_store.agreements import AgreementsStorage
+from ocean_utils.did import id_to_did
+from ocean_utils.did_resolver.did_resolver import DIDResolver
+from ocean_keeper.web3_provider import Web3Provider
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +56,7 @@ class StarfishAgreementRecord:
 class StarfishEventsManager:
     """
 
+
     Manage the main keeper events listeners necessary for processing service agreements.
 
     on init
@@ -76,6 +79,7 @@ class StarfishEventsManager:
 
 
     """
+
     _instance = None
 
     EVENT_WAIT_TIMEOUT = 3600
@@ -94,8 +98,7 @@ class StarfishEventsManager:
         self.other_agreement_ids = set()
 
         # prepare condition names and events arguments dict
-        sla_template_path = get_sla_template_path()
-        sla_template = ServiceAgreementTemplate.from_json_file(sla_template_path)
+        sla_template = ServiceAgreementTemplate(template_json=get_sla_template())
         self.condition_names = [cond.name for cond in sla_template.conditions]
         self.event_to_arg_names = sla_template.get_event_to_args_map(self._keeper.contract_name_to_instance)
 
@@ -309,7 +312,7 @@ class StarfishEventsManager:
                 self._keeper.lock_reward_condition.subscribe_condition_fulfilled(
                     agreement_id,
                     max(condition_def_dict['lockReward'].timeout, self.EVENT_WAIT_TIMEOUT),
-                    access_secret_store_condition.fulfillAccessSecretStoreCondition,
+                    lockRewardCondition.fulfillAccessSecretStoreCondition,
                     (agreement_id, ddo.did, service_agreement, consumer_address,
                      self._account, condition_ids[0]),
                     from_block=block_number
@@ -318,7 +321,7 @@ class StarfishEventsManager:
                 self._keeper.access_secret_store_condition.subscribe_condition_fulfilled(
                     agreement_id,
                     max(condition_def_dict['accessSecretStore'].timeout, self.EVENT_WAIT_TIMEOUT),
-                    escrow_reward_condition.fulfillEscrowRewardCondition,
+                    accessSecretStore.fulfillEscrowRewardCondition,
                     (agreement_id, service_agreement, price, consumer_address, self._account,
                      condition_ids, condition_ids[2]),
                     from_block=block_number

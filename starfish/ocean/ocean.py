@@ -17,7 +17,7 @@ from web3 import (
 
 from starfish.account import Account
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from squid_py.keeper import Keeper
+from squid_py.ocean.keeper import SquidKeeper
 
 
 logger = logging.getLogger('starfish.ocean')
@@ -145,8 +145,8 @@ class Ocean():
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_hosted:
-            raise ValueError('You must pass a valid hosted account')
+        if not account.is_valid:
+            raise ValueError('You must pass a valid account')
 
         if not isinstance(ddo, str):
             raise TypeError('You need to pass a DDO as a string')
@@ -193,63 +193,23 @@ class Ocean():
         ## To be implemented
         return []
 
-    def get_account(self, address, password=None):
+    def load_account(self, address, password=None, keyfile=None):
         """
-        Get an account object based on it's address. This just returns the account object, the
-        account can be hosted or local
+        Get an account object based on it's address, password and keyfile.
+        This returns the account object, of the local account.
 
-        :param address: address of the account, if dict then use the fields, `address` and `password`.
+        :param address: address of the account, if dict then use the fields, `address`, `password` and 'keyfile'.
         :type address: str, list or dict
-        :param password: optional password to save with the account
-        :type password: str or None
+        :param str password: password to access the keyfile for this account
+        :param str keyfile: JSON filename of the account key file.
 
         :return: return the :class:`Account` object.
         :type: :class:`Account` or None
 
-        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        >>> account = ocean.load_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password', 'key_file_test.json')
         """
-        account = Account(self, address, password)
+        account = Account(self, address, password, keyfile)
         return account
-
-    def create_account_host(self, password):
-        """
-        Create a account object on the hosted node on the connected network.
-
-        :param password: optional password to save with the account
-        :type password: str or None
-
-        :return: return the :class:`Account` object or None if the account can not be used.
-        :type: :class:`Account` or None
-
-        >>> account = ocean.create_account_host('my_password')
-        """
-
-        account = None
-        adapter = self.get_squid_agent_adapter()
-        if adapter:
-            address = adapter.create_account_host(password)
-            if address:
-                account = Account(self, address, password)
-        return account
-
-    @property
-    def accounts(self):
-        """
-
-        Return a list of hosted accounts
-        :return: a list of :class:`.Account` objects
-        :type: list of :class:`Account` objects
-
-        >>> ocean.accounts
-        {'0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e': <starfish.account.Account object at 0x10456c080>, ...
-        """
-        adapter = self.get_squid_agent_adapter()
-        accounts = {}
-        if adapter:
-            for squid_account in adapter.accounts:
-                account = Account(self, squid_account.address)
-                accounts[account.address] = account
-        return accounts
 
     @property
     def _web3(self):
@@ -278,7 +238,7 @@ class Ocean():
 
     def _get_network_name(self):
         network_id = int(self.__web3.version.network)
-        return Keeper.get_network_name(network_id)
+        return SquidKeeper.get_network_name(network_id)
 
     def get_squid_agent_adapter(self, options=None):
         if self.__squid_agent_adapter_class:

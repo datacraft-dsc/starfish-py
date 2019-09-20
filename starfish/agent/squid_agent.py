@@ -32,11 +32,11 @@ from starfish.exceptions import (
 )
 
 from squid_py.brizo.brizo_provider import BrizoProvider
-from squid_py.ddo.metadata import (
+from ocean_utils.ddo.metadata import (
     MetadataBase,
     AdditionalInfoMeta,
 )
-from squid_py.exceptions import OceanDIDNotFound
+from ocean_keeper.exceptions import OceanDIDNotFound
 
 
 logger = logging.getLogger('starfish.squid_agent')
@@ -147,11 +147,8 @@ class SquidAgent(AgentBase):
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        if not account.is_hosted:
-            raise ValueError('You must pass a hosted account')
-
-        if not account.is_password:
-            raise ValueError('You must set the account password')
+        if not account.is_valid:
+            raise ValueError('You must set the account address, password and keyfile')
 
         if not isinstance(listing_data, dict):
             raise TypeError('You must provide some listing data as dict')

@@ -1,6 +1,6 @@
-from squid_py.keeper.contract_base import ContractBase
-from squid_py.keeper.web3_provider import Web3Provider
-from squid_py.keeper.event_listener import EventListener
+from ocean_keeper.contract_base import ContractBase
+from ocean_keeper.web3_provider import Web3Provider
+from ocean_keeper.event_listener import EventListener
 
 class DirectPurchase(ContractBase):
     """Class representing the Token contract."""
@@ -37,6 +37,7 @@ class DirectPurchase(ContractBase):
             transact={
                 'from': account.address,
                 'passphrase': account.password,
+                'keyfile': account.key_file
             }
         )
         return self.get_tx_receipt(tx_hash).status == 1
@@ -69,4 +70,3 @@ class DirectPurchase(ContractBase):
             if event_args._amount == amount:
                 return True
         return False
-

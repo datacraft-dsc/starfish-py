@@ -73,15 +73,15 @@ class ExampleConfig:
     @staticmethod
     def get_accounts_config(local_node=True):
         if local_node:
-            a, p = "0x00bd138abd70e2f00903268f3db08f2d25677c9e", "node0"
-            a1, p1 = "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0", "secret"
+            a, p, k = "0x00bd138abd70e2f00903268f3db08f2d25677c9e", "node0", "tests/resources/account_key_files/key_file_2.json"
+            a1, p1, k1 = "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0", "secret", "tests/resources/account_key_files/key_file_1.json"
         else:
-            a, p = get_variable_value('PARITY_ADDRESS'), get_variable_value('PARITY_PASSWORD')
-            a1, p1 = get_variable_value('PARITY_ADDRESS1'), get_variable_value('PARITY_PASSWORD1')
+            a, p, k = get_variable_value('PARITY_ADDRESS'), get_variable_value('PARITY_PASSWORD'), get_variable_value('PARITY_KEYFILE')
+            a1, p1, k1 = get_variable_value('PARITY_ADDRESS1'), get_variable_value('PARITY_PASSWORD1'), get_variable_value('PARITY_KEYFILE1')
 
         return {
-           "parity.address": a, "parity.password": p,
-           "parity.address1": a1, "parity.password1": p1
+           "parity.address": a, "parity.password": p, "parity.keyfile": k,
+           "parity.address1": a1, "parity.password1": p1, "parity.keyfile1": k1,
         }
 
     @staticmethod

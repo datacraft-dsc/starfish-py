@@ -6,7 +6,7 @@ import json
 import requests
 from web3 import Web3
 
-from squid_py.did_resolver.did_resolver import DIDResolver
+from ocean_utils.did_resolver.did_resolver import DIDResolver
 
 from starfish import logger
 

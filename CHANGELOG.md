@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.5.3
+
+*   Squid_py v0.7.1
+
 ### Release v0.5.2
 
 *   Code cleanup

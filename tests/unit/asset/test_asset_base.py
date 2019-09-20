@@ -8,7 +8,7 @@ import logging
 import json
 
 from starfish.asset import AssetBase
-from squid_py.did import did_to_id
+from ocean_utils.did import did_to_id
 
 ASSET_METADATA = {
     'name': 'Asset',

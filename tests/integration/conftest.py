@@ -54,3 +54,18 @@ def surfer_agent(ocean):
 def squid_agent(ocean):
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
     return SquidAgent(ocean, integrationTestConfig.squid_config)
+
+@pytest.fixture(scope='module')
+def publisher_account(ocean, config):
+    return ocean.load_account(config.publisher_account['address'], config.publisher_account['password'], config.publisher_account['keyfile'])
+
+
+@pytest.fixture(scope='module')
+def purchaser_account(ocean, config):
+    return ocean.load_account(config.purchaser_account['address'], config.purchaser_account['password'], config.purchaser_account['keyfile'])
+
+
+@pytest.fixture(scope='module')
+def agent_account(ocean, config):
+    return ocean.load_account(config.agent_account['address'], config.agent_account['password'], config.agent_account['keyfile'])
+
