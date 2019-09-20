@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset using Squid &mdash; starfish-py 0.5.2 documentation</title>
+  <title>Register asset using Squid &mdash; starfish-py 0.5.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -287,7 +287,7 @@ asset from the listing.</p>
         <span class="s1">&#39;parity_url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">,</span>
         <span class="s1">&#39;storage_path&#39;</span><span class="p">:</span> <span class="s1">&#39;squid_py.db&#39;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="s1">&#39;account&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">)</span>
+    <span class="s1">&#39;account&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">,</span> <span class="s1">&#39;tests/resources/account_key_files/key_file_2.json&#39;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="n">NILE_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
@@ -312,7 +312,7 @@ asset from the listing.</p>
     <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;keeper_url&#39;</span><span class="p">])</span>
 
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;config data&#39;</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">)</span>
-    <span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;account&#39;</span><span class="p">])</span>
+    <span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;account&#39;</span><span class="p">])</span>
 
     <span class="c1"># Print out the account&#39;s ocean balance.</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my account ocean balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">)</span>

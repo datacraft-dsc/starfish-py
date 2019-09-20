@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account class &mdash; starfish-py 0.5.2 documentation</title>
+  <title>Account class &mdash; starfish-py 0.5.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -166,7 +166,7 @@
 <h1>Account class<a class="headerlink" href="#account-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.account.Account">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">address</em>, <em class="sig-param">password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Account class, adds functionality for an account to be used by the Ocean network.</p>
 <p>At the moment the Account object is created by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code> class.</p>
@@ -204,6 +204,23 @@ If dict then the dict can be the following format:</p>
 <span class="go">0x00bd138abd70e2f00903268f3db08f2d25677c9e</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.approve_tokens">
+<code class="sig-name descname">approve_tokens</code><span class="sig-paren">(</span><em class="sig-param">spender_address</em>, <em class="sig-param">amount</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.approve_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approve some ocean tokens to be transfere from this account address by another Spender address</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> (<em>number</em>) – The amount of ocean tokens to approve</p></li>
+<li><p><strong>spender_address</strong> (<em>address</em>) – The address of spender</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -267,40 +284,26 @@ address and then compared.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.is_hosted">
-<em class="property">property </em><code class="sig-name descname">is_hosted</code><a class="headerlink" href="#starfish.account.Account.is_hosted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if this account is registered in the Ocean network, on the block chain node
-:return: True if this account address is valid
-:type: boolean</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">is_hosted</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
 <dt id="starfish.account.Account.is_password">
 <em class="property">property </em><code class="sig-name descname">is_password</code><a class="headerlink" href="#starfish.account.Account.is_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return True if the password has been set, else return False</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.lock">
-<code class="sig-name descname">lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lock the account, to stop access to this account for ethereum token transfer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if this account was unlocked, else False if the account was not locked.</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>boolean</p>
-</dd>
-</dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">lock</span><span class="p">()</span>
-<span class="go">True</span>
-</pre></div>
-</div>
+<dt id="starfish.account.Account.is_valid">
+<em class="property">property </em><code class="sig-name descname">is_valid</code><a class="headerlink" href="#starfish.account.Account.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.key_file">
+<em class="property">property </em><code class="sig-name descname">key_file</code><a class="headerlink" href="#starfish.account.Account.key_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compatability field, so that this account behaves the same as a squid account</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.keyfile">
+<em class="property">property </em><code class="sig-name descname">keyfile</code><a class="headerlink" href="#starfish.account.Account.keyfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="starfish.account.Account.ocean">
@@ -323,6 +326,24 @@ address and then compared.</p>
 </dd>
 </dl>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span>
+<span class="go">101</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.ocean_balance_raw">
+<em class="property">property </em><code class="sig-name descname">ocean_balance_raw</code><a class="headerlink" href="#starfish.account.Account.ocean_balance_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of ocean tokens</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>number of ocean tokens</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>number</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance_raw</span>
 <span class="go">101</span>
 </pre></div>
 </div>
@@ -408,21 +429,6 @@ address and then compared.</p>
 </dl>
 <p>;param amount_ether: amount in ocean tokens to transfer
 :return: number of tokens transfered</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.unlock">
-<code class="sig-name descname">unlock</code><span class="sig-paren">(</span><em class="sig-param">password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.unlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unlock the account so that it can be used to spend tokens/gas</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – optional password to use to unlock this account, if none provided then the original password will be used.</p>
-</dd>
-</dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">unlock</span><span class="p">(</span><span class="s1">&#39;secret&#39;</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>

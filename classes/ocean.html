@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ocean class &mdash; starfish-py 0.5.2 documentation</title>
+  <title>Ocean class &mdash; starfish-py 0.5.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -203,18 +203,6 @@ If not prodived then the network name will be used to search for the correct art
 </dd>
 </dl>
 <dl class="method">
-<dt id="starfish.Ocean.accounts">
-<em class="property">property </em><code class="sig-name descname">accounts</code><a class="headerlink" href="#starfish.Ocean.accounts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of hosted accounts
-:return: a list of <a class="reference internal" href="account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> objects
-:type: list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> objects</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span><span class="o">.</span><span class="n">accounts</span>
-<span class="go">{&#39;0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e&#39;: &lt;starfish.account.Account object at 0x10456c080&gt;, ...</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
 <dt id="starfish.Ocean.connect">
 <code class="sig-name descname">connect</code><span class="sig-paren">(</span><em class="sig-param">keeper_url=None</em>, <em class="sig-param">network_name=None</em>, <em class="sig-param">contracts_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.Ocean.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normally you do not need to call this, since the ocean class will connect automatically
@@ -227,53 +215,9 @@ using the provided keeper url and contracts path</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="starfish.Ocean.create_account_host">
-<code class="sig-name descname">create_account_host</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.Ocean.create_account_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a account object on the hosted node on the connected network.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – optional password to save with the account</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>return the <code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object or None if the account can not be used.</p>
-</dd>
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> or None</p>
-</dd>
-</dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">create_account_host</span><span class="p">(</span><span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
 <dt id="starfish.Ocean.gas_limit">
 <em class="property">property </em><code class="sig-name descname">gas_limit</code><a class="headerlink" href="#starfish.Ocean.gas_limit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="starfish.Ocean.get_account">
-<code class="sig-name descname">get_account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.Ocean.get_account" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get an account object based on it’s address. This just returns the account object, the
-account can be hosted or local</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – address of the account, if dict then use the fields, <cite>address</cite> and <cite>password</cite>.</p></li>
-<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – optional password to save with the account</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>return the <code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object.</p>
-</dd>
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> or None</p>
-</dd>
-</dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
 
 <dl class="method">
 <dt id="starfish.Ocean.get_squid_agent_adapter">
@@ -289,6 +233,31 @@ account can be hosted or local</p>
 <dt id="starfish.Ocean.keeper_url">
 <em class="property">property </em><code class="sig-name descname">keeper_url</code><a class="headerlink" href="#starfish.Ocean.keeper_url" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.Ocean.load_account">
+<code class="sig-name descname">load_account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.Ocean.load_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an account object based on it’s address, password and keyfile.
+This returns the account object, of the local account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – address of the account, if dict then use the fields, <cite>address</cite>, <cite>password</cite> and ‘keyfile’.</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – password to access the keyfile for this account</p></li>
+<li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – JSON filename of the account key file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return the <code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> or None</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;key_file_test.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="starfish.Ocean.network_name">
