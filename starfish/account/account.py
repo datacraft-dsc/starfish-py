@@ -250,6 +250,13 @@ class Account():
         return self._keyfile
 
     @property
+    def key_file(self):
+        """
+        Compatability field, so that this account behaves the same as a squid account
+        """
+        return self._keyfile
+
+    @property
     def is_valid(self):
         return self._address and self._password and self._keyfile
 
