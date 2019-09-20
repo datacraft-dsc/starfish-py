@@ -36,7 +36,6 @@ class Account():
         self._ocean = ocean
         self._address = None
         self._password = None
-        self._unlock_squid_account = None
 
         if isinstance(address, dict):
             self._address = address.get('address')
@@ -71,9 +70,6 @@ class Account():
         """
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-#            if not self._unlock_squid_account:
-#                raise ValueError('You must unlock the account before requesting tokens')
-
             return adapter.request_tokens(amount, self._squid_account)
         return 0
 
@@ -87,9 +83,6 @@ class Account():
         """
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-            if not self._unlock_squid_account:
-                raise ValueError('You must unlock the account before approving tokens')
-
             amount = Web3.toWei(amount, 'ether')
             return adapter.approve_tokens(spender_address, amount, self)
         return False
@@ -114,9 +107,6 @@ class Account():
 
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-#            if not self._unlock_squid_account:
-#                raise ValueError('You must unlock the account before requesting tokens')
-
             return adapter.transfer_ether(self._squid_account, to_address, amount_wei)
         return 0
 
@@ -140,9 +130,6 @@ class Account():
 
         adapter = self._ocean.get_squid_agent_adapter()
         if adapter:
-#            if not self._unlock_squid_account:
-#                raise ValueError('You must unlock the account before requesting tokens')
-
             return adapter.transfer_tokens(self._squid_account, to_address, amount_vodka)
         return 0
 
