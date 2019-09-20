@@ -1,8 +1,10 @@
 ## Change Log
 
+
 ### Release v0.5.3
 
 *   Squid_py v0.7.1
+*   barge/dex-2019-09-11
 
 ### Release v0.5.2
 
