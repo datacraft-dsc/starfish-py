@@ -193,7 +193,7 @@ class Ocean():
         ## To be implemented
         return []
 
-    def load_account(self, address, password=None, keyfile=None):
+    def load_account(self, address, password=None, keyfile=None, agent_adapter=None):
         """
         Get an account object based on it's address, password and keyfile.
         This returns the account object, of the local account.
@@ -202,13 +202,14 @@ class Ocean():
         :type address: str, list or dict
         :param str password: password to access the keyfile for this account
         :param str keyfile: JSON filename of the account key file.
+        :param agent_adapter: Optional adapter class to use for this account object. Usually it's the :class:`SquidAdapter`
 
         :return: return the :class:`Account` object.
         :type: :class:`Account` or None
 
         >>> account = ocean.load_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e', 'password', 'key_file_test.json')
         """
-        account = Account(self, address, password, keyfile)
+        account = Account(self, address, password, keyfile, agent_adapter)
         return account
 
     @property

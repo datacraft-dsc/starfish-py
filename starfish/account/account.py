@@ -31,11 +31,15 @@ class Account():
 
     """
 
-    def __init__(self, ocean, address, password=None, keyfile=None):
+    def __init__(self, ocean, address, password=None, keyfile=None, agent_adapter=None):
         """init a standard ocean agent"""
         self._ocean = ocean
         self._address = None
         self._password = None
+        self._agent_adapter = agent_adapter
+        if self._agent_adapter is None:
+            self._agent_adapter = self._ocean.get_squid_agent_adapter()
+
 
         if isinstance(address, dict):
             self._address = address.get('address')
@@ -68,9 +72,9 @@ class Account():
         >>> account.request_tokens(100)
         100
         """
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            return adapter.request_tokens(amount, self._squid_account)
+            return adapter.request_tokens(amount, self.agent_adapter_account)
         return 0
 
     def approve_tokens(self, spender_address, amount):
@@ -81,7 +85,7 @@ class Account():
         :param address spender_address: The address of spender
         :return: boolean
         """
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
             amount = Web3.toWei(amount, 'ether')
             return adapter.approve_tokens(spender_address, amount, self)
@@ -105,9 +109,9 @@ class Account():
         if isinstance(to_account, Account):
             to_address = to_account.address
 
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            return adapter.transfer_ether(self._squid_account, to_address, amount_wei)
+            return adapter.transfer_ether(self.agent_adapter_account, to_address, amount_wei)
         return 0
 
     def transfer_token(self, to_account, amount_token):
@@ -128,9 +132,9 @@ class Account():
         if isinstance(to_account, Account):
             to_address = to_account.address
 
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            return adapter.transfer_tokens(self._squid_account, to_address, amount_vodka)
+            return adapter.transfer_tokens(self.agent_adapter_account, to_address, amount_vodka)
         return 0
 
     def is_address_equal(self, address):
@@ -168,21 +172,6 @@ class Account():
 
         """
         return not self._password is None
-
-    @property
-    def _squid_account(self):
-        """
-
-        Return the squid account object used for squid services, curretly only hosted accounts can be used
-        :return: The squid account object
-        :type: object
-
-        """
-
-        adapter = self._ocean.get_squid_agent_adapter()
-        if adapter:
-            return adapter.get_account(self.as_checksum_address, self._password, self._keyfile)
-        return None
 
     @property
     def address(self):
@@ -273,13 +262,11 @@ class Account():
         101
 
         """
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            squid_account = self._squid_account
-            if squid_account:
-                balance = adapter.get_account_balance(squid_account)
-                if balance:
-                    return Web3.fromWei(balance.ocn, 'ether')
+            balance = adapter.get_account_balance(self.agent_adapter_account)
+            if balance:
+                return Web3.fromWei(balance.ocn, 'ether')
         return 0
 
     @property
@@ -295,13 +282,11 @@ class Account():
         101
 
         """
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            squid_account = self._squid_account
-            if squid_account:
-                balance = adapter.get_account_balance(squid_account)
-                if balance:
-                    return balance.ocn
+            balance = adapter.get_account_balance(self.agent_adapter_account)
+            if balance:
+                return balance.ocn
         return 0
 
     @property
@@ -317,14 +302,33 @@ class Account():
         1000000001867769600000000000
 
         """
-        adapter = self._ocean.get_squid_agent_adapter()
+        adapter = self.agent_adapter
         if adapter:
-            squid_account = self._squid_account
-            if squid_account:
-                balance = adapter.get_account_balance(self._squid_account)
-                if balance:
-                    return Web3.fromWei(balance.eth, 'ether')
+            balance = adapter.get_account_balance(self.agent_adapter_account)
+            if balance:
+                return Web3.fromWei(balance.eth, 'ether')
         return 0
+
+    @property
+    def agent_adapter(self):
+        return self._agent_adapter
+
+    @agent_adapter.setter
+    def agent_adapter(self, agent_adapter):
+        self._agent_adapter = agent_adapter
+
+    @property
+    def agent_adapter_account(self):
+        """
+
+        Return the squid account object used for squid services, curretly only hosted accounts can be used
+        :params obj adapter: middleware agent adapter to get the actual account object for this adapter
+        :return: The squid account object
+        :type: object
+
+        """
+
+        return self._agent_adapter.get_account(self.as_checksum_address, self._password, self._keyfile)
 
     def __str__(self):
         return f'Account: {self.address}'
