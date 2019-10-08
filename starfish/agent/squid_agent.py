@@ -399,11 +399,12 @@ class SquidAgent(AgentBase):
 
         """
         adapter = self.agent_adapter
-        adapter.start_agreement_events_monitor(account, callback)
+        account.agent_adapter = adapter
+        adapter.start_agreement_events_monitor(account.agent_adapter_account, callback)
 
     def stop_agreement_events_monitor(self):
         adapter = self.agent_adapter
-        adapter.start_agreement_events_monitor()
+        adapter.stop_agreement_events_monitor()
 
     def _listing_from_ddo(self, ddo):
         """ convert a ddo to a listing that contains a BundleAsset """

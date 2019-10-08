@@ -154,7 +154,7 @@ class Ocean():
         # call the squid adapter to do the actual registration writing the ddo to the block chain
         adapter = self.get_squid_agent_adapter()
         if adapter:
-            return adapter.register_ddo(did, ddo, account)
+            return adapter.register_ddo(did, ddo, account.agent_adapter_account)
         return None
 
     def resolve_did(self, did):
