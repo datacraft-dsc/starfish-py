@@ -114,7 +114,7 @@ class SquidAgent(AgentBase):
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
         self._parity_url = kwargs.get('parity_url', self._ocean.keeper_url)
 
-    def register_asset(self, asset, listing_data, account):
+    def register_asset(self, asset, listing_data, account ):
         """
 
         Register a squid asset with the ocean network.
@@ -124,6 +124,7 @@ class SquidAgent(AgentBase):
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
+        :param dict options:
 
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class

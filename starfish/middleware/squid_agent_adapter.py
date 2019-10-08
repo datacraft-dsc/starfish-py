@@ -76,16 +76,24 @@ class SquidAgentAdapter():
         # to get past codacy static method 'register_agent'
         self._keeper = SquidKeeper.get_instance()
 
-    def register_asset(self, metadata, account):
+    def register_asset(self, metadata, account,
+            service_descriptors=None, providers=None, use_secret_store=True):
         """
 
         Register an asset with the agent storage server
 
         :param dict metadata: metadata to write to the storage server
         :param object account: squid account to register the asset
+        :param dict options: options to pass to the squid asset create function
         """
         squid_ocean = self.get_squid_ocean(account)
-        return squid_ocean.assets.create(metadata, account)
+        return squid_ocean.assets.create(
+            metadata,
+            account,
+            service_descriptors,
+            providers,
+            use_secret_store
+            )
 
     def validate_metadata(self, metadata):
         """
