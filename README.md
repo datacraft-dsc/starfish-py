@@ -1,6 +1,4 @@
-
 # starfish-py
-
 
 [![Travis (.com)](https://img.shields.io/travis/com/DEX-Company/starfish-py.svg)](https://travis-ci.com/DEX-Company/starfish-py)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/385d72f0a6314b18bedd96e808a90e46)](https://www.codacy.com/app/billbsing/starfish-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DEX-Company/starfish-py&amp;utm_campaign=Badge_Grade)
