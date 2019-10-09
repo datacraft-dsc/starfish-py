@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.5.5
+
+*   Account class uses an agent_adapter property to convert to an agent_adapter_account
+*   Minor fixes
 
 ### Release v0.5.3
 
