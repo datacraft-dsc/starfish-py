@@ -83,7 +83,7 @@ class SquidAgent(AgentBase):
         ocean = Ocean()
 
         # get your publisher account
-        account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        account = ocean.load_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
 
         #create the SquidAgent
         my_config = {
@@ -114,7 +114,7 @@ class SquidAgent(AgentBase):
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
         self._parity_url = kwargs.get('parity_url', self._ocean.keeper_url)
 
-    def register_asset(self, asset, listing_data, account):
+    def register_asset(self, asset, listing_data, account ):
         """
 
         Register a squid asset with the ocean network.
@@ -124,6 +124,7 @@ class SquidAgent(AgentBase):
         :param dict listing_data: data that is required for listing a registered asset
         :param account: Ocean account to use to register this asset.
         :type account: :class:`.Account` object to use for registration.
+        :param dict options:
 
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
@@ -156,10 +157,11 @@ class SquidAgent(AgentBase):
         if not SquidAgent.is_supported_asset(asset):
             raise TypeError('This agent only supports a DataAsset, RemoteDataAsset or BundleAsset')
 
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
         metadata = SquidAgent._convert_listing_asset_to_metadata(asset, listing_data)
 
-        ddo = adapter.register_asset(metadata, account._squid_account)
+        ddo = adapter.register_asset(metadata, account.agent_adapter_account)
 
         listing = None
         if ddo:
@@ -187,7 +189,7 @@ class SquidAgent(AgentBase):
         if not isinstance(asset.metadata, dict):
             raise ValueError('Metadat must be a dict')
 
-#        adapter = self.get_adapter
+#        adapter = self.agent_adapter
 #        return adapter.validate_metadata(asset.metadata)
         return True
 
@@ -204,7 +206,7 @@ class SquidAgent(AgentBase):
             aquarius or the DID of the asset is not on the network ( Block chain )
         """
         listing = None
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
 
         try:
             ddo = adapter.read_asset(listing_id)
@@ -237,7 +239,7 @@ class SquidAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
         if isinstance(text, str) or isinstance(text, dict):
             ddo_list = adapter.search_assets(text, sort, offset, page)
         else:
@@ -264,7 +266,8 @@ class SquidAgent(AgentBase):
 
         """
         purchase = None
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
 
         try:
             if 'price' in listing.data:
@@ -273,7 +276,7 @@ class SquidAgent(AgentBase):
                 if account_balance < asset_price:
                     raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} which is not enougth to purchase the asset at a price of {asset_price}')
 
-            service_agreement_id = adapter.purchase_asset(listing.ddo, account._squid_account)
+            service_agreement_id = adapter.purchase_asset(listing.ddo, account.agent_adapter_account)
         except OceanDIDNotFound as e:
             raise StarfishAssetNotFound(e)
 
@@ -297,14 +300,14 @@ class SquidAgent(AgentBase):
         :type: boolean
         """
 
-        adapter = self.get_adapter
-
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
         if purchase_id:
-            return adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id)
+            return adapter.is_access_granted_for_asset(asset.did, account.agent_adapter_account, purchase_id)
         else:
             purchase_id_list = adapter.get_asset_purchase_ids(asset.did)
             for purchase_id in purchase_id_list:
-                if adapter.is_access_granted_for_asset(asset.did, account._squid_account, purchase_id):
+                if adapter.is_access_granted_for_asset(asset.did, account.agent_adapter_account, purchase_id):
                     return True
         return False
 
@@ -320,7 +323,7 @@ class SquidAgent(AgentBase):
         :type: list
 
         """
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
 
         return adapter.get_asset_purchase_ids(asset.did)
 
@@ -343,12 +346,13 @@ class SquidAgent(AgentBase):
         :raises OceanPurchaseError: if the correct events are not received
 
         """
-        adapter = self.get_adapter
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
         if not purchase_id:
             raise ValueError('Please provide a valid purhase id')
 
         try:
-            adapter.purchase_wait_for_completion(asset.did, account._squid_account, purchase_id, timeoutSeconds)
+            adapter.purchase_wait_for_completion(asset.did, account.agent_adapter_account, purchase_id, timeoutSeconds)
         except SquidAgentAdapterPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
@@ -374,8 +378,9 @@ class SquidAgent(AgentBase):
 
         """
         asset = None
-        adapter = self.get_adapter
-        file_list = adapter.consume_asset(listing.ddo, account._squid_account, purchase_id)
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
+        file_list = adapter.consume_asset(listing.ddo, account.agent_adapter_account, purchase_id)
         if file_list:
             asset = BundleAsset.create('SquidAssetBundle', did=listing.ddo.did)
             for index, file_item in enumerate(file_list):
@@ -394,12 +399,13 @@ class SquidAgent(AgentBase):
         :type account: :class:`.Account`
 
         """
-        adapter = self.get_adapter
-        adapter.start_agreement_events_monitor(account, callback)
+        adapter = self.agent_adapter
+        account.agent_adapter = adapter
+        adapter.start_agreement_events_monitor(account.agent_adapter_account, callback)
 
     def stop_agreement_events_monitor(self):
-        adapter = self.get_adapter
-        adapter.start_agreement_events_monitor()
+        adapter = self.agent_adapter
+        adapter.stop_agreement_events_monitor()
 
     def _listing_from_ddo(self, ddo):
         """ convert a ddo to a listing that contains a BundleAsset """
@@ -549,7 +555,7 @@ class SquidAgent(AgentBase):
 
 
     @property
-    def get_adapter(self):
+    def agent_adapter(self):
         """
 
         Return an instance of the squid ageent adapter, for access to the squid library layer

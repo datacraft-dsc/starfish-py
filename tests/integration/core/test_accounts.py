@@ -25,7 +25,7 @@ def test_account_load(ocean, config):
 def test_account_get_squid_account(ocean, config):
     account = ocean.load_account(config.publisher_account['address'], config.publisher_account['password'], config.publisher_account['keyfile'])
     assert(account)
-    squid_account = account._squid_account
+    squid_account = account.agent_adapter_account
     assert(squid_account)
 
 def test_account_get_balance(ocean, config):

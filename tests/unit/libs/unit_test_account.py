@@ -12,6 +12,7 @@ class UnitTestAccount():
             self.test_keyfile = keyfile
         self.test_ether = 1 + secrets.randbelow(100)
         self.test_tokens = 5 + secrets.randbelow(100)
+        self._agent_adapter = None
 
     @property
     def as_tuple(self):
@@ -28,3 +29,12 @@ class UnitTestAccount():
     @property
     def address(self):
         return self.test_address
+
+    @property
+    def agent_adapter(self):
+        return self._agent_adapter
+
+    @agent_adapter.setter
+    def agent_adapter(self, agent_adapter):
+        self._agent_adapter = agent_adapter
+

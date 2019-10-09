@@ -44,11 +44,12 @@ def test_init(ocean):
 
     agent = SquidAgent(ocean, TEST_INIT_PARMS)
     assert(agent)
-    assert isinstance(agent.get_adapter, MockSquidAgentAdapter)
-    assert(agent.get_adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
-    assert(agent.get_adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
-    assert(agent.get_adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
-    assert(agent.get_adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
+    assert isinstance(agent.agent_adapter, MockSquidAgentAdapter)
+    adapter = agent.agent_adapter
+    assert(adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
+    assert(adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
+    assert(adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
+    assert(adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
 
     agent = SquidAgent(ocean,
         aquarius_url = TEST_INIT_PARMS['aquarius_url'],
@@ -57,10 +58,12 @@ def test_init(ocean):
         storage_path = TEST_INIT_PARMS['storage_path']
     )
     assert(agent)
-    assert(agent.get_adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
-    assert(agent.get_adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
-    assert(agent.get_adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
-    assert(agent.get_adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
+    adapter = agent.agent_adapter
+    assert(adapter)
+    assert(adapter.options['aquarius_url'] == TEST_INIT_PARMS['aquarius_url'])
+    assert(adapter.options['brizo_url'] == TEST_INIT_PARMS['brizo_url'])
+    assert(adapter.options['secret_store_url'] == TEST_INIT_PARMS['secret_store_url'])
+    assert(adapter.options['storage_path'] == TEST_INIT_PARMS['storage_path'])
 
 def test_register_asset(ocean, resources, config):
     listing, agent, asset = _register_asset(ocean, resources, config)

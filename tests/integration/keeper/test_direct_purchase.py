@@ -8,7 +8,6 @@ REFERENCE_1 = 4
 REFERENCE_2 = 5
 
 def test_direct_purchase(ocean, config, squid_agent, publisher_account, purchaser_account):
-    adapter = squid_agent.get_adapter
     purchaser_contract = DirectPurchase.get_instance()
 
     purchaser_account.request_tokens(TOKEN_AMOUNT_TO_TRANSFER)

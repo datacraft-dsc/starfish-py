@@ -76,16 +76,24 @@ class SquidAgentAdapter():
         # to get past codacy static method 'register_agent'
         self._keeper = SquidKeeper.get_instance()
 
-    def register_asset(self, metadata, account):
+    def register_asset(self, metadata, account,
+            service_descriptors=None, providers=None, use_secret_store=True):
         """
 
         Register an asset with the agent storage server
 
         :param dict metadata: metadata to write to the storage server
         :param object account: squid account to register the asset
+        :param dict options: options to pass to the squid asset create function
         """
         squid_ocean = self.get_squid_ocean(account)
-        return squid_ocean.assets.create(metadata, account)
+        return squid_ocean.assets.create(
+            metadata,
+            account,
+            service_descriptors,
+            providers,
+            use_secret_store
+            )
 
     def validate_metadata(self, metadata):
         """
@@ -414,12 +422,15 @@ class SquidAgentAdapter():
         return self._keeper.token.token_approve(spender_address, price, from_account)
 
     def register_ddo(self, did, ddo_text, account):
-        """register a ddo object on the block chain for this agent"""
+        """register a ddo object on the block chain for this agent
+
+        The account must be an agent_adapter acount
+        """
         # register/update the did->ddo to the block chain
         squid_ocean = self.get_squid_ocean()
         checksum = Web3.toBytes(Web3.sha3(ddo_text.encode()))
         did_bytes = did_to_id_bytes(did)
-        receipt = squid_ocean._keeper.did_registry.register(did_bytes, checksum, ddo_text, account._squid_account)
+        receipt = squid_ocean._keeper.did_registry.register(did_bytes, checksum, ddo_text, account)
 
         # transaction = self._squid_ocean._keeper.did_registry._register_attribute(did_id, checksum, ddo_text, account, [])
         # receipt = self._squid_ocean._keeper.did_registry.get_tx_receipt(transaction)
@@ -435,20 +446,24 @@ class SquidAgentAdapter():
         return None
 
     def start_agreement_events_monitor(self, account, callback=None):
-        """ called by the publisher to watch payment request events for the published assets """
+        """ called by the publisher to watch payment request events for the published assets
+        The account must be an agent_adapter account
+        """
         squid_ocean = self.get_squid_ocean(account)
 
         events_manager = StarfishEventsManager.get_instance(
-            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+            squid_ocean._keeper, squid_ocean._config.storage_path, account)
 
         events_manager.start_agreement_events_monitor(callback)
 
-    def stop_agreement_events_monitor(self):
-        """ called by the publisher to watch payment request events for the published assets """
+    def stop_agreement_events_monitor(self, account=None):
+        """ called by the publisher to watch payment request events for the published assets
+        The account must be an agent_adapter account
+        """
         squid_ocean = self.get_squid_ocean(account)
 
         events_manager = StarfishEventsManager.get_instance(
-            squid_ocean._keeper, squid_ocean._config.storage_path, account._squid_account)
+            squid_ocean._keeper, squid_ocean._config.storage_path, account)
 
         events_manager.stop_agreement_events_monitor()
 
