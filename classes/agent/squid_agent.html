@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Squid Agent class &mdash; starfish-py 0.5.4 documentation</title>
+  <title>Squid Agent class &mdash; starfish-py 0.5.5 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.5
               </div>
             
           
@@ -200,7 +200,7 @@
 <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
 
 <span class="c1"># get your publisher account</span>
-<span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">)</span>
+<span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">)</span>
 
 <span class="c1">#create the SquidAgent</span>
 <span class="n">my_config</span> <span class="o">=</span> <span class="p">{</span>
@@ -217,6 +217,13 @@
 <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="method">
+<dt id="starfish.agent.SquidAgent.agent_adapter">
+<em class="property">property </em><code class="sig-name descname">agent_adapter</code><a class="headerlink" href="#starfish.agent.SquidAgent.agent_adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an instance of the squid ageent adapter, for access to the squid library layer
+:return: squid Agent Adapter object</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="starfish.agent.SquidAgent.consume_asset">
 <code class="sig-name descname">consume_asset</code><span class="sig-paren">(</span><em class="sig-param">listing</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SquidAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
@@ -244,13 +251,6 @@ provider will be made at this point.</p>
 <dt id="starfish.agent.SquidAgent.create_data_asset_from_file_item">
 <em class="property">static </em><code class="sig-name descname">create_data_asset_from_file_item</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">file_item</em>, <em class="sig-param">did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.SquidAgent.create_data_asset_from_file_item" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="starfish.agent.SquidAgent.get_adapter">
-<em class="property">property </em><code class="sig-name descname">get_adapter</code><a class="headerlink" href="#starfish.agent.SquidAgent.get_adapter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an instance of the squid ageent adapter, for access to the squid library layer
-:return: squid Agent Adapter object</p>
-</dd></dl>
 
 <dl class="method">
 <dt id="starfish.agent.SquidAgent.get_asset_purchase_ids">
@@ -417,6 +417,7 @@ aquarius or the DID of the asset is not on the network ( Block chain )</p>
 <li><p><strong>asset</strong> (<a class="reference internal" href="../asset/data_asset.html#starfish.asset.DataAsset" title="starfish.asset.DataAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataAsset</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteAsset</span></code> or <a class="reference internal" href="../asset/bundle_asset.html#starfish.asset.BundleAsset" title="starfish.asset.BundleAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">BundleAsset</span></code></a> object to register) – the asset to register, at the moment only a Asset can be used.</p></li>
 <li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – data that is required for listing a registered asset</p></li>
 <li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to use to register this asset.</p></li>
+<li><p><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

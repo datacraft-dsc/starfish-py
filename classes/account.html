@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account class &mdash; starfish-py 0.5.4 documentation</title>
+  <title>Account class &mdash; starfish-py 0.5.5 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.5
               </div>
             
           
@@ -166,7 +166,7 @@
 <h1>Account class<a class="headerlink" href="#account-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.account.Account">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em>, <em class="sig-param">agent_adapter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Account class, adds functionality for an account to be used by the Ocean network.</p>
 <p>At the moment the Account object is created by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code> class.</p>
@@ -204,6 +204,20 @@ If dict then the dict can be the following format:</p>
 <span class="go">0x00bd138abd70e2f00903268f3db08f2d25677c9e</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.agent_adapter">
+<em class="property">property </em><code class="sig-name descname">agent_adapter</code><a class="headerlink" href="#starfish.account.Account.agent_adapter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.agent_adapter_account">
+<em class="property">property </em><code class="sig-name descname">agent_adapter_account</code><a class="headerlink" href="#starfish.account.Account.agent_adapter_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the squid account object used for squid services, curretly only hosted accounts can be used
+:params obj adapter: middleware agent adapter to get the actual account object for this adapter
+:return: The squid account object
+:type: object</p>
 </dd></dl>
 
 <dl class="method">

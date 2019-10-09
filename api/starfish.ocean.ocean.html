@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>starfish.ocean.ocean module &mdash; starfish-py 0.5.4 documentation</title>
+  <title>starfish.ocean.ocean module &mdash; starfish-py 0.5.5 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.5
               </div>
             
           
@@ -235,7 +235,7 @@ using the provided keeper url and contracts path</p>
 
 <dl class="method">
 <dt id="starfish.ocean.ocean.Ocean.load_account">
-<code class="sig-name descname">load_account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.ocean.ocean.Ocean.load_account" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em>, <em class="sig-param">agent_adapter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.ocean.ocean.Ocean.load_account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get an account object based on it’s address, password and keyfile.
 This returns the account object, of the local account.</p>
 <dl class="field-list simple">
@@ -244,6 +244,7 @@ This returns the account object, of the local account.</p>
 <li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – address of the account, if dict then use the fields, <cite>address</cite>, <cite>password</cite> and ‘keyfile’.</p></li>
 <li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – password to access the keyfile for this account</p></li>
 <li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – JSON filename of the account key file.</p></li>
+<li><p><strong>agent_adapter</strong> – Optional adapter class to use for this account object. Usually it’s the <code class="xref py py-class docutils literal notranslate"><span class="pre">SquidAdapter</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
