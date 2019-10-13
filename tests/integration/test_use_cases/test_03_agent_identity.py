@@ -15,7 +15,7 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 def find_remote_service(service_type):
-    for service_name, service in SurferAgent.services.items():
+    for service_name, service in RemoteAgent.services.items():
         if service['type'] == service_type:
             return service
     return None

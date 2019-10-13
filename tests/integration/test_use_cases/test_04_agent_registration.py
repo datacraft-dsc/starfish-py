@@ -28,7 +28,7 @@ def test_04_agent_register_and_resolve(ocean, config, publisher_account):
     found_ddo = StarfishDDO(json_text=ocean.resolve_did(did))
     assert(found_ddo.as_text() == ddo.as_text())
 
-    resolved_agent = SurferAgent(ocean, did=did)
+    resolved_agent = RemoteAgent(ocean, did=did)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text() == ddo.as_text())

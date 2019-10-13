@@ -42,7 +42,7 @@ def remote_agent(ocean):
         ddo_options = {
             'invoke': f'{integrationTestConfig.koi_url}/api/v1',
         }
-    ddo = SurferAgent.generate_ddo(integrationTestConfig.remote_agent_url, ddo_options)
+    ddo = RemoteAgent.generate_ddo(integrationTestConfig.remote_agent_url, ddo_options)
     options = {
         'url': integrationTestConfig.remote_agent_url,
         'username': integrationTestConfig.remote_agent_username,

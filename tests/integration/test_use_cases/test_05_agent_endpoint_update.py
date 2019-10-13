@@ -20,9 +20,9 @@ def test_05_agent_endpoint_update(ocean, config, remote_agent):
     assert(endpoint)
     assert(re.search('meta/data', endpoint))
 
-    ddo = SurferAgent.generate_ddo(config.remote_agent_url)
+    ddo = RemoteAgent.generate_ddo(config.remote_agent_url)
     ddo.set_service_endpoint('Ocean.Meta.v1', f'{config.remote_agent_url}{new_endpoint_uri}')
-    new_agent = SurferAgent(ocean, ddo=ddo)
+    new_agent = RemoteAgent(ocean, ddo=ddo)
     new_endpoint = new_agent.get_endpoint('metadata')
     assert(new_endpoint)
     assert(re.search(new_endpoint_uri, new_endpoint))
