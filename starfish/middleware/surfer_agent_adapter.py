@@ -2,11 +2,8 @@
     SurferAgentAdapter - Adapter to access the Surfer Services
 """
 import io
-import json
 import requests
 from web3 import Web3
-
-from ocean_utils.did_resolver.did_resolver import DIDResolver
 
 from starfish import logger
 

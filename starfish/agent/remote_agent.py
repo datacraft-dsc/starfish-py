@@ -26,11 +26,6 @@ from starfish.listing import Listing
 from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 
-
-
-
-from ocean_utils.ddo.ddo import DDO
-
 class RemoteAgent(AgentBase):
     """
 

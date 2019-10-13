@@ -10,10 +10,8 @@ import json
 
 from ocean_utils.did import id_to_did, did_to_id
 
-from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.listing import Listing
-from starfish.asset import DataAsset
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
 

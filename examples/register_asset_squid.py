@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-import json
-import pathlib
-import logging
-
 from starfish import Ocean
 from starfish.asset import RemoteDataAsset
 from starfish.agent import SquidAgent
@@ -37,11 +33,9 @@ NILE_CONFIG = {
         'storage_path': 'squid_py.db',
     },
     'account': ('0x413c9ba0a05b8a600899b41b0c62dd661e689354', 'ocean_secret'),
-
 }
 
 CONFIG = LOCAL_CONFIG
-
 
 def main():
 
