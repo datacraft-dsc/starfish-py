@@ -9,21 +9,21 @@
 
 import re
 
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
-def test_06_agent_endpoint_query(ocean, surfer_agent):
+def test_06_agent_endpoint_query(ocean, remote_agent):
 
-    endpoint = surfer_agent.get_endpoint('metadata')
+    endpoint = remote_agent.get_endpoint('metadata')
     assert(re.search('/meta/data', endpoint))
-    endpoint = surfer_agent.get_endpoint('storage')
+    endpoint = remote_agent.get_endpoint('storage')
     assert(re.search('/assets', endpoint))
-    endpoint = surfer_agent.get_endpoint('invoke')
+    endpoint = remote_agent.get_endpoint('invoke')
     assert(re.search('/api/v1$', endpoint))
-    endpoint = surfer_agent.get_endpoint('market')
+    endpoint = remote_agent.get_endpoint('market')
     assert(re.search('/market$', endpoint))
-    endpoint = surfer_agent.get_endpoint('trust')
+    endpoint = remote_agent.get_endpoint('trust')
     assert(re.search('/trust$', endpoint))
-    endpoint = surfer_agent.get_endpoint('auth')
+    endpoint = remote_agent.get_endpoint('auth')
     assert(re.search('/auth$', endpoint))

@@ -16,7 +16,7 @@ from starfish.asset import (
     RemoteDataAsset,
 )
 
-def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_agent, publisher_account):
+def test_pd_case_file_transfer(ocean, config, resources, remote_agent, squid_agent, publisher_account):
 
     # for the use case , we need to assign a unique id to the asset
     # so we know that it's from the publisher
@@ -24,7 +24,7 @@ def test_pd_case_file_transfer(ocean, config, resources, surfer_agent, squid_age
     unique_pd_case_id = secrets.token_hex(32)
     dummy_did = secrets.token_hex(32)
     dummy_asset_id = secrets.token_hex(32)
-    # create a pretend dummy url based on the dummy surfer DID & dummy asset_id saved in surfer
+    # create a pretend dummy url based on the dummy remote agent DID & dummy asset_id saved in remote agent
     dummy_url = 'op:did:{dummy_did}/{dummy_asset_id}'
 
     # now create a checksum so that we know this actually comes from the correct publisher

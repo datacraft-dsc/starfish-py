@@ -4,7 +4,7 @@ import secrets
 
 from starfish import Ocean
 from starfish.account import Account
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 
 def test_ocean_init(config):
     ocean = Ocean(
@@ -45,7 +45,7 @@ def test_register_update_agent_service(ocean, config):
 
     account = ocean.load_account(config.accounts[0].as_dict)
 
-    ddo = SurferAgent.generate_ddo(config.surfer_url)
+    ddo = RemoteAgent.generate_ddo(config.remote_agent_url)
     with pytest.raises(TypeError):
         ocean.register_did(ddo.did, ddo.as_text, None)
 

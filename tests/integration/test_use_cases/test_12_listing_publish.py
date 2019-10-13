@@ -11,10 +11,10 @@ import secrets
 from starfish.asset import DataAsset
 
 
-def test_12_listing_publish(resources, surfer_agent):
+def test_12_listing_publish(resources, remote_agent):
     test_data = secrets.token_hex(1024)
     asset = DataAsset.create('TestAsset', test_data)
-    listing = surfer_agent.register_asset(asset, resources.listing_data)
+    listing = remote_agent.register_asset(asset, resources.listing_data)
     assert(listing)
     assert(listing.asset)
 
@@ -23,8 +23,8 @@ def test_12_listing_publish(resources, surfer_agent):
     listing.set_published(True)
     assert(listing.is_published)
 
-    assert(surfer_agent.update_listing(listing))
+    assert(remote_agent.update_listing(listing))
 
-    read_listing = surfer_agent.get_listing(listing.listing_id)
+    read_listing = remote_agent.get_listing(listing.listing_id)
     assert(read_listing)
     assert(read_listing.is_published)

@@ -12,7 +12,7 @@
 import secrets
 import json
 from starfish import Ocean
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 from starfish.utils.did import did_generate_random
 
 
@@ -20,7 +20,7 @@ def test_01_connect_to_ocean(ocean, config):
     assert(ocean)
 
 
-def test_01_connect_to_surfer(ocean, config, publisher_account):
+def test_01_connect_to_remote_agent(ocean, config, publisher_account):
 
     did = did_generate_random()
     assert(did)
@@ -35,7 +35,7 @@ def test_01_connect_to_surfer(ocean, config, publisher_account):
     found_ddo = json.loads(resolve_ddo)
     assert(found_ddo == ddo)
 
-def test_01_connect_to_multiple_surfer(ocean, config, publisher_account):
+def test_01_connect_to_multiple_remote_agent(ocean, config, publisher_account):
 
     for index in range(0, 2):
         did = did_generate_random()

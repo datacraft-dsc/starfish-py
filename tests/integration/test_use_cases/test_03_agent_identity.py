@@ -9,19 +9,19 @@
 """
 
 import secrets
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 from starfish.utils.did import did_parse
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
-def find_surfer_service(service_type):
+def find_remote_service(service_type):
     for service_name, service in SurferAgent.services.items():
         if service['type'] == service_type:
             return service
     return None
 
-def test_03_agent_did(surfer_agent):
-    did = surfer_agent.did
+def test_03_agent_did(remote_agent):
+    did = remote_agent.did
     assert(did)
     data = did_parse(did)
     assert(data)
@@ -30,22 +30,22 @@ def test_03_agent_did(surfer_agent):
     assert(data['path'] is None)
     assert(data['fragment'] is None)
 
-def test_03_agent_ddo(surfer_agent):
-    ddo = surfer_agent.ddo
+def test_03_agent_ddo(remote_agent):
+    ddo = remote_agent.ddo
     assert(ddo)
     assert(isinstance(ddo, StarfishDDO))
     for service in ddo.services:
-        supported_service = find_surfer_service(service.type)
+        supported_service = find_remote_service(service.type)
         assert(supported_service)
-        endpoint = surfer_agent.get_endpoint(service.type)
+        endpoint = remote_agent.get_endpoint(service.type)
         assert(endpoint)
         assert(endpoint == service.endpoints.service)
 
 
-def test_03_agent_get_endpoints(surfer_agent):
-    assert(surfer_agent.get_endpoint('metadata'))
-    assert(surfer_agent.get_endpoint('storage'))
-    assert(surfer_agent.get_endpoint('invoke'))
-    assert(surfer_agent.get_endpoint('market'))
-    assert(surfer_agent.get_endpoint('trust'))
-    assert(surfer_agent.get_endpoint('auth'))
+def test_03_agent_get_endpoints(remote_agent):
+    assert(remote_agent.get_endpoint('metadata'))
+    assert(remote_agent.get_endpoint('storage'))
+    assert(remote_agent.get_endpoint('invoke'))
+    assert(remote_agent.get_endpoint('market'))
+    assert(remote_agent.get_endpoint('trust'))
+    assert(remote_agent.get_endpoint('auth'))

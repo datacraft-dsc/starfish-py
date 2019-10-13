@@ -11,9 +11,9 @@ import secrets
 from starfish.asset import DataAsset
 
 
-def test_13_asset_listing_search(resources, surfer_agent):
+def test_13_asset_listing_search(resources, remote_agent):
     test_data = secrets.token_hex(1024)
     asset = DataAsset.create('TestAsset', test_data)
-    listing = surfer_agent.register_asset(asset, resources.listing_data)
+    listing = remote_agent.register_asset(asset, resources.listing_data)
     assert(listing)
     assert(listing.asset)

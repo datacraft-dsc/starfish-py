@@ -18,6 +18,5 @@ from starfish.asset import (
 TEST_ASSET_COUNT = 4
 
 
-def test_16_asset_bundle_register(ocean, config, surfer_agent, metadata):
+def test_16_asset_bundle_register(ocean, config, remote_agent, metadata):
     pass
-

@@ -9,7 +9,7 @@ from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
 from starfish import Ocean
 from starfish.agent import (
-    SurferAgent,
+    RemoteAgent,
     SquidAgent,
 )
 
@@ -34,7 +34,7 @@ def config():
     return integrationTestConfig
 
 @pytest.fixture(scope="module")
-def surfer_agent(ocean):
+def remote_agent(ocean):
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
 
     ddo_options = None
@@ -42,13 +42,13 @@ def surfer_agent(ocean):
         ddo_options = {
             'invoke': f'{integrationTestConfig.koi_url}/api/v1',
         }
-    ddo = SurferAgent.generate_ddo(integrationTestConfig.surfer_url, ddo_options)
+    ddo = SurferAgent.generate_ddo(integrationTestConfig.remote_agent_url, ddo_options)
     options = {
-        'url': integrationTestConfig.surfer_url,
-        'username': integrationTestConfig.surfer_username,
-        'password': integrationTestConfig.surfer_password,
+        'url': integrationTestConfig.remote_agent_url,
+        'username': integrationTestConfig.remote_agent_username,
+        'password': integrationTestConfig.remote_agent_password,
     }
-    return SurferAgent(ocean, did=ddo.did, ddo=ddo, options=options)
+    return RemoteAgent(ocean, did=ddo.did, ddo=ddo, options=options)
 
 @pytest.fixture(scope="module")
 def squid_agent(ocean):
@@ -68,4 +68,3 @@ def purchaser_account(ocean, config):
 @pytest.fixture(scope='module')
 def agent_account(ocean, config):
     return ocean.load_account(config.agent_account['address'], config.agent_account['password'], config.agent_account['keyfile'])
-
