@@ -74,6 +74,7 @@ class SurferAgentAdapter():
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
+                'hash': SurferAgentAdapter.calc_hash_from_text(metadata)                
             }
         return result
 
@@ -195,7 +196,8 @@ class SurferAgentAdapter():
         if response and response.status_code == requests.codes.ok:
             result = {
                 'asset_id': asset_id,
-                'metadata_text': response.content
+                'metadata_text': response.content,
+                'hash': SurferAgentAdapter.calc_hash_from_text(response.context)
             }
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
@@ -326,7 +328,7 @@ class SurferAgentAdapter():
         a 64 char hex string, which is the asset id
         :return 64 char hex string, with no leading '0x'
         """
-        return Web3.toHex(Web3.sha3(metadata_text.encode()))[2:]
+        return SurferAgentAdapter.calc_hash_from_text(metdata_text)
 
     @staticmethod
     def set_http_client(http_client):
@@ -388,3 +390,17 @@ class SurferAgentAdapter():
                 'url': f'{url}{service_uri}',
             })
         return result
+
+    @staticmethod
+    def calc_hash_from_text(text):
+        """
+
+        Return the hash as a string of the provided text
+
+        """
+
+        data = text
+        if is_instance(text, str):
+            data = text.encode()
+
+        return Web3.toHex(Web3.sha3(data))[2:]
