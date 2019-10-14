@@ -74,7 +74,7 @@ class SurferAgentAdapter():
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
-                'hash': SurferAgentAdapter.calc_hash_from_text(metadata)                
+                'hash': SurferAgentAdapter.calc_hash_from_text(metadata)
             }
         return result
 
@@ -400,7 +400,7 @@ class SurferAgentAdapter():
         """
 
         data = text
-        if is_instance(text, str):
+        if isinstance(text, str):
             data = text.encode()
 
         return Web3.toHex(Web3.sha3(data))[2:]

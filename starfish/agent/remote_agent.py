@@ -133,7 +133,7 @@ class RemoteAgent(AgentBase):
 
         listing = None
 
-        register_data = adapter.register_asset(asset.metadata)
+        register_data = adapter.register_asset(asset.metadata_text)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'

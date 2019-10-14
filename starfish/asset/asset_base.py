@@ -4,14 +4,14 @@
 
 """
 
-
+import json
 from abc import ABC
 from starfish.utils.did import did_to_asset_id
 
 class AssetBase(ABC):
     """
 
-    :param dict metadata: metadata for the asset
+    :param str metadata_text: metadata text for the asset
     :param did: Octional did of the asset, if the asset is new then the did will be None.
     :type did: None or str
 
@@ -20,8 +20,14 @@ class AssetBase(ABC):
         """
         init an asset class
         """
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
+        if isinstance(metadata, str):
+            self._metadata = json.loads(metadata)
+            self._metadata_text = metadata
+        elif isinstance(metadata, dict):
+            self._metadata_text = json.dumps(metadata)
+            self._metadata = metadata
+        else:
+            raise ValueError('metadata must be a dict or string')
 
         if not 'name' in metadata:
             raise ValueError('metadata must contain a metadata name')
@@ -29,7 +35,6 @@ class AssetBase(ABC):
         if not 'type' in metadata:
             raise ValueError('metadata must contain a metadata type')
 
-        self._metadata = metadata
         self._did = did
         super().__init__()
 
@@ -72,6 +77,14 @@ class AssetBase(ABC):
         :type: dict
         """
         return self._metadata
+
+    @property
+    def metadata_text(self):
+        """
+        :return: The metadata for this asset
+        :type: dict
+        """
+        return self._metadata_text
 
     @property
     def asset_id(self):

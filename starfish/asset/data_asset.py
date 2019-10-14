@@ -20,9 +20,6 @@ class DataAsset(AssetBase):
 
     """
     def __init__(self, metadata, did=None, data=None):
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
-
         if data:
             if not (isinstance(data, str) or isinstance(data, bytes)):
                 raise ValueError('data can only be str or bytes')
