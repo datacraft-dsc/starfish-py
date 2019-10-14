@@ -136,7 +136,7 @@ class Ocean():
 
         For example::
 
-            # register the public surfer on the block chain
+            # register the public remote agent on the block chain
             receipt = ocean.register_did(did, ddo.as_text(), register_account)
 
         TODO: Need to split this up into two calls, one to add, other to update

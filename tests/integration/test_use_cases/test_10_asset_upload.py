@@ -11,11 +11,11 @@ import secrets
 from starfish.asset import DataAsset
 
 
-def test_10_asset_upload(resources, surfer_agent):
+def test_10_asset_upload(resources, remote_agent):
     test_data = secrets.token_hex(1024)
     asset = DataAsset.create('TestAsset', test_data)
-    listing = surfer_agent.register_asset(asset, resources.listing_data)
+    listing = remote_agent.register_asset(asset, resources.listing_data)
     assert(listing)
     assert(listing.asset)
 
-    assert(surfer_agent.upload_asset(listing.asset))
+    assert(remote_agent.upload_asset(listing.asset))

@@ -10,6 +10,6 @@ def test_register_asset():
     main()
 
 
-def test_register_upload_asset_surfer():
-    from examples.register_upload_asset_surfer import main
+def test_register_upload_asset_remote():
+    from examples.register_upload_asset_remote_agent import main
     main()

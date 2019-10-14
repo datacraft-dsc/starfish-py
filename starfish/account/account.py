@@ -4,7 +4,6 @@ Account class to provide basic functionality for all Ocean Accounts
 
 """
 
-from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from web3 import Web3
 
 class Account():

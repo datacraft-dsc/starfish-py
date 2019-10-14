@@ -8,7 +8,7 @@ class UnitTestConfig():
     keeper_url = 'http://test-keeper-url:1234'
     contracts_path = 'test_artifacts_folder'
     gas_limit = 123456
-    surfer_url = 'http://localhost:8080'
+    remote_agent_url = 'http://localhost:8080'
     accounts = {}
     def __init__(self):
         for index in range(0, 8):

@@ -7,18 +7,18 @@
 
 """
 
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 
 def test_04_agent_register_and_resolve(ocean, config, publisher_account):
 
-    ddo = SurferAgent.generate_ddo(config.surfer_url)
+    ddo = RemoteAgent.generate_ddo(config.remote_agent_url)
     options = {
-        'url': config.surfer_url,
-        'username': config.surfer_username,
-        'password': config.surfer_password
+        'url': config.remote_agent_url,
+        'username': config.remote_agent_username,
+        'password': config.remote_agent_password
     }
 
     register_account = publisher_account
@@ -28,7 +28,7 @@ def test_04_agent_register_and_resolve(ocean, config, publisher_account):
     found_ddo = StarfishDDO(json_text=ocean.resolve_did(did))
     assert(found_ddo.as_text() == ddo.as_text())
 
-    resolved_agent = SurferAgent(ocean, did=did)
+    resolved_agent = RemoteAgent(ocean, did=did)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text() == ddo.as_text())

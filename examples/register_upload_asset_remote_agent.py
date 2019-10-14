@@ -2,7 +2,7 @@
 
 from starfish import Ocean
 from starfish.asset import DataAsset
-from starfish.agent import SurferAgent
+from starfish.agent import RemoteAgent
 
 def main():
 
@@ -15,11 +15,11 @@ def main():
     # Print the asset data
     print('my asset:', asset.data)
 
-    # Create a surfer agent to do the work.
-    surfer_url = 'http://localhost:8080'
-    surfer_ddo = SurferAgent.generate_ddo(surfer_url)
-    surfer_options = {
-        'url': surfer_url,
+    # Create a remote agent to do the work.
+    agent_url = 'http://localhost:8080'
+    agent_ddo = RemoteAgent.generate_ddo(agent_url)
+    agent_options = {
+        'url': agent_url,
         'username': 'test',
         'password':  'foobar',
     }
@@ -31,7 +31,7 @@ def main():
         'license': 'CC0: Public Domain',
         'price': '0'
     }
-    agent = SurferAgent(ocean, ddo=surfer_ddo, options=surfer_options)
+    agent = RemoteAgent(ocean, ddo=agent_ddo, options=agent_options)
 
     listing = agent.register_asset(asset, listing_data)
     print(listing.did, listing.data)

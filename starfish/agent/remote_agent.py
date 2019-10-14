@@ -26,21 +26,16 @@ from starfish.listing import Listing
 from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 
-
-
-
-from ocean_utils.ddo.ddo import DDO
-
-class SurferAgent(AgentBase):
+class RemoteAgent(AgentBase):
     """
 
-    Surfer Agent class allows to register, list, purchase and consume assets.
+    Remote Agent class allows to register, list, purchase and consume assets.
 
     :param ocean: Ocean object that is being used.
     :type ocean: :class:`.Ocean`
     :param did: Optional did of the Surfer agent
 
-    :param ddo: Optional ddo of the surfer agent, if not provided the agent
+    :param ddo: Optional ddo of the remote agent, if not provided the agent
         will automatically get the DDO from the network based on the DID.
 
     :param options: Optional options, only `authorization` is used to access the
@@ -329,7 +324,7 @@ class SurferAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        # TODO: implement search listing in surfer
+        # TODO: implement search listing in remote
         pass
 
     def purchase_asset(self, listing, account, purchase_id=None, status=None,
@@ -509,7 +504,7 @@ class SurferAgent(AgentBase):
     def did(self):
         """
 
-        Return the did for this surfer agent.
+        Return the did for this remote agent.
 
         :return: did of the registered agent
         :type: string
@@ -549,13 +544,13 @@ class SurferAgent(AgentBase):
     @staticmethod
     def generate_ddo(url, services=None):
         """
-        Generate a DDO for the surfer url. This DDO will contain the supported
-        endpoints for the surfer
+        Generate a DDO for the remote agent url. This DDO will contain the supported
+        endpoints for the remote agent
 
-        :param str url: URL of the remote surfer agent
+        :param str url: URL of the remote agent
         :param dict services: Optional dict of services urls that are not assigned to the main url.
 
-        :return: created DDO object assigned to the url of the remote surfer agent service
+        :return: created DDO object assigned to the url of the remote agent service
         :type: :class:.`DDO`
         """
 

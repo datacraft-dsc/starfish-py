@@ -7,4 +7,4 @@ Agent Classes
     agent/invoke_agent
     agent/memory_agent
     agent/squid_agent
-    agent/surfer_agent
+    agent/remote_agent

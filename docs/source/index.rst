@@ -20,7 +20,7 @@ Contents
     getting_started
     agents
     register_asset_squid
-    register_asset_surfer
+    register_asset_remote_agent
     modules/starfish
     classes/ocean
     classes/account

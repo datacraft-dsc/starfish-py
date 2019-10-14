@@ -22,7 +22,7 @@ def test_init(ocean, config):
 
 def test_request_tokens(ocean, config):
     account = ocean.load_account(config.accounts[0].as_dict)
-    amount = secrets.randbelow(100)
+    amount = secrets.randbelow(100) + 1
     assert(account.request_tokens(amount))
 
 
