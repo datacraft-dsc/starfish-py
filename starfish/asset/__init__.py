@@ -1,4 +1,5 @@
 import json
+from eth_utils import remove_0x_prefix
 
 from starfish.asset.asset_base import AssetBase
 from starfish.asset.data_asset import DataAsset
@@ -20,7 +21,6 @@ def create_asset_from_metadata_text(metadata_text, did=None):
 
     metadata = json.loads(metadata_text)
     asset_type = AssetBase.get_asset_type(metadata)
-    print('asset_type [', asset_type, ']', metadata, type(metadata))
     if asset_type == 'bundle':
         return BundleAsset(metadata, did, metadata_text=metadata_text)
     elif asset_type == 'operation':
@@ -30,3 +30,13 @@ def create_asset_from_metadata_text(metadata_text, did=None):
     else:
         raise ValueError(f'Unknown asset type {asset_type}')
     return Asset(metadata, did, metadata_text=metadata_text)
+
+
+def is_asset_hash_valid(asset_id, hash):
+    """
+    :return: true if the hash string is the same as the asset_id
+    :type: boolean
+    """
+    if asset_id or hash:
+        return remove_0x_prefix(asset_id).lower() == remove_0x_prefix(hash).lower()
+    return False
