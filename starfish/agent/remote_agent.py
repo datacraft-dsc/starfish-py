@@ -17,7 +17,8 @@ from starfish.agent import AgentBase
 from starfish.asset import (
     DataAsset,
     OperationAsset,
-    create_asset_from_metadata,
+    create_asset_from_metadata_text,
+    is_asset_hash_valid,
 )
 from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
@@ -25,6 +26,7 @@ from starfish.utils.did import did_parse
 from starfish.listing import Listing
 from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
+from starfish.exceptions import StarfishAssetInvalid
 
 class RemoteAgent(AgentBase):
     """
@@ -133,7 +135,7 @@ class RemoteAgent(AgentBase):
 
         listing = None
 
-        register_data = adapter.register_asset(asset.metadata)
+        register_data = adapter.register_asset(asset.metadata_text)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
@@ -177,7 +179,12 @@ class RemoteAgent(AgentBase):
         adapter = self._get_adapter()
         data = adapter.download_asset(url)
         store_asset = self.get_asset(asset_id)
-        asset = DataAsset(store_asset.metadata, store_asset.did, data=data)
+        asset = DataAsset(
+            store_asset.metadata,
+            store_asset.did,
+            data=data,
+            metadata_text=store_asset.metadata_text
+        )
         return asset
 
     def get_asset_store_url(self, asset_id):
@@ -201,9 +208,7 @@ class RemoteAgent(AgentBase):
             asset_id = data['assetid']
             read_metadata = adapter.read_metadata(asset_id)
             if read_metadata:
-                metadata = json.loads(read_metadata['metadata_text'])
-                did = f'{self._did}/{asset_id}'
-                asset = create_asset_from_metadata(metadata, did)
+                asset = self._create_asset_from_read(asset_id, read_metadata)
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
@@ -223,9 +228,7 @@ class RemoteAgent(AgentBase):
         clean_asset_id = remove_0x_prefix(asset_id)
         read_metadata = adapter.read_metadata(clean_asset_id)
         if read_metadata:
-            metadata = json.loads(read_metadata['metadata_text'])
-            did = f'{self._did}/{clean_asset_id}'
-            asset = create_asset_from_metadata(metadata, did)
+            asset = self._create_asset_from_read(asset_id, read_metadata)
         return asset
 
     def get_listings(self):
@@ -243,9 +246,7 @@ class RemoteAgent(AgentBase):
                 asset_id = data['assetid']
                 read_metadata = adapter.read_metadata(asset_id)
                 if read_metadata:
-                    metadata = json.loads(read_metadata['metadata_text'])
-                    did = f'{self._did}/{asset_id}'
-                    asset = DataAsset(metadata, did)
+                    asset = self._create_asset_from_read(asset_id, read_metadata)
                     listing = Listing(self, data['id'], asset, data)
                     listings.append(listing)
         return listings
@@ -578,3 +579,13 @@ class RemoteAgent(AgentBase):
                 "tags": ["string"],
                 "contentType": "string",
                 "links": [{"name": "string", "type": "download", "url": "string"}]}
+
+    def _create_asset_from_read(self, asset_id, read_metadata):
+        # check the hash of the reading asset
+        asset_id = remove_0x_prefix(asset_id)
+        if not is_asset_hash_valid(asset_id, read_metadata['hash']):
+            raise StarfishAssetInvalid(f' asset {asset_id} is not valid')
+        did = f'{self._did}/{asset_id}'
+        metadata_text = read_metadata['metadata_text']
+        asset = create_asset_from_metadata_text(metadata_text, did)
+        return asset

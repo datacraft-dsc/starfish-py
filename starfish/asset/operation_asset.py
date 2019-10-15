@@ -17,8 +17,11 @@ class OperationAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None):
-        AssetBase.__init__(self, metadata, did)
+    def __init__(self, metadata=None, did=None, metadata_text=None):
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+
+        AssetBase.__init__(self, metadata, did, metadata_text)
 
     def create(name, metadata=None, did=None):
         """

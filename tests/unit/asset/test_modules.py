@@ -8,7 +8,7 @@ import logging
 import json
 
 from starfish.asset import (
-    create_asset_from_metadata,
+    create_asset_from_metadata_text,
     AssetBase,
     BundleAsset,
     DataAsset,
@@ -28,6 +28,6 @@ def test_create_asset_from_metadata():
             'type': type_name,
             'name': f'TestAsset_{type_name}'
         }
-        asset = create_asset_from_metadata(metadata)
+        asset = create_asset_from_metadata_text(json.dumps(metadata))
         assert(asset)
         assert(isinstance(asset, class_type))
