@@ -32,11 +32,14 @@ def create_asset_from_metadata_text(metadata_text, did=None):
     return Asset(metadata, did, metadata_text=metadata_text)
 
 
-def is_asset_hash_valid(asset_id, hash):
+def is_asset_hash_valid(asset_id, hash_hex):
     """
+
+    :param str asset_id: asset id to check against
+    :param str hash_hex: hex string to check
     :return: true if the hash string is the same as the asset_id
     :type: boolean
     """
     if asset_id or hash:
-        return remove_0x_prefix(asset_id).lower() == remove_0x_prefix(hash).lower()
+        return remove_0x_prefix(asset_id).lower() == remove_0x_prefix(hash_hex).lower()
     return False
