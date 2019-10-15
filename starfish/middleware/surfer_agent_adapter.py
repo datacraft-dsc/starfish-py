@@ -206,11 +206,10 @@ class SurferAgentAdapter():
                 'asset_id': asset_id,
                 'metadata_text': response.content,
             }
+            result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
                 result['metadata_text'] = response.content.decode('utf-8')
-            result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
-
         else:
             logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result

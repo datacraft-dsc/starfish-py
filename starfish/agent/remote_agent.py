@@ -179,7 +179,12 @@ class RemoteAgent(AgentBase):
         adapter = self._get_adapter()
         data = adapter.download_asset(url)
         store_asset = self.get_asset(asset_id)
-        asset = DataAsset(store_asset.metadata, store_asset.did, data=data)
+        asset = DataAsset(
+            store_asset.metadata,
+            store_asset.did,
+            data=data,
+            metadata_text=store_asset.metadata_text
+        )
         return asset
 
     def get_asset_store_url(self, asset_id):
@@ -576,10 +581,11 @@ class RemoteAgent(AgentBase):
                 "links": [{"name": "string", "type": "download", "url": "string"}]}
 
     def _create_asset_from_read(self, asset_id, read_metadata):
-        metadata_text = read_metadata['metadata_text']
         # check the hash of the reading asset
+        asset_id = remove_0x_prefix(asset_id)
         if not is_asset_hash_valid(asset_id, read_metadata['hash']):
             raise StarfishAssetInvalid(f' asset {asset_id} is not valid')
         did = f'{self._did}/{asset_id}'
+        metadata_text = read_metadata['metadata_text']
         asset = create_asset_from_metadata_text(metadata_text, did)
         return asset
