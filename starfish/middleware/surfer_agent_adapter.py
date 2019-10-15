@@ -52,7 +52,8 @@ class SurferAgentAdapter():
         if not options:
             options = {}
 
-        self._headers = {'content-type': 'application/json'}
+#        self._headers = {'content-type': 'application/json'}
+        self._headers = {'content-type': 'text/plain'}
         authorization = options.get('authorization')
         if authorization: # this is an OAuth2 token
             self._headers['Authorization'] = f'token {authorization}'
@@ -82,9 +83,9 @@ class SurferAgentAdapter():
         """save metadata to the agent server, using the asset_id and metadata"""
         url = self.get_endpoint('metadata')
         logger.debug(f'metadata save url {url}')
-        response = SurferAgentAdapter._http_client.post(url, json=metadata, headers=self._headers)
+        self._content_header = 'text/plain'
+        response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-
             data = response.json()
             logger.debug(f'metadata asset response returned {data}')
             return data
@@ -101,6 +102,7 @@ class SurferAgentAdapter():
             'assetid': asset_id,
             'info': listing_data,
         }
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
@@ -113,6 +115,7 @@ class SurferAgentAdapter():
         return None
 
     def download_asset(self, url):
+        self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.content
@@ -131,6 +134,7 @@ class SurferAgentAdapter():
     def get_listing(self, listing_id):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
@@ -144,6 +148,7 @@ class SurferAgentAdapter():
     def get_listings(self):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings'
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
@@ -157,6 +162,7 @@ class SurferAgentAdapter():
     def update_listing(self, listing_id, data):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings/{listing_id}'
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.put(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             return True
@@ -176,6 +182,7 @@ class SurferAgentAdapter():
         headers = {
             'Authorization': self._headers['Authorization']
         }
+        self._content_header = 'application/octet-stream'
         response = SurferAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
@@ -192,16 +199,18 @@ class SurferAgentAdapter():
         endpoint = self.get_endpoint('metadata')
         url = f'{endpoint}/{asset_id}'
         logger.debug(f'metadata read url {url}')
+        self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             result = {
                 'asset_id': asset_id,
                 'metadata_text': response.content,
-                'hash': SurferAgentAdapter.calc_hash_from_text(response.context)
             }
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
                 result['metadata_text'] = response.content.decode('utf-8')
+            result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
+
         else:
             logger.warning(f'metadata asset read {asset_id} response returned {response}')
         return result
@@ -210,6 +219,7 @@ class SurferAgentAdapter():
         """record purchase"""
         url = self.get_endpoint('market') + '/purchases'
         logger.debug(f'market url for purchases {url}')
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=purchase, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
 
@@ -238,7 +248,7 @@ class SurferAgentAdapter():
             url = f'{endpoint}{INVOKE_ASYNC_METHOD}/{asset_id}'
         else:
             url = f'{endpoint}{INVOKE_SYNC_METHOD}/{asset_id}'
-        print(f'request {url}')
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             json = response.json()
@@ -253,6 +263,7 @@ class SurferAgentAdapter():
     def get_job(self, job_id):
         endpoint = self.get_endpoint('invoke')
         url = f'{endpoint}{INVOKE_JOB_METHOD}/{job_id}'
+        self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
@@ -404,3 +415,11 @@ class SurferAgentAdapter():
             data = text.encode()
 
         return Web3.toHex(Web3.sha3(data))[2:]
+
+    @property
+    def _content_header(self, value):
+        return self._headers['content-type']
+
+    @_content_header.setter
+    def _content_header(self, value):
+        self._headers['content-type'] = value

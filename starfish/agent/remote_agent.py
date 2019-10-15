@@ -17,7 +17,7 @@ from starfish.agent import AgentBase
 from starfish.asset import (
     DataAsset,
     OperationAsset,
-    create_asset_from_metadata,
+    create_asset_from_metadata_text,
 )
 from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
@@ -201,9 +201,9 @@ class RemoteAgent(AgentBase):
             asset_id = data['assetid']
             read_metadata = adapter.read_metadata(asset_id)
             if read_metadata:
-                metadata = json.loads(read_metadata['metadata_text'])
+                metadata_text = read_metadata['metadata_text']
                 did = f'{self._did}/{asset_id}'
-                asset = create_asset_from_metadata(metadata, did)
+                asset = create_asset_from_metadata_text(metadata_text, did)
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
@@ -223,9 +223,9 @@ class RemoteAgent(AgentBase):
         clean_asset_id = remove_0x_prefix(asset_id)
         read_metadata = adapter.read_metadata(clean_asset_id)
         if read_metadata:
-            metadata = json.loads(read_metadata['metadata_text'])
+            metadata_text = read_metadata['metadata_text']
             did = f'{self._did}/{clean_asset_id}'
-            asset = create_asset_from_metadata(metadata, did)
+            asset = create_asset_from_metadata_text(metadata_text, did)
         return asset
 
     def get_listings(self):
@@ -243,9 +243,9 @@ class RemoteAgent(AgentBase):
                 asset_id = data['assetid']
                 read_metadata = adapter.read_metadata(asset_id)
                 if read_metadata:
-                    metadata = json.loads(read_metadata['metadata_text'])
+                    metadata_text = read_metadata['metadata_text']
                     did = f'{self._did}/{asset_id}'
-                    asset = DataAsset(metadata, did)
+                    asset = create_asset_from_metadata_text(metadata_text, did)
                     listing = Listing(self, data['id'], asset, data)
                     listings.append(listing)
         return listings

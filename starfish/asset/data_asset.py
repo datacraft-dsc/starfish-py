@@ -19,7 +19,10 @@ class DataAsset(AssetBase):
     :param str data: Optional data of the asset, this can be str or bytes
 
     """
-    def __init__(self, metadata, did=None, data=None):
+    def __init__(self, metadata, did=None, data=None,  metadata_text=None):
+        if not isinstance(metadata, dict):
+            raise ValueError('metadata must be a dict')
+
         if data:
             if not (isinstance(data, str) or isinstance(data, bytes)):
                 raise ValueError('data can only be str or bytes')
@@ -27,7 +30,7 @@ class DataAsset(AssetBase):
         metadata['type'] = 'dataset'
 
         self._data = data
-        AssetBase.__init__(self, metadata, did)
+        AssetBase.__init__(self, metadata, did, metadata_text)
 
     @staticmethod
     def create(name, data, metadata=None, did=None):

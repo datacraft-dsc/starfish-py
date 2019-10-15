@@ -15,10 +15,11 @@ class BundleAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata, did=None):
+    def __init__(self, metadata, did=None, metadata_text=None):
+
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
-        AssetBase.__init__(self, metadata, did)
+        AssetBase.__init__(self, metadata, did, metadata_text)
         self._assets = {}
 
     @staticmethod
@@ -160,4 +161,3 @@ class BundleAsset(AssetBase):
 
         """
         return True
-
