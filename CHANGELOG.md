@@ -1,5 +1,11 @@
 ## Change Log
 
+### Release v0.5.6
+
+*   Rename SurferAgent to RemoteAgent
+*   Check the response object has the correct property before calling
+*   Allow for different types or url building for the invoke & invoke jobs agent
+
 ### Release v0.5.5
 
 *   Account class uses an agent_adapter property to convert to an agent_adapter_account

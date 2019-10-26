@@ -37,12 +37,26 @@ SUPPORTED_SERVICES = {
     },
 }
 
-INVOKE_SYNC_METHOD = '/invoke'
-INVOKE_ASYNC_METHOD = '/invokeasync'
-INVOKE_JOB_METHOD = '/jobs'
+class SurferAgentInvokeAPIGenerator():
+
+    invoke_sync_uri = '/invoke'
+    invoke_async_uri = '/invokeasync'
+    jobs_uri = '/jobs'
+    result = None
+    def generate_url(self, endpoint , name):
+        if name == 'invoke_sync':
+            result = f'{endpoint}{self.invoke_sync_uri}'
+        elif name == 'invoke_async':
+            result = f'{endpoint}{self.invoke_async_uri}'
+        elif name == 'jobs':
+            result = f'{endpoint}{self.jobs_uri}'
+        else:
+            raise ValueError('invalid generation name')
+        return result
 
 class SurferAgentAdapter():
     _http_client = requests
+    _invoke_api_generator = SurferAgentInvokeAPIGenerator()
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
@@ -87,7 +101,6 @@ class SurferAgentAdapter():
         response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
-            logger.debug(f'metadata asset response returned {data}')
             return data
         else:
             msg = f'metadata asset response failed: {response.status_code}'
@@ -109,7 +122,7 @@ class SurferAgentAdapter():
             logger.debug('listing response returned: ' + str(data))
             return data
         else:
-            msg = f'listing response failed: {response.status_code} {response.text}'
+            msg = f'listing response failed: {response.status_code} {response}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -118,10 +131,15 @@ class SurferAgentAdapter():
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.content
+            if hasattr(response, 'content'):
+                data = response.content
+            elif hasattr(response, 'data'):
+                data = response.data
+            else:
+                raise TypeError('Cannot find correct response data')
             return data
         else:
-            msg = f'GET assets response failed: {response.status_code} {response.text}'
+            msg = f'GET assets response failed: {response.status_code} {response}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -202,16 +220,22 @@ class SurferAgentAdapter():
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
+            if hasattr(response, 'content'):
+                data = response.content
+            elif hasattr(response, 'data'):
+                data = response.data
+            else:
+                raise TypeError('Cannot find correct response data')
             result = {
                 'asset_id': asset_id,
-                'metadata_text': response.content,
+                'metadata_text': data,
             }
             result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
-                result['metadata_text'] = response.content.decode('utf-8')
+                result['metadata_text'] = data.decode('utf-8')
         else:
-            logger.warning(f'metadata asset read {asset_id} response returned {response}')
+            logger.warning(f'metadata asset read {asset_id} response returned {response} for {url}')
         return result
 
     def purchase_asset(self, purchase):
@@ -244,9 +268,11 @@ class SurferAgentAdapter():
         endpoint = self.get_endpoint('invoke')
 
         if is_async:
-            url = f'{endpoint}{INVOKE_ASYNC_METHOD}/{asset_id}'
+            url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'invoke_async')
         else:
-            url = f'{endpoint}{INVOKE_SYNC_METHOD}/{asset_id}'
+            url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'invoke_sync')
+
+        url = f'{url}/{asset_id}'
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
@@ -254,21 +280,22 @@ class SurferAgentAdapter():
             logger.debug('invoke response returned: ' + str(json))
             return json
         else:
-            msg = f'invoke response failed: {response.status_code} {response.text}'
+            msg = f'invoke response failed: {response.status_code} {response} for {url}'
             logger.error(msg)
             raise ValueError(msg)
         return None
 
     def get_job(self, job_id):
         endpoint = self.get_endpoint('invoke')
-        url = f'{endpoint}{INVOKE_JOB_METHOD}/{job_id}'
+        url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'jobs')
+        url = f'{url}/{job_id}'
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = response.json()
             return data
         else:
-            msg = f'GET job response failed: {response.status_code}'
+            msg = f'GET job response failed: {response.status_code} for {url}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -344,6 +371,10 @@ class SurferAgentAdapter():
     def set_http_client(http_client):
         """Set the http client to something other than the default `requests`"""
         SurferAgentAdapter._http_client = http_client
+
+    @staticmethod
+    def set_invoke_api_generator(invoke_api_generator):
+        SurferAgentAdapter._invoke_api_generator = invoke_api_generator
 
     @staticmethod
     def get_authorization_token(surfer_url, surfer_username, surfer_password):
