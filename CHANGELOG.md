@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.5.7
+
+*   Allow for different response objects to use get_json(), json
+
 ### Release v0.5.6
 
 *   Rename SurferAgent to RemoteAgent
