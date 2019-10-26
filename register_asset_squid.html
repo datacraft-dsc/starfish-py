@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset using Squid &mdash; starfish-py 0.5.5 documentation</title>
+  <title>Register asset using Squid &mdash; starfish-py 0.5.6 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Register asset on Surfer" href="register_asset_surfer.html" />
+    <link rel="next" title="Register asset on a remote agent" href="register_asset_remote_agent.html" />
     <link rel="prev" title="Starfish Agents" href="agents.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.5
+                0.5.6
               </div>
             
           
@@ -97,7 +97,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#full-example-to-register-an-asset-on-the-ocean-network">Full example to register an Asset on the Ocean Network</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset_surfer.html">Register asset on Surfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register_asset_remote_agent.html">Register asset on a remote agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
@@ -263,10 +263,6 @@ asset from the listing.</p>
 <h2>Full example to register an Asset on the Ocean Network<a class="headerlink" href="#full-example-to-register-an-asset-on-the-ocean-network" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-
 <span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
 <span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">RemoteDataAsset</span>
 <span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">SquidAgent</span>
@@ -300,11 +296,9 @@ asset from the listing.</p>
         <span class="s1">&#39;storage_path&#39;</span><span class="p">:</span> <span class="s1">&#39;squid_py.db&#39;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="s1">&#39;account&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0x413c9ba0a05b8a600899b41b0c62dd661e689354&#39;</span><span class="p">,</span> <span class="s1">&#39;ocean_secret&#39;</span><span class="p">),</span>
-
 <span class="p">}</span>
 
 <span class="n">CONFIG</span> <span class="o">=</span> <span class="n">LOCAL_CONFIG</span>
-
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
@@ -353,7 +347,7 @@ asset from the listing.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="register_asset_surfer.html" class="btn btn-neutral float-right" title="Register asset on Surfer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="register_asset_remote_agent.html" class="btn btn-neutral float-right" title="Register asset on a remote agent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="agents.html" class="btn btn-neutral float-left" title="Starfish Agents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

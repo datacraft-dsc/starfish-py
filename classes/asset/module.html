@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Module &mdash; starfish-py 0.5.5 documentation</title>
+  <title>Asset Module &mdash; starfish-py 0.5.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.5
+                0.5.6
               </div>
             
           
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset_surfer.html">Register asset on Surfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
@@ -174,19 +174,38 @@
   <div class="section" id="module-starfish.asset">
 <span id="asset-module"></span><h1>Asset Module<a class="headerlink" href="#module-starfish.asset" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="starfish.asset.create_asset_from_metadata">
-<code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">create_asset_from_metadata</code><span class="sig-paren">(</span><em class="sig-param">metadata</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset_from_metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.asset.create_asset_from_metadata_text">
+<code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">create_asset_from_metadata_text</code><span class="sig-paren">(</span><em class="sig-param">metadata_text</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset_from_metadata_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new asset class based on the metadata. Once created assign
 the metadata to the asset and also the optional did</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – metadata to test and create the correct asset object</p></li>
-<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – optional did to assign to the asset</p></li>
+<li><p><strong>metadata_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – metadata text to test and create the correct asset object</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – optional did to assign to the asset</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Return an asset class based on the metadata type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="starfish.asset.is_asset_hash_valid">
+<code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">is_asset_hash_valid</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em>, <em class="sig-param">hash_hex</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.is_asset_hash_valid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>asset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – asset id to check against</p></li>
+<li><p><strong>hash_hex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – hex string to check</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if the hash string is the same as the asset_id</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>

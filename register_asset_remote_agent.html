@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on Surfer &mdash; starfish-py 0.5.5 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.5.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.5
+                0.5.6
               </div>
             
           
@@ -89,13 +89,13 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Register asset on Surfer</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Register asset on a remote agent</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-an-asset">Create an Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setup-the-surfer-agent">Setup the Surfer Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-the-remote-agent">Setup the Remote Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#register-the-asset">Register the Asset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#saving-the-asset">Saving the Asset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#full-example-to-register-and-upload-an-asset-on-surfer">Full example to register and upload an Asset on Surfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-example-to-register-and-upload-an-asset-on-remote-agent">Full example to register and upload an Asset on Remote Agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules/starfish.html">starfish_py module</a></li>
@@ -151,13 +151,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Register asset on Surfer</li>
+      <li>Register asset on a remote agent</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/register_asset_surfer.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/register_asset_remote_agent.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -170,14 +170,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="register-asset-on-surfer">
-<h1>Register asset on Surfer<a class="headerlink" href="#register-asset-on-surfer" title="Permalink to this headline">¶</a></h1>
-<p>This is to show how to register an asset on Surfer.</p>
-<p>Surfer is a centralized server that allows the server url to be registered on the Ocean Network.</p>
-<p>Any asset registered with Surfer will not be written to the block chain, but the returned
-DID will contain the SurferDID/asset_id. This can be resolved by using the Ocean Protocol network
+  <div class="section" id="register-asset-on-a-remote-agent">
+<h1>Register asset on a remote agent<a class="headerlink" href="#register-asset-on-a-remote-agent" title="Permalink to this headline">¶</a></h1>
+<p>This is to show how to register an asset on a remote agent.</p>
+<p>The remote agent (Surfer) is a centralized server that allows the server url to be registered on the Ocean Network.</p>
+<p>Any asset registered with a remote agent will not be written to the block chain, but the returned
+DID will contain the Remote Agent DID/asset_id. This can be resolved by using the Ocean Protocol network
 to obtain the asset.</p>
-<p>We assume that you have already setup a test <cite>barge</cite> in ‘Getting Started’, with a running Surfer in Barge.</p>
+<p>We assume that you have already setup a test <cite>barge</cite> in ‘Getting Started’, with a running remote agent in Barge.</p>
 <div class="section" id="creating-a-new-ocean-instance">
 <h2>Creating a new <cite>Ocean</cite> instance<a class="headerlink" href="#creating-a-new-ocean-instance" title="Permalink to this headline">¶</a></h2>
 <p>First import the main starfish ocean library, and the logging library</p>
@@ -192,11 +192,11 @@ some extra logging so you can see what is happening.</p>
 </div>
 <div class="section" id="create-an-asset">
 <h2>Create an Asset<a class="headerlink" href="#create-an-asset" title="Permalink to this headline">¶</a></h2>
-<p>We now want to create an Ocean asset to register with Surfer, we can store it’s metadata and data
-all with Surfer.</p>
+<p>We now want to create an Ocean asset to register with the remote agent, we can store it’s metadata and data
+all with agent.</p>
 <p>First we need to create a data asset, using some test data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">DataAsset</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;MyAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Here is some test text that I want to save in Surfer service&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;MyAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Here is some test text that I want to save in remote agent service&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Let see what’s in the DataAsset metadata</p>
@@ -206,7 +206,7 @@ all with Surfer.</p>
 </div>
 <p>and what is in the DataAsset data property</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="go">Here is some test text that I want to save in Surfer service</span>
+<span class="go">Here is some test text that I want to save in remote agent service</span>
 </pre></div>
 </div>
 <p>Now see if the asset has a DID?</p>
@@ -215,12 +215,12 @@ all with Surfer.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="setup-the-surfer-agent">
-<h2>Setup the Surfer Agent<a class="headerlink" href="#setup-the-surfer-agent" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="setup-the-remote-agent">
+<h2>Setup the Remote Agent<a class="headerlink" href="#setup-the-remote-agent" title="Permalink to this headline">¶</a></h2>
 <p>We now need an agent to register and manage our Asset. The agents
 task is to do the actual work of registration.</p>
 <p>First we need to import the agent and setup it’s configuration for the local test Barge.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">SurferAgent</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">RemoteAgent</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:8080&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
 <span class="go">        &#39;url&#39;: url,</span>
@@ -229,20 +229,20 @@ task is to do the actual work of registration.</p>
 <span class="go">    }</span>
 </pre></div>
 </div>
-<p>Since this is probably the first time we are using Surfer, we need to register
-all of the services that Surfer supports on the Ocean Network. In our case
+<p>Since this is probably the first time we are using remote agent, we need to register
+all of the services that remote agent supports on the Ocean Network. In our case
 the Ocean Network is going to be the local Barge.</p>
-<p>So first create a DDO record for the local Surfer service.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ddo</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<p>So first create a DDO record for the local remote agent service.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ddo</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Lets see what the DID of the Surfer service is going to be?</p>
+<p>Lets see what the DID of the remote agent service is going to be?</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
 <span class="go">did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c</span>
 </pre></div>
 </div>
-<p>We can now create the Surfer agent using teh options provided</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">did</span><span class="o">=</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<p>We can now create the remote agent using teh options provided</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">did</span><span class="o">=</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -260,7 +260,7 @@ information about the asset.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We can find out what the listing id has been assigned to us by Surfer</p>
+<p>We can find out what the listing id has been assigned to us by remote agent</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">listing_id</span><span class="p">)</span>
 <span class="go">a3392ea6f7b7301bb81c4fe58ad0959360d53662ce3a3d35589f9fbd0e276699</span>
 </pre></div>
@@ -271,7 +271,7 @@ information about the asset.</p>
 </pre></div>
 </div>
 <p>You will notice that the listing DID returned contains two id’s. The first is the regisered DID on the
-Ocean Protocol block chain, the second id is the internall asset id registered on the Surfer.</p>
+Ocean Protocol block chain, the second id is the internall asset id registered on the remote agent.</p>
 <p>To check that the asset id is the same we can print out the asset id</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">asset_id</span><span class="p">)</span>
 <span class="go">0x3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5</span>
@@ -280,20 +280,20 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
 </div>
 <div class="section" id="saving-the-asset">
 <h2>Saving the Asset<a class="headerlink" href="#saving-the-asset" title="Permalink to this headline">¶</a></h2>
-<p>With Surfer we can now save the asset data. To do this we just need to call the <cite>upload</cite> method in the Surfer Agent.</p>
+<p>With the remote agent we can now save the asset data. To do this we just need to call the <cite>upload</cite> method in the remote agent.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="o">.</span><span class="n">upload_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>N.B. Rememeber you can only upload and download in asset with Surfer if you have regisetred it before hand.</p>
+<p>N.B. Rememeber you can only upload and download in asset with the remote agent if you have registered it before hand.</p>
 </div>
-<div class="section" id="full-example-to-register-and-upload-an-asset-on-surfer">
-<h2>Full example to register and upload an Asset on Surfer<a class="headerlink" href="#full-example-to-register-and-upload-an-asset-on-surfer" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="full-example-to-register-and-upload-an-asset-on-remote-agent">
+<h2>Full example to register and upload an Asset on Remote Agent<a class="headerlink" href="#full-example-to-register-and-upload-an-asset-on-remote-agent" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
 <span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
 <span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
-<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">SurferAgent</span>
+<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
@@ -306,11 +306,11 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
     <span class="c1"># Print the asset data</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my asset:&#39;</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="c1"># Create a surfer agent to do the work.</span>
-    <span class="n">surfer_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:8080&#39;</span>
-    <span class="n">surfer_ddo</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">surfer_url</span><span class="p">)</span>
-    <span class="n">surfer_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">surfer_url</span><span class="p">,</span>
+    <span class="c1"># Create a remote agent to do the work.</span>
+    <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:8080&#39;</span>
+    <span class="n">agent_ddo</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">agent_url</span><span class="p">)</span>
+    <span class="n">agent_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">agent_url</span><span class="p">,</span>
         <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span>
         <span class="s1">&#39;password&#39;</span><span class="p">:</span>  <span class="s1">&#39;foobar&#39;</span><span class="p">,</span>
     <span class="p">}</span>
@@ -322,7 +322,7 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
         <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
         <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
     <span class="p">}</span>
-    <span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">surfer_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">surfer_options</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">agent_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">agent_options</span><span class="p">)</span>
 
     <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>

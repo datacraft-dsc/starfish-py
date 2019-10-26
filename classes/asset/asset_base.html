@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Base class &mdash; starfish-py 0.5.5 documentation</title>
+  <title>Asset Base class &mdash; starfish-py 0.5.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.5
+                0.5.6
               </div>
             
           
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset_surfer.html">Register asset on Surfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
@@ -175,13 +175,13 @@
 <h1>Asset Base class<a class="headerlink" href="#asset-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.asset.AssetBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">AssetBase</code><span class="sig-paren">(</span><em class="sig-param">metadata</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">AssetBase</code><span class="sig-paren">(</span><em class="sig-param">metadata</em>, <em class="sig-param">did=None</em>, <em class="sig-param">metadata_text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – metadata for the asset</p></li>
-<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Octional did of the asset, if the asset is new then the did will be None.</p></li>
+<li><p><strong>metadata_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – metadata text for the asset</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Octional did of the asset, if the asset is new then the did will be None.</p></li>
 </ul>
 </dd>
 </dl>
@@ -198,7 +198,7 @@
 <dd class="field-odd"><p>the asset did</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,7 +219,7 @@
 <dd><p>Returns if this metadata has the correct type</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the asset type stored in the metadata</p>
+<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the asset type stored in the metadata</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True if the metadata type is equal to type_name</p>
@@ -252,7 +252,20 @@
 <dd class="field-odd"><p>The metadata for this asset</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.asset.AssetBase.metadata_text">
+<em class="property">property </em><code class="sig-name descname">metadata_text</code><a class="headerlink" href="#starfish.asset.AssetBase.metadata_text" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The metadata for this asset</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>

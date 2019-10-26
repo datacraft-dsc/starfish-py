@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ocean class &mdash; starfish-py 0.5.5 documentation</title>
+  <title>Ocean class &mdash; starfish-py 0.5.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.5
+                0.5.6
               </div>
             
           
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agents.html">Starfish Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../register_asset_squid.html">Register asset using Squid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../register_asset_surfer.html">Register asset on Surfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Account class</a></li>
@@ -167,7 +167,7 @@
 <dl class="class">
 <dt id="starfish.Ocean">
 <em class="property">class </em><code class="sig-prename descclassname">starfish.</code><code class="sig-name descname">Ocean</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.Ocean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>The Ocean class connects to the ocean network.</p>
 <p>For example to use this class you can do the following:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
@@ -195,10 +195,10 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network</strong> – name of the network to connect too. This can be ‘development’, ‘nile’ or ‘kovan’</p></li>
-<li><p><strong>keeper_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – url to the keeper node ( <a class="reference external" href="http://localhost:8545">http://localhost:8545</a> ).</p></li>
-<li><p><strong>contracts_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – path to the contract files ( artifacts ).
+<li><p><strong>keeper_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – url to the keeper node ( <a class="reference external" href="http://localhost:8545">http://localhost:8545</a> ).</p></li>
+<li><p><strong>contracts_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – path to the contract files ( artifacts ).
 If not prodived then the network name will be used to search for the correct artifact files.</p></li>
-<li><p><strong>gas_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><em>string</em>) – The amount of gas you are willing to spend on each block chain transaction ( 0 ).</p></li>
+<li><p><strong>gas_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><em>string</em>) – The amount of gas you are willing to spend on each block chain transaction ( 0 ).</p></li>
 </ul>
 </dd>
 </dl>
@@ -242,9 +242,9 @@ This returns the account object, of the local account.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – address of the account, if dict then use the fields, <cite>address</cite>, <cite>password</cite> and ‘keyfile’.</p></li>
-<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – password to access the keyfile for this account</p></li>
-<li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – JSON filename of the account key file.</p></li>
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – address of the account, if dict then use the fields, <cite>address</cite>, <cite>password</cite> and ‘keyfile’.</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – password to access the keyfile for this account</p></li>
+<li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – JSON filename of the account key file.</p></li>
 <li><p><strong>agent_adapter</strong> – Optional adapter class to use for this account object. Usually it’s the <code class="xref py py-class docutils literal notranslate"><span class="pre">SquidAdapter</span></code></p></li>
 </ul>
 </dd>
@@ -272,7 +272,7 @@ This returns the account object, of the local account.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – DID to use to register for this ddo.</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – DID to use to register for this ddo.</p></li>
 <li><p><strong>ddo</strong> – DDO to save for the registration. This is a JSON string of a DDO</p></li>
 <li><p><strong>account</strong> (<a class="reference internal" href="account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a>) – account to use as the owner of the registration.</p></li>
 </ul>
@@ -285,7 +285,7 @@ This returns the account object, of the local account.</p>
 </dd>
 </dl>
 <p>For example:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># register the public surfer on the block chain</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># register the public remote agent on the block chain</span>
 <span class="n">receipt</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">register_did</span><span class="p">(</span><span class="n">did</span><span class="p">,</span> <span class="n">ddo</span><span class="o">.</span><span class="n">as_text</span><span class="p">(),</span> <span class="n">register_account</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -299,7 +299,7 @@ This returns the account object, of the local account.</p>
 if no value found then return None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – did to resolve</p>
+<dd class="field-odd"><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – did to resolve</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>ddo or url as a string</p>
@@ -317,8 +317,8 @@ if no value found then return None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Search for ‘text’ in metadata.</p></li>
-<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Limit the result. If not provided, default is 10</p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Search for ‘text’ in metadata.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Limit the result. If not provided, default is 10</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
