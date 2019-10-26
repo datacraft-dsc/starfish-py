@@ -37,6 +37,7 @@ SUPPORTED_SERVICES = {
     },
 }
 
+
 class SurferAgentInvokeAPIGenerator():
 
     invoke_sync_uri = '/invoke'
@@ -53,6 +54,42 @@ class SurferAgentInvokeAPIGenerator():
         else:
             raise ValueError('invalid generation name')
         return result
+
+class ResponseWrapper():
+    """
+
+    Response object returned by different test and production
+    systems are not the same, and have different properties to obtain
+    data and JSON data.
+
+    This class tries to obtain the correct call to get the data from the
+    Response object.
+
+    """
+    def __init__(self, response):
+        self._response = response
+
+    @property
+    def json(self):
+        if hasattr(self._response, 'get_json'):
+            data = self._response.get_json()
+        elif hasattr(self._response,'json'):
+            data = self._response.json()
+        else:
+            TypeError('cannot get the json property from response object')
+        return data
+
+    @property
+    def data(self):
+        if hasattr(self._response, 'content'):
+            data = self._response.content
+        elif hasattr(self._response, 'data'):
+            data = self._response.data
+        else:
+            raise TypeError('Cannot find correct response data')
+        return data
+
+
 
 class SurferAgentAdapter():
     _http_client = requests
@@ -100,7 +137,7 @@ class SurferAgentAdapter():
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.json()
+            data = ResponseWrapper(response).json
             return data
         else:
             msg = f'metadata asset response failed: {response.status_code}'
@@ -118,7 +155,7 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.json()
+            data = ResponseWrapper(response).json
             logger.debug('listing response returned: ' + str(data))
             return data
         else:
@@ -131,12 +168,7 @@ class SurferAgentAdapter():
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            if hasattr(response, 'content'):
-                data = response.content
-            elif hasattr(response, 'data'):
-                data = response.data
-            else:
-                raise TypeError('Cannot find correct response data')
+            data = ResponseWrapper(response).data
             return data
         else:
             msg = f'GET assets response failed: {response.status_code} {response}'
@@ -155,7 +187,7 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.json()
+            data = ResponseWrapper(response).json
             return data
         else:
             msg = f'GET listings response failed: {response.status_code}'
@@ -169,8 +201,7 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.json()
-            return data
+            return ResponseWrapper(response).json
         else:
             msg = f'GET listings response failed: {response.status_code}'
             logger.error(msg)
@@ -220,12 +251,7 @@ class SurferAgentAdapter():
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            if hasattr(response, 'content'):
-                data = response.content
-            elif hasattr(response, 'data'):
-                data = response.data
-            else:
-                raise TypeError('Cannot find correct response data')
+            data = ResponseWrapper(response).data
             result = {
                 'asset_id': asset_id,
                 'metadata_text': data,
@@ -245,17 +271,21 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=purchase, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-
-            json = response.json()
-            logger.debug(f'purchase response returned {json}')
-            return json
+            data = ResponseWrapper(response).json
+            logger.debug(f'purchase response returned {data}')
+            return data
         else:
             msg = f'purchase response failed: {response.status_code}'
             logger.error(msg)
             # NOTE surfer may return error information in additon to a 500
             if response:
-                json = response.json()
-                logger.error(f'purchase response returned {json}')
+                if hasattr(response, 'get_json'):
+                    data = response.get_json()
+                elif hasattr(response,'json'):
+                    data = response.json()
+                else:
+                    TypeError('cannot get the json property from response object')
+                logger.error(f'purchase response returned {data}')
             raise ValueError(msg)
         return None
 
@@ -276,9 +306,9 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
-            json = response.json()
-            logger.debug('invoke response returned: ' + str(json))
-            return json
+            data = ResponseWrapper(response).json
+            logger.debug('invoke response returned: ' + str(data))
+            return data
         else:
             msg = f'invoke response failed: {response.status_code} {response} for {url}'
             logger.error(msg)
@@ -292,7 +322,7 @@ class SurferAgentAdapter():
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
-            data = response.json()
+            data = ResponseWrapper(response).json
             return data
         else:
             msg = f'GET job response failed: {response.status_code} for {url}'
@@ -381,22 +411,22 @@ class SurferAgentAdapter():
         """Get a surfer authorization token (create one if needed).
         Throws exception on error."""
         token_url = surfer_url + SURFER_BASE_URI + '/auth/token'
-        r = requests.get(token_url, auth=(surfer_username, surfer_password))
+        response = requests.get(token_url, auth=(surfer_username, surfer_password))
         token = None
-        if r.status_code == 200:
-            tokens = r.json()
+        if response.status_code == 200:
+            tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
             else: # need to create a token
-                r = requests.post(token_url, auth=(surfer_username, surfer_password))
-                if r.status_code == 200:
-                    token = r.json()
+                response = requests.post(token_url, auth=(surfer_username, surfer_password))
+                if response.status_code == 200:
+                    token = ResponseWrapper(response).json
                 else:
-                    msg = f'unable to create token, status {r.status_code}'
+                    msg = f'unable to create token, status {response.status_code}'
                     logger.error(msg)
                     raise ValueError(msg)
         else:
-            msg = f'unable to get tokens, status {r.status_code}'
+            msg = f'unable to get tokens, status {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
         logger.debug(f'using surfer token {token}')
