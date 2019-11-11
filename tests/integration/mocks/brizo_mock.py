@@ -25,7 +25,7 @@ class BrizoMock(object):
         self._is_event_subscribed = False
         self._ddo_records = {}
 
-    def initialize_service_agreement(did, agreement_id, service_definition_id,
+    def initialize_service_agreement(self, did, agreement_id, service_definition_id,
                                      signature, account_address, purchase_endpoint):
         print(f'BrizoMock.initialize_service_agreement: purchase_endpoint={purchase_endpoint}')
         self._ocean_instance.agreements.create(
