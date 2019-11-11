@@ -52,6 +52,6 @@ def did_to_asset_id(did):
     asset_id = None
     if data['id_hex']:
         asset_id = data['id_hex']
-    if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path'] ):
+    if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path']):
         asset_id = '0x' + data['path']
     return asset_id

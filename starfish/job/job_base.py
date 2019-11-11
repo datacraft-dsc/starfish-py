@@ -36,7 +36,7 @@ class JobBase(ABC):
     @property
     def is_finished(self):
         if self._status:
-            return not self._status in JobBase.IsWorkingStatusList
+            return self._status not in JobBase.IsWorkingStatusList
         return False
 
     @property

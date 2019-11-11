@@ -20,7 +20,6 @@ from ocean_utils.did import (
 )
 from squid_py.ocean.keeper import SquidKeeper
 
-from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
 from ocean_utils.agreements.service_agreement import ServiceAgreement
 from ocean_utils.agreements.service_types import ServiceTypes
 from squid_py.brizo.brizo_provider import BrizoProvider
@@ -45,7 +44,7 @@ class SquidAgentAdapterPurchaseError(Exception):
 
 
 class AgreementStoreManagerExtra(AgreementStoreManager):
-   def get_agreement_ids_for_did(self, did):
+    def get_agreement_ids_for_did(self, did):
         return self.contract_concise.getAgreementIdsForDID(did)
 
 class SquidAgentAdapter():
@@ -76,7 +75,8 @@ class SquidAgentAdapter():
         # to get past codacy static method 'register_agent'
         self._keeper = SquidKeeper.get_instance()
 
-    def register_asset(self, metadata, account,
+    def register_asset(
+            self, metadata, account,
             service_descriptors=None, providers=None, use_secret_store=True):
         """
 
@@ -160,7 +160,7 @@ class SquidAgentAdapter():
         :param account: account to register for
         :return: The template registered
         """
-        template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
+        # template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
         template = register_service_agreement_template(
             self._keeper.service_agreement,
             account,
@@ -247,24 +247,24 @@ class SquidAgentAdapter():
 
         service_agreement_id = None
         service_agreement = SquidAgentAdapter.get_service_agreement_from_ddo(ddo)
-        agreements=squid_ocean.agreements
-        did=ddo.did
+        agreements = squid_ocean.agreements
+        did = ddo.did
         if service_agreement:
             logger.info(f'purchase invoke operation ')
-            service_definition_id=service_agreement.sa_definition_id
+            service_definition_id = service_agreement.sa_definition_id
 
             service_agreement_id, signature = agreements.prepare(ddo.did, service_definition_id, account)
             asset = agreements._asset_resolver.resolve(did)
 
             service_agreement = ServiceAgreement.from_ddo(service_definition_id, asset)
-            service_def = asset.find_service_by_id(service_definition_id).as_dictionary()
+            # service_def = asset.find_service_by_id(service_definition_id).as_dictionary()
 
             # Must approve token transfer for this purchase
 
             agreements._approve_token_transfer(service_agreement.get_price(), account)
             # subscribe to events related to this agreement_id before sending the request.
             logger.debug(f'Registering service agreement with id: {service_agreement_id}')
-
+            """
             register_service_agreement( agreements._config.storage_path,
                                         account,
                                         service_agreement_id,
@@ -276,7 +276,7 @@ class SquidAgentAdapter():
                                         asset.encrypted_files,
                                         start_time=None
             )
-
+            """
             BrizoProvider.get_brizo().initialize_service_agreement(did,
                                                                    service_agreement_id,
                                                                    service_agreement.sa_definition_id,
@@ -407,7 +407,7 @@ class SquidAgentAdapter():
 
     @staticmethod
     def transfer_ether(from_account, to_address, amount):
-        tx_hash = Web3Provider.get_web3().personal.sendTransaction( {
+        tx_hash = Web3Provider.get_web3().personal.sendTransaction({
             'from': from_account.address,
             'to': to_address,
             'value': amount,

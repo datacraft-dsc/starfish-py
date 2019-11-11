@@ -114,7 +114,7 @@ class Ocean():
             logger.debug(f'Changing contracts path to {self._contracts_path}')
 
         # if no contracts path then search for the contract for this network
-        if self._contracts_path is None and self._network_name :
+        if self._contracts_path is None and self._network_name:
             self._contracts_path = find_contract_path(self._network_name)
 
         logger.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')

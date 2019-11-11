@@ -1,5 +1,6 @@
 
 import logging
+import json
 from base64 import b64encode
 from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
@@ -91,19 +92,17 @@ class StarfishDDO(DDO):
         logger.debug('Adding signature to the ddo object.')
         return private_key_pem
 
-
     def add_public_key(self, did, public_key):
         """
         Add a public key object to the list of public keys.
         :param public_key: Public key, PublicKeyHex
         """
-        if did == None:
+        if did is None:
             self._public_keys.append(public_key)
         else:
             logger.debug(f'Adding public key {public_key} to the did {did}')
             self._public_keys.append(
                 PublicKeyBase(did, **{"owner": public_key, "type": "EthereumECDSAKey"}))
-
 
     def add_proof_keeper(self, text, publisher_account, keeper):
         """Add a proof to the DDO, based on the public_key id/index and signed with the private key

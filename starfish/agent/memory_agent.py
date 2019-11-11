@@ -1,4 +1,4 @@
-"""
+    """
 
 Memory Agent class to provide basic functionality for Ocean Agents
 
@@ -76,7 +76,7 @@ class MemoryAgent(AgentBase):
         :param asset: Asset to validate.
         :return: True if the asset is valid
         """
-        return not asset is None
+        return asset is not None
 
 
     def get_listing(self, listing_id):

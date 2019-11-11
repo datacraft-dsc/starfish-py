@@ -166,7 +166,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def consume_asset(self, listing, account, purchase_id ):
+    def consume_asset(self, listing, account, purchase_id):
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
