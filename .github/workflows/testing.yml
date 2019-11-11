@@ -27,8 +27,8 @@ jobs:
       uses: actions/checkout@v1
       with:
         repository: DEX-Company/barge
-        # ref: tags/dex-2019-10-09
-        ref: develop
+        ref: tags/dex-2019-10-09
+        # ref: develop
         path: barge
     - name: Start Barge
       run: |
