@@ -36,7 +36,7 @@ jobs:
         ./start_ocean.sh --mongodb --no-brizo --local-spree-node &
         sleep 240
     - name: Wait for barge startup
-      run: tests/scripts/wait_for_migration_and_extract_keeper_artifacts.sh
+      run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
     - name: Test
       run: |
         pip install pytest
