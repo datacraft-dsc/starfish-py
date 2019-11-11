@@ -161,6 +161,7 @@ class SquidAgentAdapter():
         :return: The template registered
         """
         # template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
+        """
         template = register_service_agreement_template(
             self._keeper.service_agreement,
             account,
@@ -168,6 +169,8 @@ class SquidAgentAdapter():
             self._keeper.network_name
         )
         return template
+        """
+        return None
 
     @staticmethod
     def get_asset_purchase_ids(did):

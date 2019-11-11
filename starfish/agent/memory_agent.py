@@ -1,4 +1,4 @@
-    """
+"""
 
 Memory Agent class to provide basic functionality for Ocean Agents
 
