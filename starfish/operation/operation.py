@@ -8,7 +8,7 @@ from starfish.operation.operation_base import OperationBase
 from collections import ChainMap
 import requests
 import json
-from strarfish.asset import AssetBase
+from starfish.asset import AssetBase
 
 logger = logging.getLogger('starfish.operiation')
 
