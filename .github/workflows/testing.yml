@@ -32,7 +32,7 @@ jobs:
     - name: Start Barge
       run: |
         cd ../barge
-        ./start_ocean.sh --mongodb --no-brizo --local-spree-node &
+        ./start_ocean.sh --mongodb --no-brizo --no-pleuston --local-spree-node &
         sleep 240
     - name: Wait for barge startup
       run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
