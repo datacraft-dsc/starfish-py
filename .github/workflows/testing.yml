@@ -33,7 +33,7 @@ jobs:
       run: |
         cd ../barge
         sudo sysctl -w vm.max_map_count=262144
-        ./start_ocean.sh --mongodb --no-brizo --local-spree-node &
+        ./start_ocean.sh --no-brizo --local-spree-node &
         sleep 240
     - name: Wait for barge startup
       run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
