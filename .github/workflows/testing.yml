@@ -26,13 +26,14 @@ jobs:
       uses: actions/checkout@v1
       with:
         repository: DEX-Company/barge
-        ref: tags/dex-2019-10-09
-        # ref: develop
+        # ref: tags/dex-2019-10-09
+        ref: develop
         path: barge
     - name: Start Barge
       run: |
         cd ../barge
-        ./start_ocean.sh --mongodb --no-brizo --no-pleuston --local-spree-node &
+        sudo sysctl -w vm.max_map_count=262144
+        ./start_ocean.sh --mongodb --no-brizo --local-spree-node &
         sleep 240
     - name: Wait for barge startup
       run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
