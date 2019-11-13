@@ -506,7 +506,7 @@ class SquidAgent(AgentBase):
         for item in metadata['base']['files']:
             delete_list = []
             for name in item.keys():
-                if not name in ALLOWED_FILE_META_ITEMS:
+                if name not in ALLOWED_FILE_META_ITEMS:
                     delete_list.append(name)
             for name in delete_list:
                 metadata[AdditionalInfoMeta.KEY][f'file_{name}'] = item[name]

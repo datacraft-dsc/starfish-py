@@ -85,7 +85,7 @@ class RemoteAgent(AgentBase):
             squid_adapter = SquidAgentAdapter(ocean)
             ddo_text = squid_adapter.resolve_did_to_ddo(self._did)
             if not ddo_text:
-                raise ValueError(f'cannot find registered agent at {did}')
+                raise ValueError(f'cannot find registered agent at {self.did}')
             self._ddo = StarfishDDO(json_text=ddo_text)
 
         if self._did is None and self._ddo:
