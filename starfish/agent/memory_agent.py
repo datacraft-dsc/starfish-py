@@ -150,7 +150,7 @@ class MemoryAgent(AgentBase):
 
         return purchase
 
-    def purchase_wait_for_completion(self, purchase_id, asset, account, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset, account,  purchase_id, timeoutSeconds):
         """
 
             Wait for completion of the purchase
@@ -161,8 +161,7 @@ class MemoryAgent(AgentBase):
 
         """
         return True
-
-    def is_access_granted_for_asset(self, asset, account,  purchase_id, timeoutSecond):
+    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
