@@ -495,7 +495,8 @@ class SquidAgentAdapter():
         service_agreement = None
         if ddo:
             service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
-            assert(ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary())
+            if ServiceAgreement.SERVICE_DEFINITION_ID not in service.as_dictionary():
+                raise KeyError(f'cannot find services definition id {ServiceAgreement.SERVICE_DEFINITION_ID}')
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 
