@@ -29,7 +29,7 @@ def create_asset_from_metadata_text(metadata_text, did=None):
         return DataAsset(metadata, did, metadata_text=metadata_text)
     else:
         raise ValueError(f'Unknown asset type {asset_type}')
-    return Asset(metadata, did, metadata_text=metadata_text)
+    return AssetBase(metadata, did, metadata_text=metadata_text)
 
 
 def is_asset_hash_valid(asset_id, hash_hex):

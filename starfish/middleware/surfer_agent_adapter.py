@@ -44,7 +44,7 @@ class SurferAgentInvokeAPIGenerator():
     invoke_async_uri = '/invokeasync'
     jobs_uri = '/jobs'
     result = None
-    def generate_url(self, endpoint , name):
+    def generate_url(self, endpoint, name):
         if name == 'invoke_sync':
             result = f'{endpoint}{self.invoke_sync_uri}'
         elif name == 'invoke_async':
@@ -57,7 +57,6 @@ class SurferAgentInvokeAPIGenerator():
 
 class ResponseWrapper():
     """
-
     Response object returned by different test and production
     systems are not the same, and have different properties to obtain
     data and JSON data.
@@ -73,7 +72,7 @@ class ResponseWrapper():
     def json(self):
         if hasattr(self._response, 'get_json'):
             data = self._response.get_json()
-        elif hasattr(self._response,'json'):
+        elif hasattr(self._response, 'json'):
             data = self._response.json()
         else:
             TypeError('cannot get the json property from response object')
@@ -227,7 +226,7 @@ class SurferAgentAdapter():
         if not isinstance(data_bytes, bytes):
             data_bytes = data.encode()
 
-        files = { 'file':  ( asset_id, io.BytesIO(data_bytes), 'application/octet-stream') }
+        files = {'file': (asset_id, io.BytesIO(data_bytes), 'application/octet-stream')}
         headers = {
             'Authorization': self._headers['Authorization']
         }
@@ -281,7 +280,7 @@ class SurferAgentAdapter():
             if response:
                 if hasattr(response, 'get_json'):
                     data = response.get_json()
-                elif hasattr(response,'json'):
+                elif hasattr(response, 'json'):
                     data = response.json()
                 else:
                     TypeError('cannot get the json property from response object')
@@ -395,7 +394,7 @@ class SurferAgentAdapter():
         a 64 char hex string, which is the asset id
         :return 64 char hex string, with no leading '0x'
         """
-        return SurferAgentAdapter.calc_hash_from_text(metdata_text)
+        return SurferAgentAdapter.calc_hash_from_text(metadata_text)
 
     @staticmethod
     def set_http_client(http_client):
@@ -417,7 +416,7 @@ class SurferAgentAdapter():
             tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
-            else: # need to create a token
+            else:   # need to create a token
                 response = requests.post(token_url, auth=(surfer_username, surfer_password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json

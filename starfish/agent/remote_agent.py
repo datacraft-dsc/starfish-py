@@ -5,14 +5,10 @@ Surfer Agent class to provide basic functionality for Ocean Agents
 In starfish-java, this is named as `RemoteAgent`
 
 """
-import secrets
-import re
-import json
 import time
 
 from eth_utils import remove_0x_prefix
 
-from starfish.account import Account
 from starfish.agent import AgentBase
 from starfish.asset import (
     DataAsset,
@@ -100,7 +96,7 @@ class RemoteAgent(AgentBase):
                 options.get('password', '')
             )
 
-    def register_asset(self, asset, listing_data, account=None ):
+    def register_asset(self, asset, listing_data, account=None):
         """
 
         Register an asset with Surfer
@@ -473,7 +469,7 @@ class RemoteAgent(AgentBase):
         # data from a different source, so load in the ddo
         if did and did != self._did and ddo is None:
             if self._did and not self._ddo:
-                squid_adapter = SquidAgentAdapter(ocean)
+                squid_adapter = SquidAgentAdapter(self._ocean)
                 ddo = squid_adapter.resolve_did_to_ddo(self._did)
 
         if did is None:

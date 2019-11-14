@@ -170,7 +170,7 @@ class Account():
         Return True if the password has been set, else return False
 
         """
-        return not self._password is None
+        return self._password is not None
 
     @property
     def address(self):

@@ -279,7 +279,7 @@ class StarfishEventsManager:
                                  consumer_address, block_number, new_agreement=True):
 
         # check the callback, if set then
-        if not self._is_valid_callback is None:
+        if self._is_valid_callback is not None:
             is_valid = self._is_valid_callback(did, agreement_id, self._account.address, consumer_address)
             if not is_valid:
                 return

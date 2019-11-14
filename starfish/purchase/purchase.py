@@ -4,6 +4,7 @@
 """
 
 from starfish.purchase.purchase_base import PurchaseBase
+from starfish.exceptions import StarfishPurchaseError
 
 class Purchase(PurchaseBase):
     """

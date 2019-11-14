@@ -8,6 +8,7 @@ from starfish.operation.operation_base import OperationBase
 from collections import ChainMap
 import requests
 import json
+from starfish.asset import AssetBase
 
 logger = logging.getLogger('starfish.operiation')
 
@@ -41,7 +42,7 @@ class Operation(OperationBase):
 
     def _payload(self,account,k,v):
         if self.schema.get(k)=='asset':
-            if isinstance(v,Asset):
+            if isinstance(v, AssetBase):
                 return {k:{'service_agreement_id':v.purchase_id, 'account':account}}
             raise ValueError("Invalid arguments ")
         else:
@@ -55,14 +56,14 @@ class Operation(OperationBase):
         This parameterization of invoke takes only string arguments (and not Ocean assets).
         """
         ## check if all the args are present
-        valid_args=len(frozenset(self.argnames).intersection(kwargs.keys()))==len(kwargs)
+        valid_args = len(frozenset(self.argnames).intersection(kwargs.keys()))==len(kwargs)
         ## check if args are not of 'asset' type
-        string_args_only=len([k for k,v in kwargs.items() if self.schema.get(k)=='string'])==len(kwargs)
+        string_args_only = len([k for k,v in kwargs.items() if self.schema.get(k) == 'string']) == len(kwargs)
         logger.info(f' valid args {valid_args} string args {string_args_only}')
         #if True==valid_args and string_args_only==True:
-        if True==valid_args:
-            r=requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=kwargs)
-            j=json.loads(r.text)
+        if True == valid_args:
+            r = requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=kwargs)
+            j = json.loads(r.text)
             return j
         else:
             raise ValueError("Invalid arguments ")
@@ -75,13 +76,13 @@ class Operation(OperationBase):
         logger.info(f'calling invoke in operation.py with payload: {kwargs}')
         #test if the keyword arguments are valid
         valid_args=len(frozenset(self.argnames).intersection(kwargs.keys()))==len(kwargs)
-        if True==valid_args:
+        if True == valid_args:
             try:
-                payload_seq=[_payload(account,k,v) for k,v in kwargs.items()]
-                payload=dict(ChainMap(*payload_seq))
+                payload_seq = [self._payload(account,k,v) for k,v in kwargs.items()]
+                payload = dict(ChainMap(*payload_seq))
 
-                r=requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=payload)
-                j=json.loads(r.text)
+                r = requests.post(self.agent._koi_url+'freeinvoke/'+self.did,json=payload)
+                j = json.loads(r.text)
                 return j
             except ValueError:
                 raise ValueError(" arguments are invalid according to the schema defn " )

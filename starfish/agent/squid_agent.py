@@ -9,6 +9,8 @@ import datetime
 import json
 import logging
 import re
+import traceback
+import sys
 
 from web3 import Web3
 
@@ -114,7 +116,7 @@ class SquidAgent(AgentBase):
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
         self._parity_url = kwargs.get('parity_url', self._ocean.keeper_url)
 
-    def register_asset(self, asset, listing_data, account ):
+    def register_asset(self, asset, listing_data, account):
         """
 
         Register a squid asset with the ocean network.
@@ -284,7 +286,7 @@ class SquidAgent(AgentBase):
 
         return purchase
 
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None ):
+    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
 
         Check to see if the account and purchase_id have access to the assed data.

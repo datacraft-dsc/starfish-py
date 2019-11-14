@@ -20,9 +20,11 @@ class Metadata():
         init the metadata class
         """
 
-        self._valid_fields = ['name', 'type', 'description', 'dateCreated',
-        'author', 'license', 'copyrightHolder', 'links', 'inLanguage',
-        'tags', 'additionalInformation', 'files' ]
+        self._valid_fields = [
+            'name', 'type', 'description', 'dateCreated',
+            'author', 'license', 'copyrightHolder', 'links', 'inLanguage',
+            'tags', 'additionalInformation', 'files'
+        ]
 
         self._data = {}
 

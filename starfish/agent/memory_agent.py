@@ -76,7 +76,7 @@ class MemoryAgent(AgentBase):
         :param asset: Asset to validate.
         :return: True if the asset is valid
         """
-        return not asset is None
+        return asset is not None
 
 
     def get_listing(self, listing_id):
@@ -150,7 +150,7 @@ class MemoryAgent(AgentBase):
 
         return purchase
 
-    def purchase_wait_for_completion(self, purchase_id, asset, account, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset, account,  purchase_id, timeoutSeconds):
         """
 
             Wait for completion of the purchase
@@ -161,7 +161,6 @@ class MemoryAgent(AgentBase):
 
         """
         return True
-
     def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
 

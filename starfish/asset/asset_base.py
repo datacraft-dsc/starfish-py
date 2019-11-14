@@ -30,10 +30,10 @@ class AssetBase(ABC):
         if self._metadata_text is None:
             self._metadata_text = json.dumps(metadata)
 
-        if not 'name' in metadata:
+        if 'name' not in metadata:
             raise ValueError('metadata must contain a metadata name')
 
-        if not 'type' in metadata:
+        if 'type' not in metadata:
             raise ValueError('metadata must contain a metadata type')
 
         self._did = did
