@@ -267,19 +267,7 @@ class SquidAgentAdapter():
             agreements._approve_token_transfer(service_agreement.get_price(), account)
             # subscribe to events related to this agreement_id before sending the request.
             logger.debug(f'Registering service agreement with id: {service_agreement_id}')
-            """
-            register_service_agreement( agreements._config.storage_path,
-                                        account,
-                                        service_agreement_id,
-                                        did,
-                                        service_def,
-                                        'consumer',
-                                        service_agreement.sa_definition_id,
-                                        service_agreement.get_price(),
-                                        asset.encrypted_files,
-                                        start_time=None
-            )
-            """
+
             BrizoProvider.get_brizo().initialize_service_agreement(did,
                                                                    service_agreement_id,
                                                                    service_agreement.sa_definition_id,
