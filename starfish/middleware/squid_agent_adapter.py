@@ -159,9 +159,9 @@ class SquidAgentAdapter():
         :param template_id: template id to use to register
         :param account: account to register for
         :return: The template registered
-        """
+
+
         # template = ServiceAgreementTemplate.from_json_file(get_sla_template_path())
-        """
         template = register_service_agreement_template(
             self._keeper.service_agreement,
             account,
@@ -495,7 +495,7 @@ class SquidAgentAdapter():
         service_agreement = None
         if ddo:
             service = ddo.get_service(service_type=ServiceTypes.ASSET_ACCESS)
-            assert ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary()
+            assert(ServiceAgreement.SERVICE_DEFINITION_ID in service.as_dictionary())
             service_agreement = ServiceAgreement.from_service_dict(service.as_dictionary())
         return service_agreement
 

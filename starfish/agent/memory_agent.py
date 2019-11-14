@@ -162,7 +162,7 @@ class MemoryAgent(AgentBase):
         """
         return True
 
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset, account,  purchase_id, timeoutSecond):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
