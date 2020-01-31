@@ -43,6 +43,6 @@ class IntegrationTestConfig():
 
         self.remote_agent_username=config.get('remote agent', 'username')
         self.remote_agent_password=config.get('remote agent', 'password')
-        self.remote_agent_url=config.get('remote agent', 'agent_url')
+        self.remote_agent_url=config.get('remote agent', 'url')
 
-        self.koi_url=config.get('invoke agent', 'koi_url')
+        self.koi_url=config.get('invoke agent', 'url')
