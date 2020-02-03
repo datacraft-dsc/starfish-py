@@ -24,6 +24,7 @@ install_requirements = [
     'coloredlogs',
     'eciespy',
     'pyopenssl',
+    'pycryptodome',
     'PyJWT',  # not jwt
     'PyYAML==4.2b4',
     'web3==4.5.0',

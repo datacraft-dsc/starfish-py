@@ -3,9 +3,11 @@
 """
 import io
 import requests
+import datetime
 from web3 import Web3
 
 from starfish import logger
+from starfish.utils.crypto_hash import hash_sha3_256
 
 # default base URI for this version surfer
 SURFER_BASE_URI = '/api/v1'
@@ -125,7 +127,7 @@ class SurferAgentAdapter():
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
-                'hash': SurferAgentAdapter.calc_hash_from_text(metadata)
+                'hash': hash_sha3_256(metadata)
             }
         return result
 
@@ -151,6 +153,7 @@ class SurferAgentAdapter():
             'assetid': asset_id,
             'info': listing_data,
         }
+
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
@@ -158,13 +161,14 @@ class SurferAgentAdapter():
             logger.debug('listing response returned: ' + str(data))
             return data
         else:
-            msg = f'listing response failed: {response.status_code} {response}'
+            msg = f'listing response failed: {response.status_code} {response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
 
     def download_asset(self, url):
-        self._content_header = 'text/plain'
+        self._content_header = 'application/octet-stream'
+#        self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
@@ -222,20 +226,22 @@ class SurferAgentAdapter():
 
     def upload_asset_data(self, url, asset_id, data):
         logger.debug(f'uploading data to {url}')
-        data_bytes = data
-        if not isinstance(data_bytes, bytes):
-            data_bytes = data.encode()
+#        if not isinstance(dataBytes, bytes):
+#            data_bytes = data.encode()
 
-        files = {'file': (asset_id, io.BytesIO(data_bytes), 'application/octet-stream')}
-        headers = {
-            'Authorization': self._headers['Authorization']
+        files = {
+            'file': (asset_id, io.BytesIO(data), 'application/octet-stream')
         }
-        self._content_header = 'application/octet-stream'
+#        files = {'file': (asset_id, data)}
+        headers = {
+            'Authorization': self._headers['Authorization'],
+        }
+#        self._content_header = 'application/octet-stream'
         response = SurferAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
-            msg = f'upload asset response failed: {response.status_code}'
+            msg = f'upload asset response failed: {response.status_code}:{response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -255,7 +261,7 @@ class SurferAgentAdapter():
                 'asset_id': asset_id,
                 'metadata_text': data,
             }
-            result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
+            result['hash'] = hash_sha3_256(result['metadata_text'])
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
                 result['metadata_text'] = data.decode('utf-8')
@@ -394,7 +400,7 @@ class SurferAgentAdapter():
         a 64 char hex string, which is the asset id
         :return 64 char hex string, with no leading '0x'
         """
-        return SurferAgentAdapter.calc_hash_from_text(metadata_text)
+        return hash_sha3_256(metadata_text)
 
     @staticmethod
     def set_http_client(http_client):
@@ -460,20 +466,6 @@ class SurferAgentAdapter():
                 'url': f'{url}{service_uri}',
             })
         return result
-
-    @staticmethod
-    def calc_hash_from_text(text):
-        """
-
-        Return the hash as a string of the provided text
-
-        """
-
-        data = text
-        if isinstance(text, str):
-            data = text.encode()
-
-        return Web3.toHex(Web3.sha3(data))[2:]
 
     @property
     def _content_header(self, value):

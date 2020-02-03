@@ -2,6 +2,11 @@
     Memory Asset
 """
 import os
+import io
+from web3 import Web3
+from starfish.utils.crypto_hash import hash_sha3_256
+
+
 from mimetypes import MimeTypes
 
 
@@ -26,7 +31,10 @@ class DataAsset(AssetBase):
         if data:
             if not (isinstance(data, str) or isinstance(data, bytes)):
                 raise ValueError('data can only be str or bytes')
+            if not isinstance(data, bytes):
+                data = data.encode('utf-8')
 
+            metadata['contentHash'] = hash_sha3_256(data)
         metadata['type'] = 'dataset'
 
         self._data = data

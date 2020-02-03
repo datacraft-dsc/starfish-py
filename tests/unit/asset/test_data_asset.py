@@ -19,5 +19,5 @@ def test_init():
     asset = DataAsset.create('test data asset', TEST_DATA)
     assert(asset)
     assert(isinstance(asset, DataAsset))
-    assert(asset.data == TEST_DATA)
+    assert(asset.data == TEST_DATA.encode('utf-8'))
 

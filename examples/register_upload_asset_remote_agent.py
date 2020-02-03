@@ -16,12 +16,12 @@ def main():
     print('my asset:', asset.data)
 
     # Create a remote agent to do the work.
-    agent_url = 'http://localhost:8080'
+    agent_url = 'http://localhost:3030'
     agent_ddo = RemoteAgent.generate_ddo(agent_url)
     agent_options = {
         'url': agent_url,
-        'username': 'test',
-        'password':  'foobar',
+        'username': 'Aladdin',
+        'password':  'OpenSesame',
     }
 
     # create a listing specifying the information about the asset
