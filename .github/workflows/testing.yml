@@ -54,6 +54,7 @@ jobs:
       run: |
         cd ../surfer
         clojure -M:main &
+        sleep 30
     - name: Test
       run: |
         pip install pytest
