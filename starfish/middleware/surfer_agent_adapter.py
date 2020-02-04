@@ -3,9 +3,6 @@
 """
 import io
 import requests
-import datetime
-from web3 import Web3
-
 from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256
 

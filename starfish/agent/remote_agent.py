@@ -584,7 +584,7 @@ class RemoteAgent(AgentBase):
 
         did = SquidAgentAdapter.generate_did()
         ddo = StarfishDDO(did)
-        for service_name, service_item in service_items.items():
+        for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)
 
         # add a signature

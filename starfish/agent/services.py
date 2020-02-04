@@ -67,18 +67,14 @@ class Services:
             'url': url
         }
 
-    def is_url(self, text):
-        info = urlparse(text)
-        return info.scheme
-
-
     def _get_url(self, name, url_or_uri=None, version=None):
         if version is None:
             version = self._version
         if url_or_uri is None:
             url_or_uri = SERVICES[name]['url'].format(BASE_URL=self._base_url, VERSION = version)
         url = url_or_uri
-        if not self.is_url(url):
+        info = urlparse(url)
+        if not info.scheme:
             url = urljoin(self._base_url, url)
         return url
 

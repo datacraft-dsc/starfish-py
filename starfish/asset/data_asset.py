@@ -2,8 +2,6 @@
     Memory Asset
 """
 import os
-import io
-from web3 import Web3
 from starfish.utils.crypto_hash import hash_sha3_256
 
 
