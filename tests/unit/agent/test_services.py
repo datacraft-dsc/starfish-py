@@ -1,6 +1,5 @@
 
 import pytest
-import secrets
 
 
 from starfish.agent.services import (
@@ -41,3 +40,6 @@ def test_init():
     result = services.as_dict
     assert(result)
     assert(services.names == ALL_SERVICES)
+
+    with pytest.raises(ValueError):
+        services.add('bad-name')
