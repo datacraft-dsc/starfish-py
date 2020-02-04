@@ -3,40 +3,20 @@
 """
 import io
 import requests
-from web3 import Web3
-
 from starfish import logger
+from starfish.utils.crypto_hash import hash_sha3_256
 
 # default base URI for this version surfer
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': {
-        'type': 'Ocean.Meta.v1',
-        'uri': f'{SURFER_BASE_URI}/meta/data',
-    },
-    'storage': {
-        'type': 'Ocean.Storage.v1',
-        'uri': f'{SURFER_BASE_URI}/assets',
-    },
-    'invoke': {
-        'type': 'Ocean.Invoke.v1',
-        'uri': f'{SURFER_BASE_URI}/invoke',
-    },
-    'market': {
-        'type': 'Ocean.Market.v1',
-        'uri': f'{SURFER_BASE_URI}/market',
-    },
-    'trust': {
-        'type': 'Ocean.Trust.v1',
-        'uri': f'{SURFER_BASE_URI}/trust',
-    },
-    'auth': {
-        'type': 'Ocean.Auth.v1',
-        'uri': f'{SURFER_BASE_URI}/auth',
-    },
+    'metadata': 'Ocean.Meta.v1',
+    'storage': 'Ocean.Storage.v1',
+    'invoke': 'Ocean.Invoke.v1',
+    'market': 'Ocean.Market.v1',
+    'trust': 'Ocean.Trust.v1',
+    'auth': 'Ocean.Auth.v1',
 }
-
 
 class SurferAgentInvokeAPIGenerator():
 
@@ -125,7 +105,7 @@ class SurferAgentAdapter():
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
-                'hash': SurferAgentAdapter.calc_hash_from_text(metadata)
+                'hash': hash_sha3_256(metadata)
             }
         return result
 
@@ -151,6 +131,7 @@ class SurferAgentAdapter():
             'assetid': asset_id,
             'info': listing_data,
         }
+
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
@@ -158,13 +139,14 @@ class SurferAgentAdapter():
             logger.debug('listing response returned: ' + str(data))
             return data
         else:
-            msg = f'listing response failed: {response.status_code} {response}'
+            msg = f'listing response failed: {response.status_code} {response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
 
     def download_asset(self, url):
-        self._content_header = 'text/plain'
+        self._content_header = 'application/octet-stream'
+#        self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
@@ -222,20 +204,22 @@ class SurferAgentAdapter():
 
     def upload_asset_data(self, url, asset_id, data):
         logger.debug(f'uploading data to {url}')
-        data_bytes = data
-        if not isinstance(data_bytes, bytes):
-            data_bytes = data.encode()
+#        if not isinstance(dataBytes, bytes):
+#            data_bytes = data.encode()
 
-        files = {'file': (asset_id, io.BytesIO(data_bytes), 'application/octet-stream')}
-        headers = {
-            'Authorization': self._headers['Authorization']
+        files = {
+            'file': (asset_id, io.BytesIO(data), 'application/octet-stream')
         }
-        self._content_header = 'application/octet-stream'
+#        files = {'file': (asset_id, data)}
+        headers = {
+            'Authorization': self._headers['Authorization'],
+        }
+#        self._content_header = 'application/octet-stream'
         response = SurferAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
-            msg = f'upload asset response failed: {response.status_code}'
+            msg = f'upload asset response failed: {response.status_code}:{response.text}'
             logger.error(msg)
             raise ValueError(msg)
         return None
@@ -255,7 +239,7 @@ class SurferAgentAdapter():
                 'asset_id': asset_id,
                 'metadata_text': data,
             }
-            result['hash'] = SurferAgentAdapter.calc_hash_from_text(result['metadata_text'])
+            result['hash'] = hash_sha3_256(result['metadata_text'])
             # convert to str if bytes
             if isinstance(result['metadata_text'], bytes):
                 result['metadata_text'] = data.decode('utf-8')
@@ -332,13 +316,12 @@ class SurferAgentAdapter():
 
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service or service type"""
-        supported_service = SurferAgentAdapter.find_supported_service(name)
-        if supported_service is None:
+        service_type = SurferAgentAdapter.find_supported_service_type(name)
+        if service_type is None:
             message = f'unknown surfer endpoint service name or type: {name}'
             logger.error(message)
             raise ValueError(message)
 
-        service_type = supported_service['type']
         endpoint = None
         if self._ddo:
             service = self._ddo.get_service(service_type)
@@ -394,7 +377,7 @@ class SurferAgentAdapter():
         a 64 char hex string, which is the asset id
         :return 64 char hex string, with no leading '0x'
         """
-        return SurferAgentAdapter.calc_hash_from_text(metadata_text)
+        return hash_sha3_256(metadata_text)
 
     @staticmethod
     def set_http_client(http_client):
@@ -432,48 +415,16 @@ class SurferAgentAdapter():
         return token
 
     @staticmethod
-    def find_supported_service(search_name_type):
+    def find_supported_service_type(search_name_type):
         """ return the supported service record if the name or service type is found
         else return None """
-        for name, service in SUPPORTED_SERVICES.items():
-            if service['type'] == search_name_type:
-                return service
+        for name, service_type in SUPPORTED_SERVICES.items():
+            if service_type == search_name_type:
+                return service_type
             if name == search_name_type:
-                return service
+                return service_type
         return None
 
-    @staticmethod
-    def generate_service_endpoints(url):
-        """
-        Return a dict list of services available for this surfer
-        in the format::
-
-            {'name': service name, 'type': service_type, 'url': service endpoint url}
-
-        """
-        result = []
-        for name, service in SUPPORTED_SERVICES.items():
-            service_uri = service['uri']
-            result.append({
-                'name': name,
-                'type': service['type'],
-                'url': f'{url}{service_uri}',
-            })
-        return result
-
-    @staticmethod
-    def calc_hash_from_text(text):
-        """
-
-        Return the hash as a string of the provided text
-
-        """
-
-        data = text
-        if isinstance(text, str):
-            data = text.encode()
-
-        return Web3.toHex(Web3.sha3(data))[2:]
 
     @property
     def _content_header(self, value):

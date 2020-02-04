@@ -10,6 +10,9 @@ import time
 from eth_utils import remove_0x_prefix
 
 from starfish.agent import AgentBase
+from starfish.agent.services import Services
+
+
 from starfish.asset import (
     DataAsset,
     OperationAsset,
@@ -40,7 +43,7 @@ class RemoteAgent(AgentBase):
         Surfer server.
 
     """
-    services = SUPPORTED_SERVICES
+    service_types = SUPPORTED_SERVICES
 
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
@@ -451,8 +454,8 @@ class RemoteAgent(AgentBase):
         :param str name: name or type of the service, e.g. 'metadata', 'storage', 'Ocean.Meta.v1'
         """
         adapter = self._get_adapter()
-        supported_service = SurferAgentAdapter.find_supported_service(name)
-        if supported_service is None:
+        service_type = SurferAgentAdapter.find_supported_service_type(name)
+        if service_type is None:
             raise ValueError(f'This agent does not support the following service name or type {name}')
         return adapter.get_endpoint(name)
 
@@ -539,27 +542,50 @@ class RemoteAgent(AgentBase):
         return data['id'], data['path']
 
     @staticmethod
-    def generate_ddo(url, services=None):
+    def generate_ddo(base_url_or_services, service_list=None):
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
         endpoints for the remote agent
 
-        :param str url: URL of the remote agent
-        :param dict services: Optional dict of services urls that are not assigned to the main url.
+        :param str base_url_or_services: Base URL of the remote agent
+        :param dict base_url_or_services: Service dict to use. This has to be in the sample format:
+            see starfish.agent.services SERVICES
+        :param :class:`agent.services.Services` base_url_or_services: An agent Services object.
+
+        :param dict service_list: Optional list of services to regsiter. This is only if the
+            base_url_or_services is a string containing the base_url.
 
         :return: created DDO object assigned to the url of the remote agent service
         :type: :class:.`DDO`
+
+            generate_ddo('http://localhost', ['metadata', 'storage'])
+
+            # is the same as
+            services = Services('http://localhost', service_list=['metadata', 'storage'])
+            generate_ddo(services)
+
+            # or
+
+            generate_ddo(services.as_dict)
+
         """
 
+        service_items = None
+
+        if isinstance(base_url_or_services, str):
+            services = Services(base_url_or_services, service_list)
+            service_items = services.as_dict
+        elif isinstance(base_url_or_services, dict):
+            service_items = base_url_or_services
+        elif isinstance(base_url_or_services, Services):
+            service_items = base_url_or_services.as_dict
+        else:
+            raise(TypeError('Invalid services type, must be a string, dict or Services object'))
+
         did = SquidAgentAdapter.generate_did()
-        service_endpoints = SurferAgentAdapter.generate_service_endpoints(url)
         ddo = StarfishDDO(did)
-        for service_endpoint in service_endpoints:
-            service_name = service_endpoint['name']
-            url = service_endpoint['url']
-            if services and service_name in services:
-                url = services[service_name]
-            ddo.add_service(service_endpoint['type'], url, None)
+        for _service_name, service_item in service_items.items():
+            ddo.add_service(service_item['type'], service_item['url'], None)
 
         # add a signature
         private_key_pem = ddo.add_signature()

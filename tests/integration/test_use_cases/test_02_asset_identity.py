@@ -11,11 +11,12 @@ import secrets
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent
 
+# TEST_TEXT = "Django raspberrypi diversity goat python. Cython raspberrypi community dict import object coroutine arduino. Python raspberrypi beautiful pypy gevent pycon raspberrypi rocksdahouse method. Return integration mercurial pypi dunder. Reduce integration itertools test import. Future raspberrypi exception list."
 
 def test_02_asset_register(ocean, resources, remote_agent):
-    test_data = secrets.token_hex(1024)
-    asset1 = DataAsset.create('TestAsset1', test_data)
-    asset2 = DataAsset.create('TestAsset2', test_data)
+    testData = secrets.token_hex(1024)
+    asset1 = DataAsset.create('TestAsset1', testData)
+    asset2 = DataAsset.create('TestAsset2', testData)
     listing = remote_agent.register_asset(asset2, resources.listing_data)
     assert(not listing is None)
     assert(64==len(listing.listing_id))
@@ -24,6 +25,7 @@ def test_02_asset_register(ocean, resources, remote_agent):
 
 
 def test_02_asset_upload(ocean, resources, remote_agent):
-    asset = DataAsset.create('TestAsset', secrets.token_hex(1024))
+    testData = secrets.token_hex(1024)
+    asset = DataAsset.create('TestAsset', testData)
     listing = remote_agent.register_asset(asset, resources.listing_data)
     remote_agent.upload_asset(listing.asset)
