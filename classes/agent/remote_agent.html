@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.5.7 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.5.8 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.7
+                0.5.8
               </div>
             
           
@@ -265,21 +265,35 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.generate_ddo">
-<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">services=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param">base_url_or_services</em>, <em class="sig-param">service_list=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a DDO for the remote agent url. This DDO will contain the supported
 endpoints for the remote agent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – URL of the remote agent</p></li>
-<li><p><strong>services</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Optional dict of services urls that are not assigned to the main url.</p></li>
+<li><p><strong>base_url_or_services</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Base URL of the remote agent</p></li>
+<li><p><strong>base_url_or_services</strong> – Service dict to use. This has to be in the sample format:
+see starfish.agent.services SERVICES</p></li>
 </ul>
+</dd>
+</dl>
+<p>:param <code class="xref py py-class docutils literal notranslate"><span class="pre">agent.services.Services</span></code> base_url_or_services: An agent Services object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>service_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Optional list of services to regsiter. This is only if the
+base_url_or_services is a string containing the base_url.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>created DDO object assigned to the url of the remote agent service</p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>:class:.`DDO`</p>
+<p>generate_ddo(‘<a class="reference external" href="http://localhost">http://localhost</a>’, [‘metadata’, ‘storage’])</p>
+<p># is the same as
+services = Services(‘<a class="reference external" href="http://localhost">http://localhost</a>’, service_list=[‘metadata’, ‘storage’])
+generate_ddo(services)</p>
+<p># or</p>
+<p>generate_ddo(services.as_dict)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -514,7 +528,7 @@ to see if it is assigned to a valid Asset.</p>
 <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span><span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">listing</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -547,8 +561,8 @@ to see if it is assigned to a valid Asset.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="starfish.agent.RemoteAgent.services">
-<code class="sig-name descname">services</code><em class="property"> = {'auth': {'type': 'Ocean.Auth.v1', 'uri': '/api/v1/auth'}, 'invoke': {'type': 'Ocean.Invoke.v1', 'uri': '/api/v1/invoke'}, 'market': {'type': 'Ocean.Market.v1', 'uri': '/api/v1/market'}, 'metadata': {'type': 'Ocean.Meta.v1', 'uri': '/api/v1/meta/data'}, 'storage': {'type': 'Ocean.Storage.v1', 'uri': '/api/v1/assets'}, 'trust': {'type': 'Ocean.Trust.v1', 'uri': '/api/v1/trust'}}</em><a class="headerlink" href="#starfish.agent.RemoteAgent.services" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.agent.RemoteAgent.service_types">
+<code class="sig-name descname">service_types</code><em class="property"> = {'auth': 'Ocean.Auth.v1', 'invoke': 'Ocean.Invoke.v1', 'market': 'Ocean.Market.v1', 'metadata': 'Ocean.Meta.v1', 'storage': 'Ocean.Storage.v1', 'trust': 'Ocean.Trust.v1'}</em><a class="headerlink" href="#starfish.agent.RemoteAgent.service_types" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

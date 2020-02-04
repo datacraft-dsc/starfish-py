@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Squid Agent class &mdash; starfish-py 0.5.7 documentation</title>
+  <title>Squid Agent class &mdash; starfish-py 0.5.8 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.7
+                0.5.8
               </div>
             
           
@@ -192,9 +192,9 @@
 </dl>
 <p>Example how to use this agent:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First import the classes</span>
-<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">SquidAgent</span>
-<span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
-<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">RemoteDataAsset</span>
+<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">SquidAgent</span>
+<span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
+<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">RemoteDataAsset</span>
 
 <span class="c1"># create the ocean object</span>
 <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
@@ -437,7 +437,7 @@ aquarius or the DID of the asset is not on the network ( Block chain )</p>
 <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span> <span class="n">account</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">listing</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

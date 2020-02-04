@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>starfish.ocean.ocean module &mdash; starfish-py 0.5.7 documentation</title>
+  <title>starfish.ocean.ocean module &mdash; starfish-py 0.5.8 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.5.7
+                0.5.8
               </div>
             
           
@@ -169,7 +169,7 @@
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>The Ocean class connects to the ocean network.</p>
 <p>For example to use this class you can do the following:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
 
 <span class="n">my_config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;contracts_path&#39;</span><span class="p">:</span> <span class="s1">&#39;artifacts&#39;</span><span class="p">,</span>
@@ -180,12 +180,12 @@
 </pre></div>
 </div>
 <p>or you can do the following setup:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish.ocean</span> <span class="k">import</span> <span class="n">Ocean</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish.ocean</span> <span class="kn">import</span> <span class="n">Ocean</span>
 <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">,</span> <span class="n">contracts_path</span><span class="o">=</span> <span class="n">artifacts</span><span class="p">,</span> <span class="n">gas_limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or with no block chain network:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish.ocean</span> <span class="k">import</span> <span class="n">Ocean</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starfish.ocean</span> <span class="kn">import</span> <span class="n">Ocean</span>
 <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -254,7 +254,7 @@ This returns the account object, of the local account.</p>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> or None</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;key_file_test.json&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;key_file_test.json&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

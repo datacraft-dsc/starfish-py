@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset using Squid &mdash; starfish-py 0.5.7 documentation</title>
+  <title>Register asset using Squid &mdash; starfish-py 0.5.8 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.7
+                0.5.8
               </div>
             
           
@@ -177,12 +177,12 @@
 <div class="section" id="creating-a-new-ocean-instance">
 <h2>Creating a new <cite>Ocean</cite> instance<a class="headerlink" href="#creating-a-new-ocean-instance" title="Permalink to this headline">¶</a></h2>
 <p>First import the main starfish ocean library, and the logging library</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="k">import</span> <span class="n">Ocean</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
 </pre></div>
 </div>
 <p>Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -193,7 +193,7 @@ We will always need some ether to be able to pay for the transaction costs to re
 on the Ethereum network.</p>
 <p>For our test Ocean network, we will use some ethereum for registering an asset, but
 no ocean tokens, since we are not purchasing an asset yet.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">,</span> <span class="s1">&#39;node0&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span><span class="p">)</span>
 <span class="go">1067 1000000003718520260000000000</span>
 </pre></div>
@@ -204,12 +204,12 @@ no ocean tokens, since we are not purchasing an asset yet.</p>
 <p>We now want to create a Starfish asset to register on the block chain.</p>
 <p>First we need to create a data asset, using the a URL of an actual asset. In this case
 we are going to use an image of a mantaray from the OceanProtocol web site.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="k">import</span> <span class="n">RemoteDataAsset</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">RemoteDataAsset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create_with_url</span><span class="p">(</span><span class="s1">&#39;MyAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Let see what’s in the data asset</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 <span class="go">{&#39;name&#39;: &#39;MyAsset&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;url&#39;: &#39;https://oceanprotocol.com/static/media/mantaray-full.22a18aee.svg&#39;, &#39;contentType&#39;: &#39;image/svg+xml&#39;}</span>
 </pre></div>
 </div>
@@ -222,7 +222,7 @@ None</p>
 <p>We now need an agent to register and manage our Asset. The agents
 task is to do the actual work of registration. In this example we are going to
 use Squid to register this asset.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="k">import</span> <span class="n">SquidAgent</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">SquidAgent</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
 <span class="go">    &#39;aquarius_url&#39;: &#39;http://localhost:5000&#39;,</span>
 <span class="go">    &#39;brizo_url&#39;: &#39;http://localhost:8030&#39;,</span>
@@ -238,23 +238,23 @@ use Squid to register this asset.</p>
 <h2>Register the Asset<a class="headerlink" href="#register-the-asset" title="Permalink to this headline">¶</a></h2>
 <p>First we nee to setup some ‘Listing data’, this is the data that we wish to publish
 to anyone who wants to download or buy from us.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mantaray Pic&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Ocean Protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">}</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mantaray Pic&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Ocean Protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Now we can register the asset we have created earlier with the ocean account. This will return
 a :class:.Listing object. The listing object will contain all of the listing data we supplied.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can now view the returned listing. The listing id is the unique identifier that
 we can use to load the asset.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">listing_id</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">listing_id</span><span class="p">)</span>
 <span class="go">did:op:00b8348dcfdf4a29b4f973cd0ad43c1d1321c628acf6463597efd21052043e5c</span>
 </pre></div>
 </div>
 <p>In fact the listing id for squid is the same as the asset id. You can see it is the same by getting the DID of the
 asset from the listing.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
 <span class="go">did:op:00b8348dcfdf4a29b4f973cd0ad43c1d1321c628acf6463597efd21052043e5c</span>
 </pre></div>
 </div>
@@ -305,12 +305,12 @@ asset from the listing.</p>
     <span class="c1"># Create a new Ocean instance.</span>
     <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;keeper_url&#39;</span><span class="p">])</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;config data&#39;</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;config data&#39;</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">)</span>
     <span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">load_account</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;account&#39;</span><span class="p">])</span>
 
     <span class="c1"># Print out the account&#39;s ocean balance.</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my account ocean balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;my account ether balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my account ocean balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my account ether balance:&#39;</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span><span class="p">)</span>
 
     <span class="c1"># create a listing specifying the information about the asset</span>
     <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
@@ -330,7 +330,7 @@ asset from the listing.</p>
     <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 
     <span class="c1"># Print out the listing did and listing data.</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;the listing&#39;</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;the listing&#39;</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
