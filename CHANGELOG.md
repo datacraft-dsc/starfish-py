@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.5.8
+
+*   Upgrade to use surfer 2020-01-31.2
+*   Change the call to create a ddo using service descriptors
+
 ### Release v0.5.7
 
 *   Allow for different response objects to use get_json(), json

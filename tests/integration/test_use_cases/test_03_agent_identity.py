@@ -14,10 +14,10 @@ from starfish.utils.did import did_parse
 from starfish.ddo.starfish_ddo import StarfishDDO
 
 
-def find_remote_service(service_type):
-    for service_name, service in RemoteAgent.services.items():
-        if service['type'] == service_type:
-            return service
+def find_remote_service(find_service_type):
+    for service_name, service_type in RemoteAgent.service_types.items():
+        if service_type == find_service_type:
+            return service_type
     return None
 
 def test_03_agent_did(remote_agent):
@@ -35,9 +35,9 @@ def test_03_agent_ddo(remote_agent):
     assert(ddo)
     assert(isinstance(ddo, StarfishDDO))
     for service in ddo.services:
-        supported_service = find_remote_service(service.type)
-        assert(supported_service)
-        endpoint = remote_agent.get_endpoint(service.type)
+        service_type = find_remote_service(service.type)
+        assert(service_type)
+        endpoint = remote_agent.get_endpoint(service_type)
         assert(endpoint)
         assert(endpoint == service.endpoints.service)
 

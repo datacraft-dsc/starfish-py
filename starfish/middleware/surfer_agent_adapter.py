@@ -13,32 +13,13 @@ from starfish.utils.crypto_hash import hash_sha3_256
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': {
-        'type': 'Ocean.Meta.v1',
-        'uri': f'{SURFER_BASE_URI}/meta/data',
-    },
-    'storage': {
-        'type': 'Ocean.Storage.v1',
-        'uri': f'{SURFER_BASE_URI}/assets',
-    },
-    'invoke': {
-        'type': 'Ocean.Invoke.v1',
-        'uri': f'{SURFER_BASE_URI}/invoke',
-    },
-    'market': {
-        'type': 'Ocean.Market.v1',
-        'uri': f'{SURFER_BASE_URI}/market',
-    },
-    'trust': {
-        'type': 'Ocean.Trust.v1',
-        'uri': f'{SURFER_BASE_URI}/trust',
-    },
-    'auth': {
-        'type': 'Ocean.Auth.v1',
-        'uri': f'{SURFER_BASE_URI}/auth',
-    },
+    'metadata': 'Ocean.Meta.v1',
+    'storage': 'Ocean.Storage.v1',
+    'invoke': 'Ocean.Invoke.v1',
+    'market': 'Ocean.Market.v1',
+    'trust': 'Ocean.Trust.v1',
+    'auth': 'Ocean.Auth.v1',
 }
-
 
 class SurferAgentInvokeAPIGenerator():
 
@@ -338,13 +319,12 @@ class SurferAgentAdapter():
 
     def get_endpoint(self, name):
         """return the endpoint based on the name of the service or service type"""
-        supported_service = SurferAgentAdapter.find_supported_service(name)
-        if supported_service is None:
+        service_type = SurferAgentAdapter.find_supported_service_type(name)
+        if service_type is None:
             message = f'unknown surfer endpoint service name or type: {name}'
             logger.error(message)
             raise ValueError(message)
 
-        service_type = supported_service['type']
         endpoint = None
         if self._ddo:
             service = self._ddo.get_service(service_type)
@@ -438,34 +418,16 @@ class SurferAgentAdapter():
         return token
 
     @staticmethod
-    def find_supported_service(search_name_type):
+    def find_supported_service_type(search_name_type):
         """ return the supported service record if the name or service type is found
         else return None """
-        for name, service in SUPPORTED_SERVICES.items():
-            if service['type'] == search_name_type:
-                return service
+        for name, service_type in SUPPORTED_SERVICES.items():
+            if service_type == search_name_type:
+                return service_type
             if name == search_name_type:
-                return service
+                return service_type
         return None
 
-    @staticmethod
-    def generate_service_endpoints(url):
-        """
-        Return a dict list of services available for this surfer
-        in the format::
-
-            {'name': service name, 'type': service_type, 'url': service endpoint url}
-
-        """
-        result = []
-        for name, service in SUPPORTED_SERVICES.items():
-            service_uri = service['uri']
-            result.append({
-                'name': name,
-                'type': service['type'],
-                'url': f'{url}{service_uri}',
-            })
-        return result
 
     @property
     def _content_header(self, value):

@@ -6,12 +6,13 @@ import pathlib
 
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
-
 from starfish import Ocean
 from starfish.agent import (
     RemoteAgent,
     SquidAgent,
 )
+
+from starfish.agent.services import Services, ALL_SERVICES
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
@@ -38,11 +39,10 @@ def remote_agent(ocean):
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
 
     ddo_options = None
+    services = Services(integrationTestConfig.remote_agent_url, ALL_SERVICES)
     if integrationTestConfig.koi_url:
-        ddo_options = {
-            'invoke': f'{integrationTestConfig.koi_url}/api/v1',
-        }
-    ddo = RemoteAgent.generate_ddo(integrationTestConfig.remote_agent_url, ddo_options)
+        services.add('invoke', f'{integrationTestConfig.koi_url}/api/v1')
+    ddo = RemoteAgent.generate_ddo(services)
     options = {
         'url': integrationTestConfig.remote_agent_url,
         'username': integrationTestConfig.remote_agent_username,
