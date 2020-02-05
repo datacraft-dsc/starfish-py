@@ -15,7 +15,7 @@ ASSET_METADATA = {
     'type': 'asset',
 }
 
-TEST_DID = 'did:op:' + secrets.token_hex(32)
+TEST_DID = 'did:dep:' + secrets.token_hex(32)
 
 def test_init(metadata):
     asset = AssetBase(ASSET_METADATA)
@@ -47,7 +47,7 @@ def test_asset_id():
     assert(asset.asset_id == f'0x{asset_id}')
 
 
-    path_did = 'did:op:' + secrets.token_hex(32)
+    path_did = 'did:dep:' + secrets.token_hex(32)
     asset_id = did_to_id(TEST_DID)
 
     asset = AssetBase(ASSET_METADATA, f'{path_did}/{asset_id}')

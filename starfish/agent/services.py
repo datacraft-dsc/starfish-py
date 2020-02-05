@@ -11,27 +11,27 @@ from urllib.parse import urlparse, urljoin
 
 SERVICES = {
     'metadata': {
-        'type': 'Ocean.Meta.{VERSION}',
+        'type': 'DEP.Meta.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/meta/data',
     },
     'storage': {
-        'type': 'Ocean.Storage.{VERSION}',
+        'type': 'DEP.Storage.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/assets',
     },
     'invoke': {
-        'type': 'Ocean.Invoke.{VERSION}',
+        'type': 'DEP.Invoke.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/invoke',
     },
     'market': {
-        'type': 'Ocean.Market.{VERSION}',
+        'type': 'DEP.Market.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/market',
     },
     'trust': {
-        'type': 'Ocean.Trust.{VERSION}',
+        'type': 'DEP.Trust.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/trust',
     },
     'auth': {
-        'type': 'Ocean.Auth.{VERSION}',
+        'type': 'DEP.Auth.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/auth',
     },
 }

@@ -8,8 +8,8 @@ import tempfile
 from starfish.agent.memory_agent import MemoryAgent
 from starfish.asset.data_asset import DataAsset
 
-VALID_DID = 'did:op:' + secrets.token_hex(64)
-INVALID_DID = 'did:ox:' + secrets.token_hex(128)
+VALID_DID = 'did:dep:' + secrets.token_hex(64)
+INVALID_DID = 'did:dep:' + secrets.token_hex(128)
 
 
 def _register_asset(ocean, resources, config):
