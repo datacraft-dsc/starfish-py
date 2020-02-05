@@ -15,7 +15,7 @@ ASSET_METADATA = {
     'type': 'asset',
 }
 
-TEST_DID = 'did:op:' + secrets.token_hex(32)
+TEST_DID = 'did:dep:' + secrets.token_hex(32)
 
 def test_init(metadata):
     asset = AssetBase(ASSET_METADATA)

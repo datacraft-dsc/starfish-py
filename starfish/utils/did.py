@@ -8,7 +8,7 @@ import re
 from urllib.parse import urlparse
 from web3 import Web3
 
-OCEAN_DID_METHOD = 'op'
+OCEAN_DID_METHOD = 'dep'
 
 def did_parse(did):
     """parse a DID into it's parts"""

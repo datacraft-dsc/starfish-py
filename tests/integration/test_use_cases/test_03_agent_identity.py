@@ -25,7 +25,7 @@ def test_03_agent_did(remote_agent):
     assert(did)
     data = did_parse(did)
     assert(data)
-    assert(data['method'] == 'op')
+    assert(data['method'] == 'dep')
     assert(data['id_hex'] == '0x' + data['id'])
     assert(data['path'] is None)
     assert(data['fragment'] is None)

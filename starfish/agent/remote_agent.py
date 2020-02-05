@@ -21,7 +21,10 @@ from starfish.asset import (
 )
 from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from starfish.utils.did import did_parse
+from starfish.utils.did import (
+    did_parse,
+    did_generate_random,
+)
 from starfish.listing import Listing
 from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
@@ -582,7 +585,7 @@ class RemoteAgent(AgentBase):
         else:
             raise(TypeError('Invalid services type, must be a string, dict or Services object'))
 
-        did = SquidAgentAdapter.generate_did()
+        did = did_generate_random()
         ddo = StarfishDDO(did)
         for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)

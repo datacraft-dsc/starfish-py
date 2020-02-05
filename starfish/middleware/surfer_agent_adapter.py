@@ -425,6 +425,9 @@ class SurferAgentAdapter():
                 return service_type
         return None
 
+    @staticmethod
+    def generate_did():
+        return DID.did()
 
     @property
     def _content_header(self, value):
