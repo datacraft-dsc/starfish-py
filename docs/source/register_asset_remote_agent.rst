@@ -77,7 +77,7 @@ So first create a DDO record for the local remote agent service.
 Lets see what the DID of the remote agent service is going to be?
 
 >>> print(ddo.did)
-did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c
+did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c
 
 We can now create the remote agent using teh options provided
 
@@ -106,7 +106,7 @@ a3392ea6f7b7301bb81c4fe58ad0959360d53662ce3a3d35589f9fbd0e276699
 Lets find out what the asset or listing DID
 
 >>> print(listing.did)
-did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5
+did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5
 
 You will notice that the listing DID returned contains two id's. The first is the regisered DID on the
 Ocean Protocol block chain, the second id is the internall asset id registered on the remote agent.

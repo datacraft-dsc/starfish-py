@@ -533,7 +533,7 @@ class RemoteAgent(AgentBase):
 
         :param str did: DID string to check to see if it is in a valid format.
 
-        :return: True if the DID is in the format 'did:op:xxxxx/yyyy'
+        :return: True if the DID is in the format 'did:dep:xxxxx/yyyy'
         :type: boolean
         """
         data = did_parse(did)
