@@ -17,7 +17,7 @@ from starfish.agent.services import Services, ALL_SERVICES
 
 
 def test_05_agent_endpoint_update(ocean, config, remote_agent):
-    endpoint = remote_agent.get_endpoint('Ocean.Meta.v1')
+    endpoint = remote_agent.get_endpoint('DEP.Meta.v1')
     assert(endpoint)
     assert(re.search('meta/data', endpoint))
 
@@ -27,4 +27,4 @@ def test_05_agent_endpoint_update(ocean, config, remote_agent):
     new_endpoint_uri = '/app/v99/meta/test'
     new_agent = RemoteAgent(ocean, ddo=ddo)
     with pytest.raises(ValueError):
-        new_endpoint = new_agent.get_endpoint('Ocean.Meta.v99')
+        new_endpoint = new_agent.get_endpoint('DEP.Meta.v99')

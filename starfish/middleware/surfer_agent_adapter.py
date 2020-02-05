@@ -10,12 +10,12 @@ from starfish.utils.crypto_hash import hash_sha3_256
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': 'Ocean.Meta.v1',
-    'storage': 'Ocean.Storage.v1',
-    'invoke': 'Ocean.Invoke.v1',
-    'market': 'Ocean.Market.v1',
-    'trust': 'Ocean.Trust.v1',
-    'auth': 'Ocean.Auth.v1',
+    'metadata': 'DEP.Meta.v1',
+    'storage': 'DEP.Storage.v1',
+    'invoke': 'DEP.Invoke.v1',
+    'market': 'DEP.Market.v1',
+    'trust': 'DEP.Trust.v1',
+    'auth': 'DEP.Auth.v1',
 }
 
 class SurferAgentInvokeAPIGenerator():

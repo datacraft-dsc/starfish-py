@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.6.0
+
+*   Change the DID header id from :op: to :dep:
+*   Change the DDO services from Ocean.xxx to DEP.xxx
+
 ### Release v0.5.8
 
 *   Upgrade to use surfer 2020-01-31.2
