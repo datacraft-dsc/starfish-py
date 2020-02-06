@@ -36,7 +36,7 @@ def test_init():
     assert(result['storage']['url'] == 'http://localhost/api/v1/assets')
 
 
-    services = Services('http://localhost', service_list=ALL_SERVICES)
+    services = Services('http://localhost', all_services=True)
     result = services.as_dict
     assert(result)
     assert(services.names == ALL_SERVICES)

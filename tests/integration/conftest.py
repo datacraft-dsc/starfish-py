@@ -12,7 +12,7 @@ from starfish.agent import (
     SquidAgent,
 )
 
-from starfish.agent.services import Services, ALL_SERVICES
+from starfish.agent.services import Services
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
@@ -39,7 +39,7 @@ def remote_agent(ocean):
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
 
     ddo_options = None
-    services = Services(integrationTestConfig.remote_agent_url, ALL_SERVICES)
+    services = Services(integrationTestConfig.remote_agent_url, all_services=True)
     if integrationTestConfig.koi_url:
         services.add('invoke', f'{integrationTestConfig.koi_url}/api/v1')
     ddo = RemoteAgent.generate_ddo(services)
