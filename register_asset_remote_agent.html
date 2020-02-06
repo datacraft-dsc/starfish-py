@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.5.8 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.6.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.5.8
+                0.6.0
               </div>
             
           
@@ -238,7 +238,7 @@ the Ocean Network is going to be the local Barge.</p>
 </div>
 <p>Lets see what the DID of the remote agent service is going to be?</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
-<span class="go">did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c</span>
+<span class="go">did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c</span>
 </pre></div>
 </div>
 <p>We can now create the remote agent using teh options provided</p>
@@ -267,7 +267,7 @@ information about the asset.</p>
 </div>
 <p>Lets find out what the asset or listing DID</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
-<span class="go">did:op:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5</span>
+<span class="go">did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5</span>
 </pre></div>
 </div>
 <p>You will notice that the listing DID returned contains two id’s. The first is the regisered DID on the
