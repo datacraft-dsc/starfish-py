@@ -16,6 +16,7 @@ SUPPORTED_SERVICES = {
     'market': 'DEP.Market.v1',
     'trust': 'DEP.Trust.v1',
     'auth': 'DEP.Auth.v1',
+    'job': 'DEP.Job.v1'
 }
 
 class SurferAgentInvokeAPIGenerator():
