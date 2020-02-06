@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.6.1
+
+*   Improve adding and changing agent services.
+
 ### Release v0.6.0
 
 *   Change the DID header id from :op: to :dep:
