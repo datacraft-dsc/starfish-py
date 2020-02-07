@@ -29,6 +29,12 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Install Surfer
+      uses: actions/checkout@v1
+      with:
+        repository: DEX-Company/surfer
+        ref: develop
+        path: surfer
     - name: Install Barge
       uses: actions/checkout@v1
       with:
@@ -42,19 +48,12 @@ jobs:
         sudo sysctl -w vm.max_map_count=262144
         ./start_ocean.sh --no-brizo --no-surfer --no-koi --local-spree-node &
         sleep 240
-    - name: Wait for barge startup
-      run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
-    - name: Install Surfer
-      uses: actions/checkout@v1
-      with:
-        repository: DEX-Company/surfer
-        ref: develop
-        path: surfer
     - name : Start Surfer
       run: |
         cd ../surfer
         clojure -M:main &
-        sleep 30
+    - name: Wait for barge startup
+      run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
     - name: Test
       run: |
         pip install pytest

@@ -43,7 +43,7 @@ def test_03_agent_ddo(remote_agent):
 
 
 def test_03_agent_get_endpoints(remote_agent):
-    assert(remote_agent.get_endpoint('metadata'))
+    assert(remote_agent.get_endpoint('meta'))
     assert(remote_agent.get_endpoint('storage'))
     assert(remote_agent.get_endpoint('invoke'))
     assert(remote_agent.get_endpoint('market'))

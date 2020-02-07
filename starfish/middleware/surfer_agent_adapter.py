@@ -3,6 +3,8 @@
 """
 import io
 import requests
+from urllib.parse import urljoin
+
 from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256
 
@@ -10,7 +12,7 @@ from starfish.utils.crypto_hash import hash_sha3_256
 SURFER_BASE_URI = '/api/v1'
 
 SUPPORTED_SERVICES = {
-    'metadata': 'DEP.Meta.v1',
+    'meta': 'DEP.Meta.v1',
     'storage': 'DEP.Storage.v1',
     'invoke': 'DEP.Invoke.v1',
     'market': 'DEP.Market.v1',
@@ -112,7 +114,7 @@ class SurferAgentAdapter():
 
     def save_metadata(self, metadata):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = self.get_endpoint('metadata')
+        url = urljoin(self.get_endpoint('meta') + '/', 'data');
         logger.debug(f'metadata save url {url}')
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
@@ -229,7 +231,7 @@ class SurferAgentAdapter():
         """read the metadata from a service agent using the asset_id"""
 
         result = None
-        endpoint = self.get_endpoint('metadata')
+        endpoint = urljoin(self.get_endpoint('meta') + '/', 'data')
         url = f'{endpoint}/{asset_id}'
         logger.debug(f'metadata read url {url}')
         self._content_header = 'text/plain'

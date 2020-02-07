@@ -10,33 +10,33 @@ from starfish.agent.services import (
 
 
 def test_add_single_default():
-    # I want to add a metadata service using the default url & version
+    # I want to add a meta service using the default url & version
     services = Services('http://localhost')
-    services.add('metadata')
+    services.add('meta')
     result = services.as_dict
     assert(result)
-    assert('metadata' in result)
-    assert(result['metadata']['url'] == 'http://localhost/api/v1/meta/data')
+    assert('meta' in result)
+    assert(result['meta']['url'] == 'http://localhost/api/v1/meta')
 
 
 def test_add_single_version_default():
-    # I want to add metadata service using the a default version
+    # I want to add meta service using the a default version
     services = Services('http://localhost', version='v99')
-    services.add('metadata')
+    services.add('meta')
     result = services.as_dict
     assert(result)
-    assert('metadata' in result)
-    assert(result['metadata']['url'] == 'http://localhost/api/v99/meta/data')
-    assert('metadata' in services.names)
+    assert('meta' in result)
+    assert(result['meta']['url'] == 'http://localhost/api/v99/meta')
+    assert('meta' in services.names)
 
 
 def test_add_multiple():
-    # I want to add only metadata and storage services
-    services = Services('http://localhost', service_list=['metadata', 'storage'])
+    # I want to add only meta and storage services
+    services = Services('http://localhost', service_list=['meta', 'storage'])
     result = services.as_dict
     assert(result)
-    assert('metadata' in result)
-    assert(result['metadata']['url'] == 'http://localhost/api/v1/meta/data')
+    assert('meta' in result)
+    assert(result['meta']['url'] == 'http://localhost/api/v1/meta')
     assert('storage' in result)
     assert(result['storage']['url'] == 'http://localhost/api/v1/assets')
 

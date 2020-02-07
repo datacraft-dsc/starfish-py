@@ -10,9 +10,9 @@ from urllib.parse import urlparse, urljoin
 
 
 SERVICES = {
-    'metadata': {
+    'meta': {
         'type': 'DEP.Meta.{VERSION}',
-        'url': '{BASE_URL}/api/{VERSION}/meta/data',
+        'url': '{BASE_URL}/api/{VERSION}/meta',
     },
     'storage': {
         'type': 'DEP.Storage.{VERSION}',
@@ -80,7 +80,7 @@ class Services:
         url = url_or_uri
         info = urlparse(url)
         if not info.scheme:
-            url = urljoin(self._base_url, url)
+            url = urljoin(self._base_url + '/', url)
         return url
 
     def _get_service_type(self, name, service_type=None, version=None):

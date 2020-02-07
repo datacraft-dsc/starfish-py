@@ -3,7 +3,7 @@
 from starfish import Ocean
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services, ALL_SERVICES
+from starfish.agent.services import Services
 
 def main():
 
@@ -18,7 +18,7 @@ def main():
 
     # Create a remote agent to do the work.
     agent_url = 'http://localhost:3030'
-    services = Services(agent_url, ALL_SERVICES)
+    services = Services(agent_url, all_services=True)
     agent_ddo = RemoteAgent.generate_ddo(services)
     agent_options = {
         'url': agent_url,
