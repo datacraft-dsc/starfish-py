@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.6.1 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.6.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.6.2
               </div>
             
           
@@ -294,7 +294,7 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
 <span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
 <span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
 <span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span>
-<span class="kn">from</span> <span class="nn">starfish.agent.services</span> <span class="kn">import</span> <span class="n">Services</span><span class="p">,</span> <span class="n">ALL_SERVICES</span>
+<span class="kn">from</span> <span class="nn">starfish.agent.services</span> <span class="kn">import</span> <span class="n">Services</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
@@ -309,7 +309,7 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
 
     <span class="c1"># Create a remote agent to do the work.</span>
     <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:3030&#39;</span>
-    <span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">(</span><span class="n">agent_url</span><span class="p">,</span> <span class="n">ALL_SERVICES</span><span class="p">)</span>
+    <span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">(</span><span class="n">agent_url</span><span class="p">,</span> <span class="n">all_services</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">agent_ddo</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
     <span class="n">agent_options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">agent_url</span><span class="p">,</span>
