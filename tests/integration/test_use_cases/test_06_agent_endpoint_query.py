@@ -15,8 +15,8 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 def test_06_agent_endpoint_query(ocean, remote_agent):
 
-    endpoint = remote_agent.get_endpoint('metadata')
-    assert(re.search('/meta/data', endpoint))
+    endpoint = remote_agent.get_endpoint('meta')
+    assert(re.search('/meta', endpoint))
     endpoint = remote_agent.get_endpoint('storage')
     assert(re.search('/assets', endpoint))
     endpoint = remote_agent.get_endpoint('invoke')
@@ -27,3 +27,5 @@ def test_06_agent_endpoint_query(ocean, remote_agent):
     assert(re.search('/trust$', endpoint))
     endpoint = remote_agent.get_endpoint('auth')
     assert(re.search('/auth$', endpoint))
+    endpoint = remote_agent.get_endpoint('job')
+    assert(re.search('/job', endpoint))

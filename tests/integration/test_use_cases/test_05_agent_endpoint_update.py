@@ -19,9 +19,9 @@ from starfish.agent.services import Services, ALL_SERVICES
 def test_05_agent_endpoint_update(ocean, config, remote_agent):
     endpoint = remote_agent.get_endpoint('DEP.Meta.v1')
     assert(endpoint)
-    assert(re.search('meta/data', endpoint))
+    assert(re.search('meta', endpoint))
 
-    services = Services(config.remote_agent_url, ['metadata'], 'v99')
+    services = Services(config.remote_agent_url, ['meta'], 'v99')
 
     ddo = RemoteAgent.generate_ddo(services)
     new_endpoint_uri = '/app/v99/meta/test'

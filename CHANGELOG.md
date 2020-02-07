@@ -1,5 +1,10 @@
 ## Change Log
 
+
+### Release v0.6.2
+
+*   Rename services name metadata to meta
+
 ### Release v0.6.1
 
 *   Improve adding and changing agent services.
