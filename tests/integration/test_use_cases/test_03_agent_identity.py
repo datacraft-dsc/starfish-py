@@ -49,4 +49,3 @@ def test_03_agent_get_endpoints(remote_agent):
     assert(remote_agent.get_endpoint('market'))
     assert(remote_agent.get_endpoint('trust'))
     assert(remote_agent.get_endpoint('auth'))
-    assert(remote_agent.get_endpoint('job'))

@@ -18,25 +18,7 @@ SUPPORTED_SERVICES = {
     'market': 'DEP.Market.v1',
     'trust': 'DEP.Trust.v1',
     'auth': 'DEP.Auth.v1',
-    'job': 'DEP.Job.v1'
 }
-
-class SurferAgentInvokeAPIGenerator():
-
-    invoke_sync_uri = '/invoke'
-    invoke_async_uri = '/invokeasync'
-    jobs_uri = '/jobs'
-    result = None
-    def generate_url(self, endpoint, name):
-        if name == 'invoke_sync':
-            result = f'{endpoint}{self.invoke_sync_uri}'
-        elif name == 'invoke_async':
-            result = f'{endpoint}{self.invoke_async_uri}'
-        elif name == 'jobs':
-            result = f'{endpoint}{self.jobs_uri}'
-        else:
-            raise ValueError('invalid generation name')
-        return result
 
 class ResponseWrapper():
     """
@@ -75,7 +57,6 @@ class ResponseWrapper():
 
 class SurferAgentAdapter():
     _http_client = requests
-    _invoke_api_generator = SurferAgentInvokeAPIGenerator()
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
@@ -281,14 +262,12 @@ class SurferAgentAdapter():
 
         call the invoke based on the asset_id without leading 0x
         """
-        endpoint = self.get_endpoint('invoke')
 
+        endpoint = self.get_endpoint('invoke','sync')
         if is_async:
-            url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'invoke_async')
-        else:
-            url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'invoke_sync')
+            endpoint = self.get_endpoint('invoke', 'async')
 
-        url = f'{url}/{asset_id}'
+        url = f'{endpoint}/{asset_id}'
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
@@ -302,9 +281,8 @@ class SurferAgentAdapter():
         return None
 
     def get_job(self, job_id):
-        endpoint = self.get_endpoint('invoke')
-        url = SurferAgentAdapter._invoke_api_generator.generate_url(endpoint, 'jobs')
-        url = f'{url}/{job_id}'
+        endpoint = self.get_endpoint('invoke', 'jobs')
+        url = f'{endpoint}/{job_id}'
         self._content_header = 'application/json'
         response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
         if response and response.status_code == requests.codes.ok:
@@ -317,7 +295,7 @@ class SurferAgentAdapter():
         return None
 
 
-    def get_endpoint(self, name):
+    def get_endpoint(self, name, uri=None):
         """return the endpoint based on the name of the service or service type"""
         service_type = SurferAgentAdapter.find_supported_service_type(name)
         if service_type is None:
@@ -337,6 +315,8 @@ class SurferAgentAdapter():
             message = f'unable to find surfer endpoint for {name} = {service_type}'
             logger.error(message)
             raise ValueError(message)
+        if uri:
+            endpoint = urljoin(endpoint + '/', uri)
         return endpoint
 
 
@@ -386,10 +366,6 @@ class SurferAgentAdapter():
     def set_http_client(http_client):
         """Set the http client to something other than the default `requests`"""
         SurferAgentAdapter._http_client = http_client
-
-    @staticmethod
-    def set_invoke_api_generator(invoke_api_generator):
-        SurferAgentAdapter._invoke_api_generator = invoke_api_generator
 
     @staticmethod
     def get_authorization_token(surfer_url, surfer_username, surfer_password):

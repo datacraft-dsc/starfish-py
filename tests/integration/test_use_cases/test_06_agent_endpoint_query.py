@@ -27,5 +27,3 @@ def test_06_agent_endpoint_query(ocean, remote_agent):
     assert(re.search('/trust$', endpoint))
     endpoint = remote_agent.get_endpoint('auth')
     assert(re.search('/auth$', endpoint))
-    endpoint = remote_agent.get_endpoint('job')
-    assert(re.search('/job', endpoint))
