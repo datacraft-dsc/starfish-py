@@ -94,10 +94,12 @@ class RemoteAgent(AgentBase):
             self._did = self._ddo.did
 
         self._authorization = options.get('authorization')
-        if self._authorization is None and 'url' in options and 'username' in options:
+
+        adapter = self._get_adapter()
+
+        if self._authorization is None and 'username' in options:
             # if no authorization, then we may need to create one
-            self._authorization = SurferAgentAdapter.get_authorization_token(
-                options['url'],
+            self._authorization = adapter.get_authorization_token(
                 options['username'],
                 options.get('password', '')
             )
