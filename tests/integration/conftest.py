@@ -44,7 +44,6 @@ def remote_agent(ocean):
         services.add('invoke', f'{integrationTestConfig.koi_url}/api/v1')
     ddo = RemoteAgent.generate_ddo(services)
     options = {
-        'url': integrationTestConfig.remote_agent_url,
         'username': integrationTestConfig.remote_agent_username,
         'password': integrationTestConfig.remote_agent_password,
     }

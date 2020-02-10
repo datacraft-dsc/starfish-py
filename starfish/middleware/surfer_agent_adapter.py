@@ -8,9 +8,6 @@ from urllib.parse import urljoin
 from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256
 
-# default base URI for this version surfer
-SURFER_BASE_URI = '/api/v1'
-
 SUPPORTED_SERVICES = {
     'meta': 'DEP.Meta.v1',
     'storage': 'DEP.Storage.v1',
@@ -295,6 +292,32 @@ class SurferAgentAdapter():
         return None
 
 
+    def get_authorization_token(surfer_username, surfer_password):
+        """Get a surfer authorization token (create one if needed).
+        Throws exception on error."""
+        token_url = self.get_endpoint('auth', 'token')
+        response = requests.get(token_url, auth=(surfer_username, surfer_password))
+        print(response)
+        token = None
+        if response.status_code == 200:
+            tokens = ResponseWrapper(response).json
+            if len(tokens) > 0:
+                token = tokens[-1]
+            else:   # need to create a token
+                response = requests.post(token_url, auth=(surfer_username, surfer_password))
+                if response.status_code == 200:
+                    token = ResponseWrapper(response).json
+                else:
+                    msg = f'unable to create token, status {response.status_code}'
+                    logger.error(msg)
+                    raise ValueError(msg)
+        else:
+            msg = f'unable to get tokens, status {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+        logger.debug(f'using surfer token {token}')
+        return token
+
     def get_endpoint(self, name, uri=None):
         """return the endpoint based on the name of the service or service type"""
         service_type = SurferAgentAdapter.find_supported_service_type(name)
@@ -367,31 +390,6 @@ class SurferAgentAdapter():
         """Set the http client to something other than the default `requests`"""
         SurferAgentAdapter._http_client = http_client
 
-    @staticmethod
-    def get_authorization_token(surfer_url, surfer_username, surfer_password):
-        """Get a surfer authorization token (create one if needed).
-        Throws exception on error."""
-        token_url = surfer_url + SURFER_BASE_URI + '/auth/token'
-        response = requests.get(token_url, auth=(surfer_username, surfer_password))
-        token = None
-        if response.status_code == 200:
-            tokens = ResponseWrapper(response).json
-            if len(tokens) > 0:
-                token = tokens[-1]
-            else:   # need to create a token
-                response = requests.post(token_url, auth=(surfer_username, surfer_password))
-                if response.status_code == 200:
-                    token = ResponseWrapper(response).json
-                else:
-                    msg = f'unable to create token, status {response.status_code}'
-                    logger.error(msg)
-                    raise ValueError(msg)
-        else:
-            msg = f'unable to get tokens, status {response.status_code}'
-            logger.error(msg)
-            raise ValueError(msg)
-        logger.debug(f'using surfer token {token}')
-        return token
 
     @staticmethod
     def find_supported_service_type(search_name_type):
