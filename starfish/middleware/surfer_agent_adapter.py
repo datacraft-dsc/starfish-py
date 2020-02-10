@@ -292,11 +292,11 @@ class SurferAgentAdapter():
         return None
 
 
-    def get_authorization_token(surfer_username, surfer_password):
+    def get_authorization_token(self, username, password):
         """Get a surfer authorization token (create one if needed).
         Throws exception on error."""
         token_url = self.get_endpoint('auth', 'token')
-        response = requests.get(token_url, auth=(surfer_username, surfer_password))
+        response = requests.get(token_url, auth=(username, password))
         print(response)
         token = None
         if response.status_code == 200:
@@ -304,7 +304,7 @@ class SurferAgentAdapter():
             if len(tokens) > 0:
                 token = tokens[-1]
             else:   # need to create a token
-                response = requests.post(token_url, auth=(surfer_username, surfer_password))
+                response = requests.post(token_url, auth=(username, password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json
                 else:
