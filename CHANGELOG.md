@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0 TBD
+
+*   Use the service 'auth' values to obtain a OAuth2 token
 
 ### Release v0.6.3
 
