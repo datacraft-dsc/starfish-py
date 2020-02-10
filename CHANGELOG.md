@@ -1,6 +1,10 @@
 ## Change Log
 
 
+### Release v0.6.3
+
+*   Move the Job service over to Invoke service.
+
 ### Release v0.6.2
 
 *   Rename services name metadata to meta

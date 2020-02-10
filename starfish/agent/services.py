@@ -34,10 +34,6 @@ SERVICES = {
         'type': 'DEP.Auth.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/auth',
     },
-    'job': {
-        'type': 'DEP.Job.{VERSION}',
-        'url': '{BASE_URL}/api/{VERSION}/jobs',
-    }
 }
 
 ALL_SERVICES=SERVICES.keys()
