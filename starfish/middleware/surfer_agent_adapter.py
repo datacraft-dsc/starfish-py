@@ -254,19 +254,20 @@ class SurferAgentAdapter():
         return None
 
 
-    def invoke(self, asset_id, params, is_async=False):
+    def invoke(self, asset_id, inputs, is_async=False):
         """
 
         call the invoke based on the asset_id without leading 0x
         """
 
-        endpoint = self.get_endpoint('invoke','sync')
+        endpoint = self.get_endpoint('invoke', 'sync')
         if is_async:
             endpoint = self.get_endpoint('invoke', 'async')
 
         url = f'{endpoint}/{asset_id}'
+
         self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.post(url, json=params, headers=self._headers)
+        response = SurferAgentAdapter._http_client.post(url, json=inputs, headers=self._headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             data = ResponseWrapper(response).json
             logger.debug('invoke response returned: ' + str(data))
@@ -297,7 +298,6 @@ class SurferAgentAdapter():
         Throws exception on error."""
         token_url = self.get_endpoint('auth', 'token')
         response = requests.get(token_url, auth=(username, password))
-        print(response)
         token = None
         if response.status_code == 200:
             tokens = ResponseWrapper(response).json

@@ -3,6 +3,7 @@ import pytest
 import secrets
 import logging
 import pathlib
+import requests
 
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
@@ -29,6 +30,7 @@ def ocean():
 
     return ocean
 
+
 @pytest.fixture(scope="module")
 def config():
     integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
@@ -40,8 +42,6 @@ def remote_agent(ocean):
 
     ddo_options = None
     services = Services(integrationTestConfig.remote_agent_url, all_services=True)
-    if integrationTestConfig.koi_url:
-        services.add('invoke', f'{integrationTestConfig.koi_url}/api/v1')
     ddo = RemoteAgent.generate_ddo(services)
     options = {
         'username': integrationTestConfig.remote_agent_username,
@@ -67,3 +67,12 @@ def purchaser_account(ocean, config):
 @pytest.fixture(scope='module')
 def agent_account(ocean, config):
     return ocean.load_account(config.agent_account['address'], config.agent_account['password'], config.agent_account['keyfile'])
+
+@pytest.fixture(scope='module')
+def invokable_list(config):
+    url = f'{config.remote_agent_url}/api/v1/admin/import-invokables'
+    username = config.remote_agent_username
+    password = config.remote_agent_password
+    response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
+    return response.json()
+

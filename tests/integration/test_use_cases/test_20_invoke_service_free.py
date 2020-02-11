@@ -13,54 +13,49 @@ import time
 
 from starfish.asset import OperationAsset
 from starfish.job import Job
+from starfish.utils.did import did_to_asset_id
 
-PRIME_NUMBER_OPERATION_ASSET_ID = "0x1c9796e94bc2d19f6f2f5d95724f4ad63ea6aa36b31227bf19b99cb4ab09eda3"
-TO_HASH_OPERATION_ASSET_ID = "0x868f40dce1242d6351c3cc7ded486c854df48c4d0fa7fc14c7158d9573a14cb8"
+INVOKE_TOKENIZE_TEXT_NAME = "Tokenize Text"
+INVOKE_INCREMENT_NAME = "Increment"
 
 TEST_HASH_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu congue odio, vel congue sapien. Morbi ac purus ornare, volutpat elit a, lacinia odio. Integer tempor tellus eget iaculis lacinia. Curabitur aliquam, dui vel vestibulum rhoncus, enim metus interdum enim, in sagittis massa est vel velit. Nunc venenatis commodo libero, vitae elementum nulla ultricies id. Aliquam erat volutpat. Cras eu pretium lacus, quis facilisis mauris. Duis sem quam, blandit id tempor in, porttitor at neque. Cras ut blandit risus. Maecenas vitae sodales neque, eu ultricies nibh.'
 
-def test_20_prime_number_sync(remote_agent):
+def _load_operation_asset(remote_agent, invokable_list, name):
+    asset_did = invokable_list[name]
+    assert(asset_did)
+    asset_id = did_to_asset_id(asset_did)
+    assert(asset_id)
+    asset = remote_agent.get_asset(asset_id)
+    assert(asset)
+    assert(isinstance(asset, OperationAsset))
+    assert(asset.metadata['type'] == 'operation')
+    return asset
 
-    # this should be get_listing..
-    # listing = remote_agent.get_listing(listing_id)
 
-    # at the moment Koi does not create a listing with the asset, so
-    # we need to call get_asset instead
-    operation_asset = remote_agent.get_asset(PRIME_NUMBER_OPERATION_ASSET_ID)
-    assert(operation_asset)
-    assert(isinstance(operation_asset, OperationAsset))
-    assert(operation_asset.metadata['type'] == 'operation')
+def test_20_tokenize_text_sync(remote_agent, invokable_list):
 
+    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
     inputs = {
-        'first-n': '11'
+        'text': TEST_HASH_TEXT
     }
-
-    response = remote_agent.invoke_result(operation_asset, inputs)
+    response = remote_agent.invoke_result(asset, inputs)
     assert(response)
     assert(response['outputs'])
     print(response)
 
-def test_20_prime_number_async(remote_agent):
+def test_20_tokenize_text_async(remote_agent, invokable_list):
 
-    # this should be get_listing..
-    # listing = remote_agent.get_listing(listing_id)
+    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
 
-    # at the moment Koi does not create a listing with the asset, so
-    # we need to call get_asset instead
-    operation_asset = remote_agent.get_asset(PRIME_NUMBER_OPERATION_ASSET_ID)
-    assert(operation_asset)
-    assert(isinstance(operation_asset, OperationAsset))
-    assert(operation_asset.metadata['type'] == 'operation')
-
-    params = {
-        'first-n': '11'
+    inputs = {
+        'text': TEST_HASH_TEXT
     }
 
-    response = remote_agent.invoke_result(operation_asset, params, True)
+    response = remote_agent.invoke_result(asset, inputs, True)
     assert(response)
-    assert(response['jobid'])
+    assert(response['job-id'])
 
-    job_id = int(response['jobid'])
+    job_id = int(response['job-id'])
     assert(isinstance(job_id, int))
 
     # FIXME: bug in koi, can return an empty job status record, straight after job creation
@@ -80,48 +75,34 @@ def test_20_prime_number_async(remote_agent):
 
 
 
-def test_20_to_hash_sync(remote_agent):
+def test_20_to_increment_sync(remote_agent):
 
-    # this should be get_listing..
-    # listing = remote_agent.get_listing(listing_id)
 
-    # at the moment Koi does not create a listing with the asset, so
-    # we need to call get_asset instead
-    operation_asset = remote_agent.get_asset(TO_HASH_OPERATION_ASSET_ID)
-    assert(operation_asset)
-    assert(isinstance(operation_asset, OperationAsset))
-    assert(operation_asset.metadata['type'] == 'operation')
+    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
-    params = {
+    inputs = {
         'to-hash': TEST_HASH_TEXT
     }
 
-    response = remote_agent.invoke_result(operation_asset, params)
+    response = remote_agent.invoke_result(asset, inputs)
     assert(response)
     assert(response['results'])
     print(response)
 
-def test_20_to_hash_async(remote_agent):
+def test_20_to_increment_async(remote_agent):
 
-    # this should be get_listing..
-    # listing = remote_agent.get_listing(listing_id)
+    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
-    # at the moment Koi does not create a listing with the asset, so
-    # we need to call get_asset instead
-    operation_asset = remote_agent.get_asset(TO_HASH_OPERATION_ASSET_ID)
-    assert(operation_asset)
-    assert(isinstance(operation_asset, OperationAsset))
-    assert(operation_asset.metadata['type'] == 'operation')
 
-    params = {
+    inputs = {
         'to-hash': TEST_HASH_TEXT
     }
 
-    response = remote_agent.invoke_result(operation_asset, params, True)
+    response = remote_agent.invoke_result(asset, inputs, True)
     assert(response)
-    assert(response['jobid'])
+    assert(response['job-id'])
 
-    job_id = int(response['jobid'])
+    job_id = int(response['job-id'])
     assert(isinstance(job_id, int))
 
     # FIXME: bug in koi, can return an empty job status record, straight after job creation
