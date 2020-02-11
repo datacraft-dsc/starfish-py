@@ -14,8 +14,8 @@ import time
 from starfish.asset import OperationAsset
 from starfish.job import Job
 
-PRIME_NUMBER_OPERATION_ASSET_ID = "0x0e48ad0c07f6fe87762e24cba3e013a029b7cd734310bface8b3218280366791"
-TO_HASH_OPERATION_ASSET_ID = "0x678d5e333ca9ea1a0f7939b4f1d923f73a1641dda8da0430c2b3604d3ceb5991"
+PRIME_NUMBER_OPERATION_ASSET_ID = "0x1c9796e94bc2d19f6f2f5d95724f4ad63ea6aa36b31227bf19b99cb4ab09eda3"
+TO_HASH_OPERATION_ASSET_ID = "0x868f40dce1242d6351c3cc7ded486c854df48c4d0fa7fc14c7158d9573a14cb8"
 
 TEST_HASH_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu congue odio, vel congue sapien. Morbi ac purus ornare, volutpat elit a, lacinia odio. Integer tempor tellus eget iaculis lacinia. Curabitur aliquam, dui vel vestibulum rhoncus, enim metus interdum enim, in sagittis massa est vel velit. Nunc venenatis commodo libero, vitae elementum nulla ultricies id. Aliquam erat volutpat. Cras eu pretium lacus, quis facilisis mauris. Duis sem quam, blandit id tempor in, porttitor at neque. Cras ut blandit risus. Maecenas vitae sodales neque, eu ultricies nibh.'
 
@@ -31,13 +31,13 @@ def test_20_prime_number_sync(remote_agent):
     assert(isinstance(operation_asset, OperationAsset))
     assert(operation_asset.metadata['type'] == 'operation')
 
-    params = {
+    inputs = {
         'first-n': '11'
     }
 
-    response = remote_agent.invoke_result(operation_asset, params)
+    response = remote_agent.invoke_result(operation_asset, inputs)
     assert(response)
-    assert(response['results'])
+    assert(response['outputs'])
     print(response)
 
 def test_20_prime_number_async(remote_agent):
