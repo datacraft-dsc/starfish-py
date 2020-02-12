@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.6.3 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.6.4 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
             
           
@@ -90,12 +90,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/starfish.html">starfish_py module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../agent.html">Agent Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="agent_base.html">Agent Base class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="invoke_agent.html">Invoke Agent class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory_agent.html">Memory Agent class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="squid_agent.html">Squid Agent class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Remote Agent class</a></li>
@@ -309,7 +307,7 @@ generate_ddo(services)</p>
 <dd><p>This is for compatability for Surfer calls to get an asset directly from Surfer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>asset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Id of the asset to read</p>
+<dd class="field-odd"><p><strong>asset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Id of the asset to read or did/asset_id</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>an asset class</p>
@@ -395,14 +393,14 @@ generate_ddo(services)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.agent.RemoteAgent.invoke_result">
-<code class="sig-name descname">invoke_result</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">params=None</em>, <em class="sig-param">is_async=False</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.invoke_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call an operation asset with params to execute a remote call.</p>
+<dt id="starfish.agent.RemoteAgent.invoke">
+<code class="sig-name descname">invoke</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">inputs=None</em>, <em class="sig-param">is_async=False</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.invoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call an operation asset with inputs to execute a remote call.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>asset</strong> (<a class="reference internal" href="../asset/operation_asset.html#starfish.asset.OperationAsset" title="starfish.asset.OperationAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperationAsset</span></code></a>) – Operation asset to use for this invoke call</p></li>
-<li><p><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Parameters to send to the invoke call</p></li>
+<li><p><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Inputs to send to the invoke call</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

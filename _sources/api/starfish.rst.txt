@@ -10,7 +10,6 @@ Subpackages
    starfish.job
    starfish.metadata
    starfish.ocean
-   starfish.operation
 
 Module contents
 ---------------

@@ -21,7 +21,6 @@ Contents
     agents
     register_asset_squid
     register_asset_remote_agent
-    modules/starfish
     classes/ocean
     classes/account
     classes/agent
