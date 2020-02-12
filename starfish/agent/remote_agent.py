@@ -221,7 +221,7 @@ class RemoteAgent(AgentBase):
 
         This is for compatability for Surfer calls to get an asset directly from Surfer
 
-        :param str asset_id: Id of the asset to read
+        :param str asset_id: Id of the asset to read or did/asset_id
 
         :return: an asset class
         :type: :class:`.AssetBase` class
@@ -232,7 +232,7 @@ class RemoteAgent(AgentBase):
         clean_asset_id = remove_0x_prefix(asset_id)
         read_metadata = adapter.read_metadata(clean_asset_id)
         if read_metadata:
-            asset = self._create_asset_from_read(asset_id, read_metadata)
+            asset = self._create_asset_from_read(clean_asset_id, read_metadata)
         return asset
 
     def get_listings(self):
@@ -271,8 +271,8 @@ class RemoteAgent(AgentBase):
         data = adapter.get_job(job_id)
         if data:
             status = data.get('status', None)
-            results = data.get('results', None)
-            job = Job(job_id, status, results)
+            outputs = data.get('outputs', None)
+            job = Job(job_id, status, outputs)
         return job
 
     def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
@@ -425,14 +425,14 @@ class RemoteAgent(AgentBase):
         """
         return False
 
-    def invoke_result(self, asset, params=None, is_async=False):
+    def invoke(self, asset, inputs=None, is_async=False):
         """
 
-        Call an operation asset with params to execute a remote call.
+        Call an operation asset with inputs to execute a remote call.
 
         :param asset: Operation asset to use for this invoke call
         :type asset: :class:`.OperationAsset`
-        :param dict params: Parameters to send to the invoke call
+        :param dict inputs: Inputs to send to the invoke call
 
         :return: Return a dict of the result.
         :type: dict
@@ -446,10 +446,10 @@ class RemoteAgent(AgentBase):
         mode_type = 'async' if is_async else 'sync'
         if not asset.is_mode(mode_type):
             raise TypeError(f'This operation asset does not support {mode_type}')
-        if not params:
-            params = {}
+        if not inputs:
+            inputs = {}
         adapter = self._get_adapter()
-        response = adapter.invoke(remove_0x_prefix(asset.asset_id), params, is_async)
+        response = adapter.invoke(remove_0x_prefix(asset.asset_id), inputs, is_async)
         return response
 
     def get_endpoint(self, name):
@@ -555,6 +555,7 @@ class RemoteAgent(AgentBase):
         :param str base_url_or_services: Base URL of the remote agent
         :param dict base_url_or_services: Service dict to use. This has to be in the sample format:
             see starfish.agent.services SERVICES
+
         :param :class:`agent.services.Services` base_url_or_services: An agent Services object.
 
         :param dict service_list: Optional list of services to regsiter. This is only if the
