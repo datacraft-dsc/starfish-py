@@ -10,6 +10,7 @@ import secrets
 import logging
 import json
 import time
+import re
 
 from starfish.asset import OperationAsset
 from starfish.job import Job
@@ -18,7 +19,7 @@ from starfish.utils.did import did_to_asset_id
 INVOKE_TOKENIZE_TEXT_NAME = "Tokenize Text"
 INVOKE_INCREMENT_NAME = "Increment"
 
-TEST_HASH_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu congue odio, vel congue sapien. Morbi ac purus ornare, volutpat elit a, lacinia odio. Integer tempor tellus eget iaculis lacinia. Curabitur aliquam, dui vel vestibulum rhoncus, enim metus interdum enim, in sagittis massa est vel velit. Nunc venenatis commodo libero, vitae elementum nulla ultricies id. Aliquam erat volutpat. Cras eu pretium lacus, quis facilisis mauris. Duis sem quam, blandit id tempor in, porttitor at neque. Cras ut blandit risus. Maecenas vitae sodales neque, eu ultricies nibh.'
+TEST_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu congue odio, vel congue sapien. Morbi ac purus ornare, volutpat elit a, lacinia odio. Integer tempor tellus eget iaculis lacinia. Curabitur aliquam, dui vel vestibulum rhoncus, enim metus interdum enim, in sagittis massa est vel velit. Nunc venenatis commodo libero, vitae elementum nulla ultricies id. Aliquam erat volutpat. Cras eu pretium lacus, quis facilisis mauris. Duis sem quam, blandit id tempor in, porttitor at neque. Cras ut blandit risus. Maecenas vitae sodales neque, eu ultricies nibh.'
 
 def _load_operation_asset(remote_agent, invokable_list, name):
     asset_did = invokable_list[name]
@@ -31,24 +32,31 @@ def _load_operation_asset(remote_agent, invokable_list, name):
     assert(asset.metadata['type'] == 'operation')
     return asset
 
+def _assert_tokenize_text(tokens, text):
+    values = re.split(r'\W+', text.lower())
+    values.pop()
+    assert(tokens == values)
+
 
 def test_20_tokenize_text_sync(remote_agent, invokable_list):
 
     asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
     inputs = {
-        'text': TEST_HASH_TEXT
+        'text': TEST_TEXT
     }
     response = remote_agent.invoke_result(asset, inputs)
     assert(response)
     assert(response['outputs'])
-    print(response)
+    assert(response['status'])
+    assert(response['status'] == 'succeeded')
+    _assert_tokenize_text(response['outputs']['tokens'], TEST_TEXT)
 
 def test_20_tokenize_text_async(remote_agent, invokable_list):
 
     asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
 
     inputs = {
-        'text': TEST_HASH_TEXT
+        'text': TEST_TEXT
     }
 
     response = remote_agent.invoke_result(asset, inputs, True)
@@ -58,7 +66,7 @@ def test_20_tokenize_text_async(remote_agent, invokable_list):
     job_id = int(response['job-id'])
     assert(isinstance(job_id, int))
 
-    # FIXME: bug in koi, can return an empty job status record, straight after job creation
+    # wait for job to complete
     time.sleep(1)
     # test get_job
     job = remote_agent.get_job(job_id)
@@ -70,8 +78,8 @@ def test_20_tokenize_text_async(remote_agent, invokable_list):
     assert(job)
     assert(isinstance(job, Job))
     assert(job.status == 'succeeded' or job.status == 'completed')
-    assert(job.results)
-    print(job)
+    assert(job)
+    _assert_tokenize_text(job.outputs['tokens'], TEST_TEXT)
 
 
 

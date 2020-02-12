@@ -19,18 +19,18 @@ class JobBase(ABC):
         'running',
         'accepted'
     ]
-    def __init__(self, job_id, status=None, results=None):
+    def __init__(self, job_id, status=None, outputs=None):
         """
 
         init the the Job Object Base with the agent instance
 
         :param int job_id: id of the job
         :param str status: status of the job
-        :param dict results: dict or None for the results
+        :param dict outputs: dict or None for the outputs
         """
         self._job_id = job_id
         self._status = status
-        self._results = results
+        self._outputs = outputs
         super().__init__()
 
     @property
@@ -60,19 +60,19 @@ class JobBase(ABC):
         return self._status
 
     @property
-    def results(self):
+    def outputs(self):
         """
-        Return the results for this job
+        Return the ouptuts for this job
 
         :return: results
         :type: dict or None
         """
-        return self._results
+        return self._outputs
 
     def __str__(self):
         text = 'job:'
         if self._status:
             text += f'{self._status}'
-        if self._results:
-            text += f' = {self._results}'
+        if self._outputs:
+            text += f' = {self._outputs}'
         return text

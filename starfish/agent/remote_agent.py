@@ -271,8 +271,8 @@ class RemoteAgent(AgentBase):
         data = adapter.get_job(job_id)
         if data:
             status = data.get('status', None)
-            results = data.get('results', None)
-            job = Job(job_id, status, results)
+            outputs = data.get('outputs', None)
+            job = Job(job_id, status, outputs)
         return job
 
     def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
