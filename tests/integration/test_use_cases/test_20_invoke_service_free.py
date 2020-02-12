@@ -32,7 +32,7 @@ def _load_operation_asset(remote_agent, invokable_list, name):
     assert(asset.metadata['type'] == 'operation')
     return asset
 
-def _assert_tokenize_text(tokens, text):
+def assert_tokenize_text(tokens, text):
     values = re.split(r'\W+', text.lower())
     values.pop()
     assert(tokens == values)
@@ -49,7 +49,7 @@ def test_20_tokenize_text_sync(remote_agent, invokable_list):
     assert(response['outputs'])
     assert(response['status'])
     assert(response['status'] == 'succeeded')
-    _assert_tokenize_text(response['outputs']['tokens'], TEST_TEXT)
+    assert_tokenize_text(response['outputs']['tokens'], TEST_TEXT)
 
 def test_20_tokenize_text_async(remote_agent, invokable_list):
 
@@ -77,33 +77,37 @@ def test_20_tokenize_text_async(remote_agent, invokable_list):
     job = remote_agent.job_wait_for_completion(job_id)
     assert(job)
     assert(isinstance(job, Job))
-    assert(job.status == 'succeeded' or job.status == 'completed')
+    assert(job.status == 'succeeded')
     assert(job)
-    _assert_tokenize_text(job.outputs['tokens'], TEST_TEXT)
+    assert_tokenize_text(job.outputs['tokens'], TEST_TEXT)
 
 
 
-def test_20_to_increment_sync(remote_agent):
+def test_20_increment_sync(remote_agent, invokable_list):
 
 
+    value = time.time()
     asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
     inputs = {
-        'to-hash': TEST_HASH_TEXT
+        'n': value
     }
 
     response = remote_agent.invoke_result(asset, inputs)
     assert(response)
-    assert(response['results'])
-    print(response)
+    assert(response['status'])
+    assert(response['status'] == 'succeeded')
+    assert(response['outputs'])
+    assert(float(response['outputs']['n']) - 1 == value)
 
-def test_20_to_increment_async(remote_agent):
+def test_20_increment_async(remote_agent, invokable_list):
 
+    value = time.time()
     asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
 
     inputs = {
-        'to-hash': TEST_HASH_TEXT
+        'n': value
     }
 
     response = remote_agent.invoke_result(asset, inputs, True)
@@ -113,19 +117,18 @@ def test_20_to_increment_async(remote_agent):
     job_id = int(response['job-id'])
     assert(isinstance(job_id, int))
 
-    # FIXME: bug in koi, can return an empty job status record, straight after job creation
+    # wait for job to complete
     time.sleep(1)
-
     # test get_job
     job = remote_agent.get_job(job_id)
     assert(job)
     assert(isinstance(job, Job))
 
-
     # test wait_for_job
     job = remote_agent.job_wait_for_completion(job_id)
     assert(job)
     assert(isinstance(job, Job))
-    assert(job.status == 'completed')
-    assert(job.results)
-    print(job)
+    assert(job.status == 'succeeded')
+    assert(job)
+    assert(float(job.outputs['n']) - 1 == value)
+
