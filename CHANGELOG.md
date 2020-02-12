@@ -1,8 +1,10 @@
 ## Change Log
 
-### Release v0 TBD
+### Release v0.6.4
 
 *   Use the service 'auth' values to obtain a OAuth2 token
+*   Inovke tests from surfer
+*   Remove invoke agent and operation
 
 ### Release v0.6.3
 
