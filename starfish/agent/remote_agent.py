@@ -425,14 +425,14 @@ class RemoteAgent(AgentBase):
         """
         return False
 
-    def invoke_result(self, asset, inputs=None, is_async=False):
+    def invoke(self, asset, inputs=None, is_async=False):
         """
 
-        Call an operation asset with params to execute a remote call.
+        Call an operation asset with inputs to execute a remote call.
 
         :param asset: Operation asset to use for this invoke call
         :type asset: :class:`.OperationAsset`
-        :param dict params: Parameters to send to the invoke call
+        :param dict inputs: Inputs to send to the invoke call
 
         :return: Return a dict of the result.
         :type: dict
