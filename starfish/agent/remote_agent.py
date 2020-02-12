@@ -555,6 +555,7 @@ class RemoteAgent(AgentBase):
         :param str base_url_or_services: Base URL of the remote agent
         :param dict base_url_or_services: Service dict to use. This has to be in the sample format:
             see starfish.agent.services SERVICES
+
         :param :class:`agent.services.Services` base_url_or_services: An agent Services object.
 
         :param dict service_list: Optional list of services to regsiter. This is only if the
