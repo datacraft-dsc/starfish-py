@@ -44,7 +44,7 @@ def test_20_tokenize_text_sync(remote_agent, invokable_list):
     inputs = {
         'text': TEST_TEXT
     }
-    response = remote_agent.invoke_result(asset, inputs)
+    response = remote_agent.invoke(asset, inputs)
     assert(response)
     assert(response['outputs'])
     assert(response['status'])
@@ -59,7 +59,7 @@ def test_20_tokenize_text_async(remote_agent, invokable_list):
         'text': TEST_TEXT
     }
 
-    response = remote_agent.invoke_result(asset, inputs, True)
+    response = remote_agent.invoke(asset, inputs, True)
     assert(response)
     assert(response['job-id'])
 
@@ -93,7 +93,7 @@ def test_20_increment_sync(remote_agent, invokable_list):
         'n': value
     }
 
-    response = remote_agent.invoke_result(asset, inputs)
+    response = remote_agent.invoke(asset, inputs)
     assert(response)
     assert(response['status'])
     assert(response['status'] == 'succeeded')
@@ -110,7 +110,7 @@ def test_20_increment_async(remote_agent, invokable_list):
         'n': value
     }
 
-    response = remote_agent.invoke_result(asset, inputs, True)
+    response = remote_agent.invoke(asset, inputs, True)
     assert(response)
     assert(response['job-id'])
 
