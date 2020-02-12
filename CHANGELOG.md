@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.6.5
+
++   fix auth token to request via SurferAgentAdapter._http_client
+
 ### Release v0.6.4
 
 +    Use the service 'auth' values to obtain a OAuth2 token
