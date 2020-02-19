@@ -49,6 +49,9 @@ dev_requirements = [
     'pkginfo',
     'twine',
     'watchdog',
+    'isort',
+    'mypy',
+    'black'
 ]
 
 docs_requirements = [
