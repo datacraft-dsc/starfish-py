@@ -33,6 +33,7 @@ jobs:
       uses: actions/checkout@v1
       with:
         repository: DEX-Company/surfer
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: develop
         path: surfer
     - name: Install Barge
