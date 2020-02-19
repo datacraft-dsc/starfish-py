@@ -1,6 +1,6 @@
-.PHONY: clean lint test docs
+.PHONY: clean clean-pyc clean-build lint flake8 isort test docs
 
-all: clean
+# all: clean lint test docs
 
 MODULE_NAME = starfish
 
@@ -8,9 +8,18 @@ FLAKE8_PARAMETERS = --max-line-length=132 $(MODULE_NAME)
 
 ISORT_PARAMETERS = --check-only --diff --recursive $(MODULE_NAME)
 
-clean:
-	rm -rf *egg-info dist .eggs
-	cd docs; $(MAKE) clean
+clean: clean-build clean-pyc
+
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr *.egg-info
+
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+
 
 lint: flake8 isort
 
