@@ -1,7 +1,2 @@
 
-from starfish.metadata.metadata import Metadata
-
-
-__all__ = [
-    'Metadata'
-]
+from starfish.metadata.metadata import Metadata     # noqa: F401

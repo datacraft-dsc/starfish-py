@@ -1,7 +1,2 @@
 
-from starfish.account.account import Account
-
-
-__all__ = [
-    'Account',
-]
+from starfish.account.account import Account        # noqa: F401

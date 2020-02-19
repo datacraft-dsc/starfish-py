@@ -1,5 +1,5 @@
 import logging
-from starfish.ocean.ocean import Ocean
+from starfish.ocean.ocean import Ocean      # noqa: F401
 
 """
     Starfish-py module
@@ -16,10 +16,3 @@ __version__ = '0.6.5'
 
 
 logger = logging.getLogger(__name__)
-
-
-__all__ = [
-    '__author__',
-    '__version__',
-    'Ocean',
-]

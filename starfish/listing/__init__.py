@@ -1,8 +1,3 @@
 
-from starfish.listing.listing import Listing
-from starfish.listing.listing_base import ListingBase
-
-__all__ = [
-    'Listing',
-    'ListingBase',
-]
+from starfish.listing.listing import Listing                # noqa: F401
+from starfish.listing.listing_base import ListingBase       # noqa: F401
