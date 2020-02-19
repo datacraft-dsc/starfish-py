@@ -2,36 +2,27 @@
     SquidAgentAdapter - Access squid services using the squid-py api
 """
 
+import json
 import logging
 import time
-import json
-
-from web3 import Web3
 
 from ocean_keeper.account import Account as SquidAccount
-
-from squid_py.config_provider import ConfigProvider
-from squid_py.config import Config as SquidConfig
-from squid_py.ocean import Ocean as SquidOcean
-from ocean_utils.did import (
-    did_to_id_bytes,
-    did_to_id,
-    DID,
-)
-from squid_py.ocean.keeper import SquidKeeper
-
+from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
+from ocean_keeper.web3_provider import Web3Provider
 from ocean_utils.agreements.service_agreement import ServiceAgreement
 from ocean_utils.agreements.service_types import ServiceTypes
-from squid_py.brizo.brizo_provider import BrizoProvider
-from ocean_keeper.web3_provider import Web3Provider
-from squid_py.ocean.ocean_tokens import OceanTokens
-
 from ocean_utils.ddo.metadata import Metadata
-from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
+from ocean_utils.did import DID, did_to_id, did_to_id_bytes
 from plecos import is_valid_dict_local, validate_dict_local
+from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.config import Config as SquidConfig
+from squid_py.config_provider import ConfigProvider
+from squid_py.ocean import Ocean as SquidOcean
+from squid_py.ocean.keeper import SquidKeeper
+from squid_py.ocean.ocean_tokens import OceanTokens
+from web3 import Web3
 
 from starfish.middleware.starfish_events_manager import StarfishEventsManager
-
 
 logger = logging.getLogger('starfish.squid_agent_adapter')
 # from starfish import logger

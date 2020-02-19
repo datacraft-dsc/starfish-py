@@ -1,7 +1,7 @@
 
 
-from starfish.job.job_base import JobBase
 from starfish.job.job import Job
+from starfish.job.job_base import JobBase
 
 
 __all__ = [

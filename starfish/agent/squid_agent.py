@@ -9,36 +9,26 @@ import datetime
 import json
 import logging
 import re
-import traceback
 import sys
+import traceback
+
+from ocean_keeper.exceptions import OceanDIDNotFound
+from ocean_utils.ddo.metadata import AdditionalInfoMeta, MetadataBase
+from squid_py.brizo.brizo_provider import BrizoProvider
 
 from web3 import Web3
 
+from starfish.account import Account
+from starfish.agent import AgentBase
+from starfish.asset import BundleAsset, DataAsset, RemoteDataAsset
+from starfish.exceptions import StarfishAssetNotFound, StarfishPurchaseError
+from starfish.listing import Listing
 from starfish.middleware.squid_agent_adapter import (
     SquidAgentAdapter,
     SquidAgentAdapterPurchaseError
 )
-from starfish.account import Account
-from starfish.agent import AgentBase
-from starfish.listing import Listing
-from starfish.asset import (
-    BundleAsset,
-    DataAsset,
-    RemoteDataAsset,
- )
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
-from starfish.exceptions import (
-    StarfishAssetNotFound,
-    StarfishPurchaseError
-)
-
-from squid_py.brizo.brizo_provider import BrizoProvider
-from ocean_utils.ddo.metadata import (
-    MetadataBase,
-    AdditionalInfoMeta,
-)
-from ocean_keeper.exceptions import OceanDIDNotFound
 
 
 logger = logging.getLogger('starfish.squid_agent')

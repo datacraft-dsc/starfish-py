@@ -1,19 +1,29 @@
 
-import logging
 import json
+import logging
 from base64 import b64encode
+
 from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import PKCS1_v1_5
-
-from starfish.ddo.authentication import Authentication
+from ocean_utils.ddo.constants import (
+    DID_DDO_CONTEXT_URL,
+    KEY_PAIR_MODULUS_BIT,
+    PROOF_TYPE
+)
 
 from ocean_utils.ddo.ddo import DDO
 
-from ocean_utils.ddo.public_key_base import PUBLIC_KEY_STORE_TYPE_PEM, PublicKeyBase
-from ocean_utils.ddo.constants import KEY_PAIR_MODULUS_BIT, DID_DDO_CONTEXT_URL, PROOF_TYPE
-from ocean_utils.ddo.public_key_rsa import PublicKeyRSA, PUBLIC_KEY_TYPE_RSA
+from ocean_utils.ddo.public_key_base import (
+    PUBLIC_KEY_STORE_TYPE_PEM,
+    PublicKeyBase
+)
+
+from ocean_utils.ddo.public_key_rsa import PUBLIC_KEY_TYPE_RSA, PublicKeyRSA
+
 from ocean_utils.ddo.service import Service
+
+from starfish.ddo.authentication import Authentication
 
 logger = logging.getLogger('starfish.ddo')
 

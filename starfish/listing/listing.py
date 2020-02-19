@@ -3,8 +3,9 @@
    Listing class
 """
 
-from starfish.listing.listing_base import ListingBase
 from starfish.account import Account
+
+from starfish.listing.listing_base import ListingBase
 
 
 class Listing(ListingBase):

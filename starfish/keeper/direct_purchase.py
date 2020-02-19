@@ -1,6 +1,6 @@
 from ocean_keeper.contract_base import ContractBase
-from ocean_keeper.web3_provider import Web3Provider
 from ocean_keeper.event_listener import EventListener
+from ocean_keeper.web3_provider import Web3Provider
 
 
 class DirectPurchase(ContractBase):

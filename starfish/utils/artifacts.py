@@ -1,7 +1,7 @@
 
 import logging
-import re
 import os
+import re
 import sys
 
 logger = logging.getLogger('starfish.artifacts')

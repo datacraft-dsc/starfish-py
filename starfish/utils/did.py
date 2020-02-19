@@ -3,9 +3,10 @@ DID utils
 
 """
 
-import secrets
 import re
+import secrets
 from urllib.parse import urlparse
+
 from web3 import Web3
 
 OCEAN_DID_METHOD = 'dep'

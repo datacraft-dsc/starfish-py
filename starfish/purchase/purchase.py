@@ -3,8 +3,8 @@
     Basic Purchase class
 """
 
-from starfish.purchase.purchase_base import PurchaseBase
 from starfish.exceptions import StarfishPurchaseError
+from starfish.purchase.purchase_base import PurchaseBase
 
 
 class Purchase(PurchaseBase):

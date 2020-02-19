@@ -5,20 +5,15 @@ Ocean class to access the Ocean eco system.
 """
 import logging
 
-from starfish.utils.artifacts import (
-    find_contract_path,
-    is_contract_type_exists,
-)
-
-from web3 import (
-    Web3,
-    HTTPProvider
-)
+from squid_py.ocean.keeper import SquidKeeper
+from web3 import HTTPProvider, Web3
 
 from starfish.account import Account
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from squid_py.ocean.keeper import SquidKeeper
-
+from starfish.utils.artifacts import (
+    find_contract_path,
+    is_contract_type_exists
+)
 
 logger = logging.getLogger('starfish.ocean')
 

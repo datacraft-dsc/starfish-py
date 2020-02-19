@@ -4,8 +4,8 @@
 import os
 from mimetypes import MimeTypes
 
-from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.asset.asset_base import AssetBase
+from starfish.utils.crypto_hash import hash_sha3_256
 
 
 class DataAsset(AssetBase):

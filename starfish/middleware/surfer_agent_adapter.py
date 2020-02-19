@@ -2,8 +2,9 @@
     SurferAgentAdapter - Adapter to access the Surfer Services
 """
 import io
-import requests
 from urllib.parse import urljoin
+
+import requests
 
 from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256

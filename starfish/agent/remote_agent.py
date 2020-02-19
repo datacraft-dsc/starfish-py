@@ -11,23 +11,22 @@ from eth_utils import remove_0x_prefix
 
 from starfish.agent import AgentBase
 from starfish.agent.services import Services
-
 from starfish.asset import (
     DataAsset,
     OperationAsset,
     create_asset_from_metadata_text,
-    is_asset_hash_valid,
+    is_asset_hash_valid
 )
-from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
-from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from starfish.utils.did import (
-    did_parse,
-    did_generate_random,
-)
-from starfish.listing import Listing
-from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.exceptions import StarfishAssetInvalid
+from starfish.job import Job
+from starfish.listing import Listing
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
+from starfish.middleware.surfer_agent_adapter import (
+    SUPPORTED_SERVICES,
+    SurferAgentAdapter
+)
+from starfish.utils.did import did_generate_random, did_parse
 
 
 class RemoteAgent(AgentBase):

@@ -4,11 +4,11 @@ Memory Agent class to provide basic functionality for Ocean Agents
 
 """
 
-import secrets
-import re
 import json
+import re
+import secrets
 
-from ocean_utils.did import id_to_did, did_to_id
+from ocean_utils.did import did_to_id, id_to_did
 
 from starfish.agent import AgentBase
 from starfish.listing import Listing

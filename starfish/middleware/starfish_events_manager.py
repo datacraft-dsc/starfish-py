@@ -9,15 +9,20 @@ from datetime import datetime
 from threading import Thread
 
 
-from ocean_events_handler.event_handlers import accessSecretStore, lockRewardCondition
+from ocean_events_handler.agreement_store.agreements import AgreementsStorage
+from ocean_events_handler.event_handlers import (
+    accessSecretStore,
+    lockRewardCondition
+)
+from ocean_keeper.web3_provider import Web3Provider
 from ocean_utils.agreements.service_agreement import ServiceAgreement
-from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
+from ocean_utils.agreements.service_agreement_template import (
+    ServiceAgreementTemplate
+)
 from ocean_utils.agreements.service_types import ServiceTypes
 from ocean_utils.agreements.utils import get_sla_template
-from ocean_events_handler.agreement_store.agreements import AgreementsStorage
 from ocean_utils.did import id_to_did
 from ocean_utils.did_resolver.did_resolver import DIDResolver
-from ocean_keeper.web3_provider import Web3Provider
 
 logger = logging.getLogger(__name__)
 
