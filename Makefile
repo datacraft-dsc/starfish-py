@@ -2,11 +2,11 @@
 
 # all: clean lint test docs
 
-MODULE_NAME = starfish
+PACKAGE_FOLDERS = starfish
 
-FLAKE8_PARAMETERS = --max-line-length=132 $(MODULE_NAME)
+FLAKE8_PARAMETERS = --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
 
-ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --diff --recursive $(MODULE_NAME)
+ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --diff --recursive $(PACKAGE_FOLDERS)
 
 clean: clean-build clean-pyc
 

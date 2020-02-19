@@ -20,7 +20,7 @@ jobs:
         pip install -r requirements_dev.txt
     - name: Build Docs
       run: |
-        make -C docs html
+        make docs
         touch docs/build/html/.nojekyll
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v2.5.0
