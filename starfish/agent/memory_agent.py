@@ -26,12 +26,9 @@ class MemoryAgent(AgentBase):
 
     """
 
-    def __init__(self, ocean, *args, **kwargs):
+    def __init__(self, ocean):
         """init a standard ocean object"""
         AgentBase.__init__(self, ocean)
-
-        if args and isinstance(args[0], dict):
-            kwargs = args[0]
 
         self._memory = {
             'listing_data': {},
@@ -78,7 +75,6 @@ class MemoryAgent(AgentBase):
         """
         return asset is not None
 
-
     def get_listing(self, listing_id):
         """
 
@@ -99,7 +95,6 @@ class MemoryAgent(AgentBase):
                 listing = Listing(self, listing_id, asset, listing_data)
 
         return listing
-
 
     def search_listings(self, text, sort=None, offset=100, page=0):
         """
@@ -161,6 +156,7 @@ class MemoryAgent(AgentBase):
 
         """
         return True
+
     def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
 

@@ -236,7 +236,8 @@ class StarfishEventsManager:
             return
 
         if self._account.address != event.args["_accessProvider"]:
-            logger.debug(f'agreement event not for my address {self._account.address}, event provider address {event.args["_accessProvider"]}')
+            logger.debug(f'agreement event not for my address {self._account.address}, \
+                event provider address {event.args["_accessProvider"]}')
             return
         agreement_id = None
         try:

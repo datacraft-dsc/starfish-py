@@ -17,6 +17,7 @@ SUPPORTED_SERVICES = {
     'auth': 'DEP.Auth.v1',
 }
 
+
 class ResponseWrapper():
     """
     Response object returned by different test and production
@@ -51,7 +52,6 @@ class ResponseWrapper():
         return data
 
 
-
 class SurferAgentAdapter():
     _http_client = requests
 
@@ -66,7 +66,7 @@ class SurferAgentAdapter():
 #        self._headers = {'content-type': 'application/json'}
         self._headers = {'content-type': 'text/plain'}
         authorization = options.get('authorization')
-        if authorization: # this is an OAuth2 token
+        if authorization:   # this is an OAuth2 token
             self._headers['Authorization'] = f'token {authorization}'
 
     def register_asset(self, metadata):
@@ -92,7 +92,7 @@ class SurferAgentAdapter():
 
     def save_metadata(self, metadata):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = urljoin(self.get_endpoint('meta') + '/', 'data');
+        url = urljoin(self.get_endpoint('meta') + '/', 'data')
         logger.debug(f'metadata save url {url}')
         self._content_header = 'text/plain'
         response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
@@ -253,7 +253,6 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-
     def invoke(self, asset_id, inputs, is_async=False):
         """
 
@@ -291,7 +290,6 @@ class SurferAgentAdapter():
             logger.error(msg)
             raise ValueError(msg)
         return None
-
 
     def get_authorization_token(self, username, password):
         """Get a surfer authorization token (create one if needed).
@@ -342,7 +340,6 @@ class SurferAgentAdapter():
             endpoint = urljoin(endpoint + '/', uri)
         return endpoint
 
-
     @property
     def ddo(self):
         """return the DDO stored for this agent"""
@@ -374,7 +371,6 @@ class SurferAgentAdapter():
             return metadata_id == asset_id
         return False
 
-
     @staticmethod
     def get_asset_id_from_metadata(metadata_text):
         """
@@ -389,7 +385,6 @@ class SurferAgentAdapter():
     def set_http_client(http_client):
         """Set the http client to something other than the default `requests`"""
         SurferAgentAdapter._http_client = http_client
-
 
     @staticmethod
     def find_supported_service_type(search_name_type):

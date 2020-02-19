@@ -39,6 +39,7 @@ logger = logging.getLogger('starfish.squid_agent_adapter')
 # to keep the squid_agent_adapter seperate, we will issue a seperate purchase exception just
 # from this class
 
+
 class SquidAgentAdapterPurchaseError(Exception):
     """ Raised when a purchase event has failed to complete """
 
@@ -47,9 +48,8 @@ class AgreementStoreManagerExtra(AgreementStoreManager):
     def get_agreement_ids_for_did(self, did):
         return self.contract_concise.getAgreementIdsForDID(did)
 
+
 class SquidAgentAdapter():
-
-
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
@@ -63,7 +63,6 @@ class SquidAgentAdapter():
         self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
-
 
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
@@ -277,7 +276,6 @@ class SquidAgentAdapter():
 
         return service_agreement_id
 
-
     def consume_asset(self, ddo, account, service_agreement_id):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
@@ -457,7 +455,6 @@ class SquidAgentAdapter():
             squid_ocean._keeper, squid_ocean._config.storage_path, account)
 
         events_manager.stop_agreement_events_monitor()
-
 
     @property
     def accounts(self):

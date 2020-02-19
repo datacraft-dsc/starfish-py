@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 from starfish.asset.asset_base import AssetBase
 from starfish.asset.data_asset import DataAsset
 
+
 class RemoteDataAsset(DataAsset):
 
     @staticmethod
@@ -38,7 +39,6 @@ class RemoteDataAsset(DataAsset):
                 metadata['contentType'] = mime_type[0]
 
         return RemoteDataAsset(metadata, did)
-
 
     @property
     def url(self):

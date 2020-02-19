@@ -6,6 +6,7 @@
 from starfish.listing.listing_base import ListingBase
 from starfish.account import Account
 
+
 class Listing(ListingBase):
     """
         Create a Listing object
@@ -19,7 +20,6 @@ class Listing(ListingBase):
         :param ddo: Optional ddo for the listing
         :type data: dict
     """
-
 
     def purchase(self, account):
         """

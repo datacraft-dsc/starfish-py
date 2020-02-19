@@ -18,6 +18,7 @@ def get_default(args, index, default=None):
         return args[index]
     return default
 
+
 def assert_arg_match(args, index, patterns, message):
     value = get_default(args, index)
     if value:
@@ -25,6 +26,7 @@ def assert_arg_match(args, index, patterns, message):
             if re.match(pattern, value):
                 return value
     raise OceanCommandLineError(message)
+
 
 def assert_arg_filename(args, index, message):
     value = get_default(args, index)
@@ -34,6 +36,7 @@ def assert_arg_filename(args, index, message):
 
 
 class CommandLine:
+
     def __init__(self, **kwargs):
         self._ocean = Ocean(**kwargs)
         self._output = kwargs.get('output', None)

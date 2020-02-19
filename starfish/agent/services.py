@@ -36,7 +36,8 @@ SERVICES = {
     },
 }
 
-ALL_SERVICES=SERVICES.keys()
+ALL_SERVICES = SERVICES.keys()
+
 
 class Services:
 
@@ -53,7 +54,6 @@ class Services:
                 raise ValueError('you must provide a base URL')
             for service_name in service_list:
                 self.add(service_name)
-
 
     def add(self, name, url_or_uri=None, service_type=None, version=None):
         if url_or_uri is None and self._base_url is None:
@@ -72,7 +72,7 @@ class Services:
         if url_or_uri is None:
             if name not in SERVICES:
                 raise ValueError(f'service name {name} is not a valid service name')
-            url_or_uri = SERVICES[name]['url'].format(BASE_URL=self._base_url, VERSION = version)
+            url_or_uri = SERVICES[name]['url'].format(BASE_URL=self._base_url, VERSION=version)
         url = url_or_uri
         info = urlparse(url)
         if not info.scheme:
@@ -85,7 +85,7 @@ class Services:
         if service_type is None:
             if name not in SERVICES:
                 raise ValueError(f'service name {name} is not a valid service name')
-            service_type = SERVICES[name]['type'].format(VERSION = version)
+            service_type = SERVICES[name]['type'].format(VERSION=version)
 
         return service_type
 

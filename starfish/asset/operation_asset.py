@@ -4,6 +4,7 @@
 
 from starfish.asset.asset_base import AssetBase
 
+
 class OperationAsset(AssetBase):
 
     """
@@ -48,5 +49,5 @@ class OperationAsset(AssetBase):
         """
         try:
             return mode_type in self._metadata['operation']['modes']
-        except:
+        except ValueError:
             raise ValueError('Metadata does not contain operation->modes structure')

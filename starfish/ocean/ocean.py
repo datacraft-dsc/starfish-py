@@ -22,6 +22,7 @@ from squid_py.ocean.keeper import SquidKeeper
 
 logger = logging.getLogger('starfish.ocean')
 
+
 class Ocean():
     """
     .. _Asset class: asset.html
@@ -119,7 +120,6 @@ class Ocean():
 
         logger.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
 
-
     def register_did(self, did, ddo, account):
         """
 
@@ -190,7 +190,7 @@ class Ocean():
             #
             my_result = ocean.search_operations('model_training')
         """
-        ## To be implemented
+        # To be implemented
         return []
 
     def load_account(self, address, password=None, keyfile=None, agent_adapter=None):

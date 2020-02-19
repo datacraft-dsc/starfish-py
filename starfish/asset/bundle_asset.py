@@ -4,6 +4,7 @@
 
 from starfish.asset.asset_base import AssetBase
 
+
 class BundleAsset(AssetBase):
     """
 
@@ -93,7 +94,6 @@ class BundleAsset(AssetBase):
         asset = self._assets[name]
         del self._assets[name]
         return asset
-
 
     def __iter__(self):
         """

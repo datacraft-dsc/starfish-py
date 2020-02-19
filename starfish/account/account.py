@@ -6,6 +6,7 @@ Account class to provide basic functionality for all Ocean Accounts
 
 from web3 import Web3
 
+
 class Account():
     """
 
@@ -39,7 +40,6 @@ class Account():
         if self._agent_adapter is None:
             self._agent_adapter = self._ocean.get_squid_agent_adapter()
 
-
         if isinstance(address, dict):
             self._address = address.get('address')
             self._password = address.get('password')
@@ -54,7 +54,6 @@ class Account():
             self._address = address
             self._password = password
             self._keyfile = keyfile
-
 
     def request_tokens(self, amount):
         """
@@ -162,7 +161,6 @@ class Account():
 
         """
         return self._ocean
-
 
     @property
     def is_password(self):

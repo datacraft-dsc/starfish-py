@@ -1,9 +1,9 @@
+from abc import ABC
 
 """
    Job Base class
 """
 
-from abc import ABC
 
 class JobBase(ABC):
     """
@@ -19,6 +19,7 @@ class JobBase(ABC):
         'running',
         'accepted'
     ]
+
     def __init__(self, job_id, status=None, outputs=None):
         """
 

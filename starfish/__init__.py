@@ -1,3 +1,6 @@
+import logging
+from starfish.ocean.ocean import Ocean
+
 """
     Starfish-py module
 
@@ -11,9 +14,12 @@
 __author__ = """DEX.sg"""
 __version__ = '0.6.5'
 
-import logging
 
 logger = logging.getLogger(__name__)
 
 
-from starfish.ocean.ocean import Ocean
+__all__ = [
+    '__author__',
+    '__version__',
+    'Ocean',
+]

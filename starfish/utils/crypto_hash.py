@@ -8,6 +8,7 @@ CryptoHash utils
 from Crypto.Hash import SHA3_256
 from web3 import Web3
 
+
 def hash_sha3_256(data):
     if isinstance(data, str):
         data = data.encode('utf-8')

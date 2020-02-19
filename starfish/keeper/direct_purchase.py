@@ -2,6 +2,7 @@ from ocean_keeper.contract_base import ContractBase
 from ocean_keeper.web3_provider import Web3Provider
 from ocean_keeper.event_listener import EventListener
 
+
 class DirectPurchase(ContractBase):
     """Class representing the Token contract."""
     CONTRACT_NAME = 'DirectPurchase'
@@ -59,7 +60,7 @@ class DirectPurchase(ContractBase):
             self.TOKEN_SENT_EVENT_NAME,
             None,
             filters={'_from': address_from, '_to': address_to, '_reference2': reference},
-            from_block=1, # TODO: later can be optimized
+            from_block=1,       # TODO: later can be optimized
             to_block='latest'
         )
 
