@@ -5,22 +5,18 @@ Ocean class to access the Ocean eco system.
 """
 import logging
 
-from starfish.utils.artifacts import (
-    find_contract_path,
-    is_contract_type_exists,
-)
-
-from web3 import (
-    Web3,
-    HTTPProvider
-)
+from squid_py.ocean.keeper import SquidKeeper
+from web3 import HTTPProvider, Web3
 
 from starfish.account import Account
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from squid_py.ocean.keeper import SquidKeeper
-
+from starfish.utils.artifacts import (
+    find_contract_path,
+    is_contract_type_exists
+)
 
 logger = logging.getLogger('starfish.ocean')
+
 
 class Ocean():
     """
@@ -119,7 +115,6 @@ class Ocean():
 
         logger.debug(f'network: {self._network_name} contracts_path: {self._contracts_path}')
 
-
     def register_did(self, did, ddo, account):
         """
 
@@ -190,7 +185,7 @@ class Ocean():
             #
             my_result = ocean.search_operations('model_training')
         """
-        ## To be implemented
+        # To be implemented
         return []
 
     def load_account(self, address, password=None, keyfile=None, agent_adapter=None):

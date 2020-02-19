@@ -4,6 +4,7 @@
 
 """
 
+
 class BaseOutput():
     """
     Base output to handle the basic formating to Console, JSON and Test
@@ -36,6 +37,7 @@ class BaseOutput():
             'title': title,
             'format': format_text
         }
+
     def show_header(self):
         pass
 

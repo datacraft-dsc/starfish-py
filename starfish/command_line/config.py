@@ -156,7 +156,7 @@ class Config(configparser.ConfigParser):
             squid.write(file_handle)
         return filename
 
-    def as_squid_dict(self, options = None):
+    def as_squid_dict(self, options=None):
         """
 
         Return a set of config values, so that squid can read.

@@ -7,8 +7,8 @@ import json
 
 from .base_output import BaseOutput
 
-class JSONOutput(BaseOutput):
 
+class JSONOutput(BaseOutput):
 
     def show(self, text=None, name=None):
         if self._rows:

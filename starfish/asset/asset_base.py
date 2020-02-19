@@ -8,6 +8,7 @@ import json
 from abc import ABC
 from starfish.utils.did import did_to_asset_id
 
+
 class AssetBase(ABC):
     """
 
@@ -38,7 +39,6 @@ class AssetBase(ABC):
 
         self._did = did
         super().__init__()
-
 
     def set_did(self, did):
         """
@@ -112,7 +112,6 @@ class AssetBase(ABC):
 
         """
         return False
-
 
     @staticmethod
     def get_asset_type(metadata):

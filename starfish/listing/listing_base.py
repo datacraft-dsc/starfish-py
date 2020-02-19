@@ -5,6 +5,7 @@
 
 from abc import ABC, abstractmethod
 
+
 class ListingBase(ABC):
     """
         Create a Listing object
@@ -21,7 +22,7 @@ class ListingBase(ABC):
     def __init__(self, agent, listing_id, asset, data, ddo=None):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
-        self._listing_id=listing_id
+        self._listing_id = listing_id
         self._asset = asset
         self._data = data
         self._ddo = ddo

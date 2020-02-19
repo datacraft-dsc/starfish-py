@@ -11,24 +11,23 @@ from eth_utils import remove_0x_prefix
 
 from starfish.agent import AgentBase
 from starfish.agent.services import Services
-
-
 from starfish.asset import (
     DataAsset,
     OperationAsset,
     create_asset_from_metadata_text,
-    is_asset_hash_valid,
+    is_asset_hash_valid
 )
-from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter, SUPPORTED_SERVICES
-from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
-from starfish.utils.did import (
-    did_parse,
-    did_generate_random,
-)
-from starfish.listing import Listing
-from starfish.job import Job
 from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.exceptions import StarfishAssetInvalid
+from starfish.job import Job
+from starfish.listing import Listing
+from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
+from starfish.middleware.surfer_agent_adapter import (
+    SUPPORTED_SERVICES,
+    SurferAgentAdapter
+)
+from starfish.utils.did import did_generate_random, did_parse
+
 
 class RemoteAgent(AgentBase):
     """
@@ -47,7 +46,6 @@ class RemoteAgent(AgentBase):
 
     """
     service_types = SUPPORTED_SERVICES
-
 
     def __init__(self, ocean, did=None, ddo=None, options=None):
         """init a standard ocean object"""
@@ -80,7 +78,6 @@ class RemoteAgent(AgentBase):
         # incase the user just sends a ddo without a did
         if self._did is None and self._ddo:
             self._did = self._ddo.did
-
 
         # if DID and no DDO then try to load in the registered DDO, using squid
         if self._did and not self._ddo:
@@ -162,13 +159,13 @@ class RemoteAgent(AgentBase):
 
         if not isinstance(asset, DataAsset):
             raise TypeError('Only DataAsset is supported')
+
         if not asset.data:
             raise ValueError('No data to upload')
 
         adapter = self._get_adapter()
         url = self.get_asset_store_url(asset.asset_id)
         return adapter.upload_asset_data(url, asset.asset_id, asset.data)
-
 
     def download_asset(self, asset_id, url):
         """
@@ -439,7 +436,6 @@ class RemoteAgent(AgentBase):
 
 
         """
-
         if not isinstance(asset, OperationAsset):
             raise ValueError('Asset is not a OperationAsset')
 
@@ -463,7 +459,6 @@ class RemoteAgent(AgentBase):
         if service_type is None:
             raise ValueError(f'This agent does not support the following service name or type {name}')
         return adapter.get_endpoint(name)
-
 
     def _get_adapter(self, did=None, ddo=None, authorization=None):
         """
@@ -515,6 +510,7 @@ class RemoteAgent(AgentBase):
         :type: string
         """
         return self._did
+
     @property
     def ddo(self):
         """

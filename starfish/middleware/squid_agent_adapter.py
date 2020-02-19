@@ -2,42 +2,34 @@
     SquidAgentAdapter - Access squid services using the squid-py api
 """
 
+import json
 import logging
 import time
-import json
-
-from web3 import Web3
 
 from ocean_keeper.account import Account as SquidAccount
-
-from squid_py.config_provider import ConfigProvider
-from squid_py.config import Config as SquidConfig
-from squid_py.ocean import Ocean as SquidOcean
-from ocean_utils.did import (
-    did_to_id_bytes,
-    did_to_id,
-    DID,
-)
-from squid_py.ocean.keeper import SquidKeeper
-
+from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
+from ocean_keeper.web3_provider import Web3Provider
 from ocean_utils.agreements.service_agreement import ServiceAgreement
 from ocean_utils.agreements.service_types import ServiceTypes
-from squid_py.brizo.brizo_provider import BrizoProvider
-from ocean_keeper.web3_provider import Web3Provider
-from squid_py.ocean.ocean_tokens import OceanTokens
-
 from ocean_utils.ddo.metadata import Metadata
-from ocean_keeper.agreements.agreement_manager import AgreementStoreManager
+from ocean_utils.did import DID, did_to_id, did_to_id_bytes
 from plecos import is_valid_dict_local, validate_dict_local
+from squid_py.brizo.brizo_provider import BrizoProvider
+from squid_py.config import Config as SquidConfig
+from squid_py.config_provider import ConfigProvider
+from squid_py.ocean import Ocean as SquidOcean
+from squid_py.ocean.keeper import SquidKeeper
+from squid_py.ocean.ocean_tokens import OceanTokens
+from web3 import Web3
 
 from starfish.middleware.starfish_events_manager import StarfishEventsManager
-
 
 logger = logging.getLogger('starfish.squid_agent_adapter')
 # from starfish import logger
 
 # to keep the squid_agent_adapter seperate, we will issue a seperate purchase exception just
 # from this class
+
 
 class SquidAgentAdapterPurchaseError(Exception):
     """ Raised when a purchase event has failed to complete """
@@ -47,9 +39,8 @@ class AgreementStoreManagerExtra(AgreementStoreManager):
     def get_agreement_ids_for_did(self, did):
         return self.contract_concise.getAgreementIdsForDID(did)
 
+
 class SquidAgentAdapter():
-
-
     def __init__(self, ocean, options=None):
         """init a standard ocean object"""
         self._ocean = ocean
@@ -63,7 +54,6 @@ class SquidAgentAdapter():
         self._secret_store_url = options.get('secret_store_url', 'http://localhost:12001')
         self._storage_path = options.get('storage_path', 'squid_py.db')
         self._parity_url = options.get('parity_url', self._ocean.keeper_url)
-
 
         # clear out any old connections to a different network
         # this means removing the static web3 connection in squid
@@ -277,7 +267,6 @@ class SquidAgentAdapter():
 
         return service_agreement_id
 
-
     def consume_asset(self, ddo, account, service_agreement_id):
         """
         Conusmer the asset data, by completing the payment and later returning the data for the asset
@@ -457,7 +446,6 @@ class SquidAgentAdapter():
             squid_ocean._keeper, squid_ocean._config.storage_path, account)
 
         events_manager.stop_agreement_events_monitor()
-
 
     @property
     def accounts(self):

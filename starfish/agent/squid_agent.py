@@ -9,36 +9,26 @@ import datetime
 import json
 import logging
 import re
-import traceback
 import sys
+import traceback
+
+from ocean_keeper.exceptions import OceanDIDNotFound
+from ocean_utils.ddo.metadata import AdditionalInfoMeta, MetadataBase
+from squid_py.brizo.brizo_provider import BrizoProvider
 
 from web3 import Web3
 
+from starfish.account import Account
+from starfish.agent import AgentBase
+from starfish.asset import BundleAsset, DataAsset, RemoteDataAsset
+from starfish.exceptions import StarfishAssetNotFound, StarfishPurchaseError
+from starfish.listing import Listing
 from starfish.middleware.squid_agent_adapter import (
     SquidAgentAdapter,
     SquidAgentAdapterPurchaseError
 )
-from starfish.account import Account
-from starfish.agent import AgentBase
-from starfish.listing import Listing
-from starfish.asset import (
-    BundleAsset,
-    DataAsset,
-    RemoteDataAsset,
- )
 from starfish.purchase import Purchase
 from starfish.utils.did import did_parse
-from starfish.exceptions import (
-    StarfishAssetNotFound,
-    StarfishPurchaseError
-)
-
-from squid_py.brizo.brizo_provider import BrizoProvider
-from ocean_utils.ddo.metadata import (
-    MetadataBase,
-    AdditionalInfoMeta,
-)
-from ocean_keeper.exceptions import OceanDIDNotFound
 
 
 logger = logging.getLogger('starfish.squid_agent')
@@ -55,6 +45,7 @@ ALLOWED_FILE_META_ITEMS = [
     'contentType',
     'resourceId',
 ]
+
 
 class SquidAgent(AgentBase):
     """
@@ -172,7 +163,6 @@ class SquidAgent(AgentBase):
 
         return listing
 
-
     def validate_asset(self, asset):
         """
 
@@ -218,7 +208,6 @@ class SquidAgent(AgentBase):
         if ddo:
             listing = self._listing_from_ddo(ddo)
         return listing
-
 
     def search_listings(self, text, sort=None, offset=100, page=1):
         """
@@ -276,7 +265,8 @@ class SquidAgent(AgentBase):
                 account_balance = account.ocean_balance
                 asset_price = listing.data['price']
                 if account_balance < asset_price:
-                    raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} which is not enougth to purchase the asset at a price of {asset_price}')
+                    raise StarfishPurchaseError(f'Insufficient Funds: Your account balance has {account_balance} \
+                        which is not enougth to purchase the asset at a price of {asset_price}')
 
             service_agreement_id = adapter.purchase_asset(listing.ddo, account.agent_adapter_account)
         except OceanDIDNotFound as e:
@@ -329,8 +319,6 @@ class SquidAgent(AgentBase):
 
         return adapter.get_asset_purchase_ids(asset.did)
 
-
-
     def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
         """
 
@@ -360,7 +348,6 @@ class SquidAgent(AgentBase):
         except Exception as e:
             raise e
         return True
-
 
     def consume_asset(self, listing, account, purchase_id):
         """
@@ -500,7 +487,8 @@ class SquidAgent(AgentBase):
         if isinstance(asset, BundleAsset):
             for _, asset_item in asset:
                 if not (isinstance(asset_item, DataAsset)):
-                    raise TypeError(f'Invalid asset type {type(asset_item)}: The BundleAsset can only contain multilple assets of the type DataAsset')
+                    raise TypeError(f'Invalid asset type {type(asset_item)}: \
+                        The BundleAsset can only contain multilple assets of the type DataAsset')
                 append_asset_file(metadata, asset_item)
         else:
             append_asset_file(metadata, asset)
@@ -514,7 +502,6 @@ class SquidAgent(AgentBase):
                 metadata[AdditionalInfoMeta.KEY][f'file_{name}'] = item[name]
                 del item[name]
         return metadata
-
 
     @staticmethod
     def invoke_operation(listing, account, purchase_id, payload):
@@ -533,8 +520,8 @@ class SquidAgent(AgentBase):
 
         """
         logger.info(f'calling invoke in squid_agent.py with payload: {payload}')
-        try :
-            ddo= listing.data
+        try:
+            ddo = listing.data
             files = ddo.metadata['base']['encryptedFiles']
             logger.info(f'encrypted contentUrls: {files}')
             files = files if isinstance(files, str) else files[0]
@@ -553,8 +540,6 @@ class SquidAgent(AgentBase):
             logger.error('got error invoking Brizo')
             traceback.print_exc(file=sys.stdout)
             return False
-
-
 
     @property
     def agent_adapter(self):

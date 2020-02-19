@@ -2,10 +2,10 @@ import json
 from eth_utils import remove_0x_prefix
 
 from starfish.asset.asset_base import AssetBase
-from starfish.asset.data_asset import DataAsset
-from starfish.asset.remote_data_asset import RemoteDataAsset
 from starfish.asset.bundle_asset import BundleAsset
+from starfish.asset.data_asset import DataAsset
 from starfish.asset.operation_asset import OperationAsset
+from starfish.asset.remote_data_asset import RemoteDataAsset        # noqa: F401
 
 
 def create_asset_from_metadata_text(metadata_text, did=None):

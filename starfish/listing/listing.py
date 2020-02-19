@@ -3,8 +3,10 @@
    Listing class
 """
 
-from starfish.listing.listing_base import ListingBase
 from starfish.account import Account
+
+from starfish.listing.listing_base import ListingBase
+
 
 class Listing(ListingBase):
     """
@@ -19,7 +21,6 @@ class Listing(ListingBase):
         :param ddo: Optional ddo for the listing
         :type data: dict
     """
-
 
     def purchase(self, account):
         """

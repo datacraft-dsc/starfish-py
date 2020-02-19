@@ -1,4 +1,4 @@
 
 
-from starfish.job.job_base import JobBase
-from starfish.job.job import Job
+from starfish.job.job import Job                # noqa: F401
+from starfish.job.job_base import JobBase       # noqa: F401

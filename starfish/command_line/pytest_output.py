@@ -4,10 +4,8 @@
 
 """
 
+from .base_output import BaseOutput
 
-from .base_output import (
-    BaseOutput,
-)
 
 class PyTestOutput(BaseOutput):
 

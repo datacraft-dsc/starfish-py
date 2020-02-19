@@ -3,8 +3,9 @@
     Basic Purchase class
 """
 
-from starfish.purchase.purchase_base import PurchaseBase
 from starfish.exceptions import StarfishPurchaseError
+from starfish.purchase.purchase_base import PurchaseBase
+
 
 class Purchase(PurchaseBase):
     """
@@ -54,7 +55,6 @@ class Purchase(PurchaseBase):
             raise StarfishPurchaseError('You need to purchase this asset before waiting')
 
         return self._agent.purchase_wait_for_completion(self._listing.asset, self._account, self._purchase_id, timeout_seconds)
-
 
     @property
     def consume_asset(self):

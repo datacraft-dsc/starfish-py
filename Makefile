@@ -6,7 +6,7 @@ MODULE_NAME = starfish
 
 FLAKE8_PARAMETERS = --max-line-length=132 $(MODULE_NAME)
 
-ISORT_PARAMETERS = --check-only --diff --recursive $(MODULE_NAME)
+ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --diff --recursive $(MODULE_NAME)
 
 clean: clean-build clean-pyc
 

@@ -8,6 +8,7 @@ import json
 
 from .base_output import BaseOutput
 
+
 class ConsoleOutput(BaseOutput):
 
     def show(self, text=None, name=None):

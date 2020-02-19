@@ -1,2 +1,2 @@
 
-from starfish.account.account import Account
+from starfish.account.account import Account        # noqa: F401

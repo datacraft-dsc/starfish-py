@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release TBD
+
++   better linting and module import order
+
 ### Release v0.6.5
 
 +   fix auth token to request via SurferAgentAdapter._http_client
