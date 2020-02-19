@@ -40,6 +40,8 @@ test_requirements = [
     'mccabe',
     'pyflakes',
     'pytest',
+    'isort',
+    'mypy',
     'tox',
 ]
 
@@ -51,7 +53,6 @@ dev_requirements = [
     'watchdog',
     'isort',
     'mypy',
-    'black'
 ]
 
 docs_requirements = [

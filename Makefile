@@ -1,12 +1,14 @@
-.PHONY: clean clean-pyc clean-build lint flake8 isort test docs
+.PHONY: clean clean-pyc clean-build  install install-dev install-test install-docs lint flake8 isort test docs
 
 # all: clean lint test docs
 
-MODULE_NAME = starfish
+IGNORE_VENV ?= FALSE
 
-FLAKE8_PARAMETERS = --max-line-length=132 $(MODULE_NAME)
+PACKAGE_FOLDERS = starfish
 
-ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --diff --recursive $(MODULE_NAME)
+FLAKE8_PARAMETERS = --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
+
+ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --diff --recursive $(PACKAGE_FOLDERS)
 
 clean: clean-build clean-pyc
 
@@ -19,6 +21,27 @@ clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
+
+install: virtualvenv
+	pip install -e ".[dev]" -e ".[test]" -e ".[docs]"
+
+install-dev: virtualvenv
+	pip install -e ".[dev]"
+
+install-test: virtualvenv
+	pip install -e ".[test]"
+
+install-docs: virtualvenv
+	pip install -e ".[docs]"
+
+
+virtualvenv:
+ifeq ($(IGNORE_VENV),FALSE)
+ifeq ($(VIRTUAL_ENV),)
+		@echo "you are about to install this module when you are not in a virtual environment"
+		exit 1
+endif
+endif
 
 
 lint: flake8 isort
@@ -33,7 +56,7 @@ test:
 	pytest tests
 
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	cd docs; $(MAKE) clean
-	cd docs; $(MAKE) html
+docs:
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs html
 
