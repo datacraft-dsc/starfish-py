@@ -63,6 +63,7 @@ def assert_walk_dict(standard, result):
                 assert_walk_dict(standard[name], result[name])
             else:
                 assert(standard[name] == result[name])
+
 def test_provenance_publish():
 
     agent_id = secrets.token_hex(32)

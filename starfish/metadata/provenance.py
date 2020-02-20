@@ -7,7 +7,6 @@
 
 import secrets
 
-
 PROVENANCE_DEP = 'dep'
 PROVENANCE_ACTIVITY_TYPE_PUBLISH = 'publish'
 PROVENANCE_ACTIVITY_TYPE_PUBLISH = 'import'
@@ -28,6 +27,7 @@ def create_publish(agent_id, activity_id=None):
         'wasAssociatedWith': create_associated_with(agent_id, activity_id),
         'wasGeneratedBy': create_generated_by(activity_id)
     }
+
 
 def create_prefix():
     return {
@@ -58,6 +58,7 @@ def create_activity(activity_id, activity_type):
         }
     }
 
+
 def create_agent(agent_id, agent_type):
     return {
         f'{PROVENANCE_DEP}:{agent_id}': {
@@ -67,6 +68,7 @@ def create_agent(agent_id, agent_type):
             }
         }
     }
+
 
 def create_associated_with(agent_id, activity_id):
     random_id = secrets.token_hex(32)
@@ -87,4 +89,3 @@ def create_generated_by(activity_id):
             'prov:activity': activity_id
         }
     }
-
