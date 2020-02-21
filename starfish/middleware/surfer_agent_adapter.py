@@ -91,6 +91,21 @@ class SurferAgentAdapter():
             }
         return result
 
+    def get_metadata_list(self):
+        """ return a list of metadata stored on this agent """
+        url = urljoin(self.get_endpoint('meta') + '/', 'index')
+        logger.debug(f'metadata list url {url}')
+        self._content_header = 'application/json'
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+        if response and response.status_code == requests.codes.ok:
+            data = ResponseWrapper(response).json
+            return data
+        else:
+            msg = f'metadata asset response failed: {response.status_code}'
+            logger.error(msg)
+            raise ValueError(msg)
+
+
     def save_metadata(self, metadata):
         """save metadata to the agent server, using the asset_id and metadata"""
         url = urljoin(self.get_endpoint('meta') + '/', 'data')
