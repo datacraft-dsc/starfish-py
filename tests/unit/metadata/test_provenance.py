@@ -8,7 +8,8 @@ import json
 import re
 import secrets
 
-from starfish.metadata.provenance import create_publish
+from starfish.metadata.provenance import create_publish, create_invoke
+from starfish.asset import DataAsset
 
 PUBLISH_STANDARD = {
     'prefix':{
@@ -95,3 +96,18 @@ def test_provenance_publish():
 
     assert_walk_dict(PUBLISH_STANDARD, result)
 
+
+def test_provenance_invoke():
+    asset_list = []
+    for index in range(0, 10):
+        asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
+        asset_list.append(asset)
+
+    activity_id = secrets.token_hex(32)
+    agent_id = secrets.token_hex(32)
+
+    inputs_text = 'test inputs text'
+    outputs_text = 'test outputs text'
+    result = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
+    assert(isinstance(result, dict))
+#    print(result)
