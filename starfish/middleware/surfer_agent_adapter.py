@@ -105,7 +105,6 @@ class SurferAgentAdapter():
             logger.error(msg)
             raise ValueError(msg)
 
-
     def save_metadata(self, metadata):
         """save metadata to the agent server, using the asset_id and metadata"""
         url = urljoin(self.get_endpoint('meta') + '/', 'data')

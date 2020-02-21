@@ -32,7 +32,9 @@ def _load_operation_asset(remote_agent, invokable_list, name):
                 asset_id = meta_asset_id
                 print(f'found {asset_id} {metadata["dateCreated"]}, {metadata["description"]}')
 
+    # no operation asset found
     assert(asset_id)
+    print(asset_id)
     asset = remote_agent.get_asset(asset_id)
     assert(asset)
     assert(isinstance(asset, OperationAsset))
