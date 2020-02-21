@@ -80,6 +80,4 @@ def invokable_list(config):
         if demo['id'] == 'operations':
             invoke_list = demo['invokables']
 
-    for name in invoke_list:
-        print(name)
     return invoke_list
