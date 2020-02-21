@@ -110,4 +110,10 @@ def test_provenance_invoke():
     outputs_text = 'test outputs text'
     result = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
     assert(isinstance(result, dict))
+    fields = ['prefix', 'activity', 'entity', 'agent', 'wasAssociatedWith', 'wasGeneratedBy', 'wasDerivedFrom' ]
+    for field in fields:
+        assert(field in result)
+    assert(len(fields) == len(result.keys()))
+
+
 #    print(result)
