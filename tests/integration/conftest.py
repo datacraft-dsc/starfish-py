@@ -70,9 +70,10 @@ def agent_account(ocean, config):
 
 @pytest.fixture(scope='module')
 def invokable_list(config):
-    url = f'{config.remote_agent_url}/api/v1/admin/import-invokables'
+
+    url = f'{config.remote_agent_url}/api/v1/admin/import-demo?id=operations'
     username = config.remote_agent_username
     password = config.remote_agent_password
     response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
-    return response.json()
-
+    result = response.json()
+    return result.get('invokables')

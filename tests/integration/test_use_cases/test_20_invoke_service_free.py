@@ -11,6 +11,7 @@ import logging
 import json
 import time
 import re
+import requests
 
 from starfish.asset import OperationAsset
 from starfish.job import Job
@@ -21,15 +22,32 @@ INVOKE_INCREMENT_NAME = "Increment"
 
 TEST_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu congue odio, vel congue sapien. Morbi ac purus ornare, volutpat elit a, lacinia odio. Integer tempor tellus eget iaculis lacinia. Curabitur aliquam, dui vel vestibulum rhoncus, enim metus interdum enim, in sagittis massa est vel velit. Nunc venenatis commodo libero, vitae elementum nulla ultricies id. Aliquam erat volutpat. Cras eu pretium lacus, quis facilisis mauris. Duis sem quam, blandit id tempor in, porttitor at neque. Cras ut blandit risus. Maecenas vitae sodales neque, eu ultricies nibh.'
 
-def _load_operation_asset(remote_agent, invokable_list, name):
+
+def load_operation_asset(remote_agent, invokable_list, name):
+
+    # cannot find {name} in invokable list
+    assert(name in invokable_list)
+
     asset_did = invokable_list[name]
+
     assert(asset_did)
+
     asset_id = did_to_asset_id(asset_did)
+
+    # no operation asset found
     assert(asset_id)
+
     asset = remote_agent.get_asset(asset_id)
+
+    # cannot load asset
     assert(asset)
+
+    # asset returned is not an operation asset
     assert(isinstance(asset, OperationAsset))
+
+    # invalid asset type
     assert(asset.metadata['type'] == 'operation')
+
     return asset
 
 def assert_tokenize_text(tokens, text):
@@ -40,7 +58,7 @@ def assert_tokenize_text(tokens, text):
 
 def test_20_tokenize_text_sync(remote_agent, invokable_list):
 
-    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
+    asset = load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
     inputs = {
         'text': TEST_TEXT
     }
@@ -53,7 +71,7 @@ def test_20_tokenize_text_sync(remote_agent, invokable_list):
 
 def test_20_tokenize_text_async(remote_agent, invokable_list):
 
-    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
+    asset = load_operation_asset(remote_agent, invokable_list, INVOKE_TOKENIZE_TEXT_NAME)
 
     inputs = {
         'text': TEST_TEXT
@@ -87,7 +105,7 @@ def test_20_increment_sync(remote_agent, invokable_list):
 
 
     value = time.time()
-    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
+    asset = load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
     inputs = {
         'n': value
@@ -103,7 +121,7 @@ def test_20_increment_sync(remote_agent, invokable_list):
 def test_20_increment_async(remote_agent, invokable_list):
 
     value = time.time()
-    asset = _load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
+    asset = load_operation_asset(remote_agent, invokable_list, INVOKE_INCREMENT_NAME)
 
 
     inputs = {
@@ -131,4 +149,3 @@ def test_20_increment_async(remote_agent, invokable_list):
     assert(job.status == 'succeeded')
     assert(job)
     assert(float(job.outputs['n']) - 1 == value)
-
