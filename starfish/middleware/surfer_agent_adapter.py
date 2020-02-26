@@ -5,9 +5,11 @@ import io
 from urllib.parse import urljoin
 
 import requests
+from eth_utils import remove_0x_prefix
 
 from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256
+from starfish.utils.did import did_to_asset_id
 
 SUPPORTED_SERVICES = {
     'meta': 'DEP.Meta.v1',
@@ -120,9 +122,10 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def create_listing(self, asset_id, listing_data):
+    def create_listing(self, listing_data, asset_did):
         endpoint = self.get_endpoint('market')
         url = f'{endpoint}/listings'
+        asset_id = remove_0x_prefix(did_to_asset_id(asset_did))
         data = {
             'assetid': asset_id,
             'info': listing_data,

@@ -54,7 +54,7 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             raise StarfishPurchaseError('You need to purchase this asset before waiting')
 
-        return self._agent.purchase_wait_for_completion(self._listing.asset, self._account, self._purchase_id, timeout_seconds)
+        return self._agent.purchase_wait_for_completion(self._listing.asset_did, self._account, self._purchase_id, timeout_seconds)
 
     @property
     def consume_asset(self):
@@ -100,4 +100,4 @@ class Purchase(PurchaseBase):
         if not self.is_purchased:
             return False
 
-        return self._agent.is_access_granted_for_asset(self._listing.asset, self._account, self._purchase_id)
+        return self._agent.is_access_granted_for_asset(self._listing.asset_did, self._account, self._purchase_id)

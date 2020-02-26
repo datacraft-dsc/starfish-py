@@ -27,9 +27,8 @@ def test_pd_case_file_transfer(ocean, config, resources, remote_agent,
         store_data = fp.read()
 
     # save the asset file to remote agent
-    asset_store = DataAsset.create_from_file('TestAsset', resources.asset_file)
-    listing_store = remote_agent.register_asset(asset_store, resources.listing_data)
-    assert(listing_store)
+    asset_data = DataAsset.create_from_file('TestAsset', resources.asset_file)
+    asset_store = remote_agent.register_asset(asset_data)
 
     # now upload to the storage
     remote_agent.upload_asset(asset_store)
@@ -39,7 +38,7 @@ def test_pd_case_file_transfer(ocean, config, resources, remote_agent,
     resourceId = base64.b64encode(bytes(resources.asset_file)).decode('utf-8')
     asset_sale = RemoteDataAsset.create_with_url('SquidAsset', download_link, metadata={'resourceId': resourceId})
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, resources.listing_data))
-    listing = squid_agent.register_asset(asset_sale, resources.listing_data, account=publisher_account)
+    listing = squid_agent.register_asset_and_listing(asset_sale, resources.listing_data, account=publisher_account)
     assert(listing)
 
     # now re-read the listing to make sure that we get the same result and listing data

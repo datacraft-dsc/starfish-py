@@ -64,7 +64,7 @@ def main():
     agent = SquidAgent(ocean, CONFIG['squid_agent'])
 
     # Register the asset, on the block chain.
-    listing = agent.register_asset(asset, listing_data, account)
+    listing = agent.register_asset_and_listing(asset, listing_data, account)
 
     # Print out the listing did and listing data.
     print('the listing', listing.did, listing.data)

@@ -17,14 +17,12 @@ from starfish.ddo.starfish_ddo import StarfishDDO
 
 def test_08_asset_registration(resources, remote_agent):
     test_data = secrets.token_hex(1024)
-    asset1 = DataAsset.create('TestAsset', test_data)
-    listing1 = remote_agent.register_asset(asset1, resources.listing_data)
-    assert(listing1)
-    assert(listing1.asset)
+    asset_data_1 = DataAsset.create('TestAsset', test_data)
+    asset_1 = remote_agent.register_asset(asset_data_1)
+    assert(asset_1)
 
-    asset2 = DataAsset.create('TestAsset', test_data)
-    listing2 = remote_agent.register_asset(asset2, resources.listing_data)
-    assert(listing2)
-    assert(listing2.asset)
+    asset_data_2 = DataAsset.create('TestAsset', test_data)
+    asset_2 = remote_agent.register_asset(asset_data_2)
+    assert(asset_2)
 
-    assert(listing1.asset.asset_id == listing2.asset.asset_id)
+    assert(asset_1.asset_id == asset_2.asset_id)

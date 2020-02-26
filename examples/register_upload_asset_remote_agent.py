@@ -35,7 +35,9 @@ def main():
     }
     agent = RemoteAgent(ocean, ddo=agent_ddo, options=agent_options)
 
-    listing = agent.register_asset(asset, listing_data)
+    asset = agent.register_asset(asset)
+    print(asset.did)
+    listing = agent.create_listing(listing_data, asset.did)
     print(listing.did, listing.data)
 
     # now upload the asset data to Surfer

@@ -101,29 +101,26 @@ class RemoteAgent(AgentBase):
                 options.get('password', '')
             )
 
-    def register_asset(self, asset, listing_data, account=None):
+    def register_asset(self, asset):
         """
 
         Register an asset with Surfer
 
         :param asset: asset object to register
         :type asset: :class:`.DataAsset` object to register
-        :param dict listing_data:  Listing inforamiton to give for this asset
         :param account: This is not used for this agent, so for compatibility it is left in
         :type account: :class:`.Account` object to use for registration.
 
-        :return: A new :class:`.Listing` object that has been registered, if failure then return None.
-        :type: :class:`.Listing` class
+        :return: A :class:`.AssetBase` object that has been registered, if failure then return None.
+        :type: :class:`.AssetBase` class
 
         For example::
 
             asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
             agent = SurferAgent(ocean)
-            listing = agent.register_asset(asset,listing_data, account)
-
-            if listing:
-                print(f'registered my listing asset for sale with the did {listing.did}')
+            asset = agent.register_asset(asset, account)
+            print(f'Asset DID is {asset.did}')
 
         """
         adapter = self._get_adapter()
@@ -131,19 +128,56 @@ class RemoteAgent(AgentBase):
         if self._did is None:
             raise ValueError('The agent must have a valid did')
 
-        if not isinstance(listing_data, dict):
-            raise ValueError('You must provide a dict as the listing data')
-
-        listing = None
-
         register_data = adapter.register_asset(asset.metadata_text)
         if register_data:
             asset_id = register_data['asset_id']
             did = f'{self._did}/{asset_id}'
             asset.set_did(did)
-            data = adapter.create_listing(asset_id, listing_data)
-            listing = Listing(self, data['id'], asset, data)
+        return asset
+
+    def create_listing(self, listing_data, asset_did):
+        """
+
+        Create a listing on the market place for this asset
+
+        :param dict listing_data:  Listing inforamiton to give for this asset
+        :param str asset_did: asset DID to assign to this listing
+        :return: A new :class:`.Listing` object that has been registered, if failure then return None.
+        :type: :class:`.Listing` class
+
+        For example::
+
+            asset = DataAsset.create('test data asset', 'Some test data')
+            agent = SurferAgent(ocean)
+            asset = agent.register_asset(asset, account)
+
+            listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
+            listing = agent.create_listing(listing_data, asset)
+            if listing:
+                print(f'registered my listing asset for sale with the did {listing.did}')
+
+
+        """
+        adapter = self._get_adapter()
+
+        if not isinstance(listing_data, dict):
+            raise ValueError('You must provide a dict as the listing data')
+
+        data = adapter.create_listing(listing_data, asset_did)
+        listing = Listing(self, data['id'], asset_did, data)
         return listing
+
+    def update_listing(self, listing):
+        """
+
+        Update the listing to the agent server.
+
+        :param listing: Listing object to update
+        :type listing: :class:`.Listing` class
+
+        """
+        adapter = self._get_adapter()
+        return adapter.update_listing(listing.listing_id, listing.data)
 
     def validate_asset(self, asset):
         """
@@ -293,18 +327,6 @@ class RemoteAgent(AgentBase):
             if sleep_seconds > 0:
                 time.sleep(sleep_seconds)
         return False
-
-    def update_listing(self, listing):
-        """
-
-        Update the listing to the agent server.
-
-        :param listing: Listing object to update
-        :type listing: :class:`.Listing` class
-
-        """
-        adapter = self._get_adapter()
-        return adapter.update_listing(listing.listing_id, listing.data)
 
     def search_listings(self, text, sort=None, offset=100, page=0):
         """
