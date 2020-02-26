@@ -13,10 +13,12 @@ from starfish.asset import DataAsset
 
 def test_12_listing_publish(resources, remote_agent):
     test_data = secrets.token_hex(1024)
-    asset = DataAsset.create('TestAsset', test_data)
-    listing = remote_agent.register_asset(asset, resources.listing_data)
+    asset_data = DataAsset.create('TestAsset', test_data)
+    asset = remote_agent.register_asset(asset_data)
+    assert(asset)
+    listing = remote_agent.create_listing(resources.listing_data, asset.did)
     assert(listing)
-    assert(listing.asset)
+    assert(listing.asset_did)
 
     assert(not listing.is_published)
 

@@ -16,12 +16,13 @@ from starfish.agent import MemoryAgent
 from starfish.asset import DataAsset
 
 
-def _register_asset_for_sale(agent, resources, account):
+def register_asset_for_sale(agent, resources, account):
 
     asset = DataAsset.create('TestAsset', secrets.token_hex(256))
-    listing = agent.register_asset(asset, resources.listing_data, account=account)
+    asset = agent.register_asset(asset)
+    listing = agent.create_listing(resources.listing_data, asset.did)
     assert listing
-    assert listing.asset.did
+    assert listing.asset_did
     return listing
 
 def test_asset(ocean, resources, config, publisher_account, purchaser_account):
@@ -32,7 +33,7 @@ def test_asset(ocean, resources, config, publisher_account, purchaser_account):
     assert agent
 
 
-    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
@@ -61,7 +62,7 @@ def test_search_listing(ocean, resources, config, publisher_account):
 
     agent = MemoryAgent(ocean)
 
-    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 

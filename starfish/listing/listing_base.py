@@ -13,17 +13,16 @@ class ListingBase(ABC):
         :param agent: agent object that created the listing.
         :type agent: :class:`.Agent` object to assign to this Listing
         :param str listing_id: id of the listing.
-        :param asset: the core asset for this listing
-        :type asset: :class:`.Asset` object
+        :param str asset_did: the asset DID for this listing
         :param data: data of the listing
         :param ddo: Optional DDO object for this listing
         :type data: dict
     """
-    def __init__(self, agent, listing_id, asset, data, ddo=None):
+    def __init__(self, agent, listing_id, asset_did, data, ddo=None):
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
         self._listing_id = listing_id
-        self._asset = asset
+        self._asset_did = asset_did
         self._data = data
         self._ddo = ddo
         super().__init__()
@@ -81,13 +80,13 @@ class ListingBase(ABC):
         return self._listing_id
 
     @property
-    def asset(self):
+    def asset_did(self):
         """
 
-        :return: asset held by the listing
-        :type: :class:`.Asset`
+        :return: asset DID held by the listing
+        :type: str
         """
-        return self._asset
+        return self._asset_did
 
     @property
     def did(self):
@@ -96,8 +95,7 @@ class ListingBase(ABC):
         :return: asset held did
         :type: str
         """
-        if self._asset:
-            return self._asset.did
+        return self._asset_did
 
     @property
     def is_empty(self):
@@ -108,4 +106,4 @@ class ListingBase(ABC):
         :return: True if this listing is empty else False.
         :type: boolean
         """
-        return self._listing_id is None or self._asset is None
+        return self._listing_id is None or self._asset_did is None

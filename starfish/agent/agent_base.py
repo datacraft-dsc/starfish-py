@@ -25,35 +25,42 @@ class AgentBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def register_asset(self, asset, listing_data, account):
+    def register_asset(self, asset):
         """
 
-        Register a squid asset with the ocean network.
+        Register an asset with an Agent
 
-        :param asset: the Asset to register, at the moment only a Asset can be used.
-        :type asset: :class:`.AssetBase` object to register
-        :param dict listing_data: data providing listing information for the asset.
-        :param account: Ocean account to use to register this asset.
-        :type account: :class:`.Account` object to use for registration.
+        :param asset: asset object to register
+        :type asset: :class:`.DataAsset` object to register
 
+        :return: A :class:`.AssetBase` object that has been registered, if failure then return None.
+        :type: :class:`.AssetBase` class
+
+        """
+        pass
+
+    @abstractmethod
+    def create_listing(self, listing_data, asset_did):
+        """
+
+        Create a listing on the market place for this asset
+
+        :param dict listing_data:  Listing inforamiton to give for this asset
+        :param str asset_did: asset DID to assign to this listing
         :return: A new :class:`.Listing` object that has been registered, if failure then return None.
         :type: :class:`.Listing` class
 
-        For example::
+        """
+        pass
 
-           # get your publisher account
-           account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
-           agent = SquidAgent(ocean)
-           asset = FileAsset(filename='my_file.csv')
-           listing_data = {
-                'name': 'My data',
-                'price': '4',
-           }
+    @abstractmethod
+    def update_listing(self, listing):
+        """
 
-           listing = agent.register_asset(asset, listing_data, account)
+        Update the listing to the agent server.
 
-           if listing:
-               print(f'registered my listing asset for sale with the did {listing.did}')
+        :param listing: Listing object to update
+        :type listing: :class:`.Listing` class
 
         """
         pass
@@ -121,14 +128,13 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset_did, account, purchase_id=None):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
 
 
-        :param asset: Asset to check for access.
-        :type asset: :class:`.Asset` object
+        :param str asset_did: Asset DID to check for access.
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
         :param str purchase_id: purchase id that was used to purchase the asset.
@@ -154,7 +160,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def purchase_wait_for_completion(self, asset, account,  purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset_did, account,  purchase_id, timeoutSeconds):
         """
 
             Wait for completion of the purchase

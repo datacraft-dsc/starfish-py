@@ -107,10 +107,10 @@ class SquidAgent(AgentBase):
         self._storage_path = kwargs.get('storage_path', 'squid_py.db')
         self._parity_url = kwargs.get('parity_url', self._ocean.keeper_url)
 
-    def register_asset(self, asset, listing_data, account):
+    def register_asset_and_listing(self, asset, listing_data, account):
         """
 
-        Register a squid asset with the ocean network.
+        Register a squid asset and listing with the ocean network.
 
         :param asset: the asset to register, at the moment only a Asset can be used.
         :type asset: :class:`.DataAsset`, :class:`.RemoteAsset` or :class:`.BundleAsset` object to register
@@ -159,9 +159,18 @@ class SquidAgent(AgentBase):
         listing = None
         if ddo:
             asset.set_did(ddo.did)
-            listing = Listing(self, ddo.did, asset, listing_data, ddo)
+            listing = Listing(self, ddo.did, asset.did, listing_data, ddo)
 
         return listing
+
+    def register_asset(self, asset):
+        raise NotImplementedError('Use register_asset_and_listing instead')
+
+    def create_listing(self, listing_data, asset):
+        raise NotImplementedError('Use register_asset_and_listing instead')
+
+    def update_listing(self, listing):
+        raise NotImplementedError('Use register_asset_and_listing instead')
 
     def validate_asset(self, asset):
         """
@@ -276,14 +285,13 @@ class SquidAgent(AgentBase):
 
         return purchase
 
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset_did, account, purchase_id=None):
         """
 
         Check to see if the account and purchase_id have access to the assed data.
 
 
-        :param asset: Asset to check for access.
-        :type asset: :class:`.Asset` object
+        :param str asset_dad: Asset DID to check for access.
         :param account: Ocean account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
         :param str purchase_id: Optional purchase id that was used to purchase the asset.
@@ -295,20 +303,20 @@ class SquidAgent(AgentBase):
         adapter = self.agent_adapter
         account.agent_adapter = adapter
         if purchase_id:
-            return adapter.is_access_granted_for_asset(asset.did, account.agent_adapter_account, purchase_id)
+            return adapter.is_access_granted_for_asset(asset_did, account.agent_adapter_account, purchase_id)
         else:
-            purchase_id_list = adapter.get_asset_purchase_ids(asset.did)
+            purchase_id_list = adapter.get_asset_purchase_ids(asset_did)
             for purchase_id in purchase_id_list:
-                if adapter.is_access_granted_for_asset(asset.did, account.agent_adapter_account, purchase_id):
+                if adapter.is_access_granted_for_asset(asset_did, account.agent_adapter_account, purchase_id):
                     return True
         return False
 
-    def get_asset_purchase_ids(self, asset):
+    def get_asset_purchase_ids(self, asset_did):
         """
 
         Returns as list of purchase id's that have been used for this asset
 
-        :param asset: Asset to return purchase details.
+        :param str asset_did: Asset DID to return purchase details.
         :type asset: :class:`.DataAsset` or :class:`.BundleAsset` object
 
         :return: list of purchase ids
@@ -317,9 +325,9 @@ class SquidAgent(AgentBase):
         """
         adapter = self.agent_adapter
 
-        return adapter.get_asset_purchase_ids(asset.did)
+        return adapter.get_asset_purchase_ids(asset_did)
 
-    def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset_did, account, purchase_id, timeoutSeconds):
         """
 
         Wait for completion of the purchase
@@ -342,7 +350,7 @@ class SquidAgent(AgentBase):
             raise ValueError('Please provide a valid purhase id')
 
         try:
-            adapter.purchase_wait_for_completion(asset.did, account.agent_adapter_account, purchase_id, timeoutSeconds)
+            adapter.purchase_wait_for_completion(asset_did, account.agent_adapter_account, purchase_id, timeoutSeconds)
         except SquidAgentAdapterPurchaseError as purchaseError:
             raise StarfishPurchaseError(purchaseError)
         except Exception as e:
@@ -405,7 +413,7 @@ class SquidAgent(AgentBase):
             asset_item = SquidAgent.create_data_asset_from_file_item(index, file_item, ddo.did)
             asset.add(asset_item.name, asset_item)
         listing_id = ddo.did
-        listing = Listing(self, listing_id, asset, listing_data, ddo)
+        listing = Listing(self, listing_id, asset.did, listing_data, ddo)
         return listing
 
     @staticmethod

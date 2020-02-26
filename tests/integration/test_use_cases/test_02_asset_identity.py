@@ -17,15 +17,13 @@ def test_02_asset_register(ocean, resources, remote_agent):
     testData = secrets.token_hex(1024)
     asset1 = DataAsset.create('TestAsset1', testData)
     asset2 = DataAsset.create('TestAsset2', testData)
-    listing = remote_agent.register_asset(asset2, resources.listing_data)
-    assert(not listing is None)
-    assert(64==len(listing.listing_id))
-    assert(listing.asset.data == asset2.data)
-    assert(listing.asset.asset_id == asset2.asset_id)
+    asset = remote_agent.register_asset(asset2)
+    assert(asset.data == asset2.data)
+    assert(asset.asset_id == asset2.asset_id)
 
 
 def test_02_asset_upload(ocean, resources, remote_agent):
     testData = secrets.token_hex(1024)
-    asset = DataAsset.create('TestAsset', testData)
-    listing = remote_agent.register_asset(asset, resources.listing_data)
-    remote_agent.upload_asset(listing.asset)
+    asset_data = DataAsset.create('TestAsset', testData)
+    asset = remote_agent.register_asset(asset_data)
+    remote_agent.upload_asset(asset)

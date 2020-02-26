@@ -31,39 +31,59 @@ class MemoryAgent(AgentBase):
         AgentBase.__init__(self, ocean)
 
         self._memory = {
-            'listing_data': {},
+            'listing': {},
             'asset': {},
             'purchase': {}
         }
 
-    def register_asset(self, asset, listing_data, account=None):
+    def register_asset(self, asset):
         """
 
         Register a memory asset with the ocean network.
 
-        :param dict metadata: metadata dictionary to store for this asset.
-        :param account: Optional, since an account is not assigned to an registered memory asset.
-        :type account: :class:`.Account` object to use for registration.
+        :param object metadata: asset object to register for this asset.
 
-        :return: A new :class:`.Listing` object that has been registered, if failure then return None.
-        :type: :class:`.Listing` class
+        :return: A :class:`.AssetBase` object that has been registered, if failure then return None.
+        :type: :class:`.AssetBase` class
 
         """
 
         asset_did = id_to_did(secrets.token_hex(64))
-        listing_id = did_to_id(asset_did)
-        listing_data['listing_id'] = listing_id,
-        listing_data['asset_did'] = asset_did
 
-        self._memory['listing_data'][listing_id] = listing_data
         self._memory['asset'][asset_did] = asset
+        asset.set_did(asset_did)
+        return asset
 
+    def create_listing(self, listing_data, asset_did):
+        """
+
+        Create a listing on the market place for this asset
+
+        :param dict listing_data:  Listing inforamiton to give for this asset
+        :param str asset_did: asset DID to assign to this listing
+        :return: A new :class:`.Listing` object that has been registered, if failure then return None.
+        :type: :class:`.Listing` class
+
+        """
         listing = None
         if listing_data:
-            asset.set_did(asset_did)
-            listing = Listing(self, listing_id, asset, listing_data)
-
+            listing_id = did_to_id(asset_did)
+            listing_data['listing_id'] = listing_id,
+            listing_data['asset_did'] = asset_did
+            listing = Listing(self, listing_id, asset_did, listing_data)
+            self._memory['listing'][listing_id] = listing
         return listing
+
+    def update_listing(self, listing):
+        """
+
+        Update the listing to the agent server.
+
+        :param listing: Listing object to update
+        :type listing: :class:`.Listing` class
+
+        """
+        self._memory['listing'][listing.listing_id] = listing
 
     def validate_asset(self, asset):
         """
@@ -87,13 +107,8 @@ class MemoryAgent(AgentBase):
 
         """
         listing = None
-        if listing_id in self._memory['listing_data']:
-            listing_data = self._memory['listing_data'][listing_id]
-            if listing_data:
-                asset_did = listing_data['asset_did']
-                asset = self._memory['asset'][asset_did]
-                listing = Listing(self, listing_id, asset, listing_data)
-
+        if listing_id in self._memory['listing']:
+            listing = self._memory['listing'][listing_id]
         return listing
 
     def search_listings(self, text, sort=None, offset=100, page=0):
@@ -116,14 +131,12 @@ class MemoryAgent(AgentBase):
             my_result = agent.search_registered_assets('weather', None, 100, 3)
 
         """
-        listing_items = None
-        for listing_id, listing_data in self._memory['listing_data'].items():
-            if re.search(text, json.dumps(listing_data)):
-                if listing_items is None:
-                    listing_items = {}
-                listing_items[listing_id] = listing_data
+        listing_id_list = []
+        for listing_id, listing in self._memory['listing'].items():
+            if re.search(text, json.dumps(listing.data)):
+                listing_id_list.append(listing.listing_id)
 
-        return listing_items
+        return listing_id_list
 
     def purchase_asset(self, listing, account):
         """

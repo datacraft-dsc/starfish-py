@@ -15,8 +15,10 @@ from starfish.asset import DataAsset
 
 def test_14_view_asset_listing(resources, remote_agent):
     test_data = "Test listing searching by listing id"
-    asset = DataAsset.create('TestAsset', test_data)
-    listing = remote_agent.register_asset(asset, resources.listing_data)
+    asset_data = DataAsset.create('TestAsset', test_data)
+    asset = remote_agent.register_asset(asset_data)
+    assert(asset)
+    listing = remote_agent.create_listing(resources.listing_data, asset.did)
     listing.set_published(True)
     logging.debug("view_asset_listing for listing_id: " + listing.listing_id)
     listing2 = remote_agent.get_listing(listing.listing_id)

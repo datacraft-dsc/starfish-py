@@ -16,8 +16,10 @@ from starfish.asset import DataAsset
 
 def test_18_confirm_purchase(ocean, resources, config, remote_agent, purchaser_account):
     test_data = secrets.token_hex(1024)
-    asset = DataAsset.create('TestAsset', test_data)
-    listing = remote_agent.register_asset(asset, resources.listing_data)
+    asset_data = DataAsset.create('TestAsset', test_data)
+    asset = remote_agent.register_asset(asset_data)
+    assert(asset)
+    listing = remote_agent.create_listing(resources.listing_data, asset.did)
     listing.set_published(True)
     logging.debug("confirm_purchase for listingid: " + listing.listing_id)
     response = remote_agent.update_listing(listing)

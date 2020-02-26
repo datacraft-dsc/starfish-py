@@ -45,7 +45,7 @@ def test_pd_case_file_transfer(ocean, config, resources, remote_agent, squid_age
     asset_sale = RemoteDataAsset.create_with_url('TestAsset', dummy_url)
     # print('metadata ',squid_agent._convert_listing_asset_to_metadata(asset_sale, listing_data))
 
-    listing = squid_agent.register_asset(asset_sale, listing_data, account=publisher_account)
+    listing = squid_agent.register_asset_and_listing(asset_sale, listing_data, account=publisher_account)
     assert(listing)
 
     listing_items = squid_agent.search_listings({'tags': [pd_test_case_tag]})

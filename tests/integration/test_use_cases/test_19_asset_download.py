@@ -15,8 +15,9 @@ from starfish.asset import DataAsset
 
 def test_19_asset_download(resources, remote_agent):
     test_data = secrets.token_hex(1024)
-    asset = DataAsset.create('TestAsset', test_data)
-    listing = remote_agent.register_asset(asset, resources.listing_data)
+    asset_data = DataAsset.create('TestAsset', test_data)
+
+    asset = remote_agent.register_asset(asset_data)
 
     url = remote_agent.get_asset_store_url(asset.asset_id)
     remote_agent.upload_asset(asset)

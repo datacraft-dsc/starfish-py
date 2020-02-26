@@ -15,8 +15,7 @@ class Listing(ListingBase):
         :param agent: agent object that created the listing.
         :type agent: :class:`.Agent` object to assign to this Listing
         :param str did: did of the listing, this can be the did of the underling asset.
-        :param asset: the core asset for this listing
-        :type asset: :class:`.Asset` object
+        :param str asset_did: the core asset DID for this listing
         :param data: data of the listing
         :param ddo: Optional ddo for the listing
         :type data: dict
@@ -55,7 +54,7 @@ class Listing(ListingBase):
         if not isinstance(account, Account):
             raise TypeError('You need to pass an Account object')
 
-        return self._agent.is_access_granted_for_asset(self.asset, account)
+        return self._agent.is_access_granted_for_asset(self.asset_did, account)
 
     def set_published(self, value):
         """
@@ -87,11 +86,11 @@ class Listing(ListingBase):
 
     @property
     def get_purchase_ids(self):
-        return self._agent.get_asset_purchase_ids(self.asset)
+        return self._agent.get_asset_purchase_ids(self.asset_did)
 
     def __str__(self):
         s = 'Listing: agent=' + self._agent.__class__.__name__ + ', '
         s += 'listing_id=' + self._listing_id + ', '
-        s += 'asset=' + self._asset.__class__.__name__ + ', '
+        s += 'asset_did=' + self._asset_did + ', '
         s += 'data=' + str(self._data)
         return s

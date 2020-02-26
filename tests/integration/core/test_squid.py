@@ -34,12 +34,12 @@ from ocean_utils.ddo.ddo import DDO
 
 logger = logging.getLogger('test.core.test_squid')
 
-def _register_asset_for_sale(agent, resources, account):
+def register_asset_for_sale(agent, resources, account):
 
     asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
-    listing = agent.register_asset(asset, resources.listing_data, account=account)
+    listing = agent.register_asset_and_listing(asset, resources.listing_data, account=account)
     assert(listing)
-    assert(listing.asset.did)
+    assert(listing.asset_did)
     return(listing)
 
 
@@ -49,7 +49,7 @@ def test_asset_file_register(ocean, config, resources, publisher_account):
     assert(agent)
 
     asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
-    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
+    listing = agent.register_asset_and_listing(asset, resources.listing_data, publisher_account)
     assert(listing)
 
 
@@ -60,7 +60,7 @@ def test_asset_remote_register(ocean, config, resources, publisher_account):
 
     asset = RemoteDataAsset.create_with_url('TestAsset', resources.asset_remote)
 
-    listing = agent.register_asset(asset, resources.listing_data, publisher_account)
+    listing = agent.register_asset_and_listing(asset, resources.listing_data, publisher_account)
     assert(listing)
 
 
@@ -76,15 +76,15 @@ def test_asset_purchase(ocean, config, resources, publisher_account, purchaser_a
 
     publisher_account.request_tokens(20)
 
-    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    listing = register_asset_for_sale(agent, resources, publisher_account)
     assert(listing)
     assert(publisher_account)
 
-    listing_did = listing.asset.did
+    listing_did = listing.asset_did
     # start to test getting the asset from storage
     listing = agent.get_listing(listing_did)
     assert(listing)
-    assert(listing.asset.did == listing_did)
+    assert(listing.asset_did == listing_did)
 
 
 
@@ -142,7 +142,7 @@ def test_search_listing(ocean, config, resources, publisher_account):
     agent = SquidAgent(ocean, config.squid_config)
 
 
-    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
@@ -161,7 +161,7 @@ def test_search_listing(ocean, config, resources, publisher_account):
 def test_get_listing(ocean, config, resources, publisher_account, purchaser_account):
     agent = SquidAgent(ocean, config.squid_config)
 
-    listing = _register_asset_for_sale(agent, resources, publisher_account)
+    listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing
     assert publisher_account
 
@@ -212,10 +212,10 @@ def test_insufficient_funds(ocean, config, resources, publisher_account, purchas
     asset = DataAsset.create_from_file('TestAsset', resources.asset_file)
     listing_data = resources.listing_data.copy()
     listing_data['price'] = 83454.2345
-    listing = agent.register_asset(asset, listing_data, publisher_account)
+    listing = agent.register_asset_and_listing(asset, listing_data, publisher_account)
     assert(listing)
 
-    listing_did = listing.asset.did
+    listing_did = listing.asset_did
     # start to test getting the asset from storage
     listing = agent.get_listing(listing_did)
 
