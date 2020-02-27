@@ -9,7 +9,17 @@ import re
 import secrets
 
 from starfish.metadata.provenance import create_publish, create_invoke
-from starfish.asset import DataAsset
+from starfish.asset import DataAsset, OperationAsset
+from starfish.metadata import METADATA_PROVENANCE
+
+OPERATION_METADATA = {
+    'name': 'operation',
+    'type': 'operation',
+    'operation': {
+        'modes': ['sync', 'async', 'test'],
+    },
+}
+
 
 PUBLISH_STANDARD = {
     'prefix':{
@@ -116,4 +126,36 @@ def test_provenance_invoke():
     assert(len(fields) == len(result.keys()))
 
 
-#    print(result)
+def test_assign_provenance_to_data_asset():
+    agent_id = secrets.token_hex(32)
+    test_data = secrets.token_hex(120)
+    metadata = {
+        METADATA_PROVENANCE: create_publish(agent_id)
+    }
+    asset = DataAsset.create('test data asset', test_data, metadata)
+    assert(asset)
+
+
+def test_assign_provenance_to_operation_asset():
+    asset_list = []
+    for index in range(0, 10):
+        asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
+        asset_list.append(asset)
+
+    activity_id = secrets.token_hex(32)
+    agent_id = secrets.token_hex(32)
+    inputs_text = json.dumps(
+        {
+            'asset_list': 'json'
+        }
+    )
+    outputs_text =  json.dumps(
+        {
+            'asset_id': 'asset'
+        }
+    )
+    metadata = OPERATION_METADATA
+    metadata[METADATA_PROVENANCE] = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
+    asset = OperationAsset(OPERATION_METADATA)
+    assert(asset)
+    assert(isinstance(asset, OperationAsset))
