@@ -1,11 +1,9 @@
 ## Change Log
 
-### Release v0.7.0
-
-    **Warning** Breaking API changes
+### Release v0.6.6
 
 +   better linting and module import order
-+   provenance
++   Provenance
 +   Split up register_asset and create_listing in agents
 +   Changed squid to use register_asset_and_listing
 +   change listing to pass the asset_did instead of the asset object

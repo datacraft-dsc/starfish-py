@@ -16,6 +16,7 @@ class Metadata():
     :type metadata: dict
 
     """
+
     def __init__(self, name=None, asset_type=None, **kwargs):
         """
         init the metadata class
