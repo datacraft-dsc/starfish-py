@@ -82,6 +82,7 @@ setup(
     description="Ocean/squid-py wrapper.",
     extras_require={
         'test': test_requirements,
+        'docs': docs_requirements,
         'dev': dev_requirements + test_requirements + docs_requirements,
     },
     install_requires=install_requirements,

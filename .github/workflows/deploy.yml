@@ -15,7 +15,7 @@ jobs:
       with:
         python-version: 3.7
     - name: Install dependencies
-      run: make install-docs IGNORE_VENV=1
+      run: make install IGNORE_VENV=1
     - name: Build Docs
       run: |
         make docs
