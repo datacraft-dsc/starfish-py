@@ -12,7 +12,7 @@ from starfish.ocean.ocean import Ocean      # noqa: F401
 """
 
 __author__ = """DEX.sg"""
-__version__ = '0.6.6'
+__version__ = '0.6.7'
 
 
 logger = logging.getLogger(__name__)
