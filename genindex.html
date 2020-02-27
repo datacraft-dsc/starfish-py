@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; starfish-py 0.6.5 documentation</title>
+  <title>Index &mdash; starfish-py 0.6.7 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.6.5
+                0.6.7
               </div>
             
           
@@ -193,6 +193,8 @@
 </li>
       <li><a href="classes/asset/bundle_asset.html#starfish.asset.BundleAsset.add">add() (starfish.asset.BundleAsset method)</a>
 </li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.add_asset_entity">add_asset_entity() (in module starfish.metadata.provenance)</a>
+</li>
       <li><a href="api/starfish.ddo.starfish_ddo.html#starfish.ddo.starfish_ddo.StarfishDDO.add_authentication">add_authentication() (starfish.ddo.starfish_ddo.StarfishDDO method)</a>
 </li>
       <li><a href="api/starfish.ddo.starfish_ddo.html#starfish.ddo.starfish_ddo.StarfishDDO.add_proof">add_proof() (starfish.ddo.starfish_ddo.StarfishDDO method)</a>
@@ -235,9 +237,9 @@
       </ul></li>
       <li><a href="api/starfish.ddo.authentication.html#starfish.ddo.authentication.Authentication.as_text">as_text() (starfish.ddo.authentication.Authentication method)</a>
 </li>
-      <li><a href="classes/listing/listing_base.html#starfish.listing.ListingBase.asset">asset() (starfish.listing.ListingBase property)</a>
-</li>
       <li><a href="classes/asset/bundle_asset.html#starfish.asset.BundleAsset.asset_count">asset_count() (starfish.asset.BundleAsset property)</a>
+</li>
+      <li><a href="classes/listing/listing_base.html#starfish.listing.ListingBase.asset_did">asset_did() (starfish.listing.ListingBase property)</a>
 </li>
       <li><a href="classes/asset/asset_base.html#starfish.asset.AssetBase.asset_id">asset_id() (starfish.asset.AssetBase property)</a>
 </li>
@@ -291,8 +293,6 @@
         <li><a href="api/starfish.ocean.ocean.html#starfish.ocean.ocean.Ocean.contracts_path">(starfish.ocean.ocean.Ocean property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/asset/bundle_asset.html#starfish.asset.BundleAsset.create">create() (starfish.asset.BundleAsset static method)</a>
 
       <ul>
@@ -301,13 +301,43 @@
         <li><a href="classes/asset/operation_asset.html#starfish.asset.OperationAsset.create">(starfish.asset.OperationAsset method)</a>
 </li>
       </ul></li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_activity">create_activity() (in module starfish.metadata.provenance)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_agent">create_agent() (in module starfish.metadata.provenance)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/asset/module.html#starfish.asset.create_asset_from_metadata_text">create_asset_from_metadata_text() (in module starfish.asset)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_associated_with">create_associated_with() (in module starfish.metadata.provenance)</a>
 </li>
       <li><a href="api/starfish.ddo.starfish_ddo.html#starfish.ddo.starfish_ddo.StarfishDDO.create_authentication_from_json">create_authentication_from_json() (starfish.ddo.starfish_ddo.StarfishDDO static method)</a>
 </li>
       <li><a href="classes/agent/squid_agent.html#starfish.agent.SquidAgent.create_data_asset_from_file_item">create_data_asset_from_file_item() (starfish.agent.SquidAgent static method)</a>
 </li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_dependencies">create_dependencies() (in module starfish.metadata.provenance)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_derived_from">create_derived_from() (in module starfish.metadata.provenance)</a>
+</li>
       <li><a href="classes/asset/data_asset.html#starfish.asset.DataAsset.create_from_file">create_from_file() (starfish.asset.DataAsset static method)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_generated_by">create_generated_by() (in module starfish.metadata.provenance)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_invoke">create_invoke() (in module starfish.metadata.provenance)</a>
+</li>
+      <li><a href="classes/agent/agent_base.html#starfish.agent.AgentBase.create_listing">create_listing() (starfish.agent.AgentBase method)</a>
+
+      <ul>
+        <li><a href="classes/agent/memory_agent.html#starfish.agent.MemoryAgent.create_listing">(starfish.agent.MemoryAgent method)</a>
+</li>
+        <li><a href="classes/agent/remote_agent.html#starfish.agent.RemoteAgent.create_listing">(starfish.agent.RemoteAgent method)</a>
+</li>
+        <li><a href="classes/agent/squid_agent.html#starfish.agent.SquidAgent.create_listing">(starfish.agent.SquidAgent method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_prefix">create_prefix() (in module starfish.metadata.provenance)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#starfish.metadata.provenance.create_publish">create_publish() (in module starfish.metadata.provenance)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -713,14 +743,16 @@
         <li><a href="classes/agent/squid_agent.html#starfish.agent.SquidAgent.register_asset">(starfish.agent.SquidAgent method)</a>
 </li>
       </ul></li>
+      <li><a href="classes/agent/squid_agent.html#starfish.agent.SquidAgent.register_asset_and_listing">register_asset_and_listing() (starfish.agent.SquidAgent method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/ocean.html#starfish.Ocean.register_did">register_did() (starfish.Ocean method)</a>
 
       <ul>
         <li><a href="api/starfish.ocean.ocean.html#starfish.ocean.ocean.Ocean.register_did">(starfish.ocean.ocean.Ocean method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/agent/remote_agent.html#starfish.agent.RemoteAgent">RemoteAgent (class in starfish.agent)</a>
 </li>
       <li><a href="classes/account.html#starfish.account.Account.request_tokens">request_tokens() (starfish.account.Account method)</a>
@@ -771,10 +803,10 @@
 </li>
       <li><a href="api/starfish.html#module-starfish">starfish (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/asset/module.html#module-starfish.asset">starfish.asset (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/starfish.ddo.html#module-starfish.ddo">starfish.ddo (module)</a>
 </li>
       <li><a href="api/starfish.ddo.authentication.html#module-starfish.ddo.authentication">starfish.ddo.authentication (module)</a>
@@ -790,6 +822,8 @@
       <li><a href="api/starfish.metadata.html#module-starfish.metadata">starfish.metadata (module)</a>
 </li>
       <li><a href="api/starfish.metadata.metadata.html#module-starfish.metadata.metadata">starfish.metadata.metadata (module)</a>
+</li>
+      <li><a href="api/starfish.metadata.provenance.html#module-starfish.metadata.provenance">starfish.metadata.provenance (module)</a>
 </li>
       <li><a href="api/starfish.ocean.html#module-starfish.ocean">starfish.ocean (module)</a>
 </li>
@@ -827,8 +861,16 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes/agent/remote_agent.html#starfish.agent.RemoteAgent.update_listing">update_listing() (starfish.agent.RemoteAgent method)</a>
+      <li><a href="classes/agent/agent_base.html#starfish.agent.AgentBase.update_listing">update_listing() (starfish.agent.AgentBase method)</a>
+
+      <ul>
+        <li><a href="classes/agent/memory_agent.html#starfish.agent.MemoryAgent.update_listing">(starfish.agent.MemoryAgent method)</a>
 </li>
+        <li><a href="classes/agent/remote_agent.html#starfish.agent.RemoteAgent.update_listing">(starfish.agent.RemoteAgent method)</a>
+</li>
+        <li><a href="classes/agent/squid_agent.html#starfish.agent.SquidAgent.update_listing">(starfish.agent.SquidAgent method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/agent/remote_agent.html#starfish.agent.RemoteAgent.upload_asset">upload_asset() (starfish.agent.RemoteAgent method)</a>

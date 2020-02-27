@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.6.5 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.6.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.5
+                0.6.7
               </div>
             
           
@@ -325,7 +325,9 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
     <span class="p">}</span>
     <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">agent_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">agent_options</span><span class="p">)</span>
 
-    <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+    <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">create_listing</span><span class="p">(</span><span class="n">listing_data</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">listing</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="c1"># now upload the asset data to Surfer</span>

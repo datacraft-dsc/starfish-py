@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Memory Agent class &mdash; starfish-py 0.6.5 documentation</title>
+  <title>Memory Agent class &mdash; starfish-py 0.6.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.5
+                0.6.7
               </div>
             
           
@@ -173,7 +173,7 @@
 <h1>Memory Agent class<a class="headerlink" href="#memory-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.MemoryAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param">ocean</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Memory Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
@@ -199,6 +199,26 @@ provider will be made at this point.</p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.MemoryAgent.create_listing">
+<code class="sig-name descname">create_listing</code><span class="sig-paren">(</span><em class="sig-param">listing_data</em>, <em class="sig-param">asset_did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent.create_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a listing on the market place for this asset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Listing inforamiton to give for this asset</p></li>
+<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – asset DID to assign to this listing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new <a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> object that has been registered, if failure then return None.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,20 +322,17 @@ to see if it is assigned to a valid Asset.</p>
 
 <dl class="method">
 <dt id="starfish.agent.MemoryAgent.register_asset">
-<code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">listing_data</em>, <em class="sig-param">account=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent.register_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent.register_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a memory asset with the ocean network.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – metadata dictionary to store for this asset.</p></li>
-<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Optional, since an account is not assigned to an registered memory asset.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – asset object to register for this asset.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new <a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> object that has been registered, if failure then return None.</p>
+<dd class="field-even"><p>A <a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> object that has been registered, if failure then return None.</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
+<dd class="field-odd"><p><a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> class</p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,6 +362,17 @@ to see if it is assigned to a valid Asset.</p>
 <span class="n">my_result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">search_registered_assets</span><span class="p">(</span><span class="s1">&#39;weather&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.MemoryAgent.update_listing">
+<code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param">listing</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent.update_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the listing to the agent server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class) – Listing object to update</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">

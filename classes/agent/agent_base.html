@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Agent Base class &mdash; starfish-py 0.6.5 documentation</title>
+  <title>Agent Base class &mdash; starfish-py 0.6.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.5
+                0.6.7
               </div>
             
           
@@ -204,6 +204,26 @@ provider will be made at this point.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="starfish.agent.AgentBase.create_listing">
+<em class="property">abstract </em><code class="sig-name descname">create_listing</code><span class="sig-paren">(</span><em class="sig-param">listing_data</em>, <em class="sig-param">asset_did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.create_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a listing on the market place for this asset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Listing inforamiton to give for this asset</p></li>
+<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – asset DID to assign to this listing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new <a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> object that has been registered, if failure then return None.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="starfish.agent.AgentBase.get_asset_purchase_ids">
 <em class="property">abstract </em><code class="sig-name descname">get_asset_purchase_ids</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.get_asset_purchase_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns as list of purchase id’s that have been used for this asset</p>
@@ -239,12 +259,12 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.AgentBase.is_access_granted_for_asset">
-<em class="property">abstract </em><code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_did</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check to see if the account and purchase_id have access to the assed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – Asset to check for access.</p></li>
+<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Asset DID to check for access.</p></li>
 <li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to purchase the asset.</p></li>
 <li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
 </ul>
@@ -287,7 +307,7 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.AgentBase.purchase_wait_for_completion">
-<em class="property">abstract </em><code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id</em>, <em class="sig-param">timeoutSeconds</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param">asset_did</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id</em>, <em class="sig-param">timeoutSeconds</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for completion of the purchase</p>
 <p>TODO: issues here…
 + No method as yet to pass back paramaters and values during the purchase process
@@ -296,39 +316,19 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.AgentBase.register_asset">
-<em class="property">abstract </em><code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em>, <em class="sig-param">listing_data</em>, <em class="sig-param">account</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.register_asset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a squid asset with the ocean network.</p>
+<em class="property">abstract </em><code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.register_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an asset with an Agent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>asset</strong> (<a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> object to register) – the Asset to register, at the moment only a Asset can be used.</p></li>
-<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – data providing listing information for the asset.</p></li>
-<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to use to register this asset.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>asset</strong> (<a class="reference internal" href="../asset/data_asset.html#starfish.asset.DataAsset" title="starfish.asset.DataAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataAsset</span></code></a> object to register) – asset object to register</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new <a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> object that has been registered, if failure then return None.</p>
+<dd class="field-even"><p>A <a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> object that has been registered, if failure then return None.</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
+<dd class="field-odd"><p><a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> class</p>
 </dd>
 </dl>
-<p>For example:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get your publisher account</span>
-<span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SquidAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
-<span class="n">asset</span> <span class="o">=</span> <span class="n">FileAsset</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;my_file.csv&#39;</span><span class="p">)</span>
-<span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
-     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;My data&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">listing_data</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">listing</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -356,6 +356,17 @@ provider will be made at this point.</p>
 <span class="n">my_result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">search_registered_assets</span><span class="p">(</span><span class="s1">&#39;weather&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.AgentBase.update_listing">
+<em class="property">abstract </em><code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param">listing</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase.update_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the listing to the agent server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class) – Listing object to update</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">

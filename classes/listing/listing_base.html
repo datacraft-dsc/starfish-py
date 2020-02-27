@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Listing Base class &mdash; starfish-py 0.6.5 documentation</title>
+  <title>Listing Base class &mdash; starfish-py 0.6.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.5
+                0.6.7
               </div>
             
           
@@ -171,7 +171,7 @@
 <h1>Listing Base class<a class="headerlink" href="#listing-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.listing.ListingBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.listing.</code><code class="sig-name descname">ListingBase</code><span class="sig-paren">(</span><em class="sig-param">agent</em>, <em class="sig-param">listing_id</em>, <em class="sig-param">asset</em>, <em class="sig-param">data</em>, <em class="sig-param">ddo=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.ListingBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.listing.</code><code class="sig-name descname">ListingBase</code><span class="sig-paren">(</span><em class="sig-param">agent</em>, <em class="sig-param">listing_id</em>, <em class="sig-param">asset_did</em>, <em class="sig-param">data</em>, <em class="sig-param">ddo=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.ListingBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Create a Listing object</p>
 <dl class="field-list simple">
@@ -179,7 +179,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>agent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Agent</span></code> object to assign to this Listing) – agent object that created the listing.</p></li>
 <li><p><strong>listing_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – id of the listing.</p></li>
-<li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – the core asset for this listing</p></li>
+<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the asset DID for this listing</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – data of the listing</p></li>
 <li><p><strong>ddo</strong> – Optional DDO object for this listing</p></li>
 </ul>
@@ -199,14 +199,14 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.listing.ListingBase.asset">
-<em class="property">property </em><code class="sig-name descname">asset</code><a class="headerlink" href="#starfish.listing.ListingBase.asset" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.listing.ListingBase.asset_did">
+<em class="property">property </em><code class="sig-name descname">asset_did</code><a class="headerlink" href="#starfish.listing.ListingBase.asset_did" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>asset held by the listing</p>
+<dd class="field-odd"><p>asset DID held by the listing</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
