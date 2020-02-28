@@ -1,4 +1,7 @@
-.PHONY: clean clean-pyc clean-build  install install-dev install-test install-docs lint flake8 isort test docs
+.PHONY: clean clean-pyc clean-build  \
+	install install-dev install-test install-docs \
+	lint flake8 isort \
+	tests test-unit test-integration docs
 
 # all: clean lint test docs
 
@@ -52,9 +55,16 @@ flake8:
 isort:
 	isort $(ISORT_PARAMETERS)
 
-test:
+tests:
+	./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
 	pytest tests
 
+test-unit:
+	pytest tests/unit
+
+test-integration:
+	./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
+	pytest tests/integration
 
 docs:
 	$(MAKE) -C docs clean

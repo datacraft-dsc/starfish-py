@@ -49,4 +49,4 @@ jobs:
     - name: Wait for barge startup
       run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
     - name: Test
-      run: make test
+      run: make tests
