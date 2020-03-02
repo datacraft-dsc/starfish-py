@@ -20,11 +20,12 @@ def test_decode_readable_size():
     test_values = {
         '1mb': ONE_MB,
         '1 mb': ONE_MB,
+        '125mb': ONE_MB * 125,
         '2m': ONE_MB * 2,
         '1kb': ONE_KB,
         '20.2kb': ONE_KB * 20.2,
         '4k': ONE_KB * 4,
-        '5GB': ONE_GB * 5,
+        '502GB': ONE_GB * 502,
         '6G': ONE_GB * 6,
         '22T': ONE_TB * 22,
         '1 Tb': ONE_TB
