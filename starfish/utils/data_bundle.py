@@ -37,7 +37,7 @@ def decode_readable_size(text, base_size=1024):
     return None
 
 
-def register_upload_data(remote_agent, name, byte_stream, chunk_size_value=None):
+def register_upload_data(remote_agent, name, data_stream, chunk_size_value=None):
 
     if chunk_size_value is None:
         chunk_size_value = DEFAULT_CHUNK_SIZE
@@ -52,7 +52,7 @@ def register_upload_data(remote_agent, name, byte_stream, chunk_size_value=None)
     index = 0
     asset = None
     while True:
-        data = byte_stream.read(chunk_size)
+        data = data_stream.read(chunk_size)
         if data:
             asset_name = f'{name}:{index}'
             data_asset = DataAsset.create(asset_name, data)
@@ -77,7 +77,7 @@ def register_upload_bundle_file(remote_agent, filename, chunk_size=None):
     return bundle_asset
 
 
-def download_bundle_data(data_stream, remote_agent, bundle_asset):
+def download_bundle_data(remote_agent, bundle_asset, data_stream):
     size = 0
     for name, asset in bundle_asset:
         url = remote_agent.get_asset_store_url(asset.asset_id)
@@ -92,5 +92,5 @@ def download_bundle_file(remote_agent, bundle_asset, filename):
         raise TypeError(f'asset type {bundle_asset.type} is not a bundle asset')
     size = 0
     with open(filename, 'wb') as fp:
-        size = download_bundle_data(fp, remote_agent, bundle_asset)
+        size = download_bundle_data(remote_agent, bundle_asset, fp)
     return size
