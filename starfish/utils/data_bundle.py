@@ -76,6 +76,7 @@ def register_upload_bundle_file(remote_agent, filename, chunk_size=None):
         bundle_asset = register_upload_data(remote_agent, name, fp, chunk_size)
     return bundle_asset
 
+
 def download_bundle_data(data_stream, remote_agent, bundle_asset):
     size = 0
     for name, asset in bundle_asset:
@@ -84,6 +85,7 @@ def download_bundle_data(data_stream, remote_agent, bundle_asset):
         data_stream.write(store_asset.data)
         size += len(store_asset.data)
     return size
+
 
 def download_bundle_file(remote_agent, bundle_asset, filename):
     if not bundle_asset.is_bundle:
