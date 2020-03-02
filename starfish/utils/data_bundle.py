@@ -37,7 +37,7 @@ def decode_readable_size(text, base_size=1024):
     return None
 
 
-def register_upload_chunks(remote_agent, name, byte_stream, chunk_size_value=None):
+def register_upload_data(remote_agent, name, byte_stream, chunk_size_value=None):
 
     if chunk_size_value is None:
         chunk_size_value = DEFAULT_CHUNK_SIZE
@@ -67,24 +67,28 @@ def register_upload_chunks(remote_agent, name, byte_stream, chunk_size_value=Non
     return asset
 
 
-def upload_bundle_file(remote_agent, filename, chunk_size=None):
+def register_upload_bundle_file(remote_agent, filename, chunk_size=None):
     if not os.path.exists(filename):
         raise FileNotFoundError(f'Cannot find file {filename}')
     bundle_asset = None
     with open(filename, 'rb') as fp:
         name = f'file: {os.path.basename(filename)}'
-        bundle_asset = register_upload_chunks(remote_agent, name, fp, chunk_size)
+        bundle_asset = register_upload_data(remote_agent, name, fp, chunk_size)
     return bundle_asset
 
+def download_bundle_data(data_stream, remote_agent, bundle_asset):
+    size = 0
+    for name, asset in bundle_asset:
+        url = remote_agent.get_asset_store_url(asset.asset_id)
+        store_asset = remote_agent.download_asset(asset.asset_id, url)
+        data_stream.write(store_asset.data)
+        size += len(store_asset.data)
+    return size
 
 def download_bundle_file(remote_agent, bundle_asset, filename):
     if not bundle_asset.is_bundle:
         raise TypeError(f'asset type {bundle_asset.type} is not a bundle asset')
     size = 0
     with open(filename, 'wb') as fp:
-        for name, asset in bundle_asset:
-            url = remote_agent.get_asset_store_url(asset.asset_id)
-            store_asset = remote_agent.download_asset(asset.asset_id, url)
-            fp.write(store_asset.data)
-            size += len(store_asset.data)
+        size = download_bundle_data(fp, remote_agent, bundle_asset)
     return size

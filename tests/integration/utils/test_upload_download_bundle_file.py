@@ -12,7 +12,7 @@ import secrets
 
 from starfish.utils.data_bundle import (
     decode_readable_size,
-    upload_bundle_file,
+    register_upload_bundle_file,
     download_bundle_file
 )
 
@@ -33,7 +33,7 @@ def test_bundle_file_upload_download(remote_agent):
         test_data_md5 = md5sum.hexdigest()
         fp.seek(0)
         filename = fp.name
-        asset_bundle = upload_bundle_file(remote_agent, filename)
+        asset_bundle = register_upload_bundle_file(remote_agent, filename)
 
         fp.seek(0)
 
