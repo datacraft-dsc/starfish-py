@@ -29,5 +29,5 @@ if [[ $2 == '--tag' ]]; then
     exit 1
   fi
 else
-  bumpversion $1
+  bumpversion --no-tag $1
 fi

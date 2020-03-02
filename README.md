@@ -58,13 +58,13 @@ Python 3.6
 1. Install package requirements for starfish
 
     ```bash
-    pip install -r requirements_dev.txt
+    make install
     ```
 
 1. Run the unit tests, without any supporting software/libraries outside of starfish
 
     ```bash
-    pytest tests/unit
+    make test_unit
     ```
 
 1. To run the full test using the current remote implementation of [barge](https://github.com/DEX-Company/barge).
@@ -93,7 +93,7 @@ Python 3.6
 1. Run the all tests
 
     ```bash
-    pytest tests
+    make tests
     ```
 
 ## Documentation

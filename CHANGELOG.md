@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release TBD
+
++   Large file upload and download using asset bundle and chunk of data assets
+
+
 ### Release v0.6.6
 
 +   better linting and module import order

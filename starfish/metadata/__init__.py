@@ -1,3 +1,3 @@
 from starfish.metadata.metadata import Metadata     # noqa: F401
 
-METADATA_PROVENANCE = 'provenance'
+METADATA_PROVENANCE_NAME = 'provenance'
