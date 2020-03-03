@@ -10,7 +10,6 @@
 import re
 
 from starfish.agent import RemoteAgent
-from starfish.ddo.starfish_ddo import StarfishDDO
 
 
 def test_06_agent_endpoint_query(ocean, remote_agent):

@@ -11,8 +11,6 @@ import json
 
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent
-from starfish.ddo.starfish_ddo import StarfishDDO
-
 
 
 def test_08_asset_registration(resources, remote_agent):

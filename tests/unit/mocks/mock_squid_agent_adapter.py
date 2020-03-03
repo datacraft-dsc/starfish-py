@@ -5,7 +5,9 @@ import json
 import re
 from web3 import Web3
 
-from starfish.ddo.starfish_ddo import StarfishDDO
+from ocean_utils.ddo.ddo import DDO
+from starfish.ddo import DDO as StarfishDDO
+
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapterPurchaseError
 
 from ocean_utils.did import (
@@ -96,9 +98,7 @@ class MockSquidAgentAdapter():
         self._metadata[did] = metadata
 
         # create a new DDO
-        ddo = StarfishDDO(did)
-        # add a signature
-        private_key_pem = ddo.add_signature()
+        ddo = DDO(did)
         # add the service endpoint with the meta data
         assert(self._options)
         assert('aquarius_url' in self._options)
@@ -111,7 +111,7 @@ class MockSquidAgentAdapter():
         if not 'checksum' in metadata['base']:
             metadata['base']['checksum'] = did
 
-        ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
+        # ddo.add_proof_keeper(metadata['base']['checksum'], account, mockKeeper)
         # if self.register_ddo(did, ddo, account._squid_account):
         self._ddo_list[did] = ddo
         return ddo
