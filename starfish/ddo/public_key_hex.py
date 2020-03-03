@@ -19,6 +19,7 @@ class PublicKeyHex(PublicKeyBase):
         self._type = PUBLIC_KEY_TYPE_HEX
         self._store_type = PUBLIC_KEY_STORE_TYPE_HEX
 
-    def get_authentication_type(self):
+    @property
+    def authentication_type(self):
         """Return the type of authentication supported by this class."""
         return AUTHENTICATION_TYPE_HEX

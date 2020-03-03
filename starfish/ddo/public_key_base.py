@@ -31,7 +31,8 @@ class PublicKeyBase:
         self._owner = kwargs.get('owner', None)
         self._type = kwargs.get('type', None)
 
-    def get_id(self):
+    @property
+    def id(self):
         """ get the key id"""
         return self._id
 
@@ -45,18 +46,18 @@ class PublicKeyBase:
         if re.match('^#.*', self._owner):
             self._owner = did + self._owner
 
-    def get_owner(self):
+    @property
+    def owner(self):
         """get the owner of this key"""
         return self._owner
 
-    # def set_owner(self, value):
-    # self._owner = value
-
-    def get_type(self):
+    @property
+    def type(self):
         """get the type of key"""
         return self._type
 
-    def get_store_type(self):
+    @property
+    def store_type(self):
         """get the type of key storage"""
         return self._store_type
 
@@ -93,7 +94,8 @@ class PublicKeyBase:
             self._value = value
         return value
 
-    def get_decode_value(self):
+    @property
+    def decode_value(self):
         """ return the key value based on it's storage type"""
         if self._store_type == PUBLIC_KEY_STORE_TYPE_HEX:
             value = bytes.fromhex(self._value)
@@ -108,7 +110,8 @@ class PublicKeyBase:
             value = self._value
         return value
 
-    def get_value(self):
+    @property
+    def value(self):
         """ get the key value"""
         return self._value
 
@@ -123,6 +126,7 @@ class PublicKeyBase:
 
         return json.dumps(values)
 
+    @property
     def as_dictionary(self):
         """return the key as a python dictionary"""
         values = {
@@ -136,11 +140,13 @@ class PublicKeyBase:
             values['owner'] = self._owner
         return values
 
+    @property
     def is_valid(self):
         """return True if the key structure is valid"""
         return self._id and self._type
 
-    def get_authentication_type(self):
+    @property
+    def authentication_type(self):
         """
         base overloaded method to return the authentication type to use for
         this key

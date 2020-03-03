@@ -32,11 +32,13 @@ class Authentication:
         if self._public_key:
             self._public_key.assign_did(did)
 
-    def get_type(self):
+    @property
+    def type(self):
         """get the authentication type"""
         return self._type
 
-    def get_public_key_id(self):
+    @property
+    def public_key_id(self):
         """ get the authentication key id used to validate this authentication"""
         if self._public_key_id:
             return self._public_key_id
@@ -44,7 +46,8 @@ class Authentication:
             return self._public_key.get_id()
         return None
 
-    def get_public_key(self):
+    @property
+    def public_key(self):
         """ get the authentication public key"""
         return self._public_key
 
@@ -63,6 +66,7 @@ class Authentication:
 
         return json.dumps(values)
 
+    @property
     def as_dictionary(self):
         """ return the authentication as a dictionary"""
         values = {
@@ -75,10 +79,12 @@ class Authentication:
 
         return values
 
+    @property
     def is_valid(self):
         """ return true if this authentication has valid structure"""
         return self.get_public_key_id() is not None and self._type is not None
 
+    @property
     def is_public_key(self):
         """ return true if this authentication has an embedded public key"""
         return self._public_key is not None

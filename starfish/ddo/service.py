@@ -34,6 +34,7 @@ class Service:
         """ Assign a new DID/Id to the service"""
         if re.match('^#.*', self._id):
             self._id = did + self._id
+
     @property
     def type(self):
         """get the service type"""
@@ -70,6 +71,7 @@ class Service:
 
         return json.dumps(values)
 
+    @property
     def as_dictionary(self):
         """return the service as a python dictionary"""
         values = {

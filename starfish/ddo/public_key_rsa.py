@@ -20,7 +20,8 @@ class PublicKeyRSA(PublicKeyBase):
         PublicKeyBase.__init__(self, key_id, **kwargs)
         self._type = PUBLIC_KEY_TYPE_RSA
 
-    def get_authentication_type(self):
+    @property
+    def authentication_type(self):
         """return the type of authentication supported by this class"""
         return AUTHENTICATION_TYPE_RSA
 
