@@ -11,7 +11,6 @@ import pytest
 import re
 
 from starfish.agent import RemoteAgent
-from starfish.ddo.starfish_ddo import StarfishDDO
 from starfish.agent.services import Services, ALL_SERVICES
 
 

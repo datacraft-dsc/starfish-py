@@ -17,7 +17,7 @@ from starfish.asset import (
     create_asset_from_metadata_text,
     is_asset_hash_valid
 )
-from starfish.ddo.starfish_ddo import StarfishDDO
+from starfish.ddo.ddo import DDO
 from starfish.exceptions import StarfishAssetInvalid
 from starfish.job import Job
 from starfish.listing import Listing
@@ -64,16 +64,16 @@ class RemoteAgent(AgentBase):
 
         # set the DDO
         if isinstance(ddo, dict):
-            self._ddo = StarfishDDO(dictionary=ddo)
+            self._ddo = DDO(dictionary=ddo)
         elif isinstance(ddo, str):
-            self._ddo = StarfishDDO(json_text=ddo)
-        elif isinstance(ddo, StarfishDDO):
+            self._ddo = DDO(json_text=ddo)
+        elif isinstance(ddo, DDO):
             self._ddo = ddo
         elif ddo is None:
             if self._did:
                 self._ddo = self._resolve_ddo_from_did(self._did)
         else:
-            raise ValueError('ddo can be one of the following: None, StarfishDDO object or type dict')
+            raise ValueError('ddo can be one of the following: None, DDO object or type dict')
 
         # incase the user just sends a ddo without a did
         if self._did is None and self._ddo:
@@ -85,7 +85,7 @@ class RemoteAgent(AgentBase):
             ddo_text = squid_adapter.resolve_did_to_ddo(self._did)
             if not ddo_text:
                 raise ValueError(f'cannot find registered agent at {self.did}')
-            self._ddo = StarfishDDO(json_text=ddo_text)
+            self._ddo = DDO(json_text=ddo_text)
 
         if self._did is None and self._ddo:
             self._did = self._ddo.did
@@ -520,7 +520,7 @@ class RemoteAgent(AgentBase):
         ddo_text = squid_adapter.resolve_did(self._did)
         if not ddo_text:
             raise ValueError(f'cannot find registered agent at {did}')
-        return StarfishDDO(json_text=ddo_text)
+        return DDO(json_text=ddo_text)
 
     @property
     def did(self):
@@ -540,7 +540,7 @@ class RemoteAgent(AgentBase):
         Return the registered DDO for this agent
 
         :return: DDO registered for this agent
-        :type: :class:`.StarfishDDO`
+        :type: :class:`.DDO`
         """
         return self._ddo
 
@@ -607,7 +607,7 @@ class RemoteAgent(AgentBase):
             raise(TypeError('Invalid services type, must be a string, dict or Services object'))
 
         did = did_generate_random()
-        ddo = StarfishDDO(did)
+        ddo = DDO(did)
         for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)
 

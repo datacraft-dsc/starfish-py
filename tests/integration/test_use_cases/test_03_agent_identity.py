@@ -11,7 +11,7 @@
 import secrets
 from starfish.agent import RemoteAgent
 from starfish.utils.did import did_parse
-from starfish.ddo.starfish_ddo import StarfishDDO
+from starfish.ddo import DDO
 
 
 def find_remote_service(find_service_type):
@@ -33,13 +33,13 @@ def test_03_agent_did(remote_agent):
 def test_03_agent_ddo(remote_agent):
     ddo = remote_agent.ddo
     assert(ddo)
-    assert(isinstance(ddo, StarfishDDO))
+    assert(isinstance(ddo, DDO))
     for service in ddo.services:
         service_type = find_remote_service(service.type)
         assert(service_type)
         endpoint = remote_agent.get_endpoint(service_type)
         assert(endpoint)
-        assert(endpoint == service.endpoints.service)
+        assert(endpoint == service.endpoint)
 
 
 def test_03_agent_get_endpoints(remote_agent):

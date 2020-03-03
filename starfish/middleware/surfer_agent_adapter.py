@@ -349,7 +349,7 @@ class SurferAgentAdapter():
                 message = f'unable to find surfer endpoint service type {service_type}'
                 logger.error(message)
                 raise ValueError(message)
-            endpoint = service.endpoints.service
+            endpoint = service.endpoint
         if not endpoint:
             message = f'unable to find surfer endpoint for {name} = {service_type}'
             logger.error(message)
