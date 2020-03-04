@@ -81,7 +81,6 @@ class ContractManager:
 
     @staticmethod
     def _find_class_in_module(class_name, contract_module):
-        class_list = []
         for name, obj in inspect.getmembers(contract_module, inspect.isclass):
             if issubclass(obj, ContractBase) \
                and name != 'ContractBase' \
