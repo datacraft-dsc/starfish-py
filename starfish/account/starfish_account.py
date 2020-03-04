@@ -49,7 +49,6 @@ class StarfishAccount():
             self._password = password
             self._keyfile = keyfile
 
-
     def is_address_equal(self, address):
         """
 
@@ -66,9 +65,7 @@ class StarfishAccount():
         """
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
-
     def sign_transaction(self, web3, transaction):
-
         encrypted_key = None
         with open(self._keyfile, 'r') as fp:
             encrypted_key = fp.read()
@@ -76,7 +73,6 @@ class StarfishAccount():
             secret_key = web3.eth.account.decrypt(encrypted_key, self._password)
             signed = web3.eth.account.signTransaction(transaction, secret_key)
             return signed
-
 
     @property
     def is_password(self):

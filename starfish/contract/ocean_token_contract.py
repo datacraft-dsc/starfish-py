@@ -1,0 +1,24 @@
+"""
+
+    Ocean Token Contract
+
+"""
+
+from .contract_base import ContractBase
+
+CONTRACT_NAME = 'OceanToken'
+
+
+class OceanTokenContract(ContractBase):
+    """Class representing the Ocean Token contract."""
+
+    def __init__(self):
+        ContractBase.__init__(self, CONTRACT_NAME)
+
+    def get_balance(self, account):
+        amount = self.call('balanceOf', account.address)
+        return self._web3.fromWei(amount, 'ether')
+
+    def approve_tranfer(self, account, to_address, amount):
+        amount_wei = self._web3.toWei(amount, 'ether')
+        return self.call('approve', (to_address, amount_wei), account)

@@ -10,6 +10,7 @@ from .contract_base import ContractBase
 CONTRACT_NAME = 'DirectPurchase'
 TOKEN_SENT_EVENT_NAME = 'TokenSent'
 
+
 class DirectPurchaseContract(ContractBase):
     """Class representing the Token contract."""
 
@@ -32,14 +33,12 @@ class DirectPurchaseContract(ContractBase):
         :return: void
         """
 
-        if not self.web3.isChecksumAddress(address_to):
-            address_to = self.web3.toChecksumAddress(address_to)
-
-        account.approve_tokens(self.address, amount)
+        if not self._web3.isChecksumAddress(address_to):
+            address_to = self._web3.toChecksumAddress(address_to)
 
         amount = self.web3.toWei(amount, 'ether')
 
-        transaction_hash = self.call(
+        tx_hash = self.call(
             'sendTokenAndLog',
             (
                 address_to,
@@ -49,24 +48,7 @@ class DirectPurchaseContract(ContractBase):
             ),
             account
         )
-
-        print(transaction_hash)
-        """
-        tx_hash = self.send_transaction(
-            'sendTokenAndLog', (
-                address_to,
-                amount,
-                self.w3.toBytes(reference1),
-                self.w3.toBytes(reference2)
-            ),
-            transact={
-                'from': account.address,
-                'passphrase': account.password,
-                'keyfile': account.key_file
-            }
-        )
-        """
-        return self.get_tx_receipt(transaction_hash).status == 1
+        return tx_hash
 
     def check_is_paid(self, address_from, address_to, amount, reference):
         """

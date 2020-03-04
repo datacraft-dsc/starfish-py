@@ -10,13 +10,13 @@
 
 import importlib
 import inspect
-import logging
 import json
+import logging
 import os
 
-from .contract_base import ContractBase
+from web3 import HTTPProvider, Web3
 
-from web3 import Web3, HTTPProvider
+from starfish.contract.contract_base import ContractBase
 
 DEFAULT_PACKAGE_NAME = 'starfish.contract'
 
@@ -58,16 +58,13 @@ class ContractManager:
                 return self.create_contract(name, class_list[0])
         return None
 
-
     def create_contract(self, name, class_def):
         contract_object = class_def()
         contract_name = contract_object.name
-        print(contract_name)
         abi_filename = ContractManager.find_abi_filename(contract_name, self.network_name)
         if abi_filename:
             contract_info = ContractManager.load_abi_file(abi_filename)
             contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
-        print(abi_filename)
         return contract_object
 
     @property

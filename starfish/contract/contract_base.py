@@ -24,11 +24,18 @@ class ContractBase:
             abi=abi
         )
 
-    def call(self, function_name, parameters, account):
-        # return self._contract.caller(transaction=transaction).function_name(*parameters)
-        if not isinstance(parameters, list):
+    def call(self, function_name, parameters, account=None):
+        if not isinstance(parameters, (list, tuple)):
             parameters = (parameters,)
 
+        if account:
+            result = self._call_with_transaction(function_name, parameters, account)
+        else:
+            result = self._contract.functions[function_name](*parameters).call()
+        return result
+
+    def _call_with_transaction(self, function_name, parameters, account):
+        # return self._contract.caller(transaction=transaction).function_name(*parameters)
         transact = {
             'gas': self.get_gas_price(account.address),
             'nonce': self.get_nonce(account.address),
@@ -47,8 +54,9 @@ class ContractBase:
         return self._web3.eth.getTransactionCount(address)
 
     def get_gas_price(self, address):
-        if self._gas_price == 0:
-            self._gas_price = int(self._web3.eth.gasPrice / 100);
+        block = self._web3.eth.getBlock("latest")
+        self._gas_price = int(self._web3.eth.gasPrice / 100)
+        self._gas_price = max(self._gas_price, block.gasLimit)
         return self._gas_price
 
     @property
