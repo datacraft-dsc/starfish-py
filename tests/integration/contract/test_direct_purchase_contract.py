@@ -14,9 +14,9 @@ def test_direct_purchase(config, starfish_accounts):
 
     """
     manager = ContractManager(config.keeper_url)
-    direct_contract = manager.load('direct_purchase_contract')
-    ocean_token_contract = manager.load('ocean_token_contract')
-    dispenser_contract = manager.load('dispenser_contract')
+    direct_contract = manager.load('DirectPurchaseContract')
+    ocean_token_contract = manager.load('OceanTokenContract')
+    dispenser_contract = manager.load('DispenserContract')
 
     buy_account = starfish_accounts['purchaser']
     sell_account = starfish_accounts['publisher']
@@ -52,7 +52,7 @@ def test_direct_purchase(config, starfish_accounts):
 
 def test_is_paid(config, starfish_accounts):
     manager = ContractManager(config.keeper_url)
-    direct_contract = manager.load('direct_purchase_contract')
+    direct_contract = manager.load('DirectPurchaseContract')
     buy_account = starfish_accounts['purchaser']
     sell_account = starfish_accounts['publisher']
 

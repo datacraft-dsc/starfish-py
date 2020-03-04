@@ -53,9 +53,9 @@ class ContractManager:
             package_name = DEFAULT_PACKAGE_NAME
         package_module = importlib.import_module(package_name)
         for item in inspect.getmembers(package_module, inspect.ismodule):
-            if item[0] == name:
-                class_list = ContractManager._find_class_list_in_module(item[1])
-                return self.create_contract(name, class_list[0])
+            class_def = ContractManager._find_class_in_module(name, item[1])
+            if class_def:
+                return self.create_contract(name, class_def)
         return None
 
     def create_contract(self, name, class_def):
@@ -80,12 +80,14 @@ class ContractManager:
         return self._web3
 
     @staticmethod
-    def _find_class_list_in_module(contract_module):
+    def _find_class_in_module(class_name, contract_module):
         class_list = []
         for name, obj in inspect.getmembers(contract_module, inspect.isclass):
-            if issubclass(obj, ContractBase) and (name != 'ContractBase'):
-                class_list.append(obj)
-        return class_list
+            if issubclass(obj, ContractBase) \
+               and name != 'ContractBase' \
+               and name == class_name:
+                return obj
+        return None
 
     @staticmethod
     def find_network_name_from_id(network_id):

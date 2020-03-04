@@ -7,8 +7,8 @@ TOKEN_AMOUNT_TO_TRANSFER = 100
 
 def test_dispenser(config, starfish_accounts):
     manager = ContractManager(config.keeper_url)
-    ocean_token_contract = manager.load('ocean_token_contract')
-    dispenser_contract = manager.load('dispenser_contract')
+    ocean_token_contract = manager.load('OceanTokenContract')
+    dispenser_contract = manager.load('DispenserContract')
 
     balance = ocean_token_contract.get_balance(starfish_accounts['publisher'])
     tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, starfish_accounts['publisher'])
