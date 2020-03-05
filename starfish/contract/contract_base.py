@@ -8,6 +8,7 @@ nonce_list = {}
 
 GAS_MINIMUM = 200000
 
+
 class ContractBase:
 
     def __init__(self, name):
@@ -38,18 +39,20 @@ class ContractBase:
 
     def _call_as_transaction(self, function_name, parameters, account, transact=None):
         if transact is None:
+            # gas = self._contract.functions[function_name](*parameters).estimateGas()
+            gas = 52666
             transact = {
-                'gas': self.get_gas_price(account.address),
+                'gas': gas,
                 'nonce': self.get_nonce(account.address),
             }
         built_transaction = self._contract.functions[function_name](*parameters).buildTransaction(transact)
         transaction = {
             'from': account.address,
             'to': built_transaction['to'],
-            'gasPrice':  self.get_gas_price(account.address),
-            'nonce':  built_transaction['nonce'],
             'gas': built_transaction['gas'],
             'data': built_transaction['data'],
+            'gasPrice':  self.get_gas_price(account.address),
+            'nonce':  built_transaction['nonce'],
         }
         print(transaction)
         signed = account.sign_transaction(self._web3, transaction)
@@ -62,7 +65,8 @@ class ContractBase:
         return tx_hash
 
     def wait_for_receipt(self, tx_hash, timeout=30):
-        return self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=timeout)
+        self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=timeout)
+        return self._web3.eth.getTransactionReceipt(tx_hash)
 
     def get_nonce(self, address):
         global nonce_list

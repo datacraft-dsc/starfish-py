@@ -23,7 +23,7 @@ class OceanTokenContract(ContractBase):
         amount_wei = self._web3.toWei(amount, 'ether')
         return self.call('approve', (to_address, amount_wei), account)
 
-    def transfer(self,account, to_address, amount):
+    def transfer(self, account, to_address, amount):
         amount_wei = self._web3.toWei(amount, 'ether')
         return self.call('transfer', (to_address, amount_wei), account)
 
