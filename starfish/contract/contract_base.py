@@ -4,6 +4,8 @@
 
 """
 
+nonce_list = {}
+
 
 class ContractBase:
 
@@ -51,7 +53,14 @@ class ContractBase:
         return self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=30)
 
     def get_nonce(self, address):
-        return self._web3.eth.getTransactionCount(address)
+        global nonce_list
+        nonce = self._web3.eth.getTransactionCount(address)
+        if address not in nonce_list:
+            nonce_list[address] = nonce
+        else:
+            if nonce <= nonce_list[address]:
+                nonce = nonce_list[address] + 1
+        return nonce
 
     def get_gas_price(self, address):
         block = self._web3.eth.getBlock("latest")
