@@ -17,9 +17,6 @@ class DirectPurchaseContract(ContractBase):
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def request_tokens(self, amount):
-        return 0
-
     def send_token_and_log(self, account, address_to, amount, reference1, reference2):
         """
         Send tokens to address with tracking record in log.
@@ -33,16 +30,16 @@ class DirectPurchaseContract(ContractBase):
         :return: void
         """
 
-        if not self._web3.isChecksumAddress(address_to):
-            address_to = self._web3.toChecksumAddress(address_to)
+        if not self.web3.isChecksumAddress(address_to):
+            address_to = self.web3.toChecksumAddress(address_to)
 
-        amount = self.web3.toWei(amount, 'ether')
+        amount_wei = self.web3.toWei(amount, 'ether')
 
         tx_hash = self.call(
             'sendTokenAndLog',
             (
                 address_to,
-                amount,
+                amount_wei,
                 self.web3.toBytes(reference1),
                 self.web3.toBytes(reference2)
             ),

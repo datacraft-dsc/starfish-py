@@ -65,6 +65,9 @@ class ContractManager:
         if abi_filename:
             contract_info = ContractManager.load_abi_file(abi_filename)
             contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
+        else:
+            raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name}')
+
         return contract_object
 
     @property

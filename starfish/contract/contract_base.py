@@ -6,6 +6,7 @@
 
 nonce_list = {}
 
+GAS_MINIMUM = 200000
 
 class ContractBase:
 
@@ -15,7 +16,6 @@ class ContractBase:
         self._abi = None
         self._address = None
         self._contract = None
-        self._gas_price = 0
 
     def load(self, web3, abi=None, address=None):
         self._web3 = web3
@@ -26,31 +26,43 @@ class ContractBase:
             abi=abi
         )
 
-    def call(self, function_name, parameters, account=None):
+    def call(self, function_name, parameters, account=None, transact=None):
         if not isinstance(parameters, (list, tuple)):
             parameters = (parameters,)
 
         if account:
-            result = self._call_with_transaction(function_name, parameters, account)
+            result = self._call_as_transaction(function_name, parameters, account, transact)
         else:
             result = self._contract.functions[function_name](*parameters).call()
         return result
 
-    def _call_with_transaction(self, function_name, parameters, account):
-        # return self._contract.caller(transaction=transaction).function_name(*parameters)
-        transact = {
-            'gas': self.get_gas_price(account.address),
-            'nonce': self.get_nonce(account.address),
+    def _call_as_transaction(self, function_name, parameters, account, transact=None):
+        if transact is None:
+            transact = {
+                'gas': self.get_gas_price(account.address),
+                'nonce': self.get_nonce(account.address),
+            }
+        built_transaction = self._contract.functions[function_name](*parameters).buildTransaction(transact)
+        transaction = {
+            'from': account.address,
+            'to': built_transaction['to'],
+            'gasPrice':  self.get_gas_price(account.address),
+            'nonce':  built_transaction['nonce'],
+            'gas': built_transaction['gas'],
+            'data': built_transaction['data'],
         }
-        transaction = self._contract.functions[function_name](*parameters).buildTransaction(transact)
+        print(transaction)
         signed = account.sign_transaction(self._web3, transaction)
         tx_hash = None
         if signed:
             tx_hash = self._web3.eth.sendRawTransaction(signed.rawTransaction)
+        else:
+            raise ValueError(f'unable to sign a transaciton for {self.name}:{function_name}')
+
         return tx_hash
 
-    def wait_for_receipt(self, tx_hash):
-        return self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=30)
+    def wait_for_receipt(self, tx_hash, timeout=30):
+        return self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=timeout)
 
     def get_nonce(self, address):
         global nonce_list
@@ -64,9 +76,10 @@ class ContractBase:
 
     def get_gas_price(self, address):
         block = self._web3.eth.getBlock("latest")
-        self._gas_price = int(self._web3.eth.gasPrice / 100)
-        self._gas_price = max(self._gas_price, block.gasLimit)
-        return self._gas_price
+        gas_price = int(self._web3.eth.gasPrice / 100)
+        gas_price = min(block.gasLimit, gas_price)
+        gas_price = max(GAS_MINIMUM, gas_price)
+        return gas_price
 
     @property
     def name(self):
