@@ -34,13 +34,13 @@ class DIDRegistryContract(ContractBase):
         tx_hash = self.call('registerDID', (did_id, ddo_text), account)
         return tx_hash
 
-    def get_block_number_for_did(self, did):
+    def get_block_number(self, did):
         did_id = self._web3.toBytes(hexstr=did_to_id(did))
         block_number = self.call('getBlockNumberUpdated', did_id)
         return block_number
 
     def get_value(self, did):
-        block_number = self.get_block_number_for_did(did)
+        block_number = self.get_block_number(did)
         if block_number:
             did_id = self._web3.toBytes(hexstr=did_to_id(did))
             event_filter = self.create_event_filter(
