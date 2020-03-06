@@ -50,6 +50,11 @@ def did_generate_random():
     return f'did:{OCEAN_DID_METHOD}:{did_id}'
 
 
+def did_to_id(did):
+    data = did_parse(did)
+    return data['id_hex']
+
+
 def did_to_asset_id(did):
     data = did_parse(did)
     asset_id = None

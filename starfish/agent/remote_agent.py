@@ -565,7 +565,7 @@ class RemoteAgent(AgentBase):
         return data['id'], data['path']
 
     @staticmethod
-    def generate_ddo(base_url_or_services, service_list=None):
+    def generate_ddo(base_url_or_services, service_list=None, is_add_proof=False):
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
         endpoints for the remote agent
@@ -611,10 +611,11 @@ class RemoteAgent(AgentBase):
         for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)
 
-        # add a signature
-        private_key_pem = ddo.add_signature()
-        # add the static proof
-        ddo.add_proof(0, private_key_pem)
+        if is_add_proof:
+            # add a signature
+            private_key_pem = ddo.add_signature()
+            # add the static proof
+            ddo.add_proof(0, private_key_pem)
 
         return ddo
 

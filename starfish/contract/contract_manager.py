@@ -50,25 +50,27 @@ class ContractManager:
             logger.info(f'connected to {self._network_name}')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
 
-    def load(self, name, package_name=None):
+    def load(self, name, package_name=None, abi_filename=None):
         if package_name is None:
             package_name = DEFAULT_PACKAGE_NAME
         package_module = importlib.import_module(package_name)
         for item in inspect.getmembers(package_module, inspect.ismodule):
             class_def = ContractManager._find_class_in_module(name, item[1])
             if class_def:
-                return self.create_contract(name, class_def)
+                return self.create_contract(name, class_def, abi_filename)
         return None
 
-    def create_contract(self, name, class_def):
+    def create_contract(self, name, class_def, abi_filename=None):
         contract_object = class_def()
         contract_name = contract_object.name
-        abi_filename = ContractManager.find_abi_filename(contract_name, self.network_name)
-        if abi_filename:
-            contract_info = ContractManager.load_abi_file(abi_filename)
+        if abi_filename is None:
+            abi_filename = f'{contract_name}.{self.network_name}.json'
+        abi_filename_path = ContractManager.find_abi_filename(abi_filename)
+        if abi_filename_path:
+            contract_info = ContractManager.load_abi_file(abi_filename_path)
             contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
         else:
-            raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name}')
+            raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name} {abi_filename}')
 
         return contract_object
 
@@ -100,8 +102,7 @@ class ContractManager:
         return NETWORK_NAMES[0]
 
     @staticmethod
-    def find_abi_filename(name, network_name):
-        filename = f'{name}.{network_name}.json'
+    def find_abi_filename(filename):
         test_file = os.path.join('artifacts', filename)
         if os.path.exists(test_file):
             return test_file
