@@ -4,6 +4,7 @@ import secrets
 import logging
 import pathlib
 import requests
+from web3 import Web3, HTTPProvider
 
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
@@ -14,45 +15,53 @@ from starfish.agent import (
 )
 
 from starfish.agent.services import Services
+from starfish.account import StarfishAccount
+
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
 
+logging.getLogger('web3').setLevel(logging.INFO)
+logging.getLogger('urllib3').setLevel(logging.INFO)
+
+@pytest.fixture(scope='module')
+def intergation_config():
+    integration_test_config = IntegrationTestConfig(CONFIG_FILE_PATH)
+    return integration_test_config
+
 @pytest.fixture(scope="module")
-def ocean():
-    integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
+def ocean(intergation_config):
     ocean = Ocean(
-        keeper_url=integrationTestConfig.keeper_url,
-        contracts_path=integrationTestConfig.contracts_path,
-        gas_limit=integrationTestConfig.gas_limit,
+        keeper_url=intergation_config.keeper_url,
+        contracts_path=intergation_config.contracts_path,
+        gas_limit=intergation_config.gas_limit,
         log_level=logging.WARNING
     )
 
     return ocean
 
+@pytest.fixture(scope='module')
+def w3(intergation_config):
+    return Web3(HTTPProvider(intergation_config.keeper_url))
 
 @pytest.fixture(scope="module")
-def config():
-    integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
-    return integrationTestConfig
+def config(intergation_config):
+    return intergation_config
 
 @pytest.fixture(scope="module")
-def remote_agent(ocean):
-    integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
-
+def remote_agent(ocean, intergation_config):
     ddo_options = None
-    services = Services(integrationTestConfig.remote_agent_url, all_services=True)
+    services = Services(intergation_config.remote_agent_url, all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     options = {
-        'username': integrationTestConfig.remote_agent_username,
-        'password': integrationTestConfig.remote_agent_password,
+        'username': intergation_config.remote_agent_username,
+        'password': intergation_config.remote_agent_password,
     }
     return RemoteAgent(ocean, did=ddo.did, ddo=ddo, options=options)
 
 @pytest.fixture(scope="module")
-def squid_agent(ocean):
-    integrationTestConfig = IntegrationTestConfig(CONFIG_FILE_PATH)
-    return SquidAgent(ocean, integrationTestConfig.squid_config)
+def squid_agent(ocean, intergation_config):
+    return SquidAgent(ocean, intergation_config.squid_config)
 
 @pytest.fixture(scope='module')
 def publisher_account(ocean, config):
@@ -63,6 +72,13 @@ def publisher_account(ocean, config):
 def purchaser_account(ocean, config):
     return ocean.load_account(config.purchaser_account['address'], config.purchaser_account['password'], config.purchaser_account['keyfile'])
 
+@pytest.fixture(scope='module')
+def starfish_accounts(config):
+    result = {
+        'publisher': StarfishAccount(config.publisher_account),
+        'purchaser': StarfishAccount(config.purchaser_account)
+    }
+    return result
 
 @pytest.fixture(scope='module')
 def agent_account(ocean, config):
