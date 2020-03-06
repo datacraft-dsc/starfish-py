@@ -96,13 +96,13 @@ def test_direct_purchase(config, starfish_accounts):
 def test_is_paid(config, starfish_accounts):
     manager = ContractManager(config.keeper_url)
     direct_contract = manager.load('DirectPurchaseContract')
-    buy_account = starfish_accounts['purchaser']
-    sell_account = starfish_accounts['publisher']
+    from_account = starfish_accounts['purchaser']
+    to_account = starfish_accounts['publisher']
 
     isPaid = direct_contract.check_is_paid(
-        buy_account.address,
-        sell_account.address,
+        from_account.address,
+        to_account.address,
         TOKEN_AMOUNT_TO_TRANSFER,
-        REFERENCE_2
+        REFERENCE_1
     )
     assert(isPaid)

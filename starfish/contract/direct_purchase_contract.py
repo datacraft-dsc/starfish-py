@@ -6,7 +6,6 @@
 
 from .contract_base import ContractBase
 
-
 CONTRACT_NAME = 'DirectPurchase'
 TOKEN_SENT_EVENT_NAME = 'TokenSent'
 
@@ -47,7 +46,7 @@ class DirectPurchaseContract(ContractBase):
         )
         return tx_hash
 
-    def check_is_paid(self, address_from, address_to, amount, reference):
+    def check_is_paid(self, address_from, address_to, amount, reference1=None, reference2=None):
         """
         Check if the log about transaction exists in blockchain.
 
@@ -57,17 +56,30 @@ class DirectPurchaseContract(ContractBase):
         :param reference: reference in log, int256
         :return: bool
         """
-        reference = self.web3.toBytes(reference)
-        amount = self.web3.toWei(amount, 'ether')
+        amount_wei = self.web3.toWei(amount, 'ether')
 
-        filter = self.web3.eth.filter(
-            {
-                # '_from': address_from,
-                # '_to': address_to,
-                # '_reference2': reference,
-                'fromBlock': 1,
-                'toBlock': 'latest'
-            }
+        argument_filters = {
+            '_from': address_from,
+            '_to': address_to,
+            '_amount': amount_wei,
+        }
+        if reference1:
+            argument_filters['_reference1'] = self.web3.toBytes(reference1)
+
+        if reference2:
+            argument_filters['_reference2'] = self.web3.toBytes(reference2)
+
+        event_filter = self.create_event_filter(
+            'TokenSent',
+            None,
+            from_block=1,
+            argument_filters=argument_filters
         )
-        print(self.web3.eth.getFilterChanges(filter.filter_id))
-        return True
+
+        if event_filter:
+            for event_log in event_filter.get_all_entries():
+                event_args = event_log.args
+                if event_args._amount == amount_wei:
+                    return True
+
+        return False

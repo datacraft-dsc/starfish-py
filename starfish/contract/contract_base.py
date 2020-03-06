@@ -40,6 +40,18 @@ class ContractBase:
             result = contract_function_call.call()
         return result
 
+    def get_event(self, event_name, parameters=None):
+        return self._contract.events[event_name]
+
+    def create_event_filter(self, event_name, parameters=None, from_block=1, argument_filters=None):
+        event = self.get_event(event_name, parameters)
+        if event:
+            return event.createFilter(
+                fromBlock=from_block,
+                argument_filters=argument_filters
+            )
+        return None
+
     def _call_as_transaction(self, contract_function_call, account, transact=None):
         if transact is None:
             gas = contract_function_call.estimateGas({'from': account.address})
@@ -88,6 +100,9 @@ class ContractBase:
 
     def unlockAccount(self, account):
         self._web3.personal.unlockAccount(account.address, account.password)
+
+    def lockAccount(self, account):
+        self._web3.personal.lockAccount(account.address, account.password)
 
     @property
     def name(self):
