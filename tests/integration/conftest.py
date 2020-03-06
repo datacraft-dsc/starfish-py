@@ -21,6 +21,9 @@ from starfish.account import StarfishAccount
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
 
+logging.getLogger('web3').setLevel(logging.INFO)
+logging.getLogger('urllib3').setLevel(logging.INFO)
+
 @pytest.fixture(scope='module')
 def intergation_config():
     integration_test_config = IntegrationTestConfig(CONFIG_FILE_PATH)

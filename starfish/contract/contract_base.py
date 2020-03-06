@@ -42,15 +42,12 @@ class ContractBase:
 
     def _call_as_transaction(self, contract_function_call, account, transact=None):
         if transact is None:
-            # gas = self.get_gas_price(account.address)
-            # gas = self._web3.eth.generateGasPrice()
+            gas = contract_function_call.estimateGas({'from': account.address})
             transact = {
                 'from': account.address,
-                'nonce': self.get_nonce(account.address),
+                'gas': gas,
+                'nonce': self.get_nonce(account.address)
             }
-            print('estimate gas', contract_function_call, transact)
-            gas = contract_function_call.estimateGas(transact)
-            transact['gas'] = gas
 
         built_transaction = contract_function_call.buildTransaction(transact)
         transaction = {
