@@ -4,7 +4,7 @@
 
 +   Large file upload and download using asset bundle and chunk of data assets
 +   Direct Purchase contract using web3-py library only
-
++   Dex DID Registry contract
 
 ### Release v0.6.6
 
