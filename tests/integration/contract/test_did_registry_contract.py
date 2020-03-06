@@ -27,7 +27,7 @@ def test_did_registry_contract(config, starfish_accounts):
     tx_hash = did_registry_contract.register(register_account, did, ddo_text)
     receipt = did_registry_contract.wait_for_receipt(tx_hash)
 
-    block_number = did_registry_contract.get_block_number_for_did(did)
+    block_number = did_registry_contract.get_block_number(did)
     assert(receipt.blockNumber == block_number)
 
     saved_ddo_text = did_registry_contract.get_value(did)
