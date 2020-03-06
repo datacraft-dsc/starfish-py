@@ -9,7 +9,6 @@ import logging
 from eth_utils import remove_0x_prefix
 
 from starfish.contract.contract_base import ContractBase
-from starfish.utils.did import did_to_id
 
 logger = logging.getLogger(__name__)
 
