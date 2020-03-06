@@ -64,7 +64,7 @@ class ContractManager:
         contract_object = class_def()
         contract_name = contract_object.name
         if abi_filename is None:
-            abi_filename =  f'{contract_name}.{self.network_name}.json'
+            abi_filename = f'{contract_name}.{self.network_name}.json'
         abi_filename_path = ContractManager.find_abi_filename(abi_filename)
         if abi_filename_path:
             contract_info = ContractManager.load_abi_file(abi_filename_path)

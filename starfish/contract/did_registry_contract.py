@@ -16,6 +16,7 @@ CONTRACT_NAME = 'DIDRegistry'
 
 MAX_DDO_TEXT_SIZE = 2048
 
+
 class DIDRegistryContract(ContractBase):
     """
 
@@ -25,7 +26,6 @@ class DIDRegistryContract(ContractBase):
 
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
-
 
     def register(self, account, did, ddo_text):
         did_id = self._web3.toBytes(hexstr=did_to_id(did))
