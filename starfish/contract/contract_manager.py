@@ -15,6 +15,7 @@ import logging
 import os
 
 from web3 import HTTPProvider, Web3
+from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract.contract_base import ContractBase
 
@@ -47,6 +48,7 @@ class ContractManager:
         if self._web3:
             self._network_name = ContractManager.find_network_name_from_id(int(self._web3.version.network))
             logger.info(f'connected to {self._network_name}')
+            self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
 
     def load(self, name, package_name=None):
         if package_name is None:

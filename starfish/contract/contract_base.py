@@ -31,21 +31,28 @@ class ContractBase:
         if not isinstance(parameters, (list, tuple)):
             parameters = (parameters,)
 
+        contract_function_call = self._contract.functions[function_name](*parameters)
         if account:
-            result = self._call_as_transaction(function_name, parameters, account, transact)
+            result = self._call_as_transaction(contract_function_call, account, transact)
+            if result is None:
+                raise ValueError(f'unable to sign a transaciton for {self.name}:{function_name}')
         else:
-            result = self._contract.functions[function_name](*parameters).call()
+            result = contract_function_call.call()
         return result
 
-    def _call_as_transaction(self, function_name, parameters, account, transact=None):
+    def _call_as_transaction(self, contract_function_call, account, transact=None):
         if transact is None:
-            # gas = self._contract.functions[function_name](*parameters).estimateGas()
-            gas = 52666
+            # gas = self.get_gas_price(account.address)
+            # gas = self._web3.eth.generateGasPrice()
             transact = {
-                'gas': gas,
+                'from': account.address,
                 'nonce': self.get_nonce(account.address),
             }
-        built_transaction = self._contract.functions[function_name](*parameters).buildTransaction(transact)
+            print('estimate gas', contract_function_call, transact)
+            gas = contract_function_call.estimateGas(transact)
+            transact['gas'] = gas
+
+        built_transaction = contract_function_call.buildTransaction(transact)
         transaction = {
             'from': account.address,
             'to': built_transaction['to'],
@@ -54,13 +61,10 @@ class ContractBase:
             'gasPrice':  self.get_gas_price(account.address),
             'nonce':  built_transaction['nonce'],
         }
-        print(transaction)
         signed = account.sign_transaction(self._web3, transaction)
         tx_hash = None
         if signed:
             tx_hash = self._web3.eth.sendRawTransaction(signed.rawTransaction)
-        else:
-            raise ValueError(f'unable to sign a transaciton for {self.name}:{function_name}')
 
         return tx_hash
 
@@ -84,6 +88,9 @@ class ContractBase:
         gas_price = min(block.gasLimit, gas_price)
         gas_price = max(GAS_MINIMUM, gas_price)
         return gas_price
+
+    def unlockAccount(self, account):
+        self._web3.personal.unlockAccount(account.address, account.password)
 
     @property
     def name(self):

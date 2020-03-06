@@ -22,6 +22,13 @@ New transactions that fails.
 
 {'from': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'to': '0xfe989a69356bAB1B35E73D3D7D02ee5310e19005', 'gas': 52666, 'gasPrice': 200000, 'nonce': 67
 'data': '0x026a0ab200000000000000000000000000bd138abd70e2f00903268f3db08f2d25677c9e0000000000000000000000000000000000000000000000056bc75e2d6310000004000000000000000000000000000000000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000'}
+
+
+
+Failed estimate gas
+estimate gas <Function sendTokenAndLog(address,uint256,bytes32,bytes32) bound to ('0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e', 100000000000000000000, b'\x04', b'\x05')> {'from': '0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'nonce': 109}
+
+
 """
 def test_direct_purchase(config, starfish_accounts):
     """
@@ -36,7 +43,10 @@ def test_direct_purchase(config, starfish_accounts):
 
     from_account = starfish_accounts['purchaser']
     to_account = starfish_accounts['publisher']
-    dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
+    tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
+    receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+    print('request tokens receipt', receipt)
+    assert(receipt.status == 1)
 
     from_balance = ocean_token_contract.get_balance(from_account)
     to_balance = ocean_token_contract.get_balance(to_account)
@@ -48,7 +58,9 @@ def test_direct_purchase(config, starfish_accounts):
     )
     receipt = ocean_token_contract.wait_for_receipt(tx_hash)
     print('approve transfer receipt', receipt)
+    assert(receipt.status == 1)
 
+    direct_contract.unlockAccount(from_account)
 
     tx_hash = direct_contract.send_token_and_log(
         from_account,
@@ -59,6 +71,7 @@ def test_direct_purchase(config, starfish_accounts):
     )
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
     print('send token and log receipt', receipt)
+    assert(receipt.status == 1)
 
     new_from_balance = ocean_token_contract.get_balance(from_account)
     new_to_balance = ocean_token_contract.get_balance(to_account)
