@@ -3,6 +3,7 @@
 ### Release TBD
 
 +   Large file upload and download using asset bundle and chunk of data assets
++   Direct Purchase contract using web3-py library only
 
 
 ### Release v0.6.6
