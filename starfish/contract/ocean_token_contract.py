@@ -15,8 +15,11 @@ class OceanTokenContract(ContractBase):
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def get_balance(self, account):
-        amount_wei = self.call('balanceOf', account.address)
+    def get_balance(self, account_address):
+        address = account_address
+        if hasattr(account_address, 'address'):
+            address = account_address.address
+        amount_wei = self.call('balanceOf', address)
         return self._web3.fromWei(amount_wei, 'ether')
 
     def approve_tranfer(self, account, to_address, amount):

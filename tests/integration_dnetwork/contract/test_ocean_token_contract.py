@@ -1,7 +1,8 @@
 import pytest
+import time
 
 
-TOKEN_AMOUNT_TO_TRANSFER = 100
+TOKEN_AMOUNT_TO_TRANSFER = 10
 
 def test_ocean_taken_contract(dnetwork, starfish_accounts):
 
@@ -15,8 +16,9 @@ def test_ocean_taken_contract(dnetwork, starfish_accounts):
 
     tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
-    new_balance = ocean_token_contract.get_balance(from_account)
-    assert(balance + TOKEN_AMOUNT_TO_TRANSFER == new_balance)
+
+    # give enougth time for the block chain to go to the next block and mine this dispenser request
+    time.sleep(1)
 
     from_balance = ocean_token_contract.get_balance(from_account)
     to_balance = ocean_token_contract.get_balance(to_account)

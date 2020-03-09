@@ -82,7 +82,7 @@ class DNetwork():
         dispenser_contract = self.get_contract('Dispenser')
         tx_hash = dispenser_contract.request_tokens(amount, account)
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
-
+        return receipt
 
     @property
     def contract_names(self):

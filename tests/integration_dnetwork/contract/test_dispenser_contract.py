@@ -1,6 +1,6 @@
 import pytest
 
-TOKEN_AMOUNT_TO_TRANSFER = 100
+TOKEN_AMOUNT_TO_TRANSFER = 2
 
 
 def test_dispenser(dnetwork, starfish_accounts):
