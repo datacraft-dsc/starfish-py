@@ -2,21 +2,19 @@ import pytest
 import secrets
 import time
 
-from starfish.contract import ContractManager
 from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 
 ASSET_REGISTER_COUNT = 2
 
-def test_provenance_contract(config, starfish_accounts):
+def test_provenance_contract(dnetwork, starfish_accounts):
     """
 
     Register and find a provenance record on the block chain for a given asset_id
 
     """
-    manager = ContractManager(config.keeper_url)
-    provenance_contract = manager.load('ProvenanceContract', abi_filename='Provenance.development.json')
+    provenance_contract = dnetwork.get_contract('Provenance')
 
     asset_id = secrets.token_hex(32)
 

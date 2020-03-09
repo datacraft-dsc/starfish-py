@@ -9,7 +9,7 @@ import os
 import logging
 import secrets
 
-from starfish import Ocean, logger
+from starfish import Ocean
 from squid_py import Ocean as SquidOcean
 from squid_py import Config as SquidConfig
 

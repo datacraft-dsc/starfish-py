@@ -8,6 +8,6 @@
 
 from starfish.contract import ContractManager
 
-def test_contract_load(config):
-    manager = ContractManager(config.keeper_url)
-    contract = manager.load('DirectPurchaseContract')
+def test_contract_load(dnetwork):
+    manager = ContractManager(dnetwork.web3, 'starfish.contract')
+    contract = manager.load('DirectPurchaseContract', dnetwork.network_name)

@@ -1,15 +1,12 @@
 import pytest
 
 
-from starfish.contract import ContractManager
-
 TOKEN_AMOUNT_TO_TRANSFER = 100
 
-def test_ocean_taken_contract(config, starfish_accounts):
-    manager = ContractManager(config.keeper_url)
+def test_ocean_taken_contract(dnetwork, starfish_accounts):
 
-    ocean_token_contract = manager.load('OceanTokenContract')
-    dispenser_contract = manager.load('DispenserContract')
+    ocean_token_contract = dnetwork.get_contract('OceanToken')
+    dispenser_contract = dnetwork.get_contract('Dispenser')
 
     balance = ocean_token_contract.get_balance(starfish_accounts['purchaser'])
 

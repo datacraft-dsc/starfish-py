@@ -8,7 +8,8 @@ from web3 import Web3, HTTPProvider
 
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
-from starfish import Ocean
+from starfish import DNetwork
+from starfish import Ocean          # TODO: remove
 from starfish.agent import (
     RemoteAgent,
     SquidAgent,
@@ -93,3 +94,7 @@ def invokable_list(config):
     response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
     result = response.json()
     return result.get('invokables')
+
+@pytest.fixture(scope='module')
+def dnetwork(config):
+    return DNetwork(config.keeper_url)

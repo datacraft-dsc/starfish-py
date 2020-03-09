@@ -1,28 +1,20 @@
 import pytest
 
 
-from starfish.contract import ContractManager
-
 TOKEN_AMOUNT_TO_TRANSFER = 100
 REFERENCE_1 = 4
 REFERENCE_2 = 5
 
 
-"""
-
-
-
-"""
-def test_direct_purchase(config, starfish_accounts):
+def test_direct_purchase(dnetwork, starfish_accounts):
     """
 
     Transfer funds from the 'buy' account -> 'sell' account
 
     """
-    manager = ContractManager(config.keeper_url)
-    direct_contract = manager.load('DirectPurchaseContract')
-    ocean_token_contract = manager.load('OceanTokenContract')
-    dispenser_contract = manager.load('DispenserContract')
+    direct_contract = dnetwork.get_contract('DirectPurchase')
+    ocean_token_contract = dnetwork.get_contract('OceanToken')
+    dispenser_contract = dnetwork.get_contract('Dispenser')
 
 
     from_account = starfish_accounts['purchaser']
@@ -69,9 +61,8 @@ def test_direct_purchase(config, starfish_accounts):
     assert(from_balance - TOKEN_AMOUNT_TO_TRANSFER == new_from_balance)
     assert(to_balance + TOKEN_AMOUNT_TO_TRANSFER == new_to_balance)
 
-def test_is_paid(config, starfish_accounts):
-    manager = ContractManager(config.keeper_url)
-    direct_contract = manager.load('DirectPurchaseContract')
+def test_is_paid(dnetwork, starfish_accounts):
+    direct_contract = dnetwork.get_contract('DirectPurchase')
     from_account = starfish_accounts['purchaser']
     to_account = starfish_accounts['publisher']
 
