@@ -20,7 +20,7 @@ def test_did_registry_contract(dnetwork, config, starfish_accounts):
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 
-    register_account = starfish_accounts['purchaser']
+    register_account = starfish_accounts[0]
 
     tx_hash = did_registry_contract.register(register_account, did, ddo_text)
     receipt = did_registry_contract.wait_for_receipt(tx_hash)

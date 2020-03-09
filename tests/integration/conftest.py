@@ -75,10 +75,10 @@ def purchaser_account(ocean, config):
 
 @pytest.fixture(scope='module')
 def starfish_accounts(config):
-    result = {
-        'publisher': StarfishAccount(config.publisher_account),
-        'purchaser': StarfishAccount(config.purchaser_account)
-    }
+    result = [
+        StarfishAccount(config.publisher_account),
+        StarfishAccount(config.purchaser_account)
+    ]
     return result
 
 @pytest.fixture(scope='module')

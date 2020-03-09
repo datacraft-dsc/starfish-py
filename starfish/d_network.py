@@ -71,6 +71,19 @@ class DNetwork():
             self._contracts[name] = self._contract_manager.load(item['name'], self._network_name, item.get('abi_filename', None))
         return self._contracts[name]
 
+    def get_ether_balance(self, account):
+        return self._web3.eth.getBalance(account.address)
+
+    def get_token_balance(self, account):
+        ocean_token_contract = self.get_contract('OceanToken')
+        return ocean_token_contract.get_balance(account)
+
+    def request_test_tokens(self, amount, account):
+        dispenser_contract = self.get_contract('Dispenser')
+        tx_hash = dispenser_contract.request_tokens(amount, account)
+        receipt = dispenser_contract.wait_for_receipt(tx_hash)
+
+
     @property
     def contract_names(self):
         return CONTRACT_LIST.keys()

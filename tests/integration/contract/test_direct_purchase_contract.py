@@ -17,8 +17,8 @@ def test_direct_purchase(dnetwork, starfish_accounts):
     dispenser_contract = dnetwork.get_contract('Dispenser')
 
 
-    from_account = starfish_accounts['purchaser']
-    to_account = starfish_accounts['publisher']
+    from_account = starfish_accounts[0]
+    to_account = starfish_accounts[1]
 
 
     tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
@@ -63,8 +63,8 @@ def test_direct_purchase(dnetwork, starfish_accounts):
 
 def test_is_paid(dnetwork, starfish_accounts):
     direct_contract = dnetwork.get_contract('DirectPurchase')
-    from_account = starfish_accounts['purchaser']
-    to_account = starfish_accounts['publisher']
+    from_account = starfish_accounts[0]
+    to_account = starfish_accounts[1]
 
     isPaid = direct_contract.check_is_paid(
         from_account.address,

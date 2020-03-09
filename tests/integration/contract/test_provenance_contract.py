@@ -18,7 +18,7 @@ def test_provenance_contract(dnetwork, starfish_accounts):
 
     asset_id = secrets.token_hex(32)
 
-    register_account = starfish_accounts['purchaser']
+    register_account = starfish_accounts[0]
 
     register_block_number = 0
     for counter in range(0, ASSET_REGISTER_COUNT):
