@@ -20,16 +20,14 @@ class OceanTokenContract(ContractBase):
         amount_wei = self.call('balanceOf', address)
         return self.to_ether(amount_wei)
 
-    def approve_tranfer(self, account, to_account_address, amount):
+    def approve_transfer(self, account, to_account_address, amount):
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
-
         return self.call('approve', (to_address, amount_wei), account)
 
     def transfer(self, account, to_account_address, amount):
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
-
         return self.call('transfer', (to_address, amount_wei), account)
 
     def total_supply(self):

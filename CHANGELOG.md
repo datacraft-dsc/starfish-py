@@ -7,6 +7,7 @@
 +   Dex DID Registry contract
 +   Dex Provenance contract
 +   DNetwork class
++   Remove squid-py
 
 ### Release v0.6.6
 

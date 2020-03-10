@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 
 from web3 import Web3
 
-OCEAN_DID_METHOD = 'dep'
+NETWORK_DID_METHOD = 'dep'
 
 
 def did_parse(did):
@@ -36,7 +36,7 @@ def did_parse(did):
         if uri.path:
             result['path'] = uri.path[1:]
 
-    if result['method'] == OCEAN_DID_METHOD and re.match('^[0-9A-Fa-f]{1,64}$', result['id']):
+    if result['method'] == NETWORK_DID_METHOD and re.match('^[0-9A-Fa-f]{1,64}$', result['id']):
         result['id_hex'] = Web3.toHex(hexstr=result['id'])
 
     if not result['id_hex'] and result['id'].startswith('0x'):
@@ -47,12 +47,16 @@ def did_parse(did):
 
 def did_generate_random():
     did_id = secrets.token_hex(32)
-    return f'did:{OCEAN_DID_METHOD}:{did_id}'
+    return id_to_did(did_id)
 
 
 def did_to_id(did):
     data = did_parse(did)
     return data['id_hex']
+
+
+def id_to_did(did_id):
+    return f'did:{NETWORK_DID_METHOD}:{did_id}'
 
 
 def did_to_asset_id(did):

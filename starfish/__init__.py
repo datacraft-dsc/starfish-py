@@ -4,9 +4,7 @@
 
 """
 
-from starfish.d_network import DNetwork     # noqa: F401
-from starfish.ocean.ocean import Ocean      # noqa: F401
-
+from starfish.d_network import DNetwork                     # noqa: F401
 
 __author__ = """DEX.sg"""
 __version__ = '0.6.7'

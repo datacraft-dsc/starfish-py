@@ -11,7 +11,6 @@ import time
 import secrets
 from web3 import Web3
 
-from starfish import Ocean
 from starfish.agent import MemoryAgent
 from starfish.asset import DataAsset
 
@@ -25,11 +24,14 @@ def register_asset_for_sale(agent, resources, account):
     assert listing.asset_did
     return listing
 
-def test_asset(ocean, resources, config, publisher_account, purchaser_account):
+def test_asset(network, resources, config, accounts):
 
     # create an ocean object
 
-    agent = MemoryAgent(ocean)
+    publisher_account = accounts[0]
+    purchaser_account = accounts[1]
+
+    agent = MemoryAgent(network)
     assert agent
 
 
@@ -58,9 +60,12 @@ def test_asset(ocean, resources, config, publisher_account, purchaser_account):
 
 
 
-def test_search_listing(ocean, resources, config, publisher_account):
+def test_search_listing(network, resources, config, accounts):
 
-    agent = MemoryAgent(ocean)
+    publisher_account = accounts[0]
+    purchaser_account = accounts[1]
+
+    agent = MemoryAgent(network)
 
     listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing

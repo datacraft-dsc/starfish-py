@@ -9,14 +9,9 @@ from web3 import Web3, HTTPProvider
 from tests.integration.libs.integration_test_config import IntegrationTestConfig
 
 from starfish import DNetwork
-from starfish import Ocean          # TODO: remove
-from starfish.agent import (
-    RemoteAgent,
-    SquidAgent,
-)
-
+from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
-from starfish.account import StarfishAccount
+from starfish.account import Account
 
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
@@ -31,59 +26,35 @@ def intergation_config():
     return integration_test_config
 
 @pytest.fixture(scope="module")
-def ocean(intergation_config):
-    ocean = Ocean(
-        keeper_url=intergation_config.keeper_url,
-        contracts_path=intergation_config.contracts_path,
-        gas_limit=intergation_config.gas_limit,
-        log_level=logging.WARNING
-    )
-
-    return ocean
-
-@pytest.fixture(scope='module')
-def w3(intergation_config):
-    return Web3(HTTPProvider(intergation_config.keeper_url))
-
-@pytest.fixture(scope="module")
 def config(intergation_config):
     return intergation_config
 
 @pytest.fixture(scope="module")
-def remote_agent(ocean, intergation_config):
-    ddo_options = None
-    services = Services(intergation_config.remote_agent_url, all_services=True)
-    ddo = RemoteAgent.generate_ddo(services)
-    options = {
-        'username': intergation_config.remote_agent_username,
-        'password': intergation_config.remote_agent_password,
-    }
-    return RemoteAgent(ocean, did=ddo.did, ddo=ddo, options=options)
+def network(config):
+    network = DNetwork()
+    network.connect(config.network_url)
+    return network
+
 
 @pytest.fixture(scope="module")
-def squid_agent(ocean, intergation_config):
-    return SquidAgent(ocean, intergation_config.squid_config)
+def remote_agent(network, config):
+    ddo_options = None
+    services = Services(config.remote_agent_url, all_services=True)
+    ddo = RemoteAgent.generate_ddo(services)
+    options = {
+        'username': config.remote_agent_username,
+        'password': config.remote_agent_password,
+    }
+    return RemoteAgent(network, did=ddo.did, ddo=ddo, options=options)
 
 @pytest.fixture(scope='module')
-def publisher_account(ocean, config):
-    return ocean.load_account(config.publisher_account['address'], config.publisher_account['password'], config.publisher_account['keyfile'])
-
-
-@pytest.fixture(scope='module')
-def purchaser_account(ocean, config):
-    return ocean.load_account(config.purchaser_account['address'], config.purchaser_account['password'], config.purchaser_account['keyfile'])
-
-@pytest.fixture(scope='module')
-def starfish_accounts(config):
+def accounts(config):
     result = [
-        StarfishAccount(config.publisher_account),
-        StarfishAccount(config.purchaser_account)
+        Account(config.account_1),
+        Account(config.account_2)
     ]
     return result
 
-@pytest.fixture(scope='module')
-def agent_account(ocean, config):
-    return ocean.load_account(config.agent_account['address'], config.agent_account['password'], config.agent_account['keyfile'])
 
 @pytest.fixture(scope='module')
 def invokable_list(config):
@@ -94,7 +65,3 @@ def invokable_list(config):
     response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
     result = response.json()
     return result.get('invokables')
-
-@pytest.fixture(scope='module')
-def dnetwork(config):
-    return DNetwork(config.keeper_url)

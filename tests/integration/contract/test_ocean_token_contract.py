@@ -4,13 +4,13 @@ import time
 
 TOKEN_AMOUNT_TO_TRANSFER = 10
 
-def test_ocean_taken_contract(dnetwork, starfish_accounts):
+def test_ocean_taken_contract(network, accounts):
 
-    ocean_token_contract = dnetwork.get_contract('OceanToken')
-    dispenser_contract = dnetwork.get_contract('Dispenser')
+    ocean_token_contract = network.get_contract('OceanToken')
+    dispenser_contract = network.get_contract('Dispenser')
 
-    from_account = starfish_accounts[0]
-    to_account = starfish_accounts[1]
+    from_account = accounts[0]
+    to_account = accounts[1]
 
     balance = ocean_token_contract.get_balance(from_account)
 

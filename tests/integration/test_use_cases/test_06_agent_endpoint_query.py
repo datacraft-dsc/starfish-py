@@ -12,7 +12,7 @@ import re
 from starfish.agent import RemoteAgent
 
 
-def test_06_agent_endpoint_query(ocean, remote_agent):
+def test_06_agent_endpoint_query(remote_agent):
 
     endpoint = remote_agent.get_endpoint('meta')
     assert(re.search('/meta', endpoint))

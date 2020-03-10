@@ -8,17 +8,17 @@ from starfish.agent.services import Services
 
 ASSET_REGISTER_COUNT = 2
 
-def test_provenance_contract(dnetwork, starfish_accounts):
+def test_provenance_contract(network, accounts):
     """
 
     Register and find a provenance record on the block chain for a given asset_id
 
     """
-    provenance_contract = dnetwork.get_contract('Provenance')
+    provenance_contract = network.get_contract('Provenance')
 
     asset_id = secrets.token_hex(32)
 
-    register_account = starfish_accounts[0]
+    register_account = accounts[0]
 
     register_block_number = 0
     for counter in range(0, ASSET_REGISTER_COUNT):

@@ -1,22 +1,22 @@
 import pytest
 import secrets
+import time
 
-TOKEN_AMOUNT_TO_TRANSFER = 100
+TOKEN_AMOUNT_TO_TRANSFER = 10
 
 
-def test_direct_purchase(dnetwork, starfish_accounts):
+def test_direct_purchase(network, accounts):
     """
 
     Transfer funds from the 'buy' account -> 'sell' account
 
     """
-    direct_contract = dnetwork.get_contract('DirectPurchase')
-    ocean_token_contract = dnetwork.get_contract('OceanToken')
-    dispenser_contract = dnetwork.get_contract('Dispenser')
+    direct_contract = network.get_contract('DirectPurchase')
+    ocean_token_contract = network.get_contract('OceanToken')
+    dispenser_contract = network.get_contract('Dispenser')
 
-
-    from_account = starfish_accounts[0]
-    to_account = starfish_accounts[1]
+    from_account = accounts[0]
+    to_account = accounts[1]
     ref_1 = secrets.token_hex(32)
     ref_2 = secrets.token_hex(32)
 
@@ -30,7 +30,7 @@ def test_direct_purchase(dnetwork, starfish_accounts):
 
     # ocean_token_contract.unlockAccount(from_account)
 
-    tx_hash = ocean_token_contract.approve_tranfer(
+    tx_hash = ocean_token_contract.approve_transfer(
         from_account,
         direct_contract.address,
         TOKEN_AMOUNT_TO_TRANSFER
@@ -53,9 +53,6 @@ def test_direct_purchase(dnetwork, starfish_accounts):
 
     new_from_balance = ocean_token_contract.get_balance(from_account)
     new_to_balance = ocean_token_contract.get_balance(to_account)
-
-    print('from', from_balance, new_from_balance)
-    print('to', to_balance, new_to_balance)
 
     assert(from_balance - TOKEN_AMOUNT_TO_TRANSFER == new_from_balance)
     assert(to_balance + TOKEN_AMOUNT_TO_TRANSFER == new_to_balance)

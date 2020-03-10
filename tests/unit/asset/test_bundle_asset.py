@@ -23,7 +23,7 @@ def test_init():
     })
     assert(bundle)
 
-def test_bundle_asset_add_access_remove(ocean, config):
+def test_bundle_asset_add_access_remove(config):
     bundle = BundleAsset.create('name')
     asset_list = {}
 
