@@ -4,9 +4,7 @@
 
 """
 
-import datetime
 import logging
-from eth_utils import remove_0x_prefix
 
 from starfish.contract.contract_base import ContractBase
 
@@ -35,7 +33,7 @@ class NetworkContract(ContractBase):
     def send_ether(self, account, to_account_address, amount):
 
         amount_wei = self.to_wei(amount)
-        to_address =  self.get_account_address(to_account_address)
+        to_address = self.get_account_address(to_account_address)
 
         gas_transact = {
             'from': account.address,
@@ -56,4 +54,3 @@ class NetworkContract(ContractBase):
             tx_hash = self._web3.eth.sendRawTransaction(signed.rawTransaction)
 
         return tx_hash
-

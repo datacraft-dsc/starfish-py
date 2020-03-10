@@ -7,7 +7,10 @@
 
 import logging
 
-from web3 import HTTPProvider, Web3
+from web3 import (
+    HTTPProvider,
+    Web3
+)
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
@@ -99,7 +102,6 @@ class DNetwork():
         tx_hash = network_contract.send_ether(account, to_account_address, amount)
         receipt = network_contract.wait_for_receipt(tx_hash)
         return receipt
-
 
     @property
     def contract_names(self):

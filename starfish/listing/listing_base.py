@@ -3,7 +3,10 @@
    Listing Base class
 """
 
-from abc import ABC, abstractmethod
+from abc import (
+    ABC,
+    abstractmethod
+)
 
 
 class ListingBase(ABC):

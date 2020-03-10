@@ -16,9 +16,7 @@ from ocean_events_handler.event_handlers import (
 )
 from ocean_keeper.web3_provider import Web3Provider
 from ocean_utils.agreements.service_agreement import ServiceAgreement
-from ocean_utils.agreements.service_agreement_template import (
-    ServiceAgreementTemplate
-)
+from ocean_utils.agreements.service_agreement_template import ServiceAgreementTemplate
 from ocean_utils.agreements.service_types import ServiceTypes
 from ocean_utils.agreements.utils import get_sla_template
 from ocean_utils.did import id_to_did

@@ -11,7 +11,10 @@ import math
 import os
 import re
 
-from starfish.asset import BundleAsset, DataAsset
+from starfish.asset import (
+    BundleAsset,
+    DataAsset
+)
 
 # WARNING currently surfer cannot support > 6mb in asset data size
 DEFAULT_CHUNK_SIZE = '6mb'

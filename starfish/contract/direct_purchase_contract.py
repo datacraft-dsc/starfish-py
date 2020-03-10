@@ -55,8 +55,8 @@ class DirectPurchaseContract(ContractBase):
         :return: bool
         """
 
-        from_address =  self.get_account_address(from_account_address)
-        to_address =  self.get_account_address(to_account_address)
+        from_address = self.get_account_address(from_account_address)
+        to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
 
         argument_filters = {

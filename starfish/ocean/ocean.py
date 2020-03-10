@@ -6,8 +6,10 @@ Ocean class to access the Ocean eco system.
 import logging
 
 from squid_py.ocean.keeper import SquidKeeper
-from web3 import HTTPProvider, Web3
-
+from web3 import (
+    HTTPProvider,
+    Web3
+)
 from starfish.account import Account
 from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from starfish.utils.artifacts import (
