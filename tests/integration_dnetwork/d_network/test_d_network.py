@@ -95,4 +95,17 @@ def test_dnetwork_send_token_and_log(dnetwork, starfish_accounts):
     )
     assert(is_sent)
 
+def test_dnetwork_regiser_provenance(dnetwork, starfish_accounts):
+
+    register_account = starfish_accounts[0]
+    asset_id = secrets.token_hex(32)
+
+    dnetwork.register_provenace(register_account, asset_id)
+    event_list = dnetwork.get_provenace_event_list(asset_id)
+    assert(len(event_list) > 0)
+
+
+
+
+
 

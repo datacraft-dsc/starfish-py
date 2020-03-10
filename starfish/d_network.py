@@ -152,6 +152,26 @@ class DNetwork():
         )
         return is_sent
 
+    """
+
+    Register Provenance
+
+    """
+    def register_provenace(self, account, asset_id):
+        provenance_contract = self.get_contract('Provenance')
+        tx_hash = provenance_contract.register(account, asset_id)
+        receipt = provenance_contract.wait_for_receipt(tx_hash)
+        return receipt
+
+    def get_provenace_event_list(self, asset_id):
+        provenance_contract = self.get_contract('Provenance')
+        return provenance_contract.get_event_list(asset_id)
+    """
+
+    Register DDO
+
+    """
+
     @property
     def contract_names(self):
         return CONTRACT_LIST.keys()
