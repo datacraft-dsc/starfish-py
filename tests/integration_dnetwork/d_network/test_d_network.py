@@ -52,3 +52,18 @@ def test_dnetwork_send_ether(dnetwork, starfish_accounts):
     assert(from_balance - TEST_AMOUNT == new_from_balance)
     assert(to_balance + TEST_AMOUNT == new_to_balance)
 
+
+def test_dnetwork_send_token(dnetwork, starfish_accounts):
+    from_account = starfish_accounts[0]
+    to_account = starfish_accounts[1]
+
+    from_balance = dnetwork.get_token_balance(from_account)
+    to_balance = dnetwork.get_token_balance(to_account)
+
+    receipt = dnetwork.send_token(from_account, to_account, TEST_AMOUNT)
+
+    new_from_balance = dnetwork.get_token_balance(from_account)
+    new_to_balance = dnetwork.get_token_balance(to_account)
+
+    assert(from_balance - TEST_AMOUNT == new_from_balance)
+    assert(to_balance + TEST_AMOUNT == new_to_balance)

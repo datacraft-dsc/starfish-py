@@ -103,6 +103,12 @@ class DNetwork():
         receipt = network_contract.wait_for_receipt(tx_hash)
         return receipt
 
+    def send_token(self, account, to_account_address, amount):
+        ocean_token_contract = self.get_contract('OceanToken')
+        tx_hash = ocean_token_contract.transfer(account, to_account_address, amount)
+        receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+        return receipt
+
     @property
     def contract_names(self):
         return CONTRACT_LIST.keys()
