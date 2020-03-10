@@ -18,10 +18,13 @@ def test_ocean_taken_contract(network, accounts):
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
 
     # give enougth time for the block chain to go to the next block and mine this dispenser request
-    time.sleep(5)
+    time.sleep(1)
 
     from_balance = ocean_token_contract.get_balance(from_account)
     to_balance = ocean_token_contract.get_balance(to_account)
+
+    tx_hash = ocean_token_contract.approve_transfer(from_account, ocean_token_contract.address, TOKEN_AMOUNT_TO_TRANSFER)
+    receipt = ocean_token_contract.wait_for_receipt(tx_hash)
 
     tx_hash = ocean_token_contract.transfer(from_account, to_account.address, TOKEN_AMOUNT_TO_TRANSFER)
     receipt = ocean_token_contract.wait_for_receipt(tx_hash)
