@@ -116,7 +116,7 @@ class DNetwork():
 
     """
 
-    Send a payment with logging
+    Send tokens (make payment) with logging
 
     """
     def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
@@ -166,11 +166,21 @@ class DNetwork():
     def get_provenace_event_list(self, asset_id):
         provenance_contract = self.get_contract('Provenance')
         return provenance_contract.get_event_list(asset_id)
-    """
-
-    Register DDO
 
     """
+
+    Register DID with a DDO and resolve DID to a DDO
+
+    """
+    def register_did(self, account, did, ddo_text):
+        did_registry_contract = self.get_contract('DIDRegistry')
+        tx_hash = did_registry_contract.register(account, did, ddo_text)
+        receipt = did_registry_contract.wait_for_receipt(tx_hash)
+        return receipt
+
+    def resolve_did(self, did):
+        did_registry_contract = self.get_contract('DIDRegistry')
+        return did_registry_contract.get_value(did)
 
     @property
     def contract_names(self):
