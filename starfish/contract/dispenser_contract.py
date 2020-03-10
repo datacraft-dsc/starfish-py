@@ -15,6 +15,6 @@ class DispenserContract(ContractBase):
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def request_tokens(self, amount, account):
+    def request_tokens(self, account, amount):
         # amount is in ether
         return self.call('requestTokens', amount, account)

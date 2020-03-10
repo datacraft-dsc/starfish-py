@@ -9,7 +9,7 @@ def test_dispenser(network, accounts):
 
     test_account = accounts[0]
     balance = ocean_token_contract.get_balance(test_account)
-    tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, test_account)
+    tx_hash = dispenser_contract.request_tokens(test_account, TOKEN_AMOUNT_TO_TRANSFER)
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
 
     new_balance = ocean_token_contract.get_balance(test_account)

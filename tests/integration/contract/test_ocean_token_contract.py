@@ -14,7 +14,7 @@ def test_ocean_taken_contract(network, accounts):
 
     balance = ocean_token_contract.get_balance(from_account)
 
-    tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
+    tx_hash = dispenser_contract.request_tokens(from_account, TOKEN_AMOUNT_TO_TRANSFER * 2)
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
 
     # give enougth time for the block chain to go to the next block and mine this dispenser request
@@ -23,8 +23,8 @@ def test_ocean_taken_contract(network, accounts):
     from_balance = ocean_token_contract.get_balance(from_account)
     to_balance = ocean_token_contract.get_balance(to_account)
 
-    tx_hash = ocean_token_contract.approve_transfer(from_account, ocean_token_contract.address, TOKEN_AMOUNT_TO_TRANSFER)
-    receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+#    tx_hash = ocean_token_contract.approve_transfer(from_account, ocean_token_contract.address, TOKEN_AMOUNT_TO_TRANSFER)
+#    receipt = ocean_token_contract.wait_for_receipt(tx_hash)
 
     tx_hash = ocean_token_contract.transfer(from_account, to_account.address, TOKEN_AMOUNT_TO_TRANSFER)
     receipt = ocean_token_contract.wait_for_receipt(tx_hash)

@@ -20,7 +20,7 @@ def test_direct_purchase(network, accounts):
     ref_1 = secrets.token_hex(32)
     ref_2 = secrets.token_hex(32)
 
-    tx_hash = dispenser_contract.request_tokens(TOKEN_AMOUNT_TO_TRANSFER, from_account)
+    tx_hash = dispenser_contract.request_tokens(from_account, TOKEN_AMOUNT_TO_TRANSFER)
     receipt = dispenser_contract.wait_for_receipt(tx_hash)
     # print('request tokens receipt', receipt)
     assert(receipt.status == 1)
