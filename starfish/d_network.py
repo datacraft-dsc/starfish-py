@@ -97,6 +97,11 @@ class DNetwork():
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
         return receipt
 
+    """
+
+    Send ether and tokens to another account
+
+    """
     def send_ether(self, account, to_account_address, amount):
         network_contract = self.get_contract('Network')
         tx_hash = network_contract.send_ether(account, to_account_address, amount)
@@ -108,6 +113,44 @@ class DNetwork():
         tx_hash = ocean_token_contract.transfer(account, to_account_address, amount)
         receipt = ocean_token_contract.wait_for_receipt(tx_hash)
         return receipt
+
+    """
+
+    Send a payment with logging
+
+    """
+    def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
+        ocean_token_contract = self.get_contract('OceanToken')
+        direct_contract = self.get_contract('DirectPurchase')
+
+        tx_hash = ocean_token_contract.approve_tranfer(
+            account,
+            direct_contract.address,
+            amount
+        )
+        receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+
+        tx_hash = direct_contract.send_token_and_log(
+            account,
+            to_account_address,
+            amount,
+            reference_1,
+            reference_2
+        )
+        receipt = direct_contract.wait_for_receipt(tx_hash)
+        return receipt
+
+    def is_token_sent(self, from_account_address, to_account_address, amount, reference_1=None, reference_2=None):
+        direct_contract = self.get_contract('DirectPurchase')
+
+        is_sent = direct_contract.check_is_paid(
+            from_account_address,
+            to_account_address,
+            amount,
+            reference_1,
+            reference_2
+        )
+        return is_sent
 
     @property
     def contract_names(self):
