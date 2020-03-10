@@ -21,7 +21,6 @@ from starfish.ddo.ddo import DDO
 from starfish.exceptions import StarfishAssetInvalid
 from starfish.job import Job
 from starfish.listing import Listing
-from starfish.middleware.squid_agent_adapter import SquidAgentAdapter
 from starfish.middleware.surfer_agent_adapter import (
     SUPPORTED_SERVICES,
     SurferAgentAdapter
@@ -50,9 +49,7 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, ocean, did=None, ddo=None, options=None):
-        """init a standard ocean object"""
-        AgentBase.__init__(self, ocean)
+    def __init__(self, network, did=None, ddo=None, options=None):
         self._did = None
         self._ddo = None
 
@@ -65,6 +62,7 @@ class RemoteAgent(AgentBase):
         else:
             raise ValueError('did must be a string or None')
 
+        AgentBase.__init__(self, network, did)
         # set the DDO
         if isinstance(ddo, dict):
             self._ddo = DDO(dictionary=ddo)
@@ -84,11 +82,10 @@ class RemoteAgent(AgentBase):
 
         # if DID and no DDO then try to load in the registered DDO, using squid
         if self._did and not self._ddo:
-            squid_adapter = SquidAgentAdapter(ocean)
-            ddo_text = squid_adapter.resolve_did_to_ddo(self._did)
-            if not ddo_text:
+            ddo = self._resolve_ddo_from_did(self._did)
+            if not ddo:
                 raise ValueError(f'cannot find registered agent at {self.did}')
-            self._ddo = DDO(json_text=ddo_text)
+            self._ddo = ddo
 
         if self._did is None and self._ddo:
             self._did = self._ddo.did
@@ -121,7 +118,7 @@ class RemoteAgent(AgentBase):
 
             asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
-            agent = SurferAgent(ocean)
+            agent = SurferAgent(network)
             asset = agent.register_asset(asset, account)
             print(f'Asset DID is {asset.did}')
 
@@ -151,7 +148,7 @@ class RemoteAgent(AgentBase):
         For example::
 
             asset = DataAsset.create('test data asset', 'Some test data')
-            agent = SurferAgent(ocean)
+            agent = SurferAgent(network)
             asset = agent.register_asset(asset, account)
 
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
@@ -487,7 +484,6 @@ class RemoteAgent(AgentBase):
 
     def _get_adapter(self, did=None, ddo=None, authorization=None):
         """
-
         Return a new SurferAgentAdapter object based on the did.
         If did == None then use the loaded did in this class.
         else check to see if the did != self._did, if not then load in the ddo as well
@@ -497,8 +493,7 @@ class RemoteAgent(AgentBase):
         # data from a different source, so load in the ddo
         if did and did != self._did and ddo is None:
             if self._did and not self._ddo:
-                squid_adapter = SquidAgentAdapter(self._ocean)
-                ddo = squid_adapter.resolve_did_to_ddo(self._did)
+                ddo = self._resolve_ddo_from_did(self._did)
 
         if did is None:
             did = self._did
@@ -516,25 +511,13 @@ class RemoteAgent(AgentBase):
                 'authorization': self._authorization
             }
 
-        return SurferAgentAdapter(self._ocean, did, ddo, options)
+        return SurferAgentAdapter(self._network, did, ddo, options)
 
     def _resolve_ddo_from_did(self, did):
-        squid_adapter = SquidAgentAdapter(self._ocean)
-        ddo_text = squid_adapter.resolve_did(self._did)
+        ddo_text = self._network.resolve_did(self._did)
         if not ddo_text:
             raise ValueError(f'cannot find registered agent at {did}')
         return DDO(json_text=ddo_text)
-
-    @property
-    def did(self):
-        """
-
-        Return the did for this remote agent.
-
-        :return: did of the registered agent
-        :type: string
-        """
-        return self._did
 
     @property
     def ddo(self):

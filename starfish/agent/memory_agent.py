@@ -8,14 +8,15 @@ import json
 import re
 import secrets
 
-from ocean_utils.did import (
-    did_to_id, id_to_did
-)
-
 from starfish.agent import AgentBase
 from starfish.listing import Listing
 from starfish.purchase import Purchase
-from starfish.utils.did import did_parse
+from starfish.utils.crypto_hash import hash_sha3_256
+from starfish.utils.did import (
+    did_generate_random,
+    did_parse,
+    did_to_asset_id
+)
 
 
 class MemoryAgent(AgentBase):
@@ -28,9 +29,12 @@ class MemoryAgent(AgentBase):
 
     """
 
-    def __init__(self, ocean):
-        """init a standard ocean object"""
-        AgentBase.__init__(self, ocean)
+    def __init__(self, network, did=None):
+
+        if did is None:
+            did = did_generate_random()
+
+        AgentBase.__init__(self, network, did=did)
 
         self._memory = {
             'listing': {},
@@ -50,10 +54,11 @@ class MemoryAgent(AgentBase):
 
         """
 
-        asset_did = id_to_did(secrets.token_hex(64))
+        asset_id = hash_sha3_256(asset.metadata_text)
+        did = f'{self._did}/{asset_id}'
 
-        self._memory['asset'][asset_did] = asset
-        asset.set_did(asset_did)
+        self._memory['asset'][did] = asset
+        asset.set_did(did)
         return asset
 
     def create_listing(self, listing_data, asset_did):
@@ -69,7 +74,7 @@ class MemoryAgent(AgentBase):
         """
         listing = None
         if listing_data:
-            listing_id = did_to_id(asset_did)
+            listing_id = did_to_asset_id(asset_did)
             listing_data['listing_id'] = listing_id,
             listing_data['asset_did'] = asset_did
             listing = Listing(self, listing_id, asset_did, listing_data)

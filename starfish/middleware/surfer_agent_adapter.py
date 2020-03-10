@@ -60,9 +60,9 @@ class ResponseWrapper():
 class SurferAgentAdapter():
     _http_client = requests
 
-    def __init__(self, ocean, did=None, ddo=None, options=None):
+    def __init__(self, network, did=None, ddo=None, options=None):
         """init a standard ocan connection, with a given DID"""
-        self._ocean = ocean
+        self._network = network
         self._did = did
         self._ddo = ddo
         if not options:

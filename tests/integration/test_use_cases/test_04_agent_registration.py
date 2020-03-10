@@ -12,7 +12,7 @@ from starfish.ddo import DDO
 
 
 
-def test_04_agent_register_and_resolve(ocean, config, publisher_account):
+def test_04_agent_register_and_resolve(network, config, accounts):
 
     ddo = RemoteAgent.generate_ddo(config.remote_agent_url)
     options = {
@@ -21,14 +21,14 @@ def test_04_agent_register_and_resolve(ocean, config, publisher_account):
         'password': config.remote_agent_password
     }
 
-    register_account = publisher_account
+    register_account = accounts[0]
 
     did = ddo.did
-    assert(ocean.register_did(ddo.did, ddo.as_text(), register_account))
-    found_ddo = DDO(json_text=ocean.resolve_did(did))
+    assert(network.register_did(register_account, ddo.did, ddo.as_text()))
+    found_ddo = DDO(json_text=network.resolve_did(did))
     assert(found_ddo.as_text() == ddo.as_text())
 
-    resolved_agent = RemoteAgent(ocean, did=did)
+    resolved_agent = RemoteAgent(network, did=did)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text() == ddo.as_text())

@@ -12,7 +12,7 @@ from starfish.asset import OperationAsset
 OPERATION_METADATA = {
     'name': 'operation',
     'type': 'operation',
-    'operation': { 
+    'operation': {
         'modes': ['sync', 'async', 'test'],
     },
 }
@@ -24,8 +24,8 @@ def test_init(metadata):
     assert(isinstance(asset, OperationAsset))
 
 
-def test_operation_asset_mode(ocean, metadata, config):
-    
+def test_operation_asset_mode(metadata, config):
+
     asset = OperationAsset(OPERATION_METADATA)
     for mode_name in OPERATION_METADATA['operation']['modes']:
         assert(asset.is_mode(mode_name))

@@ -61,7 +61,10 @@ class ContractBase:
 
     def _call_as_transaction(self, contract_function_call, account, transact=None):
         if transact is None:
-            gas = contract_function_call.estimateGas({'from': account.address})
+            gas_transact = {
+                'from': account.address
+            }
+            gas = contract_function_call.estimateGas(gas_transact)
             transact = {
                 'from': account.address,
                 'gas': gas,

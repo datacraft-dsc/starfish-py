@@ -7,7 +7,7 @@ from abc import (
     ABC,
     abstractmethod
 )
-from starfish import Ocean
+from starfish import DNetwork
 
 
 class AgentBase(ABC):
@@ -18,12 +18,13 @@ class AgentBase(ABC):
     :param ocean: Ocean object that is used by the Agent class
     :type ocean: :class:`.Ocean`
     """
-    def __init__(self, ocean):
+    def __init__(self, network, did=None):
         """init the the Ocean Object Base with the ocean instance"""
 
-        if not isinstance(ocean, Ocean):
-            raise ValueError('You must pass a valid Ocean object')
-        self._ocean = ocean
+        if not isinstance(network, DNetwork):
+            raise ValueError('You must pass a valid DNetwork object')
+        self._network = network
+        self._did = did
 
         super().__init__()
 
@@ -193,9 +194,20 @@ class AgentBase(ABC):
         """
 
     @property
-    def ocean(self):
+    def did(self):
+        """
+
+        Return the did for this remote agent.
+
+        :return: did of the registered agent
+        :type: string
+        """
+        return self._did
+
+    @property
+    def network(self):
         """
         :return: Ocean object
         :type: :class:`.Ocean`
         """
-        return self._ocean
+        return self._network

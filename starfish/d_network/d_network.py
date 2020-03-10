@@ -14,6 +14,7 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
+from starfish.exceptions import StarfishInsufficientFunds
 
 logger = logging.getLogger(__name__)
 
@@ -57,17 +58,23 @@ CONTRACT_LIST = {
 
 
 class DNetwork():
-    def __init__(self, network_url):
-        self._network_url = network_url
+    def __init__(self):
+        self._url = None
         self._web3 = None
-        self._network_name = None
+        self._name = None
         self._contracts = {}
-        self._web3 = Web3(HTTPProvider(self._network_url))
+        self._web3 = None
+
+    def connect(self, url):
+        self._url = url
+        self._web3 = Web3(HTTPProvider(url))
         if self._web3:
-            self._network_name = DNetwork.find_network_name_from_id(int(self._web3.version.network))
-            logger.info(f'connected to {self._network_name}')
+            self._name = DNetwork.find_network_name_from_id(int(self._web3.version.network))
+            logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
             self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
+            return True
+        return False
 
     def get_contract(self, name):
         if name not in CONTRACT_LIST:
@@ -75,7 +82,7 @@ class DNetwork():
 
         if name not in self._contracts:
             item = CONTRACT_LIST[name]
-            self._contracts[name] = self._contract_manager.load(item['name'], self._network_name, item.get('abi_filename', None))
+            self._contracts[name] = self._contract_manager.load(item['name'], self._name, item.get('abi_filename', None))
         return self._contracts[name]
 
     """
@@ -93,9 +100,9 @@ class DNetwork():
 
     def request_test_tokens(self, account, amount):
         dispenser_contract = self.get_contract('Dispenser')
-        tx_hash = dispenser_contract.request_tokens(amount, account)
+        tx_hash = dispenser_contract.request_tokens(account, amount)
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
-        return receipt
+        return receipt.status == 1
 
     """
 
@@ -104,15 +111,25 @@ class DNetwork():
     """
     def send_ether(self, account, to_account_address, amount):
         network_contract = self.get_contract('Network')
+
+        account_balance = self.get_ether_balance(account)
+        if account_balance < amount:
+            raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
+
         tx_hash = network_contract.send_ether(account, to_account_address, amount)
         receipt = network_contract.wait_for_receipt(tx_hash)
-        return receipt
+        return receipt.status == 1
 
     def send_token(self, account, to_account_address, amount):
         ocean_token_contract = self.get_contract('OceanToken')
+
+        account_balance = self.get_token_balance(account)
+        if account_balance < amount:
+            raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
+
         tx_hash = ocean_token_contract.transfer(account, to_account_address, amount)
         receipt = ocean_token_contract.wait_for_receipt(tx_hash)
-        return receipt
+        return receipt.status == 1
 
     """
 
@@ -123,22 +140,28 @@ class DNetwork():
         ocean_token_contract = self.get_contract('OceanToken')
         direct_contract = self.get_contract('DirectPurchase')
 
-        tx_hash = ocean_token_contract.approve_tranfer(
+        account_balance = self.get_token_balance(account)
+        if account_balance < amount:
+            raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
+
+        tx_hash = ocean_token_contract.approve_transfer(
             account,
             direct_contract.address,
             amount
         )
         receipt = ocean_token_contract.wait_for_receipt(tx_hash)
-
-        tx_hash = direct_contract.send_token_and_log(
-            account,
-            to_account_address,
-            amount,
-            reference_1,
-            reference_2
-        )
-        receipt = direct_contract.wait_for_receipt(tx_hash)
-        return receipt
+        if receipt and receipt.status == 1:
+            tx_hash = direct_contract.send_token_and_log(
+                account,
+                to_account_address,
+                amount,
+                reference_1,
+                reference_2
+            )
+            receipt = direct_contract.wait_for_receipt(tx_hash)
+            if receipt and receipt.status == 1:
+                return True
+        return False
 
     def is_token_sent(self, from_account_address, to_account_address, amount, reference_1=None, reference_2=None):
         direct_contract = self.get_contract('DirectPurchase')
@@ -161,7 +184,7 @@ class DNetwork():
         provenance_contract = self.get_contract('Provenance')
         tx_hash = provenance_contract.register(account, asset_id)
         receipt = provenance_contract.wait_for_receipt(tx_hash)
-        return receipt
+        return receipt.status == 1
 
     def get_provenace_event_list(self, asset_id):
         provenance_contract = self.get_contract('Provenance')
@@ -176,7 +199,7 @@ class DNetwork():
         did_registry_contract = self.get_contract('DIDRegistry')
         tx_hash = did_registry_contract.register(account, did, ddo_text)
         receipt = did_registry_contract.wait_for_receipt(tx_hash)
-        return receipt
+        return receipt.status == 1
 
     def resolve_did(self, did):
         did_registry_contract = self.get_contract('DIDRegistry')
@@ -187,12 +210,12 @@ class DNetwork():
         return CONTRACT_LIST.keys()
 
     @property
-    def network_url(self):
-        return self._network_url
+    def url(self):
+        return self._url
 
     @property
-    def network_name(self):
-        return self._network_name
+    def name(self):
+        return self._name
 
     @property
     def web3(self):
