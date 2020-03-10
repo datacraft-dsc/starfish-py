@@ -40,7 +40,7 @@ jobs:
       run: |
         cd ../barge
         sudo sysctl -w vm.max_map_count=262144
-        ./start_ocean.sh --no-brizo --no-surfer --no-koi --local-spree-node &
+        ./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --local-spree-node &
         sleep 240
     - name : Start Surfer
       run: |
