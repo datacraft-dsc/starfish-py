@@ -5,7 +5,10 @@
     https://github.com/oceanprotocol/squid-py/tree/b62b1bae303c499ca43f09dad1677001d9be840e/squid_py/ddo
 """
 
-from .public_key_base import PUBLIC_KEY_STORE_TYPE_HEX, PublicKeyBase
+from .public_key_base import (
+    PUBLIC_KEY_STORE_TYPE_HEX,
+    PublicKeyBase
+)
 
 AUTHENTICATION_TYPE_HEX = 'HexVerificationKey'
 PUBLIC_KEY_TYPE_HEX = 'PublicKeyHex'

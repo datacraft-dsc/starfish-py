@@ -2,7 +2,10 @@
 """
     Base Purchase class
 """
-from abc import ABC, abstractmethod
+from abc import (
+    ABC,
+    abstractmethod
+)
 
 
 class PurchaseBase(ABC):

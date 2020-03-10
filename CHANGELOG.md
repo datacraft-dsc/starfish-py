@@ -6,6 +6,7 @@
 +   Direct Purchase contract using web3-py library only
 +   Dex DID Registry contract
 +   Dex Provenance contract
++   DNetwork class
 
 ### Release v0.6.6
 

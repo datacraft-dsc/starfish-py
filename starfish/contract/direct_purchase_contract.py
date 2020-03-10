@@ -16,7 +16,7 @@ class DirectPurchaseContract(ContractBase):
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def send_token_and_log(self, account, address_to, amount, reference1, reference2):
+    def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
         """
         Send tokens to address with tracking record in log.
 
@@ -29,24 +29,28 @@ class DirectPurchaseContract(ContractBase):
         :return: void
         """
 
-        if not self.web3.isChecksumAddress(address_to):
-            address_to = self.web3.toChecksumAddress(address_to)
+        if reference_1 is None:
+            reference_1 = 0
 
-        amount_wei = self.web3.toWei(amount, 'ether')
+        if reference_2 is None:
+            reference_2 = 0
+
+        to_address = self.get_account_address(to_account_address)
+        amount_wei = self.to_wei(amount)
 
         tx_hash = self.call(
             'sendTokenAndLog',
             (
-                address_to,
+                to_address,
                 amount_wei,
-                self.web3.toBytes(reference1),
-                self.web3.toBytes(reference2)
+                self.web3.toBytes(hexstr=reference_1),
+                self.web3.toBytes(hexstr=reference_2)
             ),
             account
         )
         return tx_hash
 
-    def check_is_paid(self, address_from, address_to, amount, reference1=None, reference2=None):
+    def check_is_paid(self, from_account_address, to_account_address, amount, reference_1=None, reference_2=None):
         """
         Check if the log about transaction exists in blockchain.
 
@@ -56,18 +60,21 @@ class DirectPurchaseContract(ContractBase):
         :param reference: reference in log, int256
         :return: bool
         """
-        amount_wei = self.web3.toWei(amount, 'ether')
+
+        from_address = self.get_account_address(from_account_address)
+        to_address = self.get_account_address(to_account_address)
+        amount_wei = self.to_wei(amount)
 
         argument_filters = {
-            '_from': address_from,
-            '_to': address_to,
+            '_from': from_address,
+            '_to': to_address,
             '_amount': amount_wei,
         }
-        if reference1:
-            argument_filters['_reference1'] = self.web3.toBytes(reference1)
+        if reference_1:
+            argument_filters['_reference1'] = self.web3.toBytes(hexstr=reference_1)
 
-        if reference2:
-            argument_filters['_reference2'] = self.web3.toBytes(reference2)
+        if reference_2:
+            argument_filters['_reference2'] = self.web3.toBytes(hexstr=reference_2)
 
         event_filter = self.create_event_filter(
             'TokenSent',

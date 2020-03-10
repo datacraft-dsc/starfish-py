@@ -3,7 +3,10 @@
     Base agent object
 """
 
-from abc import ABC, abstractmethod
+from abc import (
+    ABC,
+    abstractmethod
+)
 from starfish import Ocean
 
 

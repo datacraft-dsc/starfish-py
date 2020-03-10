@@ -9,7 +9,12 @@
 import json
 import re
 
-from base64 import b64decode, b64encode, b85decode, b85encode
+from base64 import (
+    b64decode,
+    b64encode,
+    b85decode,
+    b85encode
+)
 
 PUBLIC_KEY_STORE_TYPE_PEM = 'publicKeyPem'
 PUBLIC_KEY_STORE_TYPE_JWK = 'publicKeyJwk'

@@ -13,15 +13,24 @@ import sys
 import traceback
 
 from ocean_keeper.exceptions import OceanDIDNotFound
-from ocean_utils.ddo.metadata import AdditionalInfoMeta, MetadataBase
+from ocean_utils.ddo.metadata import (
+    AdditionalInfoMeta,
+    MetadataBase
+)
 from squid_py.brizo.brizo_provider import BrizoProvider
-
 from web3 import Web3
 
 from starfish.account import Account
 from starfish.agent import AgentBase
-from starfish.asset import BundleAsset, DataAsset, RemoteDataAsset
-from starfish.exceptions import StarfishAssetNotFound, StarfishPurchaseError
+from starfish.asset import (
+    BundleAsset,
+    DataAsset,
+    RemoteDataAsset
+)
+from starfish.exceptions import (
+    StarfishAssetNotFound,
+    StarfishPurchaseError
+)
 from starfish.listing import Listing
 from starfish.middleware.squid_agent_adapter import (
     SquidAgentAdapter,

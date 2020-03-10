@@ -2,14 +2,16 @@
     SurferAgentAdapter - Adapter to access the Surfer Services
 """
 import io
+import logging
 from urllib.parse import urljoin
 
 import requests
 from eth_utils import remove_0x_prefix
 
-from starfish import logger
 from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.utils.did import did_to_asset_id
+
+logger = logging.getLogger(__name__)
 
 SUPPORTED_SERVICES = {
     'meta': 'DEP.Meta.v1',

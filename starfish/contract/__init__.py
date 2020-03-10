@@ -5,20 +5,10 @@
 
 """
 
-from starfish.contract.contract_manager import ContractManager                       # noqa: F401
-
-from starfish.contract.did_registry_contract import (           # noqa: F401
-    DIDRegistryContract
-)
-from starfish.contract.direct_purchase_contract import (        # noqa: F401
-    DirectPurchaseContract
-)
-from starfish.contract.dispenser_contract import (              # noqa: F401
-    DispenserContract
-)
-from starfish.contract.ocean_token_contract import (            # noqa: F401
-    OceanTokenContract
-)
-from starfish.contract.provenance_contract import (             # noqa: F401
-    ProvenanceContract
-)
+from starfish.contract.contract_manager import ContractManager                      # noqa: F401
+from starfish.contract.did_registry_contract import DIDRegistryContract             # noqa: F401
+from starfish.contract.direct_purchase_contract import DirectPurchaseContract       # noqa: F401
+from starfish.contract.dispenser_contract import DispenserContract                  # noqa: F401
+from starfish.contract.network_contract import NetworkContract                      # noqa: F401
+from starfish.contract.ocean_token_contract import OceanTokenContract               # noqa: F401
+from starfish.contract.provenance_contract import ProvenanceContract                # noqa: F401

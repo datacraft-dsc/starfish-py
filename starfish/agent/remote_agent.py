@@ -26,7 +26,10 @@ from starfish.middleware.surfer_agent_adapter import (
     SUPPORTED_SERVICES,
     SurferAgentAdapter
 )
-from starfish.utils.did import did_generate_random, did_parse
+from starfish.utils.did import (
+    did_generate_random,
+    did_parse
+)
 
 
 class RemoteAgent(AgentBase):

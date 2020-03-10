@@ -6,8 +6,10 @@ Agent Services
 
 """
 
-from urllib.parse import urljoin, urlparse
-
+from urllib.parse import (
+    urljoin,
+    urlparse
+)
 
 SERVICES = {
     'meta': {

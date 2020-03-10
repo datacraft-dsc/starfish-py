@@ -1,20 +1,18 @@
 import pytest
 
 
-from starfish.contract import ContractManager
 from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 
 
-def test_did_registry_contract(config, starfish_accounts):
+def test_did_registry_contract(dnetwork, config, starfish_accounts):
     """
 
     Register and find a ddo based on a did
 
     """
-    manager = ContractManager(config.keeper_url)
-    did_registry_contract = manager.load('DIDRegistryContract', abi_filename='DIDRegistry.development.json')
+    did_registry_contract = dnetwork.get_contract('DIDRegistry')
 
     did = did_generate_random()
 
@@ -22,7 +20,7 @@ def test_did_registry_contract(config, starfish_accounts):
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 
-    register_account = starfish_accounts['purchaser']
+    register_account = starfish_accounts[0]
 
     tx_hash = did_registry_contract.register(register_account, did, ddo_text)
     receipt = did_registry_contract.wait_for_receipt(tx_hash)

@@ -8,7 +8,9 @@ import json
 import re
 import secrets
 
-from ocean_utils.did import did_to_id, id_to_did
+from ocean_utils.did import (
+    did_to_id, id_to_did
+)
 
 from starfish.agent import AgentBase
 from starfish.listing import Listing
