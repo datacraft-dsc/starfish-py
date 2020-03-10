@@ -43,12 +43,16 @@ class ContractManager:
         contract_name = contract_object.name
         if abi_filename is None:
             abi_filename = f'{contract_name}.{network_name}.json'
-        abi_filename_path = ContractManager.find_abi_filename(abi_filename)
-        if abi_filename_path:
-            contract_info = ContractManager.load_abi_file(abi_filename_path)
-            contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
+        if abi_filename:
+            abi_filename_path = ContractManager.find_abi_filename(abi_filename)
+            if abi_filename_path:
+                contract_info = ContractManager.load_abi_file(abi_filename_path)
+                contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
+            else:
+                raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name} {abi_filename}')
         else:
-            raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name} {abi_filename}')
+            # load in an dummy contract with no abi or address
+            contract_object.load(self.web3)
 
         return contract_object
 

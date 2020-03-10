@@ -28,6 +28,10 @@ NETWORK_NAMES = {
 }
 
 CONTRACT_LIST = {
+    'Network': {
+        'name': 'NetworkContract',
+        'abi_filename': False,
+    },
     'DIDRegistry': {
         'name': 'DIDRegistryContract',
         'abi_filename': 'DIDRegistry.development.json'
@@ -71,18 +75,31 @@ class DNetwork():
             self._contracts[name] = self._contract_manager.load(item['name'], self._network_name, item.get('abi_filename', None))
         return self._contracts[name]
 
-    def get_ether_balance(self, account):
-        return self._web3.eth.getBalance(account.address)
+    """
+
+    Account based operations
+
+    """
+    def get_ether_balance(self, account_address):
+        network_contract = self.get_contract('Network')
+        return network_contract.get_balance(account_address)
 
     def get_token_balance(self, account):
         ocean_token_contract = self.get_contract('OceanToken')
         return ocean_token_contract.get_balance(account)
 
-    def request_test_tokens(self, amount, account):
+    def request_test_tokens(self, account, amount):
         dispenser_contract = self.get_contract('Dispenser')
         tx_hash = dispenser_contract.request_tokens(amount, account)
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
         return receipt
+
+    def send_ether(self, account, to_account_address, amount):
+        network_contract = self.get_contract('Network')
+        tx_hash = network_contract.send_ether(account, to_account_address, amount)
+        receipt = network_contract.wait_for_receipt(tx_hash)
+        return receipt
+
 
     @property
     def contract_names(self):

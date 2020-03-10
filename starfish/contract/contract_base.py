@@ -22,12 +22,17 @@ class ContractBase:
         self._web3 = web3
         self._abi = abi
         self._address = address
-        self._contract = self._web3.eth.contract(
-            address=address,
-            abi=abi
-        )
+        self._contract = None
+        if abi and address:
+            self._contract = self._web3.eth.contract(
+                address=address,
+                abi=abi
+            )
 
     def call(self, function_name, parameters, account=None, transact=None):
+        if self._contract is None:
+            raise ValueError('contract not loaded')
+
         if not isinstance(parameters, (list, tuple)):
             parameters = (parameters,)
 
@@ -41,6 +46,8 @@ class ContractBase:
         return result
 
     def get_event(self, event_name, parameters=None):
+        if self._contract is None:
+            raise ValueError('contract not loaded')
         return self._contract.events[event_name]
 
     def create_event_filter(self, event_name, parameters=None, from_block=1, argument_filters=None):
@@ -115,3 +122,19 @@ class ContractBase:
     @property
     def address(self):
         return self._address
+
+    def to_wei(self, amount_ether):
+        return self._web3.toWei(amount_ether, 'ether')
+
+    def to_ether(self, amount_wei):
+        return self._web3.fromWei(amount_wei, 'ether')
+
+    def get_account_address(self, account_address):
+        address = account_address
+        if hasattr(account_address, 'address'):
+            address = account_address.address
+
+        if not self.web3.isChecksumAddress(address):
+            address = self.web3.toChecksumAddress(address)
+
+        return address
