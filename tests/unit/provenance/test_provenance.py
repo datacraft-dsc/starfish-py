@@ -8,7 +8,7 @@ import json
 import re
 import secrets
 
-from starfish.provenance.provenance import create_publish, create_invoke
+from starfish.provenance import create_publish, create_invoke
 from starfish.asset import DataAsset, OperationAsset
 from starfish.metadata import METADATA_PROVENANCE_NAME
 

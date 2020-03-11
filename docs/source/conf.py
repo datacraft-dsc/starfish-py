@@ -39,7 +39,7 @@ version = release_parts[0] + '.' + release_parts[1] + '.' + release_parts[2]
 # ones.
 extensions = [
     'sphinx.ext.intersphinx',
-    'sphinxcontrib.apidoc',
+#    'sphinxcontrib.apidoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.graphviz',
@@ -55,8 +55,6 @@ apidoc_separate_modules = True
 # See https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
 apidoc_extra_args = []
 apidoc_excluded_paths = [
-  'ocean.py',
-  'command_line',
   'constants.py',
   'exceptions.py',
   'logging.py',
@@ -66,7 +64,11 @@ apidoc_excluded_paths = [
   'purchase',
   'listing',
   'account',
-  'asset'
+  'agent',
+  'asset',
+  'provenance.py',
+  'contract',
+  'network',
 ]
 
 # autodoc settings

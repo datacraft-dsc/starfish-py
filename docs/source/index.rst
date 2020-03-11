@@ -19,12 +19,12 @@ Contents
 
     getting_started
     agents
-    register_asset_squid
     register_asset_remote_agent
-    classes/ocean
     classes/account
     classes/agent
     classes/asset
-    classes/listing
-    classes/purchase
+    classes/dnetwork
     classes/job
+    classes/listing
+    classes/provenance
+    classes/purchase

@@ -44,7 +44,7 @@ class ProvenanceContract(ContractBase):
                 'AssetRegistered',
                 None,
                 from_block=from_block_number,
-                argument_filters={'_asset_id': asset_id_bytes}
+                argument_filters={'_assetID': asset_id_bytes}
             )
 
             if event_filter:

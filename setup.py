@@ -14,36 +14,21 @@ with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
 install_requirements = [
-    'coloredlogs',
-    'eciespy',
-    'pyopenssl',
-    'pycryptodome',
-    'PyJWT',  # not jwt
-    'PyYAML==4.2b4',
-    'web3==4.5.0',
+    'web3',
 ]
 
 setup_requirements = ['pytest-runner', ]
 
 test_requirements = [
-    'codacy-coverage',
-    'coverage',
-    'docker',
     'flake8',
-    'mccabe',
-    'pyflakes',
     'pytest',
     'isort',
     'mypy',
-    'tox',
 ]
 
 # Possibly required by developers of starfish-py:
 dev_requirements = [
     'bumpversion',
-    'pkginfo',
-    'twine',
-    'watchdog',
     'isort',
     'mypy',
 ]

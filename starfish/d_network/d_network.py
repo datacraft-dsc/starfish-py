@@ -69,7 +69,7 @@ class DNetwork():
         self._url = url
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:
-            self._name = DNetwork.find_network_name_from_id(int(self._web3.version.network))
+            self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
             logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
             self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)

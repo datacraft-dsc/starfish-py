@@ -71,7 +71,7 @@ class Account():
             encrypted_key = fp.read()
         if encrypted_key:
             secret_key = web3.eth.account.decrypt(encrypted_key, self._password)
-            signed = web3.eth.account.signTransaction(transaction, secret_key)
+            signed = web3.eth.account.sign_transaction(transaction, secret_key)
             return signed
 
     @property

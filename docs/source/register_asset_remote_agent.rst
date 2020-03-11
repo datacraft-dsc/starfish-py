@@ -3,30 +3,31 @@ Register asset on a remote agent
 
 This is to show how to register an asset on a remote agent.
 
-The remote agent (Surfer) is a centralized server that allows the server url to be registered on the Ocean Network.
+The remote agent (Surfer) is a centralized server that allows the server url to be registered on the Ocean/Dex Network.
 
 Any asset registered with a remote agent will not be written to the block chain, but the returned
-DID will contain the Remote Agent DID/asset_id. This can be resolved by using the Ocean Protocol network
+DID will contain the Remote Agent DID/asset_id. This can be resolved by using the Ocean/Dex Protocol network
 to obtain the asset.
 
 We assume that you have already setup a test `barge` in 'Getting Started', with a running remote agent in Barge.
 
-Creating a new `Ocean` instance
--------------------------------
+Creating a new `DNetwork` instance
+----------------------------------
 
 First import the main starfish ocean library, and the logging library
 
->>> from starfish import Ocean
+>>> from starfish import DNetwork
 
 Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.
 
->>> ocean = Ocean(keeper_url='http://localhost:8545')
+>>> network = DNetwork()
+>>> network.connect('http://localhost:8545')
 
 Create an Asset
 ---------------
 
-We now want to create an Ocean asset to register with the remote agent, we can store it's metadata and data
+We now want to create an asset to register with the remote agent, we can store it's metadata and data
 all with agent.
 
 First we need to create a data asset, using some test data.
@@ -67,8 +68,8 @@ First we need to import the agent and setup it's configuration for the local tes
     }
 
 Since this is probably the first time we are using remote agent, we need to register
-all of the services that remote agent supports on the Ocean Network. In our case
-the Ocean Network is going to be the local Barge.
+all of the services that remote agent supports on the Network. In our case
+the Network is going to be the local Barge.
 
 So first create a DDO record for the local remote agent service.
 
@@ -79,9 +80,9 @@ Lets see what the DID of the remote agent service is going to be?
 >>> print(ddo.did)
 did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c
 
-We can now create the remote agent using teh options provided
+We can now create the remote agent using the options provided
 
->>> agent = RemoteAgent(ocean, did=ddo.did, ddo=ddo, options=options)
+>>> agent = RemoteAgent(network, did=ddo.did, ddo=ddo, options=options)
 
 Register the Asset
 ------------------
@@ -109,7 +110,7 @@ Lets find out what the asset or listing DID
 did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c/3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5
 
 You will notice that the listing DID returned contains two id's. The first is the regisered DID on the
-Ocean Protocol block chain, the second id is the internall asset id registered on the remote agent.
+block chain, the second id is the internall asset id registered on the remote agent.
 
 To check that the asset id is the same we can print out the asset id
 
