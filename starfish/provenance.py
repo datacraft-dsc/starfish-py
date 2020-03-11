@@ -1,6 +1,6 @@
 """
 
-    Provenance class to create provenance metadata
+    Provenance module
 
 """
 

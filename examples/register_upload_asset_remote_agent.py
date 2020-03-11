@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from starfish import Ocean
+from starfish import DNetwork
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
@@ -8,7 +8,9 @@ from starfish.agent.services import Services
 def main():
 
     # Create a new Ocean instance.
-    ocean = Ocean(keeper_url='http://localhost:8545')
+    network = DNetwork()
+    network.connect('http://localhost:8545')
+    print(network.name)
 
     # Now create a memory asset
     asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
@@ -33,7 +35,7 @@ def main():
         'license': 'CC0: Public Domain',
         'price': '0'
     }
-    agent = RemoteAgent(ocean, ddo=agent_ddo, options=agent_options)
+    agent = RemoteAgent(network, ddo=agent_ddo, options=agent_options)
 
     asset = agent.register_asset(asset)
     print(asset.did)
