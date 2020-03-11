@@ -1,6 +1,6 @@
 ## Change Log
 
-### Release TBD
+### Release v0.7.0
 
 +   Large file upload and download using asset bundle and chunk of data assets
 +   Direct Purchase contract using web3-py library only
