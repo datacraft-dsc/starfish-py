@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Agent Base class &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Agent Base class &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -88,21 +88,20 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../agent.html">Agent Classes</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Agent Base class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory_agent.html">Memory Agent class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="squid_agent.html">Squid Agent class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote_agent.html">Remote Agent class</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -173,12 +172,12 @@
 <h1>Agent Base class<a class="headerlink" href="#agent-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.AgentBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">AgentBase</code><span class="sig-paren">(</span><em class="sig-param">ocean</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">AgentBase</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Base agent class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ocean</strong> (<a class="reference internal" href="../ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a>) – Ocean object that is used by the Agent class</p>
+<dd class="field-odd"><p><strong>ocean</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code>) – Ocean object that is used by the Agent class</p>
 </dd>
 </dl>
 <dl class="method">
@@ -219,6 +218,20 @@ provider will be made at this point.</p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a> class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.AgentBase.did">
+<em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.agent.AgentBase.did" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the did for this remote agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>did of the registered agent</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
@@ -279,14 +292,14 @@ provider will be made at this point.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.agent.AgentBase.ocean">
-<em class="property">property </em><code class="sig-name descname">ocean</code><a class="headerlink" href="#starfish.agent.AgentBase.ocean" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.agent.AgentBase.network">
+<em class="property">property </em><code class="sig-name descname">network</code><a class="headerlink" href="#starfish.agent.AgentBase.network" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Ocean object</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></p>
 </dd>
 </dl>
 </dd></dl>

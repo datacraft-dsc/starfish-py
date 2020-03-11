@@ -18,7 +18,7 @@ Install the library
         cd starfish-py
         virtualvenv venv
         source venv/bin/activate
-        pip install -r requirements_dev.txt
+        make install
 
 Run the unit tests
 ------------------
@@ -27,7 +27,7 @@ Run the unit tests
 
     .. code-block:: console
 
-        pytest tests/unit
+        make test-unit
 
 
 Startup a local ocean test node (``barge``)
@@ -42,7 +42,7 @@ Startup a local ocean test node (``barge``)
 
         git clone https://github.com/DEX-Company/barge.git
         cd barge
-        ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
+       ./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node
 
     So you should now have two folders::
 
@@ -74,10 +74,10 @@ Run the full tests
 
     .. code-block:: console
 
-        pytest tests/intergration
+        make test-intergration
 
     or you can run the complete test suite by entering the command
 
     .. code-block:: console
 
-        pytest tests
+        make tests

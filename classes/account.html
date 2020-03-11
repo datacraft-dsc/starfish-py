@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account class &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Account class &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Agent Classes" href="agent.html" />
-    <link rel="prev" title="Ocean class" href="ocean.html" /> 
+    <link rel="prev" title="Register asset on a remote agent" href="../register_asset_remote_agent.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -88,15 +88,15 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ocean.html">Ocean class</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Account class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent.html">Agent Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -165,16 +165,15 @@
 <h1>Account class<a class="headerlink" href="#account-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.account.Account">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em>, <em class="sig-param">agent_adapter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Account class, adds functionality for an account to be used by the Ocean network.</p>
-<p>At the moment the Account object is created by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code> class.</p>
+<p>Account class, adds functionality for an account to be used on the starfish named network.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ocean</strong> (<a class="reference internal" href="ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a>) – Ocean object</p></li>
 <li><p><strong>address</strong> (<em>string</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – address or dict of the account details</p></li>
 <li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – password for the account</p></li>
+<li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – keyfile containing the private encrypted key</p></li>
 </ul>
 </dd>
 </dl>
@@ -206,37 +205,6 @@ If dict then the dict can be the following format:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.agent_adapter">
-<em class="property">property </em><code class="sig-name descname">agent_adapter</code><a class="headerlink" href="#starfish.account.Account.agent_adapter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.agent_adapter_account">
-<em class="property">property </em><code class="sig-name descname">agent_adapter_account</code><a class="headerlink" href="#starfish.account.Account.agent_adapter_account" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the squid account object used for squid services, curretly only hosted accounts can be used
-:params obj adapter: middleware agent adapter to get the actual account object for this adapter
-:return: The squid account object
-:type: object</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.approve_tokens">
-<code class="sig-name descname">approve_tokens</code><span class="sig-paren">(</span><em class="sig-param">spender_address</em>, <em class="sig-param">amount</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.approve_tokens" title="Permalink to this definition">¶</a></dt>
-<dd><p>Approve some ocean tokens to be transfere from this account address by another Spender address</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>amount</strong> (<em>number</em>) – The amount of ocean tokens to approve</p></li>
-<li><p><strong>spender_address</strong> (<em>address</em>) – The address of spender</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>boolean</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="starfish.account.Account.as_checksum_address">
 <em class="property">property </em><code class="sig-name descname">as_checksum_address</code><a class="headerlink" href="#starfish.account.Account.as_checksum_address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the address as a checksum address</p>
@@ -251,24 +219,6 @@ If dict then the dict can be the following format:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">ocean</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="s1">&#39;0x00bd138abd70e2f00903268f3db08f2d25677c9e&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">as_checksum_address</span>
 <span class="go">0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.ether_balance">
-<em class="property">property </em><code class="sig-name descname">ether_balance</code><a class="headerlink" href="#starfish.account.Account.ether_balance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of ocean tokens</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of ocean tokens</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>number</p>
-</dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">ether_balance</span>
-<span class="go">1000000001867769600000000000</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -308,59 +258,9 @@ address and then compared.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.key_file">
-<em class="property">property </em><code class="sig-name descname">key_file</code><a class="headerlink" href="#starfish.account.Account.key_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compatability field, so that this account behaves the same as a squid account</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="starfish.account.Account.keyfile">
 <em class="property">property </em><code class="sig-name descname">keyfile</code><a class="headerlink" href="#starfish.account.Account.keyfile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.ocean">
-<em class="property">property </em><code class="sig-name descname">ocean</code><a class="headerlink" href="#starfish.account.Account.ocean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a> object for this account
-:return: The main ocean class
-:type: <a class="reference internal" href="ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.ocean_balance">
-<em class="property">property </em><code class="sig-name descname">ocean_balance</code><a class="headerlink" href="#starfish.account.Account.ocean_balance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of ocean tokens</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of ocean tokens</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>number</p>
-</dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance</span>
-<span class="go">101</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.ocean_balance_raw">
-<em class="property">property </em><code class="sig-name descname">ocean_balance_raw</code><a class="headerlink" href="#starfish.account.Account.ocean_balance_raw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of ocean tokens</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of ocean tokens</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>number</p>
-</dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">ocean_balance_raw</span>
-<span class="go">101</span>
-</pre></div>
-</div>
-</dd></dl>
 
 <dl class="method">
 <dt id="starfish.account.Account.password">
@@ -376,28 +276,6 @@ address and then compared.</p>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">password</span>
 <span class="go">secret</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.request_tokens">
-<code class="sig-name descname">request_tokens</code><span class="sig-paren">(</span><em class="sig-param">amount</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.request_tokens" title="Permalink to this definition">¶</a></dt>
-<dd><p>For <strong>Testing Only</strong></p>
-<p>Request some ocean tokens to be transfere to this account address</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>amount</strong> (<em>number</em>) – The amount of ocean tokens to transfer ( <em>Money for nothing</em> )</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>number of tokens transfered</p>
-</dd>
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
-</dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account</span><span class="o">.</span><span class="n">request_tokens</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="go">100</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -419,30 +297,9 @@ address and then compared.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.transfer_ether">
-<code class="sig-name descname">transfer_ether</code><span class="sig-paren">(</span><em class="sig-param">to_account</em>, <em class="sig-param">amount_ether</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.transfer_ether" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transfer ether from this account to another account</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>to_account</strong> (<em>str for an account address</em><em> or </em><em>:class:'.Account` object</em>) – To account object or account address</p>
-</dd>
-</dl>
-<p>;param amount_ether: amount in ether to transfer
-:return: number of ether transfered</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="starfish.account.Account.transfer_token">
-<code class="sig-name descname">transfer_token</code><span class="sig-paren">(</span><em class="sig-param">to_account</em>, <em class="sig-param">amount_token</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.transfer_token" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transfer ocean tokens from this account to another account</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>to_account</strong> (<em>str for an account address</em><em> or </em><em>:class:'.Account` object</em>) – To account object or account address</p>
-</dd>
-</dl>
-<p>;param amount_ether: amount in ocean tokens to transfer
-:return: number of tokens transfered</p>
-</dd></dl>
+<dt id="starfish.account.Account.sign_transaction">
+<code class="sig-name descname">sign_transaction</code><span class="sig-paren">(</span><em class="sig-param">web3</em>, <em class="sig-param">transaction</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.sign_transaction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -459,7 +316,7 @@ address and then compared.</p>
         <a href="agent.html" class="btn btn-neutral float-right" title="Agent Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ocean.html" class="btn btn-neutral float-left" title="Ocean class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../register_asset_remote_agent.html" class="btn btn-neutral float-left" title="Register asset on a remote agent" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

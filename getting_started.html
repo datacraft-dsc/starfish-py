@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Getting Started &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -95,15 +95,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/agent.html">Agent Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -180,7 +180,7 @@ Then you need to use <code class="docutils literal notranslate"><span class="pre
 <span class="go">cd starfish-py</span>
 <span class="go">virtualvenv venv</span>
 <span class="go">source venv/bin/activate</span>
-<span class="go">pip install -r requirements_dev.txt</span>
+<span class="go">make install</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -189,7 +189,7 @@ Then you need to use <code class="docutils literal notranslate"><span class="pre
 <h2>Run the unit tests<a class="headerlink" href="#run-the-unit-tests" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>You can run the unit tests without any external access to the Ocean Protocol Network, by running the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests/unit</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make test-unit</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -200,9 +200,9 @@ Then you need to use <code class="docutils literal notranslate"><span class="pre
 <div><p>Create the local testing environment using the <a class="reference external" href="https://github.com/DEX-Company/barge">barge</a> repo.</p>
 <p>In a separate terminal session you need to clone and checkout the correct tagged
 version of <code class="docutils literal notranslate"><span class="pre">barge</span></code> repository, by doing the following:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/DEX-Company/barge.git</span>
-<span class="go">cd barge</span>
-<span class="go">./start_ocean.sh --no-brizo --no-pleuston --local-spree-node</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> git clone https://github.com/DEX-Company/barge.git</span>
+<span class="go"> cd barge</span>
+<span class="go">./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node</span>
 </pre></div>
 </div>
 <p>So you should now have two folders:</p>
@@ -230,11 +230,11 @@ The script waits until the keeper contracts are deployed, and then copies the ar
 <h2>Run the full tests<a class="headerlink" href="#run-the-full-tests" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Once you have the local barge running. You now have a local Ocean Protocol Network stack running. You can now run the interegration tests by running the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests/intergration</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make test-intergration</span>
 </pre></div>
 </div>
 <p>or you can run the complete test suite by entering the command</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make tests</span>
 </pre></div>
 </div>
 </div></blockquote>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Asset Classes" href="../asset.html" />
-    <link rel="prev" title="Squid Agent class" href="squid_agent.html" /> 
+    <link rel="prev" title="Memory Agent class" href="memory_agent.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -88,21 +88,20 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../agent.html">Agent Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="agent_base.html">Agent Base class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory_agent.html">Memory Agent class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="squid_agent.html">Squid Agent class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Remote Agent class</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -173,13 +172,13 @@
 <h1>Remote Agent class<a class="headerlink" href="#remote-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.RemoteAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param">ocean</em>, <em class="sig-param">did=None</em>, <em class="sig-param">ddo=None</em>, <em class="sig-param">options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did=None</em>, <em class="sig-param">ddo=None</em>, <em class="sig-param">options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Remote Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ocean</strong> (<a class="reference internal" href="../ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a>) – Ocean object that is being used.</p></li>
+<li><p><strong>ocean</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code>) – Ocean object that is being used.</p></li>
 <li><p><strong>did</strong> – Optional did of the Surfer agent</p></li>
 <li><p><strong>ddo</strong> – Optional ddo of the remote agent, if not provided the agent
 will automatically get the DDO from the network based on the DID.</p></li>
@@ -231,13 +230,13 @@ provider will be made at this point.</p>
 </dl>
 <p>For example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;test data asset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 
 <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
 <span class="n">listing</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">create_listing</span><span class="p">(</span><span class="n">listing_data</span><span class="p">,</span> <span class="n">asset</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">listing</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{listing.did}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;registered my listing asset for sale with the did </span><span class="si">{</span><span class="n">listing</span><span class="o">.</span><span class="n">did</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -251,7 +250,7 @@ provider will be made at this point.</p>
 <dd class="field-odd"><p>DDO registered for this agent</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../../api/starfish.ddo.starfish_ddo.html#starfish.ddo.starfish_ddo.StarfishDDO" title="starfish.ddo.starfish_ddo.StarfishDDO"><code class="xref py py-class docutils literal notranslate"><span class="pre">StarfishDDO</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DDO</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,20 +259,6 @@ provider will be made at this point.</p>
 <dt id="starfish.agent.RemoteAgent.decode_asset_did">
 <em class="property">static </em><code class="sig-name descname">decode_asset_did</code><span class="sig-paren">(</span><em class="sig-param">did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.decode_asset_did" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="starfish.agent.RemoteAgent.did">
-<em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.agent.RemoteAgent.did" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the did for this remote agent.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>did of the registered agent</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>string</p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.download_asset">
@@ -294,7 +279,7 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.generate_ddo">
-<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param">base_url_or_services</em>, <em class="sig-param">service_list=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param">base_url_or_services</em>, <em class="sig-param">service_list=None</em>, <em class="sig-param">is_add_proof=False</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a DDO for the remote agent url. This DDO will contain the supported
 endpoints for the remote agent</p>
 <dl class="field-list simple">
@@ -552,9 +537,9 @@ to see if it is assigned to a valid Asset.</p>
 <p>For example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;test data asset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
 <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Asset DID is </span><span class="si">{asset.did}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Asset DID is </span><span class="si">{</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -636,7 +621,7 @@ to see if it is assigned to a valid Asset.</p>
         <a href="../asset.html" class="btn btn-neutral float-right" title="Asset Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="squid_agent.html" class="btn btn-neutral float-left" title="Squid Agent class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="memory_agent.html" class="btn btn-neutral float-left" title="Memory Agent class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Memory Agent class &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Memory Agent class &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Squid Agent class" href="squid_agent.html" />
+    <link rel="next" title="Remote Agent class" href="remote_agent.html" />
     <link rel="prev" title="Agent Base class" href="agent_base.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -88,21 +88,20 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../register_asset_remote_agent.html">Register asset on a remote agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../account.html">Account class</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../agent.html">Agent Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="agent_base.html">Agent Base class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Memory Agent class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="squid_agent.html">Squid Agent class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote_agent.html">Remote Agent class</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -173,12 +172,12 @@
 <h1>Memory Agent class<a class="headerlink" href="#memory-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.MemoryAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param">ocean</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Memory Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ocean</strong> (<a class="reference internal" href="../ocean.html#starfish.Ocean" title="starfish.Ocean"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code></a>) – Ocean object that is being used.</p>
+<dd class="field-odd"><p><strong>ocean</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code>) – Ocean object that is being used.</p>
 </dd>
 </dl>
 <dl class="method">
@@ -401,7 +400,7 @@ to see if it is assigned to a valid Asset.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="squid_agent.html" class="btn btn-neutral float-right" title="Squid Agent class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="remote_agent.html" class="btn btn-neutral float-right" title="Remote Agent class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="agent_base.html" class="btn btn-neutral float-left" title="Agent Base class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

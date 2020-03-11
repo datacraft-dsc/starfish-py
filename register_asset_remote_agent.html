@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.6.7 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.7.1 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Ocean class" href="classes/ocean.html" />
-    <link rel="prev" title="Register asset using Squid" href="register_asset_squid.html" /> 
+    <link rel="next" title="Account class" href="classes/account.html" />
+    <link rel="prev" title="Starfish Agents" href="agents.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.6.7
+                0.7.1
               </div>
             
           
@@ -88,9 +88,8 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agents.html">Starfish Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="register_asset_squid.html">Register asset using Squid</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Register asset on a remote agent</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-ocean-instance">Creating a new <cite>Ocean</cite> instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-dnetwork-instance">Creating a new <cite>DNetwork</cite> instance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-an-asset">Create an Asset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setup-the-remote-agent">Setup the Remote Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#register-the-asset">Register the Asset</a></li>
@@ -98,13 +97,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#full-example-to-register-and-upload-an-asset-on-remote-agent">Full example to register and upload an Asset on Remote Agent</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="classes/ocean.html">Ocean class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/account.html">Account class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/agent.html">Agent Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/asset.html">Asset Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/dnetwork.html">DNetwork class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes/job.html">Job Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/listing.html">Listing Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/provenance.html">Provenance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/purchase.html">Purchase Classes</a></li>
 </ul>
 
             
@@ -172,26 +172,27 @@
   <div class="section" id="register-asset-on-a-remote-agent">
 <h1>Register asset on a remote agent<a class="headerlink" href="#register-asset-on-a-remote-agent" title="Permalink to this headline">¶</a></h1>
 <p>This is to show how to register an asset on a remote agent.</p>
-<p>The remote agent (Surfer) is a centralized server that allows the server url to be registered on the Ocean Network.</p>
+<p>The remote agent (Surfer) is a centralized server that allows the server url to be registered on the Ocean/Dex Network.</p>
 <p>Any asset registered with a remote agent will not be written to the block chain, but the returned
-DID will contain the Remote Agent DID/asset_id. This can be resolved by using the Ocean Protocol network
+DID will contain the Remote Agent DID/asset_id. This can be resolved by using the Ocean/Dex Protocol network
 to obtain the asset.</p>
 <p>We assume that you have already setup a test <cite>barge</cite> in ‘Getting Started’, with a running remote agent in Barge.</p>
-<div class="section" id="creating-a-new-ocean-instance">
-<h2>Creating a new <cite>Ocean</cite> instance<a class="headerlink" href="#creating-a-new-ocean-instance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-a-new-dnetwork-instance">
+<h2>Creating a new <cite>DNetwork</cite> instance<a class="headerlink" href="#creating-a-new-dnetwork-instance" title="Permalink to this headline">¶</a></h2>
 <p>First import the main starfish ocean library, and the logging library</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">DNetwork</span>
 </pre></div>
 </div>
 <p>Next create an instance and a basic connection to the ocean network, with
 some extra logging so you can see what is happening.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">DNetwork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="create-an-asset">
 <h2>Create an Asset<a class="headerlink" href="#create-an-asset" title="Permalink to this headline">¶</a></h2>
-<p>We now want to create an Ocean asset to register with the remote agent, we can store it’s metadata and data
+<p>We now want to create an asset to register with the remote agent, we can store it’s metadata and data
 all with agent.</p>
 <p>First we need to create a data asset, using some test data.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
@@ -229,8 +230,8 @@ task is to do the actual work of registration.</p>
 </pre></div>
 </div>
 <p>Since this is probably the first time we are using remote agent, we need to register
-all of the services that remote agent supports on the Ocean Network. In our case
-the Ocean Network is going to be the local Barge.</p>
+all of the services that remote agent supports on the Network. In our case
+the Network is going to be the local Barge.</p>
 <p>So first create a DDO record for the local remote agent service.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ddo</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 </pre></div>
@@ -240,8 +241,8 @@ the Ocean Network is going to be the local Barge.</p>
 <span class="go">did:dep:45fd1d44764047808b313bf777d98d6304fdf9ff3ba7463aa4346e888ff5041c</span>
 </pre></div>
 </div>
-<p>We can now create the remote agent using teh options provided</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">did</span><span class="o">=</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<p>We can now create the remote agent using the options provided</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">did</span><span class="o">=</span><span class="n">ddo</span><span class="o">.</span><span class="n">did</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -270,7 +271,7 @@ information about the asset.</p>
 </pre></div>
 </div>
 <p>You will notice that the listing DID returned contains two id’s. The first is the regisered DID on the
-Ocean Protocol block chain, the second id is the internall asset id registered on the remote agent.</p>
+block chain, the second id is the internall asset id registered on the remote agent.</p>
 <p>To check that the asset id is the same we can print out the asset id</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">listing</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">asset_id</span><span class="p">)</span>
 <span class="go">0x3bd774d7d7ee5239c26b39b44b659a2488cc3fcdd17140274b04bfc0a05520f5</span>
@@ -290,7 +291,7 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
 <h2>Full example to register and upload an Asset on Remote Agent<a class="headerlink" href="#full-example-to-register-and-upload-an-asset-on-remote-agent" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
-<span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">Ocean</span>
+<span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">DNetwork</span>
 <span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
 <span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span>
 <span class="kn">from</span> <span class="nn">starfish.agent.services</span> <span class="kn">import</span> <span class="n">Services</span>
@@ -298,7 +299,9 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
     <span class="c1"># Create a new Ocean instance.</span>
-    <span class="n">ocean</span> <span class="o">=</span> <span class="n">Ocean</span><span class="p">(</span><span class="n">keeper_url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">DNetwork</span><span class="p">()</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1"># Now create a memory asset</span>
     <span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;TestAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
@@ -323,7 +326,7 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
         <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
         <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
     <span class="p">}</span>
-    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">ocean</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">agent_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">agent_options</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">agent_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">agent_options</span><span class="p">)</span>
 
     <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
@@ -348,10 +351,10 @@ Ocean Protocol block chain, the second id is the internall asset id registered o
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="classes/ocean.html" class="btn btn-neutral float-right" title="Ocean class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="classes/account.html" class="btn btn-neutral float-right" title="Account class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="register_asset_squid.html" class="btn btn-neutral float-left" title="Register asset using Squid" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="agents.html" class="btn btn-neutral float-left" title="Starfish Agents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
