@@ -8,6 +8,7 @@
 +   Dex Provenance contract
 +   DNetwork class
 +   Remove squid-py
++   Upgrade to the latest web3 library
 
 ### Release v0.6.6
 
