@@ -2,8 +2,7 @@
 
 ![](https://github.com/DEX-Company/starfish-py/workflows/testing/badge.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Squid Version](https://img.shields.io/badge/squid--py-v0.7.1-blue.svg)](https://github.com/oceanprotocol/squid-py/releases/tag/v0.7.1)
-[![Barge Version](https://img.shields.io/badge/barge-dex--2019--09--11-blue.svg)](https://github.com/DEX-Company/barge/releases/tag/dex-2019-09-11)
+[![Barge Version](https://img.shields.io/badge/develop.svg)](https://github.com/DEX-Company/barge)
 
 ---
 

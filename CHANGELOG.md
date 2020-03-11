@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.7.1
+
++   Fix badges on README
+
 ### Release v0.7.0
 
 +   Large file upload and download using asset bundle and chunk of data assets
