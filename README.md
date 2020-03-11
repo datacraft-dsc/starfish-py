@@ -2,7 +2,7 @@
 
 ![](https://github.com/DEX-Company/starfish-py/workflows/testing/badge.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Barge Version](https://img.shields.io/badge/develop.svg)](https://github.com/DEX-Company/barge)
+[![Barge Version](https://img.shields.io/badge/develop-blue.svg)](https://github.com/DEX-Company/barge)
 
 ---
 
