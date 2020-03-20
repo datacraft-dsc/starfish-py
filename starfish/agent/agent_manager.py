@@ -5,6 +5,8 @@
 """
 
 from starfish.agent.remote_agent import RemoteAgent
+from starfish.ddo import DDO
+from starfish.middleware.surfer_agent_adapter import SurferAgentAdapter
 
 
 class AgentManager:
@@ -88,21 +90,44 @@ class AgentManager:
 
         ddo = None
         if url:
-            options = None
+            adapter = SurferAgentAdapter(self._network)
+            headers = None
             if username:
-                options = {
-                    'authorization': {
-                        'username': username,
-                        'password': password
-                    }
+                token_url = f'{url}/api/v1/auth/token'
+                authorization = adapter.get_authorization_token(username, password, token_url)
+                headers = {
+                    'Authorization': f'token {authorization}'
                 }
-            agent = RemoteAgent(self._network, options)
-            adapter = agent._get_adapter()
-            ddo = adapter.get_ddo(url)
+
+            ddo = adapter.get_ddo(url, headers)
         return ddo
 
-    def get_remote_agent(did_name_asset_did):
-        pass
+    def get_remote_agent(self, name):
+        """
+
+        Resolves and gets a valid remote agent for a given asset_did, agent_did or agent name
+
+        :param str name: Name can be an asset_did, agent_did or name of the agent held by this object
+
+        :return RemoteAgent: Object or None if none found
+
+        """
+        agent = None
+        ddo_text = None
+        # test for name in the agent list
+        if name in self._items:
+            ddo_text = self.get_ddo(name)
+
+        # test if the name is an agent_did or asset_did
+        if name:
+            ddo_text = self.get_network_ddo(name)
+
+        if ddo_text:
+            ddo = DDO(json_text=ddo_text)
+            if ddo:
+                options = None
+                agent = RemoteAgent(self._network, ddo.did, ddo, options)
+        return agent
 
     @property
     def items(self):

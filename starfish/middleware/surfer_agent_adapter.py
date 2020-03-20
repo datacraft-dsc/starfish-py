@@ -311,18 +311,19 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def get_authorization_token(self, username, password):
+    def get_authorization_token(self, username, password, url=None):
         """Get a surfer authorization token (create one if needed).
         Throws exception on error."""
-        token_url = self.get_endpoint('auth', 'token')
-        response = SurferAgentAdapter._http_client.get(token_url, auth=(username, password))
+        if url is None:
+            url = self.get_endpoint('auth', 'token')
+        response = SurferAgentAdapter._http_client.get(url, auth=(username, password))
         token = None
         if response.status_code == 200:
             tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
             else:   # need to create a token
-                response = SurferAgentAdapter._http_client.post(token_url, auth=(username, password))
+                response = SurferAgentAdapter._http_client.post(url, auth=(username, password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json
                 else:
@@ -336,11 +337,14 @@ class SurferAgentAdapter():
         logger.debug(f'using surfer token {token}')
         return token
 
-    def get_ddo(self, agent_url):
+    def get_ddo(self, agent_url, headers=None):
         ddo = None
         url = f'{agent_url}/api/ddo'
+        if headers is None:
+            headers = self._headers
         self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+        response = SurferAgentAdapter._http_client.get(url, headers=headers)
+        print(response.status_code)
         if response.status_code == 200:
             ddo = ResponseWrapper(response).json
         return ddo
