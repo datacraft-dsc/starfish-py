@@ -14,11 +14,12 @@ from starfish.ddo import DDO
 
 def test_04_agent_register_and_resolve(network, config, accounts):
 
-    ddo = RemoteAgent.generate_ddo(config.remote_agent_url)
+    remote_agent = config.agent_list['remote']
+    ddo = RemoteAgent.generate_ddo(remote_agent['url'])
     options = {
-        'url': config.remote_agent_url,
-        'username': config.remote_agent_username,
-        'password': config.remote_agent_password
+        'url': remote_agent['url'],
+        'username': remote_agent['username'],
+        'password': remote_agent['password']
     }
 
     register_account = accounts[0]
