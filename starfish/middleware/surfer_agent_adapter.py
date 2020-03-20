@@ -336,6 +336,15 @@ class SurferAgentAdapter():
         logger.debug(f'using surfer token {token}')
         return token
 
+    def get_ddo(self, agent_url):
+        ddo = None
+        url = f'{agent_url}/api/ddo'
+        self._content_header = 'application/json'
+        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+        if response.status_code == 200:
+            ddo = ResponseWrapper(response).json
+        return ddo
+
     def get_endpoint(self, name, uri=None):
         """return the endpoint based on the name of the service or service type"""
         service_type = SurferAgentAdapter.find_supported_service_type(name)
