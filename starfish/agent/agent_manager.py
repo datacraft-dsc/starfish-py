@@ -43,56 +43,62 @@ class AgentManager:
 
         Tries to resolve the remote agent to a ddo using it's provided URL or DID.
 
+        :param str name: Name of the remote agent added to the managed list.
+        :return dict: DDO or None for the remote agent
+
         """
 
         if name not in self._items:
             raise ValueError(f'remote agent {name} not found in list')
 
-        if self._items[name].get('ddo', None) is None:
-            ddo = self.get_network_ddo(name)
+        item = self._items[name]
+        if item.get('ddo', None) is None:
+            ddo = self.get_network_ddo(item.get('did', None))
             if ddo is None:
-                ddo = self.get_url_ddo(name)
+                ddo = self.get_url_ddo(item.get('url', None), item.get('username', None), item.get('password', None))
 
             self._items[name]['ddo'] = ddo
         return self._items[name]['ddo']
 
-    def get_network_ddo(self, name):
+    def get_network_ddo(self, did):
         """
 
         Resolves the remote agent via the dnetwork using it's did to get the agent DDO
 
+        :param str did: DID of the remote agent to resolve and get DDO
+        :return dict: DDO or None if not found in the network
+
         """
 
         ddo = None
-        if name not in self._items:
-            raise ValueError(f'remote agent {name} not found in list')
-        item = self._items[name]
-        if item['did']:
-            ddo = self._network.resolve_did(item['did'])
+        if did:
+            ddo = self._network.resolve_did(did)
         return ddo
 
-    def get_url_ddo(self, name):
+    def get_url_ddo(self, url, username=None, password=None):
         """
 
         Resolves the remote agent ddo using the url of the agent
 
+        :param str url: url of the remote agent
+        :param str username: optional username for access to the remote agent
+        :param str password: optional password for access to the remote agent
+        :return dict: DDO or None if not found
         """
 
         ddo = None
-        if name not in self._items:
-            raise ValueError(f'remote agent {name} not found in list')
-
-        item = self._items[name]
-        if item['url']:
-            options = {
-                'authorization': {
-                    'username': item.get('username', None),
-                    'password': item.get('password', None)
+        if url:
+            options = None
+            if username:
+                options = {
+                    'authorization': {
+                        'username': username,
+                        'password': password
+                    }
                 }
-            }
             agent = RemoteAgent(self._network, options)
             adapter = agent._get_adapter()
-            ddo = adapter.get_ddo(item['url'])
+            ddo = adapter.get_ddo(url)
         return ddo
 
     @property
