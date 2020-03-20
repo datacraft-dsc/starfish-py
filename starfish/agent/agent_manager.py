@@ -4,7 +4,7 @@
 
 """
 
-from starfish.agent import RemoteAgent
+from starfish.agent.remote_agent import RemoteAgent
 
 
 class AgentManager:
@@ -100,6 +100,9 @@ class AgentManager:
             adapter = agent._get_adapter()
             ddo = adapter.get_ddo(url)
         return ddo
+
+    def get_remote_agent(did_name_asset_did):
+        pass
 
     @property
     def items(self):
