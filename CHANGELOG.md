@@ -1,11 +1,14 @@
 ## Change Log
 
-### Release v0.7.1
+### Release v0.8.0
 
-+   Fix badges on README
 +   Add AgentManager, to manage a list of agents with authorization details
 +   Allow RemoteAgent to be created based on an agent_did, asset_did or DDO
 +   Register a RemoteAgent using a DDO
+
+### Release v0.7.1
+
++   Fix badges on README
 
 ### Release v0.7.0
 
