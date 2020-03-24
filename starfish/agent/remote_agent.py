@@ -93,7 +93,6 @@ class RemoteAgent(AgentBase):
 
         return None
 
-
     def register_asset(self, asset):
         """
 
