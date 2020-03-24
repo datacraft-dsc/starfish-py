@@ -27,7 +27,7 @@ def main():
     }
 
     # find an agent based on it's url, you can also use did=did_string as an option
-    agent = RemoteAgent.load(network, url=agent_url, authentication_access=authentication_access)
+    agent = RemoteAgent.load(network, agent_url, authentication_access=authentication_access)
     if not agent:
         print('failed to find the agent')
 

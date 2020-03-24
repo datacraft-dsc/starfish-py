@@ -27,7 +27,9 @@ from starfish.listing import Listing
 from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
 from starfish.utils.did import (
     did_generate_random,
-    did_parse
+    did_parse,
+    id_to_did,
+    did_to_id
 )
 
 SUPPORTED_SERVICES = {
@@ -78,19 +80,26 @@ class RemoteAgent(AgentBase):
         self._adapter = RemoteAgentAdapter()
 
     @staticmethod
-    def load(network, did=None, url=None, asset_did=None, authentication_access=None):
-        ddo = None
-        if asset_did:
-            did, asset_id = RemoteAgent.decode_asset_did(asset_did)
-        if did:
-            ddo = RemoteAgent.resolve_network_ddo(network, ddo)
-        if url and ddo is None:
-            ddo = RemoteAgent.resolve_url_ddo(url, authentication_access)
-        if ddo:
-            print(ddo)
-            return RemoteAgent(network, ddo, authentication_access)
+    def load(network, asset_agent_did_url, authentication_access=None):
+        ddo_text = None
+
+        did_id = did_to_id(asset_agent_did_url)
+
+        if did_id:
+            did = id_to_did(did_id)
+            ddo_text = RemoteAgent.resolve_network_ddo(network, did)
+        if ddo_text is None:
+            ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication_access)
+
+        if ddo_text:
+            return RemoteAgent(network, ddo_text, authentication_access)
 
         return None
+
+    @staticmethod
+    def register(network, register_account, ddo, authentication_access=None):
+        network.register_did(register_account, ddo.did, ddo.as_text())
+        return RemoteAgent(network, ddo.as_text(), authentication_access)
 
     def register_asset(self, asset):
         """

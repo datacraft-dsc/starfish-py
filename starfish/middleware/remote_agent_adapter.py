@@ -298,16 +298,15 @@ class RemoteAgentAdapter():
         return token
 
     def get_ddo(self, url, authorization_token=None):
-        ddo = None
+        ddo_text = None
         url = urljoin(f'{url}/', '/api/ddo')
         logger.debug(f'get_ddo url {url}')
 
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
         response = RemoteAgentAdapter._http_client.get(url, headers=headers)
-        print(response.status_code)
         if response.status_code == 200:
-            ddo = ResponseWrapper(response).json
-        return ddo
+            ddo_text = response.text
+        return ddo_text
 
     @staticmethod
     def is_metadata_valid(asset_id, metadata_text):

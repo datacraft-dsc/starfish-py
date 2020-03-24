@@ -16,7 +16,7 @@ def test_04_agent_register_and_resolve(network, config, accounts):
 
     remote_agent = config.agent_list['remote']
     ddo = RemoteAgent.generate_ddo(remote_agent['url'])
-    options = {
+    authentication_access = {
         'username': remote_agent['username'],
         'password': remote_agent['password']
     }
@@ -24,11 +24,13 @@ def test_04_agent_register_and_resolve(network, config, accounts):
     register_account = accounts[0]
 
     did = ddo.did
-    assert(network.register_did(register_account, did, ddo.as_text()))
+    remote_agent = RemoteAgent.register(network, register_account, ddo, authentication_access)
+    assert(remote_agent)
     found_ddo = DDO(json_text=network.resolve_did(did))
     assert(found_ddo.as_text() == ddo.as_text())
 
-    resolved_agent = RemoteAgent(network, ddo)
+
+    resolved_agent = RemoteAgent.load(network, ddo.did, authentication_access=authentication_access)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text() == ddo.as_text())
