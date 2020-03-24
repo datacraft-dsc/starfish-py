@@ -27,7 +27,6 @@ class Service:
 
     @property
     def id(self):
-        """Return the service id"""
         return self._id
 
     def assign_did(self, did):

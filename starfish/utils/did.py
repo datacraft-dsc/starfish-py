@@ -5,9 +5,12 @@ DID utils
 
 import re
 import secrets
+
 from urllib.parse import urlparse
+from eth_utils import remove_0x_prefix
 
 from web3 import Web3
+
 
 NETWORK_DID_METHOD = 'dep'
 
@@ -51,11 +54,15 @@ def did_generate_random():
 
 
 def did_to_id(did):
-    data = did_parse(did)
+    try:
+        data = did_parse(did)
+    except ValueError:
+        return None
     return data['id_hex']
 
 
 def id_to_did(did_id):
+    did_id = remove_0x_prefix(did_id)
     return f'did:{NETWORK_DID_METHOD}:{did_id}'
 
 

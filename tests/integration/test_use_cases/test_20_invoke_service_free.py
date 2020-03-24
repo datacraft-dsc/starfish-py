@@ -81,8 +81,8 @@ def test_20_tokenize_text_async(remote_agent, invokable_list):
     assert(response)
     assert(response['job-id'])
 
-    job_id = int(response['job-id'])
-    assert(isinstance(job_id, int))
+    job_id = response['job-id']
+    assert(isinstance(job_id, str))
 
     # wait for job to complete
     time.sleep(1)
@@ -132,8 +132,8 @@ def test_20_increment_async(remote_agent, invokable_list):
     assert(response)
     assert(response['job-id'])
 
-    job_id = int(response['job-id'])
-    assert(isinstance(job_id, int))
+    job_id = response['job-id']
+    assert(isinstance(job_id, str))
 
     # wait for job to complete
     time.sleep(1)

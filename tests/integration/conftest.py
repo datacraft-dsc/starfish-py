@@ -13,9 +13,9 @@ from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 from starfish.account import Account
 
-
+RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
-CONFIG_FILE_PATH = INTEGRATION_PATH / 'config.ini'
+CONFIG_FILE_PATH = RESOURCES_PATH / 'config_local.conf'
 
 logging.getLogger('web3').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
@@ -39,13 +39,14 @@ def network(config):
 @pytest.fixture(scope="module")
 def remote_agent(network, config):
     ddo_options = None
-    services = Services(config.remote_agent_url, all_services=True)
+    remote_agent = config.agent_list['remote']
+    services = Services(remote_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
-    options = {
-        'username': config.remote_agent_username,
-        'password': config.remote_agent_password,
+    authentication_access = {
+        'username': remote_agent['username'],
+        'password': remote_agent['password'],
     }
-    return RemoteAgent(network, did=ddo.did, ddo=ddo, options=options)
+    return RemoteAgent(network, ddo, authentication_access)
 
 @pytest.fixture(scope='module')
 def accounts(config):
@@ -59,9 +60,11 @@ def accounts(config):
 @pytest.fixture(scope='module')
 def invokable_list(config):
 
-    url = f'{config.remote_agent_url}/api/v1/admin/import-demo?id=operations'
-    username = config.remote_agent_username
-    password = config.remote_agent_password
+    remote_agent = config.agent_list['remote']
+
+    url = f'{remote_agent["url"]}/api/v1/admin/import-demo?id=operations'
+    username = remote_agent['username']
+    password = remote_agent['password']
     response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
     result = response.json()
     return result.get('invokables')

@@ -16,7 +16,8 @@ def test_did_registry_contract(network, config, accounts):
 
     did = did_generate_random()
 
-    services = Services(config.remote_agent_url, all_services=True)
+    remote_agent = config.agent_list['remote']
+    services = Services(remote_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 

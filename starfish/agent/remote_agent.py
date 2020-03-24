@@ -5,7 +5,10 @@ Surfer Agent class to provide basic functionality for Ocean Agents
 In starfish-java, this is named as `RemoteAgent`
 
 """
+import logging
 import time
+from urllib.parse import urljoin
+
 
 from eth_utils import remove_0x_prefix
 
@@ -21,14 +24,25 @@ from starfish.ddo.ddo import DDO
 from starfish.exceptions import StarfishAssetInvalid
 from starfish.job import Job
 from starfish.listing import Listing
-from starfish.middleware.surfer_agent_adapter import (
-    SUPPORTED_SERVICES,
-    SurferAgentAdapter
-)
+from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
 from starfish.utils.did import (
     did_generate_random,
-    did_parse
+    did_parse,
+    did_to_id,
+    id_to_did
 )
+
+SUPPORTED_SERVICES = {
+    'meta': 'DEP.Meta.v1',
+    'storage': 'DEP.Storage.v1',
+    'invoke': 'DEP.Invoke.v1',
+    'market': 'DEP.Market.v1',
+    'trust': 'DEP.Trust.v1',
+    'auth': 'DEP.Auth.v1',
+}
+
+
+logger = logging.getLogger(__name__)
 
 
 class RemoteAgent(AgentBase):
@@ -49,57 +63,43 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, network, did=None, ddo=None, options=None):
-        self._did = None
-        self._ddo = None
+    def __init__(self, network, ddo, authentication_access=None):
+        self._authentication_access = authentication_access
+        self._authorization_token = None
 
-        if options is None:
-            options = {}
-
-        # set the DID
-        if did is None or isinstance(did, str):
-            self._did = did
-        else:
-            raise ValueError('did must be a string or None')
-
-        AgentBase.__init__(self, network, did)
-        # set the DDO
         if isinstance(ddo, dict):
-            self._ddo = DDO(dictionary=ddo)
+            ddo = DDO(dictionary=ddo)
         elif isinstance(ddo, str):
-            self._ddo = DDO(json_text=ddo)
+            ddo = DDO(json_text=ddo)
         elif isinstance(ddo, DDO):
-            self._ddo = ddo
-        elif ddo is None:
-            if self._did:
-                self._ddo = self._resolve_ddo_from_did(self._did)
+            pass
         else:
-            raise ValueError('ddo can be one of the following: None, DDO object or type dict')
+            raise ValueError(f'Unknown ddo type {ddo}')
+        AgentBase.__init__(self, network, ddo)
 
-        # incase the user just sends a ddo without a did
-        if self._did is None and self._ddo:
-            self._did = self._ddo.did
+        self._adapter = RemoteAgentAdapter()
 
-        # if DID and no DDO then try to load in the registered DDO, using squid
-        if self._did and not self._ddo:
-            ddo = self._resolve_ddo_from_did(self._did)
-            if not ddo:
-                raise ValueError(f'cannot find registered agent at {self.did}')
-            self._ddo = ddo
+    @staticmethod
+    def load(network, asset_agent_did_url, authentication_access=None):
+        ddo_text = None
 
-        if self._did is None and self._ddo:
-            self._did = self._ddo.did
+        did_id = did_to_id(asset_agent_did_url)
 
-        self._authorization = options.get('authorization')
+        if did_id:
+            did = id_to_did(did_id)
+            ddo_text = RemoteAgent.resolve_network_ddo(network, did)
+        if ddo_text is None:
+            ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication_access)
 
-        adapter = self._get_adapter()
+        if ddo_text:
+            return RemoteAgent(network, ddo_text, authentication_access)
 
-        if self._authorization is None and 'username' in options:
-            # if no authorization, then we may need to create one
-            self._authorization = adapter.get_authorization_token(
-                options['username'],
-                options.get('password', '')
-            )
+        return None
+
+    @staticmethod
+    def register(network, register_account, ddo, authentication_access=None):
+        network.register_did(register_account, ddo.did, ddo.as_text())
+        return RemoteAgent(network, ddo.as_text(), authentication_access)
 
     def register_asset(self, asset):
         """
@@ -118,20 +118,21 @@ class RemoteAgent(AgentBase):
 
             asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
-            agent = SurferAgent(network)
+            agent = SurferAgent(network, ddo)
             asset = agent.register_asset(asset, account)
             print(f'Asset DID is {asset.did}')
 
         """
-        adapter = self._get_adapter()
 
-        if self._did is None:
-            raise ValueError('The agent must have a valid did')
+        if self._ddo is None:
+            raise ValueError('The agent must have a valid ddo')
 
-        register_data = adapter.register_asset(asset.metadata_text)
+        url = self.get_endpoint('meta')
+        authorization_token = self.get_authorization_token()
+        register_data = self._adapter.register_asset(asset.metadata_text, url, authorization_token)
         if register_data:
             asset_id = register_data['asset_id']
-            did = f'{self._did}/{asset_id}'
+            did = f'{self._ddo.did}/{asset_id}'
             asset.set_did(did)
         return asset
 
@@ -158,12 +159,14 @@ class RemoteAgent(AgentBase):
 
 
         """
-        adapter = self._get_adapter()
 
         if not isinstance(listing_data, dict):
             raise ValueError('You must provide a dict as the listing data')
 
-        data = adapter.create_listing(listing_data, asset_did)
+        url = self.get_endpoint('market')
+        authorization_token = self.get_authorization_token()
+
+        data = self._adapter.create_listing(listing_data, asset_did, url, authorization_token)
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 
@@ -176,8 +179,10 @@ class RemoteAgent(AgentBase):
         :type listing: :class:`.Listing` class
 
         """
-        adapter = self._get_adapter()
-        return adapter.update_listing(listing.listing_id, listing.data)
+        url = self.get_endpoint('market')
+        authorization_token = self.get_authorization_token()
+
+        return self._adapter.update_listing(listing.listing_id, listing.data, url, authorization_token)
 
     def validate_asset(self, asset):
         """
@@ -197,22 +202,28 @@ class RemoteAgent(AgentBase):
         if not asset.data:
             raise ValueError('No data to upload')
 
-        adapter = self._get_adapter()
-        url = self.get_asset_store_url(asset.asset_id)
-        return adapter.upload_asset_data(url, asset.asset_id, asset.data)
+        url = self.get_endpoint('storage')
+        authorization_token = self.get_authorization_token()
+        asset_id = remove_0x_prefix(asset.asset_id)
 
-    def download_asset(self, asset_id, url):
+        return self._adapter.upload_asset_data(asset_id, asset.data, url, authorization_token)
+
+    def download_asset(self, asset_id):
         """
         Download an asset
 
-        :param str url: url of the asset_id.
+        :param str asset_id: asset_id to download
 
         :return: an Asset
-        :type: :class:`.MemoryAsset` class
+        :type: :class:`.DataAsset` class
 
         """
-        adapter = self._get_adapter()
-        data = adapter.download_asset(url)
+
+        url = self.get_endpoint('storage')
+        authorization_token = self.get_authorization_token()
+
+        asset_id = remove_0x_prefix(asset_id)
+        data = self._adapter.download_asset(asset_id, url, authorization_token)
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(
             store_asset.metadata,
@@ -221,10 +232,6 @@ class RemoteAgent(AgentBase):
             metadata_text=store_asset.metadata_text
         )
         return asset
-
-    def get_asset_store_url(self, asset_id):
-        adapter = self._get_adapter()
-        return adapter.get_asset_store_url(remove_0x_prefix(asset_id))
 
     def get_listing(self, listing_id):
         """
@@ -236,12 +243,15 @@ class RemoteAgent(AgentBase):
         :type: :class:`.Asset` class
 
         """
-        adapter = self._get_adapter()
         listing = None
-        data = adapter.get_listing(listing_id)
+        url = self.get_endpoint('market')
+        authorization_token = self.get_authorization_token()
+
+        data = self._adapter.get_listing(listing_id, url, authorization_token)
         if data:
             asset_id = data['assetid']
-            read_metadata = adapter.read_metadata(asset_id)
+            url = self.get_endpoint('meta')
+            read_metadata = self._adapter.read_metadata(asset_id, url, authorization_token)
             if read_metadata:
                 asset = self._create_asset_from_read(asset_id, read_metadata)
                 listing = Listing(self, data['id'], asset, data)
@@ -259,9 +269,10 @@ class RemoteAgent(AgentBase):
 
         """
         asset = None
-        adapter = self._get_adapter()
         clean_asset_id = remove_0x_prefix(asset_id)
-        read_metadata = adapter.read_metadata(clean_asset_id)
+        url = self.get_endpoint('meta')
+        authorization_token = self.get_authorization_token()
+        read_metadata = self._adapter.read_metadata(clean_asset_id, url, authorization_token)
         if read_metadata:
             asset = self._create_asset_from_read(clean_asset_id, read_metadata)
         return asset
@@ -273,13 +284,15 @@ class RemoteAgent(AgentBase):
         :return: List of listing objects
 
         """
-        adapter = self._get_adapter()
         listings = []
-        listings_data = adapter.get_listings()
+        url = self.get_endpoint('market')
+        authorization_token = self.get_authorization_token()
+        listings_data = self._adapter.get_listings(url, authorization_token)
         if listings_data:
             for data in listings_data:
                 asset_id = data['assetid']
-                read_metadata = adapter.read_metadata(asset_id)
+                url = self.get_endpoint('meta')
+                read_metadata = self._adapter.read_metadata(asset_id, url, authorization_token)
                 if read_metadata:
                     asset = self._create_asset_from_read(asset_id, read_metadata)
                     listing = Listing(self, data['id'], asset, data)
@@ -298,8 +311,9 @@ class RemoteAgent(AgentBase):
 
         """
         job = None
-        adapter = self._get_adapter()
-        data = adapter.get_job(job_id)
+        url = self.get_endpoint('invoke', 'jobs')
+        authorization_token = self.get_authorization_token()
+        data = self._adapter.get_job(job_id, url, authorization_token)
         if data:
             status = data.get('status', None)
             outputs = data.get('outputs', None)
@@ -371,7 +385,6 @@ class RemoteAgent(AgentBase):
         :type agreement: dict or None
 
         """
-        adapter = self._get_adapter()
         purchase = {'listingid': listing.listing_id}
         if purchase_id:
             purchase['id'] = purchase_id
@@ -381,7 +394,9 @@ class RemoteAgent(AgentBase):
             purchase['info'] = info
         if agreement:
             purchase['agreement'] = agreement
-        return adapter.purchase_asset(purchase)
+        url = self.get_endpoint('market')
+        authorization_token = self.get_authorization_token()
+        return self._adapter.purchase_asset(purchase, url, authorization_token)
 
     def is_access_granted_for_asset(self, asset, account, purchase_id=None):
         """
@@ -466,58 +481,27 @@ class RemoteAgent(AgentBase):
             raise TypeError(f'This operation asset does not support {mode_type}')
         if not inputs:
             inputs = {}
-        adapter = self._get_adapter()
-        response = adapter.invoke(remove_0x_prefix(asset.asset_id), inputs, is_async)
+
+        url = self.get_endpoint('invoke', mode_type)
+        authorization_token = self.get_authorization_token()
+        response = self._adapter.invoke(remove_0x_prefix(asset.asset_id), inputs, url, authorization_token)
         return response
 
-    def get_endpoint(self, name):
-        """
+    def get_authorization_token(self):
+        url = self.get_endpoint('auth', 'token')
+        token = None
+        if url and self._authentication_access and 'username' in self._authentication_access:
+            token = self._adapter.get_authorization_token(
+                self._authentication_access['username'],
+                self._authentication_access.get('password', ''),
+                url
+            )
+        return token
 
-        Return the endpoint of the service available for this agent
-        :param str name: name or type of the service, e.g. 'metadata', 'storage', 'Ocean.Meta.v1'
-        """
-        adapter = self._get_adapter()
-        service_type = SurferAgentAdapter.find_supported_service_type(name)
-        if service_type is None:
-            raise ValueError(f'This agent does not support the following service name or type {name}')
-        return adapter.get_endpoint(name)
-
-    def _get_adapter(self, did=None, ddo=None, authorization=None):
-        """
-        Return a new SurferAgentAdapter object based on the did.
-        If did == None then use the loaded did in this class.
-        else check to see if the did != self._did, if not then load in the ddo as well
-        """
-
-        # if the given did is different, and no ddo, then we are requesting
-        # data from a different source, so load in the ddo
-        if did and did != self._did and ddo is None:
-            if self._did and not self._ddo:
-                ddo = self._resolve_ddo_from_did(self._did)
-
-        if did is None:
-            did = self._did
-
-        if ddo is None:
-            ddo = self._ddo
-
-        # TODO: check that the ddo is valid with the did
-        if self._authorization is None:
-            options = {
-                'authorization': authorization
-            }
-        else:
-            options = {
-                'authorization': self._authorization
-            }
-
-        return SurferAgentAdapter(self._network, did, ddo, options)
-
-    def _resolve_ddo_from_did(self, did):
-        ddo_text = self._network.resolve_did(self._did)
-        if not ddo_text:
-            raise ValueError(f'cannot find registered agent at {did}')
-        return DDO(json_text=ddo_text)
+    def get_metadata_list(self):
+        url = self.get_endpoint('meta')
+        authorization_token = self.get_authorization_token()
+        return self._adapter.get_metadata_list(url, authorization_token)
 
     @property
     def ddo(self):
@@ -605,20 +589,89 @@ class RemoteAgent(AgentBase):
 
         return ddo
 
-    @staticmethod
-    def generate_metadata():
-        return {"name": "string", "description": "string", "type": "dataset",
-                "dateCreated": "2018-11-26T13:27:45.542Z",
-                "tags": ["string"],
-                "contentType": "string",
-                "links": [{"name": "string", "type": "download", "url": "string"}]}
-
     def _create_asset_from_read(self, asset_id, read_metadata):
         # check the hash of the reading asset
         asset_id = remove_0x_prefix(asset_id)
         if not is_asset_hash_valid(asset_id, read_metadata['hash']):
             raise StarfishAssetInvalid(f' asset {asset_id} is not valid')
-        did = f'{self._did}/{asset_id}'
+
+        did = f'{self._ddo.did}/{asset_id}'
         metadata_text = read_metadata['metadata_text']
         asset = create_asset_from_metadata_text(metadata_text, did)
         return asset
+
+    def get_endpoint(self, name, uri=None):
+        """return the endpoint based on the name of the service or service type"""
+        service_type = RemoteAgent.find_supported_service_type(name)
+        if service_type is None:
+            message = f'unknown surfer endpoint service name or type: {name}'
+            logger.error(message)
+            raise ValueError(message)
+
+        endpoint = None
+        if self._ddo:
+            service = self._ddo.get_service(service_type)
+            if not service:
+                message = f'unable to find surfer endpoint service type {service_type}'
+                logger.error(message)
+                raise ValueError(message)
+            endpoint = service.endpoint
+        if not endpoint:
+            message = f'unable to find surfer endpoint for {name} = {service_type}'
+            logger.error(message)
+            raise ValueError(message)
+        if uri:
+            endpoint = urljoin(endpoint + '/', uri)
+        return endpoint
+
+    @staticmethod
+    def find_supported_service_type(search_name_type):
+        """ return the supported service record if the name or service type is found
+        else return None """
+        for name, service_type in SUPPORTED_SERVICES.items():
+            if service_type == search_name_type:
+                return service_type
+            if name == search_name_type:
+                return service_type
+        return None
+
+    @staticmethod
+    def resolve_network_ddo(network, did):
+        """
+
+        Resolves the remote agent via the dnetwork using it's did to get the agent DDO
+
+        :param object network: DNetwork to resolve the did
+        :param str did: DID of the remote agent to resolve and get DDO
+        :return dict: DDO or None if not found in the network
+
+        """
+        if did:
+            return network.resolve_did(did)
+
+    @staticmethod
+    def resolve_url_ddo(url, authentication_access=None):
+        """
+
+        Resolves the remote agent ddo using the url of the agent
+
+        :param str url: url of the remote agent
+        :param str username: optional username for access to the remote agent
+        :param str password: optional password for access to the remote agent
+        :return dict: DDO or None if not found
+        """
+
+        ddo = None
+        if url:
+            adapter = RemoteAgentAdapter()
+            token = None
+            token_url = urljoin(f'{url}/', 'api/v1/auth/token')
+            if authentication_access and 'username' in authentication_access:
+                token = adapter.get_authorization_token(
+                    authentication_access['username'],
+                    authentication_access.get('password', ''),
+                    token_url
+                )
+
+            ddo = adapter.get_ddo(url, token)
+        return ddo

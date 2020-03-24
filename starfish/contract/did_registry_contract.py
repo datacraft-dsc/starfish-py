@@ -28,15 +28,21 @@ class DIDRegistryContract(ContractBase):
         ContractBase.__init__(self, CONTRACT_NAME)
 
     def register(self, account, did, ddo_text):
-        did_id = self._web3.toBytes(hexstr=did_to_id(did))
-        if len(ddo_text) > MAX_DDO_TEXT_SIZE:
-            logger.error(f'ddo test is to large {len(ddo_text)}')
-        tx_hash = self.call('registerDID', (did_id, ddo_text), account)
+        tx_hash = None
+        did_id = did_to_id(did)
+        if did_id:
+            did_id = self._web3.toBytes(hexstr=did_id)
+            if len(ddo_text) > MAX_DDO_TEXT_SIZE:
+                logger.error(f'ddo test is to large {len(ddo_text)}')
+            tx_hash = self.call('registerDID', (did_id, ddo_text), account)
         return tx_hash
 
     def get_block_number(self, did):
-        did_id = self._web3.toBytes(hexstr=did_to_id(did))
-        block_number = self.call('getBlockNumberUpdated', did_id)
+        block_number = None
+        did_id = did_to_id(did)
+        if did_id:
+            did_id = self._web3.toBytes(hexstr=did_id)
+            block_number = self.call('getBlockNumberUpdated', did_id)
         return block_number
 
     def get_value(self, did):
