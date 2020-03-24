@@ -184,7 +184,7 @@ class RemoteAgentAdapter():
         files = {
             'file': (asset_id, io.BytesIO(data), 'application/octet-stream')
         }
-        headers = RemoteAgentAdapter.create_headers('application/octet-stream', authorization_token)
+        headers = RemoteAgentAdapter.create_headers(None, authorization_token)
         response = RemoteAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
@@ -342,10 +342,12 @@ class RemoteAgentAdapter():
         RemoteAgentAdapter._http_client = http_client
 
     @staticmethod
-    def create_headers(content_type, authorization_token=None):
-        headers = {
-            'content-type': content_type,
-        }
+    def create_headers(content_type=None, authorization_token=None):
+        headers = {}
+        if content_type:
+            headers['content-type'] = content_type
         if authorization_token:
             headers['Authorization'] = f'token {authorization_token}'
+        if headers == {}:
+            return None
         return headers

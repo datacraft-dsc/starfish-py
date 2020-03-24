@@ -62,7 +62,6 @@ class RemoteAgent(AgentBase):
     service_types = SUPPORTED_SERVICES
 
     def __init__(self, network, ddo, authentication_access=None):
-        self._ddo = None
         self._authentication_access = authentication_access
         self._authorization_token = None
 
@@ -196,8 +195,9 @@ class RemoteAgent(AgentBase):
 
         url = self.get_endpoint('storage')
         authorization_token = self.get_authorization_token()
+        asset_id = remove_0x_prefix(asset.asset_id)
 
-        return self._adapter.upload_asset_data(asset.asset_id, asset.data, url, authorization_token)
+        return self._adapter.upload_asset_data(asset_id, asset.data, url, authorization_token)
 
     def download_asset(self, asset_id):
         """
@@ -213,6 +213,7 @@ class RemoteAgent(AgentBase):
         url = self.get_endpoint('storage')
         authorization_token = self.get_authorization_token()
 
+        asset_id = remove_0x_prefix(asset_id)
         data = self._adapter.download_asset(asset_id, url, authorization_token)
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(
@@ -636,8 +637,8 @@ class RemoteAgent(AgentBase):
         :return dict: DDO or None if not found in the network
 
         """
-
-        return network.resolve_did(did)
+        if did:
+            return network.resolve_did(did)
 
     @staticmethod
     def resolve_url_ddo(url, authentication_access=None):

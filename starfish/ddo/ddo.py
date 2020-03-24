@@ -181,7 +181,7 @@ class DDO:
             for value in values['service']:
                 if isinstance(value, str):
                     value = json.loads(value)
-                self.services.append(DDO.create_service_from_json(value))
+                self.services.append(DDO.create_service_from_json(value, self._did))
         if 'proof' in values:
             self._proof = values['proof']
 
@@ -299,9 +299,11 @@ class DDO:
                 return authentication
         return None
 
-    def get_service(self, service_type=None):
+    def get_service(self, service_type=None, service_id=None):
         """return a service using"""
         for service in self._services:
+            if service.id == service_id and service_id:
+                return service
             if service.type == service_type and service_type:
                 return service
         return None
@@ -505,13 +507,16 @@ class DDO:
         return authentication
 
     @staticmethod
-    def create_service_from_json(values):
+    def create_service_from_json(values, service_id):
         """create a service object from a JSON string"""
+
+        if 'id' in values:
+            service_id = values['id']
         if 'serviceEndpoint' not in values:
             raise IndexError
         if 'type' not in values:
             raise IndexError
-        service = Service(values['serviceEndpoint'], values['type'], values)
+        service = Service(service_id, values['serviceEndpoint'], values['type'], values)
         return service
 
     @staticmethod

@@ -42,11 +42,11 @@ def remote_agent(network, config):
     remote_agent = config.agent_list['remote']
     services = Services(remote_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
-    options = {
+    authentication_access = {
         'username': remote_agent['username'],
         'password': remote_agent['password'],
     }
-    return RemoteAgent(network, did=ddo.did, ddo=ddo, options=options)
+    return RemoteAgent(network, ddo, authentication_access)
 
 @pytest.fixture(scope='module')
 def accounts(config):

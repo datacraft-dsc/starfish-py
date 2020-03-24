@@ -194,6 +194,11 @@ class AgentBase(ABC):
         """
 
     @property
+    def did(self):
+        if self._ddo:
+            return self._ddo.did
+
+    @property
     def ddo(self):
         """
 
