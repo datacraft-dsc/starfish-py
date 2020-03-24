@@ -18,13 +18,13 @@ class AgentBase(ABC):
     :param ocean: Ocean object that is used by the Agent class
     :type ocean: :class:`.Ocean`
     """
-    def __init__(self, network, did=None):
+    def __init__(self, network, ddo=None):
         """init the the Ocean Object Base with the ocean instance"""
 
         if not isinstance(network, DNetwork):
             raise ValueError('You must pass a valid DNetwork object')
         self._network = network
-        self._did = did
+        self._ddo = ddo
 
         super().__init__()
 
@@ -194,7 +194,7 @@ class AgentBase(ABC):
         """
 
     @property
-    def did(self):
+    def ddo(self):
         """
 
         Return the did for this remote agent.
@@ -202,7 +202,7 @@ class AgentBase(ABC):
         :return: did of the registered agent
         :type: string
         """
-        return self._did
+        return self._ddo
 
     @property
     def network(self):

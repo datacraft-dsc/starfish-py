@@ -1,5 +1,5 @@
 """
-    SurferAgentAdapter - Adapter to access the Surfer Services
+    RemoteAgentAdapter - Adapter to access the Remote Services
 """
 import io
 import logging
@@ -12,15 +12,6 @@ from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.utils.did import did_to_asset_id
 
 logger = logging.getLogger(__name__)
-
-SUPPORTED_SERVICES = {
-    'meta': 'DEP.Meta.v1',
-    'storage': 'DEP.Storage.v1',
-    'invoke': 'DEP.Invoke.v1',
-    'market': 'DEP.Market.v1',
-    'trust': 'DEP.Trust.v1',
-    'auth': 'DEP.Auth.v1',
-}
 
 
 class ResponseWrapper():
@@ -57,24 +48,13 @@ class ResponseWrapper():
         return data
 
 
-class SurferAgentAdapter():
+class RemoteAgentAdapter():
     _http_client = requests
 
-    def __init__(self, network, did=None, ddo=None, options=None):
-        """init a standard ocan connection, with a given DID"""
-        self._network = network
-        self._did = did
-        self._ddo = ddo
-        if not options:
-            options = {}
+    def __init__(self):
+        pass
 
-#        self._headers = {'content-type': 'application/json'}
-        self._headers = {'content-type': 'text/plain'}
-        authorization = options.get('authorization')
-        if authorization:   # this is an OAuth2 token
-            self._headers['Authorization'] = f'token {authorization}'
-
-    def register_asset(self, metadata):
+    def register_asset(self, metadata, url, authorization_token=None):
         """
         Register an asset with the agent storage server
         :param metadata: metadata to write to the storage server
@@ -87,7 +67,7 @@ class SurferAgentAdapter():
         :type: dict
         """
         result = None
-        saved_asset_id = self.save_metadata(metadata)
+        saved_asset_id = self.save_metadata(metadata, url, authorization_token)
         result = {
                 'asset_id': saved_asset_id,
                 'metadata': metadata,
@@ -95,12 +75,12 @@ class SurferAgentAdapter():
             }
         return result
 
-    def get_metadata_list(self):
+    def get_metadata_list(self, url, authorization_token=None):
         """ return a list of metadata stored on this agent """
-        url = urljoin(self.get_endpoint('meta') + '/', 'index')
+        url = urljoin(f'{url}/', 'index')
         logger.debug(f'metadata list url {url}')
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -109,12 +89,12 @@ class SurferAgentAdapter():
             logger.error(msg)
             raise ValueError(msg)
 
-    def save_metadata(self, metadata):
+    def save_metadata(self, metadata, url, authorization_token=None):
         """save metadata to the agent server, using the asset_id and metadata"""
-        url = urljoin(self.get_endpoint('meta') + '/', 'data')
+        url = urljoin(f'{url}/', 'data')
         logger.debug(f'metadata save url {url}')
-        self._content_header = 'text/plain'
-        response = SurferAgentAdapter._http_client.post(url, data=metadata, headers=self._headers)
+        headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
+        response = RemoteAgentAdapter._http_client.post(url, data=metadata, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -124,17 +104,17 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def create_listing(self, listing_data, asset_did):
-        endpoint = self.get_endpoint('market')
-        url = f'{endpoint}/listings'
+    def create_listing(self, listing_data, asset_did, url, authorization_token=None):
+
         asset_id = remove_0x_prefix(did_to_asset_id(asset_did))
         data = {
             'assetid': asset_id,
             'info': listing_data,
         }
 
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.post(url, json=data, headers=self._headers)
+        url = urljoin(f'{url}/', 'listings')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.post(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug('listing response returned: ' + str(data))
@@ -145,10 +125,11 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def download_asset(self, url):
-        self._content_header = 'application/octet-stream'
-#        self._content_header = 'text/plain'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+    def download_asset(self, asset_id, url, authorization_token=None):
+        url = urljoin(f'{url}/', asset_id)
+
+        headers = RemoteAgentAdapter.create_headers('application/octet-stream', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             return data
@@ -158,16 +139,10 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def get_asset_store_url(self, asset_id):
-        endpoint = self.get_endpoint('storage')
-        url = f'{endpoint}/{asset_id}'
-        return url
-
-    def get_listing(self, listing_id):
-        endpoint = self.get_endpoint('market')
-        url = f'{endpoint}/listings/{listing_id}'
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+    def get_listing(self, listing_id, url, authorization_token=None):
+        url = urljoin(f'{url}/', f'listings/{listing_id}')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -177,11 +152,10 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def get_listings(self):
-        endpoint = self.get_endpoint('market')
-        url = f'{endpoint}/listings'
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+    def get_listings(self, url,  authorization_token=None):
+        url = urljoin(f'{url}/', 'listings')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return ResponseWrapper(response).json
         else:
@@ -190,11 +164,11 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def update_listing(self, listing_id, data):
-        endpoint = self.get_endpoint('market')
-        url = f'{endpoint}/listings/{listing_id}'
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.put(url, json=data, headers=self._headers)
+    def update_listing(self, listing_id, data, url, authorization_token=None):
+        url = urljoin(f'{url}/', f'listings/{listing_id}')
+
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.put(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return True
         else:
@@ -203,20 +177,15 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def upload_asset_data(self, url, asset_id, data):
-        logger.debug(f'uploading data to {url}')
-#        if not isinstance(dataBytes, bytes):
-#            data_bytes = data.encode()
+    def upload_asset_data(self, asset_id, data, url, authorization_token=None):
+        url = urljoin(f'{url}/', asset_id)
 
+        logger.debug(f'uploading data to {url}')
         files = {
             'file': (asset_id, io.BytesIO(data), 'application/octet-stream')
         }
-#        files = {'file': (asset_id, data)}
-        headers = {
-            'Authorization': self._headers['Authorization'],
-        }
-#        self._content_header = 'application/octet-stream'
-        response = SurferAgentAdapter._http_client.post(url, files=files, headers=headers)
+        headers = RemoteAgentAdapter.create_headers('application/octet-stream', authorization_token)
+        response = RemoteAgentAdapter._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
@@ -225,15 +194,14 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def read_metadata(self, asset_id):
+    def read_metadata(self, asset_id, url, authorization_token=None):
         """read the metadata from a service agent using the asset_id"""
 
         result = None
-        endpoint = urljoin(self.get_endpoint('meta') + '/', 'data')
-        url = f'{endpoint}/{asset_id}'
+        url = urljoin(f'{url}/', f'data/{asset_id}')
         logger.debug(f'metadata read url {url}')
-        self._content_header = 'text/plain'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+        headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             result = {
@@ -248,12 +216,12 @@ class SurferAgentAdapter():
             logger.warning(f'metadata asset read {asset_id} response returned {response} for {url}')
         return result
 
-    def purchase_asset(self, purchase):
+    def purchase_asset(self, purchase, url, authorization_token=None):
         """record purchase"""
-        url = self.get_endpoint('market') + '/purchases'
+        url = urljoin(f'{url}/', 'purchases')
         logger.debug(f'market url for purchases {url}')
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.post(url, json=purchase, headers=self._headers)
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.post(url, json=purchase, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug(f'purchase response returned {data}')
@@ -273,20 +241,15 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def invoke(self, asset_id, inputs, is_async=False):
+    def invoke(self, asset_id, inputs, url, authorization_token=None):
         """
 
         call the invoke based on the asset_id without leading 0x
         """
 
-        endpoint = self.get_endpoint('invoke', 'sync')
-        if is_async:
-            endpoint = self.get_endpoint('invoke', 'async')
-
-        url = f'{endpoint}/{asset_id}'
-
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.post(url, json=inputs, headers=self._headers)
+        url = urljoin(f'{url}/', asset_id)
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.post(url, json=inputs, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             data = ResponseWrapper(response).json
             logger.debug('invoke response returned: ' + str(data))
@@ -297,11 +260,10 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def get_job(self, job_id):
-        endpoint = self.get_endpoint('invoke', 'jobs')
-        url = f'{endpoint}/{job_id}'
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=self._headers)
+    def get_job(self, job_id, url, authorization_token=None):
+        url = urljoin(f'{url}/', job_id)
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -311,19 +273,17 @@ class SurferAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def get_authorization_token(self, username, password, url=None):
+    def get_authorization_token(self, username, password, url):
         """Get a surfer authorization token (create one if needed).
         Throws exception on error."""
-        if url is None:
-            url = self.get_endpoint('auth', 'token')
-        response = SurferAgentAdapter._http_client.get(url, auth=(username, password))
+        response = RemoteAgentAdapter._http_client.get(url, auth=(username, password))
         token = None
         if response.status_code == 200:
             tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
             else:   # need to create a token
-                response = SurferAgentAdapter._http_client.post(url, auth=(username, password))
+                response = RemoteAgentAdapter._http_client.post(url, auth=(username, password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json
                 else:
@@ -337,55 +297,15 @@ class SurferAgentAdapter():
         logger.debug(f'using surfer token {token}')
         return token
 
-    def get_ddo(self, agent_url, headers=None):
+    def get_ddo(self, url, authorization_token=None):
         ddo = None
-        url = f'{agent_url}/api/ddo'
-        if headers is None:
-            headers = self._headers
-        self._content_header = 'application/json'
-        response = SurferAgentAdapter._http_client.get(url, headers=headers)
+        url = urljoin(f'{url}/', '/api/ddo')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         print(response.status_code)
         if response.status_code == 200:
             ddo = ResponseWrapper(response).json
         return ddo
-
-    def get_endpoint(self, name, uri=None):
-        """return the endpoint based on the name of the service or service type"""
-        service_type = SurferAgentAdapter.find_supported_service_type(name)
-        if service_type is None:
-            message = f'unknown surfer endpoint service name or type: {name}'
-            logger.error(message)
-            raise ValueError(message)
-
-        endpoint = None
-        if self._ddo:
-            service = self._ddo.get_service(service_type)
-            if not service:
-                message = f'unable to find surfer endpoint service type {service_type}'
-                logger.error(message)
-                raise ValueError(message)
-            endpoint = service.endpoint
-        if not endpoint:
-            message = f'unable to find surfer endpoint for {name} = {service_type}'
-            logger.error(message)
-            raise ValueError(message)
-        if uri:
-            endpoint = urljoin(endpoint + '/', uri)
-        return endpoint
-
-    @property
-    def ddo(self):
-        """return the DDO stored for this agent"""
-        return self._ddo
-
-    @property
-    def did(self):
-        """return the DID used for this agent"""
-        return self._did
-
-    @property
-    def register_name(self):
-        return self._register_name
 
     @staticmethod
     def is_metadata_valid(asset_id, metadata_text):
@@ -398,7 +318,7 @@ class SurferAgentAdapter():
         """
         if metadata_text:
             # the calc asset_id from the metadata should be same as this asset_id
-            metadata_id = SurferAgentAdapter.get_asset_id_from_metadata(metadata_text)
+            metadata_id = RemoteAgentAdapter.get_asset_id_from_metadata(metadata_text)
             if metadata_id != asset_id:
                 logger.debug(f'metdata does not match {metadata_id} != {asset_id}')
             return metadata_id == asset_id
@@ -417,23 +337,13 @@ class SurferAgentAdapter():
     @staticmethod
     def set_http_client(http_client):
         """Set the http client to something other than the default `requests`"""
-        SurferAgentAdapter._http_client = http_client
+        RemoteAgentAdapter._http_client = http_client
 
     @staticmethod
-    def find_supported_service_type(search_name_type):
-        """ return the supported service record if the name or service type is found
-        else return None """
-        for name, service_type in SUPPORTED_SERVICES.items():
-            if service_type == search_name_type:
-                return service_type
-            if name == search_name_type:
-                return service_type
-        return None
-
-    @property
-    def _content_header(self, value):
-        return self._headers['content-type']
-
-    @_content_header.setter
-    def _content_header(self, value):
-        self._headers['content-type'] = value
+    def create_headers(self, content_type, authorization_token=None):
+        headers = {
+            'content-type': content_type,
+        }
+        if authorization_token:
+            headers['Authorization'] = authorization_token
+        return headers
