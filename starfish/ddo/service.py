@@ -12,8 +12,7 @@ class Service:
     Service class to create validate service in a DDO
     """
 
-    def __init__(self, service_id, endpoint, service_type, values):
-        self._id = service_id
+    def __init__(self, endpoint, service_type, values):
         self._endpoint = endpoint
         self._type = service_type
 
@@ -24,16 +23,6 @@ class Service:
             for name, value in values.items():
                 if name not in reserved_names:
                     self._values[name] = value
-
-    @property
-    def id(self):
-        """Return the service id"""
-        return self._id
-
-    def assign_did(self, did):
-        """ Assign a new DID/Id to the service"""
-        if re.match('^#.*', self._id):
-            self._id = did + self._id
 
     @property
     def type(self):
@@ -57,7 +46,6 @@ class Service:
     def as_text(self, is_pretty=False):
         """return the service as a JSON string"""
         values = {
-            'id': self._id,
             'type': self._type,
             'serviceEndpoint': self._endpoint
         }
@@ -75,7 +63,6 @@ class Service:
     def as_dictionary(self):
         """return the service as a python dictionary"""
         values = {
-            'id': self._id,
             'type': self._type,
             'serviceEndpoint': self._endpoint
         }

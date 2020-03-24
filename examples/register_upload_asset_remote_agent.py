@@ -2,7 +2,7 @@
 
 from starfish import DNetwork
 from starfish.asset import DataAsset
-from starfish.agent import RemoteAgent
+from starfish.agent import RemoteAgent, AgentManager
 from starfish.agent.services import Services
 
 def main():
@@ -20,13 +20,16 @@ def main():
 
     # Create a remote agent to do the work.
     agent_url = 'http://localhost:3030'
-    services = Services(agent_url, all_services=True)
-    agent_ddo = RemoteAgent.generate_ddo(services)
-    agent_options = {
-        'url': agent_url,
+
+    authentication_access = {
         'username': 'Aladdin',
         'password':  'OpenSesame',
     }
+
+    # find an agent based on it's url, you can also use did=did_string as an option
+    agent = RemoteAgent.load(network, url=agent_url, authentication_access=authentication_access)
+    if not agent:
+        print('failed to find the agent')
 
     # create a listing specifying the information about the asset
     listing_data = {
@@ -35,7 +38,6 @@ def main():
         'license': 'CC0: Public Domain',
         'price': '0'
     }
-    agent = RemoteAgent(network, ddo=agent_ddo, options=agent_options)
 
     asset = agent.register_asset(asset)
     print(asset.did)

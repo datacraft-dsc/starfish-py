@@ -61,9 +61,9 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, network, ddo, options=None):
+    def __init__(self, network, ddo, authentication_access=None):
         self._ddo = None
-        self._options = options
+        self._authentication_access = authentication_access
         self._authorization_token = None
 
         if isinstance(ddo, dict):
@@ -77,6 +77,22 @@ class RemoteAgent(AgentBase):
         AgentBase.__init__(self, network, ddo)
 
         self._adapter = RemoteAgentAdapter()
+
+    @staticmethod
+    def load(network, did=None, url=None, asset_did=None, authentication_access=None):
+        ddo = None
+        if asset_did:
+            did, asset_id = RemoteAgent.decode_asset_did(asset_did)
+        if did:
+            ddo = RemoteAgent.resolve_network_ddo(network, ddo)
+        if url and ddo is None:
+            ddo = RemoteAgent.resolve_url_ddo(url, authentication_access)
+        if ddo:
+            print(ddo)
+            return RemoteAgent(network, ddo, authentication_access)
+
+        return None
+
 
     def register_asset(self, asset):
         """
@@ -109,7 +125,7 @@ class RemoteAgent(AgentBase):
         register_data = self._adapter.register_asset(asset.metadata_text, url, authorization_token)
         if register_data:
             asset_id = register_data['asset_id']
-            did = f'{self._did}/{asset_id}'
+            did = f'{self._ddo.did}/{asset_id}'
             asset.set_did(did)
         return asset
 
@@ -465,8 +481,12 @@ class RemoteAgent(AgentBase):
     def get_authorization_token(self):
         url = self.get_endpoint('auth', 'token')
         token = None
-        if url and self._ooptions and 'username' in self._options:
-            token = self._adapter.get_authorization_token(self._options['username'], self._options.get('password', ''), url)
+        if url and self._authentication_access and 'username' in self._authentication_access:
+            token = self._adapter.get_authorization_token(
+                self._authentication_access['username'],
+                self._authentication_access.get('password', ''),
+                url
+            )
         return token
 
     def get_metadata_list(self):
@@ -565,7 +585,8 @@ class RemoteAgent(AgentBase):
         asset_id = remove_0x_prefix(asset_id)
         if not is_asset_hash_valid(asset_id, read_metadata['hash']):
             raise StarfishAssetInvalid(f' asset {asset_id} is not valid')
-        did = f'{self._did}/{asset_id}'
+
+        did = f'{self._ddo.did}/{asset_id}'
         metadata_text = read_metadata['metadata_text']
         asset = create_asset_from_metadata_text(metadata_text, did)
         return asset
@@ -604,3 +625,44 @@ class RemoteAgent(AgentBase):
             if name == search_name_type:
                 return service_type
         return None
+
+    @staticmethod
+    def resolve_network_ddo(network, did):
+        """
+
+        Resolves the remote agent via the dnetwork using it's did to get the agent DDO
+
+        :param object network: DNetwork to resolve the did
+        :param str did: DID of the remote agent to resolve and get DDO
+        :return dict: DDO or None if not found in the network
+
+        """
+
+        return network.resolve_did(did)
+
+    @staticmethod
+    def resolve_url_ddo(url, authentication_access=None):
+        """
+
+        Resolves the remote agent ddo using the url of the agent
+
+        :param str url: url of the remote agent
+        :param str username: optional username for access to the remote agent
+        :param str password: optional password for access to the remote agent
+        :return dict: DDO or None if not found
+        """
+
+        ddo = None
+        if url:
+            adapter = RemoteAgentAdapter()
+            token = None
+            token_url = urljoin(f'{url}/', 'api/v1/auth/token')
+            if authentication_access and 'username' in authentication_access:
+                token = adapter.get_authorization_token(
+                    authentication_access['username'],
+                    authentication_access.get('password', ''),
+                    token_url
+                )
+
+            ddo = adapter.get_ddo(url, token)
+        return ddo

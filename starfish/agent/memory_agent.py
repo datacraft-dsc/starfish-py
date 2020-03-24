@@ -9,6 +9,7 @@ import re
 import secrets
 
 from starfish.agent import AgentBase
+from starfish.ddo.ddo import DDO
 from starfish.listing import Listing
 from starfish.purchase import Purchase
 from starfish.utils.crypto_hash import hash_sha3_256
@@ -29,12 +30,13 @@ class MemoryAgent(AgentBase):
 
     """
 
-    def __init__(self, network, did=None):
+    def __init__(self, network, ddo=None):
 
-        if did is None:
+        if ddo is None:
             did = did_generate_random()
+            ddo = DDO(did)
 
-        AgentBase.__init__(self, network, did=did)
+        AgentBase.__init__(self, network, ddo=ddo)
 
         self._memory = {
             'listing': {},
@@ -55,7 +57,7 @@ class MemoryAgent(AgentBase):
         """
 
         asset_id = hash_sha3_256(asset.metadata_text)
-        did = f'{self._did}/{asset_id}'
+        did = f'{self._ddo.did}/{asset_id}'
 
         self._memory['asset'][did] = asset
         asset.set_did(did)

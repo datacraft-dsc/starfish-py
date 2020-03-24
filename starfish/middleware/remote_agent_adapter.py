@@ -300,6 +300,8 @@ class RemoteAgentAdapter():
     def get_ddo(self, url, authorization_token=None):
         ddo = None
         url = urljoin(f'{url}/', '/api/ddo')
+        logger.debug(f'get_ddo url {url}')
+
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
         response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         print(response.status_code)
@@ -340,10 +342,10 @@ class RemoteAgentAdapter():
         RemoteAgentAdapter._http_client = http_client
 
     @staticmethod
-    def create_headers(self, content_type, authorization_token=None):
+    def create_headers(content_type, authorization_token=None):
         headers = {
             'content-type': content_type,
         }
         if authorization_token:
-            headers['Authorization'] = authorization_token
+            headers['Authorization'] = f'token {authorization_token}'
         return headers
