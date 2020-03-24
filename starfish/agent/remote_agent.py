@@ -28,8 +28,8 @@ from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
 from starfish.utils.did import (
     did_generate_random,
     did_parse,
-    id_to_did,
-    did_to_id
+    did_to_id,
+    id_to_did
 )
 
 SUPPORTED_SERVICES = {
