@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.1
+
++   Allow users to pass a valid authentication token to the remote agent
+
 ### Release v0.8.0
 
 +   Add AgentManager, to manage a list of agents with authorization details
