@@ -30,10 +30,9 @@ NETWORK_NAMES = {
     77: 'POA_Sokol',
     99: 'POA_Core',
     100: 'xDai',
-    8995: 'nile',           # Ocean Protocol Public test net
-    8996: 'spree'           # Ocean Protocol local test net
-    0xcea11: 'pacific'      # Ocean Protocol Public mainnet
-
+    8995: 'nile',                   # Ocean Protocol Public test net
+    8996: 'spree',                  # Ocean Protocol local test net
+    0xcea11: 'pacific'              # Ocean Protocol Public mainnet
 }
 
 CONTRACT_LIST = {
