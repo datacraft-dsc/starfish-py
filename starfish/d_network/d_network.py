@@ -63,7 +63,6 @@ class DNetwork():
         self._web3 = None
         self._name = None
         self._contracts = {}
-        self._web3 = None
         self._connect(self._url)
 
     def get_contract(self, name):
