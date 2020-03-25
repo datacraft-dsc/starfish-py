@@ -8,8 +8,7 @@ from starfish.agent.services import Services
 def main():
 
     # Create a new Ocean instance.
-    network = DNetwork()
-    network.connect('http://localhost:8545')
+    network = DNetwork('http://localhost:8545')
     print(network.name)
 
     # Now create a memory asset
@@ -26,7 +25,7 @@ def main():
         'password':  'OpenSesame',
     }
 
-    # find an agent based on it's url, you can also use did=did_string as an option
+    # find an agent based on it's url, you can also use an agent did or asset did instead
     agent = RemoteAgent.load(network, agent_url, authentication_access=authentication_access)
     if not agent:
         print('failed to find the agent')

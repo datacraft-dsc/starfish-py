@@ -12,8 +12,7 @@ def config():
 
 @pytest.fixture(scope="module")
 def network(config):
-    network = UnitTestNetwork()
-    network.connect(config.network_url)
+    network = UnitTestNetwork(config.network_url)
     return network
 
 @pytest.fixture(scope='module')
