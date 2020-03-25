@@ -227,4 +227,3 @@ class DNetwork():
             self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
             return True
         return False
-
