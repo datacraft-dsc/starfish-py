@@ -57,15 +57,19 @@ class RemoteAgent(AgentBase):
     :param ddo: Optional ddo of the remote agent, if not provided the agent
         will automatically get the DDO from the network based on the DID.
 
-    :param options: Optional options, only `authorization` is used to access the
-        Surfer server.
+    :param dict authentication_access: authentication_access is a dict of values to allow for authentication access to
+        a remote agent.
+        Currently the following values are supported:
+
+            username
+            password
+            token
 
     """
     service_types = SUPPORTED_SERVICES
 
     def __init__(self, network, ddo, authentication_access=None):
         self._authentication_access = authentication_access
-        self._authorization_token = None
 
         if isinstance(ddo, dict):
             ddo = DDO(dictionary=ddo)
@@ -488,6 +492,9 @@ class RemoteAgent(AgentBase):
         return response
 
     def get_authorization_token(self):
+        if self._authentication_access and 'token' in self._authentication_access:
+            return self._authentication_access['token']
+
         url = self.get_endpoint('auth', 'token')
         token = None
         if url and self._authentication_access and 'username' in self._authentication_access:
