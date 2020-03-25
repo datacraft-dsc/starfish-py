@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Agent Base class &mdash; starfish-py 0.7.1 documentation</title>
+  <title>Agent Base class &mdash; starfish-py 0.8.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -172,7 +172,7 @@
 <h1>Agent Base class<a class="headerlink" href="#agent-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.AgentBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">AgentBase</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">AgentBase</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">ddo=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.AgentBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Base agent class</p>
 <dl class="field-list simple">
@@ -223,8 +223,8 @@ provider will be made at this point.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.agent.AgentBase.did">
-<em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.agent.AgentBase.did" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.agent.AgentBase.ddo">
+<em class="property">property </em><code class="sig-name descname">ddo</code><a class="headerlink" href="#starfish.agent.AgentBase.ddo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the did for this remote agent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -235,6 +235,11 @@ provider will be made at this point.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.AgentBase.did">
+<em class="property">property </em><code class="sig-name descname">did</code><a class="headerlink" href="#starfish.agent.AgentBase.did" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="starfish.agent.AgentBase.get_asset_purchase_ids">

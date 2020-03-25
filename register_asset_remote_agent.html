@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.7.1 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.8.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -293,14 +293,13 @@ block chain, the second id is the internall asset id registered on the remote ag
 
 <span class="kn">from</span> <span class="nn">starfish</span> <span class="kn">import</span> <span class="n">DNetwork</span>
 <span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
-<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span>
+<span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span><span class="p">,</span> <span class="n">AgentManager</span>
 <span class="kn">from</span> <span class="nn">starfish.agent.services</span> <span class="kn">import</span> <span class="n">Services</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
     <span class="c1"># Create a new Ocean instance.</span>
-    <span class="n">network</span> <span class="o">=</span> <span class="n">DNetwork</span><span class="p">()</span>
-    <span class="n">network</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">DNetwork</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1"># Now create a memory asset</span>
@@ -311,13 +310,16 @@ block chain, the second id is the internall asset id registered on the remote ag
 
     <span class="c1"># Create a remote agent to do the work.</span>
     <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:3030&#39;</span>
-    <span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">(</span><span class="n">agent_url</span><span class="p">,</span> <span class="n">all_services</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">agent_ddo</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">generate_ddo</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
-    <span class="n">agent_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">agent_url</span><span class="p">,</span>
+
+    <span class="n">authentication_access</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;Aladdin&#39;</span><span class="p">,</span>
         <span class="s1">&#39;password&#39;</span><span class="p">:</span>  <span class="s1">&#39;OpenSesame&#39;</span><span class="p">,</span>
     <span class="p">}</span>
+
+    <span class="c1"># find an agent based on it&#39;s url, you can also use an agent did or asset did instead</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">agent_url</span><span class="p">,</span> <span class="n">authentication_access</span><span class="o">=</span><span class="n">authentication_access</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">agent</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed to find the agent&#39;</span><span class="p">)</span>
 
     <span class="c1"># create a listing specifying the information about the asset</span>
     <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
@@ -326,7 +328,6 @@ block chain, the second id is the internall asset id registered on the remote ag
         <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
         <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
     <span class="p">}</span>
-    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">ddo</span><span class="o">=</span><span class="n">agent_ddo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">agent_options</span><span class="p">)</span>
 
     <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.7.1 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.8.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -172,7 +172,7 @@
 <h1>Remote Agent class<a class="headerlink" href="#remote-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.agent.RemoteAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did=None</em>, <em class="sig-param">ddo=None</em>, <em class="sig-param">options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">ddo</em>, <em class="sig-param">authentication_access=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Remote Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
@@ -262,19 +262,26 @@ provider will be made at this point.</p>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.download_asset">
-<code class="sig-name descname">download_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em>, <em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.download_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">download_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.download_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download an asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – url of the asset_id.</p>
+<dd class="field-odd"><p><strong>asset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – asset_id to download</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>an Asset</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryAsset</span></code> class</p>
+<dd class="field-odd"><p><a class="reference internal" href="../asset/data_asset.html#starfish.asset.DataAsset" title="starfish.asset.DataAsset"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataAsset</span></code></a> class</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.RemoteAgent.find_supported_service_type">
+<em class="property">static </em><code class="sig-name descname">find_supported_service_type</code><span class="sig-paren">(</span><em class="sig-param">search_name_type</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.find_supported_service_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the supported service record if the name or service type is found
+else return None</p>
 </dd></dl>
 
 <dl class="method">
@@ -313,11 +320,6 @@ generate_ddo(services)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.agent.RemoteAgent.generate_metadata">
-<em class="property">static </em><code class="sig-name descname">generate_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.generate_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="starfish.agent.RemoteAgent.get_asset">
 <code class="sig-name descname">get_asset</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is for compatability for Surfer calls to get an asset directly from Surfer</p>
@@ -352,15 +354,14 @@ generate_ddo(services)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="starfish.agent.RemoteAgent.get_asset_store_url">
-<code class="sig-name descname">get_asset_store_url</code><span class="sig-paren">(</span><em class="sig-param">asset_id</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_asset_store_url" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.agent.RemoteAgent.get_authorization_token">
+<code class="sig-name descname">get_authorization_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_authorization_token" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.get_endpoint">
-<code class="sig-name descname">get_endpoint</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_endpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the endpoint of the service available for this agent
-:param str name: name or type of the service, e.g. ‘metadata’, ‘storage’, ‘Ocean.Meta.v1’</p>
+<code class="sig-name descname">get_endpoint</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">uri=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the endpoint based on the name of the service or service type</p>
 </dd></dl>
 
 <dl class="method">
@@ -407,6 +408,11 @@ generate_ddo(services)</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.RemoteAgent.get_metadata_list">
+<code class="sig-name descname">get_metadata_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_metadata_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="starfish.agent.RemoteAgent.invoke">
@@ -490,6 +496,11 @@ to see if it is assigned to a valid Asset.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="starfish.agent.RemoteAgent.load">
+<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">asset_agent_did_url</em>, <em class="sig-param">authentication_access=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="starfish.agent.RemoteAgent.purchase_asset">
 <code class="sig-name descname">purchase_asset</code><span class="sig-paren">(</span><em class="sig-param">listing</em>, <em class="sig-param">account</em>, <em class="sig-param">purchase_id=None</em>, <em class="sig-param">status=None</em>, <em class="sig-param">info=None</em>, <em class="sig-param">agreement=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.purchase_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Purchase an asset using it’s listing and an account.</p>
@@ -517,6 +528,13 @@ to see if it is assigned to a valid Asset.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="starfish.agent.RemoteAgent.register">
+<em class="property">static </em><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">register_account</em>, <em class="sig-param">ddo</em>, <em class="sig-param">authentication_access=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="starfish.agent.RemoteAgent.register_asset">
 <code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param">asset</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.register_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register an asset with Surfer</p>
@@ -537,11 +555,46 @@ to see if it is assigned to a valid Asset.</p>
 <p>For example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;test data asset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
 <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">ddo</span><span class="p">)</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Asset DID is </span><span class="si">{</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.RemoteAgent.resolve_network_ddo">
+<em class="property">static </em><code class="sig-name descname">resolve_network_ddo</code><span class="sig-paren">(</span><em class="sig-param">network</em>, <em class="sig-param">did</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.resolve_network_ddo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves the remote agent via the dnetwork using it’s did to get the agent DDO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – DNetwork to resolve the did</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the remote agent to resolve and get DDO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dict</dt>
+<dd class="field-even"><p>DDO or None if not found in the network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.agent.RemoteAgent.resolve_url_ddo">
+<em class="property">static </em><code class="sig-name descname">resolve_url_ddo</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">authentication_access=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.resolve_url_ddo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves the remote agent ddo using the url of the agent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – url of the remote agent</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – optional username for access to the remote agent</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – optional password for access to the remote agent</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dict</dt>
+<dd class="field-even"><p>DDO or None if not found</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
