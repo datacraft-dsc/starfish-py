@@ -5,7 +5,7 @@
 +   Add AgentManager, to manage a list of agents with authorization details
 +   Allow RemoteAgent to be created based on an agent_did, asset_did or DDO
 +   Register a RemoteAgent using a DDO
-+   Remove DNetwork.connect to DNetwork.__init__
++   Move DNetwork.connect to DNetwork.__init__
 
 ### Release v0.7.1
 
