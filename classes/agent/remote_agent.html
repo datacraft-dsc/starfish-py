@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.8.0 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.8.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.8.1
               </div>
             
           
@@ -182,8 +182,15 @@
 <li><p><strong>did</strong> – Optional did of the Surfer agent</p></li>
 <li><p><strong>ddo</strong> – Optional ddo of the remote agent, if not provided the agent
 will automatically get the DDO from the network based on the DID.</p></li>
-<li><p><strong>options</strong> – Optional options, only <cite>authorization</cite> is used to access the
-Surfer server.</p></li>
+<li><p><strong>authentication_access</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – <p>authentication_access is a dict of values to allow for authentication access to
+a remote agent.
+Currently the following values are supported:</p>
+<blockquote>
+<div><p>username
+password
+token</p>
+</div></blockquote>
+</p></li>
 </ul>
 </dd>
 </dl>
