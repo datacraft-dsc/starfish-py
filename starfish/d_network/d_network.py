@@ -58,23 +58,13 @@ CONTRACT_LIST = {
 
 
 class DNetwork():
-    def __init__(self):
-        self._url = None
+    def __init__(self, url):
+        self._url = url
         self._web3 = None
         self._name = None
         self._contracts = {}
         self._web3 = None
-
-    def connect(self, url):
-        self._url = url
-        self._web3 = Web3(HTTPProvider(url))
-        if self._web3:
-            self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
-            logger.info(f'connected to the {self._name} network')
-            self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
-            self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
-            return True
-        return False
+        self._connect(self._url)
 
     def get_contract(self, name):
         if name not in CONTRACT_LIST:
@@ -226,3 +216,15 @@ class DNetwork():
         if network_id in NETWORK_NAMES:
             return NETWORK_NAMES[network_id]
         return NETWORK_NAMES[0]
+
+    def _connect(self, url):
+        self._url = url
+        self._web3 = Web3(HTTPProvider(url))
+        if self._web3:
+            self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
+            logger.info(f'connected to the {self._name} network')
+            self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
+            self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
+            return True
+        return False
+

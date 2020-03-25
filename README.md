@@ -36,7 +36,7 @@ Contributions – whether it is in the form of new features, better documentatio
 
 ## Prerequisites
 
-Python 3.6
+Python >= 3.6
 
 ## Development
 
@@ -71,8 +71,8 @@ Python 3.6
     ```bash
     git clone https://github.com/DEX-Company/barge.git
     cd barge
-    git checkout tags/dex-2019-09-11
-    ./start_ocean.sh --no-brizo --no-pleuston --local-spree-node
+    git checkout develop
+    ./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node
     ```
 
     Or to run barge locally, using the same method above but using a script instead.
@@ -109,8 +109,10 @@ The [documentation](https://dex-company.github.io/starfish-py) for this repo.
 
 ## Testing
 
-Automatic tests are setup via Travis, executing `tox`.
-Our test use pytest framework. The testing uses the remote barge server to test with
+Automatic tests are setup via github actions.
+Our test use pytest framework.
+The testing uses a barge docker image and surfer server.
+See [github actions for testing](https://github.com/DEX-Company/starfish-py/blob/master/.github/workflows/testing.yml)
 
 ## New Version
 

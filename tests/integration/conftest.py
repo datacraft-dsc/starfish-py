@@ -31,8 +31,7 @@ def config(intergation_config):
 
 @pytest.fixture(scope="module")
 def network(config):
-    network = DNetwork()
-    network.connect(config.network_url)
+    network = DNetwork(config.network_url)
     return network
 
 

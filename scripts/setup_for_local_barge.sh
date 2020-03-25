@@ -4,8 +4,8 @@ BARGE_DELAY=120
 
 git clone https://github.com/DEX-Company/barge.git
 cd barge
-git checkout tags/dex-2019-09-11
-./start_ocean.sh --no-brizo --no-pleuston --local-spree-node 2>&1 > barge.log &
+git checkout develop
+./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node 2>&1 > barge.log &
 cd ..
 echo "sleeping for $BARGE_DELAY seconds"
 sleep $BARGE_DELAY
