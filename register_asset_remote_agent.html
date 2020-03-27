@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.8.1 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.8.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.8.2
               </div>
             
           
@@ -311,13 +311,13 @@ block chain, the second id is the internall asset id registered on the remote ag
     <span class="c1"># Create a remote agent to do the work.</span>
     <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:3030&#39;</span>
 
-    <span class="n">authentication_access</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">authentication</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;Aladdin&#39;</span><span class="p">,</span>
         <span class="s1">&#39;password&#39;</span><span class="p">:</span>  <span class="s1">&#39;OpenSesame&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># find an agent based on it&#39;s url, you can also use an agent did or asset did instead</span>
-    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">agent_url</span><span class="p">,</span> <span class="n">authentication_access</span><span class="o">=</span><span class="n">authentication_access</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">RemoteAgent</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">agent_url</span><span class="p">,</span> <span class="n">authentication</span><span class="o">=</span><span class="n">authentication</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">agent</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed to find the agent&#39;</span><span class="p">)</span>
 
