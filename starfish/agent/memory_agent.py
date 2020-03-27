@@ -16,7 +16,7 @@ from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.utils.did import (
     did_generate_random,
     did_parse,
-    did_to_asset_id
+    decode_to_asset_id
 )
 
 
@@ -76,7 +76,7 @@ class MemoryAgent(AgentBase):
         """
         listing = None
         if listing_data:
-            listing_id = did_to_asset_id(asset_did)
+            listing_id = decode_to_asset_id(asset_did)
             listing_data['listing_id'] = listing_id,
             listing_data['asset_did'] = asset_did
             listing = Listing(self, listing_id, asset_did, listing_data)

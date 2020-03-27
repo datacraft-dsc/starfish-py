@@ -32,5 +32,6 @@ def test_decode_readable_size():
     }
     for text, actual_value in test_values.items():
         value = decode_readable_size(text)
-        assert(value, actual_value)
+        print(text)
+        assert(value == int(actual_value))
 

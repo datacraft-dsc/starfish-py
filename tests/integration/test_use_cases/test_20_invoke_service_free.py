@@ -15,7 +15,7 @@ import requests
 
 from starfish.asset import OperationAsset
 from starfish.job import Job
-from starfish.utils.did import did_to_asset_id
+from starfish.utils.did import decode_to_asset_id
 
 INVOKE_TOKENIZE_TEXT_NAME = "Tokenize Text"
 INVOKE_INCREMENT_NAME = "Increment"
@@ -32,12 +32,7 @@ def load_operation_asset(remote_agent, invokable_list, name):
 
     assert(asset_did)
 
-    asset_id = did_to_asset_id(asset_did)
-
-    # no operation asset found
-    assert(asset_id)
-
-    asset = remote_agent.get_asset(asset_id)
+    asset = remote_agent.get_asset(asset_did)
 
     # cannot load asset
     assert(asset)

@@ -174,7 +174,8 @@ class RemoteAgent(AgentBase):
         url = self.get_endpoint('market')
         authorization_token = self.get_authorization_token()
 
-        data = self._adapter.create_listing(listing_data, asset_did, url, authorization_token)
+        asset_id = decode_to_asset_id(asset_did)
+        data = self._adapter.create_listing(listing_data, asset_id, url, authorization_token)
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 

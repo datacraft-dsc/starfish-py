@@ -4,6 +4,8 @@
 +   Allow agent download and get asset to use an asset did or asset id
 +   Change agent manager to pass an authentication_access dict instead of username, password
 +   Add the ability to set a default agent in the agent manager list
++   Depreciated utils function `did_to_asset_id` to be replaced by `decode_to_asset_id`
++   General bug fixes
 
 ### Release v0.8.1
 
