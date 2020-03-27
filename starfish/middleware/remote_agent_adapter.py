@@ -6,10 +6,8 @@ import logging
 from urllib.parse import urljoin
 
 import requests
-from eth_utils import remove_0x_prefix
 
 from starfish.utils.crypto_hash import hash_sha3_256
-from starfish.utils.did import did_to_asset_id
 
 logger = logging.getLogger(__name__)
 
@@ -104,9 +102,7 @@ class RemoteAgentAdapter():
             raise ValueError(msg)
         return None
 
-    def create_listing(self, listing_data, asset_did, url, authorization_token=None):
-
-        asset_id = remove_0x_prefix(did_to_asset_id(asset_did))
+    def create_listing(self, listing_data, asset_id, url, authorization_token=None):
         data = {
             'assetid': asset_id,
             'info': listing_data,

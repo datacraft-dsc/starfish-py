@@ -36,7 +36,8 @@ def decode_readable_size(text, base_size=1024):
     for regexp, factor in sizes.items():
         match = re.match(regexp, text, re.IGNORECASE)
         if match:
-            return int(float(match.group(1)) * math.pow(base_size, factor))
+            value = float(match.group(1))
+            return int(value * math.pow(base_size, factor))
     return None
 
 

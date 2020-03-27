@@ -21,11 +21,15 @@ from starfish.asset import (
     is_asset_hash_valid
 )
 from starfish.ddo.ddo import DDO
-from starfish.exceptions import StarfishAssetInvalid
+from starfish.exceptions import (
+    StarfishAssetInvalid,
+    StarfishRemoteAgentInvalidAccess
+)
 from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
 from starfish.utils.did import (
+    decode_to_asset_id,
     did_generate_random,
     did_parse,
     did_to_id,
@@ -57,7 +61,7 @@ class RemoteAgent(AgentBase):
     :param ddo: Optional ddo of the remote agent, if not provided the agent
         will automatically get the DDO from the network based on the DID.
 
-    :param dict authentication_access: authentication_access is a dict of values to allow for authentication access to
+    :param dict authentication: authentication is a dict of values to allow for authentication access to
         a remote agent.
         Currently the following values are supported:
 
@@ -68,8 +72,8 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, network, ddo, authentication_access=None):
-        self._authentication_access = authentication_access
+    def __init__(self, network, ddo, authentication=None):
+        self._authentication = authentication
 
         if isinstance(ddo, dict):
             ddo = DDO(dictionary=ddo)
@@ -84,7 +88,7 @@ class RemoteAgent(AgentBase):
         self._adapter = RemoteAgentAdapter()
 
     @staticmethod
-    def load(network, asset_agent_did_url, authentication_access=None):
+    def load(network, asset_agent_did_url, authentication=None):
         ddo_text = None
 
         did_id = did_to_id(asset_agent_did_url)
@@ -93,17 +97,17 @@ class RemoteAgent(AgentBase):
             did = id_to_did(did_id)
             ddo_text = RemoteAgent.resolve_network_ddo(network, did)
         if ddo_text is None:
-            ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication_access)
+            ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication)
 
         if ddo_text:
-            return RemoteAgent(network, ddo_text, authentication_access)
+            return RemoteAgent(network, ddo_text, authentication)
 
         return None
 
     @staticmethod
-    def register(network, register_account, ddo, authentication_access=None):
+    def register(network, register_account, ddo, authentication=None):
         network.register_did(register_account, ddo.did, ddo.as_text())
-        return RemoteAgent(network, ddo.as_text(), authentication_access)
+        return RemoteAgent(network, ddo.as_text(), authentication)
 
     def register_asset(self, asset):
         """
@@ -170,7 +174,8 @@ class RemoteAgent(AgentBase):
         url = self.get_endpoint('market')
         authorization_token = self.get_authorization_token()
 
-        data = self._adapter.create_listing(listing_data, asset_did, url, authorization_token)
+        asset_id = decode_to_asset_id(asset_did)
+        data = self._adapter.create_listing(listing_data, asset_id, url, authorization_token)
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 
@@ -212,11 +217,11 @@ class RemoteAgent(AgentBase):
 
         return self._adapter.upload_asset_data(asset_id, asset.data, url, authorization_token)
 
-    def download_asset(self, asset_id):
+    def download_asset(self, asset_did_id):
         """
         Download an asset
 
-        :param str asset_id: asset_id to download
+        :param str asset_did_id: Asset id or asset did to download
 
         :return: an Asset
         :type: :class:`.DataAsset` class
@@ -226,7 +231,10 @@ class RemoteAgent(AgentBase):
         url = self.get_endpoint('storage')
         authorization_token = self.get_authorization_token()
 
-        asset_id = remove_0x_prefix(asset_id)
+        asset_id = decode_to_asset_id(asset_did_id)
+        if not asset_id:
+            raise ValueError(f'{asset_did_id} is not an asset id or asset did')
+
         data = self._adapter.download_asset(asset_id, url, authorization_token)
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(
@@ -261,24 +269,24 @@ class RemoteAgent(AgentBase):
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
-    def get_asset(self, asset_id):
+    def get_asset(self, asset_did_id):
         """
 
         This is for compatability for Surfer calls to get an asset directly from Surfer
 
-        :param str asset_id: Id of the asset to read or did/asset_id
+        :param str asset_did_id: Asset DID or asset Id of the asset to read or did/asset_id
 
         :return: an asset class
         :type: :class:`.AssetBase` class
 
         """
         asset = None
-        clean_asset_id = remove_0x_prefix(asset_id)
+        asset_id = decode_to_asset_id(asset_did_id)
         url = self.get_endpoint('meta')
         authorization_token = self.get_authorization_token()
-        read_metadata = self._adapter.read_metadata(clean_asset_id, url, authorization_token)
+        read_metadata = self._adapter.read_metadata(asset_id, url, authorization_token)
         if read_metadata:
-            asset = self._create_asset_from_read(clean_asset_id, read_metadata)
+            asset = self._create_asset_from_read(asset_id, read_metadata)
         return asset
 
     def get_listings(self):
@@ -492,17 +500,22 @@ class RemoteAgent(AgentBase):
         return response
 
     def get_authorization_token(self):
-        if self._authentication_access and 'token' in self._authentication_access:
-            return self._authentication_access['token']
+
+        if self._authentication and 'token' in self._authentication:
+            if self._authentication['token']:
+                return self._authentication['token']
 
         url = self.get_endpoint('auth', 'token')
         token = None
-        if url and self._authentication_access and 'username' in self._authentication_access:
+        if url and self._authentication and 'username' in self._authentication:
             token = self._adapter.get_authorization_token(
-                self._authentication_access['username'],
-                self._authentication_access.get('password', ''),
+                self._authentication['username'],
+                self._authentication.get('password', ''),
                 url
             )
+            if token is None:
+                raise StarfishRemoteAgentInvalidAccess(f'Unable to obtain a token from {url}')
+
         return token
 
     def get_metadata_list(self):
@@ -535,11 +548,6 @@ class RemoteAgent(AgentBase):
         """
         data = did_parse(did)
         return data['path'] and data['id_hex']
-
-    @staticmethod
-    def decode_asset_did(did):
-        data = did_parse(did)
-        return data['id'], data['path']
 
     @staticmethod
     def generate_ddo(base_url_or_services, service_list=None, is_add_proof=False):
@@ -657,7 +665,7 @@ class RemoteAgent(AgentBase):
             return network.resolve_did(did)
 
     @staticmethod
-    def resolve_url_ddo(url, authentication_access=None):
+    def resolve_url_ddo(url, authentication=None):
         """
 
         Resolves the remote agent ddo using the url of the agent
@@ -673,10 +681,10 @@ class RemoteAgent(AgentBase):
             adapter = RemoteAgentAdapter()
             token = None
             token_url = urljoin(f'{url}/', 'api/v1/auth/token')
-            if authentication_access and 'username' in authentication_access:
+            if authentication and 'username' in authentication:
                 token = adapter.get_authorization_token(
-                    authentication_access['username'],
-                    authentication_access.get('password', ''),
+                    authentication['username'],
+                    authentication.get('password', ''),
                     token_url
                 )
 

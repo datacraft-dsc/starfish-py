@@ -6,7 +6,7 @@
 
 import json
 from abc import ABC
-from starfish.utils.did import did_to_asset_id
+from starfish.utils.did import decode_to_asset_id
 
 
 class AssetBase(ABC):
@@ -90,7 +90,7 @@ class AssetBase(ABC):
     @property
     def asset_id(self):
         if self._did:
-            return did_to_asset_id(self._did)
+            return decode_to_asset_id(self._did)
         return None
 
     @property

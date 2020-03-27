@@ -20,13 +20,13 @@ def main():
     # Create a remote agent to do the work.
     agent_url = 'http://localhost:3030'
 
-    authentication_access = {
+    authentication = {
         'username': 'Aladdin',
         'password':  'OpenSesame',
     }
 
     # find an agent based on it's url, you can also use an agent did or asset did instead
-    agent = RemoteAgent.load(network, agent_url, authentication_access=authentication_access)
+    agent = RemoteAgent.load(network, agent_url, authentication=authentication)
     if not agent:
         print('failed to find the agent')
 
