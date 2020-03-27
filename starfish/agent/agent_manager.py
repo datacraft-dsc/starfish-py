@@ -19,8 +19,9 @@ class AgentManager:
     def __init__(self, network):
         self._network = network
         self._items = {}
+        self._default_name = None
 
-    def add(self, name, url=None, did=None, username=None, password=None):
+    def add(self, name, url=None, did=None, authentication=None, is_default=None):
         """
 
         Add a remote agent details to the list of remote agents managed by this class.
@@ -28,22 +29,35 @@ class AgentManager:
         :param str name: name of the remote agent
         :param str,dict url: url of the remote agent, or a dict if passing a dict of items
         :param str did: DID of the agent
-        :param str username: Username access to the remote agent
-        :param str password: Password access to the remote agent
-
+        :param dict authentication: Access details to pass to the agent
 
         """
         if url and isinstance(url, dict):
             item = url
+            if 'username' in item or 'token' in item:
+                authentication = {
+                    'username': item.get('username', None),
+                    'password': item.get('password', None),
+                    'token': item.get('token', None)
+                }
+                item['authentication'] = authentication
         else:
             item = {
                 'url': url,
                 'did': did,
-                'username': username,
-                'password': password
+                'authentication': authentication,
             }
         if item['url'] is None and item['did'] is None:
             raise ValueError('You must provide at least an URL or DID for the remote agent')
+
+        # if the is_default value is set to True, then make this the default agent
+        if is_default:
+            self._default_name = is_default
+
+        # if _default_name is not assigned, then assign it to the first name
+        if self._default_name is None:
+            self._default_name = name
+
         self._items[name] = item
 
     def resolve_ddo(self, name):
@@ -64,13 +78,8 @@ class AgentManager:
 
             ddo_text = RemoteAgent.resolve_network_ddo(self._network, item.get('did', None))
             if ddo_text is None:
-                authentication_access = None
-                if item.get('username', None):
-                    authentication_access = {
-                        'username': item.get('username', None),
-                        'password': item.get('password', None)
-                    }
-                ddo_text = RemoteAgent.resolve_url_ddo(item.get('url', None), authentication_access)
+                authentication = item.get('authentication', None)
+                ddo_text = RemoteAgent.resolve_url_ddo(item.get('url', None), authentication=authentication)
 
             self._items[name]['ddo_text'] = ddo_text
             self._items[name]['ddo'] = AgentManager.create_ddo_object(ddo_text)
@@ -112,15 +121,11 @@ class AgentManager:
 
         if ddo_text:
             ddo = DDO(json_text=ddo_text)
-            authentication_access = None
+            authentication = None
 
             item = self.get_item_from_did(ddo.did)
-            if item.get('username', None):
-                authentication_access = {
-                    'username': item.get('username', None),
-                    'password': item.get('password', None)
-                }
-            agent = RemoteAgent(self._network, ddo_text, authentication_access)
+            authentication = item.get('authentication', None)
+            agent = RemoteAgent(self._network, ddo_text, authentication=authentication)
         return agent
 
     def get_item_from_did(self, find_did):
@@ -134,6 +139,14 @@ class AgentManager:
             if did and did == find_did:
                 return item
         return None
+
+    @property
+    def default_name(self):
+        return self._default_name
+
+    @default_name.setter
+    def default_name(self, value):
+        self._default_name = value
 
     @property
     def items(self):

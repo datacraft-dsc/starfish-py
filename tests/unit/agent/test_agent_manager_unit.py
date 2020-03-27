@@ -10,7 +10,11 @@ from starfish.agent import AgentManager
 def test_agent_manager_add(network):
     manager = AgentManager(network)
 
-    manager.add('test', 'http://test.com', did=None, username='user_test', password='password_test')
+    authentication = {
+        'username': 'user_test',
+        'password': 'password_test'
+    }
+    manager.add('test', 'http://test.com', authentication=authentication)
     assert(manager.items['test'])
 
     with pytest.raises(ValueError):

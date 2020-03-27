@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.8.2
++   Allow agent download and get asset to use an asset did or asset id
++   Change agent manager to pass an authentication_access dict instead of username, password
++   Add the ability to set a default agent in the agent manager list
+
 ### Release v0.8.1
 
 +   Allow users to pass a valid authentication token to the remote agent

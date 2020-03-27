@@ -32,7 +32,8 @@ def test_agent_manager_load_agent(config, network):
         manager.add(name, item)
 
     items = config.agent_list;
-    name = list(items.keys())[0]
+    name = manager.default_name
+    assert(name == 'remote')
     ddo_text = manager.resolve_ddo(name)
     ddo = AgentManager.create_ddo_object(ddo_text)
 

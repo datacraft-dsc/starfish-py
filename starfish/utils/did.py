@@ -5,6 +5,7 @@ DID utils
 
 import re
 import secrets
+import warnings
 
 from urllib.parse import urlparse
 from eth_utils import remove_0x_prefix
@@ -66,11 +67,19 @@ def id_to_did(did_id):
     return f'did:{NETWORK_DID_METHOD}:{did_id}'
 
 
-def did_to_asset_id(did):
-    data = did_parse(did)
+def decode_to_asset_id(asset_did_id):
     asset_id = None
-    if data['id_hex']:
-        asset_id = data['id_hex']
-    if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path']):
-        asset_id = '0x' + data['path']
-    return asset_id
+    if re.match(r'^[0-9a-fx]+$', asset_did_id, re.IGNORECASE):
+        asset_id = Web3.toHex(hexstr=asset_did_id)
+    else:
+        data = did_parse(asset_did_id)
+        if data['id_hex']:
+            asset_id = data['id_hex']
+        if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path']):
+            asset_id = data['path']
+    return remove_0x_prefix(asset_id)
+
+
+def did_to_asset_id(did):
+    warnings.warn('use "decode_to_asset_id" instead', DeprecationWarning)
+    return decode_to_asset_id(did)
