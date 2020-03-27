@@ -6,7 +6,6 @@ import logging
 from urllib.parse import urljoin
 
 import requests
-from eth_utils import remove_0x_prefix
 
 from starfish.utils.crypto_hash import hash_sha3_256
 
