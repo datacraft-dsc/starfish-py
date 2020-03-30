@@ -33,22 +33,22 @@ def test_did_validate():
     assert(not is_did(test_did))
 
     test_did = 'test-text'
-    with pytest.raises(ValueError, match='DID must start'):
+    with pytest.raises(ValueError, match='must start'):
         did_validate(test_did)
     assert(not is_did(test_did))
 
     test_did = 'did'
-    with pytest.raises(ValueError, match='DID must start'):
+    with pytest.raises(ValueError, match='must start'):
         did_validate(test_did)
     assert(not is_did(test_did))
 
     test_did = f'did:extra-long:{did_id}'
-    with pytest.raises(ValueError, match='DID "id" '):
+    with pytest.raises(ValueError, match='"id" must have only'):
         did_validate(test_did)
     assert(not is_did(test_did))
 
     test_did = f'did:valid:0x01A2B3C'
-    with pytest.raises(ValueError, match='DID path should '):
+    with pytest.raises(ValueError, match='path should only have hex characters'):
         did_validate(test_did)
     assert(not is_did(test_did))
 

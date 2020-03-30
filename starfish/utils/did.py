@@ -31,13 +31,13 @@ def did_validate(did):
         raise TypeError('Expecting DID of string type, got %s of %s type' % (did, type(did)))
 
     if not re.match('^did:', did, re.IGNORECASE):
-        raise ValueError('DID must start with the text "did"')
+        raise ValueError(f'DID {did} must start with the text "did"')
 
     if not re.match('^did:([a-z0-9]+):', did, re.IGNORECASE):
-        raise ValueError('DID "id" must have only a-z 0-9 characters')
+        raise ValueError(f'DID {did} "id" must have only a-z 0-9 characters')
 
     if not re.match('^did:[a-z0-9]+:[a-f0-9]{64}.*', did, re.IGNORECASE):
-        raise ValueError(f'DID path should only have hex characters.')
+        raise ValueError(f'DID {did} path should only have hex characters')
     return True
 
 
