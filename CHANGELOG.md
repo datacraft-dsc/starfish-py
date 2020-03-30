@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.3
++   Better DID validation and error reporting
++   add new functions in module utils.did: is_did, is_asset_did, asset_did_validate and did_validate
+
 ### Release v0.8.2
 +   Allow agent download and get asset to use an asset did or asset id
 +   Change agent manager to pass an authentication_access dict instead of username, password
