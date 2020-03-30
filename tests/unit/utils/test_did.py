@@ -12,7 +12,8 @@ from starfish.utils.did import (
     id_to_did,
     is_did,
     did_parse,
-    decode_to_asset_id
+    decode_to_asset_id,
+    is_asset_did
 )
 
 
@@ -107,10 +108,12 @@ def test_decode_to_asset_id():
     # decode did/asset_id
     did = f'{test_did}/{asset_id}'
     assert(asset_id == decode_to_asset_id(did))
+    assert(is_asset_did(did))
 
     # decode did/asset_id with leading 0x
     did = f'{test_did}/0x{asset_id}'
     assert(asset_id == decode_to_asset_id(did))
+    assert(is_asset_did(did))
 
     # decode asset_id
     assert(asset_id == decode_to_asset_id(asset_id))
@@ -122,9 +125,12 @@ def test_decode_to_asset_id():
     with pytest.raises(ValueError, match='Unable to get an asset_id'):
         print(decode_to_asset_id(test_did))
 
+    assert(not is_asset_did(test_did))
+
     # fail decode with invalid asset_id length is too long
     did = f'{test_did}/{asset_id}12A3B4C'
     with pytest.raises(ValueError, match='asset_id is not valid '):
         print(decode_to_asset_id(did))
 
+    assert(not is_asset_did(did))
 

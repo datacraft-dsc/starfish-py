@@ -39,6 +39,19 @@ def is_did(did):
     return False
 
 
+def is_asset_did(did):
+    try:
+        value = did_parse(did)
+        if value['path'] is None:
+            raise ValueError(f'DID {did} is not a valid asset_did')
+        if not re.match(r'^[0x]{0,2}[a-f0-9]{64}$', value['path']):
+            raise ValueError(f'DID {did} as an invalid asset_id')
+        return True
+    except (ValueError, TypeError):
+        pass
+    return False
+
+
 def did_parse(did):
     """parse a DID into it's parts"""
 
