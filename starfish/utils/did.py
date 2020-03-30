@@ -30,12 +30,14 @@ def did_validate(did):
         raise ValueError(f'DID path should only have hex characters.')
     return True
 
+
 def is_did(did):
     try:
         return did_validate(did)
     except (ValueError, TypeError):
         pass
     return False
+
 
 def did_parse(did):
     """parse a DID into it's parts"""

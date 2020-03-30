@@ -15,8 +15,7 @@ from starfish.purchase import Purchase
 from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.utils.did import (
     decode_to_asset_id,
-    did_generate_random,
-    did_parse
+    did_generate_random
 )
 
 
@@ -231,4 +230,3 @@ class MemoryAgent(AgentBase):
 
         """
         return purchase_id in self._memory['purchase']
-

@@ -32,8 +32,6 @@ from starfish.utils.did import (
     decode_to_asset_id,
     did_generate_random,
     did_parse,
-    did_to_id,
-    id_to_did,
     is_did
 )
 
@@ -92,7 +90,7 @@ class RemoteAgent(AgentBase):
     def load(network, asset_agent_did_url, authentication=None):
         ddo_text = None
 
-        if ( is_did(asset_agent_did_url) ):
+        if is_did(asset_agent_did_url):
             ddo_text = RemoteAgent.resolve_network_ddo(network, asset_agent_did_url)
         if ddo_text is None:
             ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication)
