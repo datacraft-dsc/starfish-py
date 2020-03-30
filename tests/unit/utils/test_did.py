@@ -12,6 +12,7 @@ from starfish.utils.did import (
     id_to_did,
     is_did,
     did_parse,
+    asset_did_validate,
     decode_to_asset_id,
     is_asset_did
 )
@@ -109,11 +110,13 @@ def test_decode_to_asset_id():
     did = f'{test_did}/{asset_id}'
     assert(asset_id == decode_to_asset_id(did))
     assert(is_asset_did(did))
+    assert(asset_did_validate(did))
 
     # decode did/asset_id with leading 0x
     did = f'{test_did}/0x{asset_id}'
     assert(asset_id == decode_to_asset_id(did))
     assert(is_asset_did(did))
+    assert(asset_did_validate(did))
 
     # decode asset_id
     assert(asset_id == decode_to_asset_id(asset_id))
@@ -123,14 +126,27 @@ def test_decode_to_asset_id():
 
     # fail decode with only did
     with pytest.raises(ValueError, match='Unable to get an asset_id'):
-        print(decode_to_asset_id(test_did))
+        assert(decode_to_asset_id(test_did))
+
+    with pytest.raises(ValueError, match='does not have an asset_id'):
+        assert(asset_did_validate(test_did))
 
     assert(not is_asset_did(test_did))
 
     # fail decode with invalid asset_id length is too long
     did = f'{test_did}/{asset_id}12A3B4C'
     with pytest.raises(ValueError, match='asset_id is not valid '):
-        print(decode_to_asset_id(did))
+        assert(decode_to_asset_id(did))
+
+    with pytest.raises(ValueError, match='has an invalid asset_id'):
+        assert(asset_did_validate(did))
+
+    # passes did valdiaton but fails asset_did validation
+    did = f'{test_did}/00112233445566778899AA'
+    assert(decode_to_asset_id(did))
+
+    with pytest.raises(ValueError, match='has an invalid asset_id'):
+        assert(asset_did_validate(did))
 
     assert(not is_asset_did(did))
 

@@ -17,6 +17,16 @@ NETWORK_DID_METHOD = 'dep'
 
 
 def did_validate(did):
+    """
+
+    Validate a did string.
+
+    :param str did: DID string to validate, this can be an agent did or an asset_did
+    :return: True if the did is valid
+    :raise: TypeError if did is not a string
+    :raise: ValueError if the DID is invalid
+
+    """
     if not isinstance(did, str):
         raise TypeError('Expecting DID of string type, got %s of %s type' % (did, type(did)))
 
@@ -32,6 +42,13 @@ def did_validate(did):
 
 
 def is_did(did):
+    """
+
+    Return True or False if the DID is valid.
+
+    :param str did: DID string to validate, this can be an agent did or an asset_did
+
+    """
     try:
         return did_validate(did)
     except (ValueError, TypeError):
@@ -39,21 +56,55 @@ def is_did(did):
     return False
 
 
-def is_asset_did(did):
+def asset_did_validate(asse_did):
+    """
+
+    Validates a asset_did in the format 'did:dep:<64_hex_chars>/<64_hex_chars>'
+
+    :param str asse_did: Asset did to validate
+    :return: True if validation is correct
+    :raises: TypeError if did is not a string
+    :raises: ValueError if the DID or the asset_id part of the DID is not valid
+
+    """
+    value = did_parse(asse_did)
+    if value['path'] is None:
+        raise ValueError(f'DID {asse_did} does not have an asset_id')
+    if not re.match(r'^[0x]{0,2}[a-f0-9]{64}$', value['path']):
+        raise ValueError(f'DID {asse_did} has an invalid asset_id')
+    return True
+
+
+def is_asset_did(asse_did):
+    """
+
+    Return True or False if the asset_did is valid
+
+    """
     try:
-        value = did_parse(did)
-        if value['path'] is None:
-            raise ValueError(f'DID {did} is not a valid asset_did')
-        if not re.match(r'^[0x]{0,2}[a-f0-9]{64}$', value['path']):
-            raise ValueError(f'DID {did} as an invalid asset_id')
-        return True
+        return asset_did_validate(asse_did)
     except (ValueError, TypeError):
         pass
     return False
 
 
 def did_parse(did):
-    """parse a DID into it's parts"""
+    """
+
+    parse a DID into it's parts.
+
+    did:<method>:<id/id_hex>[/<path>[#<fragment>]]
+
+    :param str did: DID to parse into seperate components
+    :return: Dict of parts they are:
+        method,
+        id,
+        id_hex,
+        path,
+        fragment
+
+
+    """
 
     did_validate(did)
 
@@ -83,21 +134,48 @@ def did_parse(did):
 
 
 def did_generate_random():
+    """
+
+    Return a randomly generated DID
+
+    """
     did_id = secrets.token_hex(32)
     return id_to_did(did_id)
 
 
 def did_to_id(did):
+    """
+
+    Convert a DID to an hex id value
+
+    """
+
     data = did_parse(did)
     return data['id_hex']
 
 
 def id_to_did(did_id):
+    """
+
+    Convert an hex id to a DID
+
+    """
     did_id = remove_0x_prefix(did_id)
     return f'did:{NETWORK_DID_METHOD}:{did_id}'
 
 
 def decode_to_asset_id(asset_did_id):
+    """
+
+    Try to decode an id to an asset_id. The id can be a full asset_did, asset_id ( 32 hex number)
+
+    :param str asset_did_id: string to try to decode
+    :return: asset_id as a hex string, with no leading '0x'
+    :raises ValueError: if no path exists in the asset_did or the path is invalid
+
+
+    """
+
     asset_id = None
     if re.match(r'^[0-9a-fx]+$', asset_did_id, re.IGNORECASE):
         asset_id = Web3.toHex(hexstr=asset_did_id)
@@ -114,5 +192,9 @@ def decode_to_asset_id(asset_did_id):
 
 
 def did_to_asset_id(did):
+    """
+
+    Depretaated function, use `decode_to_asset_id` instead
+    """
     warnings.warn('use "decode_to_asset_id" instead', DeprecationWarning)
     return decode_to_asset_id(did)
