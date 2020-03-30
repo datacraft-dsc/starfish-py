@@ -232,17 +232,3 @@ class MemoryAgent(AgentBase):
         """
         return purchase_id in self._memory['purchase']
 
-    @staticmethod
-    def is_did_valid(did):
-        """
-        Checks to see if the DID string is a valid DID for this type of Asset.
-        This method only checks the syntax of the DID, it does not resolve the DID
-        to see if it is assigned to a valid Asset.
-
-        :param str did: DID string to check to see if it is in a valid format.
-
-        :return: True if the DID is in the format 'did:dep:xxxxx'
-        :type: boolean
-        """
-        data = did_parse(did)
-        return not data['path']

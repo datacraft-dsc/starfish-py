@@ -16,15 +16,33 @@ from web3 import Web3
 NETWORK_DID_METHOD = 'dep'
 
 
-def did_parse(did):
-    """parse a DID into it's parts"""
+def did_validate(did):
     if not isinstance(did, str):
         raise TypeError('Expecting DID of string type, got %s of %s type' % (did, type(did)))
 
-    match = re.match('^did:([a-z0-9]+):([a-zA-Z0-9-.]+)(.*)', did)
-    if not match:
-        raise ValueError('DID %s does not seem to be valid.' % did)
+    if not re.match('^did:', did, re.IGNORECASE):
+        raise ValueError('DID must start with the text "did"')
 
+    if not re.match('^did:([a-z0-9]+):', did, re.IGNORECASE):
+        raise ValueError('DID "id" must have only a-z 0-9 characters')
+
+    if not re.match('^did:[a-z0-9]+:[a-f0-9]{64}.*', did, re.IGNORECASE):
+        raise ValueError(f'DID path should only have hex characters.')
+    return True
+
+def is_did(did):
+    try:
+        return did_validate(did)
+    except (ValueError, TypeError):
+        pass
+    return False
+
+def did_parse(did):
+    """parse a DID into it's parts"""
+
+    did_validate(did)
+
+    match = re.match('^did:([a-z0-9]+):([a-f0-9]{64})(.*)', did, re.IGNORECASE)
     result = {
         'method': match.group(1),
         'id': match.group(2),
@@ -40,7 +58,7 @@ def did_parse(did):
         if uri.path:
             result['path'] = uri.path[1:]
 
-    if result['method'] == NETWORK_DID_METHOD and re.match('^[0-9A-Fa-f]{1,64}$', result['id']):
+    if result['method'] == NETWORK_DID_METHOD and re.match('^[0-9a-f]{1,64}$', result['id'], re.IGNORECASE):
         result['id_hex'] = Web3.toHex(hexstr=result['id'])
 
     if not result['id_hex'] and result['id'].startswith('0x'):
@@ -55,10 +73,7 @@ def did_generate_random():
 
 
 def did_to_id(did):
-    try:
-        data = did_parse(did)
-    except ValueError:
-        return None
+    data = did_parse(did)
     return data['id_hex']
 
 
@@ -73,10 +88,13 @@ def decode_to_asset_id(asset_did_id):
         asset_id = Web3.toHex(hexstr=asset_did_id)
     else:
         data = did_parse(asset_did_id)
-        if data['id_hex']:
-            asset_id = data['id_hex']
-        if data['path'] and re.match('^[0-9A-Fa-f]{1,64}$', data['path']):
+        if data['path'] is None:
+            raise ValueError(f'Unable to get an asset_id from an agent DID address {asset_did_id}')
+
+        if data['path'] and re.match('^[0-9a-fx]{1,66}$', data['path'], re.IGNORECASE):
             asset_id = data['path']
+        else:
+            raise ValueError(f'DID with asset_id is not valid {asset_did_id}')
     return remove_0x_prefix(asset_id)
 
 

@@ -9,9 +9,6 @@ from starfish.agent.memory_agent import MemoryAgent
 from starfish.asset.data_asset import DataAsset
 from starfish.account import Account
 
-VALID_DID = 'did:dep:' + secrets.token_hex(64)
-INVALID_DID = 'did:dep:' + secrets.token_hex(128)
-
 
 def create_agent(network):
     agent = MemoryAgent(network)
@@ -90,7 +87,3 @@ def test_consume_asset(network, resources, config):
     purchase, listing, agent, asset, account = purchase_asset(network, resources, config)
     assert(agent.consume_asset(listing, account, purchase.purchase_id,))
 
-def test_is_did_valid():
-    assert(MemoryAgent.is_did_valid(VALID_DID))
-    # FIXME: This should be invalid
-    assert( MemoryAgent.is_did_valid(INVALID_DID))
