@@ -4,6 +4,7 @@
 
 """
 
+
 class StarfishConnectionError(Exception):
     """ Raised when starfish cannot connect to the network """
 

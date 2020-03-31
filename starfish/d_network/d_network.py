@@ -16,8 +16,8 @@ from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
 from starfish.exceptions import (
-    StarfishInsufficientFunds,
-    StarfishConnectionError
+    StarfishConnectionError,
+    StarfishInsufficientFunds
 )
 
 logger = logging.getLogger(__name__)

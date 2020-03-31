@@ -8,11 +8,11 @@
 
 """
 
+import gzip
 import importlib
 import inspect
 import json
 import logging
-import gzip
 import os
 
 from starfish.contract.contract_base import ContractBase
@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
+
 
 class ContractManager:
 
@@ -58,7 +59,6 @@ class ContractManager:
             contract_object.load(self.web3)
 
         return contract_object
-
 
     def get_contract_info(self, network_name, contract_name, abi_filename=None):
         contract_info = None
