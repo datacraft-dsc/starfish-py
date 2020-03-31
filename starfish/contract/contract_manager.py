@@ -49,22 +49,22 @@ class ContractManager:
 
         # abi_filename can be False, so that we do not need to load a contract info
         if abi_filename is None or abi_filename:
-            contract_info = self.get_contract_info(network_name, contract_name, abi_filename)
+            contract_info = self.get_contract_data(network_name, contract_name, abi_filename)
             if contract_info:
                 contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
             else:
-                raise FileNotFoundError(f'Cannot find artifact data for contract {network_name}.{contract_name}')
+                raise FileNotFoundError(f'Cannot find artifact data for contract {contract_name}.{network_name}')
         else:
             # load in an dummy contract with no abi or address
             contract_object.load(self.web3)
 
         return contract_object
 
-    def get_contract_info(self, network_name, contract_name, abi_filename=None):
-        contract_info = None
+    def get_contract_data(self, network_name, contract_name, abi_filename=None):
+        data = None
         if network_name in self._artifact_items and contract_name in self._artifact_items[network_name]:
             logger.debug(f'found contract in library {network_name}.{contract_name}')
-            contract_info = self._artifact_items[network_name][contract_name]
+            data = self._artifact_items[network_name][contract_name]
         else:
             if abi_filename is None:
                 abi_filename = f'{contract_name}.{network_name}.json'
@@ -72,10 +72,10 @@ class ContractManager:
             abi_filename_path = ContractManager.find_abi_filename(abi_filename)
             if abi_filename_path:
                 logger.debug(f'loading contract from file at {abi_filename_path}')
-                contract_info = ContractManager.load_abi_file(abi_filename_path)
-        return contract_info
+                data = ContractManager.load_abi_file(abi_filename_path)
+        return data
 
-    def set_contract_artifact(self, network_name, contract_name, data):
+    def set_contract_data(self, network_name, contract_name, data):
         if network_name not in self._artifact_items:
             self._artifact_items[network_name] = {}
         self._artifact_items[network_name][contract_name] = data

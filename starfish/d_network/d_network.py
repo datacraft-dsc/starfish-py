@@ -8,6 +8,7 @@
 import docker
 import logging
 import requests
+import re
 import time
 
 from web3 import (
@@ -88,31 +89,44 @@ class DNetwork():
 
         # only do this for the local 'spree' node
 
-        if not self._name == 'spree':
+        if not self._name == 'spree' or self._name == 'development':
             return True
 
+        # This list order is important, the development contracts have priority over spree
+        test_network_name_list = ['development', 'spree']
         timeout_time = time.time() + timeout_seconds
         while timeout_time > time.time():
-            contract_list = get_local_contract_files('keeper-contracts', ['spree', 'development'])
+            load_items = get_local_contract_files('keeper-contracts', '/keeper-contracts/artifacts')
 
             # now go through the list and collate the contract artifacts to a dict
-            artifact_items = {}
+            # we give pereference for .development. contracts
+            contract_items = {}
 
-            for contract_item in contract_list:
-                if 'name' in contract_item:
-                    artifact_items[contract_item['name']] = contract_item
+            for filename, data in load_items.items():
+                if 'name' in data:
+                    match = re.match('(\w+)\.(\w+)\.json', filename)
+                    if match:
+                        contract_name = match.group(1)
+                        network_name = match.group(2)
+                        if network_name and network_name in test_network_name_list:
+                            if network_name not in contract_items:
+                                contract_items[network_name] = {}
+                            contract_items[network_name][contract_name] = data
 
             # now go through the list of contracts supported and load in the artifact data
-            is_load_done = True
+            load_count = 0
+            contract_count = 0
             for contract_name, item in CONTRACT_LIST.items():
                 if item.get('abi_filename', True):
-                    if contract_name in artifact_items:
-                        self._contract_manager.set_contract_artifact('spree', contract_name, artifact_items[contract_name])
-                        logger.debug(f'imported contract {contract_name}')
-                    else:
-                        # no contract loaded yet
-                        is_load_done = False
-            if is_load_done:
+                    contract_count += 1
+                    for network_name in test_network_name_list:
+                        if contract_name in contract_items[network_name]:
+                            data = contract_items[network_name][contract_name]
+                            self._contract_manager.set_contract_data('spree', contract_name, data)
+                            logger.debug(f'imported contract {contract_name}.{network_name}')
+                            load_count += 1
+                            break
+            if load_count == contract_count:
                 return True
             # take some sleep to wait for the contracts to be built
             time.sleep(1)
