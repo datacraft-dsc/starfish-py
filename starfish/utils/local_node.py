@@ -43,7 +43,7 @@ def export_docker_contract_items(container, from_folder):
                 while tar_item:
                     if tar_item.isfile() and re.search(r'\.json$', tar_item.name):
                         filename = os.path.basename(tar_item.name)
-                        logger.debug(f'reading contract file {filename}, {tar_item.size}')
+                        # logger.debug(f'reading contract file {filename}, {tar_item.size}')
                         with tar.extractfile(tar_item) as fp:
                             contract_data = json.load(fp)
                             items[filename] = contract_data

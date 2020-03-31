@@ -76,7 +76,7 @@ class DNetwork():
         self._contracts = {}
         self._connect(self._url)
 
-    def load_test_node_contracts(self, timeout_seconds=120):
+    def load_test_node_contracts(self, timeout_seconds=240, sleep_time_seconds=10):
         """
 
         This only need to be called on a test network, where the contracts are installed locally on the node.
@@ -120,7 +120,7 @@ class DNetwork():
                 if item.get('abi_filename', True):
                     contract_count += 1
                     for network_name in test_network_name_list:
-                        if contract_name in contract_items[network_name]:
+                        if network_name in contract_items and contract_name in contract_items[network_name]:
                             data = contract_items[network_name][contract_name]
                             self._contract_manager.set_contract_data('spree', contract_name, data)
                             logger.debug(f'imported contract {contract_name}.{network_name}')
@@ -129,7 +129,8 @@ class DNetwork():
             if load_count == contract_count:
                 return True
             # take some sleep to wait for the contracts to be built
-            time.sleep(1)
+            logger.debug(f'only loaded {load_count} out of {contract_count} contracts wating for local node to startup..')
+            time.sleep(sleep_time_seconds)
         return False
 
     def get_contract(self, name):
