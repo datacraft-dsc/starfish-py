@@ -6,13 +6,13 @@
 
 """
 
-import docker
+import json
 import logging
 import os
-import tarfile
 import re
+import tarfile
 import tempfile
-import json
+import docker
 
 
 logger = logging.getLogger(__name__)

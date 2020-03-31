@@ -5,11 +5,10 @@
 
 """
 
-import docker
 import logging
-import requests
 import re
 import time
+import requests
 
 from web3 import (
     HTTPProvider,
@@ -18,11 +17,11 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
-from starfish.utils.local_node import get_local_contract_files
 from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
+from starfish.utils.local_node import get_local_contract_files
 
 
 logger = logging.getLogger(__name__)
@@ -85,9 +84,8 @@ class DNetwork():
 
 
         """
-        result = True
 
-        # only do this for the local 'spree' node
+        # only do this for the local 'spree' or 'development' node
 
         if not self._name == 'spree' or self._name == 'development':
             return True
@@ -104,7 +102,7 @@ class DNetwork():
 
             for filename, data in load_items.items():
                 if 'name' in data:
-                    match = re.match('(\w+)\.(\w+)\.json', filename)
+                    match = re.match(r'(\w+)\.(\w+)\.json', filename)
                     if match:
                         contract_name = match.group(1)
                         network_name = match.group(2)
