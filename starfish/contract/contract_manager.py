@@ -12,6 +12,7 @@ import importlib
 import inspect
 import json
 import logging
+import gzip
 import os
 
 from starfish.contract.contract_base import ContractBase
@@ -19,11 +20,14 @@ from starfish.contract.contract_base import ContractBase
 logger = logging.getLogger(__name__)
 
 
+ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
+
 class ContractManager:
 
     def __init__(self, web3, default_package_name):
         self._web3 = web3
         self._default_package_name = default_package_name
+        self._artifact_items = ContractManager.load_artifact_library(ARTIFACT_DATA_FILENAME)
 
     def load(self, name, network_name, abi_filename=None, package_name=None):
         if package_name is None:
@@ -41,20 +45,35 @@ class ContractManager:
     def create_contract(self, name, network_name, class_def, abi_filename=None):
         contract_object = class_def()
         contract_name = contract_object.name
-        if abi_filename is None:
-            abi_filename = f'{contract_name}.{network_name}.json'
-        if abi_filename:
-            abi_filename_path = ContractManager.find_abi_filename(abi_filename)
-            if abi_filename_path:
-                contract_info = ContractManager.load_abi_file(abi_filename_path)
+
+        # abi_filename can be False, so that we do not need to load a contract info
+        if abi_filename is None or abi_filename:
+            contract_info = self.get_contract_info(network_name, contract_name, abi_filename)
+            if contract_info:
                 contract_object.load(self.web3, abi=contract_info['abi'], address=contract_info['address'])
             else:
-                raise FileNotFoundError(f'Cannot find artifact file for contract {contract_name} {abi_filename}')
+                raise FileNotFoundError(f'Cannot find artifact data for contract {network_name}.{contract_name}')
         else:
             # load in an dummy contract with no abi or address
             contract_object.load(self.web3)
 
         return contract_object
+
+
+    def get_contract_info(self, network_name, contract_name, abi_filename=None):
+        contract_info = None
+        if network_name in self._artifact_items and contract_name in self._artifact_items[network_name]:
+            logger.debug(f'found contract in library {network_name}.{contract_name}')
+            contract_info = self._artifact_items[network_name][contract_name]
+        else:
+            if abi_filename is None:
+                abi_filename = f'{contract_name}.{network_name}.json'
+
+            abi_filename_path = ContractManager.find_abi_filename(abi_filename)
+            if abi_filename_path:
+                logger.debug(f'loading contract from file at {abi_filename_path}')
+                contract_info = ContractManager.load_abi_file(abi_filename_path)
+        return contract_info
 
     @property
     def web3(self):
@@ -71,6 +90,10 @@ class ContractManager:
 
     @staticmethod
     def find_abi_filename(filename):
+        test_file = os.path.join(os.path.dirname(__file__), 'data', filename)
+        if os.path.exists(test_file):
+            return test_file
+
         test_file = os.path.join('artifacts', filename)
         if os.path.exists(test_file):
             return test_file
@@ -81,3 +104,12 @@ class ContractManager:
         if filename and os.path.exists(filename):
             with open(filename, 'r') as fp:
                 return json.load(fp)
+
+    @staticmethod
+    def load_artifact_library(filename):
+        data = None
+        artifact_libray_file = os.path.join(os.path.dirname(__file__), 'data', filename)
+        if os.path.exists(artifact_libray_file):
+            with gzip.open(artifact_libray_file, 'rt') as fp:
+                data = json.load(fp)
+        return data

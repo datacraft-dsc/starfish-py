@@ -6,6 +6,7 @@
 """
 
 import logging
+import requests
 
 from web3 import (
     HTTPProvider,
@@ -14,7 +15,10 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
-from starfish.exceptions import StarfishInsufficientFunds
+from starfish.exceptions import (
+    StarfishInsufficientFunds,
+    StarfishConnectionError
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +46,6 @@ CONTRACT_LIST = {
     },
     'DIDRegistry': {
         'name': 'DIDRegistryContract',
-        'abi_filename': 'DIDRegistry.development.json'
     },
     'DirectPurchase': {
         'name': 'DirectPurchaseContract'
@@ -55,7 +58,6 @@ CONTRACT_LIST = {
     },
     'Provenance': {
         'name': 'ProvenanceContract',
-        'abi_filename': 'Provenance.development.json'
     },
 
 }
@@ -224,7 +226,11 @@ class DNetwork():
         self._url = url
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:
-            self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
+            try:
+                self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
+            except requests.exceptions.ConnectionError as e:
+                raise StarfishConnectionError(e)
+
             logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
             self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
