@@ -75,6 +75,11 @@ class ContractManager:
                 contract_info = ContractManager.load_abi_file(abi_filename_path)
         return contract_info
 
+    def set_contract_artifact(self, network_name, contract_name, data):
+        if network_name not in self._artifact_items:
+            self._artifact_items[network_name] = {}
+        self._artifact_items[network_name][contract_name] = data
+
     @property
     def web3(self):
         return self._web3

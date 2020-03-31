@@ -19,6 +19,7 @@ with open('CHANGELOG.md') as changelog_file:
 
 install_requirements = [
     'web3',
+    'docker',
 ]
 
 setup_requirements = ['pytest-runner', ]

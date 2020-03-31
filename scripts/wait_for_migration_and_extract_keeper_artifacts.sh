@@ -15,6 +15,7 @@ mkdir -p ${CONTRACT_FOLDER}
 
 until [ ${CONTRACTS_READY} -eq 0 ] || [ ${RETRY_COUNT} -eq 120 ]; do
     KEEPER_CONTRACTS_DOCKER_ID=$(docker container ls | grep keeper-contracts | awk '{print $1}')
+    echo "Docker id ${KEEPER_CONTRACTS_DOCKER_ID}"
     docker cp ${KEEPER_CONTRACTS_DOCKER_ID}:/keeper-contracts/artifacts/. ./${CONTRACT_FOLDER}/
     CONTRACT_FILES=(${CONTRACT_FOLDER}/*.json)
     # test for the ready file and a json file

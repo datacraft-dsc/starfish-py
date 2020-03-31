@@ -5,8 +5,10 @@
 
 """
 
+import docker
 import logging
 import requests
+import time
 
 from web3 import (
     HTTPProvider,
@@ -15,10 +17,12 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
+from starfish.utils.local_node import get_local_contract_files
 from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
+
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +74,49 @@ class DNetwork():
         self._name = None
         self._contracts = {}
         self._connect(self._url)
+
+    def load_test_node_contracts(self, timeout_seconds=120):
+        """
+
+        This only need to be called on a test network, where the contracts are installed locally on the node.
+
+        Wait for the contracts to be ready and installed
+
+
+        """
+        result = True
+
+        # only do this for the local 'spree' node
+
+        if not self._name == 'spree':
+            return True
+
+        timeout_time = time.time() + timeout_seconds
+        while timeout_time > time.time():
+            contract_list = get_local_contract_files('keeper-contracts', ['spree', 'development'])
+
+            # now go through the list and collate the contract artifacts to a dict
+            artifact_items = {}
+
+            for contract_item in contract_list:
+                if 'name' in contract_item:
+                    artifact_items[contract_item['name']] = contract_item
+
+            # now go through the list of contracts supported and load in the artifact data
+            is_load_done = True
+            for contract_name, item in CONTRACT_LIST.items():
+                if item.get('abi_filename', True):
+                    if contract_name in artifact_items:
+                        self._contract_manager.set_contract_artifact('spree', contract_name, artifact_items[contract_name])
+                        logger.debug(f'imported contract {contract_name}')
+                    else:
+                        # no contract loaded yet
+                        is_load_done = False
+            if is_load_done:
+                return True
+            # take some sleep to wait for the contracts to be built
+            time.sleep(1)
+        return False
 
     def get_contract(self, name):
         if name not in CONTRACT_LIST:
