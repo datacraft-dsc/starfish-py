@@ -8,14 +8,14 @@
 """
 
 import argparse
-import base64
-import json
 import gzip
-import re
+import json
 import os
+import re
 
 DEFAULT_ARTICLE_LIBRARY = 'artifacts.json.gz'
 DEFAULT_COMMAND = 'create'
+
 
 def import_artifact_file(filename, data):
     if isinstance(filename, (list, tuple)):
@@ -39,11 +39,12 @@ def import_artifact_file(filename, data):
     data[network_name][contract_name] = data_json
     print(f'Adding {network_name}/{contract_name}')
 
+
 def outptut_as_python_file(filename, data):
     with open(filename, 'w') as fp:
         fp.write('# auto generated artifle files\n')
         fp.write('artifact_data = {\n',)
-        for network_name, item in artifact_data.items():
+        for network_name, item in data.items():
             fp.write(f"    '{network_name}': {{ \n")
             for contract_name, abi_item in item.items():
                 fp.write(f"        '{contract_name}': {{\n")
@@ -53,6 +54,7 @@ def outptut_as_python_file(filename, data):
             fp.write('    }\n')
         fp.write('\n')
 
+
 def output_as_json_file(filename, data, is_compressed):
     if is_compressed:
         with gzip.open(filename, 'wt') as fp:
@@ -61,14 +63,15 @@ def output_as_json_file(filename, data, is_compressed):
         with open(filename, 'w') as fp:
             json.dump(data, fp)
 
+
 def list_artifact_data(data):
     print(f'Network Name         Contract Name')
     for network_name, contract_names in data.items():
         for contract_name, item in contract_names.items():
             print(f'{network_name:20} {contract_name}')
 
-def main():
 
+def main():
 
     parser = argparse.ArgumentParser(description='Contract Artifact Library Builder')
 
@@ -93,16 +96,16 @@ def main():
         help=f'filename of the artifact library filename to manage. Default: {DEFAULT_ARTICLE_LIBRARY}'
     )
 
-
-    parser.add_argument('command',
+    parser.add_argument(
+        'command',
         default=DEFAULT_COMMAND,
         help='''command to execute, can be the following
 
-create or c - create a new artifact library. Default option
-udpate or u - update a current library
-list or l   - list the contents of a library
+            create or c - create a new artifact library. Default option
+            udpate or u - update a current library
+            list or l   - list the contents of a library
 
-'''
+            '''
     )
 
     parser.add_argument(
@@ -114,9 +117,9 @@ list or l   - list the contents of a library
     args = parser.parse_args()
 
     library_file = args.file
-    if re.search('\.gz$', library_file):
+    if re.search(r'\.gz$', library_file):
         library_file_gz = library_file
-        library_file = re.sub('\.gz$', '', library_file_gz)
+        library_file = re.sub(r'\.gz$', '', library_file_gz)
     else:
         library_file_gz = f'{library_file}.gz'
 

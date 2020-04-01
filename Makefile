@@ -7,7 +7,7 @@
 
 IGNORE_VENV ?= FALSE
 
-PACKAGE_FOLDERS = starfish
+PACKAGE_FOLDERS = starfish tools
 
 FLAKE8_PARAMETERS = --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
 
