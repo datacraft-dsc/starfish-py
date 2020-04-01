@@ -8,3 +8,4 @@ recursive-exclude * *.py[co]
 
 recursive-include docs Makefile
 recursive-include starfish/contract/data *
+recursive-include tools *

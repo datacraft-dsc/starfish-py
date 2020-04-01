@@ -151,9 +151,9 @@ class DNetwork():
 
 
     """
-    def get_ether_balance(self, account_address):
+    def get_ether_balance(self, account):
         network_contract = self.get_contract('Network')
-        return network_contract.get_balance(account_address)
+        return network_contract.get_balance(account.address)
 
     def get_token_balance(self, account):
         ocean_token_contract = self.get_contract('OceanToken')
@@ -177,7 +177,7 @@ class DNetwork():
         response = requests.post(url, json=data, headers=headers)
         logger.debug(f'response {response.text} {response.status_code}')
         if response.status_code != 200:
-            raise ValueError(f'{response.status_code} {response.text}')
+            logger.warning(f'{response.status_code} {response.text}')
 
     """
 
