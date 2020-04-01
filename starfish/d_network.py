@@ -46,7 +46,7 @@ NETWORK_NAMES = {
 CONTRACT_LIST = {
     'Network': {
         'name': 'NetworkContract',
-        'abi_filename': False,
+        'has_artifact': False,
     },
     'DIDRegistry': {
         'name': 'DIDRegistryContract',
@@ -116,12 +116,12 @@ class DNetwork():
             load_count = 0
             contract_count = 0
             for contract_name, item in CONTRACT_LIST.items():
-                if item.get('abi_filename', True):
+                if item.get('has_artifact', True):
                     contract_count += 1
                     for network_name in test_network_name_list:
                         if network_name in contract_items and contract_name in contract_items[network_name]:
                             data = contract_items[network_name][contract_name]
-                            self._contract_manager.set_contract_data('spree', contract_name, data)
+                            self._contract_manager.set_contract_data(contract_name, data)
                             logger.debug(f'imported contract {contract_name}.{network_name}')
                             load_count += 1
                             break
@@ -138,7 +138,11 @@ class DNetwork():
 
         if name not in self._contracts:
             item = CONTRACT_LIST[name]
-            self._contracts[name] = self._contract_manager.load(item['name'], self._name, item.get('abi_filename', None))
+            self._contracts[name] = self._contract_manager.load(
+                item['name'],
+                artifact_filename=item.get('artifact_filename', None),
+                has_artifact=item.get('has_artifact', True)
+            )
         return self._contracts[name]
 
     """
@@ -309,6 +313,6 @@ class DNetwork():
 
             logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
-            self._contract_manager = ContractManager(self._web3, DEFAULT_PACKAGE_NAME)
+            self._contract_manager = ContractManager(self._web3, self._name, DEFAULT_PACKAGE_NAME)
             return True
         return False
