@@ -32,7 +32,6 @@ class ContractManager:
         if self._artifact_items is None:
             self._artifact_items = []
 
-
     def load(self, name, network_name, abi_filename=None, package_name=None):
         if package_name is None:
             package_name = self._default_package_name
