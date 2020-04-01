@@ -29,6 +29,9 @@ class ContractManager:
         self._web3 = web3
         self._default_package_name = default_package_name
         self._artifact_items = ContractManager.load_artifact_library(ARTIFACT_DATA_FILENAME)
+        if self._artifact_items is None:
+            self._artifact_items = []
+
 
     def load(self, name, network_name, abi_filename=None, package_name=None):
         if package_name is None:

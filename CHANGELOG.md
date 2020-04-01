@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.8.4
++   Add contract article library to distribution
+
 ### Release v0.8.3
 +   Better DID validation and error reporting
 +   add new functions in module utils.did: is_did, is_asset_did, asset_did_validate and did_validate
