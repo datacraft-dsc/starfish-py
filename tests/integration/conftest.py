@@ -34,7 +34,7 @@ def network(config):
     network = DNetwork(config.network_url)
 
     # new method to wait for the contracts to be installed on the test node
-    assert(network.load_test_node_contracts())
+    assert(network.load_development_contracts())
 
     return network
 
