@@ -16,6 +16,7 @@ from starfish import DNetwork
 DEFAULT_NETWORK_URL = 'http://localhost:8545'
 DEFAULT_TIMEOUT = 480
 
+
 def main():
 
     parser = argparse.ArgumentParser(description='Wait for local test network')
@@ -45,7 +46,6 @@ def main():
 
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)
-       # logging.getLogger('urllib3').setLevel(logging.INFO)
 
     print('wating for network startup...')
     network = DNetwork(args.url)
