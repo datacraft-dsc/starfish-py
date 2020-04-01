@@ -53,9 +53,11 @@ def remote_agent(network, config):
 
 @pytest.fixture(scope='module')
 def accounts(config):
+    result = []
+    # load in the test accounts
     result = [
-        Account(config.account_1),
-        Account(config.account_2)
+        Account(config.account_1['address'], config.account_1['password'], key_file=config.account_1['keyfile']),
+        Account(config.account_2['address'], config.account_2['password'], key_file=config.account_2['keyfile']),
     ]
     return result
 

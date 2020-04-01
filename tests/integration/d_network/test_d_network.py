@@ -13,6 +13,8 @@ from starfish.agent.services import Services
 from starfish import DNetwork
 
 TEST_AMOUNT = 5
+TEST_KEY_STORE_FILENAME = '/tmp/test_key_store.dat'
+
 
 def test_dnetwork_basic(network, config):
     assert(network.name == 'spree')
@@ -129,8 +131,4 @@ def test_dnetwork_regiser_resolve_did_ddo(config, network, accounts):
     ddo_text_saved = network.resolve_did(did)
 
     assert(ddo_text == ddo_text_saved)
-
-
-
-
 

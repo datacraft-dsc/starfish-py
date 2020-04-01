@@ -145,6 +145,7 @@ class DNetwork():
 
     Account based operations
 
+
     """
     def get_ether_balance(self, account_address):
         network_contract = self.get_contract('Network')
@@ -159,6 +160,20 @@ class DNetwork():
         tx_hash = dispenser_contract.request_tokens(account, amount)
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
+
+    def request_ether_from_faucet(self, account, url):
+        data = {
+            'address': account.address,
+            'agent': 'server',
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        response = requests.post(url, json=data, headers=headers)
+        logger.debug(f'response {response.text} {response.status_code}')
+        if response.status_code != 200:
+            raise ValueError(f'{response.status_code} {response.text}')
 
     """
 

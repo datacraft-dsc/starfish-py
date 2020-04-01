@@ -4,6 +4,9 @@
 
 """
 
+import json
+
+from eth_account import Account as EthAccount
 from web3 import Web3
 
 
@@ -16,8 +19,10 @@ class Account():
     :type address: string or dict
     :param password: password for the account
     :type password: str or None
+    :param str key_value: key value data that is stored in the keyfile
     :param keyfile: keyfile containing the private encrypted key
     :type keyfile: str or None
+
 
     If the address parameter is a string then it's the account address.
     If dict then the dict can be the following format: ::
@@ -29,25 +34,106 @@ class Account():
 
     """
 
-    def __init__(self, address, password=None, keyfile=None):
+    def __init__(self, address, password=None, key_value=None, key_file=None):
         """init a standard ocean agent"""
         self._address = None
         self._password = None
+        self._key_value = None
 
         if isinstance(address, dict):
             self._address = Web3.toChecksumAddress(address.get('address'))
             self._password = address.get('password')
-            self._keyfile = address.get('keyfile')
+            self._key_value = address.get('key_value')
+            key_file = address.get('key_file')
         elif isinstance(address, (tuple, list)):
             self._address = Web3.toChecksumAddress(address[0])
             if len(address) > 1:
                 self._password = address[1]
             if len(address) > 2:
-                self._keyfile = address[2]
+                self._key_value = address[2]
+            if len(address) > 3:
+                key_file = address[3]
         elif isinstance(address, str):
             self._address = Web3.toChecksumAddress(address)
             self._password = password
-            self._keyfile = keyfile
+            self._key_value = key_value
+
+        # auto load in key_value from file
+        if key_file:
+            self.load_from_file(key_file)
+
+    @staticmethod
+    def create(password):
+        """
+
+        Create a new account.
+
+        You need to call `save_key_file` method to save the key information
+
+        :return: Returns an account object
+        """
+        local_account = EthAccount.create(password)
+        key_value = EthAccount.encrypt(local_account.key, password)
+        account = Account(local_account.address, password, key_value)
+        return account
+
+    def load_from_file(self, filename):
+        """
+
+        Load in a key value from a file
+
+        :param str filename: file to that has the key_value
+
+        """
+        with open(filename, 'r') as fp:
+            self._key_value = json.load(fp)
+
+    def save_to_file(self, filename):
+        """
+
+        Save a key value to a file
+
+        :param str filename: filename to write the key_value too.
+
+        """
+        if self._key_value:
+            with open(filename, 'w') as fp:
+                json.dump(self._key_value, fp)
+
+    @property
+    def export_key_value(self):
+        """
+
+        Export a key_value to json text
+
+        """
+        return json.dumps(self._key_value, sort_keys=True, indent=2)
+
+    def import_key_value(self, json_text):
+        """
+
+        Import a key_value from a json string
+
+        """
+        data = json.loads(json_text)
+        self._key_value = data
+
+    def export_key(self, password):
+        """
+
+        Export the private key
+
+
+        """
+        return EthAccount.decrypt(self._key_value, password)
+
+    def import_key(self, raw_key, password):
+        """
+
+        Import the raw private key
+
+        """
+        self._key_value = EthAccount.encrypt(raw_key, password)
 
     def is_address_equal(self, address):
         """
@@ -66,11 +152,8 @@ class Account():
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
     def sign_transaction(self, web3, transaction):
-        encrypted_key = None
-        with open(self._keyfile, 'r') as fp:
-            encrypted_key = fp.read()
-        if encrypted_key:
-            secret_key = web3.eth.account.decrypt(encrypted_key, self._password)
+        if self.key_value:
+            secret_key = web3.eth.account.decrypt(self.key_value, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
             return signed
 
@@ -144,12 +227,17 @@ class Account():
         self._password = password
 
     @property
-    def keyfile(self):
-        return self._keyfile
+    def key_value(self):
+        """
+
+        This is the encrypted key value that contains the account private key
+
+        """
+        return self._key_value
 
     @property
     def is_valid(self):
-        return self._address and self._password and self._keyfile
+        return self._address and self._password and self._key_value
 
     def __str__(self):
         return f'Account: {self.address}'
