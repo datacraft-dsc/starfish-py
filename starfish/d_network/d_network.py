@@ -75,13 +75,12 @@ class DNetwork():
         self._contracts = {}
         self._connect(self._url)
 
-    def load_test_node_contracts(self, timeout_seconds=240, sleep_time_seconds=10):
+    def load_development_contracts(self, timeout_seconds=240, sleep_time_seconds=10):
         """
 
-        This only need to be called on a test network, where the contracts are installed locally on the node.
+        This only need to be called on a development network, where the contracts are installed locally on the local node/network.
 
         Wait for the contracts to be ready and installed
-
 
         """
 
@@ -92,6 +91,8 @@ class DNetwork():
 
         # This list order is important, the development contracts have priority over spree
         test_network_name_list = ['development', 'spree']
+        if timeout_seconds is None:
+            timeout_seconds = 240
         timeout_time = time.time() + timeout_seconds
         while timeout_time > time.time():
             load_items = get_local_contract_files('keeper-contracts', '/keeper-contracts/artifacts')

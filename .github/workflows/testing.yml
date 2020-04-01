@@ -47,6 +47,6 @@ jobs:
         cd ../surfer
         clojure -M:main &
     - name: Wait for barge startup
-      run: scripts/wait_for_migration_and_extract_keeper_artifacts.sh
+      run: tools/wait_for_development_network.py
     - name: Test
       run: make tests

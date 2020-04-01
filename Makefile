@@ -7,7 +7,7 @@
 
 IGNORE_VENV ?= FALSE
 
-PACKAGE_FOLDERS = starfish
+PACKAGE_FOLDERS = starfish tools
 
 FLAKE8_PARAMETERS = --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
 
@@ -56,14 +56,12 @@ isort:
 	isort $(ISORT_PARAMETERS)
 
 tests:
-	./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
 	pytest tests
 
 test-unit:
 	pytest tests/unit
 
 test-integration:
-	./scripts/wait_for_migration_and_extract_keeper_artifacts.sh
 	pytest tests/integration
 
 docs:
