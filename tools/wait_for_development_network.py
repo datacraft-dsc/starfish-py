@@ -49,7 +49,7 @@ def main():
 
     print('wating for network startup...')
     network = DNetwork(args.url)
-    if network.load_test_node_contracts(args.timeout):
+    if network.load_development_contracts(args.timeout):
         print(f'Network at {args.url} is ready')
     else:
         print(f'Timeout: Network at {args.url} is not ready')

@@ -11,6 +11,10 @@ def main():
     network = DNetwork('http://localhost:8545')
     print(network.name)
 
+    # we only need to call this method if we are using a local test network.
+    # load in the contracts and their addresses from the local test network
+    network.load_development_contracts()
+
     # Now create a memory asset
     asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
 

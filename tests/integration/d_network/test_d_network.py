@@ -20,8 +20,8 @@ def test_dnetwork_basic(network, config):
     assert(network.contract_names)
     assert(network.url == config.network_url)
 
-def test_dnetwork_get_load_test_node_contracts(network):
-    assert(network.load_test_node_contracts())
+def test_dnetwork_load_development_contracts(network):
+    assert(network.load_development_contracts())
 
 def test_dnetwork_account(network, accounts):
     test_account = accounts[0]
