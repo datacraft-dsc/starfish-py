@@ -98,5 +98,6 @@ def main():
         network.request_ether_from_faucet(account, args.faucet)
         print(network.get_ether_balance(account))
 
+
 if __name__ == "__main__":
     main()
