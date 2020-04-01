@@ -4,6 +4,7 @@
     Tests for `starfish-py account`.
 
 """
+import json
 import unittest
 
 def test_account_load(config, accounts):
@@ -12,4 +13,5 @@ def test_account_load(config, accounts):
     assert(account)
     assert(account.address.lower() == config.account_1['address'].lower())
     assert(account.password == config.account_1['password'])
-    assert(account.keyfile == config.account_1['keyfile'])
+    with open(config.account_1['keyfile'], 'r') as fp:
+        key_value = fp.read()
