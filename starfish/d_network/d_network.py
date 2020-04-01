@@ -92,6 +92,8 @@ class DNetwork():
 
         # This list order is important, the development contracts have priority over spree
         test_network_name_list = ['development', 'spree']
+        if timeout_seconds is None:
+            timeout_seconds = 240
         timeout_time = time.time() + timeout_seconds
         while timeout_time > time.time():
             load_items = get_local_contract_files('keeper-contracts', '/keeper-contracts/artifacts')
