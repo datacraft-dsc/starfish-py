@@ -3,9 +3,13 @@
 
 """The setup script."""
 
-from setuptools import setup
 import os
 from os.path import join
+
+from setuptools import (
+    setup,
+    find_packages
+)
 
 with open('README.md') as readme_file:
     readme = readme_file.read()
@@ -15,6 +19,7 @@ with open('CHANGELOG.md') as changelog_file:
 
 install_requirements = [
     'web3',
+    'docker',
 ]
 
 setup_requirements = ['pytest-runner', ]
@@ -42,11 +47,6 @@ docs_requirements = [
     'pygments',
 ]
 
-packages = []
-for d, _, _ in os.walk('starfish'):
-    if os.path.exists(join(d, '__init__.py')):
-        packages.append(d.replace(os.path.sep, '.'))
-
 setup(
     author="dex-company",
     author_email='devops@dex.sg',
@@ -67,10 +67,13 @@ setup(
     license="Apache Software License 2.0",
     long_description=readme,
     long_description_content_type='text/markdown',
-    include_package_data=True,
     keywords='starfish-py',
     name='starfish-py',
-    packages=packages,
+    packages=find_packages(),
+    include_package_data=True,
+    package_data={
+        'starfish.contract': ['data/*.json.gz', 'data/*.json']
+    },
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

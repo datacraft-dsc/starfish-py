@@ -3,6 +3,8 @@
 ### Release v0.8.3
 +   Better DID validation and error reporting
 +   add new functions in module utils.did: is_did, is_asset_did, asset_did_validate and did_validate
++   Read test contracts directly from barge
++   Tool to create a contract article json.gz file contracts on public networks
 
 ### Release v0.8.2
 +   Allow agent download and get asset to use an asset did or asset id

@@ -32,6 +32,10 @@ def config(intergation_config):
 @pytest.fixture(scope="module")
 def network(config):
     network = DNetwork(config.network_url)
+
+    # new method to wait for the contracts to be installed on the test node
+    assert(network.load_test_node_contracts())
+
     return network
 
 
