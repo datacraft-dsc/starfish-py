@@ -2,6 +2,8 @@
 
 ### Release v0.8.4
 +   Add contract article library to distribution
++   Refactor ContractManager
++   Add tool to add accounts and request ether from a faucet
 
 ### Release v0.8.3
 +   Better DID validation and error reporting
