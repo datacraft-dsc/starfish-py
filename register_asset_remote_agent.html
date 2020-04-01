@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.8.2 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.8.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.2
+                0.8.3
               </div>
             
           
@@ -301,6 +301,10 @@ block chain, the second id is the internall asset id registered on the remote ag
     <span class="c1"># Create a new Ocean instance.</span>
     <span class="n">network</span> <span class="o">=</span> <span class="n">DNetwork</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># we only need to call this method if we are using a local test network.</span>
+    <span class="c1"># load in the contracts and their addresses from the local test network</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">load_development_contracts</span><span class="p">()</span>
 
     <span class="c1"># Now create a memory asset</span>
     <span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;TestAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>

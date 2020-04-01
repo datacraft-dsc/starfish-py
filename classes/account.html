@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account class &mdash; starfish-py 0.8.2 documentation</title>
+  <title>Account class &mdash; starfish-py 0.8.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.2
+                0.8.3
               </div>
             
           
@@ -165,7 +165,7 @@
 <h1>Account class<a class="headerlink" href="#account-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="starfish.account.Account">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">keyfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">key_value=None</em>, <em class="sig-param">key_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Account class, adds functionality for an account to be used on the starfish named network.</p>
 <dl class="field-list simple">
@@ -173,6 +173,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>address</strong> (<em>string</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – address or dict of the account details</p></li>
 <li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – password for the account</p></li>
+<li><p><strong>key_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – key value data that is stored in the keyfile</p></li>
 <li><p><strong>keyfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – keyfile containing the private encrypted key</p></li>
 </ul>
 </dd>
@@ -224,6 +225,42 @@ If dict then the dict can be the following format:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="starfish.account.Account.create">
+<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new account.</p>
+<p>You need to call <cite>save_key_file</cite> method to save the key information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns an account object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.export_key">
+<code class="sig-name descname">export_key</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.export_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the private key</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.export_key_value">
+<em class="property">property </em><code class="sig-name descname">export_key_value</code><a class="headerlink" href="#starfish.account.Account.export_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export a key_value to json text</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.import_key">
+<code class="sig-name descname">import_key</code><span class="sig-paren">(</span><em class="sig-param">raw_key</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import the raw private key</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.import_key_value">
+<code class="sig-name descname">import_key_value</code><span class="sig-paren">(</span><em class="sig-param">json_text</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a key_value from a json string</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="starfish.account.Account.is_address_equal">
 <code class="sig-name descname">is_address_equal</code><span class="sig-paren">(</span><em class="sig-param">address</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.is_address_equal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two addresses if are equal. Both addresses are converted to checksum
@@ -258,9 +295,21 @@ address and then compared.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="starfish.account.Account.keyfile">
-<em class="property">property </em><code class="sig-name descname">keyfile</code><a class="headerlink" href="#starfish.account.Account.keyfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="starfish.account.Account.key_value">
+<em class="property">property </em><code class="sig-name descname">key_value</code><a class="headerlink" href="#starfish.account.Account.key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the encrypted key value that contains the account private key</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.load_from_file">
+<code class="sig-name descname">load_from_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.load_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load in a key value from a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – file to that has the key_value</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="starfish.account.Account.password">
@@ -278,6 +327,17 @@ address and then compared.</p>
 <span class="go">secret</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="starfish.account.Account.save_to_file">
+<code class="sig-name descname">save_to_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.save_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a key value to a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – filename to write the key_value too.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
