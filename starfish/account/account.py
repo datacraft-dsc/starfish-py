@@ -19,9 +19,9 @@ class Account():
     :type address: string or dict
     :param password: password for the account
     :type password: str or None
+    :param str key_value: key value data that is stored in the keyfile
     :param keyfile: keyfile containing the private encrypted key
     :type keyfile: str or None
-    :param str key_value: key value data that is stored in the keyfile
 
 
     If the address parameter is a string then it's the account address.
@@ -34,7 +34,7 @@ class Account():
 
     """
 
-    def __init__(self, address, password=None, key_value=None):
+    def __init__(self, address, password=None, key_value=None, key_file=None):
         """init a standard ocean agent"""
         self._address = None
         self._password = None
@@ -44,16 +44,23 @@ class Account():
             self._address = Web3.toChecksumAddress(address.get('address'))
             self._password = address.get('password')
             self._key_value = address.get('key_value')
+            key_file = address.get('key_file')
         elif isinstance(address, (tuple, list)):
             self._address = Web3.toChecksumAddress(address[0])
             if len(address) > 1:
                 self._password = address[1]
             if len(address) > 2:
                 self._key_value = address[2]
+            if len(address) > 3:
+                key_file = address[3]
         elif isinstance(address, str):
             self._address = Web3.toChecksumAddress(address)
             self._password = password
             self._key_value = key_value
+
+        # auto load in key_value from file
+        if key_file:
+            self.load_from_file(key_file)
 
     @staticmethod
     def create(password):
