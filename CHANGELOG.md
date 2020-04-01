@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.5
++   Remove test from package file
++   Release tools as scripts
+
 ### Release v0.8.4
 +   Add contract article library to distribution
 +   Refactor ContractManager
