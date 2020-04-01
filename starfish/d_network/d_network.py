@@ -5,7 +5,6 @@
 
 """
 
-import json
 import logging
 import re
 import time
@@ -148,8 +147,6 @@ class DNetwork():
 
 
     """
-
-
     def get_ether_balance(self, account_address):
         network_contract = self.get_contract('Network')
         return network_contract.get_balance(account_address)
@@ -165,7 +162,7 @@ class DNetwork():
         return receipt.status == 1
 
     def request_ether_from_faucet(self, account, url):
-        data  = {
+        data = {
             'address': account.address,
             'agent': 'server',
         }
@@ -173,7 +170,7 @@ class DNetwork():
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-        response = requests.post(url, json = data, headers=headers)
+        response = requests.post(url, json=data, headers=headers)
         logger.debug(f'response {response.text} {response.status_code}')
         if response.status_code != 200:
             raise ValueError(f'{response.status_code} {response.text}')

@@ -56,7 +56,6 @@ class Account():
             self._key_value = key_value
 
     @staticmethod
-
     def create(password):
         """
 
@@ -129,7 +128,6 @@ class Account():
         """
         self._key_value = EthAccount.encrypt(raw_key, password)
 
-
     def is_address_equal(self, address):
         """
 
@@ -147,7 +145,6 @@ class Account():
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
     def sign_transaction(self, web3, transaction):
-        encrypted_key = None
         if self.key_value:
             secret_key = web3.eth.account.decrypt(self.key_value, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
