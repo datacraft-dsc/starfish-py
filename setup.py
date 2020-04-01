@@ -74,6 +74,10 @@ setup(
     package_data={
         'starfish.contract': ['data/*.json.gz', 'data/*.json']
     },
+    scripts=[
+        'tools/account_setup.py',
+        'tools/wait_for_development_network.py'
+    ],
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
