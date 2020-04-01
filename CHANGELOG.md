@@ -6,6 +6,8 @@
 +   Read test contracts directly from barge
 +   Tool to create a contract article json.gz file contracts on public networks
 +   Tool to wait for development node to be built and contracts installed
++   Changed Account class to set the json key values on init, add new export, import, create features
++   Add request_ether_from_faucet method to DNetwork
 
 ### Release v0.8.2
 +   Allow agent download and get asset to use an asset did or asset id
