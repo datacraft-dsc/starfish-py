@@ -59,6 +59,7 @@ class SendTokenCommand(CommandBase):
 
         account = Account(args.address, args.password, key_file=args.keyfile)
         amount = float(args.amount)
+        to_address = args.to_address
 
         network = self.get_network(args.url)
         logger.debug(f'sending tokens from account {account.address} to account {to_address}')

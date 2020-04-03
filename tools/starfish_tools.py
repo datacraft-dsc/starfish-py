@@ -68,5 +68,6 @@ def main():
 
     output.printout(args.json)
 
+
 if __name__ == "__main__":
     main()
