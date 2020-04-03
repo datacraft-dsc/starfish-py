@@ -47,6 +47,6 @@ jobs:
         cd ../surfer
         clojure -M:main &
     - name: Wait for barge startup
-      run: tools/wait_for_development_network.py
+      run: tools/starfish_tools.py wait
     - name: Test
       run: make tests

@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.8.6
++   Allow for local testing on nile network
++   create new starfish_tools.py script to provide basic tools
++   move wait_for_development.py to 'starfish_tools.py wait'
+
 ### Release v0.8.5
 +   Remove test from package file
 +   Release tools as scripts

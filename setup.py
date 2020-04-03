@@ -76,7 +76,6 @@ setup(
     },
     scripts=[
         'tools/starfish_tools.py',
-        'tools/wait_for_development_network.py'
     ],
     setup_requires=setup_requirements,
     test_suite='tests',

@@ -61,9 +61,6 @@ class CommandBase(ABC):
             url = 'http://localhost:8545'
         network = DNetwork(url)
 
-        # in-case we are using a local development network
-        network.load_development_contracts()
-
         return network
 
     def get_network_setup(self, name):
