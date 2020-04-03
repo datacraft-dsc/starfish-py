@@ -13,6 +13,7 @@ import logging
 
 from starfish.tool.create_account_command import CreateAccountCommand
 from starfish.tool.get_command import GetCommand
+from starfish.tool.send_command import SendCommand
 from starfish.tool.tool_output import ToolOutput
 
 
@@ -47,45 +48,10 @@ def main():
         dest='command'
     )
 
-    """
-    parser.add_argument(
-        '-k',
-        '--keyfile',
-        help='Key file to use for the account'
-    )
-
-    parser.add_argument(
-        '-p',
-        '--password',
-        help='Password for the account'
-    )
-
-    parser.add_argument(
-        '-a',
-        '--address',
-        help='The account address'
-    )
-
-    parser.add_argument(
-        '-f',
-        '--faucet',
-        help='The faucet url'
-    )
-
-    parser.add_argument(
-        'command',
-        nargs=1,
-        help='''command to execute, can be the following
-
-            create or c - create a account
-            ether or e - request ether
-            '''
-    )
-    """
-
     command_list = [
         CreateAccountCommand(command_parser),
         GetCommand(command_parser),
+        SendCommand(command_parser),
     ]
 
     args = parser.parse_args()
@@ -101,41 +67,6 @@ def main():
             break
 
     output.printout(args.json)
-
-    """
-    command_chr = args.command[0].lower()[0]
-
-    if command_chr == 'c':
-        if args.password is None:
-            print('Please provide a password for the new account')
-            return
-        account = Account.create(args.password)
-        if args.keyfile:
-            account.save_to_file(args.keyfile)
-        else:
-            print(account.export_key_value)
-        print(account.address)
-    elif command_chr == 'e':
-        if args.address is None:
-            print('Please provide the account address')
-            return
-        if args.faucet is None:
-            print('Please provide the faucet url')
-
-        account = Account(args.address, args.password)
-        network.request_ether_from_faucet(account, args.faucet)
-        print(network.get_ether_balance(account))
-
-    elif command_chr == 't':
-        if args.address is None:
-            print('Please provide the account address')
-            return
-
-        account = Account(args.address, args.password)
-        network.request_test_tokens(account, 10)
-        print(network.get_token_balance(account))
-    """
-
 
 if __name__ == "__main__":
     main()
