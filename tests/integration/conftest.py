@@ -6,28 +6,16 @@ import pathlib
 import requests
 from web3 import Web3, HTTPProvider
 
-from tests.integration.libs.integration_test_config import IntegrationTestConfig
-
 from starfish import DNetwork
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 from starfish.account import Account
 
-RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
-CONFIG_FILE_PATH = RESOURCES_PATH / 'config_local.conf'
 
 logging.getLogger('web3').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
 
-@pytest.fixture(scope='module')
-def intergation_config():
-    integration_test_config = IntegrationTestConfig(CONFIG_FILE_PATH)
-    return integration_test_config
-
-@pytest.fixture(scope="module")
-def config(intergation_config):
-    return intergation_config
 
 @pytest.fixture(scope="module")
 def network(config):
@@ -39,7 +27,7 @@ def network(config):
     return network
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope='module')
 def remote_agent(network, config):
     ddo_options = None
     remote_agent = config.agent_list['remote']
@@ -50,6 +38,7 @@ def remote_agent(network, config):
         'password': remote_agent['password'],
     }
     return RemoteAgent(network, ddo, authentication)
+
 
 @pytest.fixture(scope='module')
 def accounts(config):

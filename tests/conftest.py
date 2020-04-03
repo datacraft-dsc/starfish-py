@@ -5,10 +5,13 @@ import datetime
 import logging
 from unittest.mock import Mock
 
+from tests.libs.config import Config
+
 RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
 METADATA_SAMPLE_FILE = RESOURCES_PATH / 'metadata' / 'sample_metadata1.json'
 TEST_ASSET_FILE = RESOURCES_PATH / 'test_asset_file.txt'
 TEST_ASSET_REMOTE = 'https://oceanprotocol.com/tech-whitepaper.pdf'
+CONFIG_FILE_PATH = RESOURCES_PATH / 'config_development.conf'
 
 
 # set debug logging
@@ -25,6 +28,10 @@ TEST_LISTING_DATA = {
     'extra_data': 'Some extra data',
     'tags': ['asset', 'sale', 'test', 'starfish'],
 }
+
+@pytest.fixture(scope='module')
+def config():
+    return Config(CONFIG_FILE_PATH)
 
 
 @pytest.fixture(scope="module")

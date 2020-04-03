@@ -8,7 +8,7 @@ from configparser import (
 )
 
 
-class IntegrationTestConfig():
+class Config():
     def __init__(self, filename):
 
         config = ConfigParser(interpolation=ExtendedInterpolation())
