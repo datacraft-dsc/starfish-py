@@ -14,9 +14,8 @@ import logging
 from starfish.tool.create_account_command import CreateAccountCommand
 from starfish.tool.get_command import GetCommand
 from starfish.tool.send_command import SendCommand
-from starfish.tool.wait_network_command import WaitNetworkCommand
 from starfish.tool.tool_output import ToolOutput
-
+from starfish.tool.wait_network_command import WaitNetworkCommand
 
 
 def main():

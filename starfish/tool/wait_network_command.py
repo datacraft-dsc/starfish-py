@@ -5,13 +5,13 @@
 """
 import logging
 
-from starfish.account import Account
 from .command_base import CommandBase
 
 logger = logging.getLogger(__name__)
 
 
 DEFAULT_TIMEOUT = 240
+
 
 class WaitNetworkCommand(CommandBase):
 
@@ -43,4 +43,3 @@ class WaitNetworkCommand(CommandBase):
         else:
             output.add_line('Network is not ready')
             output.set_value('is_ready', False)
-
