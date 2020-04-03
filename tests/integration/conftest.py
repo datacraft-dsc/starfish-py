@@ -17,7 +17,7 @@ logging.getLogger('web3').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope='module')
 def network(config):
     network = DNetwork(config.network_url)
 

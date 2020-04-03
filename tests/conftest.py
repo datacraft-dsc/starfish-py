@@ -1,5 +1,6 @@
 import pytest
 import pathlib
+import os
 import json
 import datetime
 import logging
@@ -11,7 +12,8 @@ RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
 METADATA_SAMPLE_FILE = RESOURCES_PATH / 'metadata' / 'sample_metadata1.json'
 TEST_ASSET_FILE = RESOURCES_PATH / 'test_asset_file.txt'
 TEST_ASSET_REMOTE = 'https://oceanprotocol.com/tech-whitepaper.pdf'
-CONFIG_FILE_PATH = RESOURCES_PATH / 'config_development.conf'
+CONFIG_DEVELOPMENT_FILE_PATH = RESOURCES_PATH / 'config_development.conf'
+CONFIG_TEST_NET_FILE_PATH = RESOURCES_PATH / 'config_nile.conf'
 
 
 # set debug logging
@@ -31,8 +33,10 @@ TEST_LISTING_DATA = {
 
 @pytest.fixture(scope='module')
 def config():
-    return Config(CONFIG_FILE_PATH)
-
+    filename = CONFIG_DEVELOPMENT_FILE_PATH
+    if os.environ.get('NETWORK', None) == 'nile':
+        filename = CONFIG_TEST_NET_FILE_PATH
+    return Config(filename)
 
 @pytest.fixture(scope="module")
 def metadata():
