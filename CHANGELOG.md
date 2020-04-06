@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.7
++   README on develop/release life cycle
++   Fix docs build
+
 ### Release v0.8.6
 +   Allow for local testing on nile network
 +   create new starfish_tools.py script to provide basic tools
