@@ -127,7 +127,7 @@ The `bumpversion.sh` script helps to bump the project version. You can execute t
 Notes on the current development/release lifecyle.
 
 ### Start a new release
-+   Get the latest develop branch `git checkout develop'
++   Get the latest develop branch `git checkout develop`
 +   Bump to the next version `./bumpnersion.sh [patch|minor|major]`
 +   Add version line in CHANGELOG.md
 
