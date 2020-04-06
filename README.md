@@ -124,14 +124,24 @@ The `bumpversion.sh` script helps to bump the project version. You can execute t
 
 ## Git Development Cycle
 
-Notes on the current lifecyle.
+Notes on the current development/release lifecyle.
 
+### Start a new release
 +   Get the latest develop branch `git checkout develop'
 +   Bump to the next version `./bumpnersion.sh [patch|minor|major]`
++   Add version line in CHANGELOG.md
+
+### Develop changes
 +   Create branches for new PR's.. `git checkout -b new-branch`
++   Develop new feature/patch
++   Update CHANGELOG.md with changes made
 +   Merge PR to develop.
 +   Repeat until version completed
-+   Checkout master, merge from develop and create Release
+
+### Release the current version
++   Checkout master.    `git checkout master`
++   Merge master with develop.      `git merge develop`
++   Create release using web page
 
 ## Maintainers
 
