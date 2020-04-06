@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Job Base class &mdash; starfish-py 0.8.5 documentation</title>
+  <title>Job Base class &mdash; starfish-py 0.8.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.5
+                0.8.7
               </div>
             
           
@@ -169,9 +169,9 @@
             
   <div class="section" id="job-base-class">
 <h1>Job Base class<a class="headerlink" href="#job-base-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="starfish.job.JobBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.job.</code><code class="sig-name descname">JobBase</code><span class="sig-paren">(</span><em class="sig-param">job_id</em>, <em class="sig-param">status=None</em>, <em class="sig-param">outputs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.job.JobBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.job.</code><code class="sig-name descname">JobBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">job_id</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.job.JobBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Create a Job object</p>
 <dl class="field-list simple">
@@ -182,17 +182,17 @@
 </ul>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="starfish.job.JobBase.IsWorkingStatusList">
 <code class="sig-name descname">IsWorkingStatusList</code><em class="property"> = ['scheduled', 'running', 'accepted']</em><a class="headerlink" href="#starfish.job.JobBase.IsWorkingStatusList" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.job.JobBase.is_finished">
 <em class="property">property </em><code class="sig-name descname">is_finished</code><a class="headerlink" href="#starfish.job.JobBase.is_finished" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.job.JobBase.job_id">
 <em class="property">property </em><code class="sig-name descname">job_id</code><a class="headerlink" href="#starfish.job.JobBase.job_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the job id</p>
@@ -206,7 +206,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.job.JobBase.outputs">
 <em class="property">property </em><code class="sig-name descname">outputs</code><a class="headerlink" href="#starfish.job.JobBase.outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the ouptuts for this job</p>
@@ -220,7 +220,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.job.JobBase.status">
 <em class="property">property </em><code class="sig-name descname">status</code><a class="headerlink" href="#starfish.job.JobBase.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the status for this job</p>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account class &mdash; starfish-py 0.8.5 documentation</title>
+  <title>Account class &mdash; starfish-py 0.8.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.5
+                0.8.7
               </div>
             
           
@@ -163,9 +163,9 @@
             
   <div class="section" id="account-class">
 <h1>Account class<a class="headerlink" href="#account-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="starfish.account.Account">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">password=None</em>, <em class="sig-param">key_value=None</em>, <em class="sig-param">key_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.account.</code><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">address</span></em>, <em class="sig-param"><span class="n">password</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_file</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Account class, adds functionality for an account to be used on the starfish named network.</p>
 <dl class="field-list simple">
@@ -186,7 +186,7 @@ If dict then the dict can be the following format:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.address">
 <em class="property">property </em><code class="sig-name descname">address</code><a class="headerlink" href="#starfish.account.Account.address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the account address for this account</p>
@@ -205,7 +205,7 @@ If dict then the dict can be the following format:</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.as_checksum_address">
 <em class="property">property </em><code class="sig-name descname">as_checksum_address</code><a class="headerlink" href="#starfish.account.Account.as_checksum_address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the address as a checksum address</p>
@@ -224,9 +224,9 @@ If dict then the dict can be the following format:</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.create">
-<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.create" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new account.</p>
 <p>You need to call <cite>save_key_file</cite> method to save the key information</p>
 <dl class="field-list simple">
@@ -236,33 +236,33 @@ If dict then the dict can be the following format:</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.export_key">
-<code class="sig-name descname">export_key</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.export_key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">export_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.export_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export the private key</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.export_key_value">
 <em class="property">property </em><code class="sig-name descname">export_key_value</code><a class="headerlink" href="#starfish.account.Account.export_key_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export a key_value to json text</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.import_key">
-<code class="sig-name descname">import_key</code><span class="sig-paren">(</span><em class="sig-param">raw_key</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">import_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw_key</span></em>, <em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Import the raw private key</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.import_key_value">
-<code class="sig-name descname">import_key_value</code><span class="sig-paren">(</span><em class="sig-param">json_text</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">import_key_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json_text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.import_key_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Import a key_value from a json string</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.is_address_equal">
-<code class="sig-name descname">is_address_equal</code><span class="sig-paren">(</span><em class="sig-param">address</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.is_address_equal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_address_equal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.is_address_equal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two addresses if are equal. Both addresses are converted to checksum
 address and then compared.</p>
 <dl class="field-list simple">
@@ -283,26 +283,26 @@ address and then compared.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.is_password">
 <em class="property">property </em><code class="sig-name descname">is_password</code><a class="headerlink" href="#starfish.account.Account.is_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return True if the password has been set, else return False</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.is_valid">
 <em class="property">property </em><code class="sig-name descname">is_valid</code><a class="headerlink" href="#starfish.account.Account.is_valid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.key_value">
 <em class="property">property </em><code class="sig-name descname">key_value</code><a class="headerlink" href="#starfish.account.Account.key_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the encrypted key value that contains the account private key</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.load_from_file">
-<code class="sig-name descname">load_from_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.load_from_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.load_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load in a key value from a file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -311,7 +311,7 @@ address and then compared.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.password">
 <em class="property">property </em><code class="sig-name descname">password</code><a class="headerlink" href="#starfish.account.Account.password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the account password for this account</p>
@@ -329,9 +329,9 @@ address and then compared.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.save_to_file">
-<code class="sig-name descname">save_to_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.save_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_to_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.save_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a key value to a file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -340,9 +340,9 @@ address and then compared.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.set_password">
-<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.set_password" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.set_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the password for this account</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -356,9 +356,9 @@ address and then compared.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="starfish.account.Account.sign_transaction">
-<code class="sig-name descname">sign_transaction</code><span class="sig-paren">(</span><em class="sig-param">web3</em>, <em class="sig-param">transaction</em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.sign_transaction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sign_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">web3</span></em>, <em class="sig-param"><span class="n">transaction</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.account.Account.sign_transaction" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
