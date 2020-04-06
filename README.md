@@ -122,6 +122,16 @@ The `bumpversion.sh` script helps to bump the project version. You can execute t
 
   * [developer@dex.sg][starfish-qa] -- General questions regarding the usage of Starfish.
 
+## Git Development Cycle
+
+Notes on the current lifecyle.
+
++   Get the latest develop branch `git checkout develop'
++   Bump to the next version `./bumpnersion.sh [patch|minor|major]`
++   Create branches for new PR's.. `git checkout -b new-branch`
++   Merge PR to develop.
++   Repeat until version completed
++   Checkout master, merge from develop and create Release
 
 ## Maintainers
 
