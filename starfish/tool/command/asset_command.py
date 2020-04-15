@@ -4,8 +4,8 @@
 
 """
 
-from .command_base import CommandBase
 from .asset_store_command import AssetStoreCommand
+from .command_base import CommandBase
 
 
 class AssetCommand(CommandBase):

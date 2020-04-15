@@ -3,30 +3,26 @@
     Test tool network
 
 """
-import argparse
+import pytest
 
 
 from starfish.tool.command.network_command import NetworkCommand
 from starfish.tool.command.network_wait_command import NetworkWaitCommand
 
 
-def get_sub_parser():
-    parser = argparse.ArgumentParser(description='Starfish Tools')
+@pytest.fixture(scope='module')
+def network_parser(sub_parser):
+    network = NetworkCommand()
+    network_parser = network.create_parser(sub_parser)
+    assert(network_parser)
+    return network_parser
 
-    sub_parser = parser.add_subparsers(
-        title='Starfish command',
-        description='Tool command',
-        help='Tool command',
-        dest='command'
-    )
-    return sub_parser
+def test_tool_network(network_parser):
+    assert(network_parser)
 
-def test_tool_network():
-    account = NetworkCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
-
-def test_tool_network_wait():
-    account = NetworkWaitCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+def test_tool_network_wait(parser, network_parser):
+    wait = NetworkWaitCommand()
+    wait_parser = wait.create_parser(network_parser)
+    assert(wait_parser)
+    args = parser.parse_args(['network', 'wait'])
+    assert(args)

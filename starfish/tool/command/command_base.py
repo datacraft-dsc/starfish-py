@@ -74,6 +74,10 @@ class CommandBase(ABC):
     def create_parser(self, sub_parser):
         pass
 
+    @abstractmethod
+    def execute(self, args, output):
+        pass
+
     @property
     def name(self):
         return self._name

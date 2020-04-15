@@ -4,6 +4,7 @@
 
 """
 import argparse
+import pytest
 
 from starfish.tool.command.account_command import AccountCommand
 from starfish.tool.command.account_create_command import AccountCreateCommand
@@ -14,67 +15,78 @@ from starfish.tool.command.account_send_command import AccountSendCommand
 from starfish.tool.command.account_send_ether_command import AccountSendEtherCommand
 from starfish.tool.command.account_send_token_command import AccountSendTokenCommand
 
-from starfish.tool.command.network_command import NetworkCommand
-from starfish.tool.command.network_wait_command import NetworkWaitCommand
 
 
-def get_sub_parser():
-    parser = argparse.ArgumentParser(description='Starfish Tools')
-
-    sub_parser = parser.add_subparsers(
-        title='Starfish command',
-        description='Tool command',
-        help='Tool command',
-        dest='command'
-    )
-    return sub_parser
-
-def test_tool_account():
+@pytest.fixture(scope='module')
+def account_parser(sub_parser):
     account = AccountCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+    account_parser = account.create_parser(sub_parser)
+    assert(account_parser)
+    return account_parser
 
-def test_tool_account_create():
-    account = AccountCreateCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+@pytest.fixture(scope='module')
+def account_get_parser(account_parser):
+    account_get = AccountGetCommand()
+    get_parser = account_get.create_parser(account_parser)
+    assert(get_parser)
+    return get_parser
 
-def test_tool_account_get():
-    account = AccountGetCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+@pytest.fixture(scope='module')
+def account_send_parser(account_parser):
+    account_send = AccountSendCommand()
+    send_parser = account_send.create_parser(account_parser)
+    assert(send_parser)
+    return send_parser
 
-def test_tool_account_get_ether():
+
+def test_tool_account(account_parser):
+    assert(account_parser)
+
+def test_tool_account_create(parser, account_parser):
+    create = AccountCreateCommand()
+    create_parser = create.create_parser(account_parser)
+    assert(create_parser)
+    args = parser.parse_args(['account', 'create', 'password'])
+    assert(args)
+
+def test_tool_account_get(parser, account_get_parser):
+    assert(account_get_parser)
+    args = parser.parse_args(['account', 'get'])
+    assert(args)
+
+def test_tool_account_get_ether(parser, account_get_parser):
     account = AccountGetEtherCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+    ether_parser = account.create_parser(account_get_parser)
+    assert(ether_parser)
+    args = parser.parse_args(['account', 'get', 'ether', 'address', 'faucet-url'])
+    assert(args)
 
-def test_tool_account_get_token():
+def test_tool_account_get_token(parser, account_get_parser):
     account = AccountGetTokenCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+    token_parser = account.create_parser(account_get_parser)
+    assert(token_parser)
+    args = parser.parse_args(['account', 'get', 'token', 'address', 'password', 'key-file'])
+    assert(args)
 
-def test_tool_account_send():
-    account = AccountSendCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+def test_tool_account_send(parser, account_send_parser):
+    assert(account_send_parser)
+    args = parser.parse_args(['account', 'send'])
+    assert(args)
 
-def test_tool_account_send_ether():
+
+def test_tool_account_send_ether(parser, account_send_parser):
     account = AccountSendEtherCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+    ether_parser = account.create_parser(account_send_parser)
+    assert(ether_parser)
+    args = parser.parse_args(['account', 'send', 'ether', 'address', 'password', 'keyfile', 'to_address', 'amount'])
+    assert(args)
 
-def test_tool_account_send_token():
+
+def test_tool_account_send_token(parser, account_send_parser):
     account = AccountSendTokenCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
+    token_parser = account.create_parser(account_send_parser)
+    assert(token_parser)
+    args = parser.parse_args(['account', 'send', 'token', 'address', 'password', 'keyfile', 'to_address', 'amount'])
+    assert(args)
 
-def test_tool_network():
-    account = NetworkCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)
 
-def test_tool_network_wait():
-    account = NetworkWaitCommand()
-    parser = account.create_parser(get_sub_parser())
-    assert(parser)

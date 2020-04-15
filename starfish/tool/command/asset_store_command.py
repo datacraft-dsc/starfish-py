@@ -19,7 +19,28 @@ class AssetStoreCommand(CommandBase):
             self._name,
             description='Tool to store an asset',
             help='Tool to store an asset',
+        )
 
+        parser.add_argument(
+            '-u',
+            '--username',
+            help='Optional username to access the agent'
+        )
+
+        parser.add_argument(
+            '-p',
+            '--password',
+            help='Optional password to access the agent'
+        )
+
+        parser.add_argument(
+            'agent',
+            help='agent url or agent did to store the asset'
+        )
+
+        parser.add_argument(
+            'filename',
+            help='filename to store'
         )
 
         return parser

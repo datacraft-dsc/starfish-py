@@ -12,6 +12,8 @@ import logging
 
 
 from starfish.tool.command.account_command import AccountCommand
+from starfish.tool.command.agent_command import AgentCommand
+from starfish.tool.command.asset_command import AssetCommand
 from starfish.tool.command.network_command import NetworkCommand
 from starfish.tool.output import Output
 
@@ -49,6 +51,8 @@ def main():
 
     command_list = [
         AccountCommand(command_parser),
+        AgentCommand(command_parser),
+        AssetCommand(command_parser),
         NetworkCommand(command_parser)
     ]
 
