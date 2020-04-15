@@ -2,7 +2,9 @@
 
 ### Release v0.8.8
 +   Cleanup starfish tools
-+   Add asset and agent tools
++   Asset store and download tool
++   Agent register and resolve tool
++   Account balance tool
 
 ### Release v0.8.7
 +   README on develop/release life cycle
