@@ -6,6 +6,7 @@
 from unittest.mock import Mock
 
 from starfish.tool.command.account_create_command import AccountCreateCommand
+from starfish.tool.command.account_balance_command import AccountBalanceCommand
 from starfish.tool.output import Output
 
 def test_account_create_command(config):
@@ -21,3 +22,15 @@ def test_account_create_command(config):
     print(output.values)
     assert(output.values['keyvalue'])
     assert(output.values['address'])
+
+def test_account_balance(config):
+
+    args = Mock()
+    args.address = config.account_1['address']
+    args.url = config.network_url
+    network = AccountBalanceCommand()
+    output = Output()
+    network.execute(args, output)
+    assert(output.values['token'])
+    assert(output.values['ether'])
+

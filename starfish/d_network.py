@@ -151,13 +151,13 @@ class DNetwork():
 
 
     """
-    def get_ether_balance(self, account):
+    def get_ether_balance(self, account_address):
         network_contract = self.get_contract('Network')
-        return network_contract.get_balance(account.address)
+        return network_contract.get_balance(account_address)
 
-    def get_token_balance(self, account):
+    def get_token_balance(self, account_address):
         ocean_token_contract = self.get_contract('OceanToken')
-        return ocean_token_contract.get_balance(account)
+        return ocean_token_contract.get_balance(account_address)
 
     def request_test_tokens(self, account, amount):
         dispenser_contract = self.get_contract('Dispenser')

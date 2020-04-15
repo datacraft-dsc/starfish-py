@@ -4,6 +4,7 @@
 
 """
 
+from .account_balance_command import AccountBalanceCommand
 from .account_create_command import AccountCreateCommand
 from .account_get_command import AccountGetCommand
 from .account_send_command import AccountSendCommand
@@ -32,9 +33,10 @@ class AccountCommand(CommandBase):
         )
 
         self._command_list = [
+            AccountBalanceCommand(account_parser),
+            AccountCreateCommand(account_parser),
             AccountGetCommand(account_parser),
-            AccountSendCommand(account_parser),
-            AccountCreateCommand(account_parser)
+            AccountSendCommand(account_parser)
         ]
         return account_parser
 

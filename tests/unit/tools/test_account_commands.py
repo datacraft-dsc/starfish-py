@@ -7,6 +7,7 @@ import argparse
 import pytest
 
 from starfish.tool.command.account_command import AccountCommand
+from starfish.tool.command.account_balance_command import AccountBalanceCommand
 from starfish.tool.command.account_create_command import AccountCreateCommand
 from starfish.tool.command.account_get_command import AccountGetCommand
 from starfish.tool.command.account_get_ether_command import AccountGetEtherCommand
@@ -47,6 +48,13 @@ def test_tool_account_create(parser, account_parser):
     create_parser = create.create_parser(account_parser)
     assert(create_parser)
     args = parser.parse_args(['account', 'create', 'password'])
+    assert(args)
+
+def test_tool_account_balance(parser, account_parser):
+    balance = AccountBalanceCommand()
+    balance_parser = balance.create_parser(account_parser)
+    assert(balance_parser)
+    args = parser.parse_args(['account', 'balance', 'address'])
     assert(args)
 
 def test_tool_account_get(parser, account_get_parser):

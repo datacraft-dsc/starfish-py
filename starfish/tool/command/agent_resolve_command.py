@@ -45,9 +45,6 @@ class AgentResolveCommand(CommandBase):
     def execute(self, args, output):
         network = self.get_network(args.url)
 
-        # in-case we are using a local development network
-        network.load_development_contracts()
-
         output.set_value('agent', args.agent)
 
         result = AgentManager.resolve_agent(args.agent, network, args.username, args.password)

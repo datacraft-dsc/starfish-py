@@ -4,6 +4,7 @@
 
 """
 import re
+from web3 import Web3
 
 from starfish.account import Account
 from starfish.agent import (
@@ -67,8 +68,9 @@ Services can be: {",".join(ALL_SERVICES)}
     def execute(self, args, output):
         network = self.get_network(args.url)
 
-        # in-case we are using a local development network
-        network.load_development_contracts()
+        if not Web3.isAddress(args.address):
+            output.add_error(f'{args.address} is not an ethereum account address')
+            return
 
         register_account = Account(args.address, args.password, key_file=args.keyfile)
 
@@ -81,13 +83,13 @@ Services can be: {",".join(ALL_SERVICES)}
             for name in name_list:
                 service_name = name.strip()
                 if service_name not in ALL_SERVICES:
-                    output.add_line(f'Error: {service_name} is not a valid service')
+                    output.add_error(f'{service_name} is not a valid service')
                     return
                 service_list.append(service_name)
             if service_list:
                 all_services=False
             else:
-                output.add_line(f'No services found to register in list {args.service_list}')
+                output.add_error(f'No services found to register in list {args.service_list}')
                 return
 
         services = Services(args.agent_url, service_list=service_list, all_services=all_services)
@@ -98,4 +100,4 @@ Services can be: {",".join(ALL_SERVICES)}
             output.set_value('did', ddo.did)
             output.set_value('ddo_text', ddo.as_text())
         else:
-            output.add_line(f'unable to register {args.agent_url}')
+            output.add_error(f'unable to register {args.agent_url}')
