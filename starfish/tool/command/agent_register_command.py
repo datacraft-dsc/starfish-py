@@ -4,16 +4,14 @@
 
 """
 import re
+
 from web3 import Web3
 
 from starfish.account import Account
-from starfish.agent import (
-    AgentManager,
-    RemoteAgent
-)
+from starfish.agent import RemoteAgent
 from starfish.agent.services import (
-    Services,
-    ALL_SERVICES
+    ALL_SERVICES,
+    Services
 )
 
 
@@ -74,10 +72,10 @@ Services can be: {",".join(ALL_SERVICES)}
 
         register_account = Account(args.address, args.password, key_file=args.keyfile)
 
-        all_services=True
+        all_services = True
         service_list = None
         if args.service_list:
-            name_list = re.split(r'[^a-z]+',args.service_list, re.IGNORECASE)
+            name_list = re.split(r'[^a-z]+', args.service_list, re.IGNORECASE)
             service_list = []
             print(name_list)
             for name in name_list:
@@ -87,7 +85,7 @@ Services can be: {",".join(ALL_SERVICES)}
                     return
                 service_list.append(service_name)
             if service_list:
-                all_services=False
+                all_services = False
             else:
                 output.add_error(f'No services found to register in list {args.service_list}')
                 return
