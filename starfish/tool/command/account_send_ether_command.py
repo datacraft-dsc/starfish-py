@@ -1,6 +1,6 @@
 """
 
-    Command Send Token
+    Command Account Send Ether
 
 """
 import logging
@@ -14,14 +14,14 @@ from .command_base import CommandBase
 logger = logging.getLogger(__name__)
 
 
-class SendEtherCommand(CommandBase):
+class AccountSendEtherCommand(CommandBase):
 
-    def __init__(self, subparser):
-        super().__init__('ether', subparser)
+    def __init__(self, sub_parser=None):
+        super().__init__('ether', sub_parser)
 
-    def create_parser(self, subparser):
+    def create_parser(self, sub_parser):
 
-        parser = subparser.add_parser(
+        parser = sub_parser.add_parser(
             self._name,
             description='Send ether from an account address to another account',
             help='Send ether from one account to the another'
@@ -51,6 +51,7 @@ class SendEtherCommand(CommandBase):
             'amount',
             help=f'Amount to send'
         )
+        return parser
 
     def execute(self, args, output):
         if not Web3.isAddress(args.address):

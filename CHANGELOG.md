@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.8
++   Add extra items to starfish tools
++   Cleanup starfish tools
+
 ### Release v0.8.7
 +   README on develop/release life cycle
 +   Fix docs build

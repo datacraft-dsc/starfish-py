@@ -11,11 +11,9 @@ import argparse
 import logging
 
 
-from starfish.tool.create_account_command import CreateAccountCommand
-from starfish.tool.get_command import GetCommand
-from starfish.tool.send_command import SendCommand
-from starfish.tool.tool_output import ToolOutput
-from starfish.tool.wait_network_command import WaitNetworkCommand
+from starfish.tool.command.account_command import AccountCommand
+from starfish.tool.command.network_command import NetworkCommand
+from starfish.tool.output import Output
 
 
 def main():
@@ -50,10 +48,8 @@ def main():
     )
 
     command_list = [
-        CreateAccountCommand(command_parser),
-        GetCommand(command_parser),
-        SendCommand(command_parser),
-        WaitNetworkCommand(command_parser)
+        AccountCommand(command_parser),
+        NetworkCommand(command_parser)
     ]
 
     args = parser.parse_args()
@@ -61,12 +57,16 @@ def main():
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    output = ToolOutput()
+    output = Output()
 
+    is_found = False
     for command_item in command_list:
         if command_item.is_command(args.command):
             command_item.execute(args, output)
+            is_found = True
             break
+    if not is_found:
+        parser.print_help()
 
     output.printout(args.json)
 

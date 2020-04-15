@@ -1,6 +1,6 @@
 """
 
-    Tool command 'Create' ( an account )
+    Tool command 'Network Wait'
 
 """
 import logging
@@ -13,13 +13,13 @@ logger = logging.getLogger(__name__)
 DEFAULT_TIMEOUT = 240
 
 
-class WaitNetworkCommand(CommandBase):
+class NetworkWaitCommand(CommandBase):
 
-    def __init__(self, subparser):
-        super().__init__('wait', subparser)
+    def __init__(self, sub_parser=None):
+        super().__init__('wait', sub_parser)
 
-    def create_parser(self, subparser):
-        parser = subparser.add_parser(
+    def create_parser(self, sub_parser):
+        parser = sub_parser.add_parser(
             self._name,
             description='Wait for the development network to be built',
             help='Wait for the development network to be built'
@@ -31,6 +31,7 @@ class WaitNetworkCommand(CommandBase):
             default=DEFAULT_TIMEOUT,
             help=f'Number of seconds to wait before timing out. Default: {DEFAULT_TIMEOUT} seconds'
         )
+        return parser
 
     def execute(self, args, output):
 

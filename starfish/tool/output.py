@@ -1,14 +1,14 @@
 """
 
 
-    Tool Output
+    Starfish Tool Output
 
 """
 
 import json
 
 
-class ToolOutput:
+class Output:
     def __init__(self):
         self._line_list = []
         self._values = {}

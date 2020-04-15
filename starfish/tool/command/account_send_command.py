@@ -1,31 +1,31 @@
 """
 
-    Command 'get_ether'
+    Command Account Send ..
 
 """
 
+from .account_send_ether_command import AccountSendEtherCommand
+from .account_send_token_command import AccountSendTokenCommand
 from .command_base import CommandBase
-from .send_ether_command import SendEtherCommand
-from .send_token_command import SendTokenCommand
 
 DEFAULT_AMOUNT = 10
 
 
-class SendCommand(CommandBase):
+class AccountSendCommand(CommandBase):
 
-    def __init__(self, subparser):
+    def __init__(self, sub_parser=None):
         self._command_list = []
-        super().__init__('send', subparser)
+        super().__init__('send', sub_parser)
 
-    def create_parser(self, subparser):
+    def create_parser(self, sub_parser):
 
-        parser = subparser.add_parser(
+        parser = sub_parser.add_parser(
             self._name,
             description='Send ether or tokens from one account to another',
             help='Send some tokens or ether from one account to another'
         )
 
-        parser_send = parser.add_subparsers(
+        send_parser = parser.add_subparsers(
             title='send command',
             description='send command',
             help='Send command',
@@ -33,9 +33,10 @@ class SendCommand(CommandBase):
         )
 
         self._command_list = [
-            SendEtherCommand(parser_send),
-            SendTokenCommand(parser_send)
+            AccountSendEtherCommand(send_parser),
+            AccountSendTokenCommand(send_parser)
         ]
+        return send_parser
 
     def execute(self, args, output):
         for command_item in self._command_list:

@@ -1,6 +1,6 @@
 """
 
-    Command 'get_ether'
+    Command Account Get Ether
 
 """
 
@@ -14,14 +14,14 @@ from .command_base import CommandBase
 DEFAULT_AMOUNT = 10
 
 
-class GetEtherCommand(CommandBase):
+class AccountGetEtherCommand(CommandBase):
 
-    def __init__(self, subparser):
-        super().__init__('ether', subparser)
+    def __init__(self, sub_parser=None):
+        super().__init__('ether', sub_parser)
 
-    def create_parser(self, subparser):
+    def create_parser(self, sub_parser):
 
-        parser = subparser.add_parser(
+        parser = sub_parser.add_parser(
             self._name,
             description='Get ether for an account address',
             help='Get some ether from a faucet or transfered on a development network'
@@ -45,6 +45,7 @@ class GetEtherCommand(CommandBase):
             default=DEFAULT_AMOUNT,
             help=f'Amount to request. Default {DEFAULT_AMOUNT}'
         )
+        return parser
 
     def execute(self, args, output):
         if not Web3.isAddress(args.address):

@@ -1,31 +1,31 @@
 """
 
-    Command 'get_ether'
+    Command Account Get ..
 
 """
 
+from .account_get_ether_command import AccountGetEtherCommand
+from .account_get_token_command import AccountGetTokenCommand
 from .command_base import CommandBase
-from .get_ether_command import GetEtherCommand
-from .get_token_command import GetTokenCommand
 
 DEFAULT_AMOUNT = 10
 
 
-class GetCommand(CommandBase):
+class AccountGetCommand(CommandBase):
 
-    def __init__(self, subparser):
+    def __init__(self, sub_parser=None):
         self._command_list = []
-        super().__init__('get', subparser)
+        super().__init__('get', sub_parser)
 
-    def create_parser(self, subparser):
+    def create_parser(self, sub_parser):
 
-        parser = subparser.add_parser(
+        parser = sub_parser.add_parser(
             self._name,
             description='Get ether or tokens for an account address',
             help='Get some token or ether from a faucet or a tokens on a test network'
 
         )
-        parser_get = parser.add_subparsers(
+        get_parser = parser.add_subparsers(
             title='get command',
             description='get command',
             help='Get command',
@@ -33,9 +33,10 @@ class GetCommand(CommandBase):
         )
 
         self._command_list = [
-            GetEtherCommand(parser_get),
-            GetTokenCommand(parser_get)
+            AccountGetEtherCommand(get_parser),
+            AccountGetTokenCommand(get_parser)
         ]
+        return get_parser
 
     def execute(self, args, output):
         for command_item in self._command_list:

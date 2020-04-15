@@ -47,9 +47,10 @@ NETWORK_NAMES = {
 
 
 class CommandBase(ABC):
-    def __init__(self, name, subparser):
+    def __init__(self, name, sub_parser=None):
         self._name = name
-        self.create_parser(subparser)
+        if sub_parser:
+            self.create_parser(sub_parser)
 
     def is_command(self, name):
         return self._name == name
@@ -70,7 +71,7 @@ class CommandBase(ABC):
         return result
 
     @abstractmethod
-    def create_parser(self, subparser):
+    def create_parser(self, sub_parser):
         pass
 
     @property
