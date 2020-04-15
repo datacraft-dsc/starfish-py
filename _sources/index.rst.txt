@@ -20,6 +20,7 @@ Contents
     getting_started
     agents
     register_asset_remote_agent
+    starfish_tools
     classes/account
     classes/agent
     classes/asset
