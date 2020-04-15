@@ -132,10 +132,8 @@ Notes on the current development/release lifecyle.
 +   Add version line in CHANGELOG.md
 
 ### Develop changes
-+   Create branches for new PR's.. `git checkout -b new-branch`
 +   Develop new feature/patch
 +   Update CHANGELOG.md with changes made
-+   Merge PR to develop.
 +   Repeat until version completed
 
 ### Release the current version

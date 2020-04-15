@@ -67,4 +67,6 @@ test-integration:
 docs:
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+	$(MAKE) -C docs man
+
 
