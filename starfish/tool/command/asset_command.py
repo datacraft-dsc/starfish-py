@@ -4,6 +4,7 @@
 
 """
 
+from .asset_download_command import AssetDownloadCommand
 from .asset_store_command import AssetStoreCommand
 from .command_base import CommandBase
 
@@ -30,7 +31,8 @@ class AssetCommand(CommandBase):
         )
 
         self._command_list = [
-            AssetStoreCommand(asset_parser),
+            AssetDownloadCommand(asset_parser),
+            AssetStoreCommand(asset_parser)
         ]
         return asset_parser
 

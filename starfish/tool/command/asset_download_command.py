@@ -3,31 +3,26 @@
     Command 'Asset Store'
 
 """
-import os
 
 from starfish.agent import (
     AgentManager,
     RemoteAgent
 )
-from starfish.asset import DataAsset
 from .command_base import CommandBase
 
 
-DEFAULT_ASSET_NAME = 'starfish_asset'
-
-
-class AssetStoreCommand(CommandBase):
+class AssetDownloadCommand(CommandBase):
 
     def __init__(self, sub_parser=None):
         self._command_list = []
-        super().__init__('store', sub_parser)
+        super().__init__('download', sub_parser)
 
     def create_parser(self, sub_parser):
 
         parser = sub_parser.add_parser(
             self._name,
-            description='Tool to store an asset',
-            help='Tool to store an asset',
+            description='Tool to download an asset',
+            help='Tool to download an asset',
         )
 
         parser.add_argument(
@@ -43,38 +38,28 @@ class AssetStoreCommand(CommandBase):
         )
 
         parser.add_argument(
-            '-n',
-            '--name',
-            default=DEFAULT_ASSET_NAME,
-            help='Asset name. Default: {DEFAULT_ASSET_NAME}'
-        )
-
-        parser.add_argument(
-            'agent',
-            help='agent url or agent did to store the asset'
+            'asset_did',
+            help='asset did of the asset to download'
         )
 
         parser.add_argument(
             'filename',
-            help='filename to store'
+            nargs='?',
+            help='filename to download. Defaults: to the "<asset_did>.dat" '
         )
 
         return parser
 
     def execute(self, args, output):
 
-        if not os.path.exists(args.filename):
-            output.add_line(f'cannot find file {args.filename}')
-            return
-
         network = self.get_network(args.url)
 
         # in-case we are using a local development network
         network.load_development_contracts()
 
-        result = AgentManager.resolve_agent(args.agent, network, args.username, args.password)
+        result = AgentManager.resolve_agent(args.asset_did, network, args.username, args.password)
         if not result:
-            output.add_line(f'cannot resolve asset {args.asset}')
+            output.add_line(f'cannot resolve asset {args.asset_did}')
             return
 
         authentication = None
@@ -85,8 +70,12 @@ class AssetStoreCommand(CommandBase):
             }
 
         agent = RemoteAgent(network, result['ddo_text'], authentication=authentication)
-        asset = DataAsset.create_from_file(args.name, args.filename)
-        asset = agent.register_asset(asset)
-        agent.upload_asset(asset)
-        output.add_line(f'stored asset {asset.did}')
+        asset = agent.download_asset(args.asset_did)
+        asset_filename = args.filename
+        if asset_filename is None:
+            asset_filename = f'{asset.id}.dat'
+
+        asset.save_to_file(asset_filename)
+        output.add_line(f'saved asset {asset_filename}')
         output.set_value('asset_did', asset.did)
+        output.set_value('filename', asset_filename)

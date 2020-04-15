@@ -177,23 +177,24 @@ class AgentManager:
         ddo_text = None
         if is_did(agent_url_did) and network:
             ddo_text = RemoteAgent.resolve_network_ddo(network, agent_url_did)
-
-        if ddo_text:
-            result['type'] = 'network'
-            result['agent_did'] = agent_url_did
-        else:
-            authentication = None
-            if username or password:
-                authentication = {
-                    'username': username,
-                    'password': password
-                }
-            ddo_text = RemoteAgent.resolve_url_ddo(agent_url_did, authentication)
             if ddo_text:
-                result['type'] = 'url'
-                result['agent_url'] = agent_url_did
+                result['type'] = 'network'
+                result['agent_did'] = agent_url_did
+                result['ddo_text'] = ddo_text
+                result['did'] = AgentManager.get_did_from_ddo(ddo_text)
+                return result
+            return None
 
+        authentication = None
+        if username or password:
+            authentication = {
+                'username': username,
+                'password': password
+            }
+        ddo_text = RemoteAgent.resolve_url_ddo(agent_url_did, authentication)
         if ddo_text:
+            result['type'] = 'url'
+            result['agent_url'] = agent_url_did
             result['ddo_text'] = ddo_text
             result['did'] = AgentManager.get_did_from_ddo(ddo_text)
             return result

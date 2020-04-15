@@ -56,4 +56,4 @@ class AgentResolveCommand(CommandBase):
             for name, value in result.items():
                 output.set_value(name, value)
         else:
-            output.add_line(f'uable to resolve agent address {args.agent}')
+            output.add_line(f'unable to resolve agent address {args.agent}')
