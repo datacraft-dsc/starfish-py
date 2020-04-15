@@ -4,6 +4,7 @@
 
 """
 
+from .agent_register_command import AgentRegisterCommand
 from .agent_resolve_command import AgentResolveCommand
 from .command_base import CommandBase
 
@@ -30,7 +31,8 @@ class AgentCommand(CommandBase):
         )
 
         self._command_list = [
-            AgentResolveCommand(agent_parser),
+            AgentRegisterCommand(agent_parser),
+            AgentResolveCommand(agent_parser)
         ]
         return agent_parser
 
