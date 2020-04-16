@@ -33,10 +33,11 @@ class ContractManager:
 
     """
 
-    def __init__(self, web3, network_name, default_package_name):
+    def __init__(self, web3, network_name, default_package_name, artifacts_path):
         self._web3 = web3
         self._network_name = network_name
         self._default_package_name = default_package_name
+        self._artifacts_path = artifacts_path
         self._artifact_items = ContractManager.load_artifact_library(ARTIFACT_DATA_FILENAME)
         if self._artifact_items is None:
             self._artifact_items = []
@@ -118,17 +119,23 @@ class ContractManager:
 
         """
         data = None
-        if self._network_name in self._artifact_items and name in self._artifact_items[self._network_name]:
-            logger.debug(f'found contract in library {name}.{self._network_name}')
-            data = self._artifact_items[self._network_name][name]
-        else:
-            if artifact_filename is None:
-                artifact_filename = f'{name}.{self._network_name}.json'
 
-            artifact_filename_path = ContractManager.find_artifact_filename(artifact_filename)
-            if artifact_filename_path:
-                logger.debug(f'loading contract artifact file at {artifact_filename_path}')
-                data = ContractManager.load_artifact_file(artifact_filename_path)
+        # setup the default artifact filename
+        if artifact_filename is None:
+            artifact_filename = f'{name}.{self._network_name}.json'
+
+        # first look for user defined folder for any artifact file
+        artifacts_path_list = [self._artifacts_path, ContractManager.data_path()]
+        artifact_filename_path = ContractManager.find_artifact_filename(artifact_filename, artifacts_path_list)
+        if artifact_filename_path:
+            logger.debug(f'loading contract artifact file at {artifact_filename_path}')
+            data = ContractManager.load_artifact_file(artifact_filename_path)
+        else:
+            # now try to load from the artifact library
+            if self._network_name in self._artifact_items and name in self._artifact_items[self._network_name]:
+                logger.debug(f'found contract in library {name}.{self._network_name}')
+                data = self._artifact_items[self._network_name][name]
+
         return data
 
     def set_contract_data(self, name, data):
@@ -148,6 +155,14 @@ class ContractManager:
     def web3(self):
         return self._web3
 
+    @property
+    def artifacts_path():
+        return self._artifacts_path
+
+    @staticmethod
+    def data_path():
+        return os.path.join(os.path.dirname(__file__), 'data')
+
     @staticmethod
     def _find_class_in_module(class_name, contract_module):
         for name, obj in inspect.getmembers(contract_module, inspect.isclass):
@@ -158,15 +173,15 @@ class ContractManager:
         return None
 
     @staticmethod
-    def find_artifact_filename(filename):
-        test_file = os.path.join(os.path.dirname(__file__), 'data', filename)
-        if os.path.exists(test_file):
-            return test_file
+    def find_artifact_filename(filename, path_list):
+        found_file = None
+        for path in path_list:
+            test_file = os.path.join(path, filename)
+            if os.path.exists(test_file):
+                found_file = test_file
+                break
 
-        test_file = os.path.join('artifacts', filename)
-        if os.path.exists(test_file):
-            return test_file
-        return None
+        return found_file
 
     @staticmethod
     def load_artifact_file(filename):
@@ -177,7 +192,7 @@ class ContractManager:
     @staticmethod
     def load_artifact_library(filename):
         data = None
-        artifact_libray_file = os.path.join(os.path.dirname(__file__), 'data', filename)
+        artifact_libray_file = os.path.join(ContractManager.data_path(), filename)
         if os.path.exists(artifact_libray_file):
             with gzip.open(artifact_libray_file, 'rt') as fp:
                 data = json.load(fp)

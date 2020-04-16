@@ -11,5 +11,5 @@ from starfish.contract import ContractManager
 def test_contract_load(network):
     # test pre-loaded contracts from non local test nodes
 
-    manager = ContractManager(network.web3, 'nile', 'starfish.contract')
+    manager = ContractManager(network.web3, 'nile', 'starfish.contract', 'artifacts')
     contract = manager.load('DIDRegistryContract')

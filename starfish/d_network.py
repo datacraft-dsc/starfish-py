@@ -68,12 +68,15 @@ CONTRACT_LIST = {
 
 
 class DNetwork():
-    def __init__(self, url, load_development_contracts=True):
+    def __init__(self, url, artifacts_path=None, load_development_contracts=True):
         self._url = url
         self._web3 = None
         self._name = None
+        self._artifacts_path = artifacts_path
         self._contracts = {}
-        if self._connect(self._url):
+        if artifacts_path is None:
+            artifacts_path = 'artifacts'
+        if self._connect(self._url, artifacts_path):
             if load_development_contracts:
                 self.load_development_contracts()
 
@@ -304,7 +307,7 @@ class DNetwork():
             return NETWORK_NAMES[network_id]
         return NETWORK_NAMES[0]
 
-    def _connect(self, url):
+    def _connect(self, url, artifacts_path):
         self._url = url
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:
@@ -315,6 +318,6 @@ class DNetwork():
 
             logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
-            self._contract_manager = ContractManager(self._web3, self._name, DEFAULT_PACKAGE_NAME)
+            self._contract_manager = ContractManager(self._web3, self._name, DEFAULT_PACKAGE_NAME, artifacts_path)
             return True
         return False
