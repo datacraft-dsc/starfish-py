@@ -74,5 +74,7 @@ class AssetDownloadCommand(CommandBase):
 
         asset.save_to_file(asset_filename)
         output.add_line(f'saved asset {asset_filename}')
+        output.add_line(f'asset metadata {asset.metadata}')
         output.set_value('asset_did', asset.did)
         output.set_value('filename', asset_filename)
+        output.set_value('metadata', asset.metadata)

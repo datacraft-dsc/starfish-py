@@ -97,6 +97,7 @@ def test_asset_store_and_download_command(config, network, remote_agent, account
     output = Output()
     asset_download.execute(args, output)
 
+    print(output.lines)
     assert(output.values['asset_did'])
     assert(os.path.exists(test_download_filename))
 
