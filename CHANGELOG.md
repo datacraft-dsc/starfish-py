@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.10
++   Fix starfish_tools command line
++   Rename starfish_tools.py to starfish_tools
+
 ### Release v0.8.9
 +   Move network method `load_development_contracts` to be called automatically on network object creation
 +   Allow users to add an artifacts folder to load in different contract artifact files
