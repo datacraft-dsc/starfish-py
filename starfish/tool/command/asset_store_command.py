@@ -3,7 +3,10 @@
     Command 'Asset Store'
 
 """
+
+import datetime
 import os
+import re
 
 from starfish.agent import (
     AgentManager,
@@ -50,6 +53,47 @@ class AssetStoreCommand(CommandBase):
         )
 
         parser.add_argument(
+            '--description',
+            help='Asset metadata description'
+        )
+
+        parser.add_argument(
+            '--date-created',
+            help='Asset metadata dateCreated'
+        )
+
+        parser.add_argument(
+            '--created-now',
+            action='store_true',
+            help='Asset metadata set the dateCreated field to the current local time'
+        )
+
+        parser.add_argument(
+            '--author',
+            help='Asset metadata author'
+        )
+
+        parser.add_argument(
+            '--license',
+            help='Asset metadata license'
+        )
+
+        parser.add_argument(
+            '--copyright-holder',
+            help='Asset metadata copyrightHolder'
+        )
+
+        parser.add_argument(
+            '--in-language',
+            help='Asset metadata inLanguage'
+        )
+
+        parser.add_argument(
+            '--tags',
+            help='Asset metadata tags (string comma seperated list)'
+        )
+
+        parser.add_argument(
             'agent',
             help='agent url or agent did to store the asset'
         )
@@ -82,7 +126,38 @@ class AssetStoreCommand(CommandBase):
             }
 
         agent = RemoteAgent(network, result['ddo_text'], authentication=authentication)
-        asset = DataAsset.create_from_file(args.name, args.filename)
+        metadata = {}
+
+        if args.description:
+            metadata['description'] = args.description
+
+        if args.created_now:
+            metadata['dateCreated'] = datetime.datetime.now().isoformat()
+
+        if args.date_created:
+            metadata['dateCreated'] = args.date_created
+
+        if args.author:
+            metadata['author'] = args.author
+
+        if args.license:
+            metadata['license'] = args.license
+
+        if args.copyright_holder:
+            metadata['copyrightHolder'] = args.copyright_holder
+
+        if args.in_language:
+            metadata['inLanguage'] = args.in_language
+
+        if args.tags:
+            print('tags', args.tags)
+            tag_list = re.split(r'[\s\S]+', args.tags)
+            metadata['tags'] = tag_list
+
+        if not metadata.keys():
+            metadata = None
+
+        asset = DataAsset.create_from_file(args.name, args.filename, metadata=metadata)
         asset = agent.register_asset(asset)
         agent.upload_asset(asset)
         output.add_line(f'stored asset {asset.did}')

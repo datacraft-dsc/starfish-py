@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.8.11
++   Allow to set metadata in tools store assets
+
 ### Release v0.8.10
 +   Fix starfish_tools command line
 +   Rename starfish_tools.py to starfish_tools
