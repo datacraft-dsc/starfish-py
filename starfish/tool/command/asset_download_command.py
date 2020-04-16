@@ -54,9 +54,6 @@ class AssetDownloadCommand(CommandBase):
 
         network = self.get_network(args.url)
 
-        # in-case we are using a local development network
-        network.load_development_contracts()
-
         result = AgentManager.resolve_agent(args.asset_did, network, args.username, args.password)
         if not result:
             output.add_line(f'cannot resolve asset {args.asset_did}')

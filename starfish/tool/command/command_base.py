@@ -55,14 +55,12 @@ class CommandBase(ABC):
     def is_command(self, name):
         return self._name == name
 
-    def get_network(self, url, default_url=None):
+    def get_network(self, url, default_url=None, load_development_contracts=True):
         if url is None:
             url = default_url
         if url is None:
             url = 'http://localhost:8545'
-        network = DNetwork(url)
-        # in-case we are using a local development network
-        network.load_development_contracts()
+        network = DNetwork(url, load_development_contracts=load_development_contracts)
 
         return network
 

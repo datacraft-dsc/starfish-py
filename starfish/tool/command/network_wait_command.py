@@ -35,7 +35,7 @@ class NetworkWaitCommand(CommandBase):
 
     def execute(self, args, output):
 
-        network = self.get_network(args.url)
+        network = self.get_network(args.url, load_development_contracts=False)
 
         # in-case we are using a local development network
         if network.load_development_contracts(args.timeout):

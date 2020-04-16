@@ -68,12 +68,14 @@ CONTRACT_LIST = {
 
 
 class DNetwork():
-    def __init__(self, url):
+    def __init__(self, url, load_development_contracts=True):
         self._url = url
         self._web3 = None
         self._name = None
         self._contracts = {}
-        self._connect(self._url)
+        if self._connect(self._url):
+            if load_development_contracts:
+                self.load_development_contracts()
 
     def load_development_contracts(self, timeout_seconds=240, sleep_time_seconds=10):
         """

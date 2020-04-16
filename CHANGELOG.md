@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.8.9
++   Move network method `load_development_contracts` to be called automatically on network object creation
+
 ### Release v0.8.8
 +   Cleanup starfish tools
 +   Asset store and download tool
