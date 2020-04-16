@@ -2,6 +2,7 @@
 
 ### Release v0.8.9
 +   Move network method `load_development_contracts` to be called automatically on network object creation
++   Allow users to add an artifacts folder to load in different contract artifact files
 
 ### Release v0.8.8
 +   Cleanup starfish tools
