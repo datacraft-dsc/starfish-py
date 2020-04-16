@@ -156,7 +156,7 @@ class ContractManager:
         return self._web3
 
     @property
-    def artifacts_path():
+    def artifacts_path(self):
         return self._artifacts_path
 
     @staticmethod
