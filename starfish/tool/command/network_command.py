@@ -38,4 +38,3 @@ class NetworkCommand(CommandBase):
 
     def execute(self, args, output):
         return self.process_sub_command(args, output, args.network_command)
-

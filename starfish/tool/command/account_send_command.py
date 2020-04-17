@@ -4,10 +4,10 @@
 
 """
 
-from .help_command import HelpCommand
 from .account_send_ether_command import AccountSendEtherCommand
 from .account_send_token_command import AccountSendTokenCommand
 from .command_base import CommandBase
+from .help_command import HelpCommand
 
 DEFAULT_AMOUNT = 10
 
@@ -42,4 +42,3 @@ class AccountSendCommand(CommandBase):
 
     def execute(self, args, output):
         return self.process_sub_command(args, output, args.send_command)
-

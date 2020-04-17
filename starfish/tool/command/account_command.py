@@ -7,9 +7,9 @@
 from .account_balance_command import AccountBalanceCommand
 from .account_create_command import AccountCreateCommand
 from .account_get_command import AccountGetCommand
-from .help_command import HelpCommand
 from .account_send_command import AccountSendCommand
 from .command_base import CommandBase
+from .help_command import HelpCommand
 
 
 class AccountCommand(CommandBase):

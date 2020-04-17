@@ -82,7 +82,6 @@ class CommandBase(ABC):
         if not is_found:
             self.print_help()
 
-
     def print_help(self):
         self._sub_parser.choices[self._name].print_help()
 

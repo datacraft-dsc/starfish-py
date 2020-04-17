@@ -4,10 +4,10 @@
 
 """
 
-from .help_command import HelpCommand
 from .agent_register_command import AgentRegisterCommand
 from .agent_resolve_command import AgentResolveCommand
 from .command_base import CommandBase
+from .help_command import HelpCommand
 
 
 class AgentCommand(CommandBase):

@@ -6,8 +6,8 @@
 
 from .account_get_ether_command import AccountGetEtherCommand
 from .account_get_token_command import AccountGetTokenCommand
-from .help_command import HelpCommand
 from .command_base import CommandBase
+from .help_command import HelpCommand
 
 DEFAULT_AMOUNT = 10
 

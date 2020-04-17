@@ -5,9 +5,9 @@
 """
 
 from .asset_download_command import AssetDownloadCommand
-from .help_command import HelpCommand
 from .asset_store_command import AssetStoreCommand
 from .command_base import CommandBase
+from .help_command import HelpCommand
 
 
 class AssetCommand(CommandBase):
@@ -40,4 +40,3 @@ class AssetCommand(CommandBase):
 
     def execute(self, args, output):
         return self.process_sub_command(args, output, args.asset_command)
-
