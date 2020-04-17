@@ -4,6 +4,7 @@
 
 """
 
+from .help_command import HelpCommand
 from .account_send_ether_command import AccountSendEtherCommand
 from .account_send_token_command import AccountSendTokenCommand
 from .command_base import CommandBase
@@ -25,7 +26,7 @@ class AccountSendCommand(CommandBase):
             help='Send some tokens or ether from one account to another'
         )
 
-        send_parser = parser.add_subparsers(
+        account_send_parser = parser.add_subparsers(
             title='send command',
             description='send command',
             help='Send command',
@@ -33,13 +34,12 @@ class AccountSendCommand(CommandBase):
         )
 
         self._command_list = [
-            AccountSendEtherCommand(send_parser),
-            AccountSendTokenCommand(send_parser)
+            AccountSendEtherCommand(account_send_parser),
+            AccountSendTokenCommand(account_send_parser),
+            HelpCommand(account_send_parser, self)
         ]
-        return send_parser
+        return account_send_parser
 
     def execute(self, args, output):
-        for command_item in self._command_list:
-            if command_item.is_command(args.send_command):
-                command_item.execute(args, output)
-                break
+        return self.process_sub_command(args, output, args.send_command)
+

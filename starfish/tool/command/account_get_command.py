@@ -6,6 +6,7 @@
 
 from .account_get_ether_command import AccountGetEtherCommand
 from .account_get_token_command import AccountGetTokenCommand
+from .help_command import HelpCommand
 from .command_base import CommandBase
 
 DEFAULT_AMOUNT = 10
@@ -25,7 +26,7 @@ class AccountGetCommand(CommandBase):
             help='Get some token or ether from a faucet or a tokens on a test network'
 
         )
-        get_parser = parser.add_subparsers(
+        account_get_parser = parser.add_subparsers(
             title='get command',
             description='get command',
             help='Get command',
@@ -33,13 +34,11 @@ class AccountGetCommand(CommandBase):
         )
 
         self._command_list = [
-            AccountGetEtherCommand(get_parser),
-            AccountGetTokenCommand(get_parser)
+            AccountGetEtherCommand(account_get_parser),
+            AccountGetTokenCommand(account_get_parser),
+            HelpCommand(account_get_parser, self)
         ]
-        return get_parser
+        return account_get_parser
 
     def execute(self, args, output):
-        for command_item in self._command_list:
-            if command_item.is_command(args.get_command):
-                command_item.execute(args, output)
-                break
+        return self.process_sub_command(args, output, args.get_command)

@@ -4,6 +4,7 @@
 
 """
 
+from .help_command import HelpCommand
 from .agent_register_command import AgentRegisterCommand
 from .agent_resolve_command import AgentResolveCommand
 from .command_base import CommandBase
@@ -32,12 +33,10 @@ class AgentCommand(CommandBase):
 
         self._command_list = [
             AgentRegisterCommand(agent_parser),
-            AgentResolveCommand(agent_parser)
+            AgentResolveCommand(agent_parser),
+            HelpCommand(agent_parser, self)
         ]
         return agent_parser
 
     def execute(self, args, output):
-        for command_item in self._command_list:
-            if command_item.is_command(args.agent_command):
-                command_item.execute(args, output)
-                break
+        return self.process_sub_command(args, output, args.agent_command)

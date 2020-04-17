@@ -5,6 +5,7 @@
 """
 
 from .command_base import CommandBase
+from .help_command import HelpCommand
 from .network_wait_command import NetworkWaitCommand
 
 
@@ -31,11 +32,10 @@ class NetworkCommand(CommandBase):
 
         self._command_list = [
             NetworkWaitCommand(network_parser),
+            HelpCommand(network_parser, self)
         ]
         return network_parser
 
     def execute(self, args, output):
-        for command_item in self._command_list:
-            if command_item.is_command(args.network_command):
-                command_item.execute(args, output)
-                break
+        return self.process_sub_command(args, output, args.network_command)
+

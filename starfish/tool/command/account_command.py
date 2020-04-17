@@ -7,6 +7,7 @@
 from .account_balance_command import AccountBalanceCommand
 from .account_create_command import AccountCreateCommand
 from .account_get_command import AccountGetCommand
+from .help_command import HelpCommand
 from .account_send_command import AccountSendCommand
 from .command_base import CommandBase
 
@@ -18,7 +19,6 @@ class AccountCommand(CommandBase):
         super().__init__('account', sub_parser)
 
     def create_parser(self, sub_parser):
-
         parser = sub_parser.add_parser(
             self._name,
             description='Tool tasks on accounts',
@@ -36,12 +36,10 @@ class AccountCommand(CommandBase):
             AccountBalanceCommand(account_parser),
             AccountCreateCommand(account_parser),
             AccountGetCommand(account_parser),
-            AccountSendCommand(account_parser)
+            AccountSendCommand(account_parser),
+            HelpCommand(account_parser, self)
         ]
         return account_parser
 
     def execute(self, args, output):
-        for command_item in self._command_list:
-            if command_item.is_command(args.account_command):
-                command_item.execute(args, output)
-                break
+        return self.process_sub_command(args, output, args.account_command)

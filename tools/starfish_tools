@@ -69,6 +69,7 @@ def main():
             command_item.execute(args, output)
             is_found = True
             break
+
     if not is_found:
         parser.print_help()
 

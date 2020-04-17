@@ -49,6 +49,7 @@ NETWORK_NAMES = {
 class CommandBase(ABC):
     def __init__(self, name, sub_parser=None):
         self._name = name
+        self._sub_parser = sub_parser
         if sub_parser:
             self.create_parser(sub_parser)
 
@@ -69,6 +70,21 @@ class CommandBase(ABC):
         if name in NETWORK_NAMES:
             result = NETWORK_NAMES[name]
         return result
+
+    def process_sub_command(self, args, output, command):
+        is_found = False
+        for command_item in self._command_list:
+            if command_item.is_command(command):
+                command_item.execute(args, output)
+                is_found = True
+                break
+
+        if not is_found:
+            self.print_help()
+
+
+    def print_help(self):
+        self._sub_parser.choices[self._name].print_help()
 
     @abstractmethod
     def create_parser(self, sub_parser):
