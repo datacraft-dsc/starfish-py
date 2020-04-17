@@ -3,6 +3,7 @@
 ### Release v0.8.11
 +   Allow to set metadata in tools store assets
 +   Show asset metadata in downloaded assets
++   Add help commands to all of the sub commands in starfish_tools
 
 ### Release v0.8.10
 +   Fix starfish_tools command line
