@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.8.12
++   Removed 'id' from being published in the service record in a DDO
++   Ignored token request errors when trying to access an agent without the 'auth' service enabled
+
 ### Release v0.8.11
 +   Allow to set metadata in tools store assets
 +   Show asset metadata in downloaded assets
