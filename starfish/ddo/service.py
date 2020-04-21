@@ -74,7 +74,6 @@ class Service:
     def as_dictionary(self):
         """return the service as a python dictionary"""
         values = {
-            'id': self._id,
             'type': self._type,
             'serviceEndpoint': self._endpoint
         }
