@@ -503,7 +503,7 @@ class RemoteAgent(AgentBase):
 
         try:
             url = self.get_endpoint('auth', 'token')
-        except ValueError as e:
+        except ValueError:
             url = None
         token = None
         if url and self._authentication and 'username' in self._authentication:
