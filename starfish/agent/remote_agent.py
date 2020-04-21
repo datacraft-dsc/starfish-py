@@ -501,7 +501,10 @@ class RemoteAgent(AgentBase):
             if self._authentication['token']:
                 return self._authentication['token']
 
-        url = self.get_endpoint('auth', 'token')
+        try:
+            url = self.get_endpoint('auth', 'token')
+        except ValueError as e:
+            url = None
         token = None
         if url and self._authentication and 'username' in self._authentication:
             token = self._adapter.get_authorization_token(
