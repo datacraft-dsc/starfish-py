@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.9.0
++   Refactor resolver to main network object.  `resolve_agent` method resolves url/did to a ddo.
+
 ### Release v0.8.12
 +   Removed 'id' from being published in the service record in a DDO
 +   Ignored token request errors when trying to access an agent without the 'auth' service enabled
