@@ -81,6 +81,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/DEX-Company/starfish-py',
-    version='0.8.12',
+    version='0.9.0',
     zip_safe=False,
 )
