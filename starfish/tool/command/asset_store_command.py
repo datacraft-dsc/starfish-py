@@ -8,10 +8,7 @@ import datetime
 import os
 import re
 
-from starfish.agent import (
-    AgentManager,
-    RemoteAgent
-)
+from starfish.agent import RemoteAgent
 from starfish.asset import DataAsset
 from .command_base import CommandBase
 

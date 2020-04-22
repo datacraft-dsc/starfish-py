@@ -4,7 +4,6 @@
 
 """
 
-from starfish.agent import AgentManager
 from .command_base import CommandBase
 
 

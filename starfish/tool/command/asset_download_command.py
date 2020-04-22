@@ -4,10 +4,7 @@
 
 """
 
-from starfish.agent import (
-    AgentManager,
-    RemoteAgent
-)
+from starfish.agent import RemoteAgent
 from .command_base import CommandBase
 
 
