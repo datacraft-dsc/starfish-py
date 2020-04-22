@@ -19,3 +19,14 @@ from .public_key_base import (               # noqa: F401
     PUBLIC_KEY_STORE_TYPE_HEX,
     PUBLIC_KEY_STORE_TYPE_PEM
 )
+
+
+def create_ddo_object(ddo_data):
+    ddo = None
+    if isinstance(ddo_data, str):
+        ddo = DDO(json_text=ddo_data)
+    elif isinstance(ddo_data, dict):
+        ddo = DDO(dictionary=ddo_data)
+    elif isinstance(ddo_data, DDO):
+        ddo = ddo_data
+    return ddo

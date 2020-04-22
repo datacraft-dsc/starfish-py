@@ -12,7 +12,7 @@ from urllib.parse import urljoin
 
 from eth_utils import remove_0x_prefix
 
-from starfish.agent import AgentBase
+from starfish.agent.agent_base import AgentBase
 from starfish.agent.services import Services
 from starfish.asset import (
     DataAsset,
@@ -31,8 +31,7 @@ from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
 from starfish.utils.did import (
     decode_to_asset_id,
     did_generate_random,
-    did_parse,
-    is_did
+    did_parse
 )
 
 SUPPORTED_SERVICES = {
@@ -88,12 +87,7 @@ class RemoteAgent(AgentBase):
 
     @staticmethod
     def load(network, asset_agent_did_url, authentication=None):
-        ddo_text = None
-
-        if is_did(asset_agent_did_url):
-            ddo_text = RemoteAgent.resolve_network_ddo(network, asset_agent_did_url)
-        if ddo_text is None:
-            ddo_text = RemoteAgent.resolve_url_ddo(asset_agent_did_url, authentication)
+        ddo_text = network.resolve_agent(asset_agent_did_url, authentication=authentication)
 
         if ddo_text:
             return RemoteAgent(network, ddo_text, authentication)
@@ -639,32 +633,7 @@ class RemoteAgent(AgentBase):
         return endpoint
 
     @staticmethod
-    def find_supported_service_type(search_name_type):
-        """ return the supported service record if the name or service type is found
-        else return None """
-        for name, service_type in SUPPORTED_SERVICES.items():
-            if service_type == search_name_type:
-                return service_type
-            if name == search_name_type:
-                return service_type
-        return None
-
-    @staticmethod
-    def resolve_network_ddo(network, did):
-        """
-
-        Resolves the remote agent via the dnetwork using it's did to get the agent DDO
-
-        :param object network: DNetwork to resolve the did
-        :param str did: DID of the remote agent to resolve and get DDO
-        :return dict: DDO or None if not found in the network
-
-        """
-        if did:
-            return network.resolve_did(did)
-
-    @staticmethod
-    def resolve_url_ddo(url, authentication=None):
+    def resolve_url(url, authentication=None):
         """
 
         Resolves the remote agent ddo using the url of the agent
@@ -689,3 +658,14 @@ class RemoteAgent(AgentBase):
 
             ddo = adapter.get_ddo(url, token)
         return ddo
+
+    @staticmethod
+    def find_supported_service_type(search_name_type):
+        """ return the supported service record if the name or service type is found
+        else return None """
+        for name, service_type in SUPPORTED_SERVICES.items():
+            if service_type == search_name_type:
+                return service_type
+            if name == search_name_type:
+                return service_type
+        return None

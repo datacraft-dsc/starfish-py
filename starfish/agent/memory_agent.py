@@ -8,7 +8,7 @@ import json
 import re
 import secrets
 
-from starfish.agent import AgentBase
+from starfish.agent.agent_base import AgentBase
 from starfish.ddo.ddo import DDO
 from starfish.listing import Listing
 from starfish.purchase import Purchase

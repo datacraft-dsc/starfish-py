@@ -130,3 +130,21 @@ def test_dnetwork_regiser_resolve_did_ddo(config, network, accounts):
 
     assert(ddo_text == ddo_text_saved)
 
+
+def test_dnetwork_resolve_agent(config, network, accounts):
+    remote_agent = config.agent_list['remote']
+    ddo = network.resolve_agent(remote_agent['url'])
+    print(ddo)
+
+    did = did_generate_random()
+    services = Services(remote_agent['url'], all_services=True)
+    ddo = RemoteAgent.generate_ddo(services)
+    ddo_text = ddo.as_text()
+
+    register_account = accounts[0]
+    network.register_did(register_account, did, ddo_text)
+
+
+    ddo = network.resolve_agent(did)
+    assert(ddo)
+

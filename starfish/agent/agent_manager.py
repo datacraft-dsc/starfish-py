@@ -6,11 +6,11 @@
 import logging
 
 from starfish.agent.remote_agent import RemoteAgent
-from starfish.ddo import DDO
+from starfish.ddo import create_ddo_object
+from starfish.ddo.ddo import DDO
 from starfish.utils.did import (
     did_to_id,
-    id_to_did,
-    is_did
+    id_to_did
 )
 
 logger = logging.getLogger(__name__)
@@ -77,13 +77,13 @@ class AgentManager:
         item = self._items[name]
         if item.get('ddo_text', None) is None:
 
-            ddo_text = RemoteAgent.resolve_network_ddo(self._network, item.get('did', None))
+            ddo_text = self._network.resolve_did(item.get('did', None))
             if ddo_text is None:
                 authentication = item.get('authentication', None)
-                ddo_text = RemoteAgent.resolve_url_ddo(item.get('url', None), authentication=authentication)
+                ddo_text = RemoteAgent.resolve_url(item.get('url', None), authentication=authentication)
 
             self._items[name]['ddo_text'] = ddo_text
-            self._items[name]['ddo'] = AgentManager.create_ddo_object(ddo_text)
+            self._items[name]['ddo'] = create_ddo_object(ddo_text)
         return self._items[name]['ddo_text']
 
     def load_agent(self, asset_agent_did_name):
@@ -116,7 +116,7 @@ class AgentManager:
                 ddo_text = item['ddo_text']
             else:
                 # if it's a agent_did or asset_did
-                ddo_text = RemoteAgent.resolve_network_ddo(self._network, did)
+                ddo_text = self._network.resolve_did(did)
                 if ddo_text:
                     logger.debug(f'resolved {did} from network')
 
@@ -135,7 +135,7 @@ class AgentManager:
             if 'ddo' in item:
                 did = item['ddo'].did
             elif 'ddo_text' in item:
-                ddo = AgentManager.create_ddo_object(item['ddo_text'])
+                ddo = create_ddo_object(item['ddo_text'])
                 did = ddo.did
             if did and did == find_did:
                 return item
@@ -152,50 +152,3 @@ class AgentManager:
     @property
     def items(self):
         return self._items
-
-    @staticmethod
-    def create_ddo_object(ddo_data):
-        ddo = None
-        if isinstance(ddo_data, str):
-            ddo = DDO(json_text=ddo_data)
-        elif isinstance(ddo_data, dict):
-            ddo = DDO(dictionary=ddo_data)
-        elif isinstance(ddo_data, DDO):
-            ddo = ddo_data
-        return ddo
-
-    @staticmethod
-    def get_did_from_ddo(ddo_data):
-        ddo = AgentManager.create_ddo_object(ddo_data)
-        if ddo:
-            return ddo.did
-        return None
-
-    @staticmethod
-    def resolve_agent(agent_url_did, network=None, username=None, password=None):
-        result = {}
-        ddo_text = None
-        if is_did(agent_url_did) and network:
-            ddo_text = RemoteAgent.resolve_network_ddo(network, agent_url_did)
-            if ddo_text:
-                result['type'] = 'network'
-                result['agent_did'] = agent_url_did
-                result['ddo_text'] = ddo_text
-                result['did'] = AgentManager.get_did_from_ddo(ddo_text)
-                return result
-            return None
-
-        authentication = None
-        if username or password:
-            authentication = {
-                'username': username,
-                'password': password
-            }
-        ddo_text = RemoteAgent.resolve_url_ddo(agent_url_did, authentication)
-        if ddo_text:
-            result['type'] = 'url'
-            result['agent_url'] = agent_url_did
-            result['ddo_text'] = ddo_text
-            result['did'] = AgentManager.get_did_from_ddo(ddo_text)
-            return result
-        return None

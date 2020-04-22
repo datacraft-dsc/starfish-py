@@ -17,10 +17,12 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 
 from starfish.contract import ContractManager
+from starfish.ddo import create_ddo_object
 from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
+from starfish.utils.did import is_did
 from starfish.utils.local_node import get_local_contract_files
 
 
@@ -282,8 +284,43 @@ class DNetwork():
         return receipt.status == 1
 
     def resolve_did(self, did):
-        did_registry_contract = self.get_contract('DIDRegistry')
-        return did_registry_contract.get_value(did)
+        ddo_text = None
+        if did and is_did:
+            did_registry_contract = self.get_contract('DIDRegistry')
+            ddo_text = did_registry_contract.get_value(did)
+        return ddo_text
+
+    """
+
+
+    Helper methods
+
+
+    """
+
+    def resolve_agent(self, agent_url_did, username=None, password=None, authentication=None):
+
+        # stop circular references on import
+
+        from starfish.agent.remote_agent import RemoteAgent
+
+        ddo = None
+        if is_did(agent_url_did):
+            ddo_text = self.resolve_did(agent_url_did)
+            if ddo_text:
+                ddo = create_ddo_object(ddo_text)
+            return ddo
+
+        if not authentication:
+            if username or password:
+                authentication = {
+                    'username': username,
+                    'password': password
+                }
+        ddo_text = RemoteAgent.resolve_url(agent_url_did, authentication)
+        if ddo_text:
+            ddo = create_ddo_object(ddo_text)
+        return ddo
 
     @property
     def contract_names(self):
