@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.8.12 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.9.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.12
+                0.9.0
               </div>
             
           
@@ -566,25 +566,8 @@ to see if it is assigned to a valid Asset.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="starfish.agent.RemoteAgent.resolve_network_ddo">
-<em class="property">static </em><code class="sig-name descname">resolve_network_ddo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">did</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.resolve_network_ddo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolves the remote agent via the dnetwork using it’s did to get the agent DDO</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>network</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – DNetwork to resolve the did</p></li>
-<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the remote agent to resolve and get DDO</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return dict</dt>
-<dd class="field-even"><p>DDO or None if not found in the network</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="starfish.agent.RemoteAgent.resolve_url_ddo">
-<em class="property">static </em><code class="sig-name descname">resolve_url_ddo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.resolve_url_ddo" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.agent.RemoteAgent.resolve_url">
+<em class="property">static </em><code class="sig-name descname">resolve_url</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.resolve_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolves the remote agent ddo using the url of the agent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
