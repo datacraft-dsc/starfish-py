@@ -20,8 +20,7 @@ def test_agent_resolve_command(config):
     resolve = AgentResolveCommand()
     output = Output()
     resolve.execute(args, output)
-    assert(output.values['type'] == 'url')
-    assert(output.values['agent'])
+    assert(output.values['did'])
     assert(output.values['ddo_text'])
 
 

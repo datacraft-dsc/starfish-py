@@ -54,8 +54,8 @@ class AssetDownloadCommand(CommandBase):
 
         network = self.get_network(args.url)
 
-        result = AgentManager.resolve_agent(args.asset_did, network, args.username, args.password)
-        if not result:
+        ddo = network.resolve_agent(args.asset_did, username=args.username, password=args.password)
+        if not ddo:
             output.add_line(f'cannot resolve asset {args.asset_did}')
             return
 
@@ -66,7 +66,7 @@ class AssetDownloadCommand(CommandBase):
                 'password': args.password
             }
 
-        agent = RemoteAgent(network, result['ddo_text'], authentication=authentication)
+        agent = RemoteAgent(network, ddo=ddo, authentication=authentication)
         asset = agent.download_asset(args.asset_did)
         asset_filename = args.filename
         if asset_filename is None:

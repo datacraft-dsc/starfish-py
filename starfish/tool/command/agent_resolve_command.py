@@ -47,10 +47,11 @@ class AgentResolveCommand(CommandBase):
 
         output.set_value('agent', args.agent)
 
-        result = AgentManager.resolve_agent(args.agent, network, args.username, args.password)
-        if result:
-            output.add_line(f'{args.agent} resolved to {result["ddo_text"]}')
-            for name, value in result.items():
-                output.set_value(name, value)
+        ddo = network.resolve_agent(args.agent, username=args.username, password=args.password)
+        if ddo:
+            output.add_line(f'{args.agent} resolved to {ddo.as_text()}')
+            output.add_line(f'did: {ddo.did}')
+            output.set_value('ddo_text', ddo.as_text())
+            output.set_value('did', ddo.did)
         else:
             output.add_line(f'unable to resolve agent address {args.agent}')

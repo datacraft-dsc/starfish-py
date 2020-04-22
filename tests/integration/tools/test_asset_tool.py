@@ -68,10 +68,10 @@ def test_asset_store_and_download_command(config, network, remote_agent, account
 
     # register agent in network using it's did
 
-    result = AgentManager.resolve_agent(args.agent, network, args.username, args.password)
+    ddo = network.resolve_agent(args.agent, username=args.username, password=args.password)
     register_account = accounts[0]
     did_id = remove_0x_prefix(did_to_id(upload_asset_did))
-    network.register_did(register_account, f'did:dep:{did_id}', result['ddo_text'])
+    network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text())
 
 
     args = Mock()

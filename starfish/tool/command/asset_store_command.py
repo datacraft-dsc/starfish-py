@@ -113,8 +113,8 @@ class AssetStoreCommand(CommandBase):
 
         network = self.get_network(args.url)
 
-        result = AgentManager.resolve_agent(args.agent, network, args.username, args.password)
-        if not result:
+        ddo = network.resolve_agent(args.agent, username=args.username, password=args.password)
+        if not ddo:
             output.add_line(f'cannot resolve asset {args.asset}')
             return
 
@@ -125,7 +125,7 @@ class AssetStoreCommand(CommandBase):
                 'password': args.password
             }
 
-        agent = RemoteAgent(network, result['ddo_text'], authentication=authentication)
+        agent = RemoteAgent(network, ddo=ddo, authentication=authentication)
         metadata = {}
 
         if args.description:
