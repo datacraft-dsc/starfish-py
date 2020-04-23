@@ -125,7 +125,8 @@ class AgentManager:
             authentication = None
 
             item = self.get_item_from_did(ddo.did)
-            authentication = item.get('authentication', None)
+            if item:
+                authentication = item.get('authentication', None)
             agent = RemoteAgent(self._network, ddo_text, authentication=authentication)
         return agent
 
