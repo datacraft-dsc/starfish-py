@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.9.1
++   Bug fixes
+
 ### Release v0.9.0
 +   Refactor resolver to main network object.  `resolve_agent` method resolves url/did to a ddo.
 
