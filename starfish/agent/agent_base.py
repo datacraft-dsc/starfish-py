@@ -8,7 +8,7 @@ from abc import (
     abstractmethod
 )
 
-from starfish.d_network import DNetwork
+# from starfish.d_network import DNetwork
 
 
 class AgentBase(ABC):
