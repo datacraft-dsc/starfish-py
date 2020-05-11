@@ -19,11 +19,9 @@ class AgentBase(ABC):
     :param ocean: Ocean object that is used by the Agent class
     :type ocean: :class:`.Ocean`
     """
-    def __init__(self, network, ddo=None):
+    def __init__(self, network=None, ddo=None):
         """init the the Ocean Object Base with the ocean instance"""
 
-        if not isinstance(network, DNetwork):
-            raise ValueError('You must pass a valid DNetwork object')
         self._network = network
         self._ddo = ddo
 
