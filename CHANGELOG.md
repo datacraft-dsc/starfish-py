@@ -1,8 +1,7 @@
 ## Change Log
 
 ### Release v0.9.2
-+   Allow for None network in agents
-+   allow file uploads to work for Flask test requests and requests
++   Allow to create remote agents with no Network object assigned
 
 ### Release v0.9.1
 +   Bug fixes

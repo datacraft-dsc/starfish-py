@@ -178,7 +178,7 @@ class RemoteAgentAdapter():
 
         logger.debug(f'uploading data to {url}')
         files = {
-            'file': (asset_id, io.BytesIO(data), 'application/octet-stream')
+            'file': (asset_id, io.BytesIO(data), 'application/octet-stream'),
         }
         headers = RemoteAgentAdapter.create_headers(None, authorization_token)
         response = RemoteAgentAdapter._http_client.post(url, files=files, headers=headers)
