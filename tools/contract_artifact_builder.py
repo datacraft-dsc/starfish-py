@@ -65,7 +65,7 @@ def output_as_json_file(filename, data, is_compressed):
 
 
 def list_artifact_data(data):
-    print(f'Network Name         Contract Name')
+    print('Network Name         Contract Name')
     for network_name, contract_names in data.items():
         for contract_name, item in contract_names.items():
             print(f'{network_name:20} {contract_name}')
@@ -79,14 +79,14 @@ def main():
         '-d',
         '--debug',
         action='store_true',
-        help=f'Debug mode on or off, default: off',
+        help='Debug mode on or off, default: off',
     )
 
     parser.add_argument(
         '-u',
         '--update',
         action='store_true',
-        help=f'Update the output file'
+        help='Update the output file'
     )
 
     parser.add_argument(

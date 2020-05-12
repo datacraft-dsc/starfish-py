@@ -49,7 +49,7 @@ class AccountSendEtherCommand(CommandBase):
 
         parser.add_argument(
             'amount',
-            help=f'Amount to send'
+            help='Amount to send'
         )
         return parser
 

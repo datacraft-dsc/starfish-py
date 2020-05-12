@@ -27,5 +27,5 @@ def find_contract_path(network_name):
         if is_contract_type_exists(network_name, folder):
             return folder
 
-    logger.debug(f'artifacts not found')
+    logger.debug('artifacts not found')
     return None

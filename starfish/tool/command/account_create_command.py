@@ -43,7 +43,7 @@ class AccountCreateCommand(CommandBase):
             logger.debug(f'writing key file to {args.keyfile}')
             account.save_to_file(args.keyfile)
         else:
-            logger.debug(f'writing key file to ouptut')
+            logger.debug('writing key file to ouptut')
             output.add_line(account.export_key_value)
         output.add_line(account.address)
         output.set_value('keyvalue', account.key_value)

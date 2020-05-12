@@ -58,7 +58,7 @@ class ContractManager:
         if package_name is None:
             package_name = self._default_package_name
         if package_name is None:
-            raise ValueError(f'You need to provide a package name for the contract classes')
+            raise ValueError('You need to provide a package name for the contract classes')
 
         if has_artifact is None:
             has_artifact = True
