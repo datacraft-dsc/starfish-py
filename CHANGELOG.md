@@ -1,6 +1,6 @@
 ## Change Log
 
-### Release v0.9.2
+### Release v0.9.3
 +   Allow to create remote agents with no Network object assigned
 
 ### Release v0.9.1
