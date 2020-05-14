@@ -204,4 +204,3 @@ class AgentBase(ABC):
         :type: string
         """
         return self._ddo
-
