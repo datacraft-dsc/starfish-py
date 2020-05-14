@@ -28,7 +28,7 @@ def network(config):
 
 
 @pytest.fixture(scope='module')
-def remote_agent(network, config):
+def remote_agent(config):
     ddo_options = None
     remote_agent = config.agent_list['remote']
     services = Services(remote_agent['url'], all_services=True)
@@ -37,7 +37,7 @@ def remote_agent(network, config):
         'username': remote_agent['username'],
         'password': remote_agent['password'],
     }
-    return RemoteAgent(network, ddo, authentication)
+    return RemoteAgent(ddo, authentication)
 
 
 @pytest.fixture(scope='module')

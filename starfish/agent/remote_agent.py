@@ -52,10 +52,6 @@ class RemoteAgent(AgentBase):
 
     Remote Agent class allows to register, list, purchase and consume assets.
 
-    :param ocean: Ocean object that is being used.
-    :type ocean: :class:`.Ocean`
-    :param did: Optional did of the Surfer agent
-
     :param ddo: Optional ddo of the remote agent, if not provided the agent
         will automatically get the DDO from the network based on the DID.
 
@@ -70,7 +66,7 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, network, ddo, authentication=None):
+    def __init__(self, ddo, authentication=None):
         self._authentication = authentication
 
         if isinstance(ddo, dict):
@@ -81,7 +77,7 @@ class RemoteAgent(AgentBase):
             pass
         else:
             raise ValueError(f'Unknown ddo type {ddo}')
-        AgentBase.__init__(self, network, ddo)
+        AgentBase.__init__(self, ddo)
 
         self._adapter = RemoteAgentAdapter()
 
@@ -90,14 +86,24 @@ class RemoteAgent(AgentBase):
         ddo_text = network.resolve_agent(asset_agent_did_url, authentication=authentication)
 
         if ddo_text:
-            return RemoteAgent(network, ddo_text, authentication)
+            return RemoteAgent(ddo_text, authentication)
 
         return None
 
     @staticmethod
     def register(network, register_account, ddo, authentication=None):
+        """
+        Register the agent on the network.
+
+        :param network: DNetwork to use to register on the block chain
+        :param register_account: Account object to use to register the agent ddo
+        :param ddo: DDO object to use to register on the network
+        :param authentication: Authentication data needed to access this agent
+
+        :return: RemoteAgent object that has been registered on the network
+        """
         network.register_did(register_account, ddo.did, ddo.as_text())
-        return RemoteAgent(network, ddo.as_text(), authentication)
+        return RemoteAgent(ddo.as_text(), authentication)
 
     def register_asset(self, asset):
         """
@@ -116,7 +122,7 @@ class RemoteAgent(AgentBase):
 
             asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
-            agent = SurferAgent(network, ddo)
+            agent = SurferAgent(ddo)
             asset = agent.register_asset(asset, account)
             print(f'Asset DID is {asset.did}')
 
@@ -147,7 +153,7 @@ class RemoteAgent(AgentBase):
         For example::
 
             asset = DataAsset.create('test data asset', 'Some test data')
-            agent = SurferAgent(network)
+            agent = SurferAgent()
             asset = agent.register_asset(asset, account)
 
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }

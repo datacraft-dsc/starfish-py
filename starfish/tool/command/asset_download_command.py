@@ -63,7 +63,7 @@ class AssetDownloadCommand(CommandBase):
                 'password': args.password
             }
 
-        agent = RemoteAgent(network, ddo=ddo, authentication=authentication)
+        agent = RemoteAgent(ddo=ddo, authentication=authentication)
         asset = agent.download_asset(args.asset_did)
         asset_filename = args.filename
         if asset_filename is None:

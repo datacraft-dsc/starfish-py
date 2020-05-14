@@ -122,7 +122,7 @@ class AssetStoreCommand(CommandBase):
                 'password': args.password
             }
 
-        agent = RemoteAgent(network, ddo=ddo, authentication=authentication)
+        agent = RemoteAgent(ddo=ddo, authentication=authentication)
         metadata = {}
 
         if args.description:

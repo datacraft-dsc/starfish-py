@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.10.0
++   Remove Network from agent classes
+
 ### Release v0.9.3
 +   Allow to create remote agents with no Network object assigned
 

@@ -8,8 +8,6 @@ from abc import (
     abstractmethod
 )
 
-# from starfish.d_network import DNetwork
-
 
 class AgentBase(ABC):
     """
@@ -19,10 +17,9 @@ class AgentBase(ABC):
     :param ocean: Ocean object that is used by the Agent class
     :type ocean: :class:`.Ocean`
     """
-    def __init__(self, network=None, ddo=None):
+    def __init__(self, ddo=None):
         """init the the Ocean Object Base with the ocean instance"""
 
-        self._network = network
         self._ddo = ddo
 
         super().__init__()
@@ -208,10 +205,3 @@ class AgentBase(ABC):
         """
         return self._ddo
 
-    @property
-    def network(self):
-        """
-        :return: Ocean object
-        :type: :class:`.Ocean`
-        """
-        return self._network

@@ -24,18 +24,18 @@ class MemoryAgent(AgentBase):
 
     Memory Agent class allows to register, list, purchase and consume assets.
 
-    :param ocean: Ocean object that is being used.
-    :type ocean: :class:`.Ocean`
+    :param ddo: ddo to access the agent
+    :type ddo: :class:`.DDO`
 
     """
 
-    def __init__(self, network, ddo=None):
+    def __init__(self, ddo=None):
 
         if ddo is None:
             did = did_generate_random()
             ddo = DDO(did)
 
-        AgentBase.__init__(self, network, ddo=ddo)
+        AgentBase.__init__(self, ddo=ddo)
 
         self._memory = {
             'listing': {},
@@ -46,7 +46,7 @@ class MemoryAgent(AgentBase):
     def register_asset(self, asset):
         """
 
-        Register a memory asset with the ocean network.
+        Register a memory asset.
 
         :param object metadata: asset object to register for this asset.
 

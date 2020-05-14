@@ -24,14 +24,14 @@ def register_asset_for_sale(agent, resources, account):
     assert listing.asset_did
     return listing
 
-def test_asset(network, resources, config, accounts):
+def test_asset(resources, config, accounts):
 
     # create an ocean object
 
     publisher_account = accounts[0]
     purchaser_account = accounts[1]
 
-    agent = MemoryAgent(network)
+    agent = MemoryAgent()
     assert agent
 
 
@@ -60,12 +60,12 @@ def test_asset(network, resources, config, accounts):
 
 
 
-def test_search_listing(network, resources, config, accounts):
+def test_search_listing(resources, config, accounts):
 
     publisher_account = accounts[0]
     purchaser_account = accounts[1]
 
-    agent = MemoryAgent(network)
+    agent = MemoryAgent()
 
     listing = register_asset_for_sale(agent, resources, publisher_account)
     assert listing
