@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.9.3 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.10.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.10.0
               </div>
             
           
@@ -173,14 +173,12 @@
 <h1>Remote Agent class<a class="headerlink" href="#remote-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.agent.RemoteAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">ddo</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">RemoteAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddo</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Remote Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ocean</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code>) – Ocean object that is being used.</p></li>
-<li><p><strong>did</strong> – Optional did of the Surfer agent</p></li>
 <li><p><strong>ddo</strong> – Optional ddo of the remote agent, if not provided the agent
 will automatically get the DDO from the network based on the DID.</p></li>
 <li><p><strong>authentication</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – <p>authentication is a dict of values to allow for authentication access to
@@ -238,7 +236,7 @@ provider will be made at this point.</p>
 </dl>
 <p>For example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;test data asset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">()</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 
 <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
@@ -533,8 +531,20 @@ to see if it is assigned to a valid Asset.</p>
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.register">
 <em class="property">static </em><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">register_account</span></em>, <em class="sig-param"><span class="n">ddo</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a virtual subclass of an ABC.</p>
-<p>Returns the subclass, to allow usage as a class decorator.</p>
+<dd><p>Register the agent on the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network</strong> – DNetwork to use to register on the block chain</p></li>
+<li><p><strong>register_account</strong> – Account object to use to register the agent ddo</p></li>
+<li><p><strong>ddo</strong> – DDO object to use to register on the network</p></li>
+<li><p><strong>authentication</strong> – Authentication data needed to access this agent</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>RemoteAgent object that has been registered on the network</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -558,7 +568,7 @@ to see if it is assigned to a valid Asset.</p>
 <p>For example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;test data asset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data&#39;</span><span class="p">)</span>
 <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="mf">3.457</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;my data is for sale&#39;</span> <span class="p">}</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">ddo</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">SurferAgent</span><span class="p">(</span><span class="n">ddo</span><span class="p">)</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Asset DID is </span><span class="si">{</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Memory Agent class &mdash; starfish-py 0.9.3 documentation</title>
+  <title>Memory Agent class &mdash; starfish-py 0.10.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.10.0
               </div>
             
           
@@ -173,12 +173,12 @@
 <h1>Memory Agent class<a class="headerlink" href="#memory-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.agent.MemoryAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">ddo</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddo</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Memory Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ocean</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Ocean</span></code>) – Ocean object that is being used.</p>
+<dd class="field-odd"><p><strong>ddo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DDO</span></code>) – ddo to access the agent</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -304,7 +304,7 @@ provider will be made at this point.</p>
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.register_asset">
 <code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent.register_asset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a memory asset with the ocean network.</p>
+<dd><p>Register a memory asset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – asset object to register for this asset.</p>
