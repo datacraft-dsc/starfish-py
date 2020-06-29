@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.11.0
++   Renamed network class from DNetwork to Network
+
 ### Release v0.10.0
 +   Remove Network from agent classes
 
