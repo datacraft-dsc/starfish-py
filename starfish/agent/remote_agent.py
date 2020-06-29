@@ -95,7 +95,7 @@ class RemoteAgent(AgentBase):
         """
         Register the agent on the network.
 
-        :param network: DNetwork to use to register on the block chain
+        :param network: Network to use to register on the block chain
         :param register_account: Account object to use to register the agent ddo
         :param ddo: DDO object to use to register on the network
         :param authentication: Authentication data needed to access this agent

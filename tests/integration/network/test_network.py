@@ -10,20 +10,20 @@ from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 
-from starfish import DNetwork
+from starfish import Network
 
 TEST_AMOUNT = 5
 
-def test_dnetwork_basic(config, network):
+def test_network_basic(config, network):
     assert(network.name)
     assert(network.web3)
     assert(network.contract_names)
     assert(network.url == config.network_url)
 
-def test_dnetwork_load_development_contracts(network):
+def test_network_load_development_contracts(network):
     assert(network.load_development_contracts())
 
-def test_dnetwork_account(network, accounts):
+def test_network_account(network, accounts):
     test_account = accounts[0]
     ether_balance = network.get_ether_balance(test_account)
     assert(ether_balance)
@@ -31,7 +31,7 @@ def test_dnetwork_account(network, accounts):
     token_balance = network.get_token_balance(test_account)
     assert(token_balance)
 
-def test_dnetwork_request_test_tokens(network, accounts):
+def test_network_request_test_tokens(network, accounts):
 
     test_account = accounts[0]
 
@@ -44,7 +44,7 @@ def test_dnetwork_request_test_tokens(network, accounts):
     assert(new_token_balance)
     assert(token_balance + TEST_AMOUNT == new_token_balance)
 
-def test_dnetwork_send_ether(network, accounts):
+def test_network_send_ether(network, accounts):
     from_account = accounts[0]
     to_account = accounts[1]
 
@@ -60,7 +60,7 @@ def test_dnetwork_send_ether(network, accounts):
     assert(to_balance + TEST_AMOUNT == new_to_balance)
 
 
-def test_dnetwork_send_token(network, accounts):
+def test_network_send_token(network, accounts):
     from_account = accounts[0]
     to_account = accounts[1]
 
@@ -77,7 +77,7 @@ def test_dnetwork_send_token(network, accounts):
     assert(from_balance - TEST_AMOUNT == new_from_balance)
     assert(to_balance + TEST_AMOUNT == new_to_balance)
 
-def test_dnetwork_send_token_and_log(network, accounts):
+def test_network_send_token_and_log(network, accounts):
     from_account = accounts[0]
     to_account = accounts[1]
 
@@ -105,7 +105,7 @@ def test_dnetwork_send_token_and_log(network, accounts):
     )
     assert(is_sent)
 
-def test_dnetwork_regiser_provenance(network, accounts):
+def test_network_regiser_provenance(network, accounts):
 
     register_account = accounts[0]
     asset_id = secrets.token_hex(32)
@@ -115,7 +115,7 @@ def test_dnetwork_regiser_provenance(network, accounts):
     assert(len(event_list) > 0)
 
 
-def test_dnetwork_regiser_resolve_did_ddo(config, network, accounts):
+def test_network_regiser_resolve_did_ddo(config, network, accounts):
     did = did_generate_random()
 
     remote_agent = config.agent_list['remote']
@@ -131,7 +131,7 @@ def test_dnetwork_regiser_resolve_did_ddo(config, network, accounts):
     assert(ddo_text == ddo_text_saved)
 
 
-def test_dnetwork_resolve_agent(config, network, accounts):
+def test_network_resolve_agent(config, network, accounts):
     remote_agent = config.agent_list['remote']
     ddo = network.resolve_agent(remote_agent['url'])
     print(ddo)

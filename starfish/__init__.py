@@ -4,7 +4,7 @@
 
 """
 
-from starfish.d_network import DNetwork                     # noqa: F401
+from starfish.network import Network                     # noqa: F401
 
 __author__ = """DEX.sg"""
 __version__ = '0.10.0'

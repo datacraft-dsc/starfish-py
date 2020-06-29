@@ -9,7 +9,7 @@ from abc import (
     abstractmethod
 )
 
-from starfish import DNetwork
+from starfish import Network
 
 DEFAULT_NETWORK_URL = 'http://localhost:8545'
 
@@ -61,7 +61,7 @@ class CommandBase(ABC):
             url = default_url
         if url is None:
             url = 'http://localhost:8545'
-        network = DNetwork(url, load_development_contracts=load_development_contracts)
+        network = Network(url, load_development_contracts=load_development_contracts)
 
         return network
 

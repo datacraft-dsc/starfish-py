@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from starfish import DNetwork
+from starfish import Network
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent, AgentManager
 from starfish.agent.services import Services
@@ -8,7 +8,7 @@ from starfish.agent.services import Services
 def main():
 
     # Create a new Ocean instance.
-    network = DNetwork('http://localhost:8545')
+    network = Network('http://localhost:8545')
     print(network.name)
 
     # we only need to call this method if we are using a local test network.

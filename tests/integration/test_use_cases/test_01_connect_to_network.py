@@ -11,7 +11,6 @@
 
 import secrets
 import json
-from starfish import DNetwork
 from starfish.agent import RemoteAgent
 from starfish.utils.did import did_generate_random
 

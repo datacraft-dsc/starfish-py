@@ -1,7 +1,8 @@
 """
 
-    DNetwork class
+    Network class
 
+    To access block chain network services.
 
 """
 
@@ -69,7 +70,7 @@ CONTRACT_LIST = {
 }
 
 
-class DNetwork():
+class Network():
     def __init__(self, url, artifacts_path=None, load_development_contracts=True):
         self._url = url
         self._web3 = None
@@ -349,7 +350,7 @@ class DNetwork():
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:
             try:
-                self._name = DNetwork.find_network_name_from_id(int(self._web3.net.version))
+                self._name = Network.find_network_name_from_id(int(self._web3.net.version))
             except requests.exceptions.ConnectionError as e:
                 raise StarfishConnectionError(e)
 

@@ -4,7 +4,6 @@ import secrets
 
 from tests.unit.libs.unit_test_config import unitTestConfig
 from tests.unit.libs.unit_test_network import UnitTestNetwork
-from starfish import DNetwork
 
 @pytest.fixture(scope="module")
 def config():

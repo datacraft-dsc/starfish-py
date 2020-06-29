@@ -6,7 +6,7 @@ import pathlib
 import requests
 from web3 import Web3, HTTPProvider
 
-from starfish import DNetwork
+from starfish import Network
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 from starfish.account import Account
@@ -19,7 +19,7 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 
 @pytest.fixture(scope='module')
 def network(config):
-    network = DNetwork(config.network_url)
+    network = Network(config.network_url)
 
     # new method to wait for the contracts to be installed on the test node
     assert(network.load_development_contracts())

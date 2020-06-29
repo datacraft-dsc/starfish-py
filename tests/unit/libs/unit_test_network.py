@@ -1,7 +1,7 @@
 
-from starfish.d_network import DNetwork
+from starfish.network import Network
 
-class UnitTestNetwork(DNetwork):
+class UnitTestNetwork(Network):
 
     def __init__(self, url):
         self._url = url
