@@ -7,8 +7,6 @@
 """
 
 import logging
-import re
-import time
 import requests
 
 from web3 import (
@@ -26,7 +24,6 @@ from starfish.exceptions import (
     StarfishInsufficientFunds
 )
 from starfish.utils.did import is_did
-from starfish.utils.local_node import get_local_contract_files
 
 
 logger = logging.getLogger(__name__)

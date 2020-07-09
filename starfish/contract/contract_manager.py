@@ -15,8 +15,8 @@ import json
 import logging
 import os
 import time
-import requests
 from urllib.parse import urljoin
+import requests
 
 from starfish.contract.contract_base import ContractBase
 
@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
 LOCAL_ARTIFACT_PACKAGE_SERVER = 'http://localhost:8550'
+
 
 class ContractManager:
     """
