@@ -1,11 +1,11 @@
 """
 
 
-    test_01_connect_to_ocean
+    test_01_connect_to_network
 
 
-    As a developer working with Ocean,
-    I need a way to connect to the Ocean Network
+    As a developer working with a network,
+    I need a way to connect to the network
 
 """
 

@@ -14,6 +14,9 @@ import inspect
 import json
 import logging
 import os
+import time
+import requests
+from urllib.parse import urljoin
 
 from starfish.contract.contract_base import ContractBase
 
@@ -21,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
-
+LOCAL_ARTIFACT_PACKAGE_SERVER = 'http://localhost:8550'
 
 class ContractManager:
     """
@@ -33,12 +36,13 @@ class ContractManager:
 
     """
 
-    def __init__(self, web3, network_name, default_package_name, artifacts_path):
+    def __init__(self, web3, network_id, network_name, default_package_name, artifacts_path):
         self._web3 = web3
+        self._network_id = network_id
         self._network_name = network_name
         self._default_package_name = default_package_name
         self._artifacts_path = artifacts_path
-        self._artifact_items = ContractManager.load_artifact_library(ARTIFACT_DATA_FILENAME)
+        self._artifact_items = ContractManager.load_artifacts_package(ARTIFACT_DATA_FILENAME)
         if self._artifact_items is None:
             self._artifact_items = []
 
@@ -74,6 +78,18 @@ class ContractManager:
                     has_artifact=has_artifact
                 )
         return None
+
+    def load_local_artifacts_package(self, url=None, timeoutSeconds=20):
+        if not url:
+            url = LOCAL_ARTIFACT_PACKAGE_SERVER
+
+        timeout = time.time() + timeoutSeconds
+        info = self._request_local_artifacts_package(url)
+        while not info and timeout < time.time():
+            time.sleep(1)
+            info = self._request_local_artifacts_package(url)
+        if info and 'artifacts' in info:
+            self._artifact_items = info['artifacts']
 
     def create_contract_object(self, name, class_def, artifact_filename=None, has_artifact=None):
         """
@@ -122,7 +138,7 @@ class ContractManager:
 
         # setup the default artifact filename
         if artifact_filename is None:
-            artifact_filename = f'{name}.{self._network_name}.json'
+            artifact_filename = f'{name}.{self._network_id}.json'
 
         # first look for user defined folder for any artifact file
         artifacts_path_list = [self._artifacts_path, ContractManager.data_path()]
@@ -132,9 +148,9 @@ class ContractManager:
             data = ContractManager.load_artifact_file(artifact_filename_path)
         else:
             # now try to load from the artifact library
-            if self._network_name in self._artifact_items and name in self._artifact_items[self._network_name]:
-                logger.debug(f'found contract in library {name}.{self._network_name}')
-                data = self._artifact_items[self._network_name][name]
+            if str(self._network_id) in self._artifact_items and name in self._artifact_items[str(self._network_id)]:
+                logger.debug(f'found contract in library {name}.{self._network_id}')
+                data = self._artifact_items[str(self._network_id)][name]
 
         return data
 
@@ -147,9 +163,27 @@ class ContractManager:
         :param dict data: Article data for the contract
 
         """
-        if self._network_name not in self._artifact_items:
-            self._artifact_items[self._network_name] = {}
-        self._artifact_items[self._network_name][name] = data
+        if self._network_id not in self._artifact_items:
+            self._artifact_items[self._network_id] = {}
+        self._artifact_items[self._network_id][name] = data
+
+    def _request_local_artifacts_package(self, url):
+        """
+        Request the artifacts package from the local package serever.
+        This only works for local testing with a local private network.
+
+        Usually the artifacts are stored in a single gzipped json file for all
+        of the public and test block chain networks.
+        :param str url: URL of the package server to request
+        :returns: a dict on artifacts
+        """
+        data = None
+        url = urljoin(f'{url}/', 'artifacts')
+        logger.debug(f'requesting artifacts at url {url}')
+        response = requests.get(url)
+        if response and response.status_code == requests.codes.ok:
+            data = response.json()
+        return data
 
     @property
     def web3(self):
@@ -190,7 +224,7 @@ class ContractManager:
                 return json.load(fp)
 
     @staticmethod
-    def load_artifact_library(filename):
+    def load_artifacts_package(filename):
         data = None
         artifact_libray_file = os.path.join(ContractManager.data_path(), filename)
         if os.path.exists(artifact_libray_file):

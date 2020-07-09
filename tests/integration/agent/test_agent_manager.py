@@ -14,27 +14,27 @@ from starfish.ddo import create_ddo_object
 def test_agent_manager_add(config, network):
     manager = AgentManager(network)
 
-    for name, item in config.agent_list.items():
+    for name, item in config['agents'].items():
         manager.add(name, item)
 
     assert(manager.items)
     for name, item in manager.items.items():
-        assert(config.agent_list[name])
+        assert(config['agents'][name])
 
 
-    for name, item in config.agent_list.items():
+    for name, item in config['agents'].items():
         ddo = manager.resolve_ddo(name)
         assert(ddo)
 
 def test_agent_manager_load_agent(config, network):
     manager = AgentManager(network)
 
-    for name, item in config.agent_list.items():
+    for name, item in config['agents'].items():
         manager.add(name, item)
 
-    items = config.agent_list;
+    items = config['agents'];
     name = manager.default_name
-    assert(name == 'remote')
+    assert(name == 'local')
     ddo_text = manager.resolve_ddo(name)
     ddo = create_ddo_object(ddo_text)
 

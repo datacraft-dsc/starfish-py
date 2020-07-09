@@ -8,12 +8,12 @@ accounts:
   account1:
     address: '0x19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8'
     password: dex-secret
-    keyfile: test/resources/account_key_files/local/19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8.json
+    keyfile: tests/resources/account_key_files/local/19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8.json
 
   account2:
     address: '0xF3dc3d005F3e854Ce904A7bbF1e09dCe286caF64'
     password: dex-secret
-    keyfile: test/resources/account_key_files/local/F3dc3d005F3e854Ce904A7bbF1e09dCe286caF64.json
+    keyfile: tests/resources/account_key_files/local/F3dc3d005F3e854Ce904A7bbF1e09dCe286caF64.json
 
 # this is account's key file is on the local ethereum node
   accountNode:

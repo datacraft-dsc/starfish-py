@@ -1,5 +1,5 @@
 """
-    Test ocean class
+    Test Memory agent
 
 """
 
@@ -26,7 +26,7 @@ def register_asset_for_sale(agent, resources, account):
 
 def test_asset(resources, config, accounts):
 
-    # create an ocean object
+    # create an memory agent object
 
     publisher_account = accounts[0]
     purchaser_account = accounts[1]

@@ -15,7 +15,9 @@ from web3 import (
     HTTPProvider,
     Web3
 )
+
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
+from web3.middleware import geth_poa_middleware
 
 from starfish.contract import ContractManager
 from starfish.ddo import create_ddo_object
@@ -41,6 +43,7 @@ NETWORK_NAMES = {
     77: 'POA_Sokol',
     99: 'POA_Core',
     100: 'xDai',
+    1337: 'local',                  # Local private network
     8995: 'nile',                   # Ocean Protocol Public test net
     8996: 'spree',                  # Ocean Protocol local test net
     0xcea11: 'pacific'              # Ocean Protocol Public mainnet
@@ -57,8 +60,8 @@ CONTRACT_LIST = {
     'DirectPurchase': {
         'name': 'DirectPurchaseContract'
     },
-    'OceanToken': {
-        'name': 'OceanTokenContract'
+    'DexToken': {
+        'name': 'DexTokenContract'
     },
     'Dispenser': {
         'name': 'DispenserContract'
@@ -75,70 +78,21 @@ class Network():
         self._url = url
         self._web3 = None
         self._name = None
+        self._id = None
         self._artifacts_path = artifacts_path
         self._contracts = {}
         if artifacts_path is None:
             artifacts_path = 'artifacts'
         if self._connect(self._url, artifacts_path):
-            if load_development_contracts:
-                self.load_development_contracts()
-
-    def load_development_contracts(self, timeout_seconds=240, sleep_time_seconds=10):
-        """
-
-        This only need to be called on a development network, where the contracts are installed locally on the local node/network.
-
-        Wait for the contracts to be ready and installed
-
-        """
-
-        # only do this for the local 'spree' or 'development' node
-
-        if not self._name == 'spree' or self._name == 'development':
-            return True
-
-        # This list order is important, the development contracts have priority over spree
-        test_network_name_list = ['development', 'spree']
-        if timeout_seconds is None:
-            timeout_seconds = 240
-        timeout_time = time.time() + timeout_seconds
-        while timeout_time > time.time():
-            load_items = get_local_contract_files('keeper-contracts', '/keeper-contracts/artifacts')
-
-            # now go through the list and collate the contract artifacts to a dict
-            # we give pereference for .development. contracts
-            contract_items = {}
-
-            for filename, data in load_items.items():
-                if 'name' in data:
-                    match = re.match(r'(\w+)\.(\w+)\.json', filename)
-                    if match:
-                        contract_name = match.group(1)
-                        network_name = match.group(2)
-                        if network_name and network_name in test_network_name_list:
-                            if network_name not in contract_items:
-                                contract_items[network_name] = {}
-                            contract_items[network_name][contract_name] = data
-
-            # now go through the list of contracts supported and load in the artifact data
-            load_count = 0
-            contract_count = 0
-            for contract_name, item in CONTRACT_LIST.items():
-                if item.get('has_artifact', True):
-                    contract_count += 1
-                    for network_name in test_network_name_list:
-                        if network_name in contract_items and contract_name in contract_items[network_name]:
-                            data = contract_items[network_name][contract_name]
-                            self._contract_manager.set_contract_data(contract_name, data)
-                            logger.debug(f'imported contract {contract_name}.{network_name}')
-                            load_count += 1
-                            break
-            if load_count == contract_count:
-                return True
-            # take some sleep to wait for the contracts to be built
-            logger.debug(f'only loaded {load_count} out of {contract_count} contracts wating for local node to startup..')
-            time.sleep(sleep_time_seconds)
-        return False
+            self._contract_manager = ContractManager(
+                self._web3,
+                self._id,
+                self._name,
+                DEFAULT_PACKAGE_NAME,
+                artifacts_path,
+            )
+            if load_development_contracts and self._name == 'local':
+                self._contract_manager.load_local_artifacts_package()
 
     def get_contract(self, name):
         if name not in CONTRACT_LIST:
@@ -164,8 +118,8 @@ class Network():
         return network_contract.get_balance(account_address)
 
     def get_token_balance(self, account_address):
-        ocean_token_contract = self.get_contract('OceanToken')
-        return ocean_token_contract.get_balance(account_address)
+        dex_token_contract = self.get_contract('DexToken')
+        return dex_token_contract.get_balance(account_address)
 
     def request_test_tokens(self, account, amount):
         dispenser_contract = self.get_contract('Dispenser')
@@ -204,14 +158,14 @@ class Network():
         return receipt.status == 1
 
     def send_token(self, account, to_account_address, amount):
-        ocean_token_contract = self.get_contract('OceanToken')
+        dex_token_contract = self.get_contract('DexToken')
 
         account_balance = self.get_token_balance(account)
         if account_balance < amount:
             raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
 
-        tx_hash = ocean_token_contract.transfer(account, to_account_address, amount)
-        receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+        tx_hash = dex_token_contract.transfer(account, to_account_address, amount)
+        receipt = dex_token_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
     """
@@ -220,19 +174,19 @@ class Network():
 
     """
     def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
-        ocean_token_contract = self.get_contract('OceanToken')
+        dex_token_contract = self.get_contract('DexToken')
         direct_contract = self.get_contract('DirectPurchase')
 
         account_balance = self.get_token_balance(account)
         if account_balance < amount:
             raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
 
-        tx_hash = ocean_token_contract.approve_transfer(
+        tx_hash = dex_token_contract.approve_transfer(
             account,
             direct_contract.address,
             amount
         )
-        receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+        receipt = dex_token_contract.wait_for_receipt(tx_hash)
         if receipt and receipt.status == 1:
             tx_hash = direct_contract.send_token_and_log(
                 account,
@@ -349,13 +303,18 @@ class Network():
         self._url = url
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:
+
             try:
-                self._name = Network.find_network_name_from_id(int(self._web3.net.version))
+                self._id = int(self._web3.net.version)
+                self._name = Network.find_network_name_from_id(self._id)
             except requests.exceptions.ConnectionError as e:
                 raise StarfishConnectionError(e)
 
+            if self._name == 'local':
+                # inject the poa compatibility middleware to the innermost layer
+                self._web3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
             logger.info(f'connected to the {self._name} network')
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
-            self._contract_manager = ContractManager(self._web3, self._name, DEFAULT_PACKAGE_NAME, artifacts_path)
             return True
         return False

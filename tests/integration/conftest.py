@@ -19,23 +19,19 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 
 @pytest.fixture(scope='module')
 def network(config):
-    network = Network(config.network_url)
-
-    # new method to wait for the contracts to be installed on the test node
-    assert(network.load_development_contracts())
-
+    network = Network(config['network']['url'])
     return network
 
 
 @pytest.fixture(scope='module')
 def remote_agent(config):
     ddo_options = None
-    remote_agent = config.agent_list['remote']
-    services = Services(remote_agent['url'], all_services=True)
+    local_agent = config['agents']['local']
+    services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     authentication = {
-        'username': remote_agent['username'],
-        'password': remote_agent['password'],
+        'username': local_agent['username'],
+        'password': local_agent['password'],
     }
     return RemoteAgent(ddo, authentication)
 
@@ -44,9 +40,11 @@ def remote_agent(config):
 def accounts(config):
     result = []
     # load in the test accounts
+    account_1 = config['accounts']['account1']
+    account_2 = config['accounts']['account2']
     result = [
-        Account(config.account_1['address'], config.account_1['password'], key_file=config.account_1['keyfile']),
-        Account(config.account_2['address'], config.account_2['password'], key_file=config.account_2['keyfile']),
+        Account(account_1['address'], account_1['password'], key_file=account_1['keyfile']),
+        Account(account_2['address'], account_2['password'], key_file=account_2['keyfile']),
     ]
     return result
 
@@ -54,11 +52,11 @@ def accounts(config):
 @pytest.fixture(scope='module')
 def invokable_list(config):
 
-    remote_agent = config.agent_list['remote']
+    local_agent = config['agents']['local']
 
-    url = f'{remote_agent["url"]}/api/v1/admin/import-demo?id=operations'
-    username = remote_agent['username']
-    password = remote_agent['password']
+    url = f'{local_agent["url"]}/api/v1/admin/import-demo?id=operations'
+    username = local_agent['username']
+    password = local_agent['password']
     response = requests.post(url, auth=(username, password), headers={'accept':'application/json'})
     result = response.json()
     return result.get('invokables')

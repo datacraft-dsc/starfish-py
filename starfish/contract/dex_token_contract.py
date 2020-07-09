@@ -6,11 +6,11 @@
 
 from .contract_base import ContractBase
 
-CONTRACT_NAME = 'OceanToken'
+CONTRACT_NAME = 'DexToken'
 
 
-class OceanTokenContract(ContractBase):
-    """Class representing the Ocean Token contract."""
+class DexTokenContract(ContractBase):
+    """Class representing the Dex Token contract."""
 
     def __init__(self):
         ContractBase.__init__(self, CONTRACT_NAME)
