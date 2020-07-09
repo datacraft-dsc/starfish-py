@@ -10,9 +10,7 @@ from unittest.mock import Mock
 RESOURCES_PATH = pathlib.Path.cwd() / 'tests' / 'resources'
 METADATA_SAMPLE_FILE = RESOURCES_PATH / 'metadata' / 'sample_metadata1.json'
 TEST_ASSET_FILE = RESOURCES_PATH / 'test_asset_file.txt'
-TEST_ASSET_REMOTE = 'https://oceanprotocol.com/tech-whitepaper.pdf'
 CONFIG_LOCAL_FILE_PATH = RESOURCES_PATH / 'config_local.yml'
-# CONFIG_TEST_NET_FILE_PATH = RESOURCES_PATH / 'config_nile.conf'
 
 
 # set debug logging
@@ -53,7 +51,6 @@ def resources():
     data = Mock()
     data.asset_file = TEST_ASSET_FILE
     data.metadata = METADATA_SAMPLE_FILE
-#    data.asset_remote = TEST_ASSET_REMOTE
     data.listing_data = TEST_LISTING_DATA
     return data
 
