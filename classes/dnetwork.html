@@ -1,15 +1,19 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DNetwork class &mdash; starfish-py 0.10.0 documentation</title>
+  <title>DNetwork class &mdash; starfish-py 0.11.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
 
   
   
@@ -17,7 +21,9 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -29,11 +35,6 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Job Classes" href="job.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> starfish-py
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> starfish-py
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.10.0
+                0.11.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -103,6 +105,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -141,7 +144,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>DNetwork class</li>
     
@@ -164,114 +167,6 @@
             
   <div class="section" id="dnetwork-class">
 <h1>DNetwork class<a class="headerlink" href="#dnetwork-class" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="starfish.DNetwork">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.</code><code class="sig-name descname">DNetwork</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">artifacts_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_development_contracts</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py method">
-<dt id="starfish.DNetwork.contract_names">
-<em class="property">property </em><code class="sig-name descname">contract_names</code><a class="headerlink" href="#starfish.DNetwork.contract_names" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.find_network_name_from_id">
-<em class="property">static </em><code class="sig-name descname">find_network_name_from_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.find_network_name_from_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.get_contract">
-<code class="sig-name descname">get_contract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.get_contract" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.get_ether_balance">
-<code class="sig-name descname">get_ether_balance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.get_ether_balance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.get_provenace_event_list">
-<code class="sig-name descname">get_provenace_event_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.get_provenace_event_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.get_token_balance">
-<code class="sig-name descname">get_token_balance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.get_token_balance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.is_token_sent">
-<code class="sig-name descname">is_token_sent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">from_account_address</span></em>, <em class="sig-param"><span class="n">to_account_address</span></em>, <em class="sig-param"><span class="n">amount</span></em>, <em class="sig-param"><span class="n">reference_1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reference_2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.is_token_sent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.load_development_contracts">
-<code class="sig-name descname">load_development_contracts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout_seconds</span><span class="o">=</span><span class="default_value">240</span></em>, <em class="sig-param"><span class="n">sleep_time_seconds</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.load_development_contracts" title="Permalink to this definition">¶</a></dt>
-<dd><p>This only need to be called on a development network, where the contracts are installed locally on the local node/network.</p>
-<p>Wait for the contracts to be ready and installed</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.name">
-<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#starfish.DNetwork.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.register_did">
-<code class="sig-name descname">register_did</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">did</span></em>, <em class="sig-param"><span class="n">ddo_text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.register_did" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.register_provenace">
-<code class="sig-name descname">register_provenace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">asset_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.register_provenace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.request_ether_from_faucet">
-<code class="sig-name descname">request_ether_from_faucet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.request_ether_from_faucet" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.request_test_tokens">
-<code class="sig-name descname">request_test_tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">amount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.request_test_tokens" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.resolve_agent">
-<code class="sig-name descname">resolve_agent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_url_did</span></em>, <em class="sig-param"><span class="n">username</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">password</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.resolve_agent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.resolve_did">
-<code class="sig-name descname">resolve_did</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">did</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.resolve_did" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.send_ether">
-<code class="sig-name descname">send_ether</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">to_account_address</span></em>, <em class="sig-param"><span class="n">amount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.send_ether" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.send_token">
-<code class="sig-name descname">send_token</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">to_account_address</span></em>, <em class="sig-param"><span class="n">amount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.send_token" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.send_token_and_log">
-<code class="sig-name descname">send_token_and_log</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em>, <em class="sig-param"><span class="n">to_account_address</span></em>, <em class="sig-param"><span class="n">amount</span></em>, <em class="sig-param"><span class="n">reference_1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reference_2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.DNetwork.send_token_and_log" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.url">
-<em class="property">property </em><code class="sig-name descname">url</code><a class="headerlink" href="#starfish.DNetwork.url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="starfish.DNetwork.web3">
-<em class="property">property </em><code class="sig-name descname">web3</code><a class="headerlink" href="#starfish.DNetwork.web3" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -294,11 +189,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright starfish-py contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -309,7 +212,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
