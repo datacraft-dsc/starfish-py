@@ -141,8 +141,7 @@ Notes on the current development/release lifecyle.
 ## License
 
 ```
-Copyright 2018 Ocean Protocol Foundation Ltd.
-Copyright 2018-2019 DEX Pte. Ltd.
+Copyright 2018-2020 DEX Pte. Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
