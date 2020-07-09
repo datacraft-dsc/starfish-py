@@ -39,17 +39,17 @@ def hash_file(filename):
         md5.update(fp.read())
     return md5.hexdigest()
 
-def test_asset_store_and_download_command(config, network, remote_agent, accounts):
+def test_asset_store_and_download_command(config, network, accounts):
     args = Mock()
 
     test_upload_filename = create_random_filename()
     create_test_file(test_upload_filename)
 
-    args.url = config.network_url
-    remote_agent = config.agent_list['remote']
-    args.username = remote_agent['username']
-    args.password = remote_agent['password']
-    args.agent = remote_agent['url']
+    args.url = config['network']['url']
+    local_agent = config['agents']['local']
+    args.username = local_agent['username']
+    args.password = local_agent['password']
+    args.agent = local_agent['url']
     args.name = 'Test Asset Store'
     args.description = None
     args.date_created = None
@@ -76,10 +76,10 @@ def test_asset_store_and_download_command(config, network, remote_agent, account
 
     args = Mock()
     test_download_filename = create_random_filename()
-    args.url = config.network_url
-    remote_agent = config.agent_list['remote']
-    args.username = remote_agent['username']
-    args.password = remote_agent['password']
+    args.url = config['network']['url']
+    local_agent = config['agents']['local']
+    args.username = local_agent['username']
+    args.password = local_agent['password']
 
     args.description = None
     args.date_created = None
@@ -106,7 +106,7 @@ def test_asset_store_and_download_command(config, network, remote_agent, account
     os.unlink(test_upload_filename)
 
 
-def test_asset_store_large_file_command(config, network, remote_agent):
+def test_asset_store_large_file_command(config):
     args = Mock()
 
     # surfer can only support 7.9mb of data in one go
@@ -115,11 +115,12 @@ def test_asset_store_large_file_command(config, network, remote_agent):
     test_upload_filename = create_random_filename()
     create_test_file(test_upload_filename, (pow(2, 20) * 7))
 
-    args.url = config.network_url
-    remote_agent = config.agent_list['remote']
-    args.username = remote_agent['username']
-    args.password = remote_agent['password']
-    args.agent = remote_agent['url']
+    test_download_filename = create_random_filename()
+    args.url = config['network']['url']
+    local_agent = config['agents']['local']
+    args.username = local_agent['username']
+    args.password = local_agent['password']
+    args.agent = local_agent['url']
     args.name = 'Test Asset Store'
     args.description = None
     args.date_created = None

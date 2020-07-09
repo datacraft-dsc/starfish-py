@@ -12,7 +12,7 @@ def test_direct_purchase(network, accounts):
 
     """
     direct_contract = network.get_contract('DirectPurchase')
-    ocean_token_contract = network.get_contract('OceanToken')
+    dex_token_contract = network.get_contract('DexToken')
     dispenser_contract = network.get_contract('Dispenser')
 
     from_account = accounts[0]
@@ -25,17 +25,17 @@ def test_direct_purchase(network, accounts):
     # print('request tokens receipt', receipt)
     assert(receipt.status == 1)
 
-    from_balance = ocean_token_contract.get_balance(from_account)
-    to_balance = ocean_token_contract.get_balance(to_account)
+    from_balance = dex_token_contract.get_balance(from_account)
+    to_balance = dex_token_contract.get_balance(to_account)
 
-    # ocean_token_contract.unlockAccount(from_account)
+    # dex_token_contract.unlockAccount(from_account)
 
-    tx_hash = ocean_token_contract.approve_transfer(
+    tx_hash = dex_token_contract.approve_transfer(
         from_account,
         direct_contract.address,
         TOKEN_AMOUNT_TO_TRANSFER
     )
-    receipt = ocean_token_contract.wait_for_receipt(tx_hash)
+    receipt = dex_token_contract.wait_for_receipt(tx_hash)
     # print('approve transfer receipt', receipt)
     assert(receipt.status == 1)
 
@@ -51,8 +51,8 @@ def test_direct_purchase(network, accounts):
     # print('send token and log receipt', receipt)
     assert(receipt.status == 1)
 
-    new_from_balance = ocean_token_contract.get_balance(from_account)
-    new_to_balance = ocean_token_contract.get_balance(to_account)
+    new_from_balance = dex_token_contract.get_balance(from_account)
+    new_to_balance = dex_token_contract.get_balance(to_account)
 
     assert(from_balance - TOKEN_AMOUNT_TO_TRANSFER == new_from_balance)
     assert(to_balance + TOKEN_AMOUNT_TO_TRANSFER == new_to_balance)

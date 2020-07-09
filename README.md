@@ -2,7 +2,7 @@
 
 ![](https://github.com/DEX-Company/starfish-py/workflows/testing/badge.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![Barge Version](https://img.shields.io/badge/barge-develop-blue.svg)](https://github.com/DEX-Company/barge)
+[![dex-chain Version](https://img.shields.io/badge/dex--chain-master-blue.svg)](https://github.com/DEX-Company/dex-chain)
 
 ---
 
@@ -66,22 +66,14 @@ Python >= 3.6
     make test_unit
     ```
 
-1. To run the full test using the current remote implementation of [barge](https://github.com/DEX-Company/barge).
+1. Create the local testing environment using [dex-chain](https://github.com/DEX-Company/dex-chain).
 
-    ```bash
-    git clone https://github.com/DEX-Company/barge.git
-    cd barge
-    git checkout develop
-    ./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node
+    In a seperate terminal session you need to clone and checkout ```dex-chain``` repository, by doing the following:
     ```
-
-    Or to run barge locally, using the same method above but using a script instead.
-
-    ```bash
-    export BARGE_URL=http://localhost
-    scripts/setup_for_local_barge.sh
+    git clone https://github.com/DEX-Company/dex-chain.git
+    cd dex-chain
+    ./start_dex_chain.sh test
     ```
-
 
 1. Run the integration tests
 
@@ -111,7 +103,7 @@ The [documentation](https://dex-company.github.io/starfish-py) for this repo.
 
 Automatic tests are setup via github actions.
 Our test use pytest framework.
-The testing uses a barge docker image and surfer server.
+The testing uses a dex-chain docker image and surfer server.
 See [github actions for testing](https://github.com/DEX-Company/starfish-py/blob/master/.github/workflows/testing.yml)
 
 ## New Version
@@ -149,8 +141,7 @@ Notes on the current development/release lifecyle.
 ## License
 
 ```
-Copyright 2018 Ocean Protocol Foundation Ltd.
-Copyright 2018-2019 DEX Pte. Ltd.
+Copyright 2018-2020 DEX Pte. Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

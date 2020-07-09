@@ -3,6 +3,7 @@
 
     This is originally from
     https://github.com/oceanprotocol/squid-py/tree/b62b1bae303c499ca43f09dad1677001d9be840e/squid_py/ddo
+
 """
 
 from .public_key_base import (

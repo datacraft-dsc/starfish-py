@@ -18,10 +18,7 @@ def test_network_basic(config, network):
     assert(network.name)
     assert(network.web3)
     assert(network.contract_names)
-    assert(network.url == config.network_url)
-
-def test_network_load_development_contracts(network):
-    assert(network.load_development_contracts())
+    assert(network.url == config['network']['url'])
 
 def test_network_account(network, accounts):
     test_account = accounts[0]
@@ -56,8 +53,8 @@ def test_network_send_ether(network, accounts):
     new_from_balance = network.get_ether_balance(from_account)
     new_to_balance = network.get_ether_balance(to_account)
 
-    assert(from_balance - TEST_AMOUNT == new_from_balance)
-    assert(to_balance + TEST_AMOUNT == new_to_balance)
+    assert(int(from_balance) - TEST_AMOUNT == new_from_balance)
+    assert(int(to_balance) + TEST_AMOUNT == new_to_balance)
 
 
 def test_network_send_token(network, accounts):
@@ -118,8 +115,8 @@ def test_network_regiser_provenance(network, accounts):
 def test_network_regiser_resolve_did_ddo(config, network, accounts):
     did = did_generate_random()
 
-    remote_agent = config.agent_list['remote']
-    services = Services(remote_agent['url'], all_services=True)
+    local_agent = config['agents']['local']
+    services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 
@@ -132,12 +129,11 @@ def test_network_regiser_resolve_did_ddo(config, network, accounts):
 
 
 def test_network_resolve_agent(config, network, accounts):
-    remote_agent = config.agent_list['remote']
-    ddo = network.resolve_agent(remote_agent['url'])
-    print(ddo)
+    local_agent = config['agents']['local']
+    ddo = network.resolve_agent(local_agent['url'])
 
     did = did_generate_random()
-    services = Services(remote_agent['url'], all_services=True)
+    services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 

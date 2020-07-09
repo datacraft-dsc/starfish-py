@@ -35,7 +35,7 @@ class Account():
     """
 
     def __init__(self, address, password=None, key_value=None, key_file=None):
-        """init a standard ocean agent"""
+        """init a standard account object"""
         self._address = None
         self._password = None
         self._key_value = None
@@ -145,7 +145,7 @@ class Account():
         :return: True if the param address is the same is the one held in this account
         :type: boolean
 
-        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        >>> account = Account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.is_address_equal('0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e')
         True
         """
@@ -174,7 +174,7 @@ class Account():
         :return: address
         :type: str
 
-        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        >>> account = Account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.address
         0x00bd138abd70e2f00903268f3db08f2d25677c9e
         """
@@ -189,7 +189,7 @@ class Account():
         :return: checksum address
         :type: str
 
-        >>> account = ocean.get_account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
+        >>> account = Account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.as_checksum_address
         0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e
 

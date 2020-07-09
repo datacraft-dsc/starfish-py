@@ -14,11 +14,10 @@ class AgentBase(ABC):
 
     Base agent class
 
-    :param ocean: Ocean object that is used by the Agent class
-    :type ocean: :class:`.Ocean`
+    :param ddo: DDO of the Agent
     """
     def __init__(self, ddo=None):
-        """init the the Ocean Object Base with the ocean instance"""
+        """init the the Agent Base class"""
 
         self._ddo = ddo
 
@@ -121,7 +120,7 @@ class AgentBase(ABC):
 
         :param listing: Listing to use for the purchase.
         :type listing: :class:`.Listing`
-        :param account: Ocean account to purchase the asset.
+        :param account: Account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
 
         """
@@ -135,7 +134,7 @@ class AgentBase(ABC):
 
 
         :param str asset_did: Asset DID to check for access.
-        :param account: Ocean account to purchase the asset.
+        :param account: Account to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
         :param str purchase_id: purchase id that was used to purchase the asset.
 
@@ -180,7 +179,7 @@ class AgentBase(ABC):
 
         :param listing: Listing that was used to make the purchase.
         :type listing: :class:`.Listing`
-        :param account: Ocean account that was used to purchase the asset.
+        :param account: Account that was used to purchase the asset.
         :type account: :class:`.Account` object to use for registration.
         :param str purchase_id: purchase id that was used to purchase the asset.
 

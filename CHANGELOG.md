@@ -2,6 +2,7 @@
 
 ### Release v0.11.0
 +   Renamed network class from DNetwork to Network
++   Moved to using dex-chain for the block chain network contracts
 
 ### Release v0.10.0
 +   Remove Network from agent classes

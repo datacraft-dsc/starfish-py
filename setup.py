@@ -29,6 +29,7 @@ test_requirements = [
     'pytest',
     'isort',
     'mypy',
+    'pyyaml',
 ]
 
 # Possibly required by developers of starfish-py:

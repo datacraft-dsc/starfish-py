@@ -14,7 +14,7 @@ from starfish.utils.crypto_hash import hash_sha3_256
 class DataAsset(AssetBase):
     """
 
-    File asset can be used manage a data asset on the ocean network
+    File asset can be used manage a data asset on the dex network
 
     :param metadata: Dictionary metadata to provide for the asset.
     :type metadata: None or dict

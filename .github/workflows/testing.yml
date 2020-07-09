@@ -29,24 +29,22 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: develop
         path: surfer
-    - name: Install Barge
+    - name: Install dex-chain
       uses: actions/checkout@v1
       with:
-        repository: DEX-Company/barge
-        # ref: tags/dex-2019-10-09
-        ref: develop
-        path: barge
-    - name: Start Barge
+        repository: DEX-Company/dex-chain
+        ref: master
+        path: dex-chain
+    - name: Start dex-chain
       run: |
-        cd ../barge
-        sudo sysctl -w vm.max_map_count=262144
-        ./start_ocean.sh --no-brizo --no-surfer --no-koi --no-aquarius --no-dashboard --no-secret-store --local-spree-node &
-        sleep 120
+        docker login docker.pkg.github.com --username billbsing --password ${{ secrets.ACCESS_PACKAGES }}
+        cd ../dex-chain
+        ./start_dex_chain.sh test &
     - name : Start Surfer
       run: |
         cd ../surfer
         clojure -M:main &
-    - name: Wait for barge startup
-      run: tools/starfish_tools network wait
+    - name: sleep and wait for dex-chain & surfer to load...
+      run: sleep 100
     - name: Test
       run: make tests

@@ -20,8 +20,8 @@ def test_05_agent_endpoint_update(config, remote_agent):
     assert(endpoint)
     assert(re.search('meta', endpoint))
 
-    remote_agent = config.agent_list['remote']
-    services = Services(remote_agent['url'], ['meta'], 'v99')
+    local_agent = config['agents']['local']
+    services = Services(local_agent['url'], ['meta'], 'v99')
 
     ddo = RemoteAgent.generate_ddo(services)
     new_endpoint_uri = '/app/v99/meta/test'
