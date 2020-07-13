@@ -3,12 +3,19 @@
     Memory Asset
 
 """
-
 import os
 from mimetypes import MimeTypes
+from typing import (
+    Any,
+    ForwardRef,
+    TypeVar
+)
 
 from starfish.asset.asset_base import AssetBase
 from starfish.utils.crypto_hash import hash_sha3_256
+
+
+TDataAsset = TypeVar(ForwardRef('DataAsset'))
 
 
 class DataAsset(AssetBase):
@@ -23,7 +30,7 @@ class DataAsset(AssetBase):
     :param str data: Optional data of the asset, this can be str or bytes
 
     """
-    def __init__(self, metadata, did=None, data=None,  metadata_text=None):
+    def __init__(self, metadata: Any, did: str = None, data: Any = None,  metadata_text: str = None) -> None:
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
 
@@ -40,7 +47,7 @@ class DataAsset(AssetBase):
         AssetBase.__init__(self, metadata, did, metadata_text)
 
     @staticmethod
-    def create(name, data, metadata=None, did=None):
+    def create(name: str, data: Any, metadata: Any = None, did: str = None) -> TDataAsset:
         """
 
         Create a new DataAsset using string or bytes data.
@@ -65,7 +72,7 @@ class DataAsset(AssetBase):
         return DataAsset(metadata, did, data=data)
 
     @staticmethod
-    def create_from_file(name, filename, metadata=None, did=None, is_read=True):
+    def create_from_file(name: str, filename: str, metadata: Any = None, did: str = None, is_read: bool = True) -> TDataAsset:
         """
 
         Create a new DataAsset using a file or filename.
@@ -100,7 +107,7 @@ class DataAsset(AssetBase):
 
         return DataAsset(metadata, did, data=data)
 
-    def save_to_file(self, filename):
+    def save_to_file(self, filename: str) -> None:
         """
         Saves the data in the data asset to a file.
 
@@ -113,5 +120,5 @@ class DataAsset(AssetBase):
                 fp.write(self._data)
 
     @property
-    def data(self):
+    def data(self) -> Any:
         return self._data

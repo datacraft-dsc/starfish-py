@@ -3,18 +3,24 @@
     RemoteDataAsset:  DataAsset that has only a URL for assigned in the metadada
 
 """
-
 from mimetypes import MimeTypes
+from typing import (
+    Any,
+    ForwardRef,
+    TypeVar
+)
 from urllib.parse import urlparse
 
 from starfish.asset.asset_base import AssetBase
 from starfish.asset.data_asset import DataAsset
 
+TRemoteDataAsset = TypeVar(ForwardRef('RemoteDataAsset'))
+
 
 class RemoteDataAsset(DataAsset):
 
     @staticmethod
-    def create_with_url(name, url, metadata=None, did=None):
+    def create_with_url(name: str, url: str, metadata: Any = None, did: str = None) -> TRemoteDataAsset:
         """
 
         Create a new RemoteDataAsset using a url.
@@ -41,7 +47,7 @@ class RemoteDataAsset(DataAsset):
         return RemoteDataAsset(metadata, did)
 
     @property
-    def url(self):
+    def url(self) -> str:
         if 'url' in self._metadata:
             return self._metadata['url']
         return None
