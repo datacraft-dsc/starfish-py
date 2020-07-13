@@ -5,6 +5,7 @@
 
 """
 import logging
+from typing import Any
 
 from starfish.account import Account
 from .command_base import CommandBase
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class AccountCreateCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         super().__init__('create', sub_parser)
 
     def create_parser(self, sub_parser):
@@ -36,7 +37,7 @@ class AccountCreateCommand(CommandBase):
         )
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         account = Account.create(args.password)
         logger.debug(f'create new account {account.address}')
         if args.keyfile:

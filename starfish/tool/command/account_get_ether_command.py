@@ -3,7 +3,7 @@
     Command Account Get Ether
 
 """
-
+from typing import Any
 from web3 import Web3
 
 from starfish.account import Account
@@ -16,10 +16,10 @@ DEFAULT_AMOUNT = 10
 
 class AccountGetEtherCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         super().__init__('ether', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -47,7 +47,7 @@ class AccountGetEtherCommand(CommandBase):
         )
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         if not Web3.isAddress(args.address):
             output.add_error(f'{args.address} is not an ethereum account address')
             return

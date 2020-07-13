@@ -3,6 +3,7 @@
     Command Account Get ..
 
 """
+from typing import Any
 from web3 import Web3
 
 
@@ -13,11 +14,11 @@ DEFAULT_AMOUNT = 10
 
 class AccountBalanceCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('balance', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -32,7 +33,7 @@ class AccountBalanceCommand(CommandBase):
         )
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         if not Web3.isAddress(args.address):
             output.add_error(f'{args.address} is not an ethereum account address')
             return

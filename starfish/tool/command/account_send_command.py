@@ -3,6 +3,7 @@
     Command Account Send ..
 
 """
+from typing import Any
 
 from .account_send_ether_command import AccountSendEtherCommand
 from .account_send_token_command import AccountSendTokenCommand
@@ -14,11 +15,11 @@ DEFAULT_AMOUNT = 10
 
 class AccountSendCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('send', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -40,5 +41,5 @@ class AccountSendCommand(CommandBase):
         ]
         return account_send_parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> Any:
         return self.process_sub_command(args, output, args.send_command)

@@ -4,7 +4,7 @@
 
 """
 import logging
-
+from typing import Any
 from web3 import Web3
 
 from starfish.account import Account
@@ -19,10 +19,10 @@ DEFAULT_AMOUNT = 10
 
 class AccountGetTokenCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         super().__init__('token', sub_parser)
 
-    def create_parser(self, subparser):
+    def create_parser(self, subparser: Any) -> Any:
 
         parser = subparser.add_parser(
             self._name,
@@ -53,7 +53,7 @@ class AccountGetTokenCommand(CommandBase):
         )
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         if not Web3.isAddress(args.address):
             output.add_error(f'{args.address} is not an ethereum account address')
             return

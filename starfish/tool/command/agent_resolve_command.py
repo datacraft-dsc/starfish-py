@@ -3,17 +3,18 @@
     Command 'Agent Resolve'
 
 """
+from typing import Any
 
 from .command_base import CommandBase
 
 
 class AgentResolveCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('resolve', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -41,7 +42,7 @@ class AgentResolveCommand(CommandBase):
 
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         network = self.get_network(args.url)
 
         output.set_value('agent', args.agent)
