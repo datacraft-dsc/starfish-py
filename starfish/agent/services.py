@@ -5,6 +5,7 @@ Agent Services
 
 
 """
+from typing import Any
 
 from urllib.parse import (
     urljoin,
@@ -43,7 +44,7 @@ ALL_SERVICES = SERVICES.keys()
 
 class Services:
 
-    def __init__(self, base_url=None, service_list=None, version=None, all_services=False):
+    def __init__(self, base_url: str = None, service_list: Any = None, version: str = None, all_services: bool = False) -> None:
         self._base_url = base_url
         self._version = version
         if version is None:
@@ -57,7 +58,7 @@ class Services:
             for service_name in service_list:
                 self.add(service_name)
 
-    def add(self, name, url_or_uri=None, service_type=None, version=None):
+    def add(self, name: str, url_or_uri: str = None, service_type: str = None, version: str = None) -> None:
         if url_or_uri is None and self._base_url is None:
             raise ValueError('you must provide a base URL or service URL')
 
@@ -68,7 +69,7 @@ class Services:
             'url': url
         }
 
-    def _get_url(self, name, url_or_uri=None, version=None):
+    def _get_url(self, name: str, url_or_uri: str = None, version: str = None) -> str:
         if version is None:
             version = self._version
         if url_or_uri is None:
@@ -81,7 +82,7 @@ class Services:
             url = urljoin(self._base_url + '/', url)
         return url
 
-    def _get_service_type(self, name, service_type=None, version=None):
+    def _get_service_type(self, name: str, service_type: str = None, version: str = None) -> str:
         if version is None:
             version = self._version
         if service_type is None:
@@ -92,9 +93,9 @@ class Services:
         return service_type
 
     @property
-    def as_dict(self):
+    def as_dict(self) -> Any:
         return self._items
 
     @property
-    def names(self):
+    def names(self) -> Any:
         return self._items.keys()

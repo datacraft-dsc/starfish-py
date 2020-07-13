@@ -7,6 +7,11 @@ In starfish-java, this is named as `RemoteAgent`
 """
 import logging
 import time
+from typing import (
+    Any,
+    ForwardRef,
+    TypeVar
+)
 from urllib.parse import urljoin
 
 
@@ -43,6 +48,7 @@ SUPPORTED_SERVICES = {
     'auth': 'DEP.Auth.v1',
 }
 
+TRemoteAgent = TypeVar(ForwardRef('RemoteAgent'))
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +72,7 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, ddo, authentication=None):
+    def __init__(self, ddo: Any, authentication: Any = None) -> None:
         self._authentication = authentication
 
         if isinstance(ddo, dict):
@@ -82,7 +88,7 @@ class RemoteAgent(AgentBase):
         self._adapter = RemoteAgentAdapter()
 
     @staticmethod
-    def load(network, asset_agent_did_url, authentication=None):
+    def load(network: Any, asset_agent_did_url: str, authentication: Any = None) -> TRemoteAgent:
         ddo_text = network.resolve_agent(asset_agent_did_url, authentication=authentication)
 
         if ddo_text:
@@ -91,7 +97,7 @@ class RemoteAgent(AgentBase):
         return None
 
     @staticmethod
-    def register(network, register_account, ddo, authentication=None):
+    def register(network: Any, register_account: Any, ddo: Any, authentication: Any = None) -> TRemoteAgent:
         """
         Register the agent on the network.
 
@@ -105,7 +111,7 @@ class RemoteAgent(AgentBase):
         network.register_did(register_account, ddo.did, ddo.as_text())
         return RemoteAgent(ddo.as_text(), authentication)
 
-    def register_asset(self, asset):
+    def register_asset(self, asset: Any) -> Any:
         """
 
         Register an asset with Surfer
@@ -140,7 +146,7 @@ class RemoteAgent(AgentBase):
             asset.set_did(did)
         return asset
 
-    def create_listing(self, listing_data, asset_did):
+    def create_listing(self, listing_data: Any, asset_did: str) -> Any:
         """
 
         Create a listing on the market place for this asset
@@ -175,7 +181,7 @@ class RemoteAgent(AgentBase):
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 
-    def update_listing(self, listing):
+    def update_listing(self, listing: Any) -> bool:
         """
 
         Update the listing to the agent server.
@@ -189,7 +195,7 @@ class RemoteAgent(AgentBase):
 
         return self._adapter.update_listing(listing.listing_id, listing.data, url, authorization_token)
 
-    def validate_asset(self, asset):
+    def validate_asset(self, asset: Any) -> bool:
         """
 
         Validate an asset
@@ -199,7 +205,7 @@ class RemoteAgent(AgentBase):
         """
         pass
 
-    def upload_asset(self, asset):
+    def upload_asset(self, asset: Any) -> bool:
 
         if not isinstance(asset, DataAsset):
             raise TypeError('Only DataAsset is supported')
@@ -213,7 +219,7 @@ class RemoteAgent(AgentBase):
 
         return self._adapter.upload_asset_data(asset_id, asset.data, url, authorization_token)
 
-    def download_asset(self, asset_did_id):
+    def download_asset(self, asset_did_id: str) -> Any:
         """
         Download an asset
 
@@ -241,7 +247,7 @@ class RemoteAgent(AgentBase):
         )
         return asset
 
-    def get_listing(self, listing_id):
+    def get_listing(self, listing_id: str) -> Any:
         """
         Return an listing on the listings id.
 
@@ -265,7 +271,7 @@ class RemoteAgent(AgentBase):
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
-    def get_asset(self, asset_did_id):
+    def get_asset(self, asset_did_id: str) -> Any:
         """
 
         This is for compatability for Surfer calls to get an asset directly from Surfer
@@ -285,7 +291,7 @@ class RemoteAgent(AgentBase):
             asset = self._create_asset_from_read(asset_id, read_metadata)
         return asset
 
-    def get_listings(self):
+    def get_listings(self) -> Any:
         """
         Returns all listings
 
@@ -307,7 +313,7 @@ class RemoteAgent(AgentBase):
                     listings.append(listing)
         return listings
 
-    def get_job(self, job_id):
+    def get_job(self, job_id: str) -> Any:
         """
 
         Get a job from the invoke service ( koi )
@@ -328,7 +334,7 @@ class RemoteAgent(AgentBase):
             job = Job(job_id, status, outputs)
         return job
 
-    def job_wait_for_completion(self, job_id, timeout_seconds=60, sleep_seconds=1):
+    def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> [Any, bool]:
         """
 
         Wait for a job to complete, with optional timeout seconds.
@@ -350,7 +356,7 @@ class RemoteAgent(AgentBase):
                 time.sleep(sleep_seconds)
         return False
 
-    def search_listings(self, text, sort=None, offset=100, page=0):
+    def search_listings(self, text: str, sort: Any = None, offset: int = 100, page: int = 0) -> Any:
         """
 
         Search the off chain storage for an asset with the givien 'text'
@@ -373,8 +379,8 @@ class RemoteAgent(AgentBase):
         # TODO: implement search listing in remote
         pass
 
-    def purchase_asset(self, listing, account, purchase_id=None, status=None,
-                       info=None, agreement=None):
+    def purchase_asset(self, listing: Any, account: Any, purchase_id: str = None, status: str = None,
+                       info: Any = None, agreement: Any = None) -> bool:
         """
 
         Purchase an asset using it's listing and an account.
@@ -406,7 +412,7 @@ class RemoteAgent(AgentBase):
         authorization_token = self.get_authorization_token()
         return self._adapter.purchase_asset(purchase, url, authorization_token)
 
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset: Any, account: Any, purchase_id: str = None) -> bool:
         """
 
         Check to see if the account and purchase_id have access to the assed data.
@@ -423,7 +429,7 @@ class RemoteAgent(AgentBase):
         """
         return False
 
-    def get_asset_purchase_ids(self, asset):
+    def get_asset_purchase_ids(self, asset: Any) -> Any:
         """
 
         Returns as list of purchase id's that have been used for this asset
@@ -437,7 +443,7 @@ class RemoteAgent(AgentBase):
         """
         return []
 
-    def purchase_wait_for_completion(self, asset, account, purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset: Any, account: Any, purchase_id: str, timeoutSeconds: int) -> bool:
         """
 
             Wait for completion of the purchase
@@ -449,7 +455,7 @@ class RemoteAgent(AgentBase):
         """
         pass
 
-    def consume_asset(self, listing, account, purchase_id):
+    def consume_asset(self, listing: Any, account: Any, purchase_id: str) -> bool:
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -467,7 +473,7 @@ class RemoteAgent(AgentBase):
         """
         return False
 
-    def invoke(self, asset, inputs=None, is_async=False):
+    def invoke(self, asset: Any, inputs: Any = None, is_async: bool = False) -> Any:
         """
 
         Call an operation asset with inputs to execute a remote call.
@@ -495,7 +501,7 @@ class RemoteAgent(AgentBase):
         response = self._adapter.invoke(remove_0x_prefix(asset.asset_id), inputs, url, authorization_token)
         return response
 
-    def get_authorization_token(self):
+    def get_authorization_token(self) -> str:
 
         if self._authentication and 'token' in self._authentication:
             if self._authentication['token']:
@@ -517,13 +523,13 @@ class RemoteAgent(AgentBase):
 
         return token
 
-    def get_metadata_list(self):
+    def get_metadata_list(self) -> Any:
         url = self.get_endpoint('meta')
         authorization_token = self.get_authorization_token()
         return self._adapter.get_metadata_list(url, authorization_token)
 
     @property
-    def ddo(self):
+    def ddo(self) -> Any:
         """
 
         Return the registered DDO for this agent
@@ -534,7 +540,7 @@ class RemoteAgent(AgentBase):
         return self._ddo
 
     @staticmethod
-    def is_did_valid(did):
+    def is_did_valid(did: str) -> bool:
         """
         Checks to see if the DID string is a valid DID for this type of address for an asset.
         This method only checks the syntax of the DID, it does not resolve the DID
@@ -549,7 +555,7 @@ class RemoteAgent(AgentBase):
         return data['path'] and data['id_hex']
 
     @staticmethod
-    def generate_ddo(base_url_or_services, service_list=None, is_add_proof=False):
+    def generate_ddo(base_url_or_services: Any, service_list: Any = None, is_add_proof: bool = False) -> Any:
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
         endpoints for the remote agent
@@ -603,7 +609,7 @@ class RemoteAgent(AgentBase):
 
         return ddo
 
-    def _create_asset_from_read(self, asset_id, read_metadata):
+    def _create_asset_from_read(self, asset_id: str, read_metadata: Any) -> Any:
         # check the hash of the reading asset
         asset_id = remove_0x_prefix(asset_id)
         if not is_asset_hash_valid(asset_id, read_metadata['hash']):
@@ -614,7 +620,7 @@ class RemoteAgent(AgentBase):
         asset = create_asset_from_metadata_text(metadata_text, did)
         return asset
 
-    def get_endpoint(self, name, uri=None):
+    def get_endpoint(self, name: str, uri: str = None) -> str:
         """return the endpoint based on the name of the service or service type"""
         service_type = RemoteAgent.find_supported_service_type(name)
         if service_type is None:
@@ -639,7 +645,7 @@ class RemoteAgent(AgentBase):
         return endpoint
 
     @staticmethod
-    def resolve_url(url, authentication=None):
+    def resolve_url(url: str, authentication: Any = None) -> Any:
         """
 
         Resolves the remote agent ddo using the url of the agent
@@ -666,7 +672,7 @@ class RemoteAgent(AgentBase):
         return ddo
 
     @staticmethod
-    def find_supported_service_type(search_name_type):
+    def find_supported_service_type(search_name_type: str) -> Any:
         """ return the supported service record if the name or service type is found
         else return None """
         for name, service_type in SUPPORTED_SERVICES.items():

@@ -7,6 +7,7 @@ Memory Agent class to provide basic functionality for Ocean Agents
 import json
 import re
 import secrets
+from typing import Any
 
 from starfish.agent.agent_base import AgentBase
 from starfish.ddo.ddo import DDO
@@ -29,7 +30,7 @@ class MemoryAgent(AgentBase):
 
     """
 
-    def __init__(self, ddo=None):
+    def __init__(self, ddo: Any = None) -> None:
 
         if ddo is None:
             did = did_generate_random()
@@ -43,7 +44,7 @@ class MemoryAgent(AgentBase):
             'purchase': {}
         }
 
-    def register_asset(self, asset):
+    def register_asset(self, asset: Any) -> Any:
         """
 
         Register a memory asset.
@@ -62,7 +63,7 @@ class MemoryAgent(AgentBase):
         asset.set_did(did)
         return asset
 
-    def create_listing(self, listing_data, asset_did):
+    def create_listing(self, listing_data: Any, asset_did: str) -> Any:
         """
 
         Create a listing on the market place for this asset
@@ -82,7 +83,7 @@ class MemoryAgent(AgentBase):
             self._memory['listing'][listing_id] = listing
         return listing
 
-    def update_listing(self, listing):
+    def update_listing(self, listing: Any) -> None:
         """
 
         Update the listing to the agent server.
@@ -93,7 +94,7 @@ class MemoryAgent(AgentBase):
         """
         self._memory['listing'][listing.listing_id] = listing
 
-    def validate_asset(self, asset):
+    def validate_asset(self, asset: Any) -> bool:
         """
 
         Validate an asset
@@ -103,7 +104,7 @@ class MemoryAgent(AgentBase):
         """
         return asset is not None
 
-    def get_listing(self, listing_id):
+    def get_listing(self, listing_id: str) -> Any:
         """
 
         Return an listing from the given listing_id.
@@ -119,7 +120,7 @@ class MemoryAgent(AgentBase):
             listing = self._memory['listing'][listing_id]
         return listing
 
-    def search_listings(self, text, sort=None, offset=100, page=0):
+    def search_listings(self, text: str, sort: str = None, offset: int = 100, page: int = 0) -> Any:
         """
 
         Search for listings with the givien 'text'
@@ -146,7 +147,7 @@ class MemoryAgent(AgentBase):
 
         return listing_id_list
 
-    def purchase_asset(self, listing, account):
+    def purchase_asset(self, listing: Any, account: Any) -> Any:
         """
 
         Purchase an asset using it's listing and an account.
@@ -166,7 +167,7 @@ class MemoryAgent(AgentBase):
 
         return purchase
 
-    def purchase_wait_for_completion(self, asset, account,  purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset: Any, account: Any,  purchase_id: str, timeoutSeconds: int) -> bool:
         """
 
             Wait for completion of the purchase
@@ -178,7 +179,7 @@ class MemoryAgent(AgentBase):
         """
         return True
 
-    def is_access_granted_for_asset(self, asset, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset: Any, account: Any, purchase_id: str = None) -> bool:
         """
 
         Check to see if the account and purchase_id have access to the assed data.
@@ -200,7 +201,7 @@ class MemoryAgent(AgentBase):
 
         return False
 
-    def get_asset_purchase_ids(self, asset):
+    def get_asset_purchase_ids(self, asset: Any) -> Any:
         """
 
         Returns as list of purchase id's that have been used for this asset
@@ -214,7 +215,7 @@ class MemoryAgent(AgentBase):
         """
         return []
 
-    def consume_asset(self, listing, account, purchase_id):
+    def consume_asset(self, listing: Any, account: Any, purchase_id: str) -> bool:
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
