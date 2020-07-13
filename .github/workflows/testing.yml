@@ -44,7 +44,6 @@ jobs:
       run: |
         cd ../surfer
         clojure -M:main &
-    - name: sleep and wait for dex-chain & surfer to load...
-      run: sleep 100
+        scripts/wait_for_surfer.sh
     - name: Test
       run: make tests
