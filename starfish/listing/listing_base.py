@@ -7,6 +7,7 @@ from abc import (
     ABC,
     abstractmethod
 )
+from typing import Any
 
 
 class ListingBase(ABC):
@@ -21,7 +22,7 @@ class ListingBase(ABC):
         :param ddo: Optional DDO object for this listing
         :type data: dict
     """
-    def __init__(self, agent, listing_id, asset_did, data, ddo=None):
+    def __init__(self, agent: Any, listing_id: str, asset_did: str, data: Any, ddo: Any = None) -> None:
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
         self._listing_id = listing_id
@@ -31,7 +32,7 @@ class ListingBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def purchase(self, account):
+    def purchase(self, account: Any) -> None:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -47,7 +48,7 @@ class ListingBase(ABC):
         pass
 
     @property
-    def agent(self):
+    def agent(self) -> Any:
         """
 
         :return: Agent object that created this listing
@@ -56,7 +57,7 @@ class ListingBase(ABC):
         return self._agent
 
     @property
-    def data(self):
+    def data(self) -> Any:
         """
 
         :return: data of the listing
@@ -65,7 +66,7 @@ class ListingBase(ABC):
         return self._data
 
     @property
-    def ddo(self):
+    def ddo(self) -> Any:
         """
 
         :return: ddo of the listing
@@ -74,7 +75,7 @@ class ListingBase(ABC):
         return self._ddo
 
     @property
-    def listing_id(self):
+    def listing_id(self) -> str:
         """
 
         :return: the listing id
@@ -83,7 +84,7 @@ class ListingBase(ABC):
         return self._listing_id
 
     @property
-    def asset_did(self):
+    def asset_did(self) -> str:
         """
 
         :return: asset DID held by the listing
@@ -92,7 +93,7 @@ class ListingBase(ABC):
         return self._asset_did
 
     @property
-    def did(self):
+    def did(self) -> str:
         """
 
         :return: asset held did
@@ -101,7 +102,7 @@ class ListingBase(ABC):
         return self._asset_did
 
     @property
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """
 
         Checks to see if this Listinng is empty.
