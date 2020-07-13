@@ -6,6 +6,7 @@
 
 import datetime
 import logging
+from typing import Any
 from eth_utils import remove_0x_prefix
 
 from starfish.contract.contract_base import ContractBase
@@ -22,20 +23,20 @@ class ProvenanceContract(ContractBase):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def register(self, account, asset_id):
+    def register(self, account: Any, asset_id: str) -> str:
         asset_id_bytes = self._web3.toBytes(hexstr=asset_id)
         tx_hash = self.call('registerAsset', (asset_id_bytes), account)
         return tx_hash
 
-    def get_block_number(self, asset_id):
+    def get_block_number(self, asset_id: str) -> int:
         asset_id_bytes = self._web3.toBytes(hexstr=asset_id)
         block_number = self.call('getBlockNumber', asset_id_bytes)
         return block_number
 
-    def get_event_list(self, asset_id):
+    def get_event_list(self, asset_id: str) -> Any:
         result = []
         from_block_number = self.get_block_number(asset_id)
         if from_block_number:

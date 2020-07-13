@@ -3,6 +3,7 @@
     Contactt Base
 
 """
+from typing import Any
 
 nonce_list = {}
 
@@ -11,14 +12,14 @@ GAS_MINIMUM = 200000
 
 class ContractBase:
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._name = name
         self._web3 = None
         self._abi = None
         self._address = None
         self._contract = None
 
-    def load(self, web3, abi=None, address=None):
+    def load(self, web3: Any, abi: Any = None, address: str = None) -> None:
         self._web3 = web3
         self._abi = abi
         self._address = address
@@ -29,7 +30,7 @@ class ContractBase:
                 abi=abi
             )
 
-    def call(self, function_name, parameters, account=None, transact=None):
+    def call(self, function_name: str, parameters: Any, account: Any = None, transact: Any = None) -> Any:
         if self._contract is None:
             raise ValueError('contract not loaded')
 
@@ -45,12 +46,17 @@ class ContractBase:
             result = contract_function_call.call()
         return result
 
-    def get_event(self, event_name, parameters=None):
+    def get_event(self, event_name: str, parameters: Any = None) -> Any:
         if self._contract is None:
             raise ValueError('contract not loaded')
         return self._contract.events[event_name]
 
-    def create_event_filter(self, event_name, parameters=None, from_block=1, argument_filters=None):
+    def create_event_filter(
+            self, event_name: str,
+            parameters: Any = None,
+            from_block: int = 1,
+            argument_filters: Any = None
+            ) -> Any:
         event = self.get_event(event_name, parameters)
         if event:
             return event.createFilter(
@@ -59,7 +65,7 @@ class ContractBase:
             )
         return None
 
-    def _call_as_transaction(self, contract_function_call, account, transact=None):
+    def _call_as_transaction(self, contract_function_call: Any, account: Any, transact: Any = None) -> str:
         if transact is None:
             gas_transact = {
                 'from': account.address
@@ -87,11 +93,11 @@ class ContractBase:
 
         return tx_hash
 
-    def wait_for_receipt(self, tx_hash, timeout=30):
+    def wait_for_receipt(self, tx_hash: str, timeout: int = 30) -> Any:
         self._web3.eth.waitForTransactionReceipt(tx_hash, timeout=timeout)
         return self._web3.eth.getTransactionReceipt(tx_hash)
 
-    def get_nonce(self, address):
+    def get_nonce(self, address: str) -> int:
         global nonce_list
         nonce = self._web3.eth.getTransactionCount(address)
         if address not in nonce_list:
@@ -101,38 +107,38 @@ class ContractBase:
                 nonce = nonce_list[address] + 1
         return nonce
 
-    def get_gas_price(self, address):
+    def get_gas_price(self, address: str) -> int:
         block = self._web3.eth.getBlock("latest")
         gas_price = int(self._web3.eth.gasPrice / 100)
         gas_price = min(block.gasLimit, gas_price)
         gas_price = max(GAS_MINIMUM, gas_price)
         return gas_price
 
-    def unlockAccount(self, account):
+    def unlockAccount(self, account: Any) -> None:
         self._web3.personal.unlockAccount(account.address, account.password)
 
-    def lockAccount(self, account):
+    def lockAccount(self, account: Any) -> None:
         self._web3.personal.lockAccount(account.address, account.password)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
-    def web3(self):
+    def web3(self) -> Any:
         return self._web3
 
     @property
-    def address(self):
+    def address(self) -> str:
         return self._address
 
-    def to_wei(self, amount_ether):
+    def to_wei(self, amount_ether: float) -> int:
         return self._web3.toWei(amount_ether, 'ether')
 
-    def to_ether(self, amount_wei):
+    def to_ether(self, amount_wei: int) -> float:
         return self._web3.fromWei(amount_wei, 'ether')
 
-    def get_account_address(self, account_address):
+    def get_account_address(self, account_address: str) -> str:
         address = account_address
         if hasattr(account_address, 'address'):
             address = account_address.address

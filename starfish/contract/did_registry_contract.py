@@ -5,6 +5,7 @@
 """
 
 import logging
+from typing import Any
 
 
 from starfish.contract.contract_base import ContractBase
@@ -24,10 +25,10 @@ class DIDRegistryContract(ContractBase):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def register(self, account, did, ddo_text):
+    def register(self, account: Any, did: str, ddo_text: str) -> str:
         tx_hash = None
         did_id = did_to_id(did)
         if did_id:
@@ -37,7 +38,7 @@ class DIDRegistryContract(ContractBase):
             tx_hash = self.call('registerDID', (did_id, ddo_text), account)
         return tx_hash
 
-    def get_block_number(self, did):
+    def get_block_number(self, did: str) -> int:
         block_number = None
         did_id = did_to_id(did)
         if did_id:
@@ -45,7 +46,7 @@ class DIDRegistryContract(ContractBase):
             block_number = self.call('getBlockNumberUpdated', did_id)
         return block_number
 
-    def get_value(self, did):
+    def get_value(self, did: str) -> str:
         block_number = self.get_block_number(did)
         if block_number:
             did_id = self._web3.toBytes(hexstr=did_to_id(did))

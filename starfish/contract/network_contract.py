@@ -3,8 +3,8 @@
     DIDRegistry Contract
 
 """
-
 import logging
+from typing import Any
 
 from starfish.contract.contract_base import ContractBase
 
@@ -21,16 +21,16 @@ class NetworkContract(ContractBase):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def get_balance(self, account_address):
+    def get_balance(self, account_address: Any) -> float:
 
         address = self.get_account_address(account_address)
         amount_wei = self._web3.eth.getBalance(address, block_identifier='latest')
         return self.to_ether(amount_wei)
 
-    def send_ether(self, account, to_account_address, amount):
+    def send_ether(self, account: Any, to_account_address: Any, amount: float) -> str:
 
         amount_wei = self.to_wei(amount)
         to_address = self.get_account_address(to_account_address)
