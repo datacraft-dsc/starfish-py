@@ -2,6 +2,7 @@
 
 ### Release v0.11.1
 +   Add basic typing to API
++   Included the wait_for_surfer.sh, to wait duing tests
 
 ### Release v0.11.0
 +   Renamed network class from DNetwork to Network
