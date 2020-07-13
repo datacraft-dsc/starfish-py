@@ -3,13 +3,13 @@
 CryptoHash utils
 
 """
-
+from typing import Any
 
 from Crypto.Hash import SHA3_256
 from web3 import Web3
 
 
-def hash_sha3_256(data):
+def hash_sha3_256(data: Any) -> str:
     if isinstance(data, str):
         data = data.encode('utf-8')
 
@@ -18,7 +18,7 @@ def hash_sha3_256(data):
     return messageDigest.hexdigest()
 
 
-def hash_keccak_256(data):
+def hash_keccak_256(data: Any) -> str:
     if isinstance(data, str):
         data = data.encode('utf-8')
 

@@ -12,13 +12,14 @@ import os
 import re
 import tarfile
 import tempfile
+from typing import Any
 import docker
 
 
 logger = logging.getLogger(__name__)
 
 
-def get_local_contract_files(docker_name, from_folder):
+def get_local_contract_files(docker_name: str, from_folder: str) -> Any:
     items = []
     client = docker.from_env()
     container_list = client.containers.list(filters={'name': 'keeper-contracts'})
@@ -29,7 +30,7 @@ def get_local_contract_files(docker_name, from_folder):
     return items
 
 
-def export_docker_contract_items(container, from_folder):
+def export_docker_contract_items(container: Any, from_folder: str) -> Any:
     items = {}
     data, stat = container.get_archive(from_folder)
     if stat:

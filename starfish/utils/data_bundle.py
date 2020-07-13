@@ -10,6 +10,7 @@ Allow to split up data into 'chunks' and each chunk is an asset, and all of the 
 import math
 import os
 import re
+from typing import Any
 
 from starfish.asset import (
     BundleAsset,
@@ -20,7 +21,7 @@ from starfish.asset import (
 DEFAULT_CHUNK_SIZE = '6mb'
 
 
-def decode_readable_size(text, base_size=1024):
+def decode_readable_size(text: str, base_size: int = 1024) -> str:
     sizes = {
         r'(\d)\s?b.?': 0,       # bytes
         r'([\d\.]+)\s?k.?': 1,   # kilobyte
@@ -41,7 +42,7 @@ def decode_readable_size(text, base_size=1024):
     return None
 
 
-def register_upload_data(remote_agent, name, data_stream, chunk_size_value=None):
+def register_upload_data(remote_agent: Any, name: str, data_stream: Any, chunk_size_value: int = None) -> Any:
 
     if chunk_size_value is None:
         chunk_size_value = DEFAULT_CHUNK_SIZE
@@ -71,7 +72,7 @@ def register_upload_data(remote_agent, name, data_stream, chunk_size_value=None)
     return asset
 
 
-def register_upload_bundle_file(remote_agent, filename, chunk_size=None):
+def register_upload_bundle_file(remote_agent: Any, filename: str, chunk_size: int = None) -> Any:
     if not os.path.exists(filename):
         raise FileNotFoundError(f'Cannot find file {filename}')
     bundle_asset = None
@@ -81,7 +82,7 @@ def register_upload_bundle_file(remote_agent, filename, chunk_size=None):
     return bundle_asset
 
 
-def download_bundle_data(remote_agent, bundle_asset, data_stream):
+def download_bundle_data(remote_agent: Any, bundle_asset: Any, data_stream: Any) -> int:
     size = 0
     for name, asset in bundle_asset:
         store_asset = remote_agent.download_asset(asset.asset_id)
@@ -90,7 +91,7 @@ def download_bundle_data(remote_agent, bundle_asset, data_stream):
     return size
 
 
-def download_bundle_file(remote_agent, bundle_asset, filename):
+def download_bundle_file(remote_agent: Any, bundle_asset: Any, filename: str) -> int:
     if not bundle_asset.is_bundle:
         raise TypeError(f'asset type {bundle_asset.type} is not a bundle asset')
     size = 0

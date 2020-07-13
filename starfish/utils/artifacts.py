@@ -7,14 +7,14 @@ import sys
 logger = logging.getLogger('starfish.artifacts')
 
 
-def is_contract_type_exists(network_name, path):
+def is_contract_type_exists(network_name: str, path: str) -> bool:
     for filename in os.listdir(path):
         if re.match(fr'\w+\.{network_name}\.json', filename):
             return True
     return False
 
 
-def find_contract_path(network_name):
+def find_contract_path(network_name: str) -> str:
     folder = os.path.abspath('artifacts')
     # first search the working folder of the app
     logger.debug(f'search for artifacts {folder}')
