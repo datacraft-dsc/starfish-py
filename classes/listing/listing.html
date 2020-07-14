@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Listing class &mdash; starfish-py 0.11.0 documentation</title>
+  <title>Listing class &mdash; starfish-py 0.11.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.11.1
               </div>
             
           
@@ -175,7 +175,7 @@
 <h1>Listing class<a class="headerlink" href="#listing-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.listing.Listing">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.listing.</code><code class="sig-name descname">Listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent</span></em>, <em class="sig-param"><span class="n">listing_id</span></em>, <em class="sig-param"><span class="n">asset_did</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">ddo</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.listing.</code><code class="sig-name descname">Listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.listing.listing_base.ListingBase</span></code></p>
 <p>Create a Listing object</p>
 <dl class="field-list simple">
@@ -210,7 +210,7 @@
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.is_purchased">
-<code class="sig-name descname">is_purchased</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing.is_purchased" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_purchased</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">starfish.account.account.Account</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.listing.Listing.is_purchased" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return true if the account has already purchased this listing/asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -227,7 +227,7 @@
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.purchase">
-<code class="sig-name descname">purchase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing.purchase" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">purchase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">starfish.account.account.Account</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.listing.Listing.purchase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Purchase the underlying asset within this listing using the account details, return a purchased asset
 with the service_agreement_id ( purchase_id ) set.</p>
 <dl class="field-list simple">
@@ -245,7 +245,7 @@ with the service_agreement_id ( purchase_id ) set.</p>
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.set_published">
-<code class="sig-name descname">set_published</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing.set_published" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_published</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#starfish.listing.Listing.set_published" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the published value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Params boolean value</dt>

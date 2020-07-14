@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operation Asset class &mdash; starfish-py 0.11.0 documentation</title>
+  <title>Operation Asset class &mdash; starfish-py 0.11.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.11.1
               </div>
             
           
@@ -178,8 +178,8 @@
 <h1>Operation Asset class<a class="headerlink" href="#operation-asset-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.asset.OperationAsset">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">OperationAsset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">did</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_text</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">OperationAsset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></a></p>
 <p>Operation asset can be used to perform a invokable service</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -192,7 +192,7 @@ if non used then the class will generate a default metadata based on the data pr
 </dl>
 <dl class="py method">
 <dt id="starfish.asset.OperationAsset.create">
-<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">did</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset.create" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; OperationAsset<a class="headerlink" href="#starfish.asset.OperationAsset.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new OperationAsset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -207,7 +207,7 @@ if non used then the class will generate a default metadata based on the data pr
 
 <dl class="py method">
 <dt id="starfish.asset.OperationAsset.is_mode">
-<code class="sig-name descname">is_mode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset.is_mode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_mode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode_type</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.asset.OperationAsset.is_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check to see if this operation supports the mode provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
