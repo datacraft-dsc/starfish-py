@@ -5,13 +5,14 @@
 
 import json
 import re
+from typing import Any
 from .public_key_base import PublicKeyBase
 
 
 class Authentication:
     """DDO Authentication"""
 
-    def __init__(self, key_id, authentication_type):
+    def __init__(self, key_id: str, authentication_type: str) -> None:
         """ init an authentication based on it's key_id and authentication type"""
         self._public_key = None
         self._public_key_id = None
@@ -21,7 +22,7 @@ class Authentication:
             self._public_key_id = key_id
         self._type = authentication_type
 
-    def assign_did(self, did):
+    def assign_did(self, did: str) -> None:
         """
         Assign a DID to the authentitacation, if the DID does not end with a `#.*`
         then add an automatic key value
@@ -33,12 +34,12 @@ class Authentication:
             self._public_key.assign_did(did)
 
     @property
-    def type(self):
+    def type(self) -> str:
         """get the authentication type"""
         return self._type
 
     @property
-    def public_key_id(self):
+    def public_key_id(self) -> str:
         """ get the authentication key id used to validate this authentication"""
         if self._public_key_id:
             return self._public_key_id
@@ -47,11 +48,11 @@ class Authentication:
         return None
 
     @property
-    def public_key(self):
+    def public_key(self) -> str:
         """ get the authentication public key"""
         return self._public_key
 
-    def as_text(self, is_pretty=False):
+    def as_text(self, is_pretty: bool = False) -> str:
         """ return the authentication as a JSON text"""
         values = {
             'type': self._type
@@ -67,7 +68,7 @@ class Authentication:
         return json.dumps(values)
 
     @property
-    def as_dictionary(self):
+    def as_dictionary(self) -> Any:
         """ return the authentication as a dictionary"""
         values = {
             'type': self._type
@@ -80,16 +81,16 @@ class Authentication:
         return values
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """ return true if this authentication has valid structure"""
         return self.get_public_key_id() is not None and self._type is not None
 
     @property
-    def is_public_key(self):
+    def is_public_key(self) -> bool:
         """ return true if this authentication has an embedded public key"""
         return self._public_key is not None
 
-    def is_key_id(self, key_id):
+    def is_key_id(self, key_id: str) -> bool:
         """ return True if the `key_id` is the same as this key_id """
         if self.get_public_key_id() and self.get_public_key_id() == key_id:
             return True

@@ -3,6 +3,7 @@
     Command 'Agent'
 
 """
+from typing import Any
 
 from .agent_register_command import AgentRegisterCommand
 from .agent_resolve_command import AgentResolveCommand
@@ -12,11 +13,11 @@ from .help_command import HelpCommand
 
 class AgentCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('agent', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -38,5 +39,5 @@ class AgentCommand(CommandBase):
         ]
         return agent_parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> Any:
         return self.process_sub_command(args, output, args.agent_command)

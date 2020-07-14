@@ -15,10 +15,18 @@ import json
 import logging
 import os
 import time
+from typing import (
+    Any,
+    Generic
+)
 from urllib.parse import urljoin
 import requests
 
 from starfish.contract.contract_base import ContractBase
+from starfish.types import (
+    TContractBase,
+    TContractManager
+)
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +35,7 @@ ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
 LOCAL_ARTIFACT_PACKAGE_SERVER = 'http://localhost:8550'
 
 
-class ContractManager:
+class ContractManager(Generic[TContractManager]):
     """
     Setup the contract manager to load and get contracts
 
@@ -37,7 +45,7 @@ class ContractManager:
 
     """
 
-    def __init__(self, web3, network_id, network_name, default_package_name, artifacts_path):
+    def __init__(self, web3: Any, network_id: int, network_name: str, default_package_name: str, artifacts_path: str) -> None:
         self._web3 = web3
         self._network_id = network_id
         self._network_name = network_name
@@ -47,7 +55,7 @@ class ContractManager:
         if self._artifact_items is None:
             self._artifact_items = []
 
-    def load(self, name, artifact_filename=None, has_artifact=None, package_name=None):
+    def load(self, name: str, artifact_filename: str = None, has_artifact: bool = None, package_name: str = None) -> TContractBase:
         """
 
         Load a contract using it's name, and network name
@@ -80,7 +88,7 @@ class ContractManager:
                 )
         return None
 
-    def load_local_artifacts_package(self, url=None, timeoutSeconds=20):
+    def load_local_artifacts_package(self, url: str = None, timeoutSeconds: int = 20) -> None:
         if not url:
             url = LOCAL_ARTIFACT_PACKAGE_SERVER
 
@@ -92,7 +100,7 @@ class ContractManager:
         if info and 'artifacts' in info:
             self._artifact_items = info['artifacts']
 
-    def create_contract_object(self, name, class_def, artifact_filename=None, has_artifact=None):
+    def create_contract_object(self, name: str, class_def: Any, artifact_filename: str = None, has_artifact: bool = None) -> Any:
         """
 
         Create a new contract object from a class definition
@@ -124,7 +132,7 @@ class ContractManager:
 
         return contract_object
 
-    def get_contract_data(self, name, artifact_filename=None):
+    def get_contract_data(self, name: str, artifact_filename: str = None) -> Any:
         """
 
         Get the contract article data from a file or from the library.
@@ -155,7 +163,7 @@ class ContractManager:
 
         return data
 
-    def set_contract_data(self, name, data):
+    def set_contract_data(self, name: str, data: Any) -> None:
         """
 
         Set the contract article data for given contract.
@@ -168,7 +176,7 @@ class ContractManager:
             self._artifact_items[self._network_id] = {}
         self._artifact_items[self._network_id][name] = data
 
-    def _request_local_artifacts_package(self, url):
+    def _request_local_artifacts_package(self, url: str) -> Any:
         """
         Request the artifacts package from the local package serever.
         This only works for local testing with a local private network.
@@ -187,19 +195,19 @@ class ContractManager:
         return data
 
     @property
-    def web3(self):
+    def web3(self) -> Any:
         return self._web3
 
     @property
-    def artifacts_path(self):
+    def artifacts_path(self) -> str:
         return self._artifacts_path
 
     @staticmethod
-    def data_path():
+    def data_path() -> str:
         return os.path.join(os.path.dirname(__file__), 'data')
 
     @staticmethod
-    def _find_class_in_module(class_name, contract_module):
+    def _find_class_in_module(class_name: str, contract_module: str) -> Any:
         for name, obj in inspect.getmembers(contract_module, inspect.isclass):
             if issubclass(obj, ContractBase) \
                and name != 'ContractBase' \
@@ -208,7 +216,7 @@ class ContractManager:
         return None
 
     @staticmethod
-    def find_artifact_filename(filename, path_list):
+    def find_artifact_filename(filename: str, path_list: str) -> str:
         found_file = None
         for path in path_list:
             test_file = os.path.join(path, filename)
@@ -219,13 +227,13 @@ class ContractManager:
         return found_file
 
     @staticmethod
-    def load_artifact_file(filename):
+    def load_artifact_file(filename: str) -> Any:
         if filename and os.path.exists(filename):
             with open(filename, 'r') as fp:
                 return json.load(fp)
 
     @staticmethod
-    def load_artifacts_package(filename):
+    def load_artifacts_package(filename: str) -> Any:
         data = None
         artifact_libray_file = os.path.join(ContractManager.data_path(), filename)
         if os.path.exists(artifact_libray_file):

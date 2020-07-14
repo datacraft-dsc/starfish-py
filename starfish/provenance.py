@@ -3,8 +3,8 @@
     Provenance module
 
 """
-
 import secrets
+from typing import Any
 
 PROVENANCE_DEP = 'dep'
 PROVENANCE_ACTIVITY_TYPE_PUBLISH = 'publish'
@@ -14,7 +14,7 @@ PROVENANCE_ACTIVITY_TYPE_OPERATION = 'operation'
 PROVENANCE_AGENT_TYPE_ACCOUNT = 'account'
 
 
-def create_publish(agent_id, activity_id=None):
+def create_publish(agent_id: str, activity_id: str = None) -> Any:
     if activity_id is None:
         activity_id = secrets.token_hex(32)
 
@@ -28,7 +28,7 @@ def create_publish(agent_id, activity_id=None):
     }
 
 
-def create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text):
+def create_invoke(activity_id: str, agent_id: str, asset_list: Any, inputs_text: str, outputs_text: str) -> Any:
     entities = add_asset_entity('this')
     for asset in asset_list:
         entities = add_asset_entity(asset, entities)
@@ -45,7 +45,7 @@ def create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text):
     }
 
 
-def create_prefix():
+def create_prefix() -> Any:
     return {
         'xsd': 'http://www.w3.org/2001/XMLSchema#',
         'prov': 'http://www.w3.org/ns/prov#',
@@ -53,7 +53,7 @@ def create_prefix():
     }
 
 
-def add_asset_entity(asset_id, entities=None):
+def add_asset_entity(asset_id: str, entities: Any = None) -> Any:
     if entities is None:
         entities = {}
     entities[f'{PROVENANCE_DEP}:{asset_id}'] = {
@@ -65,7 +65,7 @@ def add_asset_entity(asset_id, entities=None):
     return entities
 
 
-def create_activity(activity_id, activity_type, entries=None):
+def create_activity(activity_id: str, activity_type: str, entries: Any = None) -> Any:
     items = {
         'prov:type': {
             '$': f'{PROVENANCE_DEP}:{activity_type}',
@@ -81,7 +81,7 @@ def create_activity(activity_id, activity_type, entries=None):
     }
 
 
-def create_agent(agent_id, agent_type):
+def create_agent(agent_id: str, agent_type: str) -> Any:
     return {
         f'{PROVENANCE_DEP}:{agent_id}': {
             'prov:type': {
@@ -92,7 +92,7 @@ def create_agent(agent_id, agent_type):
     }
 
 
-def create_associated_with(agent_id, activity_id):
+def create_associated_with(agent_id: str, activity_id: str) -> Any:
     random_id = secrets.token_hex(32)
     return {
         f'_:{random_id}': {
@@ -102,7 +102,7 @@ def create_associated_with(agent_id, activity_id):
     }
 
 
-def create_generated_by(activity_id):
+def create_generated_by(activity_id: str) -> Any:
     entity_id = f'{PROVENANCE_DEP}:this'
     random_id = secrets.token_hex(32)
     return {
@@ -113,7 +113,7 @@ def create_generated_by(activity_id):
     }
 
 
-def create_derived_from(asset_list):
+def create_derived_from(asset_list: Any) -> Any:
     entities = {}
     for asset in asset_list:
         random_id = secrets.token_hex(32)
@@ -124,7 +124,7 @@ def create_derived_from(asset_list):
     return entities
 
 
-def create_dependencies(inputs_text, outputs_text):
+def create_dependencies(inputs_text: str, outputs_text: str) -> Any:
     return {
         f'{PROVENANCE_DEP}:outputs': {
             '$': outputs_text,

@@ -3,6 +3,7 @@
     Command 'Asset'
 
 """
+from typing import Any
 
 from .asset_download_command import AssetDownloadCommand
 from .asset_store_command import AssetStoreCommand
@@ -12,11 +13,11 @@ from .help_command import HelpCommand
 
 class AssetCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('asset', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -38,5 +39,5 @@ class AssetCommand(CommandBase):
         ]
         return asset_parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> Any:
         return self.process_sub_command(args, output, args.asset_command)

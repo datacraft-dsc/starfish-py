@@ -1,11 +1,16 @@
 """
     Inovke Asset
 """
+from typing import (
+    Any,
+    Generic
+)
 
 from starfish.asset.asset_base import AssetBase
+from starfish.types import TOperationAsset
 
 
-class OperationAsset(AssetBase):
+class OperationAsset(AssetBase, Generic[TOperationAsset]):
 
     """
 
@@ -18,13 +23,13 @@ class OperationAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata=None, did=None, metadata_text=None):
+    def __init__(self, metadata: Any = None, did: str = None, metadata_text: str = None) -> None:
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
 
         AssetBase.__init__(self, metadata, did, metadata_text)
 
-    def create(name, metadata=None, did=None):
+    def create(name: str, metadata: Any = None, did: str = None) -> TOperationAsset:
         """
 
         Create a new OperationAsset.
@@ -37,7 +42,7 @@ class OperationAsset(AssetBase):
         metadata = AssetBase.generateMetadata(name, 'operation', metadata)
         return OperationAsset(metadata, did)
 
-    def is_mode(self, mode_type):
+    def is_mode(self, mode_type: str) -> bool:
         """
 
         Check to see if this operation supports the mode provided.

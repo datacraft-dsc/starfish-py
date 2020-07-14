@@ -7,6 +7,7 @@
 import datetime
 import os
 import re
+from typing import Any
 
 from starfish.agent import RemoteAgent
 from starfish.asset import DataAsset
@@ -18,11 +19,11 @@ DEFAULT_ASSET_NAME = 'starfish_asset'
 
 class AssetStoreCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('store', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -102,7 +103,7 @@ class AssetStoreCommand(CommandBase):
 
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
 
         if not os.path.exists(args.filename):
             output.add_line(f'cannot find file {args.filename}')

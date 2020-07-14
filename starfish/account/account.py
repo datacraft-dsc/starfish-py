@@ -5,12 +5,21 @@
 """
 
 import json
+from typing import (
+    Any,
+    Generic
+)
 
 from eth_account import Account as EthAccount
 from web3 import Web3
 
+from starfish.types import (
+    AccountAddressOrDict,
+    TAccount
+)
 
-class Account():
+
+class Account(Generic[TAccount]):
     """
 
     Account class, adds functionality for an account to be used on the starfish named network.
@@ -34,7 +43,7 @@ class Account():
 
     """
 
-    def __init__(self, address, password=None, key_value=None, key_file=None):
+    def __init__(self, address: AccountAddressOrDict, password: str = None, key_value: Any = None, key_file: str = None) -> None:
         """init a standard account object"""
         self._address = None
         self._password = None
@@ -63,7 +72,7 @@ class Account():
             self.load_from_file(key_file)
 
     @staticmethod
-    def create(password):
+    def create(password: str) -> TAccount:
         """
 
         Create a new account.
@@ -77,7 +86,7 @@ class Account():
         account = Account(local_account.address, password, key_value)
         return account
 
-    def load_from_file(self, filename):
+    def load_from_file(self, filename: str) -> None:
         """
 
         Load in a key value from a file
@@ -88,7 +97,7 @@ class Account():
         with open(filename, 'r') as fp:
             self._key_value = json.load(fp)
 
-    def save_to_file(self, filename):
+    def save_to_file(self, filename: str) -> None:
         """
 
         Save a key value to a file
@@ -109,7 +118,7 @@ class Account():
         """
         return json.dumps(self._key_value, sort_keys=True, indent=2)
 
-    def import_key_value(self, json_text):
+    def import_key_value(self, json_text: str) -> None:
         """
 
         Import a key_value from a json string
@@ -118,7 +127,7 @@ class Account():
         data = json.loads(json_text)
         self._key_value = data
 
-    def export_key(self, password):
+    def export_key(self, password: str) -> str:
         """
 
         Export the private key
@@ -127,7 +136,7 @@ class Account():
         """
         return EthAccount.decrypt(self._key_value, password)
 
-    def import_key(self, raw_key, password):
+    def import_key(self, raw_key: str, password: str) -> None:
         """
 
         Import the raw private key
@@ -135,7 +144,7 @@ class Account():
         """
         self._key_value = EthAccount.encrypt(raw_key, password)
 
-    def is_address_equal(self, address):
+    def is_address_equal(self, address: str) -> bool:
         """
 
         Compares two addresses if are equal. Both addresses are converted to checksum
@@ -143,7 +152,7 @@ class Account():
 
         :param str address: address to compare with this object's address
         :return: True if the param address is the same is the one held in this account
-        :type: boolean
+        :type: bool
 
         >>> account = Account('0x00bd138abd70e2f00903268f3db08f2d25677c9e')
         >>> account.is_address_equal('0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e')
@@ -151,14 +160,14 @@ class Account():
         """
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
-    def sign_transaction(self, web3, transaction):
+    def sign_transaction(self, web3: Any, transaction: Any) -> Any:
         if self.key_value:
             secret_key = web3.eth.account.decrypt(self.key_value, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
             return signed
 
     @property
-    def is_password(self):
+    def is_password(self) -> bool:
         """
         Return True if the password has been set, else return False
 
@@ -166,7 +175,7 @@ class Account():
         return self._password is not None
 
     @property
-    def address(self):
+    def address(self) -> str:
         """
 
         Return the account address for this account
@@ -181,7 +190,7 @@ class Account():
         return self._address
 
     @property
-    def as_checksum_address(self):
+    def as_checksum_address(self) -> str:
         """
 
         Return the address as a checksum address
@@ -199,7 +208,7 @@ class Account():
         return None
 
     @property
-    def password(self):
+    def password(self) -> str:
         """
 
         Return the account password for this account
@@ -213,7 +222,7 @@ class Account():
         """
         return self._password
 
-    def set_password(self, password):
+    def set_password(self, password: str) -> None:
         """
 
         Set the password for this account
@@ -227,7 +236,7 @@ class Account():
         self._password = password
 
     @property
-    def key_value(self):
+    def key_value(self) -> Any:
         """
 
         This is the encrypted key value that contains the account private key
@@ -236,8 +245,8 @@ class Account():
         return self._key_value
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> bool:
         return self._address and self._password and self._key_value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Account: {self.address}'

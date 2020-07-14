@@ -6,6 +6,7 @@ DID utils
 import re
 import secrets
 import warnings
+from typing import Any
 
 from urllib.parse import urlparse
 from eth_utils import remove_0x_prefix
@@ -13,12 +14,12 @@ from eth_utils import remove_0x_prefix
 from web3 import Web3
 
 from starfish.ddo import create_ddo_object
-
+from starfish.types import DIDParts
 
 NETWORK_DID_METHOD = 'dep'
 
 
-def did_validate(did):
+def did_validate(did: str) -> bool:
     """
 
     Validate a did string.
@@ -43,7 +44,7 @@ def did_validate(did):
     return True
 
 
-def is_did(did):
+def is_did(did: str) -> bool:
     """
 
     Return True or False if the DID is valid.
@@ -58,7 +59,7 @@ def is_did(did):
     return False
 
 
-def asset_did_validate(asse_did):
+def asset_did_validate(asse_did: str) -> bool:
     """
 
     Validates a asset_did in the format 'did:dep:<64_hex_chars>/<64_hex_chars>'
@@ -77,7 +78,7 @@ def asset_did_validate(asse_did):
     return True
 
 
-def is_asset_did(asse_did):
+def is_asset_did(asse_did: str) -> bool:
     """
 
     Return True or False if the asset_did is valid
@@ -90,7 +91,7 @@ def is_asset_did(asse_did):
     return False
 
 
-def did_parse(did):
+def did_parse(did: str) -> DIDParts:
     """
 
     parse a DID into it's parts.
@@ -135,7 +136,7 @@ def did_parse(did):
     return result
 
 
-def did_generate_random():
+def did_generate_random() -> str:
     """
 
     Return a randomly generated DID
@@ -145,7 +146,7 @@ def did_generate_random():
     return id_to_did(did_id)
 
 
-def did_to_id(did):
+def did_to_id(did: str) -> str:
     """
 
     Convert a DID to an hex id value
@@ -156,7 +157,7 @@ def did_to_id(did):
     return data['id_hex']
 
 
-def id_to_did(did_id):
+def id_to_did(did_id: str) -> str:
     """
 
     Convert an hex id to a DID
@@ -166,7 +167,7 @@ def id_to_did(did_id):
     return f'did:{NETWORK_DID_METHOD}:{did_id}'
 
 
-def decode_to_asset_id(asset_did_id):
+def decode_to_asset_id(asset_did_id: str) -> str:
     """
 
     Try to decode an id to an asset_id. The id can be a full asset_did, asset_id ( 32 hex number)
@@ -193,7 +194,7 @@ def decode_to_asset_id(asset_did_id):
     return remove_0x_prefix(asset_id)
 
 
-def did_to_asset_id(did):
+def did_to_asset_id(did: str) -> str:
     """
 
     Depretaated function, use `decode_to_asset_id` instead
@@ -202,7 +203,7 @@ def did_to_asset_id(did):
     return decode_to_asset_id(did)
 
 
-def get_did_from_ddo(ddo_data):
+def get_did_from_ddo(ddo_data: Any) -> str:
     ddo = create_ddo_object(ddo_data)
     if ddo:
         return ddo.did

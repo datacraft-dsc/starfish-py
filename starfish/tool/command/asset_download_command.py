@@ -3,6 +3,7 @@
     Command 'Asset Store'
 
 """
+from typing import Any
 
 from starfish.agent import RemoteAgent
 from .command_base import CommandBase
@@ -10,11 +11,11 @@ from .command_base import CommandBase
 
 class AssetDownloadCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('download', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -47,7 +48,7 @@ class AssetDownloadCommand(CommandBase):
 
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
 
         network = self.get_network(args.url)
 

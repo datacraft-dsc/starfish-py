@@ -8,6 +8,7 @@ from abc import (
     ABC,
     abstractmethod
 )
+from typing import Any
 
 from starfish import Network
 
@@ -47,16 +48,16 @@ NETWORK_NAMES = {
 
 
 class CommandBase(ABC):
-    def __init__(self, name, sub_parser=None):
+    def __init__(self, name: str, sub_parser: Any = None) -> None:
         self._name = name
         self._sub_parser = sub_parser
         if sub_parser:
             self.create_parser(sub_parser)
 
-    def is_command(self, name):
+    def is_command(self, name: str) -> bool:
         return self._name == name
 
-    def get_network(self, url, default_url=None, load_development_contracts=True):
+    def get_network(self, url: str, default_url: str = None, load_development_contracts: bool = True) -> Any:
         if url is None:
             url = default_url
         if url is None:
@@ -65,13 +66,13 @@ class CommandBase(ABC):
 
         return network
 
-    def get_network_setup(self, name):
+    def get_network_setup(self, name: str) -> Any:
         result = None
         if name in NETWORK_NAMES:
             result = NETWORK_NAMES[name]
         return result
 
-    def process_sub_command(self, args, output, command):
+    def process_sub_command(self, args: Any, output: Any, command: str) -> None:
         is_found = False
         for command_item in self._command_list:
             if command_item.is_command(command):
@@ -82,17 +83,17 @@ class CommandBase(ABC):
         if not is_found:
             self.print_help()
 
-    def print_help(self):
+    def print_help(self) -> None:
         self._sub_parser.choices[self._name].print_help()
 
     @abstractmethod
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
         pass
 
     @abstractmethod
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> None:
         pass
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name

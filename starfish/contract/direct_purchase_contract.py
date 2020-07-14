@@ -4,6 +4,9 @@
 
 """
 
+from starfish.account import Account
+from starfish.types import AccountAddress
+
 from .contract_base import ContractBase
 
 CONTRACT_NAME = 'DirectPurchase'
@@ -13,10 +16,17 @@ TOKEN_SENT_EVENT_NAME = 'TokenSent'
 class DirectPurchaseContract(ContractBase):
     """Class representing the Token contract."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
+    def send_token_and_log(
+        self,
+        account: Account,
+        to_account_address: AccountAddress,
+        amount: float,
+        reference_1: str = None,
+        reference_2: str = None
+    ) -> str:
         """
         Send tokens to address with tracking record in log.
 
@@ -26,7 +36,7 @@ class DirectPurchaseContract(ContractBase):
         :param amount: token amount, int in unit of Ocean vodka's
         :param reference1: reference in log, int256
         :param reference2: reference in log, int256
-        :return: void
+        :return: tx_hash
         """
 
         if reference_1 is None:
@@ -50,7 +60,14 @@ class DirectPurchaseContract(ContractBase):
         )
         return tx_hash
 
-    def check_is_paid(self, from_account_address, to_account_address, amount, reference_1=None, reference_2=None):
+    def check_is_paid(
+        self,
+        from_account_address: AccountAddress,
+        to_account_address: AccountAddress,
+        amount: float,
+        reference_1: str = None,
+        reference_2: str = None
+    ) -> bool:
         """
         Check if the log about transaction exists in blockchain.
 

@@ -1,6 +1,9 @@
-
 """
+
+
    Listing class
+
+
 """
 
 from starfish.account import Account
@@ -21,7 +24,7 @@ class Listing(ListingBase):
         :type data: dict
     """
 
-    def purchase(self, account):
+    def purchase(self, account: Account) -> bool:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -39,7 +42,7 @@ class Listing(ListingBase):
 
         return self._agent.purchase_asset(self, account)
 
-    def is_purchased(self, account):
+    def is_purchased(self, account: Account) -> bool:
         """
 
         Return true if the account has already purchased this listing/asset
@@ -56,7 +59,7 @@ class Listing(ListingBase):
 
         return self._agent.is_access_granted_for_asset(self.asset_did, account)
 
-    def set_published(self, value):
+    def set_published(self, value: bool) -> None:
         """
 
         Set the published value
@@ -71,7 +74,7 @@ class Listing(ListingBase):
                 self._data['status'] = 'unpublished'
 
     @property
-    def is_published(self):
+    def is_published(self) -> bool:
         """
 
         Return a True if this listing is published
@@ -85,10 +88,10 @@ class Listing(ListingBase):
         return False
 
     @property
-    def get_purchase_ids(self):
+    def get_purchase_ids(self) -> str:
         return self._agent.get_asset_purchase_ids(self.asset_did)
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = 'Listing: agent=' + self._agent.__class__.__name__ + ', '
         s += 'listing_id=' + self._listing_id + ', '
         s += 'asset_did=' + self._asset_did + ', '

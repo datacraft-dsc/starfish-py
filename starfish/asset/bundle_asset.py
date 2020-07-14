@@ -2,10 +2,20 @@
     Bundle Asset
 """
 
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    Iterator,
+    List
+)
+
+
 from starfish.asset.asset_base import AssetBase
+from starfish.types import TBundleAsset
 
 
-class BundleAsset(AssetBase):
+class BundleAsset(AssetBase, Generic[TBundleAsset]):
     """
 
     Bundle asset can be used to hold many assets
@@ -16,7 +26,7 @@ class BundleAsset(AssetBase):
     :type did: None or str
 
     """
-    def __init__(self, metadata, did=None, metadata_text=None):
+    def __init__(self, metadata: Any, did: str = None, metadata_text: str = None) -> None:
 
         if not isinstance(metadata, dict):
             raise ValueError('metadata must be a dict')
@@ -24,7 +34,7 @@ class BundleAsset(AssetBase):
         self._assets = {}
 
     @staticmethod
-    def create(name, metadata=None, did=None):
+    def create(name: str, metadata: Any = None, did: str = None) -> TBundleAsset:
         """
 
         Create a new empty BundleAsset
@@ -40,7 +50,7 @@ class BundleAsset(AssetBase):
         metadata = AssetBase.generateMetadata(name, 'bundle', metadata)
         return BundleAsset(metadata, did)
 
-    def add(self, name, asset):
+    def add(self, name: str, asset: AssetBase) -> None:
         """
 
         Add an asset to the bundle. Any asset object
@@ -58,7 +68,7 @@ class BundleAsset(AssetBase):
 
         self._assets[name] = asset
 
-    def get_asset(self, name):
+    def get_asset(self, name: str) -> AssetBase:
         """
 
         Return the asset in the bundle based on it's index number
@@ -79,7 +89,7 @@ class BundleAsset(AssetBase):
             name = self.asset_names[name]
         return self._assets[name]
 
-    def asset_remove(self, name):
+    def asset_remove(self, name: str) -> AssetBase:
         """
 
         Remove an asset from the bundle with a given name
@@ -95,7 +105,7 @@ class BundleAsset(AssetBase):
         del self._assets[name]
         return asset
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[AssetBase]:
         """
 
         Iterator method. This allows you to do the following::
@@ -106,7 +116,7 @@ class BundleAsset(AssetBase):
         self._iter_index = 0
         return self
 
-    def __next__(self):
+    def __next__(self) -> AssetBase:
         """
 
         Provide the __next__ method of a iterator.
@@ -124,7 +134,7 @@ class BundleAsset(AssetBase):
         else:
             raise StopIteration
 
-    def __getitem__(self, name):
+    def __getitem__(self, name: str) -> AssetBase:
         return self._assets[name]
 
     def get_asset_at_index(self, index):
@@ -132,7 +142,7 @@ class BundleAsset(AssetBase):
         return list(self._assets.values())[index]
 
     @property
-    def asset_count(self):
+    def asset_count(self) -> int:
         """
 
         Return the number of assets in this bundle
@@ -143,15 +153,15 @@ class BundleAsset(AssetBase):
         return len(self._assets.keys())
 
     @property
-    def asset_items(self):
+    def asset_items(self) -> Dict[str, AssetBase]:
         return self._assets.items()
 
     @property
-    def asset_names(self):
+    def asset_names(self) -> List[str]:
         return list(self._assets.keys())
 
     @property
-    def is_bundle(self):
+    def is_bundle(self) -> bool:
         """
 
         Return True if this asset is a bundle asset and can contain sub assets ( Asset Bundle )

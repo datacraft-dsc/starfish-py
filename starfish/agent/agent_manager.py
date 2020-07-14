@@ -4,10 +4,17 @@
 
 """
 import logging
+from typing import Dict
 
 from starfish.agent.remote_agent import RemoteAgent
 from starfish.ddo import create_ddo_object
 from starfish.ddo.ddo import DDO
+from starfish.network import Network
+from starfish.types import (
+    AgentItem,
+    Authentication,
+    TRemoteAgent
+)
 from starfish.utils.did import (
     did_to_id,
     id_to_did
@@ -17,12 +24,19 @@ logger = logging.getLogger(__name__)
 
 
 class AgentManager:
-    def __init__(self, network):
+    def __init__(self, network: Network) -> None:
         self._network = network
         self._items = {}
         self._default_name = None
 
-    def add(self, name, url=None, did=None, authentication=None, is_default=None):
+    def add(
+        self,
+        name: [str, dict],
+        url: str = None,
+        did: str = None,
+        authentication: Authentication = None,
+        is_default: bool = None
+    ) -> None:
         """
 
         Add a remote agent details to the list of remote agents managed by this class.
@@ -61,7 +75,7 @@ class AgentManager:
 
         self._items[name] = item
 
-    def resolve_ddo(self, name):
+    def resolve_ddo(self, name: str) -> str:
         """
 
         Tries to resolve the remote agent to a ddo using it's provided URL or DID.
@@ -86,7 +100,7 @@ class AgentManager:
             self._items[name]['ddo'] = create_ddo_object(ddo_text)
         return self._items[name]['ddo_text']
 
-    def load_agent(self, asset_agent_did_name):
+    def load_agent(self, asset_agent_did_name: str) -> TRemoteAgent:
         """
 
         Resolves and gets a valid remote agent for a given asset_did, agent_did or agent name
@@ -130,7 +144,7 @@ class AgentManager:
             agent = RemoteAgent(ddo_text, authentication=authentication)
         return agent
 
-    def get_item_from_did(self, find_did):
+    def get_item_from_did(self, find_did: str) -> AgentItem:
         for name, item in self._items.items():
             did = None
             if 'ddo' in item:
@@ -143,13 +157,13 @@ class AgentManager:
         return None
 
     @property
-    def default_name(self):
+    def default_name(self) -> str:
         return self._default_name
 
     @default_name.setter
-    def default_name(self, value):
+    def default_name(self, value: str) -> None:
         self._default_name = value
 
     @property
-    def items(self):
+    def items(self) -> Dict[str, AgentItem]:
         return self._items

@@ -8,6 +8,15 @@ from abc import (
     abstractmethod
 )
 
+from typing import Any
+
+from starfish.ddo.ddo import DDO
+from starfish.types import (
+    ListingData,
+    TAsset,
+    TListing
+)
+
 
 class AgentBase(ABC):
     """
@@ -16,7 +25,7 @@ class AgentBase(ABC):
 
     :param ddo: DDO of the Agent
     """
-    def __init__(self, ddo=None):
+    def __init__(self, ddo: DDO = None) -> None:
         """init the the Agent Base class"""
 
         self._ddo = ddo
@@ -24,7 +33,7 @@ class AgentBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def register_asset(self, asset):
+    def register_asset(self, asset: TAsset) -> TAsset:
         """
 
         Register an asset with an Agent
@@ -39,7 +48,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def create_listing(self, listing_data, asset_did):
+    def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:
         """
 
         Create a listing on the market place for this asset
@@ -53,7 +62,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def update_listing(self, listing):
+    def update_listing(self, listing: TListing) -> None:
         """
 
         Update the listing to the agent server.
@@ -65,7 +74,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def validate_asset(self, asset):
+    def validate_asset(self, asset: TAsset) -> bool:
         """
 
         Validate an asset
@@ -76,7 +85,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def get_listing(self, listing_id):
+    def get_listing(self, listing_id: str) -> TListing:
         """
 
         Return an listing from the given listing_id.
@@ -90,7 +99,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def search_listings(self, text, sort=None, offset=100, page=0):
+    def search_listings(self, text: str, sort: Any = None, offset: int = 100, page: int = 0) -> Any:
         """
 
         Search the off chain storage for an asset with the givien 'text'
@@ -113,7 +122,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def purchase_asset(self, listing, account):
+    def purchase_asset(self, listing: Any, account: Any) -> Any:
         """
 
         Purchase an asset using it's listing and an account.
@@ -127,7 +136,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def is_access_granted_for_asset(self, asset_did, account, purchase_id=None):
+    def is_access_granted_for_asset(self, asset_did: str, account: Any, purchase_id: str = None) -> bool:
         """
 
         Check to see if the account and purchase_id have access to the assed data.
@@ -144,7 +153,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def get_asset_purchase_ids(self, asset):
+    def get_asset_purchase_ids(self, asset: Any) -> Any:
         """
 
         Returns as list of purchase id's that have been used for this asset
@@ -159,7 +168,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def purchase_wait_for_completion(self, asset_did, account,  purchase_id, timeoutSeconds):
+    def purchase_wait_for_completion(self, asset_did: str, account: Any,  purchase_id: str, timeoutSeconds: int) -> None:
         """
 
             Wait for completion of the purchase
@@ -172,7 +181,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def consume_asset(self, listing, account, purchase_id):
+    def consume_asset(self, listing: Any, account: Any, purchase_id: str) -> bool:
         """
         Consume the asset and download the data. The actual payment to the asset
         provider will be made at this point.
@@ -189,12 +198,12 @@ class AgentBase(ABC):
         """
 
     @property
-    def did(self):
+    def did(self) -> str:
         if self._ddo:
             return self._ddo.did
 
     @property
-    def ddo(self):
+    def ddo(self) -> DDO:
         """
 
         Return the did for this remote agent.

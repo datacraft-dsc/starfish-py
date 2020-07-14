@@ -8,13 +8,13 @@
 
 import json
 import re
-
 from base64 import (
     b64decode,
     b64encode,
     b85decode,
     b85encode
 )
+from typing import Any
 
 PUBLIC_KEY_STORE_TYPE_PEM = 'publicKeyPem'
 PUBLIC_KEY_STORE_TYPE_JWK = 'publicKeyJwk'
@@ -29,7 +29,7 @@ class PublicKeyBase:
     using DDO keys
     """
 
-    def __init__(self, key_id, **kwargs):
+    def __init__(self, key_id: str, **kwargs: Any) -> None:
         self._id = key_id
         self._store_type = kwargs.get('store_type', None)
         self._value = kwargs.get('value', None)
@@ -37,11 +37,11 @@ class PublicKeyBase:
         self._type = kwargs.get('type', None)
 
     @property
-    def id(self):
+    def id(self) -> str:
         """ get the key id"""
         return self._id
 
-    def assign_did(self, did):
+    def assign_did(self, did: str) -> None:
         """
         assign the DID as the key id, if the DID does not have a '#value'
         at the end, then automatically add a new key value
@@ -52,21 +52,21 @@ class PublicKeyBase:
             self._owner = did + self._owner
 
     @property
-    def owner(self):
+    def owner(self) -> str:
         """get the owner of this key"""
         return self._owner
 
     @property
-    def type(self):
+    def type(self) -> str:
         """get the type of key"""
         return self._type
 
     @property
-    def store_type(self):
+    def store_type(self) -> str:
         """get the type of key storage"""
         return self._store_type
 
-    def set_key_value(self, value, store_type=PUBLIC_KEY_STORE_TYPE_BASE64):
+    def set_key_value(self, value: str, store_type: str = PUBLIC_KEY_STORE_TYPE_BASE64) -> None:
         """set the key value based on it's storage type"""
         if isinstance(value, dict):
             if PUBLIC_KEY_STORE_TYPE_HEX in value:
@@ -83,7 +83,7 @@ class PublicKeyBase:
             self._value = value
             self._store_type = store_type
 
-    def set_encode_key_value(self, value, store_type):
+    def set_encode_key_value(self, value: str, store_type: str) -> str:
         """ save the key value base on it's storage type"""
         self._store_type = store_type
         if store_type == PUBLIC_KEY_STORE_TYPE_HEX:
@@ -100,7 +100,7 @@ class PublicKeyBase:
         return value
 
     @property
-    def decode_value(self):
+    def decode_value(self) -> str:
         """ return the key value based on it's storage type"""
         if self._store_type == PUBLIC_KEY_STORE_TYPE_HEX:
             value = bytes.fromhex(self._value)
@@ -116,11 +116,11 @@ class PublicKeyBase:
         return value
 
     @property
-    def value(self):
+    def value(self) -> str:
         """ get the key value"""
         return self._value
 
-    def as_text(self, is_pretty=False):
+    def as_text(self, is_pretty: bool = False) -> str:
         """ return the key as JSON text"""
         values = {'id': self._id, 'type': self._type, self._store_type: self._value}
         if self._owner:
@@ -132,7 +132,7 @@ class PublicKeyBase:
         return json.dumps(values)
 
     @property
-    def as_dictionary(self):
+    def as_dictionary(self) -> Any:
         """return the key as a python dictionary"""
         values = {
             'id': self._id,
@@ -146,12 +146,12 @@ class PublicKeyBase:
         return values
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """return True if the key structure is valid"""
         return self._id and self._type
 
     @property
-    def authentication_type(self):
+    def authentication_type(self) -> str:
         """
         base overloaded method to return the authentication type to use for
         this key

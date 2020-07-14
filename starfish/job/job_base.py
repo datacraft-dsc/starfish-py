@@ -3,9 +3,15 @@ from abc import ABC
 """
    Job Base class
 """
+from typing import (
+    Any,
+    Generic
+)
+
+from starfish.types import TJobBase
 
 
-class JobBase(ABC):
+class JobBase(ABC, Generic[TJobBase]):
     """
         Create a Job object
 
@@ -20,7 +26,7 @@ class JobBase(ABC):
         'accepted'
     ]
 
-    def __init__(self, job_id, status=None, outputs=None):
+    def __init__(self, job_id: str, status: str = None, outputs: Any = None) -> None:
         """
 
         init the the Job Object Base with the agent instance
@@ -35,13 +41,13 @@ class JobBase(ABC):
         super().__init__()
 
     @property
-    def is_finished(self):
+    def is_finished(self) -> bool:
         if self._status:
             return self._status not in JobBase.IsWorkingStatusList
         return False
 
     @property
-    def job_id(self):
+    def job_id(self) -> str:
         """
         Return the job id
 
@@ -51,7 +57,7 @@ class JobBase(ABC):
         return self._job_id
 
     @property
-    def status(self):
+    def status(self) -> str:
         """
         Return the status for this job
 
@@ -61,7 +67,7 @@ class JobBase(ABC):
         return self._status
 
     @property
-    def outputs(self):
+    def outputs(self) -> Any:
         """
         Return the ouptuts for this job
 
@@ -70,7 +76,7 @@ class JobBase(ABC):
         """
         return self._outputs
 
-    def __str__(self):
+    def __str__(self) -> str:
         text = 'job:'
         if self._status:
             text += f'{self._status}'

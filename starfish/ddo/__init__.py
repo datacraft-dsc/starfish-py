@@ -10,6 +10,7 @@ https://github.com/oceanprotocol/squid-py/tree/4dc75b959f9f07101ff6ff30d33b4d95b
 
 
 """
+from typing import Any
 
 from .ddo import DDO                     # noqa: F401
 
@@ -21,7 +22,7 @@ from .public_key_base import (               # noqa: F401
 )
 
 
-def create_ddo_object(ddo_data):
+def create_ddo_object(ddo_data: Any) -> Any:
     ddo = None
     if isinstance(ddo_data, str):
         ddo = DDO(json_text=ddo_data)

@@ -19,6 +19,7 @@ with open('CHANGELOG.md') as changelog_file:
 
 install_requirements = [
     'web3',
+    'typing_extensions'
 ]
 
 setup_requirements = ['pytest-runner', ]
@@ -81,6 +82,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/DEX-Company/starfish-py',
-    version='0.11.0',
+    version='0.11.1',
     zip_safe=False,
 )

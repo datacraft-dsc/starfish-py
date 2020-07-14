@@ -4,7 +4,7 @@
 
 """
 import re
-
+from typing import Any
 from web3 import Web3
 
 from starfish.account import Account
@@ -20,11 +20,11 @@ from .command_base import CommandBase
 
 class AgentRegisterCommand(CommandBase):
 
-    def __init__(self, sub_parser=None):
+    def __init__(self, sub_parser: Any = None) -> None:
         self._command_list = []
         super().__init__('register', sub_parser)
 
-    def create_parser(self, sub_parser):
+    def create_parser(self, sub_parser: Any) -> Any:
 
         parser = sub_parser.add_parser(
             self._name,
@@ -63,7 +63,7 @@ Services can be: {",".join(ALL_SERVICES)}
         )
         return parser
 
-    def execute(self, args, output):
+    def execute(self, args: Any, output: Any) -> Any:
         network = self.get_network(args.url)
 
         if not Web3.isAddress(args.address):

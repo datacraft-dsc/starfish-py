@@ -7,8 +7,12 @@
 """
 
 import logging
+from typing import (
+    Any,
+    Generic,
+    List
+)
 import requests
-
 from web3 import (
     HTTPProvider,
     Web3
@@ -17,11 +21,22 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 from web3.middleware import geth_poa_middleware
 
+from starfish.account import Account
 from starfish.contract import ContractManager
-from starfish.ddo import create_ddo_object
+from starfish.ddo import (
+    DDO,
+    create_ddo_object
+)
 from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
+)
+from starfish.types import (
+    AccountAddress,
+    Authentication,
+    ProvenanceEventList,
+    TContractBase,
+    TNetwork
 )
 from starfish.utils.did import is_did
 
@@ -70,8 +85,8 @@ CONTRACT_LIST = {
 }
 
 
-class Network():
-    def __init__(self, url, artifacts_path=None, load_development_contracts=True):
+class Network(Generic[TNetwork]):
+    def __init__(self, url: str, artifacts_path: str = None, load_development_contracts: bool = True) -> None:
         self._url = url
         self._web3 = None
         self._name = None
@@ -91,7 +106,7 @@ class Network():
             if load_development_contracts and self._name == 'local':
                 self._contract_manager.load_local_artifacts_package()
 
-    def get_contract(self, name):
+    def get_contract(self, name: str) -> TContractBase:
         if name not in CONTRACT_LIST:
             raise LookupError(f'Invalid contract name: {name}')
 
@@ -110,21 +125,21 @@ class Network():
 
 
     """
-    def get_ether_balance(self, account_address):
+    def get_ether_balance(self, account_address: AccountAddress) -> float:
         network_contract = self.get_contract('Network')
         return network_contract.get_balance(account_address)
 
-    def get_token_balance(self, account_address):
+    def get_token_balance(self, account_address: AccountAddress) -> float:
         dex_token_contract = self.get_contract('DexToken')
         return dex_token_contract.get_balance(account_address)
 
-    def request_test_tokens(self, account, amount):
+    def request_test_tokens(self, account: Account, amount: float) -> bool:
         dispenser_contract = self.get_contract('Dispenser')
         tx_hash = dispenser_contract.request_tokens(account, amount)
         receipt = dispenser_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
-    def request_ether_from_faucet(self, account, url):
+    def request_ether_from_faucet(self, account: Account, url: str) -> None:
         data = {
             'address': account.address,
             'agent': 'server',
@@ -143,7 +158,7 @@ class Network():
     Send ether and tokens to another account
 
     """
-    def send_ether(self, account, to_account_address, amount):
+    def send_ether(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
         network_contract = self.get_contract('Network')
 
         account_balance = self.get_ether_balance(account)
@@ -154,7 +169,7 @@ class Network():
         receipt = network_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
-    def send_token(self, account, to_account_address, amount):
+    def send_token(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
         dex_token_contract = self.get_contract('DexToken')
 
         account_balance = self.get_token_balance(account)
@@ -170,7 +185,14 @@ class Network():
     Send tokens (make payment) with logging
 
     """
-    def send_token_and_log(self, account, to_account_address, amount, reference_1=None, reference_2=None):
+    def send_token_and_log(
+        self,
+        account: Account,
+        to_account_address: AccountAddress,
+        amount: float,
+        reference_1: str = None,
+        reference_2: str = None
+    ) -> bool:
         dex_token_contract = self.get_contract('DexToken')
         direct_contract = self.get_contract('DirectPurchase')
 
@@ -197,7 +219,14 @@ class Network():
                 return True
         return False
 
-    def is_token_sent(self, from_account_address, to_account_address, amount, reference_1=None, reference_2=None):
+    def is_token_sent(
+        self,
+        from_account_address: AccountAddress,
+        to_account_address: AccountAddress,
+        amount: float,
+        reference_1: str = None,
+        reference_2: str = None
+    ) -> bool:
         direct_contract = self.get_contract('DirectPurchase')
 
         is_sent = direct_contract.check_is_paid(
@@ -214,13 +243,13 @@ class Network():
     Register Provenance
 
     """
-    def register_provenace(self, account, asset_id):
+    def register_provenace(self, account: Account, asset_id: str) -> bool:
         provenance_contract = self.get_contract('Provenance')
         tx_hash = provenance_contract.register(account, asset_id)
         receipt = provenance_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
-    def get_provenace_event_list(self, asset_id):
+    def get_provenace_event_list(self, asset_id: str) -> ProvenanceEventList:
         provenance_contract = self.get_contract('Provenance')
         return provenance_contract.get_event_list(asset_id)
 
@@ -229,13 +258,13 @@ class Network():
     Register DID with a DDO and resolve DID to a DDO
 
     """
-    def register_did(self, account, did, ddo_text):
+    def register_did(self, account: Account, did: str, ddo_text: str) -> bool:
         did_registry_contract = self.get_contract('DIDRegistry')
         tx_hash = did_registry_contract.register(account, did, ddo_text)
         receipt = did_registry_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
-    def resolve_did(self, did):
+    def resolve_did(self, did: str) -> str:
         ddo_text = None
         if did and is_did:
             did_registry_contract = self.get_contract('DIDRegistry')
@@ -250,7 +279,13 @@ class Network():
 
     """
 
-    def resolve_agent(self, agent_url_did, username=None, password=None, authentication=None):
+    def resolve_agent(
+        self,
+        agent_url_did: str,
+        username: str = None,
+        password: str = None,
+        authentication: Authentication = None
+    ) -> DDO:
 
         # stop circular references on import
 
@@ -275,28 +310,28 @@ class Network():
         return ddo
 
     @property
-    def contract_names(self):
+    def contract_names(self) -> List[str]:
         return CONTRACT_LIST.keys()
 
     @property
-    def url(self):
+    def url(self) -> str:
         return self._url
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
-    def web3(self):
+    def web3(self) -> Any:
         return self._web3
 
     @staticmethod
-    def find_network_name_from_id(network_id):
+    def find_network_name_from_id(network_id: int) -> str:
         if network_id in NETWORK_NAMES:
             return NETWORK_NAMES[network_id]
         return NETWORK_NAMES[0]
 
-    def _connect(self, url, artifacts_path):
+    def _connect(self, url: str, artifacts_path: str) -> bool:
         self._url = url
         self._web3 = Web3(HTTPProvider(url))
         if self._web3:

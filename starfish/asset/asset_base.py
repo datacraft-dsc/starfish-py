@@ -6,10 +6,16 @@
 
 import json
 from abc import ABC
+from typing import (
+    Any,
+    Generic
+)
+
+from starfish.types import TAssetBase
 from starfish.utils.did import decode_to_asset_id
 
 
-class AssetBase(ABC):
+class AssetBase(ABC, Generic[TAssetBase]):
     """
 
     :param str metadata_text: metadata text for the asset
@@ -17,7 +23,7 @@ class AssetBase(ABC):
     :type did: None or str
 
     """
-    def __init__(self, metadata, did=None, metadata_text=None):
+    def __init__(self, metadata: Any, did: str = None, metadata_text: str = None) -> None:
         """
         init an asset class
         """
@@ -40,7 +46,7 @@ class AssetBase(ABC):
         self._did = did
         super().__init__()
 
-    def set_did(self, did):
+    def set_did(self, did: str) -> None:
         """
         This method makes the object immutable.
         So maybe a solution is that we have a 'copy' and
@@ -49,7 +55,7 @@ class AssetBase(ABC):
         """
         self._did = did
 
-    def is_asset_type(self, type_name):
+    def is_asset_type(self, type_name: str) -> bool:
         """
 
         Returns if this metadata has the correct type
@@ -64,7 +70,7 @@ class AssetBase(ABC):
         return asset_type == type_name
 
     @property
-    def did(self):
+    def did(self) -> str:
         """
         :return: the asset did
         :type: str
@@ -72,7 +78,7 @@ class AssetBase(ABC):
         return self._did
 
     @property
-    def metadata(self):
+    def metadata(self) -> Any:
         """
         :return: The metadata for this asset
         :type: dict
@@ -80,7 +86,7 @@ class AssetBase(ABC):
         return self._metadata
 
     @property
-    def metadata_text(self):
+    def metadata_text(self) -> str:
         """
         :return: The metadata for this asset
         :type: dict
@@ -88,21 +94,21 @@ class AssetBase(ABC):
         return self._metadata_text
 
     @property
-    def asset_id(self):
+    def asset_id(self) -> str:
         if self._did:
             return decode_to_asset_id(self._did)
         return None
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._metadata['name']
 
     @property
-    def type_name(self):
+    def type_name(self) -> str:
         return self._metadata['type']
 
     @property
-    def is_bundle(self):
+    def is_bundle(self) -> bool:
         """
 
         Return True if this asset is a bundle asset and can contain sub assets ( Asset Bundle )
@@ -114,7 +120,7 @@ class AssetBase(ABC):
         return False
 
     @staticmethod
-    def get_asset_type(metadata):
+    def get_asset_type(metadata: Any) -> str:
         asset_type = ''
         if isinstance(metadata, dict):
             if 'type' in metadata:
@@ -126,7 +132,7 @@ class AssetBase(ABC):
         return asset_type
 
     @staticmethod
-    def generateMetadata(name, asset_type, metadata=None):
+    def generateMetadata(name: str, asset_type: str, metadata: Any = None) -> Any:
         if metadata is None:
             metadata = {}
         if not isinstance(metadata, dict):
