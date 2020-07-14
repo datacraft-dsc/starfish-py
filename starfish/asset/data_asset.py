@@ -7,18 +7,15 @@ import os
 from mimetypes import MimeTypes
 from typing import (
     Any,
-    ForwardRef,
-    TypeVar
+    Generic
 )
 
 from starfish.asset.asset_base import AssetBase
+from starfish.types import TDataAsset
 from starfish.utils.crypto_hash import hash_sha3_256
 
 
-TDataAsset = TypeVar(ForwardRef('DataAsset'))
-
-
-class DataAsset(AssetBase):
+class DataAsset(AssetBase, Generic[TDataAsset]):
     """
 
     File asset can be used manage a data asset on the dex network

@@ -3,16 +3,14 @@
 """
 from typing import (
     Any,
-    ForwardRef,
-    TypeVar
+    Generic
 )
 
 from starfish.asset.asset_base import AssetBase
+from starfish.types import TOperationAsset
 
-TOperationAsset = TypeVar(ForwardRef('OperationAsset'))
 
-
-class OperationAsset(AssetBase):
+class OperationAsset(AssetBase, Generic[TOperationAsset]):
 
     """
 

@@ -40,8 +40,6 @@ from starfish.types import (
     Authentication,
     ListingData,
     TAsset,
-    TJob,
-    TListing,
     TRemoteAgent
 )
 from starfish.utils.did import (
@@ -156,7 +154,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             asset.set_did(did)
         return asset
 
-    def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:
+    def create_listing(self, listing_data: ListingData, asset_did: str) -> Listing:
         """
 
         Create a listing on the market place for this asset
@@ -191,7 +189,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 
-    def update_listing(self, listing: TListing) -> bool:
+    def update_listing(self, listing: Listing) -> bool:
         """
 
         Update the listing to the agent server.
@@ -257,7 +255,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         )
         return asset
 
-    def get_listing(self, listing_id: str) -> TListing:
+    def get_listing(self, listing_id: str) -> Listing:
         """
         Return an listing on the listings id.
 
@@ -323,7 +321,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
                     listings.append(listing)
         return listings
 
-    def get_job(self, job_id: str) -> TJob:
+    def get_job(self, job_id: str) -> Job:
         """
 
         Get a job from the invoke service ( koi )
@@ -344,7 +342,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             job = Job(job_id, status, outputs)
         return job
 
-    def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> Union[TJob, bool]:
+    def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> Union[Job, bool]:
         """
 
         Wait for a job to complete, with optional timeout seconds.

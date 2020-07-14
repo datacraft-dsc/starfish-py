@@ -6,18 +6,16 @@
 from mimetypes import MimeTypes
 from typing import (
     Any,
-    ForwardRef,
-    TypeVar
+    Generic
 )
 from urllib.parse import urlparse
 
 from starfish.asset.asset_base import AssetBase
 from starfish.asset.data_asset import DataAsset
+from starfish.types import TRemoteDataAsset
 
-TRemoteDataAsset = TypeVar(ForwardRef('RemoteDataAsset'))
 
-
-class RemoteDataAsset(DataAsset):
+class RemoteDataAsset(DataAsset, Generic[TRemoteDataAsset]):
 
     @staticmethod
     def create_with_url(name: str, url: str, metadata: Any = None, did: str = None) -> TRemoteDataAsset:

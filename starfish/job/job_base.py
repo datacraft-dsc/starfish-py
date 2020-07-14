@@ -3,10 +3,15 @@ from abc import ABC
 """
    Job Base class
 """
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
+
+from starfish.types import TJobBase
 
 
-class JobBase(ABC):
+class JobBase(ABC, Generic[TJobBase]):
     """
         Create a Job object
 

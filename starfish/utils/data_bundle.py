@@ -12,6 +12,7 @@ import os
 import re
 from typing import Any
 
+from starfish.agent.agent_base import AgentBase
 from starfish.asset import (
     BundleAsset,
     DataAsset
@@ -42,7 +43,7 @@ def decode_readable_size(text: str, base_size: int = 1024) -> str:
     return None
 
 
-def register_upload_data(remote_agent: Any, name: str, data_stream: Any, chunk_size_value: int = None) -> Any:
+def register_upload_data(remote_agent: AgentBase, name: str, data_stream: Any, chunk_size_value: int = None) -> Any:
 
     if chunk_size_value is None:
         chunk_size_value = DEFAULT_CHUNK_SIZE
@@ -72,7 +73,7 @@ def register_upload_data(remote_agent: Any, name: str, data_stream: Any, chunk_s
     return asset
 
 
-def register_upload_bundle_file(remote_agent: Any, filename: str, chunk_size: int = None) -> Any:
+def register_upload_bundle_file(remote_agent: AgentBase, filename: str, chunk_size: int = None) -> Any:
     if not os.path.exists(filename):
         raise FileNotFoundError(f'Cannot find file {filename}')
     bundle_asset = None
@@ -82,7 +83,7 @@ def register_upload_bundle_file(remote_agent: Any, filename: str, chunk_size: in
     return bundle_asset
 
 
-def download_bundle_data(remote_agent: Any, bundle_asset: Any, data_stream: Any) -> int:
+def download_bundle_data(remote_agent: AgentBase, bundle_asset: Any, data_stream: Any) -> int:
     size = 0
     for name, asset in bundle_asset:
         store_asset = remote_agent.download_asset(asset.asset_id)
@@ -91,7 +92,7 @@ def download_bundle_data(remote_agent: Any, bundle_asset: Any, data_stream: Any)
     return size
 
 
-def download_bundle_file(remote_agent: Any, bundle_asset: Any, filename: str) -> int:
+def download_bundle_file(remote_agent: AgentBase, bundle_asset: Any, filename: str) -> int:
     if not bundle_asset.is_bundle:
         raise TypeError(f'asset type {bundle_asset.type} is not a bundle asset')
     size = 0

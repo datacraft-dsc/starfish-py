@@ -14,7 +14,7 @@ from eth_utils import remove_0x_prefix
 from web3 import Web3
 
 from starfish.ddo import create_ddo_object
-
+from starfish.types import DIDParts
 
 NETWORK_DID_METHOD = 'dep'
 
@@ -91,7 +91,7 @@ def is_asset_did(asse_did: str) -> bool:
     return False
 
 
-def did_parse(did: str) -> Any:
+def did_parse(did: str) -> DIDParts:
     """
 
     parse a DID into it's parts.

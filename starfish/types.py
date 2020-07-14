@@ -23,11 +23,17 @@ else:
 
 TAccount = TypeVar('Account')
 TAsset = TypeVar('Asset')
+TAssetBase = TypeVar('AssetBase')
+TBundleAsset = TypeVar('BundleAsset')
+TDataAsset = TypeVar('DataAsset')
+TOperationAsset = TypeVar('OperationAsset')
+TRemoteDataAsset = TypeVar('RemoteDataAsset')
 TContractBase = TypeVar('ContractBase')
 TContractManager = TypeVar('ContractManager')
 TDDO = TypeVar('DDO')
-TJob = TypeVar('Job')
+TJobBase = TypeVar('JobBase')
 TListing = TypeVar('Listing')
+TListingBase = TypeVar('ListingBase')
 TNetwork = TypeVar('Network')
 TRemoteAgent = TypeVar('RemoteAgent')
 
@@ -49,6 +55,14 @@ class AgentItem(TypedDict):
     url: str
     did: str
     authentication: Authentication
+
+
+class DIDParts(TypedDict):
+    method: str
+    id: str
+    path: str
+    fragment: str
+    id_hex: str
 
 
 class ProvenanceEvent(TypedDict):

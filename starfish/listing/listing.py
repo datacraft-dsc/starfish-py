@@ -1,8 +1,10 @@
+"""
+
+
+   Listing class
+
 
 """
-   Listing class
-"""
-from typing import Any
 
 from starfish.account import Account
 
@@ -22,7 +24,7 @@ class Listing(ListingBase):
         :type data: dict
     """
 
-    def purchase(self, account: Any) -> bool:
+    def purchase(self, account: Account) -> bool:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -40,7 +42,7 @@ class Listing(ListingBase):
 
         return self._agent.purchase_asset(self, account)
 
-    def is_purchased(self, account: Any) -> bool:
+    def is_purchased(self, account: Account) -> bool:
         """
 
         Return true if the account has already purchased this listing/asset

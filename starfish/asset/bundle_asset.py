@@ -4,17 +4,18 @@
 
 from typing import (
     Any,
-    ForwardRef,
+    Dict,
+    Generic,
     Iterator,
-    TypeVar
+    List
 )
 
+
 from starfish.asset.asset_base import AssetBase
+from starfish.types import TBundleAsset
 
-TBundleAsset = TypeVar(ForwardRef('BundleAsset'))
 
-
-class BundleAsset(AssetBase):
+class BundleAsset(AssetBase, Generic[TBundleAsset]):
     """
 
     Bundle asset can be used to hold many assets
@@ -49,7 +50,7 @@ class BundleAsset(AssetBase):
         metadata = AssetBase.generateMetadata(name, 'bundle', metadata)
         return BundleAsset(metadata, did)
 
-    def add(self, name: str, asset: Any) -> None:
+    def add(self, name: str, asset: AssetBase) -> None:
         """
 
         Add an asset to the bundle. Any asset object
@@ -67,7 +68,7 @@ class BundleAsset(AssetBase):
 
         self._assets[name] = asset
 
-    def get_asset(self, name: str) -> Any:
+    def get_asset(self, name: str) -> AssetBase:
         """
 
         Return the asset in the bundle based on it's index number
@@ -88,7 +89,7 @@ class BundleAsset(AssetBase):
             name = self.asset_names[name]
         return self._assets[name]
 
-    def asset_remove(self, name: str) -> Any:
+    def asset_remove(self, name: str) -> AssetBase:
         """
 
         Remove an asset from the bundle with a given name
@@ -104,7 +105,7 @@ class BundleAsset(AssetBase):
         del self._assets[name]
         return asset
 
-    def __iter__(self) -> Iterator[Any]:
+    def __iter__(self) -> Iterator[AssetBase]:
         """
 
         Iterator method. This allows you to do the following::
@@ -115,7 +116,7 @@ class BundleAsset(AssetBase):
         self._iter_index = 0
         return self
 
-    def __next__(self) -> Any:
+    def __next__(self) -> AssetBase:
         """
 
         Provide the __next__ method of a iterator.
@@ -133,7 +134,7 @@ class BundleAsset(AssetBase):
         else:
             raise StopIteration
 
-    def __getitem__(self, name: str) -> Any:
+    def __getitem__(self, name: str) -> AssetBase:
         return self._assets[name]
 
     def get_asset_at_index(self, index):
@@ -152,11 +153,11 @@ class BundleAsset(AssetBase):
         return len(self._assets.keys())
 
     @property
-    def asset_items(self) -> Any:
+    def asset_items(self) -> Dict[str, AssetBase]:
         return self._assets.items()
 
     @property
-    def asset_names(self) -> Any:
+    def asset_names(self) -> List[str]:
         return list(self._assets.keys())
 
     @property

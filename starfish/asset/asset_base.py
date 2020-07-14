@@ -6,12 +6,16 @@
 
 import json
 from abc import ABC
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
 
+from starfish.types import TAssetBase
 from starfish.utils.did import decode_to_asset_id
 
 
-class AssetBase(ABC):
+class AssetBase(ABC, Generic[TAssetBase]):
     """
 
     :param str metadata_text: metadata text for the asset

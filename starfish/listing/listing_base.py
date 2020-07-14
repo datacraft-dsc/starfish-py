@@ -7,10 +7,17 @@ from abc import (
     ABC,
     abstractmethod
 )
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
+from starfish.account import Account
+from starfish.agent.agent_base import AgentBase
+from starfish.ddo import DDO
+from starfish.types import TListingBase
 
 
-class ListingBase(ABC):
+class ListingBase(ABC, Generic[TListingBase]):
     """
         Create a Listing object
 
@@ -22,7 +29,7 @@ class ListingBase(ABC):
         :param ddo: Optional DDO object for this listing
         :type data: dict
     """
-    def __init__(self, agent: Any, listing_id: str, asset_did: str, data: Any, ddo: Any = None) -> None:
+    def __init__(self, agent: AgentBase, listing_id: str, asset_did: str, data: Any, ddo: DDO = None) -> None:
         """init the the Listing Object Base with the agent instance"""
         self._agent = agent
         self._listing_id = listing_id
@@ -32,7 +39,7 @@ class ListingBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def purchase(self, account: Any) -> None:
+    def purchase(self, account: Account) -> None:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -48,7 +55,7 @@ class ListingBase(ABC):
         pass
 
     @property
-    def agent(self) -> Any:
+    def agent(self) -> AgentBase:
         """
 
         :return: Agent object that created this listing
@@ -66,7 +73,7 @@ class ListingBase(ABC):
         return self._data
 
     @property
-    def ddo(self) -> Any:
+    def ddo(self) -> DDO:
         """
 
         :return: ddo of the listing
