@@ -9,14 +9,16 @@ import logging
 import time
 from typing import (
     Any,
-    ForwardRef,
-    TypeVar
+    Generic,
+    List,
+    Union
 )
 from urllib.parse import urljoin
 
 
 from eth_utils import remove_0x_prefix
 
+from starfish.account import Account
 from starfish.agent.agent_base import AgentBase
 from starfish.agent.services import Services
 from starfish.asset import (
@@ -33,6 +35,15 @@ from starfish.exceptions import (
 from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
+from starfish.network import Network
+from starfish.types import (
+    Authentication,
+    ListingData,
+    TAsset,
+    TJob,
+    TListing,
+    TRemoteAgent
+)
 from starfish.utils.did import (
     decode_to_asset_id,
     did_generate_random,
@@ -48,12 +59,11 @@ SUPPORTED_SERVICES = {
     'auth': 'DEP.Auth.v1',
 }
 
-TRemoteAgent = TypeVar(ForwardRef('RemoteAgent'))
 
 logger = logging.getLogger(__name__)
 
 
-class RemoteAgent(AgentBase):
+class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     """
 
     Remote Agent class allows to register, list, purchase and consume assets.
@@ -72,7 +82,7 @@ class RemoteAgent(AgentBase):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, ddo: Any, authentication: Any = None) -> None:
+    def __init__(self, ddo: DDO, authentication: Authentication = None) -> None:
         self._authentication = authentication
 
         if isinstance(ddo, dict):
@@ -88,7 +98,7 @@ class RemoteAgent(AgentBase):
         self._adapter = RemoteAgentAdapter()
 
     @staticmethod
-    def load(network: Any, asset_agent_did_url: str, authentication: Any = None) -> TRemoteAgent:
+    def load(network: Network, asset_agent_did_url: str, authentication: Authentication = None) -> TRemoteAgent:
         ddo_text = network.resolve_agent(asset_agent_did_url, authentication=authentication)
 
         if ddo_text:
@@ -97,7 +107,7 @@ class RemoteAgent(AgentBase):
         return None
 
     @staticmethod
-    def register(network: Any, register_account: Any, ddo: Any, authentication: Any = None) -> TRemoteAgent:
+    def register(network: Network, register_account: Account, ddo: DDO, authentication: Authentication = None) -> TRemoteAgent:
         """
         Register the agent on the network.
 
@@ -111,7 +121,7 @@ class RemoteAgent(AgentBase):
         network.register_did(register_account, ddo.did, ddo.as_text())
         return RemoteAgent(ddo.as_text(), authentication)
 
-    def register_asset(self, asset: Any) -> Any:
+    def register_asset(self, asset: TAsset) -> TAsset:
         """
 
         Register an asset with Surfer
@@ -146,7 +156,7 @@ class RemoteAgent(AgentBase):
             asset.set_did(did)
         return asset
 
-    def create_listing(self, listing_data: Any, asset_did: str) -> Any:
+    def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:
         """
 
         Create a listing on the market place for this asset
@@ -181,7 +191,7 @@ class RemoteAgent(AgentBase):
         listing = Listing(self, data['id'], asset_did, data)
         return listing
 
-    def update_listing(self, listing: Any) -> bool:
+    def update_listing(self, listing: TListing) -> bool:
         """
 
         Update the listing to the agent server.
@@ -195,7 +205,7 @@ class RemoteAgent(AgentBase):
 
         return self._adapter.update_listing(listing.listing_id, listing.data, url, authorization_token)
 
-    def validate_asset(self, asset: Any) -> bool:
+    def validate_asset(self, asset: TAsset) -> bool:
         """
 
         Validate an asset
@@ -205,7 +215,7 @@ class RemoteAgent(AgentBase):
         """
         pass
 
-    def upload_asset(self, asset: Any) -> bool:
+    def upload_asset(self, asset: TAsset) -> bool:
 
         if not isinstance(asset, DataAsset):
             raise TypeError('Only DataAsset is supported')
@@ -219,7 +229,7 @@ class RemoteAgent(AgentBase):
 
         return self._adapter.upload_asset_data(asset_id, asset.data, url, authorization_token)
 
-    def download_asset(self, asset_did_id: str) -> Any:
+    def download_asset(self, asset_did_id: str) -> TAsset:
         """
         Download an asset
 
@@ -247,7 +257,7 @@ class RemoteAgent(AgentBase):
         )
         return asset
 
-    def get_listing(self, listing_id: str) -> Any:
+    def get_listing(self, listing_id: str) -> TListing:
         """
         Return an listing on the listings id.
 
@@ -271,7 +281,7 @@ class RemoteAgent(AgentBase):
                 listing = Listing(self, data['id'], asset, data)
         return listing
 
-    def get_asset(self, asset_did_id: str) -> Any:
+    def get_asset(self, asset_did_id: str) -> TAsset:
         """
 
         This is for compatability for Surfer calls to get an asset directly from Surfer
@@ -291,7 +301,7 @@ class RemoteAgent(AgentBase):
             asset = self._create_asset_from_read(asset_id, read_metadata)
         return asset
 
-    def get_listings(self) -> Any:
+    def get_listings(self) -> List[ListingData]:
         """
         Returns all listings
 
@@ -313,7 +323,7 @@ class RemoteAgent(AgentBase):
                     listings.append(listing)
         return listings
 
-    def get_job(self, job_id: str) -> Any:
+    def get_job(self, job_id: str) -> TJob:
         """
 
         Get a job from the invoke service ( koi )
@@ -334,7 +344,7 @@ class RemoteAgent(AgentBase):
             job = Job(job_id, status, outputs)
         return job
 
-    def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> [Any, bool]:
+    def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> Union[TJob, bool]:
         """
 
         Wait for a job to complete, with optional timeout seconds.
@@ -356,7 +366,7 @@ class RemoteAgent(AgentBase):
                 time.sleep(sleep_seconds)
         return False
 
-    def search_listings(self, text: str, sort: Any = None, offset: int = 100, page: int = 0) -> Any:
+    def search_listings(self, text: str, sort: Any = None, offset: int = 100, page: int = 0) -> List[ListingData]:
         """
 
         Search the off chain storage for an asset with the givien 'text'
@@ -473,7 +483,7 @@ class RemoteAgent(AgentBase):
         """
         return False
 
-    def invoke(self, asset: Any, inputs: Any = None, is_async: bool = False) -> Any:
+    def invoke(self, asset: TAsset, inputs: Any = None, is_async: bool = False) -> Any:
         """
 
         Call an operation asset with inputs to execute a remote call.
@@ -529,7 +539,7 @@ class RemoteAgent(AgentBase):
         return self._adapter.get_metadata_list(url, authorization_token)
 
     @property
-    def ddo(self) -> Any:
+    def ddo(self) -> DDO:
         """
 
         Return the registered DDO for this agent
@@ -555,7 +565,7 @@ class RemoteAgent(AgentBase):
         return data['path'] and data['id_hex']
 
     @staticmethod
-    def generate_ddo(base_url_or_services: Any, service_list: Any = None, is_add_proof: bool = False) -> Any:
+    def generate_ddo(base_url_or_services: Any, service_list: Any = None, is_add_proof: bool = False) -> DDO:
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
         endpoints for the remote agent
@@ -645,7 +655,7 @@ class RemoteAgent(AgentBase):
         return endpoint
 
     @staticmethod
-    def resolve_url(url: str, authentication: Any = None) -> Any:
+    def resolve_url(url: str, authentication: Authentication = None) -> DDO:
         """
 
         Resolves the remote agent ddo using the url of the agent

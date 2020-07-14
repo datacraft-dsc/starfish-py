@@ -4,29 +4,48 @@
 
 """
 import logging
-from typing import Any
-
-from starfish.agent.remote_agent import (
-    RemoteAgent,
-    TRemoteAgent
+from typing import (
+    Dict,
+    TypedDict
 )
+
+from starfish.agent.remote_agent import RemoteAgent
 from starfish.ddo import create_ddo_object
 from starfish.ddo.ddo import DDO
+from starfish.network import Network
+from starfish.types import (
+    Authentication,
+    TRemoteAgent
+)
 from starfish.utils.did import (
     did_to_id,
     id_to_did
 )
 
+
+class AgentItem(TypedDict):
+    url: str
+    did: str
+    authentication: Authentication
+
+
 logger = logging.getLogger(__name__)
 
 
 class AgentManager:
-    def __init__(self, network: Any) -> None:
+    def __init__(self, network: Network) -> None:
         self._network = network
         self._items = {}
         self._default_name = None
 
-    def add(self, name: [str, dict], url: str = None, did: str = None, authentication: Any = None, is_default: bool = None) -> None:
+    def add(
+        self,
+        name: [str, dict],
+        url: str = None,
+        did: str = None,
+        authentication: Authentication = None,
+        is_default: bool = None
+    ) -> None:
         """
 
         Add a remote agent details to the list of remote agents managed by this class.
@@ -134,7 +153,7 @@ class AgentManager:
             agent = RemoteAgent(ddo_text, authentication=authentication)
         return agent
 
-    def get_item_from_did(self, find_did: str) -> Any:
+    def get_item_from_did(self, find_did: str) -> AgentItem:
         for name, item in self._items.items():
             did = None
             if 'ddo' in item:
@@ -155,5 +174,5 @@ class AgentManager:
         self._default_name = value
 
     @property
-    def items(self) -> Any:
+    def items(self) -> Dict[str, AgentItem]:
         return self._items

@@ -3,14 +3,23 @@
     Contactt Base
 
 """
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
+
+from starfish.account import Account
+from starfish.types import (
+    AccountAddress,
+    TContractBase
+)
 
 nonce_list = {}
 
 GAS_MINIMUM = 200000
 
 
-class ContractBase:
+class ContractBase(Generic[TContractBase]):
 
     def __init__(self, name: str) -> None:
         self._name = name
@@ -30,7 +39,7 @@ class ContractBase:
                 abi=abi
             )
 
-    def call(self, function_name: str, parameters: Any, account: Any = None, transact: Any = None) -> Any:
+    def call(self, function_name: str, parameters: Any, account: Account = None, transact: Any = None) -> Any:
         if self._contract is None:
             raise ValueError('contract not loaded')
 
@@ -65,7 +74,7 @@ class ContractBase:
             )
         return None
 
-    def _call_as_transaction(self, contract_function_call: Any, account: Any, transact: Any = None) -> str:
+    def _call_as_transaction(self, contract_function_call: Any, account: Account, transact: Any = None) -> str:
         if transact is None:
             gas_transact = {
                 'from': account.address
@@ -114,10 +123,10 @@ class ContractBase:
         gas_price = max(GAS_MINIMUM, gas_price)
         return gas_price
 
-    def unlockAccount(self, account: Any) -> None:
+    def unlockAccount(self, account: Account) -> None:
         self._web3.personal.unlockAccount(account.address, account.password)
 
-    def lockAccount(self, account: Any) -> None:
+    def lockAccount(self, account: Account) -> None:
         self._web3.personal.lockAccount(account.address, account.password)
 
     @property
@@ -138,7 +147,7 @@ class ContractBase:
     def to_ether(self, amount_wei: int) -> float:
         return self._web3.fromWei(amount_wei, 'ether')
 
-    def get_account_address(self, account_address: str) -> str:
+    def get_account_address(self, account_address: AccountAddress) -> str:
         address = account_address
         if hasattr(account_address, 'address'):
             address = account_address.address

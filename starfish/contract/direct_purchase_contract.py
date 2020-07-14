@@ -3,7 +3,9 @@
     Direct Purchase Contract
 
 """
-from typing import Any
+
+from starfish.account import Account
+from starfish.types import AccountAddress
 
 from .contract_base import ContractBase
 
@@ -19,8 +21,8 @@ class DirectPurchaseContract(ContractBase):
 
     def send_token_and_log(
         self,
-        account: Any,
-        to_account_address: Any,
+        account: Account,
+        to_account_address: AccountAddress,
         amount: float,
         reference_1: str = None,
         reference_2: str = None
@@ -60,8 +62,8 @@ class DirectPurchaseContract(ContractBase):
 
     def check_is_paid(
         self,
-        from_account_address: Any,
-        to_account_address: Any,
+        from_account_address: AccountAddress,
+        to_account_address: AccountAddress,
         amount: float,
         reference_1: str = None,
         reference_2: str = None

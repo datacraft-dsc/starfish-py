@@ -13,6 +13,11 @@ from starfish.agent.agent_base import AgentBase
 from starfish.ddo.ddo import DDO
 from starfish.listing import Listing
 from starfish.purchase import Purchase
+from starfish.types import (
+    ListingData,
+    TAsset,
+    TListing
+)
 from starfish.utils.crypto_hash import hash_sha3_256
 from starfish.utils.did import (
     decode_to_asset_id,
@@ -30,7 +35,7 @@ class MemoryAgent(AgentBase):
 
     """
 
-    def __init__(self, ddo: Any = None) -> None:
+    def __init__(self, ddo: DDO = None) -> None:
 
         if ddo is None:
             did = did_generate_random()
@@ -44,7 +49,7 @@ class MemoryAgent(AgentBase):
             'purchase': {}
         }
 
-    def register_asset(self, asset: Any) -> Any:
+    def register_asset(self, asset: TAsset) -> TAsset:
         """
 
         Register a memory asset.
@@ -63,7 +68,7 @@ class MemoryAgent(AgentBase):
         asset.set_did(did)
         return asset
 
-    def create_listing(self, listing_data: Any, asset_did: str) -> Any:
+    def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:
         """
 
         Create a listing on the market place for this asset
@@ -83,7 +88,7 @@ class MemoryAgent(AgentBase):
             self._memory['listing'][listing_id] = listing
         return listing
 
-    def update_listing(self, listing: Any) -> None:
+    def update_listing(self, listing: TListing) -> None:
         """
 
         Update the listing to the agent server.
@@ -94,7 +99,7 @@ class MemoryAgent(AgentBase):
         """
         self._memory['listing'][listing.listing_id] = listing
 
-    def validate_asset(self, asset: Any) -> bool:
+    def validate_asset(self, asset: TAsset) -> bool:
         """
 
         Validate an asset
@@ -104,7 +109,7 @@ class MemoryAgent(AgentBase):
         """
         return asset is not None
 
-    def get_listing(self, listing_id: str) -> Any:
+    def get_listing(self, listing_id: str) -> TListing:
         """
 
         Return an listing from the given listing_id.

@@ -5,9 +5,8 @@
 """
 
 import logging
-from typing import Any
 
-
+from starfish.account import Account
 from starfish.contract.contract_base import ContractBase
 from starfish.utils.did import did_to_id
 
@@ -28,7 +27,7 @@ class DIDRegistryContract(ContractBase):
     def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def register(self, account: Any, did: str, ddo_text: str) -> str:
+    def register(self, account: Account, did: str, ddo_text: str) -> str:
         tx_hash = None
         did_id = did_to_id(did)
         if did_id:

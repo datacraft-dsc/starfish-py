@@ -10,6 +10,13 @@ from abc import (
 
 from typing import Any
 
+from starfish.ddo.ddo import DDO
+from starfish.types import (
+    ListingData,
+    TAsset,
+    TListing
+)
+
 
 class AgentBase(ABC):
     """
@@ -18,7 +25,7 @@ class AgentBase(ABC):
 
     :param ddo: DDO of the Agent
     """
-    def __init__(self, ddo: Any = None) -> None:
+    def __init__(self, ddo: DDO = None) -> None:
         """init the the Agent Base class"""
 
         self._ddo = ddo
@@ -26,7 +33,7 @@ class AgentBase(ABC):
         super().__init__()
 
     @abstractmethod
-    def register_asset(self, asset: Any) -> Any:
+    def register_asset(self, asset: TAsset) -> TAsset:
         """
 
         Register an asset with an Agent
@@ -41,7 +48,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def create_listing(self, listing_data: Any, asset_did: str) -> Any:
+    def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:
         """
 
         Create a listing on the market place for this asset
@@ -55,7 +62,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def update_listing(self, listing: Any) -> Any:
+    def update_listing(self, listing: TListing) -> None:
         """
 
         Update the listing to the agent server.
@@ -67,7 +74,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def validate_asset(self, asset: Any) -> bool:
+    def validate_asset(self, asset: TAsset) -> bool:
         """
 
         Validate an asset
@@ -78,7 +85,7 @@ class AgentBase(ABC):
         pass
 
     @abstractmethod
-    def get_listing(self, listing_id: str) -> Any:
+    def get_listing(self, listing_id: str) -> TListing:
         """
 
         Return an listing from the given listing_id.
@@ -196,7 +203,7 @@ class AgentBase(ABC):
             return self._ddo.did
 
     @property
-    def ddo(self) -> Any:
+    def ddo(self) -> DDO:
         """
 
         Return the did for this remote agent.

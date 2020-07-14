@@ -8,12 +8,17 @@ from base64 import (
     b64decode,
     b64encode
 )
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
 
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from web3 import Web3
+
+from starfish.types import TDDO
 
 from .authentication import Authentication
 from .constants import (
@@ -32,7 +37,7 @@ from .public_key_rsa import (
 from .service import Service
 
 
-class DDO:
+class DDO(Generic[TDDO]):
     """
     DDO class to create, import, export, validate DDO objects.
 

@@ -15,11 +15,18 @@ import json
 import logging
 import os
 import time
-from typing import Any
+from typing import (
+    Any,
+    Generic
+)
 from urllib.parse import urljoin
 import requests
 
 from starfish.contract.contract_base import ContractBase
+from starfish.types import (
+    TContractBase,
+    TContractManager
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +35,7 @@ ARTIFACT_DATA_FILENAME = 'artifacts.json.gz'
 LOCAL_ARTIFACT_PACKAGE_SERVER = 'http://localhost:8550'
 
 
-class ContractManager:
+class ContractManager(Generic[TContractManager]):
     """
     Setup the contract manager to load and get contracts
 
@@ -48,7 +55,7 @@ class ContractManager:
         if self._artifact_items is None:
             self._artifact_items = []
 
-    def load(self, name: str, artifact_filename: str = None, has_artifact: bool = None, package_name: str = None) -> Any:
+    def load(self, name: str, artifact_filename: str = None, has_artifact: bool = None, package_name: str = None) -> TContractBase:
         """
 
         Load a contract using it's name, and network name

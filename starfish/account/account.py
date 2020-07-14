@@ -7,16 +7,29 @@
 import json
 from typing import (
     Any,
-    TypeVar
+    Generic,
+    Tuple,
+    TypedDict,
+    Union
 )
 
 from eth_account import Account as EthAccount
 from web3 import Web3
 
-TAccount = TypeVar('Account')
+from starfish.types import TAccount
 
 
-class Account():
+class InitParams(TypedDict):
+    address: str
+    password: str
+    key_value: Any
+    key_file: str
+
+
+AddressOrDict = Union[InitParams, str, Tuple[str, str, str]]
+
+
+class Account(Generic[TAccount]):
     """
 
     Account class, adds functionality for an account to be used on the starfish named network.
@@ -40,7 +53,7 @@ class Account():
 
     """
 
-    def __init__(self, address: str, password: str = None, key_value: Any = None, key_file: str = None) -> None:
+    def __init__(self, address: AddressOrDict, password: str = None, key_value: Any = None, key_file: str = None) -> None:
         """init a standard account object"""
         self._address = None
         self._password = None

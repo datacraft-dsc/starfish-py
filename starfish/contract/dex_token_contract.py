@@ -3,9 +3,11 @@
     Ocean Token Contract
 
 """
-from typing import Any
+from starfish.account import Account
+from starfish.types import AccountAddress
 
 from .contract_base import ContractBase
+
 
 CONTRACT_NAME = 'DexToken'
 
@@ -16,17 +18,17 @@ class DexTokenContract(ContractBase):
     def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def get_balance(self, account_address: Any) -> float:
+    def get_balance(self, account_address: AccountAddress) -> float:
         address = self.get_account_address(account_address)
         amount_wei = self.call('balanceOf', address)
         return self.to_ether(amount_wei)
 
-    def approve_transfer(self, account: Any, to_account_address: Any, amount: float) -> bool:
+    def approve_transfer(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
         return self.call('approve', (to_address, amount_wei), account)
 
-    def transfer(self, account: Any, to_account_address: Any, amount: float) -> bool:
+    def transfer(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
         return self.call('transfer', (to_address, amount_wei), account)
