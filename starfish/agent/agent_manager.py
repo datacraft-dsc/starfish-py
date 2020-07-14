@@ -4,16 +4,14 @@
 
 """
 import logging
-from typing import (
-    Dict,
-    TypedDict
-)
+from typing import Dict
 
 from starfish.agent.remote_agent import RemoteAgent
 from starfish.ddo import create_ddo_object
 from starfish.ddo.ddo import DDO
 from starfish.network import Network
 from starfish.types import (
+    AgentItem,
     Authentication,
     TRemoteAgent
 )
@@ -21,13 +19,6 @@ from starfish.utils.did import (
     did_to_id,
     id_to_did
 )
-
-
-class AgentItem(TypedDict):
-    url: str
-    did: str
-    authentication: Authentication
-
 
 logger = logging.getLogger(__name__)
 

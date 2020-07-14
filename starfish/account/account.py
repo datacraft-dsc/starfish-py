@@ -7,26 +7,16 @@
 import json
 from typing import (
     Any,
-    Generic,
-    Tuple,
-    TypedDict,
-    Union
+    Generic
 )
 
 from eth_account import Account as EthAccount
 from web3 import Web3
 
-from starfish.types import TAccount
-
-
-class InitParams(TypedDict):
-    address: str
-    password: str
-    key_value: Any
-    key_file: str
-
-
-AddressOrDict = Union[InitParams, str, Tuple[str, str, str]]
+from starfish.types import (
+    AccountAddressOrDict,
+    TAccount
+)
 
 
 class Account(Generic[TAccount]):
@@ -53,7 +43,7 @@ class Account(Generic[TAccount]):
 
     """
 
-    def __init__(self, address: AddressOrDict, password: str = None, key_value: Any = None, key_file: str = None) -> None:
+    def __init__(self, address: AccountAddressOrDict, password: str = None, key_value: Any = None, key_file: str = None) -> None:
         """init a standard account object"""
         self._address = None
         self._password = None

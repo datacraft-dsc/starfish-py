@@ -1,0 +1,76 @@
+"""
+
+    Types used for typing
+
+
+"""
+import sys
+
+from datetime import datetime
+from typing import (
+    Any,
+    List,
+    Tuple,
+    TypeVar,
+    Union
+)
+
+# TypeDict is only available in python3.8
+if sys.version_info >= (3, 8):
+    from typing import TypedDict
+else:
+    from typing_extensions import TypedDict
+
+TAccount = TypeVar('Account')
+TAsset = TypeVar('Asset')
+TContractBase = TypeVar('ContractBase')
+TContractManager = TypeVar('ContractManager')
+TDDO = TypeVar('DDO')
+TJob = TypeVar('Job')
+TListing = TypeVar('Listing')
+TNetwork = TypeVar('Network')
+TRemoteAgent = TypeVar('RemoteAgent')
+
+
+class Authentication(TypedDict):
+    username: str
+    password: str
+    token: str
+
+
+class AccountInitParams(TypedDict):
+    address: str
+    password: str
+    key_value: Any
+    key_file: str
+
+
+class AgentItem(TypedDict):
+    url: str
+    did: str
+    authentication: Authentication
+
+
+class ProvenanceEvent(TypedDict):
+    asset_id: str
+    account: str
+    timestamp: datetime
+
+
+class ListingData(TypedDict):
+    trust_level: int
+    userid: str
+    assetid: str
+    agreement: str
+    ctime: str
+    status: str
+    id: str
+    info: Any
+    utime: str
+
+
+AccountAddressOrDict = Union[AccountInitParams, str, Tuple[str, str, str]]
+
+AccountAddress = Union[TAccount, str]
+
+ProvenanceEventList = List[ProvenanceEvent]
