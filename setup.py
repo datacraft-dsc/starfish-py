@@ -58,7 +58,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],
-    description="Ocean/squid-py wrapper.",
+    description="Developer Toolkit for Decentralised Data Ecosystems",
     extras_require={
         'test': test_requirements,
         'docs': docs_requirements,
