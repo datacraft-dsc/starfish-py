@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.11.1 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.11.2 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.1
+                0.11.2
               </div>
             
           
@@ -290,7 +290,7 @@ else return None</p>
 
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.generate_ddo">
-<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_url_or_services</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">service_list</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">is_add_proof</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; starfish.ddo.ddo.DDO<a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generate_ddo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_url_or_services</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">service_list</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">all_services</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">is_add_proof</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; starfish.ddo.ddo.DDO<a class="headerlink" href="#starfish.agent.RemoteAgent.generate_ddo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a DDO for the remote agent url. This DDO will contain the supported
 endpoints for the remote agent</p>
 <dl class="field-list simple">
@@ -305,8 +305,12 @@ see starfish.agent.services SERVICES</p></li>
 <p>:param <code class="xref py py-class docutils literal notranslate"><span class="pre">agent.services.Services</span></code> base_url_or_services: An agent Services object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>service_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Optional list of services to regsiter. This is only if the
-base_url_or_services is a string containing the base_url.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Optional list of services to regsiter. This is only if the
+base_url_or_services is a string containing the base_url.</p></li>
+<li><p><strong>all_services</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Optional False, If set to True register all available services.</p></li>
+<li><p><strong>is_add_proof</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Optional False, If True add a proof signature to the ddo.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>created DDO object assigned to the url of the remote agent service</p>
@@ -501,8 +505,18 @@ to see if it is assigned to a valid Asset.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.load">
-<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">starfish.network.Network</span></em>, <em class="sig-param"><span class="n">asset_agent_did_url</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">authentication</span><span class="p">:</span> <span class="n">starfish.types.Authentication</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; RemoteAgent<a class="headerlink" href="#starfish.agent.RemoteAgent.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did_or_url</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">starfish.network.Network</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">password</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">authentication</span><span class="p">:</span> <span class="n">starfish.types.Authentication</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; RemoteAgent<a class="headerlink" href="#starfish.agent.RemoteAgent.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a remote agent using a did/url. The Agent must have a DDO service available.
+If a DID is passed you also need to provide a network object to resolve the did
+For the RemoteAgent object to resolve the type of services available.</p>
+<p>:param str agent_did_or_url DID or URL of the agent to load.
+:param Authentiaciton authentication Optional Authenentication object to use to access the new agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A RemoteAgent Object or None if the agent cannot be accessed or cannot be found at the url.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.purchase_asset">
