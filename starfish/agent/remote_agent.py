@@ -100,7 +100,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         agent_did_or_url: str,
         network: Network = None,
         username: str = None,
-        password:str = None,
+        password: str = None,
         authentication: Authentication = None
     ) -> TRemoteAgent:
         """
