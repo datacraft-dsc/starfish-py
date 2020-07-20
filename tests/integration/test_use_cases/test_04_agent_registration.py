@@ -30,7 +30,7 @@ def test_04_agent_register_and_resolve(network, config, accounts):
     assert(found_ddo.as_text() == ddo.as_text())
 
 
-    resolved_agent = RemoteAgent.load(network, ddo.did, authentication=authentication)
+    resolved_agent = RemoteAgent.load(ddo.did, network, authentication=authentication)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text() == ddo.as_text())

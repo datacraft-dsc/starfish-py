@@ -96,8 +96,37 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         self._adapter = RemoteAgentAdapter()
 
     @staticmethod
-    def load(network: Network, asset_agent_did_url: str, authentication: Authentication = None) -> TRemoteAgent:
-        ddo_text = network.resolve_agent(asset_agent_did_url, authentication=authentication)
+    def load(
+        agent_did_or_url: str,
+        network: Network = None,
+        username: str = None,
+        password:str = None,
+        authentication: Authentication = None
+    ) -> TRemoteAgent:
+        """
+
+        Load a remote agent using a did/url. The Agent must have a DDO service available.
+        If a DID is passed you also need to provide a network object to resolve the did
+        For the RemoteAgent object to resolve the type of services available.
+
+        :param str agent_did_or_url DID or URL of the agent to load.
+        :param Authentiaciton authentication Optional Authenentication object to use to access the new agent.
+
+        :return: A RemoteAgent Object or None if the agent cannot be accessed or cannot be found at the url.
+
+        """
+
+        if not authentication:
+            if username or password:
+                authentication = {
+                    'username': username,
+                    'password': password
+                }
+        ddo_text = None
+        if network:
+            ddo_text = network.resolve_agent(agent_did_or_url, authentication=authentication)
+        else:
+            ddo_text = RemoteAgent.resolve_url(agent_did_or_url, authentication=authentication)
 
         if ddo_text:
             return RemoteAgent(ddo_text, authentication)

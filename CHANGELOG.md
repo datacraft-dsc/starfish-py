@@ -1,7 +1,7 @@
 ## Change Log
 
 ### Release v0.11.2
-+   Allow to create/regiser remoete agents without a network
++   Allow to create/regiser remoete agents without a network connection
 +   Fix get text bug in RemoteAgent Middleware
 
 ### Release v0.11.1
