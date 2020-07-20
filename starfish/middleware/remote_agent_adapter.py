@@ -301,7 +301,7 @@ class RemoteAgentAdapter():
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
         response = RemoteAgentAdapter._http_client.get(url, headers=headers)
         if response.status_code == 200:
-            ddo_text = response.text
+            ddo_text = ResponseWrapper(response).data.decode('utf-8')
         return ddo_text
 
     @staticmethod
