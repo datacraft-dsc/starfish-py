@@ -19,14 +19,14 @@ OPERATION_METADATA = {
 
 
 def test_init(metadata):
-    asset = OperationAsset(OPERATION_METADATA)
+    asset = OperationAsset.create('new operation', OPERATION_METADATA)
     assert(asset)
     assert(isinstance(asset, OperationAsset))
 
 
 def test_operation_asset_mode(metadata, config):
 
-    asset = OperationAsset(OPERATION_METADATA)
+    asset = OperationAsset.create('new operation', OPERATION_METADATA)
     for mode_name in OPERATION_METADATA['operation']['modes']:
         assert(asset.is_mode(mode_name))
         assert(not asset.is_mode(f'{mode_name}-badmode'))

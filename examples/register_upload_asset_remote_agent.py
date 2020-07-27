@@ -11,12 +11,6 @@ def main():
     network = Network('http://localhost:8545')
     print(network.name)
 
-    # Now create a memory asset
-    asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
-
-    # Print the asset data
-    print('my asset:', asset.data)
-
     # Create a remote agent to do the work.
     agent_url = 'http://localhost:3030'
 
@@ -37,6 +31,12 @@ def main():
         'license': 'CC0: Public Domain',
         'price': '0'
     }
+
+    # Now create a memory asset
+    asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
+
+    # Print the asset data
+    print('my asset:', asset.data)
 
     asset = agent.register_asset(asset)
     print(asset.did)

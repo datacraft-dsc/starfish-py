@@ -18,7 +18,6 @@ def test_02_asset_register(remote_agent, resources):
     asset2 = DataAsset.create('TestAsset2', testData)
     asset = remote_agent.register_asset(asset2)
     assert(asset.data == asset2.data)
-    assert(asset.asset_id == asset2.asset_id)
 
 
 def test_02_asset_upload(remote_agent, resources):

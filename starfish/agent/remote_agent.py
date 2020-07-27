@@ -5,6 +5,7 @@ Surfer Agent class to provide basic functionality for Ocean Agents
 In starfish-java, this is named as `RemoteAgent`
 
 """
+
 import logging
 import time
 from typing import (
@@ -148,15 +149,15 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         network.register_did(register_account, ddo.did, ddo.as_text())
         return RemoteAgent(ddo.as_text(), authentication)
 
-    def register_asset(self, asset: TAsset) -> TAsset:
+    def register_asset(self, asset: TAsset, create_provenance: bool = False) -> TAsset:
         """
 
         Register an asset with Surfer
 
         :param asset: asset object to register
         :type asset: :class:`.DataAsset` object to register
-        :param account: This is not used for this agent, so for compatibility it is left in
-        :type account: :class:`.Account` object to use for registration.
+        :param bool create_provenance: If set to True, then set the provenance metadata for this asset
+
 
         :return: A :class:`.AssetBase` object that has been registered, if failure then return None.
         :type: :class:`.AssetBase` class
@@ -166,7 +167,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             asset = DataAsset.create('test data asset', 'Some test data')
             listing_data = { 'price': 3.457, 'description': 'my data is for sale' }
             agent = SurferAgent(ddo)
-            asset = agent.register_asset(asset, account)
+            asset = agent.register_asset(asset, True)
             print(f'Asset DID is {asset.did}')
 
         """
@@ -179,6 +180,10 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         register_data = self._adapter.register_asset(asset.metadata_text, url, authorization_token)
         if register_data:
             asset_id = register_data['asset_id']
+            if asset.asset_id != asset_id:
+                raise ValueError(
+                    f' calculated asset_id {asset.asset_id} is not the same as the agent generated asset_id {asset_id}'
+                )
             did = f'{self._ddo.did}/{asset_id}'
             asset.set_did(did)
         return asset
@@ -277,11 +282,10 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         data = self._adapter.download_asset(asset_id, url, authorization_token)
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(
-            store_asset.metadata,
-            store_asset.did,
-            data=data,
-            metadata_text=store_asset.metadata_text
+            store_asset.metadata_text,
+            data=data
         )
+        asset.set_did(store_asset.did)
         return asset
 
     def get_listing(self, listing_id: str) -> Listing:
@@ -662,7 +666,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
         did = f'{self._ddo.did}/{asset_id}'
         metadata_text = read_metadata['metadata_text']
-        asset = create_asset_from_metadata_text(metadata_text, did)
+        asset = create_asset_from_metadata_text(metadata_text)
+        asset.set_did(did)
         return asset
 
     def get_endpoint(self, name: str, uri: str = None) -> str:

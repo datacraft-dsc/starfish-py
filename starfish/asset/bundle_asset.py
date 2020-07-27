@@ -1,6 +1,7 @@
 """
     Bundle Asset
 """
+import json
 
 from typing import (
     Any,
@@ -26,20 +27,23 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
     :type did: None or str
 
     """
-    def __init__(self, metadata: Any, did: str = None, metadata_text: str = None) -> None:
+    def __init__(self, metadata_text: str) -> None:
 
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
-        AssetBase.__init__(self, metadata, did, metadata_text)
+        AssetBase.__init__(self, metadata_text)
         self._assets = {}
+        metadata = json.loads(metadata_text)
+        if 'contents' in metadata:
+            for name, item in metadata['contents'].items():
+                self._assets[name] = item['assetID']
 
     @staticmethod
-    def create(name: str, metadata: Any = None, did: str = None) -> TBundleAsset:
+    def create(name: str, asset_list: any = None, metadata: Any = None) -> TBundleAsset:
         """
 
         Create a new empty BundleAsset
 
         :param str name: Name of the asset to create
+        :param dict asset_list: List of assets and their names
         :param dict metadata: Optional metadata to add to the assets metadata
         :param str did: Option DID to assign to this asset
 
@@ -48,7 +52,14 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         """
 
         metadata = AssetBase.generateMetadata(name, 'bundle', metadata)
-        return BundleAsset(metadata, did)
+        if asset_list:
+            metadata['contents'] = {}
+            for name, asset_id in asset_list.items():
+                metadata['contents'][name] = {
+                    'assetId': asset_id
+                }
+
+        return BundleAsset(json.dumps(metadata))
 
     def add(self, name: str, asset: AssetBase) -> None:
         """
@@ -66,17 +77,18 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         if not isinstance(asset, AssetBase):
             raise TypeError('You need to pass an Asset object')
 
-        self._assets[name] = asset
+        self._assets[name] = asset.asset_id
+        self._rebuild_metadata(self._assets)
 
-    def get_asset(self, name: str) -> AssetBase:
+    def get_asset_id(self, name: str) -> str:
         """
 
         Return the asset in the bundle based on it's index number
 
         :param str name: name of the asset in this bundle
 
-        :return: asset is returned
-        :type: :class:`.Asset` object
+        :return: asset id is returned
+        :type: str
 
         :raises: ValueError if name is not found in the bundle
         """
@@ -89,23 +101,25 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
             name = self.asset_names[name]
         return self._assets[name]
 
-    def asset_remove(self, name: str) -> AssetBase:
+    def asset_remove(self, name: str) -> str:
         """
 
         Remove an asset from the bundle with a given name
 
         :param str name: name of the asset to remove
-        :return: the removed asset
-        :type: :class:`.Asset` object
+        :return: the removed asset id
+        :type: str
 
         """
         if self._assets is None or name not in self._assets:
             raise ValueError(f'Cannot find asset named {name}')
         asset = self._assets[name]
         del self._assets[name]
+        self._rebuild_metadata(self._assets)
+
         return asset
 
-    def __iter__(self) -> Iterator[AssetBase]:
+    def __iter__(self) -> Iterator[str]:
         """
 
         Iterator method. This allows you to do the following::
@@ -116,7 +130,7 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         self._iter_index = 0
         return self
 
-    def __next__(self) -> AssetBase:
+    def __next__(self) -> str:
         """
 
         Provide the __next__ method of a iterator.
@@ -137,9 +151,18 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
     def __getitem__(self, name: str) -> AssetBase:
         return self._assets[name]
 
-    def get_asset_at_index(self, index):
+    def get_asset_id_at_index(self, index) -> str:
         """ return the asset based on the index of available assets """
         return list(self._assets.values())[index]
+
+    def _rebuild_metadata(self, asset_list):
+        metadata = self.metadata
+        metadata['contents'] = {}
+        for name, asset_id in asset_list.items():
+            metadata['contents'][name] = {
+                'assetId': asset_id
+            }
+        self.set_metadata(metadata)
 
     @property
     def asset_count(self) -> int:
@@ -153,7 +176,7 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         return len(self._assets.keys())
 
     @property
-    def asset_items(self) -> Dict[str, AssetBase]:
+    def asset_items(self) -> Dict[str, str]:
         return self._assets.items()
 
     @property

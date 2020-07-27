@@ -85,8 +85,8 @@ def register_upload_bundle_file(remote_agent: AgentBase, filename: str, chunk_si
 
 def download_bundle_data(remote_agent: AgentBase, bundle_asset: Any, data_stream: Any) -> int:
     size = 0
-    for name, asset in bundle_asset:
-        store_asset = remote_agent.download_asset(asset.asset_id)
+    for name, asset_id in bundle_asset:
+        store_asset = remote_agent.download_asset(asset_id)
         data_stream.write(store_asset.data)
         size += len(store_asset.data)
     return size

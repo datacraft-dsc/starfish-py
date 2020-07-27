@@ -12,7 +12,7 @@ from typing import (
 )
 
 from starfish.types import TAssetBase
-from starfish.utils.did import decode_to_asset_id
+from starfish.utils.crypto_hash import hash_sha3_256
 
 
 class AssetBase(ABC, Generic[TAssetBase]):
@@ -23,27 +23,22 @@ class AssetBase(ABC, Generic[TAssetBase]):
     :type did: None or str
 
     """
-    def __init__(self, metadata: Any, did: str = None, metadata_text: str = None) -> None:
+    def __init__(self, metadata_text: str) -> None:
         """
         init an asset class
         """
+        if not isinstance(metadata_text, str):
+            raise TypeError('metadata must be in text form')
 
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
-
-        self._metadata = metadata
+        self._did = None
         self._metadata_text = metadata_text
 
-        if self._metadata_text is None:
-            self._metadata_text = json.dumps(metadata)
-
-        if 'name' not in metadata:
+        if 'name' not in self.metadata:
             raise ValueError('metadata must contain a metadata name')
 
-        if 'type' not in metadata:
+        if 'type' not in self.metadata:
             raise ValueError('metadata must contain a metadata type')
 
-        self._did = did
         super().__init__()
 
     def set_did(self, did: str) -> None:
@@ -66,8 +61,12 @@ class AssetBase(ABC, Generic[TAssetBase]):
         :type: boolean
 
         """
-        asset_type = AssetBase.get_asset_type(self._metadata)
+        asset_type = AssetBase.get_asset_type(self.metadata)
         return asset_type == type_name
+
+    def set_metadata(self, metadata: any):
+        self._metadata_text = json.dumps(metadata)
+        self._did = None
 
     @property
     def did(self) -> str:
@@ -80,10 +79,14 @@ class AssetBase(ABC, Generic[TAssetBase]):
     @property
     def metadata(self) -> Any:
         """
+
+        WARNING: The read only version for this metadata, use `set_metadata` to assign a new metadata.
+        Once you change metadata, the asset id is changed and the did is set to None.
+
         :return: The metadata for this asset
         :type: dict
         """
-        return self._metadata
+        return json.loads(self._metadata_text)
 
     @property
     def metadata_text(self) -> str:
@@ -95,17 +98,15 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
     @property
     def asset_id(self) -> str:
-        if self._did:
-            return decode_to_asset_id(self._did)
-        return None
+        return hash_sha3_256(self._metadata_text)
 
     @property
     def name(self) -> str:
-        return self._metadata['name']
+        return self.metadata['name']
 
     @property
     def type_name(self) -> str:
-        return self._metadata['type']
+        return self.metadata['type']
 
     @property
     def is_bundle(self) -> bool:
@@ -118,6 +119,21 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
         """
         return False
+
+    @property
+    def is_new(self) -> bool:
+        """
+
+        Return True if this asset has not been saved, and can be changed.
+
+        :return: True if no did has been set
+
+        """
+        return self._did is None
+
+    @property
+    def data(self) -> bytes:
+        return None
 
     @staticmethod
     def get_asset_type(metadata: Any) -> str:

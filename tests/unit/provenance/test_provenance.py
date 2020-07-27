@@ -156,6 +156,6 @@ def test_assign_provenance_to_operation_asset():
     )
     metadata = OPERATION_METADATA
     metadata[METADATA_PROVENANCE_NAME] = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
-    asset = OperationAsset(OPERATION_METADATA)
+    asset = OperationAsset.create('invoke', OPERATION_METADATA)
     assert(asset)
     assert(isinstance(asset, OperationAsset))
