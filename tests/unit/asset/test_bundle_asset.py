@@ -17,10 +17,7 @@ def test_init():
     bundle = BundleAsset.create('Bundle Asset')
     assert(bundle)
 
-    bundle = BundleAsset({
-        'name': 'Bundle Asset',
-        'type': 'bundle'
-    })
+    bundle = BundleAsset.create('test')
     assert(bundle)
 
 def test_bundle_asset_add_access_remove(config):
@@ -39,33 +36,33 @@ def test_bundle_asset_add_access_remove(config):
         assert(bundle.asset_count == index + 1)
 
     # using the iterator
-    for name, asset in bundle:
+    for name, asset_id in bundle:
         assert(name)
-        assert(asset)
-        assert(asset.data == asset_list[name].data)
+        assert(asset_id)
+        assert(asset_id == asset_list[name].asset_id)
 
     # using the get_asset and __getitem__
     for index in range(0, bundle.asset_count):
-        asset = bundle.get_asset(index)
+        asset_id = bundle.get_asset_id(index)
         name = list(asset_list.keys())[index]
-        assert(asset.data == asset_list[name].data)
-        asset = bundle.get_asset(name)
-        assert(asset)
-        assert(asset.data == asset_list[name].data)
+        assert(asset_id == asset_list[name].asset_id)
+        asset_id = bundle.get_asset_id(name)
+        assert(asset_id)
+        assert(asset_id == asset_list[name].asset_id)
         asset = bundle[name]
-        assert(asset)
-        assert(asset.data == asset_list[name].data)
+        assert(asset_id)
+        assert(asset_id == asset_list[name].asset_id)
 
         items = dict(bundle.asset_items)
-        asset = items[name]
-        assert(asset)
-        assert(asset.data == asset_list[name].data)
+        asset_id = items[name]
+        assert(asset_id)
+        assert(asset_id == asset_list[name].asset_id)
 
 
 
     # test remove
     for name in bundle.asset_names:
-        asset = bundle.asset_remove(name)
-        assert(asset)
+        asset_id = bundle.asset_remove(name)
+        assert(asset_id)
 
     assert(bundle.asset_count == 0)

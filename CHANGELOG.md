@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.12.0
++   Change BaseAsset class to be created from metadata text only
++   Add creation of provenance for asset registration
+
 ### Release v0.11.2
 +   Allow to create/regiser remoete agents without a network connection
 +   Fix get text bug in RemoteAgent Middleware

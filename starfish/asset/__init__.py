@@ -22,14 +22,14 @@ def create_asset_from_metadata_text(metadata_text, did=None):
     metadata = json.loads(metadata_text)
     asset_type = AssetBase.get_asset_type(metadata)
     if asset_type == 'bundle':
-        return BundleAsset(metadata, did, metadata_text=metadata_text)
+        return BundleAsset(metadata_text)
     elif asset_type == 'operation':
-        return OperationAsset(metadata, did, metadata_text=metadata_text)
+        return OperationAsset(metadata_text)
     elif asset_type == 'dataset':
-        return DataAsset(metadata, did, metadata_text=metadata_text)
+        return DataAsset(metadata_text)
     else:
         raise ValueError(f'Unknown asset type {asset_type}')
-    return AssetBase(metadata, did, metadata_text=metadata_text)
+    return AssetBase(metadata_text)
 
 
 def is_asset_hash_valid(asset_id, hash_hex):

@@ -1,6 +1,7 @@
 """
     Inovke Asset
 """
+import json
 from typing import (
     Any,
     Generic
@@ -23,13 +24,10 @@ class OperationAsset(AssetBase, Generic[TOperationAsset]):
     :type did: None or str
 
     """
-    def __init__(self, metadata: Any = None, did: str = None, metadata_text: str = None) -> None:
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
+    def __init__(self, metadata_text: str) -> None:
+        AssetBase.__init__(self, metadata_text)
 
-        AssetBase.__init__(self, metadata, did, metadata_text)
-
-    def create(name: str, metadata: Any = None, did: str = None) -> TOperationAsset:
+    def create(name: str, metadata: Any = None) -> TOperationAsset:
         """
 
         Create a new OperationAsset.
@@ -40,7 +38,7 @@ class OperationAsset(AssetBase, Generic[TOperationAsset]):
 
         """
         metadata = AssetBase.generateMetadata(name, 'operation', metadata)
-        return OperationAsset(metadata, did)
+        return OperationAsset(json.dumps(metadata))
 
     def is_mode(self, mode_type: str) -> bool:
         """
@@ -53,6 +51,6 @@ class OperationAsset(AssetBase, Generic[TOperationAsset]):
 
         """
         try:
-            return mode_type in self._metadata['operation']['modes']
+            return mode_type in self.metadata['operation']['modes']
         except ValueError:
             raise ValueError('Metadata does not contain operation->modes structure')

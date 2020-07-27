@@ -3,6 +3,7 @@
     Memory Asset
 
 """
+import json
 import os
 from mimetypes import MimeTypes
 from typing import (
@@ -27,9 +28,7 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
     :param str data: Optional data of the asset, this can be str or bytes
 
     """
-    def __init__(self, metadata: Any, did: str = None, data: Any = None,  metadata_text: str = None) -> None:
-        if not isinstance(metadata, dict):
-            raise ValueError('metadata must be a dict')
+    def __init__(self, metadata_text: str, data: Any = None) -> None:
 
         if data:
             if not (isinstance(data, str) or isinstance(data, bytes)):
@@ -37,14 +36,11 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
             if not isinstance(data, bytes):
                 data = data.encode('utf-8')
 
-            metadata['contentHash'] = hash_sha3_256(data)
-        metadata['type'] = 'dataset'
-
         self._data = data
-        AssetBase.__init__(self, metadata, did, metadata_text)
+        AssetBase.__init__(self, metadata_text)
 
     @staticmethod
-    def create(name: str, data: Any, metadata: Any = None, did: str = None) -> TDataAsset:
+    def create(name: str, data: Any, metadata: Any = None) -> TDataAsset:
         """
 
         Create a new DataAsset using string or bytes data.
@@ -52,13 +48,13 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
         :param str name: Name of the asset to create
         :param str, bytes data: Data to assign to the asset
         :param dict metadata: Optional metadata to add to the assets metadata
-        :param str did: Option DID to assign to this asset
 
         :return: a new DataAsset
         :type: :class:`.DataAsset`
 
         """
-        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+        if metadata is None:
+            metadata = {}
         if isinstance(data, str):
             metadata['contentType'] = 'text/plain; charset=utf-8'
         elif isinstance(data, bytes):
@@ -66,7 +62,10 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
         else:
             raise ValueError('data can only be str or bytes')
 
-        return DataAsset(metadata, did, data=data)
+        metadata['contentHash'] = hash_sha3_256(data)
+
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+        return DataAsset(json.dumps(metadata), data=data)
 
     @staticmethod
     def create_from_file(name: str, filename: str, metadata: Any = None, did: str = None, is_read: bool = True) -> TDataAsset:
@@ -86,8 +85,6 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
 
         """
 
-        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
-
         metadata['filename'] = str(filename)
         data = None
         if os.path.exists(filename):
@@ -101,8 +98,10 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
                 with open(filename, 'rb') as fp:
                     data = fp.read()
                 metadata['size'] = len(data)
+        metadata['contentHash'] = hash_sha3_256(data)
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
 
-        return DataAsset(metadata, did, data=data)
+        return DataAsset(json.dumps(metadata), data=data)
 
     def save_to_file(self, filename: str) -> None:
         """
