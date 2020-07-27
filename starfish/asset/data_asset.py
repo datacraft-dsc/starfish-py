@@ -12,7 +12,6 @@ from typing import (
 )
 
 from starfish.asset.asset_base import AssetBase
-from starfish.provenance import create_publish
 from starfish.types import TDataAsset
 from starfish.utils.crypto_hash import hash_sha3_256
 
@@ -103,11 +102,6 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
         metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
 
         return DataAsset(json.dumps(metadata), data=data)
-
-    def add_provenance(self, agent_did):
-        metadata = self.metadata
-        metadata['provenance'] = create_publish(agent_did)
-        self.set_metadata(metadata)
 
     def save_to_file(self, filename: str) -> None:
         """
