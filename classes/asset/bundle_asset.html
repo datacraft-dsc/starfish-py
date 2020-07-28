@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Bundle Asset class &mdash; starfish-py 0.11.2 documentation</title>
+  <title>Bundle Asset class &mdash; starfish-py 0.12.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.2
+                0.12.0
               </div>
             
           
@@ -229,29 +229,30 @@
 
 <dl class="py method">
 <dt id="starfish.asset.BundleAsset.asset_remove">
-<code class="sig-name descname">asset_remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; starfish.asset.asset_base.AssetBase<a class="headerlink" href="#starfish.asset.BundleAsset.asset_remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">asset_remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#starfish.asset.BundleAsset.asset_remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove an asset from the bundle with a given name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the asset to remove</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the removed asset</p>
+<dd class="field-even"><p>the removed asset id</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.BundleAsset.create">
-<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; BundleAsset<a class="headerlink" href="#starfish.asset.BundleAsset.create" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">asset_list</span><span class="p">:</span> <span class="n">any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; BundleAsset<a class="headerlink" href="#starfish.asset.BundleAsset.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new empty BundleAsset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the asset to create</p></li>
+<li><p><strong>asset_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – List of assets and their names</p></li>
 <li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Optional metadata to add to the assets metadata</p></li>
 <li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Option DID to assign to this asset</p></li>
 </ul>
@@ -266,18 +267,18 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="starfish.asset.BundleAsset.get_asset">
-<code class="sig-name descname">get_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; starfish.asset.asset_base.AssetBase<a class="headerlink" href="#starfish.asset.BundleAsset.get_asset" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.asset.BundleAsset.get_asset_id">
+<code class="sig-name descname">get_asset_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#starfish.asset.BundleAsset.get_asset_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the asset in the bundle based on it’s index number</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the asset in this bundle</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>asset is returned</p>
+<dd class="field-even"><p>asset id is returned</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p>ValueError if name is not found in the bundle</p>
@@ -286,8 +287,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="starfish.asset.BundleAsset.get_asset_at_index">
-<code class="sig-name descname">get_asset_at_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.BundleAsset.get_asset_at_index" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.asset.BundleAsset.get_asset_id_at_index">
+<code class="sig-name descname">get_asset_id_at_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#starfish.asset.BundleAsset.get_asset_id_at_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the asset based on the index of available assets</p>
 </dd></dl>
 

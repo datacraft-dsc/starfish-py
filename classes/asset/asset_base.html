@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Base class &mdash; starfish-py 0.11.2 documentation</title>
+  <title>Asset Base class &mdash; starfish-py 0.12.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.2
+                0.12.0
               </div>
             
           
@@ -189,8 +189,26 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt id="starfish.asset.AssetBase.add_provenance">
+<code class="sig-name descname">add_provenance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add provenance data to the asset metadata.
+Calling this method will make the asset ‘new’. So the asset_id will change,
+and the asset.did will be set to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="starfish.asset.AssetBase.asset_id">
 <em class="property">property </em><code class="sig-name descname">asset_id</code><a class="headerlink" href="#starfish.asset.AssetBase.asset_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="starfish.asset.AssetBase.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#starfish.asset.AssetBase.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -248,9 +266,22 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="starfish.asset.AssetBase.is_new">
+<em class="property">property </em><code class="sig-name descname">is_new</code><a class="headerlink" href="#starfish.asset.AssetBase.is_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this asset has not been saved, and can be changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if no did has been set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="starfish.asset.AssetBase.metadata">
 <em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#starfish.asset.AssetBase.metadata" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>WARNING: The read only version for this metadata, use <cite>set_metadata</cite> to assign a new metadata.
+Once you change metadata, the asset id is changed and the did is set to None.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The metadata for this asset</p>
 </dd>
@@ -286,6 +317,11 @@ So maybe a solution is that we have a ‘copy’ and
 set the did in the __init__ of the new class, to return a mutable copy of the
 same asset object.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="starfish.asset.AssetBase.set_metadata">
+<code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.type_name">

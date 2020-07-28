@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.11.2 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.12.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.2
+                0.12.0
               </div>
             
           
@@ -306,12 +306,6 @@ block chain, the second id is the internall asset id registered on the remote ag
     <span class="n">network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="c1"># Now create a memory asset</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;TestAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Print the asset data</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my asset:&#39;</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
     <span class="c1"># Create a remote agent to do the work.</span>
     <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:3030&#39;</span>
 
@@ -332,6 +326,14 @@ block chain, the second id is the internall asset id registered on the remote ag
         <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
         <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
     <span class="p">}</span>
+
+    <span class="c1"># Now create a memory asset</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;TestAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
+
+    <span class="n">asset</span><span class="o">.</span><span class="n">add_provenance</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+
+    <span class="c1"># Print the asset data</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my asset:&#39;</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="n">asset</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">register_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
