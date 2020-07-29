@@ -570,16 +570,20 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         return self._adapter.get_metadata_list(url, authorization_token)
 
     def search_asset(self, filter_values: Any) -> List[str]:
+        if not isinstance(filter_values, dict):
+            raise TypeError('Filter values must be a type dict')
+
         asset_list = self.get_metadata_list()
         result = []
-        for asset_id, metadata in asset_list.items():
-            is_found = True
-            for name, value in filter_values.items():
-                if metadata.get(name, None) != value:
-                    is_found = False
-                    break
-            if is_found:
-                result.append(asset_id)
+        if asset_list:
+            for asset_id, metadata in asset_list.items():
+                is_found = True
+                for name, value in filter_values.items():
+                    if metadata.get(name, None) != value:
+                        is_found = False
+                        break
+                if is_found:
+                    result.append(asset_id)
         return result
 
     @property
