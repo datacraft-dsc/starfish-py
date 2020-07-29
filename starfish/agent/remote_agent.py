@@ -18,6 +18,7 @@ from urllib.parse import urljoin
 
 
 from eth_utils import remove_0x_prefix
+from mongoquery import Query
 
 from starfish.account import Account
 from starfish.agent.agent_base import AgentBase
@@ -570,19 +571,20 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         return self._adapter.get_metadata_list(url, authorization_token)
 
     def search_asset(self, filter_values: Any) -> List[str]:
+        """
+            :param dict filter_values: can be a dict or a mongo type query
+            :returns: a list of asset_ids found
+        """
+
         if not isinstance(filter_values, dict):
             raise TypeError('Filter values must be a type dict')
 
         asset_list = self.get_metadata_list()
+        filter_query = Query(filter_values)
         result = []
         if asset_list:
             for asset_id, metadata in asset_list.items():
-                is_found = True
-                for name, value in filter_values.items():
-                    if metadata.get(name, None) != value:
-                        is_found = False
-                        break
-                if is_found:
+                if filter_query.match(metadata):
                     result.append(asset_id)
         return result
 

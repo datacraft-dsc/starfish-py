@@ -29,6 +29,7 @@ test_requirements = [
     'pytest',
     'isort',
     'mypy',
+    'mongoquery',
     'pyyaml',
 ]
 
