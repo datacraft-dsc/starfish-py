@@ -569,6 +569,19 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         authorization_token = self.get_authorization_token()
         return self._adapter.get_metadata_list(url, authorization_token)
 
+    def search_asset(self, filter_values: Any) -> List[str]:
+        asset_list = self.get_metadata_list()
+        result = []
+        for asset_id, metadata in asset_list.items():
+            is_found = True
+            for name, value in filter_values.items():
+                if metadata.get(name, None) != value:
+                    is_found = False
+                    break
+            if is_found:
+                result.append(asset_id)
+        return result
+
     @property
     def ddo(self) -> DDO:
         """

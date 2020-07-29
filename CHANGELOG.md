@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.1
++   Add a search for metadata assets information using the a dict filter
+
 ### Release v0.12.0
 +   Change BaseAsset class to be created from metadata text only
 +   Add creation of provenance for asset registration
