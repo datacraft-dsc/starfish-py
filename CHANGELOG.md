@@ -2,6 +2,7 @@
 
 ### Release v0.12.1
 +   Add a search for metadata assets information using the a dict filter
++   Only assign metadata values for data asset, when not set by the creator
 
 ### Release v0.12.0
 +   Change BaseAsset class to be created from metadata text only
