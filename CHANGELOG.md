@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.2
++   Fix mongoquery to be installed as dependancy
+
 ### Release v0.12.1
 +   Add a search for metadata assets information using the a dict filter
 +   Only assign metadata values for data asset, when not set by the creator
