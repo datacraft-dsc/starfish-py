@@ -19,7 +19,8 @@ with open('CHANGELOG.md') as changelog_file:
 
 install_requirements = [
     'web3',
-    'typing_extensions'
+    'typing_extensions',
+    'mongoquery',
 ]
 
 setup_requirements = ['pytest-runner', ]
@@ -29,7 +30,6 @@ test_requirements = [
     'pytest',
     'isort',
     'mypy',
-    'mongoquery',
     'pyyaml',
 ]
 
