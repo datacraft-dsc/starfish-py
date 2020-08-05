@@ -53,18 +53,21 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
         :type: :class:`.DataAsset`
 
         """
-        if metadata is None:
-            metadata = {}
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+
+        content_type = 'application/octet-stream'
         if isinstance(data, str):
-            metadata['contentType'] = 'text/plain; charset=utf-8'
+            content_type = 'text/plain; charset=utf-8'
         elif isinstance(data, bytes):
-            metadata['contentType'] = 'application/octet-stream'
+            content_type = 'application/octet-stream'
         else:
             raise ValueError('data can only be str or bytes')
 
-        metadata['contentHash'] = hash_sha3_256(data)
+        if 'contentType' not in metadata:
+            metadata['contentType'] = content_type
+        if 'contentHash' not in metadata:
+            metadata['contentHash'] = hash_sha3_256(data)
 
-        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
         return DataAsset(json.dumps(metadata), data=data)
 
     @staticmethod
@@ -85,21 +88,25 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
 
         """
 
-        metadata['filename'] = str(filename)
+        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+        if 'filename' not in metadata:
+            metadata['filename'] = os.path.basename(str(filename))
         data = None
         if os.path.exists(filename):
-            metadata['contentType'] = 'application/octet-stream'
+            content_type = 'application/octet-stream'
             mime = MimeTypes()
             mime_type = mime.guess_type(f'file://{filename}')
             if mime_type:
-                metadata['contentType'] = mime_type[0]
+                content_type = mime_type[0]
+            if 'contentType' not in metadata:
+                metadata['contentType'] = content_type
             if is_read:
-                metadata['contentLength'] = os.path.getsize(filename)
                 with open(filename, 'rb') as fp:
                     data = fp.read()
-                metadata['size'] = len(data)
-        metadata['contentHash'] = hash_sha3_256(data)
-        metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
+                if 'contentLength' not in metadata:
+                    metadata['contentLength'] = os.path.getsize(filename)
+            if 'contentHash' not in metadata:
+                metadata['contentHash'] = hash_sha3_256(data)
 
         return DataAsset(json.dumps(metadata), data=data)
 
