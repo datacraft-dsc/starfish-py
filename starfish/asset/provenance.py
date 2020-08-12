@@ -8,13 +8,13 @@ from typing import Any
 
 PROVENANCE_DEP = 'dep'
 PROVENANCE_ACTIVITY_TYPE_PUBLISH = 'publish'
-PROVENANCE_ACTIVITY_TYPE_PUBLISH = 'import'
-PROVENANCE_ACTIVITY_TYPE_OPERATION = 'operation'
+PROVENANCE_ACTIVITY_TYPE_IMPORT = 'import'
+PROVENANCE_ACTIVITY_TYPE_INVOKE = 'invoke'
 
-PROVENANCE_AGENT_TYPE_ACCOUNT = 'account'
+PROVENANCE_AGENT_TYPE_ACCOUNT = 'service-provider'
 
 
-def create_publish(agent_id: str, activity_id: str = None) -> Any:
+def create_publish(agent_did: str, activity_id: str = None) -> Any:
     if activity_id is None:
         activity_id = secrets.token_hex(32)
 
@@ -22,27 +22,45 @@ def create_publish(agent_id: str, activity_id: str = None) -> Any:
         'prefix': create_prefix(),
         'activity': create_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_PUBLISH),
         'entity': add_asset_entity(),
-        'agent': create_agent(agent_id, PROVENANCE_AGENT_TYPE_ACCOUNT),
-        'wasAssociatedWith': create_associated_with(agent_id, activity_id),
+        'agent': create_agent(agent_did, PROVENANCE_AGENT_TYPE_ACCOUNT),
+        'wasAssociatedWith': create_associated_with(agent_did, activity_id),
         'wasGeneratedBy': create_generated_by(activity_id)
     }
 
 
-def create_invoke(activity_id: str, agent_id: str, asset_list: Any, inputs_text: str, outputs_text: str) -> Any:
-    entities = add_asset_entity()
-    for asset_did in asset_list:
-        entities = add_asset_entity(asset_did, entities)
+def create_import(agent_did: str, activity_id: str = None) -> Any:
+    if activity_id is None:
+        activity_id = secrets.token_hex(32)
 
-    dependencies = create_dependencies(inputs_text, outputs_text)
     return {
         'prefix': create_prefix(),
-        'activity': create_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_OPERATION, dependencies),
-        'entity': entities,
-        'agent': create_agent(agent_id, PROVENANCE_AGENT_TYPE_ACCOUNT),
-        'wasAssociatedWith': create_associated_with(agent_id, activity_id),
-        'wasDerivedFrom': create_derived_from(asset_list),
+        'activity': create_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_IMPORT),
+        'entity': add_asset_entity(),
+        'agent': create_agent(agent_did, PROVENANCE_AGENT_TYPE_ACCOUNT),
+        'wasAssociatedWith': create_associated_with(agent_did, activity_id),
         'wasGeneratedBy': create_generated_by(activity_id)
     }
+
+
+def create_invoke(agent_did: str, activity_id: str, asset_list: Any, inputs_text: str, outputs_text: str) -> Any:
+    entities = add_asset_entity()
+    if asset_list:
+        for asset_did in asset_list:
+            entities = add_asset_entity(asset_did, entities)
+
+    dependencies = create_dependencies(inputs_text, outputs_text)
+
+    result = {
+        'prefix': create_prefix(),
+        'activity': create_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_INVOKE, dependencies),
+        'entity': entities,
+        'agent': create_agent(agent_did, PROVENANCE_AGENT_TYPE_ACCOUNT),
+        'wasAssociatedWith': create_associated_with(agent_did, activity_id),
+        'wasGeneratedBy': create_generated_by(activity_id)
+    }
+    if asset_list:
+        result['wasDerivedFrom'] = create_derived_from(asset_list)
+    return result
 
 
 def create_prefix() -> Any:
@@ -83,9 +101,9 @@ def create_activity(activity_id: str, activity_type: str, entries: Any = None) -
     }
 
 
-def create_agent(agent_id: str, agent_type: str) -> Any:
+def create_agent(agent_did: str, agent_type: str) -> Any:
     return {
-        f'{PROVENANCE_DEP}:{agent_id}': {
+        f'{agent_did}': {
             'prov:type': {
                 '$': f'{PROVENANCE_DEP}:{agent_type}',
                 'type': 'xsd:string'
@@ -94,11 +112,11 @@ def create_agent(agent_id: str, agent_type: str) -> Any:
     }
 
 
-def create_associated_with(agent_id: str, activity_id: str) -> Any:
+def create_associated_with(agent_did: str, activity_id: str) -> Any:
     random_id = secrets.token_hex(32)
     return {
         f'_:{random_id}': {
-            'prov:agent': agent_id,
+            'prov:agent': agent_did,
             'prov:activity': activity_id
         }
     }

@@ -11,7 +11,10 @@ from typing import (
     Generic
 )
 
-from starfish.provenance import create_publish
+from starfish.asset.provenance import (
+    create_invoke,
+    create_publish
+)
 from starfish.types import TAssetBase
 from starfish.utils.crypto_hash import hash_sha3_256
 
@@ -42,10 +45,10 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
         super().__init__()
 
-    def add_provenance(self, agent_did: str):
+    def add_provenance_publish(self, agent_did: str):
         """
 
-        Add provenance data to the asset metadata.
+        Add a published provenance data to the asset metadata.
         Calling this method will make the asset 'new'. So the asset_id will change,
         and the asset.did will be set to None.
 
@@ -54,6 +57,20 @@ class AssetBase(ABC, Generic[TAssetBase]):
         """
         metadata = self.metadata
         metadata['provenance'] = create_publish(agent_did)
+        self.set_metadata(metadata)
+
+    def add_provenance_invoke(self, agent_did: str, job_id: str, asset_list: Any, inputs_text: str, outputs_text: str):
+        """
+
+        Add a invoke provenance data to the asset metadata.
+        Calling this method will make the asset 'new'. So the asset_id will change,
+        and the asset.did will be set to None.
+
+        :param str agent_did: DID of the agent that this asset will be registered with
+
+        """
+        metadata = self.metadata
+        metadata['provenance'] = create_invoke(agent_did, job_id, asset_list, inputs_text, outputs_text)
         self.set_metadata(metadata)
 
     def set_did(self, did: str) -> None:

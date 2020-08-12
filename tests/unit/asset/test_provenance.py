@@ -8,9 +8,10 @@ import json
 import re
 import secrets
 
-from starfish.provenance import create_publish, create_invoke
+from starfish.asset.provenance import create_publish, create_invoke
 from starfish.asset import DataAsset, OperationAsset
 from starfish.metadata import METADATA_PROVENANCE_NAME
+from starfish.utils.did import did_generate_random
 
 OPERATION_METADATA = {
     'name': 'operation',
@@ -30,7 +31,7 @@ PUBLISH_STANDARD = {
     'activity': {
         'dep:<activity_id>': {
             'prov:type': {
-                '$': 'dep:import',
+                '$': 'dep:publish',
                 'type': 'xsd:string'
             }
         }
@@ -44,16 +45,16 @@ PUBLISH_STANDARD = {
         }
     },
     'agent': {
-        'dep:<agent_id>': {
+        '<agent_did>': {
             'prov:type': {
-                '$': 'dep:account',
+                '$': 'dep:service-provider',
                 'type': 'xsd:string'
             }
         }
     },
     'wasAssociatedWith': {
         '_:<random_id>': {
-            'prov:agent': '<agent_id>',
+            'prov:agent': '<agent_did>',
             'prov:activity': '<activity_id>'
         }
     },
@@ -77,13 +78,12 @@ def assert_walk_dict(standard, result):
 
 def test_provenance_publish():
 
-    agent_id = secrets.token_hex(32)
-    result = create_publish(agent_id)
+    agent_did = did_generate_random()
+    result = create_publish(agent_did)
     assert(isinstance(result, dict))
 
-    agent_dep = f'dep:{agent_id}'
-    PUBLISH_STANDARD['agent'][agent_dep] =  PUBLISH_STANDARD['agent']['dep:<agent_id>']
-    del PUBLISH_STANDARD['agent']['dep:<agent_id>']
+    PUBLISH_STANDARD['agent'][agent_did] =  PUBLISH_STANDARD['agent']['<agent_did>']
+    del PUBLISH_STANDARD['agent']['<agent_did>']
 
     activity_dep = list(result['activity'].keys())[0]
     activity_id = re.sub(r'dep:', '', activity_dep)
@@ -95,7 +95,7 @@ def test_provenance_publish():
     del PUBLISH_STANDARD['wasAssociatedWith']['_:<random_id>']
 
 
-    PUBLISH_STANDARD['wasAssociatedWith'][id_dep]['prov:agent'] = agent_id
+    PUBLISH_STANDARD['wasAssociatedWith'][id_dep]['prov:agent'] = agent_did
     PUBLISH_STANDARD['wasAssociatedWith'][id_dep]['prov:activity'] = activity_id
 
     id_dep = list(result['wasGeneratedBy'].keys())[0]
@@ -114,11 +114,11 @@ def test_provenance_invoke():
         asset_list.append(asset.did)
 
     activity_id = secrets.token_hex(32)
-    agent_id = secrets.token_hex(32)
+    agent_did = did_generate_random()
 
     inputs_text = 'test inputs text'
     outputs_text = 'test outputs text'
-    result = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
+    result = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
     assert(isinstance(result, dict))
     fields = ['prefix', 'activity', 'entity', 'agent', 'wasAssociatedWith', 'wasGeneratedBy', 'wasDerivedFrom' ]
     for field in fields:
@@ -127,10 +127,10 @@ def test_provenance_invoke():
 
 
 def test_assign_provenance_to_data_asset():
-    agent_id = secrets.token_hex(32)
+    agent_did = did_generate_random()
     test_data = secrets.token_hex(120)
     metadata = {
-        METADATA_PROVENANCE_NAME: create_publish(agent_id)
+        METADATA_PROVENANCE_NAME: create_publish(agent_did)
     }
     asset = DataAsset.create('test data asset', test_data, metadata)
     assert(asset)
@@ -143,7 +143,7 @@ def test_assign_provenance_to_operation_asset():
         asset_list.append(asset.did)
 
     activity_id = secrets.token_hex(32)
-    agent_id = secrets.token_hex(32)
+    agent_did = did_generate_random()
     inputs_text = json.dumps(
         {
             'asset_list': 'json'
@@ -155,7 +155,7 @@ def test_assign_provenance_to_operation_asset():
         }
     )
     metadata = OPERATION_METADATA
-    metadata[METADATA_PROVENANCE_NAME] = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
+    metadata[METADATA_PROVENANCE_NAME] = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
     asset = OperationAsset.create('invoke', metadata)
     assert(asset)
     assert(isinstance(asset, OperationAsset))

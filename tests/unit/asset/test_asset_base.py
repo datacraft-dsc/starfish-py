@@ -62,3 +62,29 @@ def test_asset_id():
     assert(asset)
     asset.set_did(asset.did)
     #assert(asset.asset_id == asset_id)
+
+def test_asset_add_provenance_publish():
+    agent_did = did_generate_random()
+    asset = AssetBase(json.dumps(ASSET_METADATA))
+    assert(asset)
+    asset.add_provenance_publish(agent_did)
+    assert(asset.metadata['provenance'])
+
+
+def test_asset_add_provenance_invoke():
+    agent_did = did_generate_random()
+    job_id = secrets.token_hex(32)
+    inputs_text = json.dumps(
+        {
+            'asset_list': 'json'
+        }
+    )
+    outputs_text =  json.dumps(
+        {
+            'asset_id': 'asset'
+        }
+    )
+    asset = AssetBase(json.dumps(ASSET_METADATA))
+    assert(asset)
+    asset.add_provenance_invoke(agent_did, job_id, None, inputs_text, outputs_text)
+    assert(asset.metadata['provenance'])
