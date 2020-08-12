@@ -111,7 +111,7 @@ def test_provenance_invoke():
     asset_list = []
     for index in range(0, 10):
         asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
-        asset_list.append(asset)
+        asset_list.append(asset.did)
 
     activity_id = secrets.token_hex(32)
     agent_id = secrets.token_hex(32)
@@ -140,7 +140,7 @@ def test_assign_provenance_to_operation_asset():
     asset_list = []
     for index in range(0, 10):
         asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
-        asset_list.append(asset)
+        asset_list.append(asset.did)
 
     activity_id = secrets.token_hex(32)
     agent_id = secrets.token_hex(32)
@@ -156,6 +156,6 @@ def test_assign_provenance_to_operation_asset():
     )
     metadata = OPERATION_METADATA
     metadata[METADATA_PROVENANCE_NAME] = create_invoke(activity_id, agent_id, asset_list, inputs_text, outputs_text)
-    asset = OperationAsset.create('invoke', OPERATION_METADATA)
+    asset = OperationAsset.create('invoke', metadata)
     assert(asset)
     assert(isinstance(asset, OperationAsset))

@@ -21,7 +21,7 @@ def create_publish(agent_id: str, activity_id: str = None) -> Any:
     return {
         'prefix': create_prefix(),
         'activity': create_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_PUBLISH),
-        'entity': add_asset_entity('this'),
+        'entity': add_asset_entity(),
         'agent': create_agent(agent_id, PROVENANCE_AGENT_TYPE_ACCOUNT),
         'wasAssociatedWith': create_associated_with(agent_id, activity_id),
         'wasGeneratedBy': create_generated_by(activity_id)
@@ -29,9 +29,9 @@ def create_publish(agent_id: str, activity_id: str = None) -> Any:
 
 
 def create_invoke(activity_id: str, agent_id: str, asset_list: Any, inputs_text: str, outputs_text: str) -> Any:
-    entities = add_asset_entity('this')
-    for asset in asset_list:
-        entities = add_asset_entity(asset, entities)
+    entities = add_asset_entity()
+    for asset_did in asset_list:
+        entities = add_asset_entity(asset_did, entities)
 
     dependencies = create_dependencies(inputs_text, outputs_text)
     return {
@@ -53,10 +53,12 @@ def create_prefix() -> Any:
     }
 
 
-def add_asset_entity(asset_id: str, entities: Any = None) -> Any:
+def add_asset_entity(asset_did: str = None, entities: Any = None) -> Any:
     if entities is None:
         entities = {}
-    entities[f'{PROVENANCE_DEP}:{asset_id}'] = {
+    if asset_did is None:
+        asset_did = f'{PROVENANCE_DEP}:this'
+    entities[asset_did] = {
         'prov:type': {
             '$': f'{PROVENANCE_DEP}:asset',
             'type': 'xsd:string'
@@ -115,10 +117,10 @@ def create_generated_by(activity_id: str) -> Any:
 
 def create_derived_from(asset_list: Any) -> Any:
     entities = {}
-    for asset in asset_list:
+    for asset_did in asset_list:
         random_id = secrets.token_hex(32)
         entities[f'_:{random_id}'] = {
-            'prov:usedEntity': asset.asset_id,
+            'prov:usedEntity': asset_did,
             'prov:generatedEntity': f'{PROVENANCE_DEP}:this'
         }
     return entities

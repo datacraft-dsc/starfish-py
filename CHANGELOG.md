@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.3
++   New Provenance format
+
 ### Release v0.12.2
 +   Fix mongoquery to be installed as dependancy
 
