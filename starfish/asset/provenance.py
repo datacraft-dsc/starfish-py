@@ -48,6 +48,18 @@ def create_invoke(
     outputs_text: str = None
 ) -> Any:
 
+    """
+
+    Create a provenance invoke dict.
+
+    :param str agent_did: Agent DID that the invoke was executed on
+    :param str activity_id: Activity id or invoke job id that was used to run the invoke
+    :param list[str] asset_list: List of asset DID's that was used to call the invoke operation
+    :param str inputs_text: the JSON string of the input fields
+    :param str outputs_text: the JSON string of the returned output from the invoke operation
+
+    :returns: a dict of the provenance metadata
+    """
     if activity_id is None:
         activity_id = generate_activity_id()
 
@@ -78,7 +90,7 @@ def create_invoke(
 def generate_publish_import(activity_type: str, agent_did: str = None, activity_id: str = None) -> Any:
     """
 
-    Return a publish provenance metadata dict. This is called before an asset is published to an agent.
+    generate a import or publish provenance metadata dict. This is called before an asset is published to an agent.
 
     :param str agent_did: Optional Agent DID of the agent this asset is going to be published too.
     :param str activity_id: Activity id that can be set with this provenance, if not set ,then a random
