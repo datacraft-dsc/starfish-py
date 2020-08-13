@@ -35,7 +35,7 @@ def main():
     # Now create a memory asset
     asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
 
-    asset.add_provenance(agent.did)
+    asset.add_provenance_publish(agent.did)
 
     # Print the asset data
     print('my asset:', asset.data)
