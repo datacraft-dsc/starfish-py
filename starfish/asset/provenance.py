@@ -64,14 +64,14 @@ def create_invoke(
         'prefix': generate_prefix(),
         'activity': generate_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_INVOKE, dependencies),
         'entity': entities,
-        'wasGeneratedBy': generate_generated_by(activity_id)
+        'wasGeneratedBy': generate_was_generated_by(activity_id)
     }
     if agent_did:
         result['agent'] = generate_agent(agent_did, PROVENANCE_AGENT_TYPE_SERVICE_PROVIDER)
-        result['wasAssociatedWith'] = generate_associated_with(agent_did, activity_id)
+        result['wasAssociatedWith'] = generate_was_associated_with(agent_did, activity_id)
 
     if asset_list:
-        result['wasDerivedFrom'] = generate_derived_from(asset_list)
+        result['wasDerivedFrom'] = generate_was_derived_from(asset_list)
     return result
 
 
@@ -91,12 +91,12 @@ def generate_publish_import(activity_type: str, agent_did: str = None, activity_
         'prefix': generate_prefix(),
         'activity': generate_activity(activity_id, activity_type),
         'entity': generate_asset_entity(),
-        'wasGeneratedBy': generate_generated_by(activity_id)
+        'wasGeneratedBy': generate_was_generated_by(activity_id)
     }
 
     if agent_did:
         result['agent'] = generate_agent(agent_did, PROVENANCE_AGENT_TYPE_SERVICE_PROVIDER)
-        result['wasAssociatedWith'] = generate_associated_with(agent_did, activity_id)
+        result['wasAssociatedWith'] = generate_was_associated_with(agent_did, activity_id)
 
     return result
 
@@ -150,7 +150,7 @@ def generate_agent(agent_did: str, agent_type: str) -> Any:
     }
 
 
-def generate_associated_with(agent_did: str, activity_id: str) -> Any:
+def generate_was_associated_with(agent_did: str, activity_id: str) -> Any:
     random_id = generate_random_id()
     return {
         f'_:{random_id}': {
@@ -160,7 +160,7 @@ def generate_associated_with(agent_did: str, activity_id: str) -> Any:
     }
 
 
-def generate_generated_by(activity_id: str) -> Any:
+def generate_was_generated_by(activity_id: str) -> Any:
     entity_id = f'{PROVENANCE_DEP}:this'
     random_id = generate_random_id()
     return {
@@ -171,7 +171,7 @@ def generate_generated_by(activity_id: str) -> Any:
     }
 
 
-def generate_derived_from(asset_list: Any) -> Any:
+def generate_was_derived_from(asset_list: Any) -> Any:
     entities = {}
     for asset_did in asset_list:
         random_id = generate_random_id()
