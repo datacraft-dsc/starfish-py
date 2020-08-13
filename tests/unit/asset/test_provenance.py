@@ -8,7 +8,11 @@ import json
 import re
 import secrets
 
-from starfish.asset.provenance import create_publish, create_invoke
+from starfish.asset.provenance import (
+    create_import,
+    create_invoke,
+    create_publish
+)
 from starfish.utils.did import did_generate_random
 
 
@@ -118,6 +122,42 @@ def test_provenance_create_publish():
     assert_agent(result, agent_did)
     assert_was_associated_with(result, activity_id, agent_did)
 
+
+def test_provenance_create_import():
+
+    # minimum allowed
+    result = create_import()
+    assert_prefix(result)
+    activity_id = get_activity_id(result)
+    assert_activity(result, activity_id, 'import')
+    assert_was_generated_by(result, activity_id)
+    assert('agent' not in result)
+    assert('wasAssociatedWith' not in result)
+
+    # with agent_did
+    agent_did = did_generate_random()
+    result = create_import(agent_did)
+    assert_prefix(result)
+    activity_id = get_activity_id(result)
+
+    assert_activity(result, activity_id, 'import')
+    assert_was_generated_by(result, activity_id)
+
+    assert_agent(result, agent_did)
+    assert_was_associated_with(result, activity_id, agent_did)
+
+
+    # with agent did and activity_id
+    agent_did = did_generate_random()
+    activity_id = 'abc-123-test'
+    result = create_import(agent_did, activity_id)
+    assert_prefix(result)
+
+    assert_activity(result, activity_id, 'import')
+    assert_was_generated_by(result, activity_id)
+
+    assert_agent(result, agent_did)
+    assert_was_associated_with(result, activity_id, agent_did)
 
 
 def test_provenance_create_invoke():
