@@ -40,6 +40,41 @@ def create_import(agent_did: str = None, activity_id: str = None) -> Any:
     return generate_publish_import(PROVENANCE_ACTIVITY_TYPE_IMPORT, agent_did, activity_id)
 
 
+def create_invoke(
+    agent_did: str = None,
+    activity_id: str = None,
+    asset_list: Any = None,
+    inputs_text: str = None,
+    outputs_text: str = None
+) -> Any:
+
+    if activity_id is None:
+        activity_id = generate_activity_id()
+
+    entities = generate_asset_entity()
+    if asset_list:
+        for asset_did in asset_list:
+            entities = generate_asset_entity(asset_did, entities)
+
+    dependencies = None
+    if inputs_text or outputs_text:
+        dependencies = generate_dependencies(inputs_text, outputs_text)
+
+    result = {
+        'prefix': generate_prefix(),
+        'activity': generate_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_INVOKE, dependencies),
+        'entity': entities,
+        'wasGeneratedBy': generate_generated_by(activity_id)
+    }
+    if agent_did:
+        result['agent'] = generate_agent(agent_did, PROVENANCE_AGENT_TYPE_SERVICE_PROVIDER)
+        result['wasAssociatedWith'] = generate_associated_with(agent_did, activity_id)
+
+    if asset_list:
+        result['wasDerivedFrom'] = generate_derived_from(asset_list)
+    return result
+
+
 def generate_publish_import(activity_type: str, agent_did: str = None, activity_id: str = None) -> Any:
     """
 
@@ -63,37 +98,6 @@ def generate_publish_import(activity_type: str, agent_did: str = None, activity_
         result['agent'] = generate_agent(agent_did, PROVENANCE_AGENT_TYPE_SERVICE_PROVIDER)
         result['wasAssociatedWith'] = generate_associated_with(agent_did, activity_id)
 
-    return result
-
-
-def create_invoke(
-    agent_did: str = None,
-    activity_id: str = None,
-    asset_list: Any = None,
-    inputs_text: str = None,
-    outputs_text: str = None
-) -> Any:
-    entities = generate_asset_entity()
-    if asset_list:
-        for asset_did in asset_list:
-            entities = generate_asset_entity(asset_did, entities)
-
-    dependencies = None
-    if inputs_text or outputs_text:
-        dependencies = generate_dependencies(inputs_text, outputs_text)
-
-    result = {
-        'prefix': generate_prefix(),
-        'activity': generate_activity(activity_id, PROVENANCE_ACTIVITY_TYPE_INVOKE, dependencies),
-        'entity': entities,
-        'wasGeneratedBy': generate_generated_by(activity_id)
-    }
-    if agent_did:
-        result['agent'] = generate_agent(agent_did, PROVENANCE_AGENT_TYPE_SERVICE_PROVIDER)
-        result['wasAssociatedWith'] = generate_associated_with(agent_did, activity_id)
-
-    if asset_list:
-        result['wasDerivedFrom'] = generate_derived_from(asset_list)
     return result
 
 

@@ -9,141 +9,139 @@ import re
 import secrets
 
 from starfish.asset.provenance import create_publish, create_invoke
-from starfish.asset import DataAsset, OperationAsset
-from starfish.metadata import METADATA_PROVENANCE_NAME
 from starfish.utils.did import did_generate_random
 
-OPERATION_METADATA = {
-    'name': 'operation',
-    'type': 'operation',
-    'operation': {
-        'modes': ['sync', 'async', 'test'],
-    },
-}
 
-
-PUBLISH_STANDARD = {
-    'prefix':{
-        'xsd': 'http://www.w3.org/2001/XMLSchema#',
-        'prov': 'http://www.w3.org/ns/prov#',
-        'dep': 'http://dex.sg'
-    },
-    'activity': {
-        'dep:<activity_id>': {
-            'prov:type': {
-                '$': 'dep:publish',
-                'type': 'xsd:string'
-            }
-        }
-    },
-    'entity': {
-        'dep:this': {
-            'prov:type': {
-                '$': 'dep:asset',
-                'type': 'xsd:string'
-            }
-        }
-    },
-    'agent': {
-        '<agent_did>': {
-            'prov:type': {
-                '$': 'dep:service-provider',
-                'type': 'xsd:string'
-            }
-        }
-    },
-    'wasAssociatedWith': {
-        '_:<random_id>': {
-            'prov:agent': '<agent_did>',
-            'prov:activity': '<activity_id>'
-        }
-    },
-    'wasGeneratedBy': {
-        '_:<random_id>': {
-            'prov:entity': 'dep:this',
-            'prov:activity': '<activity_id>'
-        }
-    }
-}
-
-def assert_walk_dict(standard, result):
-    if isinstance(result, dict):
-        assert(isinstance(standard, dict))
-        for name, values in standard.items():
-            assert(name in result)
-            if isinstance(result[name], dict):
-                assert_walk_dict(standard[name], result[name])
-            else:
-                assert(standard[name] == result[name])
-
-def test_provenance_publish():
-
-    agent_did = did_generate_random()
-    result = create_publish(agent_did)
-    assert(isinstance(result, dict))
-
-    PUBLISH_STANDARD['agent'][agent_did] =  PUBLISH_STANDARD['agent']['<agent_did>']
-    del PUBLISH_STANDARD['agent']['<agent_did>']
-
+def get_activity_id(result):
+    assert(result['activity'])
     activity_dep = list(result['activity'].keys())[0]
     activity_id = re.sub(r'dep:', '', activity_dep)
-    PUBLISH_STANDARD['activity'][activity_dep] =  PUBLISH_STANDARD['activity']['dep:<activity_id>']
-    del PUBLISH_STANDARD['activity']['dep:<activity_id>']
+    return activity_id
 
-    id_dep = list(result['wasAssociatedWith'].keys())[0]
-    PUBLISH_STANDARD['wasAssociatedWith'][id_dep] =  PUBLISH_STANDARD['wasAssociatedWith']['_:<random_id>']
-    del PUBLISH_STANDARD['wasAssociatedWith']['_:<random_id>']
+def assert_prefix(result):
+    assert(result['prefix'])
+    assert(result['prefix']['xsd'])
+    assert(result['prefix']['xsd'] =='http://www.w3.org/2001/XMLSchema#')
+    assert(result['prefix']['prov'])
+    assert(result['prefix']['prov'] == 'http://www.w3.org/ns/prov#')
+    assert(result['prefix']['dep'])
+    assert(result['prefix']['dep'] == 'http://dex.sg')
 
+def assert_activity(result, activity_id, activity_type, inputs_text=None, outputs_text=None):
+    assert(result['activity'])
+    assert(result['activity'][f'dep:{activity_id}'])
+    assert(result['activity'][f'dep:{activity_id}']['prov:type']['$'] == f'dep:{activity_type}')
+    if inputs_text:
+        assert(result['activity'][f'dep:{activity_id}']['dep:inputs'])
+        assert(result['activity'][f'dep:{activity_id}']['dep:inputs']['$'] == inputs_text)
 
-    PUBLISH_STANDARD['wasAssociatedWith'][id_dep]['prov:agent'] = agent_did
-    PUBLISH_STANDARD['wasAssociatedWith'][id_dep]['prov:activity'] = activity_id
+    if outputs_text:
+        assert(result['activity'][f'dep:{activity_id}']['dep:outputs'])
+        assert(result['activity'][f'dep:{activity_id}']['dep:outputs']['$'] == outputs_text)
 
+def assert_entity(result, asset_list=None):
+    assert(result['entity'])
+    assert(result['entity']['dep:this'])
+    assert(result['entity']['dep:this']['prov:type'])
+    assert(result['entity']['dep:this']['prov:type']['$'] == 'dep:asset')
+    if asset_list:
+        for asset_did in asset_list:
+            assert(result['entity'][asset_did])
+            assert(result['entity'][asset_did]['prov:type'])
+            assert(result['entity'][asset_did]['prov:type']['$'] == 'dep:asset')
+        assert(len(list(result['entity'].keys())) == len(asset_list) + 1)
+    else:
+        # only one record in the entity the 'dep:this'
+        assert(len(list(result['entity'].keys())) == 1)
+
+def assert_was_generated_by(result, activity_id):
+    assert(result['wasGeneratedBy'])
     id_dep = list(result['wasGeneratedBy'].keys())[0]
-    PUBLISH_STANDARD['wasGeneratedBy'][id_dep] =  PUBLISH_STANDARD['wasGeneratedBy']['_:<random_id>']
-    del PUBLISH_STANDARD['wasGeneratedBy']['_:<random_id>']
+    assert(result['wasGeneratedBy'][id_dep]['prov:entity'] == 'dep:this')
+    assert(result['wasGeneratedBy'][id_dep]['prov:activity'] == activity_id)
 
-    PUBLISH_STANDARD['wasGeneratedBy'][id_dep]['prov:activity'] = activity_id
+def assert_agent(result, agent_did):
+    assert(result['agent'])
+    assert(result['agent'][agent_did])
+    assert(result['agent'][agent_did]['prov:type'])
+    assert(result['agent'][agent_did]['prov:type']['$'] == 'dep:service-provider')
 
-    assert_walk_dict(PUBLISH_STANDARD, result)
+def assert_was_associated_with(result, activity_id, agent_did):
+    assert(result['wasAssociatedWith'])
+    id_dep = list(result['wasAssociatedWith'].keys())[0]
+    assert(result['wasAssociatedWith'][id_dep]['prov:agent'] == agent_did)
+    assert(result['wasAssociatedWith'][id_dep]['prov:activity'] == activity_id)
+
+def assert_was_derived_from(result, asset_list):
+    assert(result['wasDerivedFrom'])
+    found_list = []
+    for random_key, item in result['wasDerivedFrom'].items():
+        assert(item['prov:generatedEntity'] == 'dep:this')
+        assert(item['prov:usedEntity'] in asset_list)
+        found_list.append(item['prov:usedEntity'])
+
+    assert(len(found_list) == len(asset_list))
+
+def test_provenance_create_publish():
+
+    # minimum allowed
+    result = create_publish()
+    assert_prefix(result)
+    activity_id = get_activity_id(result)
+    assert_activity(result, activity_id, 'publish')
+    assert_was_generated_by(result, activity_id)
+    assert('agent' not in result)
+    assert('wasAssociatedWith' not in result)
+
+    # with agent_did
+    agent_did = did_generate_random()
+    result = create_publish(agent_did)
+    assert_prefix(result)
+    activity_id = get_activity_id(result)
+
+    assert_activity(result, activity_id, 'publish')
+    assert_was_generated_by(result, activity_id)
+
+    assert_agent(result, agent_did)
+    assert_was_associated_with(result, activity_id, agent_did)
 
 
-def test_provenance_invoke():
+    # with agent did and activity_id
+    agent_did = did_generate_random()
+    activity_id = 'abc-123-test'
+    result = create_publish(agent_did, activity_id)
+    assert_prefix(result)
+
+    assert_activity(result, activity_id, 'publish')
+    assert_was_generated_by(result, activity_id)
+
+    assert_agent(result, agent_did)
+    assert_was_associated_with(result, activity_id, agent_did)
+
+
+
+def test_provenance_create_invoke():
+    # test minimum allowed for create_invoke
+    result = create_invoke()
+    assert_prefix(result)
+
+    activity_id = get_activity_id(result)
+    assert_activity(result, activity_id, 'invoke')
+    assert_was_generated_by(result, activity_id)
+    assert_entity(result)
+    assert('agent' not in result)
+    assert('wasAssociatedWith' not in result)
+
+
+    #test all values set for create_invoke
+    agent_did = did_generate_random()
+    activity_id = 'job-id-123-abc'
+
     asset_list = []
     for index in range(0, 10):
-        asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
-        asset_list.append(asset.did)
+        asset_id = secrets.token_hex(32)
+        asset_list.append(f'{agent_did}/{asset_id}')
 
-    activity_id = secrets.token_hex(32)
-    agent_did = did_generate_random()
-
-    inputs_text = 'test inputs text'
-    outputs_text = 'test outputs text'
-    result = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
-    assert(isinstance(result, dict))
-    fields = ['prefix', 'activity', 'entity', 'agent', 'wasAssociatedWith', 'wasGeneratedBy', 'wasDerivedFrom' ]
-    for field in fields:
-        assert(field in result)
-    assert(len(fields) == len(result.keys()))
-
-
-def test_assign_provenance_to_data_asset():
-    agent_did = did_generate_random()
-    test_data = secrets.token_hex(120)
-    metadata = {
-        METADATA_PROVENANCE_NAME: create_publish(agent_did)
-    }
-    asset = DataAsset.create('test data asset', test_data, metadata)
-    assert(asset)
-
-
-def test_assign_provenance_to_operation_asset():
-    asset_list = []
-    for index in range(0, 10):
-        asset = DataAsset.create(f'test asset #{index+1}', secrets.token_hex(1024))
-        asset_list.append(asset.did)
-
-    activity_id = secrets.token_hex(32)
-    agent_did = did_generate_random()
     inputs_text = json.dumps(
         {
             'asset_list': 'json'
@@ -154,8 +152,14 @@ def test_assign_provenance_to_operation_asset():
             'asset_id': 'asset'
         }
     )
-    metadata = OPERATION_METADATA
-    metadata[METADATA_PROVENANCE_NAME] = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
-    asset = OperationAsset.create('invoke', metadata)
-    assert(asset)
-    assert(isinstance(asset, OperationAsset))
+
+    result = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
+    assert_prefix(result)
+
+    activity_id = get_activity_id(result)
+    assert_activity(result, activity_id, 'invoke', inputs_text, outputs_text)
+    assert_was_generated_by(result, activity_id)
+    assert_entity(result, asset_list)
+    assert_agent(result, agent_did)
+    assert_was_associated_with(result, activity_id, agent_did)
+    assert_was_derived_from(result, asset_list)
