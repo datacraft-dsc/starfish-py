@@ -1,6 +1,6 @@
 ## Change Log
 
-### Release v0.12.3
+### Release v0.12.4
 +   New Provenance format
 
 ### Release v0.12.2
