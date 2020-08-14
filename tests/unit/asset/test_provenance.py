@@ -8,18 +8,13 @@ import json
 import re
 import secrets
 
-from starfish.asset.provenance import (
-    create_import,
-    create_invoke,
-    create_publish
-)
+from starfish.asset.provenance import Provenance
 from starfish.utils.did import did_generate_random
 
 
 def get_activity_id(result):
     assert(result['activity'])
-    activity_dep = list(result['activity'].keys())[0]
-    activity_id = re.sub(r'dep:', '', activity_dep)
+    activity_id = list(result['activity'].keys())[0]
     return activity_id
 
 def assert_prefix(result):
@@ -31,17 +26,14 @@ def assert_prefix(result):
     assert(result['prefix']['dep'])
     assert(result['prefix']['dep'] == 'http://dex.sg')
 
-def assert_activity(result, activity_id, activity_type, inputs_text=None, outputs_text=None):
+def assert_activity(result, activity_id, activity_type, inputs_text=None):
     assert(result['activity'])
-    assert(result['activity'][f'dep:{activity_id}'])
-    assert(result['activity'][f'dep:{activity_id}']['prov:type']['$'] == f'dep:{activity_type}')
+    assert(result['activity'][activity_id])
+    assert(result['activity'][activity_id]['prov:type']['$'] == f'dep:{activity_type}')
     if inputs_text:
-        assert(result['activity'][f'dep:{activity_id}']['dep:inputs'])
-        assert(result['activity'][f'dep:{activity_id}']['dep:inputs']['$'] == inputs_text)
+        assert(result['activity'][activity_id]['dep:inputs'])
+        assert(result['activity'][activity_id]['dep:inputs']['$'] == inputs_text)
 
-    if outputs_text:
-        assert(result['activity'][f'dep:{activity_id}']['dep:outputs'])
-        assert(result['activity'][f'dep:{activity_id}']['dep:outputs']['$'] == outputs_text)
 
 def assert_entity(result, asset_list=None):
     assert(result['entity'])
@@ -89,7 +81,8 @@ def assert_was_derived_from(result, asset_list):
 def test_provenance_create_publish():
 
     # minimum allowed
-    result = create_publish()
+    provenance = Provenance()
+    result = provenance.create_publish
     assert_prefix(result)
     activity_id = get_activity_id(result)
     assert_activity(result, activity_id, 'publish')
@@ -99,7 +92,9 @@ def test_provenance_create_publish():
 
     # with agent_did
     agent_did = did_generate_random()
-    result = create_publish(agent_did)
+    provenance = Provenance(agent_did)
+
+    result = provenance.create_publish
     assert_prefix(result)
     activity_id = get_activity_id(result)
 
@@ -113,7 +108,8 @@ def test_provenance_create_publish():
     # with agent did and activity_id
     agent_did = did_generate_random()
     activity_id = 'abc-123-test'
-    result = create_publish(agent_did, activity_id)
+    provenance = Provenance(agent_did=agent_did, activity_id=activity_id)
+    result = provenance.create_publish
     assert_prefix(result)
 
     assert_activity(result, activity_id, 'publish')
@@ -126,7 +122,9 @@ def test_provenance_create_publish():
 def test_provenance_create_import():
 
     # minimum allowed
-    result = create_import()
+    provenance = Provenance()
+
+    result = provenance.create_import
     assert_prefix(result)
     activity_id = get_activity_id(result)
     assert_activity(result, activity_id, 'import')
@@ -136,7 +134,9 @@ def test_provenance_create_import():
 
     # with agent_did
     agent_did = did_generate_random()
-    result = create_import(agent_did)
+
+    provenance = Provenance(agent_did=agent_did)
+    result = provenance.create_import
     assert_prefix(result)
     activity_id = get_activity_id(result)
 
@@ -150,7 +150,8 @@ def test_provenance_create_import():
     # with agent did and activity_id
     agent_did = did_generate_random()
     activity_id = 'abc-123-test'
-    result = create_import(agent_did, activity_id)
+    provenance = Provenance(agent_did=agent_did, activity_id=activity_id)
+    result = provenance.create_import
     assert_prefix(result)
 
     assert_activity(result, activity_id, 'import')
@@ -162,7 +163,8 @@ def test_provenance_create_import():
 
 def test_provenance_create_invoke():
     # test minimum allowed for create_invoke
-    result = create_invoke()
+    provenance = Provenance()
+    result = provenance.create_invoke
     assert_prefix(result)
 
     activity_id = get_activity_id(result)
@@ -187,17 +189,13 @@ def test_provenance_create_invoke():
             'asset_list': 'json'
         }
     )
-    outputs_text =  json.dumps(
-        {
-            'asset_id': 'asset'
-        }
-    )
-
-    result = create_invoke(agent_did, activity_id, asset_list, inputs_text, outputs_text)
+    provenance = Provenance(agent_did=agent_did, activity_id=activity_id, asset_list=asset_list, inputs_text=inputs_text)
+    result = provenance.create_invoke
+    #print(json.dumps(result, indent=4))
     assert_prefix(result)
 
     activity_id = get_activity_id(result)
-    assert_activity(result, activity_id, 'invoke', inputs_text, outputs_text)
+    assert_activity(result, activity_id, 'invoke', inputs_text)
     assert_was_generated_by(result, activity_id)
     assert_entity(result, asset_list)
     assert_agent(result, agent_did)
