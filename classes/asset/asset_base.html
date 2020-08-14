@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Base class &mdash; starfish-py 0.12.2 documentation</title>
+  <title>Asset Base class &mdash; starfish-py 0.12.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.12.2
+                0.12.3
               </div>
             
           
@@ -189,9 +189,22 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt id="starfish.asset.AssetBase.add_provenance">
-<code class="sig-name descname">add_provenance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add provenance data to the asset metadata.
+<dt id="starfish.asset.AssetBase.add_provenance_invoke">
+<code class="sig-name descname">add_provenance_invoke</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">asset_list</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">inputs_text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">outputs_text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_invoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a invoke provenance data to the asset metadata.
+Calling this method will make the asset ‘new’. So the asset_id will change,
+and the asset.did will be set to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="starfish.asset.AssetBase.add_provenance_publish">
+<code class="sig-name descname">add_provenance_publish</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a published provenance data to the asset metadata.
 Calling this method will make the asset ‘new’. So the asset_id will change,
 and the asset.did will be set to None.</p>
 <dl class="field-list simple">
