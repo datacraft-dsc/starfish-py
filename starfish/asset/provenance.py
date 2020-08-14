@@ -17,7 +17,6 @@ PROVENANCE_REFERENCE_ID_LENGTH = 32
 
 
 class Provenance:
-
     def __init__(self, agent_did: str = None, activity_id: str = None, asset_list: Any = None, inputs_text: str = None):
         """
         :param str agent_did: Agent DID that the invoke was executed on
@@ -34,7 +33,6 @@ class Provenance:
         if self._activity_id is None:
             self._activity_id = self._generate_activity_id()
 
-
         self._index_items = {
             'wasAssociatedWith': {
                 'prefix': 'assoc_',
@@ -50,7 +48,6 @@ class Provenance:
             },
         }
 
-
     @property
     def create_publish(self) -> Any:
         """
@@ -63,7 +60,6 @@ class Provenance:
         """
         return self._generate_publish_import(PROVENANCE_ACTIVITY_TYPE_PUBLISH)
 
-
     @property
     def create_import(self) -> Any:
         """
@@ -75,7 +71,6 @@ class Provenance:
             value will be set
         """
         return self._generate_publish_import(PROVENANCE_ACTIVITY_TYPE_IMPORT)
-
 
     @property
     def create_invoke(self) -> Any:
@@ -110,7 +105,6 @@ class Provenance:
             result['wasDerivedFrom'] = self._generate_was_derived_from(self._asset_list)
         return result
 
-
     def _generate_publish_import(self, activity_type: str) -> Any:
         """
 
@@ -134,7 +128,6 @@ class Provenance:
 
         return result
 
-
     @property
     def _generate_prefix(self) -> Any:
         return {
@@ -142,7 +135,6 @@ class Provenance:
             'prov': 'http://www.w3.org/ns/prov#',
             PROVENANCE_DEP: 'http://dex.sg'
         }
-
 
     def _generate_asset_entity(self, asset_did: str = None, entities: Any = None) -> Any:
         if entities is None:
@@ -156,7 +148,6 @@ class Provenance:
             }
         }
         return entities
-
 
     def _generate_activity(self, activity_id: str, activity_type: str, entries: Any = None) -> Any:
         items = {
@@ -173,7 +164,6 @@ class Provenance:
             f'{activity_id}': items
         }
 
-
     def _generate_agent(self, agent_did: str, agent_type: str) -> Any:
         return {
             f'{agent_did}': {
@@ -184,7 +174,6 @@ class Provenance:
             }
         }
 
-
     def _generate_was_associated_with(self, agent_did: str, activity_id: str) -> Any:
         new_id = self._generate_unique_id('wasAssociatedWith')
         return {
@@ -193,7 +182,6 @@ class Provenance:
                 'prov:activity': activity_id
             }
         }
-
 
     def _generate_was_generated_by(self, activity_id: str) -> Any:
         entity_id = f'{PROVENANCE_DEP}:this'
@@ -205,7 +193,6 @@ class Provenance:
             }
         }
 
-
     def _generate_was_derived_from(self, asset_list: Any) -> Any:
         entities = {}
         for asset_did in asset_list:
@@ -216,7 +203,6 @@ class Provenance:
             }
         return entities
 
-
     def _generate_dependencies(self, inputs_text: str) -> Any:
         result = {}
         if inputs_text:
@@ -226,10 +212,8 @@ class Provenance:
             }
         return result
 
-
     def _generate_activity_id(self) -> str:
         return secrets.token_hex(PROVENANCE_ACTIVITY_ID_LENGTH)
-
 
     def _generate_unique_id(self, name) -> str:
         item = self._index_items[name]
