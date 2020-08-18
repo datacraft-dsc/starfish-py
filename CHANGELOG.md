@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.5
++   Change the DDO id ( DID ) to be generated from the hash of a DDO with an empty id
+
 ### Release v0.12.4
 +   New Provenance format
 
