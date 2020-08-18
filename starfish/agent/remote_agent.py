@@ -617,7 +617,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     def generate_ddo(
         base_url_or_services: Any,
         service_list: Any = None,
-        all_services: bool = False
+        all_services: bool = False,
+        did: str = None
     ) -> DDO:
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
@@ -633,6 +634,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             base_url_or_services is a string containing the base_url.
 
         :param bool all_services: Optional False, If set to True register all available services.
+        :param str did: Optional did to use for the agent
 
         :return: created DDO object assigned to the url of the remote agent service
         :type: :class:.`DDO`
@@ -661,12 +663,15 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         else:
             raise(TypeError('Invalid services type, must be a string, dict or Services object'))
 
-        ddo = DDO()
+        if not did:
+            did = ''
+        ddo = DDO(did=did)
         for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)
 
-        # generate the did from the list of services
-        ddo.generate_did(ddo.as_text())
+        if not did:
+            # generate the did from the list of services
+            ddo.generate_did(ddo.as_text())
 
         return ddo
 
