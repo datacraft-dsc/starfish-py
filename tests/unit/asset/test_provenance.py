@@ -110,6 +110,7 @@ def test_provenance_create_publish():
     activity_id = 'abc-123-test'
     provenance = Provenance(agent_did=agent_did, activity_id=activity_id)
     result = provenance.create_publish
+    #print(json.dumps(result, indent=4))
     assert_prefix(result)
 
     assert_activity(result, activity_id, 'publish')
@@ -180,7 +181,7 @@ def test_provenance_create_invoke():
     activity_id = 'job-id-123-abc'
 
     asset_list = []
-    for index in range(0, 10):
+    for index in range(0, 4):
         asset_id = secrets.token_hex(32)
         asset_list.append(f'{agent_did}/{asset_id}')
 
@@ -191,7 +192,6 @@ def test_provenance_create_invoke():
     )
     provenance = Provenance(agent_did=agent_did, activity_id=activity_id, asset_list=asset_list, inputs_text=inputs_text)
     result = provenance.create_invoke
-    #print(json.dumps(result, indent=4))
     assert_prefix(result)
 
     activity_id = get_activity_id(result)

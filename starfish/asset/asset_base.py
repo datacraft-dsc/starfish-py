@@ -57,7 +57,7 @@ class AssetBase(ABC, Generic[TAssetBase]):
         metadata['provenance'] = provenance.create_publish
         self.set_metadata(metadata)
 
-    def add_provenance_invoke(self, agent_did: str, job_id: str, asset_list: Any, inputs_text: str, outputs_text: str):
+    def add_provenance_invoke(self, agent_did: str, job_id: str, asset_list: Any, inputs_text: str):
         """
 
         Add a invoke provenance data to the asset metadata.

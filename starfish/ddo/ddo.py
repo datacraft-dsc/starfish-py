@@ -75,6 +75,14 @@ class DDO(Generic[TDDO]):
         if dictionary:
             self._read_dict(dictionary)
 
+    def generate_did(self, meta_text):
+
+        # because of circular ref, need to import here
+        from starfish.utils.crypto_hash import hash_sha3_256
+        from starfish.utils.did import id_to_did
+
+        self._did = id_to_did(hash_sha3_256(meta_text))
+
     def add_public_key(self, public_key: str) -> None:
         """add a public key object to the list of public keys"""
         self._public_keys.append(public_key)

@@ -79,12 +79,7 @@ def test_asset_add_provenance_invoke():
             'asset_list': 'json'
         }
     )
-    outputs_text =  json.dumps(
-        {
-            'asset_id': 'asset'
-        }
-    )
     asset = AssetBase(json.dumps(ASSET_METADATA))
     assert(asset)
-    asset.add_provenance_invoke(agent_did, job_id, None, inputs_text, outputs_text)
+    asset.add_provenance_invoke(agent_did, job_id, None, inputs_text)
     assert(asset.metadata['provenance'])

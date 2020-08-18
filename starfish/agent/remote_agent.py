@@ -46,7 +46,6 @@ from starfish.types import (
 )
 from starfish.utils.did import (
     decode_to_asset_id,
-    did_generate_random,
     did_parse
 )
 
@@ -618,8 +617,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     def generate_ddo(
         base_url_or_services: Any,
         service_list: Any = None,
-        all_services: bool = False,
-        is_add_proof: bool = False
+        all_services: bool = False
     ) -> DDO:
         """
         Generate a DDO for the remote agent url. This DDO will contain the supported
@@ -635,7 +633,6 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             base_url_or_services is a string containing the base_url.
 
         :param bool all_services: Optional False, If set to True register all available services.
-        :param bool is_add_proof: Optional False, If True add a proof signature to the ddo.
 
         :return: created DDO object assigned to the url of the remote agent service
         :type: :class:.`DDO`
@@ -664,16 +661,12 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         else:
             raise(TypeError('Invalid services type, must be a string, dict or Services object'))
 
-        did = did_generate_random()
-        ddo = DDO(did)
+        ddo = DDO()
         for _service_name, service_item in service_items.items():
             ddo.add_service(service_item['type'], service_item['url'], None)
 
-        if is_add_proof:
-            # add a signature
-            private_key_pem = ddo.add_signature()
-            # add the static proof
-            ddo.add_proof(0, private_key_pem)
+        # generate the did from the list of services
+        ddo.generate_did(ddo.as_text())
 
         return ddo
 
