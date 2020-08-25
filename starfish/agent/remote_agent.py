@@ -720,6 +720,10 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             endpoint = urljoin(endpoint + '/', uri)
         return endpoint
 
+    @property
+    def adapter(self):
+        return self._adapter
+
     @staticmethod
     def resolve_url(url: str, authentication: Authentication = None, http_client: Any = None) -> DDO:
         """
