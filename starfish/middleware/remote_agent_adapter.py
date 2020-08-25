@@ -47,10 +47,11 @@ class ResponseWrapper():
 
 
 class RemoteAgentAdapter():
-    _http_client = requests
 
-    def __init__(self):
-        pass
+    def __init__(self, http_client=None):
+        self._http_client = http_client
+        if self._http_client is None:
+            self._http_client = requests
 
     def register_asset(self, metadata, url, authorization_token=None):
         """
@@ -78,7 +79,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'index')
         logger.debug(f'metadata list url {url}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -92,7 +93,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'data')
         logger.debug(f'metadata save url {url}')
         headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
-        response = RemoteAgentAdapter._http_client.post(url, data=metadata, headers=headers)
+        response = self._http_client.post(url, data=metadata, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -110,7 +111,7 @@ class RemoteAgentAdapter():
 
         url = urljoin(f'{url}/', 'listings')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.post(url, json=data, headers=headers)
+        response = self._http_client.post(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug('listing response returned: ' + str(data))
@@ -125,7 +126,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', asset_id)
 
         headers = RemoteAgentAdapter.create_headers('application/octet-stream', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             return data
@@ -138,7 +139,7 @@ class RemoteAgentAdapter():
     def get_listing(self, listing_id, url, authorization_token=None):
         url = urljoin(f'{url}/', f'listings/{listing_id}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -151,7 +152,7 @@ class RemoteAgentAdapter():
     def get_listings(self, url,  authorization_token=None):
         url = urljoin(f'{url}/', 'listings')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return ResponseWrapper(response).json
         else:
@@ -164,7 +165,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', f'listings/{listing_id}')
 
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.put(url, json=data, headers=headers)
+        response = self._http_client.put(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return True
         else:
@@ -181,7 +182,7 @@ class RemoteAgentAdapter():
             'file': (asset_id, io.BytesIO(data), 'application/octet-stream'),
         }
         headers = RemoteAgentAdapter.create_headers(None, authorization_token)
-        response = RemoteAgentAdapter._http_client.post(url, files=files, headers=headers)
+        response = self._http_client.post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
@@ -197,7 +198,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', f'data/{asset_id}')
         logger.debug(f'metadata read url {url}')
         headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             result = {
@@ -217,7 +218,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'purchases')
         logger.debug(f'market url for purchases {url}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.post(url, json=purchase, headers=headers)
+        response = self._http_client.post(url, json=purchase, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug(f'purchase response returned {data}')
@@ -225,7 +226,7 @@ class RemoteAgentAdapter():
         else:
             msg = f'purchase response failed: {response.status_code}'
             logger.error(msg)
-            # NOTE surfer may return error information in additon to a 500
+            # NOTE the agent may return error information in additon to a 500
             if response:
                 if hasattr(response, 'get_json'):
                     data = response.get_json()
@@ -245,7 +246,7 @@ class RemoteAgentAdapter():
 
         url = urljoin(f'{url}/', asset_id)
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.post(url, json=inputs, headers=headers)
+        response = self._http_client.post(url, json=inputs, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             data = ResponseWrapper(response).json
             logger.debug('invoke response returned: ' + str(data))
@@ -259,7 +260,7 @@ class RemoteAgentAdapter():
     def get_job(self, job_id, url, authorization_token=None):
         url = urljoin(f'{url}/', job_id)
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -270,16 +271,16 @@ class RemoteAgentAdapter():
         return None
 
     def get_authorization_token(self, username, password, url):
-        """Get a surfer authorization token (create one if needed).
+        """Get an agent authorization token (create one if needed).
         Throws exception on error."""
-        response = RemoteAgentAdapter._http_client.get(url, auth=(username, password))
+        response = self._http_client.get(url, auth=(username, password))
         token = None
         if response.status_code == 200:
             tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
             else:   # need to create a token
-                response = RemoteAgentAdapter._http_client.post(url, auth=(username, password))
+                response = self._http_client.post(url, auth=(username, password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json
                 else:
@@ -290,7 +291,7 @@ class RemoteAgentAdapter():
             msg = f'unable to get tokens, status {response.status_code}'
             logger.error(msg)
             raise ValueError(msg)
-        logger.debug(f'using surfer token {token}')
+        logger.debug(f'using agent token {token}')
         return token
 
     def get_ddo(self, url, authorization_token=None):
@@ -299,10 +300,19 @@ class RemoteAgentAdapter():
         logger.debug(f'get_ddo url {url}')
 
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = RemoteAgentAdapter._http_client.get(url, headers=headers)
+        response = self._http_client.get(url, headers=headers)
         if response.status_code == 200:
             ddo_text = ResponseWrapper(response).data.decode('utf-8')
         return ddo_text
+
+    @property
+    def http_client(self):
+        return self._http_client
+
+    @http_client.setter
+    def http_client(self, value):
+        """Set the http client to something other than the default `requests`"""
+        self._http_client = value
 
     @staticmethod
     def is_metadata_valid(asset_id, metadata_text):
@@ -330,11 +340,6 @@ class RemoteAgentAdapter():
         :return 64 char hex string, with no leading '0x'
         """
         return hash_sha3_256(metadata_text)
-
-    @staticmethod
-    def set_http_client(http_client):
-        """Set the http client to something other than the default `requests`"""
-        RemoteAgentAdapter._http_client = http_client
 
     @staticmethod
     def create_headers(content_type=None, authorization_token=None):

@@ -81,7 +81,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     """
     service_types = SUPPORTED_SERVICES
 
-    def __init__(self, ddo: DDO, authentication: Authentication = None) -> None:
+    def __init__(self, ddo: DDO, authentication: Authentication = None, http_client: Any = None) -> None:
         self._authentication = authentication
 
         if isinstance(ddo, dict):
@@ -94,7 +94,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             raise ValueError(f'Unknown ddo type {ddo}')
         AgentBase.__init__(self, ddo)
 
-        self._adapter = RemoteAgentAdapter()
+        self._adapter = RemoteAgentAdapter(http_client)
 
     @staticmethod
     def load(
@@ -102,7 +102,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         network: Network = None,
         username: str = None,
         password: str = None,
-        authentication: Authentication = None
+        authentication: Authentication = None,
+        http_client: Any = None
     ) -> TRemoteAgent:
         """
 
@@ -112,6 +113,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
         :param str agent_did_or_url DID or URL of the agent to load.
         :param Authentiaciton authentication Optional Authenentication object to use to access the new agent.
+        :param http_client: HTTP Client libray to use to make requests, this defaults to requests library.
 
         :return: A RemoteAgent Object or None if the agent cannot be accessed or cannot be found at the url.
 
@@ -127,15 +129,21 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         if network:
             ddo_text = network.resolve_agent(agent_did_or_url, authentication=authentication)
         else:
-            ddo_text = RemoteAgent.resolve_url(agent_did_or_url, authentication=authentication)
+            ddo_text = RemoteAgent.resolve_url(agent_did_or_url, authentication=authentication, http_client=http_client)
 
         if ddo_text:
-            return RemoteAgent(ddo_text, authentication)
+            return RemoteAgent(ddo_text, authentication=authentication, http_client=http_client)
 
         return None
 
     @staticmethod
-    def register(network: Network, register_account: Account, ddo: DDO, authentication: Authentication = None) -> TRemoteAgent:
+    def register(
+        network: Network,
+        register_account: Account,
+        ddo: DDO,
+        authentication: Authentication = None,
+        http_client: Any = None
+    ) -> TRemoteAgent:
         """
         Register the agent on the network.
 
@@ -143,11 +151,12 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         :param register_account: Account object to use to register the agent ddo
         :param ddo: DDO object to use to register on the network
         :param authentication: Authentication data needed to access this agent
+        :param http_client: HTTP Client libray to use to make requests, this defaults to requests library.
 
         :return: RemoteAgent object that has been registered on the network
         """
         network.register_did(register_account, ddo.did, ddo.as_text())
-        return RemoteAgent(ddo.as_text(), authentication)
+        return RemoteAgent(ddo.as_text(), authentication=authentication, http_client=http_client)
 
     def register_asset(self, asset: TAsset, create_provenance: bool = False) -> TAsset:
         """
@@ -712,20 +721,21 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         return endpoint
 
     @staticmethod
-    def resolve_url(url: str, authentication: Authentication = None) -> DDO:
+    def resolve_url(url: str, authentication: Authentication = None, http_client: Any = None) -> DDO:
         """
 
         Resolves the remote agent ddo using the url of the agent
 
         :param str url: url of the remote agent
-        :param str username: optional username for access to the remote agent
-        :param str password: optional password for access to the remote agent
+        :param Authenentication: Optional authentication object to access the agent
+        :param http_client: HTTP Client libray to use to make requests, this defaults to requests library.
+
         :return dict: DDO or None if not found
         """
 
         ddo = None
         if url:
-            adapter = RemoteAgentAdapter()
+            adapter = RemoteAgentAdapter(http_client)
             token = None
             token_url = urljoin(f'{url}/', 'api/v1/auth/token')
             if authentication and 'username' in authentication:
