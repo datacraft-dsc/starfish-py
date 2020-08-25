@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.7
++   Moved http_client from a static value to a RemoteAgent/middleware object instance
+
 ### Release v0.12.6
 +   Allow user to set the agent did
 
