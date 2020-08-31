@@ -724,6 +724,15 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     def adapter(self):
         return self._adapter
 
+    @property
+    def http_client(self):
+        return self._adapter.http_client
+
+    @http_client.setter
+    def http_client(self, value):
+        """Set the http client to something other than the default `requests`"""
+        self._adater.http_client = value
+
     @staticmethod
     def resolve_url(url: str, authentication: Authentication = None, http_client: Any = None) -> DDO:
         """
