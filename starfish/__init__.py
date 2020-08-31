@@ -7,4 +7,4 @@
 from starfish.network import Network                     # noqa: F401
 
 __author__ = """DEX.sg"""
-__version__ = '0.12.7'
+__version__ = '0.12.8'
