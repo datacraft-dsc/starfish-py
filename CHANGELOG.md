@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.9
++   Fix http_client bug
+
 ### Release v0.12.8
 +   Allow to change the http_client on the Remote Agent
 
