@@ -7,7 +7,7 @@
 import requests
 
 from starfish.agent.remote_agent import RemoteAgent
-from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
+from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
 
 
 def test_remote_agent_set_http_client():

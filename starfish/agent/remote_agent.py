@@ -36,7 +36,7 @@ from starfish.exceptions import (
 )
 from starfish.job import Job
 from starfish.listing import Listing
-from starfish.middleware.remote_agent_adapter import RemoteAgentAdapter
+from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
 from starfish.network import Network
 from starfish.types import (
     Authentication,
