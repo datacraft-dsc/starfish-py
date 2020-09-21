@@ -7,7 +7,7 @@
 import logging
 from typing import Any
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from .command_base import CommandBase
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ class AccountCreateCommand(CommandBase):
         return parser
 
     def execute(self, args: Any, output: Any) -> None:
-        account = Account.create(args.password)
+        account = EthereumAccount.create(args.password)
         logger.debug(f'create new account {account.address}')
         if args.keyfile:
             logger.debug(f'writing key file to {args.keyfile}')

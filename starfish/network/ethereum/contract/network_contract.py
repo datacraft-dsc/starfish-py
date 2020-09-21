@@ -5,8 +5,8 @@
 """
 import logging
 
-from starfish.account import Account
-from starfish.contract.contract_base import ContractBase
+from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.types import AccountAddress
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class NetworkContract(ContractBase):
         amount_wei = self._web3.eth.getBalance(address, block_identifier='latest')
         return self.to_ether(amount_wei)
 
-    def send_ether(self, account: Account, to_account_address: AccountAddress, amount: float) -> str:
+    def send_ether(self, account: EthereumAccount, to_account_address: AccountAddress, amount: float) -> str:
 
         amount_wei = self.to_wei(amount)
         to_address = self.get_account_address(to_account_address)

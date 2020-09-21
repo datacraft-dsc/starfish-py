@@ -8,8 +8,8 @@ import datetime
 import logging
 from eth_utils import remove_0x_prefix
 
-from starfish.account import Account
-from starfish.contract.contract_base import ContractBase
+from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.types import ProvenanceEventList
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class ProvenanceContract(ContractBase):
     def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def register(self, account: Account, asset_id: str) -> str:
+    def register(self, account: EthereumAccount, asset_id: str) -> str:
         asset_id_bytes = self._web3.toBytes(hexstr=asset_id)
         tx_hash = self.call('registerAsset', (asset_id_bytes), account)
         return tx_hash

@@ -6,8 +6,8 @@
 
 import logging
 
-from starfish.account import Account
-from starfish.contract.contract_base import ContractBase
+from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.utils.did import did_to_id
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class DIDRegistryContract(ContractBase):
     def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def register(self, account: Account, did: str, ddo_text: str) -> str:
+    def register(self, account: EthereumAccount, did: str, ddo_text: str) -> str:
         tx_hash = None
         did_id = did_to_id(did)
         if did_id:

@@ -22,7 +22,7 @@ from typing import (
 from urllib.parse import urljoin
 import requests
 
-from starfish.contract.contract_base import ContractBase
+from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.types import (
     TContractBase,
     TContractManager

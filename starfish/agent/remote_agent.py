@@ -20,7 +20,7 @@ from urllib.parse import urljoin
 from eth_utils import remove_0x_prefix
 from mongoquery import Query
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.agent.agent_base import AgentBase
 from starfish.agent.services import Services
 from starfish.asset import (
@@ -37,7 +37,7 @@ from starfish.exceptions import (
 from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
-from starfish.network import Network
+from starfish.network.ethereum_network import EthereumNetwork
 from starfish.types import (
     Authentication,
     ListingData,
@@ -99,7 +99,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     @staticmethod
     def load(
         agent_did_or_url: str,
-        network: Network = None,
+        network: EthereumNetwork = None,
         username: str = None,
         password: str = None,
         authentication: Authentication = None,
@@ -138,8 +138,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
     @staticmethod
     def register(
-        network: Network,
-        register_account: Account,
+        network: EthereumNetwork,
+        register_account: EthereumAccount,
         ddo: DDO,
         authentication: Authentication = None,
         http_client: Any = None
@@ -429,7 +429,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         # TODO: implement search listing in remote
         pass
 
-    def purchase_asset(self, listing: Any, account: Any, purchase_id: str = None, status: str = None,
+    def purchase_asset(self, listing: Any, EthereumAccount: Any, purchase_id: str = None, status: str = None,
                        info: Any = None, agreement: Any = None) -> bool:
         """
 

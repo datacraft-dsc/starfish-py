@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from starfish import Network
+from starfish.network.ethereum_network import EthereumNetwork
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent, AgentManager
 from starfish.agent.services import Services
@@ -8,7 +8,7 @@ from starfish.agent.services import Services
 def main():
 
     # Create a new Ocean instance.
-    network = Network('http://localhost:8545')
+    network = EthereumNetwork('http://localhost:8545')
     print(network.name)
 
     # Create a remote agent to do the work.

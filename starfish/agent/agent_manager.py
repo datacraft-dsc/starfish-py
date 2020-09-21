@@ -9,7 +9,7 @@ from typing import Dict
 from starfish.agent.remote_agent import RemoteAgent
 from starfish.ddo import create_ddo_object
 from starfish.ddo.ddo import DDO
-from starfish.network import Network
+from starfish.network.ethereum_network import EthereumNetwork
 from starfish.types import (
     AgentItem,
     Authentication,
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class AgentManager:
-    def __init__(self, network: Network) -> None:
+    def __init__(self, network: EthereumNetwork) -> None:
         self._network = network
         self._items = {}
         self._default_name = None

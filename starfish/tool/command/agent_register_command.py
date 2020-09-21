@@ -7,7 +7,7 @@ import re
 from typing import Any
 from web3 import Web3
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.agent import RemoteAgent
 from starfish.agent.services import (
     ALL_SERVICES,
@@ -70,7 +70,7 @@ Services can be: {",".join(ALL_SERVICES)}
             output.add_error(f'{args.address} is not an ethereum account address')
             return
 
-        register_account = Account(args.address, args.password, key_file=args.keyfile)
+        register_account = EthereumAccount(args.address, args.password, key_file=args.keyfile)
 
         all_services = True
         service_list = None

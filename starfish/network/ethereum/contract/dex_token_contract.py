@@ -3,7 +3,7 @@
     Ocean Token Contract
 
 """
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.types import AccountAddress
 
 from .contract_base import ContractBase
@@ -23,12 +23,12 @@ class DexTokenContract(ContractBase):
         amount_wei = self.call('balanceOf', address)
         return self.to_ether(amount_wei)
 
-    def approve_transfer(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
+    def approve_transfer(self, account: EthereumAccount, to_account_address: AccountAddress, amount: float) -> bool:
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
         return self.call('approve', (to_address, amount_wei), account)
 
-    def transfer(self, account: Account, to_account_address: AccountAddress, amount: float) -> bool:
+    def transfer(self, account: EthereumAccount, to_account_address: AccountAddress, amount: float) -> bool:
         to_address = self.get_account_address(to_account_address)
         amount_wei = self.to_wei(amount)
         return self.call('transfer', (to_address, amount_wei), account)

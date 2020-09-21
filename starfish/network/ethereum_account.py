@@ -19,7 +19,7 @@ from starfish.types import (
 )
 
 
-class Account(Generic[TAccount]):
+class EthereumAccount(Generic[TAccount]):
     """
 
     Account class, adds functionality for an account to be used on the starfish named network.
@@ -83,7 +83,7 @@ class Account(Generic[TAccount]):
         """
         local_account = EthAccount.create(password)
         key_value = EthAccount.encrypt(local_account.key, password)
-        account = Account(local_account.address, password, key_value)
+        account = EthereumAccount(local_account.address, password, key_value)
         return account
 
     def load_from_file(self, filename: str) -> None:

@@ -6,7 +6,7 @@
 
 """
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 
 from starfish.listing.listing_base import ListingBase
 
@@ -24,7 +24,7 @@ class Listing(ListingBase):
         :type data: dict
     """
 
-    def purchase(self, account: Account) -> bool:
+    def purchase(self, account: EthereumAccount) -> bool:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -37,12 +37,12 @@ class Listing(ListingBase):
         :type: :class:`.SquidPurchase`
 
         """
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
+        if not isinstance(account, EthereumAccount):
+            raise TypeError('You need to pass an EthereumAccount object')
 
         return self._agent.purchase_asset(self, account)
 
-    def is_purchased(self, account: Account) -> bool:
+    def is_purchased(self, account: EthereumAccount) -> bool:
         """
 
         Return true if the account has already purchased this listing/asset
@@ -54,8 +54,8 @@ class Listing(ListingBase):
         :type: boolean
 
         """
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
+        if not isinstance(account, EthereumAccount):
+            raise TypeError('You need to pass an EthereumAccount object')
 
         return self._agent.is_access_granted_for_asset(self.asset_did, account)
 

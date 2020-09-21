@@ -39,13 +39,13 @@ def hash_file(filename):
         md5.update(fp.read())
     return md5.hexdigest()
 
-def test_asset_store_and_download_command(config, network, accounts):
+def test_asset_store_and_download_command(config, ethereum_network, ethereum_accounts):
     args = Mock()
 
     test_upload_filename = create_random_filename()
     create_test_file(test_upload_filename)
 
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     local_agent = config['agents']['local']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -68,15 +68,15 @@ def test_asset_store_and_download_command(config, network, accounts):
 
     # register agent in network using it's did
 
-    ddo = network.resolve_agent(args.agent, username=args.username, password=args.password)
-    register_account = accounts[0]
+    ddo = ethereum_network.resolve_agent(args.agent, username=args.username, password=args.password)
+    register_account = ethereum_accounts[0]
     did_id = remove_0x_prefix(did_to_id(upload_asset_did))
-    network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text())
+    ethereum_network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text())
 
 
     args = Mock()
     test_download_filename = create_random_filename()
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     local_agent = config['agents']['local']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -116,7 +116,7 @@ def test_asset_store_large_file_command(config):
     create_test_file(test_upload_filename, (pow(2, 20) * 7))
 
     test_download_filename = create_random_filename()
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     local_agent = config['agents']['local']
     args.username = local_agent['username']
     args.password = local_agent['password']

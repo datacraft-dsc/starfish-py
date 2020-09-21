@@ -6,10 +6,10 @@ import pathlib
 import requests
 from web3 import Web3, HTTPProvider
 
-from starfish import Network
+from starfish.network.ethereum_network import EthereumNetwork
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 
@@ -18,8 +18,8 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 
 
 @pytest.fixture(scope='module')
-def network(config):
-    network = Network(config['network']['url'])
+def ethereum_network(config):
+    network = EthereumNetwork(config['ethereum']['network']['url'])
     return network
 
 
@@ -37,14 +37,14 @@ def remote_agent(config):
 
 
 @pytest.fixture(scope='module')
-def accounts(config):
+def ethereum_accounts(config):
     result = []
     # load in the test accounts
-    account_1 = config['accounts']['account1']
-    account_2 = config['accounts']['account2']
+    account_1 = config['ethereum']['accounts']['account1']
+    account_2 = config['ethereum']['accounts']['account2']
     result = [
-        Account(account_1['address'], account_1['password'], key_file=account_1['keyfile']),
-        Account(account_2['address'], account_2['password'], key_file=account_2['keyfile']),
+        EthereumAccount(account_1['address'], account_1['password'], key_file=account_1['keyfile']),
+        EthereumAccount(account_2['address'], account_2['password'], key_file=account_2['keyfile']),
     ]
     return result
 

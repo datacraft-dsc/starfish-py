@@ -4,7 +4,7 @@
 
 """
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 
 from .contract_base import ContractBase
 
@@ -17,6 +17,6 @@ class DispenserContract(ContractBase):
     def __init__(self) -> None:
         ContractBase.__init__(self, CONTRACT_NAME)
 
-    def request_tokens(self, account: Account, amount: float) -> bool:
+    def request_tokens(self, account: EthereumAccount, amount: float) -> bool:
         # amount is in ether
         return self.call('requestTokens', amount, account)

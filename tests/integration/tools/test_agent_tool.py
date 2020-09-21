@@ -12,7 +12,7 @@ from starfish.tool.output import Output
 def test_agent_resolve_command(config):
     args = Mock()
 
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     local_agent = config['agents']['local']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -27,12 +27,12 @@ def test_agent_resolve_command(config):
 def test_agent_register_command(config):
     args = Mock
 
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     local_agent = config['agents']['local']
 
     args.agent_url = local_agent['url']
 
-    account = config['accounts']['account1']
+    account = config['ethereum']['accounts']['account1']
     args.address = account['address']
     args.password = account['password']
     args.keyfile = account['keyfile']

@@ -5,18 +5,18 @@ import time
 TOKEN_AMOUNT_TO_TRANSFER = 10
 
 
-def test_direct_purchase(network, accounts):
+def test_direct_purchase(ethereum_network, ethereum_accounts):
     """
 
     Transfer funds from the 'buy' account -> 'sell' account
 
     """
-    direct_contract = network.get_contract('DirectPurchase')
-    dex_token_contract = network.get_contract('DexToken')
-    dispenser_contract = network.get_contract('Dispenser')
+    direct_contract = ethereum_network.get_contract('DirectPurchase')
+    dex_token_contract = ethereum_network.get_contract('DexToken')
+    dispenser_contract = ethereum_network.get_contract('Dispenser')
 
-    from_account = accounts[0]
-    to_account = accounts[1]
+    from_account = ethereum_accounts[0]
+    to_account = ethereum_accounts[1]
     ref_1 = secrets.token_hex(32)
     ref_2 = secrets.token_hex(32)
 

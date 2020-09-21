@@ -6,13 +6,13 @@ from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 
 
-def test_did_registry_contract(network, config, accounts):
+def test_did_registry_contract(ethereum_network, config, ethereum_accounts):
     """
 
     Register and find a ddo based on a did
 
     """
-    did_registry_contract = network.get_contract('DIDRegistry')
+    did_registry_contract = ethereum_network.get_contract('DIDRegistry')
 
     did = did_generate_random()
 
@@ -21,7 +21,7 @@ def test_did_registry_contract(network, config, accounts):
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
 
-    register_account = accounts[0]
+    register_account = ethereum_accounts[0]
 
     tx_hash = did_registry_contract.register(register_account, did, ddo_text)
     receipt = did_registry_contract.wait_for_receipt(tx_hash)

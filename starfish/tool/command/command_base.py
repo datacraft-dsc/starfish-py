@@ -10,7 +10,7 @@ from abc import (
 )
 from typing import Any
 
-from starfish import Network
+from starfish.network.ethereum_network import EthereumNetwork
 
 DEFAULT_NETWORK_URL = 'http://localhost:8545'
 
@@ -62,7 +62,7 @@ class CommandBase(ABC):
             url = default_url
         if url is None:
             url = 'http://localhost:8545'
-        network = Network(url, load_development_contracts=load_development_contracts)
+        network = EthereumNetwork(url, load_development_contracts=load_development_contracts)
 
         return network
 

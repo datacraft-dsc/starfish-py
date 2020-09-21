@@ -7,8 +7,8 @@ import pytest
 
 from starfish.agent import AgentManager
 
-def test_agent_manager_add(network):
-    manager = AgentManager(network)
+def test_agent_manager_add(ethereum_network):
+    manager = AgentManager(ethereum_network)
 
     authentication = {
         'username': 'user_test',

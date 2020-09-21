@@ -8,7 +8,7 @@ from typing import (
     Generic
 )
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.types import (
     AccountAddress,
     TContractBase
@@ -39,7 +39,7 @@ class ContractBase(Generic[TContractBase]):
                 abi=abi
             )
 
-    def call(self, function_name: str, parameters: Any, account: Account = None, transact: Any = None) -> Any:
+    def call(self, function_name: str, parameters: Any, account: EthereumAccount = None, transact: Any = None) -> Any:
         if self._contract is None:
             raise ValueError('contract not loaded')
 
@@ -74,7 +74,7 @@ class ContractBase(Generic[TContractBase]):
             )
         return None
 
-    def _call_as_transaction(self, contract_function_call: Any, account: Account, transact: Any = None) -> str:
+    def _call_as_transaction(self, contract_function_call: Any, account: EthereumAccount, transact: Any = None) -> str:
         if transact is None:
             gas_transact = {
                 'from': account.address
@@ -123,10 +123,10 @@ class ContractBase(Generic[TContractBase]):
         gas_price = max(GAS_MINIMUM, gas_price)
         return gas_price
 
-    def unlockAccount(self, account: Account) -> None:
+    def unlockAccount(self, account: EthereumAccount) -> None:
         self._web3.personal.unlockAccount(account.address, account.password)
 
-    def lockAccount(self, account: Account) -> None:
+    def lockAccount(self, account: EthereumAccount) -> None:
         self._web3.personal.lockAccount(account.address, account.password)
 
     @property

@@ -4,13 +4,13 @@ import time
 
 TOKEN_AMOUNT_TO_TRANSFER = 10
 
-def test_dex_token_contract(network, accounts):
+def test_dex_token_contract(ethereum_network, ethereum_accounts):
 
-    dex_token_contract = network.get_contract('DexToken')
-    dispenser_contract = network.get_contract('Dispenser')
+    dex_token_contract = ethereum_network.get_contract('DexToken')
+    dispenser_contract = ethereum_network.get_contract('Dispenser')
 
-    from_account = accounts[0]
-    to_account = accounts[1]
+    from_account = ethereum_accounts[0]
+    to_account = ethereum_accounts[1]
 
     balance = dex_token_contract.get_balance(from_account)
 

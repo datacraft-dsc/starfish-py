@@ -4,7 +4,7 @@
 
 """
 
-from starfish.account import Account
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.types import AccountAddress
 
 from .contract_base import ContractBase
@@ -21,7 +21,7 @@ class DirectPurchaseContract(ContractBase):
 
     def send_token_and_log(
         self,
-        account: Account,
+        account: EthereumAccount,
         to_account_address: AccountAddress,
         amount: float,
         reference_1: str = None,
