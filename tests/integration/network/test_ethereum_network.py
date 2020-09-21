@@ -25,6 +25,8 @@ def test_network_account(ethereum_network, ethereum_accounts):
     ether_balance = ethereum_network.get_ether_balance(test_account)
     assert(ether_balance)
 
+    ethereum_network.request_test_tokens(test_account, TEST_AMOUNT)
+
     token_balance = ethereum_network.get_token_balance(test_account)
     assert(token_balance)
 
