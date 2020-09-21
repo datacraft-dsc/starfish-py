@@ -11,9 +11,9 @@ from typing import (
     Any,
     Generic
 )
-from starfish.network.ethereum_account import EthereumAccount
 from starfish.agent.agent_base import AgentBase
 from starfish.ddo import DDO
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.types import TListingBase
 
 

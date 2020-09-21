@@ -20,7 +20,6 @@ from urllib.parse import urljoin
 from eth_utils import remove_0x_prefix
 from mongoquery import Query
 
-from starfish.network.ethereum_account import EthereumAccount
 from starfish.agent.agent_base import AgentBase
 from starfish.agent.services import Services
 from starfish.asset import (
@@ -37,6 +36,7 @@ from starfish.exceptions import (
 from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.network.ethereum_network import EthereumNetwork
 from starfish.types import (
     Authentication,

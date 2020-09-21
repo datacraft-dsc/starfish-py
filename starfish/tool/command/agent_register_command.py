@@ -7,12 +7,12 @@ import re
 from typing import Any
 from web3 import Web3
 
-from starfish.network.ethereum_account import EthereumAccount
 from starfish.agent import RemoteAgent
 from starfish.agent.services import (
     ALL_SERVICES,
     Services
 )
+from starfish.network.ethereum_account import EthereumAccount
 
 
 from .command_base import CommandBase

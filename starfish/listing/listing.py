@@ -6,9 +6,8 @@
 
 """
 
-from starfish.network.ethereum_account import EthereumAccount
-
 from starfish.listing.listing_base import ListingBase
+from starfish.network.ethereum_account import EthereumAccount
 
 
 class Listing(ListingBase):

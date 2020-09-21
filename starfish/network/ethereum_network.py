@@ -21,8 +21,6 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 from web3.middleware import geth_poa_middleware
 
-from starfish.network.ethereum_account import EthereumAccount
-from starfish.network.ethereum.contract.contract_manager import ContractManager
 from starfish.ddo import (
     DDO,
     create_ddo_object
@@ -31,6 +29,8 @@ from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
+from starfish.network.ethereum.contract.contract_manager import ContractManager
+from starfish.network.ethereum_account import EthereumAccount
 from starfish.types import (
     AccountAddress,
     Authentication,

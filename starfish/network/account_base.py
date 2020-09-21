@@ -4,22 +4,12 @@
 
 """
 
-import json
-
 from abc import (
     ABC,
     abstractmethod
 )
 
-from typing import (
-    Any,
-    Generic
-)
-
-from starfish.types import (
-    AccountAddressOrDict,
-    TAccount
-)
+from typing import Any
 
 
 class AccountBase(ABC):
@@ -45,7 +35,6 @@ class AccountBase(ABC):
         }
 
     """
-
 
     @abstractmethod
     def load_from_file(self, filename: str) -> None:
@@ -137,7 +126,6 @@ class AccountBase(ABC):
         """
         return False
 
-
     @abstractmethod
     @property
     def address(self) -> str:
@@ -186,7 +174,6 @@ class AccountBase(ABC):
 
         """
         return None
-
 
     def __str__(self) -> str:
         return f'Account: {self.address}'
