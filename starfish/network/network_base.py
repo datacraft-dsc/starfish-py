@@ -12,20 +12,20 @@ from abc import (
     ABC,
     abstractmethod
 )
-from starfish.network.account_base import AccountBase
+from typing import Any
+
 from starfish.ddo import (
     DDO,
     create_ddo_object
 )
-
-from typing import Any
+from starfish.network.account_base import AccountBase
 from starfish.types import (
     AccountAddress,
     Authentication
 )
+from starfish.utils.did import is_did
 
 logger = logging.getLogger(__name__)
-
 
 
 class NetworkBase(ABC):
@@ -48,22 +48,20 @@ class NetworkBase(ABC):
     def request_test_tokens(self, account: AccountBase, amount: float) -> bool:
         return False
 
-
     """
 
     Send tokens to another account
 
     """
-
     @abstractmethod
     def send_token(self, account: AccountBase, to_account_address: AccountAddress, amount: float) -> bool:
         return False
+
     """
 
     Send tokens (make payment) with logging
 
     """
-
     @abstractmethod
     def send_token_and_log(
         self,
@@ -154,4 +152,3 @@ class NetworkBase(ABC):
     @property
     def url(self) -> str:
         return self._url
-

@@ -9,7 +9,6 @@
 import logging
 from typing import (
     Any,
-    Generic,
     List
 )
 import requests
@@ -36,8 +35,7 @@ from starfish.types import (
     AccountAddress,
     Authentication,
     ProvenanceEventList,
-    TContractBase,
-    TNetworkBase
+    TContractBase
 )
 from starfish.utils.did import is_did
 
