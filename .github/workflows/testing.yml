@@ -19,7 +19,9 @@ jobs:
       with:
         tools-deps: '1.10.1.483'
     - name: Install dependencies
-      run: make install-test IGNORE_VENV=1
+      run: make install IGNORE_VENV=1
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     - name: Lint
       run: make lint
     - name: Install Surfer
