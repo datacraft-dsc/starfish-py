@@ -58,7 +58,6 @@ class AccountBase(ABC):
         """
         pass
 
-    @abstractmethod
     @property
     def export_key_value(self):
         """
@@ -117,7 +116,6 @@ class AccountBase(ABC):
     def sign_transaction(self, web3: Any, transaction: Any) -> Any:
         pass
 
-    @abstractmethod
     @property
     def is_password(self) -> bool:
         """
@@ -126,7 +124,6 @@ class AccountBase(ABC):
         """
         return False
 
-    @abstractmethod
     @property
     def address(self) -> str:
         """
@@ -142,7 +139,6 @@ class AccountBase(ABC):
         """
         return None
 
-    @abstractmethod
     @property
     def as_checksum_address(self) -> str:
         """
@@ -159,7 +155,6 @@ class AccountBase(ABC):
         """
         return None
 
-    @abstractmethod
     @property
     def password(self) -> str:
         """

@@ -31,12 +31,13 @@ from starfish.exceptions import (
 )
 from starfish.network.ethereum.contract.contract_manager import ContractManager
 from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.network_base import NetworkBase
 from starfish.types import (
     AccountAddress,
     Authentication,
     ProvenanceEventList,
     TContractBase,
-    TNetwork
+    TNetworkBase
 )
 from starfish.utils.did import is_did
 
@@ -85,9 +86,9 @@ CONTRACT_LIST = {
 }
 
 
-class EthereumNetwork(Generic[TNetwork]):
+class EthereumNetwork(NetworkBase):
     def __init__(self, url: str, artifacts_path: str = None, load_development_contracts: bool = True) -> None:
-        self._url = url
+        NetworkBase.__init__(self, url)
         self._web3 = None
         self._name = None
         self._id = None
@@ -312,10 +313,6 @@ class EthereumNetwork(Generic[TNetwork]):
     @property
     def contract_names(self) -> List[str]:
         return CONTRACT_LIST.keys()
-
-    @property
-    def url(self) -> str:
-        return self._url
 
     @property
     def name(self) -> str:

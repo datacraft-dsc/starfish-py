@@ -36,8 +36,8 @@ from starfish.exceptions import (
 from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
-from starfish.network.ethereum_account import EthereumAccount
-from starfish.network.ethereum_network import EthereumNetwork
+from starfish.network.account_base import AccountBase
+from starfish.network.network_base import NetworkBase
 from starfish.types import (
     Authentication,
     ListingData,
@@ -99,7 +99,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     @staticmethod
     def load(
         agent_did_or_url: str,
-        network: EthereumNetwork = None,
+        network: NetworkBase = None,
         username: str = None,
         password: str = None,
         authentication: Authentication = None,
@@ -138,8 +138,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
     @staticmethod
     def register(
-        network: EthereumNetwork,
-        register_account: EthereumAccount,
+        network: NetworkBase,
+        register_account: AccountBase,
         ddo: DDO,
         authentication: Authentication = None,
         http_client: Any = None
@@ -429,7 +429,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         # TODO: implement search listing in remote
         pass
 
-    def purchase_asset(self, listing: Any, EthereumAccount: Any, purchase_id: str = None, status: str = None,
+    def purchase_asset(self, listing: Any, AccountBase: Any, purchase_id: str = None, status: str = None,
                        info: Any = None, agreement: Any = None) -> bool:
         """
 

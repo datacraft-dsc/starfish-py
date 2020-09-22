@@ -34,7 +34,7 @@ TDDO = TypeVar('DDO')
 TJobBase = TypeVar('JobBase')
 TListing = TypeVar('Listing')
 TListingBase = TypeVar('ListingBase')
-TNetwork = TypeVar('Network')
+TNetworkBase = TypeVar('NetworkBase')
 TRemoteAgent = TypeVar('RemoteAgent')
 
 
