@@ -14,7 +14,7 @@ class UnitTestConfig():
     remote_agent_url = 'http://localhost:8080'
     def __init__(self):
         self.ethereum = ConfigEthereum()
-        for index in range(0, 8):
+        for index in range(0, 2):
             account = self.create_account(secrets.token_hex(32))
             self.ethereum.accounts.append(account)
 

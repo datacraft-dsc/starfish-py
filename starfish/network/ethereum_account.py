@@ -13,10 +13,7 @@ from typing import (
 from eth_account import Account as EthAccount
 from web3 import Web3
 
-from starfish.types import (
-    AccountAddressOrDict,
-    TAccount
-)
+from starfish.types import TAccount
 
 
 class EthereumAccount(Generic[TAccount]):
@@ -28,7 +25,7 @@ class EthereumAccount(Generic[TAccount]):
     :type address: string or dict
     :param password: password for the account
     :type password: str or None
-    :param str key_value: key value data that is stored in the keyfile
+    :param str key_data: key value data that is stored in the keyfile
     :param keyfile: keyfile containing the private encrypted key
     :type keyfile: str or None
 
@@ -43,31 +40,16 @@ class EthereumAccount(Generic[TAccount]):
 
     """
 
-    def __init__(self, address: AccountAddressOrDict, password: str = None, key_value: Any = None, key_file: str = None) -> None:
+    def __init__(self, password: str = None, key_data: Any = None, key_file: str = None) -> None:
         """init a standard account object"""
-        self._address = None
         self._password = None
-        self._key_value = None
+        self._key_data = None
+        self._address = None
 
-        if isinstance(address, dict):
-            self._address = Web3.toChecksumAddress(address.get('address'))
-            self._password = address.get('password')
-            self._key_value = address.get('key_value')
-            key_file = address.get('key_file')
-        elif isinstance(address, (tuple, list)):
-            self._address = Web3.toChecksumAddress(address[0])
-            if len(address) > 1:
-                self._password = address[1]
-            if len(address) > 2:
-                self._key_value = address[2]
-            if len(address) > 3:
-                key_file = address[3]
-        elif isinstance(address, str):
-            self._address = Web3.toChecksumAddress(address)
-            self._password = password
-            self._key_value = key_value
+        self._password = password
+        self._set_key_data(key_data)
 
-        # auto load in key_value from file
+        # auto load in key_data from file
         if key_file:
             self.load_from_file(key_file)
 
@@ -82,8 +64,8 @@ class EthereumAccount(Generic[TAccount]):
         :return: Returns an account object
         """
         local_account = EthAccount.create(password)
-        key_value = EthAccount.encrypt(local_account.key, password)
-        account = EthereumAccount(local_account.address, password, key_value)
+        key_data = EthAccount.encrypt(local_account.key, password)
+        account = EthereumAccount(password, key_data=key_data)
         return account
 
     def load_from_file(self, filename: str) -> None:
@@ -91,50 +73,51 @@ class EthereumAccount(Generic[TAccount]):
 
         Load in a key value from a file
 
-        :param str filename: file to that has the key_value
+        :param str filename: file to that has the key_data
 
         """
         with open(filename, 'r') as fp:
-            self._key_value = json.load(fp)
+            data = json.load(fp)
+            self._set_key_data(data)
 
     def save_to_file(self, filename: str) -> None:
         """
 
         Save a key value to a file
 
-        :param str filename: filename to write the key_value too.
+        :param str filename: filename to write the key_data too.
 
         """
-        if self._key_value:
+        if self._key_data:
             with open(filename, 'w') as fp:
-                json.dump(self._key_value, fp)
+                json.dump(self._key_data, fp)
 
     @property
-    def export_key_value(self):
+    def export_as_text(self):
         """
 
-        Export a key_value to json text
+        Export a key_data to json text
 
         """
-        return json.dumps(self._key_value, sort_keys=True, indent=2)
+        return json.dumps(self._key_data, sort_keys=True, indent=2)
 
-    def import_key_value(self, json_text: str) -> None:
+    def import_from_text(self, json_text: str) -> None:
         """
 
-        Import a key_value from a json string
+        Import a key_data from a json string
 
         """
         data = json.loads(json_text)
-        self._key_value = data
+        self._set_key_data(data)
 
-    def export_key(self, password: str) -> str:
+    def export_private_key(self, password: str) -> str:
         """
 
         Export the private key
 
 
         """
-        return EthAccount.decrypt(self._key_value, password)
+        return EthAccount.decrypt(self._key_data, password)
 
     def import_key(self, raw_key: str, password: str) -> None:
         """
@@ -142,7 +125,7 @@ class EthereumAccount(Generic[TAccount]):
         Import the raw private key
 
         """
-        self._key_value = EthAccount.encrypt(raw_key, password)
+        self._set_key_data(EthAccount.encrypt(raw_key, password))
 
     def is_address_equal(self, address: str) -> bool:
         """
@@ -161,8 +144,8 @@ class EthereumAccount(Generic[TAccount]):
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
     def sign_transaction(self, web3: Any, transaction: Any) -> Any:
-        if self.key_value:
-            secret_key = web3.eth.account.decrypt(self.key_value, self._password)
+        if self._key_data:
+            secret_key = web3.eth.account.decrypt(self._key_data, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
             return signed
 
@@ -222,31 +205,23 @@ class EthereumAccount(Generic[TAccount]):
         """
         return self._password
 
-    def set_password(self, password: str) -> None:
-        """
-
-        Set the password for this account
-
-        :param str password: Password to set for this account
-
-        >>> account.set_password('new secret')
-        >>> account.password
-        new secret
-        """
-        self._password = password
-
     @property
-    def key_value(self) -> Any:
+    def key_data(self) -> Any:
         """
 
         This is the encrypted key value that contains the account private key
 
         """
-        return self._key_value
+        return self._key_data
 
     @property
     def is_valid(self) -> bool:
-        return self._address and self._password and self._key_value
+        return self._address and self._password and self._key_data
+
+    def _set_key_data(self, key_data):
+        self._key_data = key_data
+        if self._key_data:
+            self._address = Web3.toChecksumAddress(self._key_data['address'])
 
     def __str__(self) -> str:
         return f'Account: {self.address}'
