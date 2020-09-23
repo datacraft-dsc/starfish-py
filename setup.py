@@ -17,13 +17,18 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
-access_token = os.environ['ACCESS_TOKEN']
+
+if 'ACCESS_TOKEN' in os.environ:
+    access_token = os.environ['ACCESS_TOKEN']
+    convex_api_py = f'convex-api-py @ git+https://{access_token}@github.com/DEX-Company/convex-api-py.git',
+else:
+    convex_api_py = f'convex-api-py @ git+ssh://git@github.com/DEX-Company/convex-api-py.git',
 
 install_requirements = [
     'web3',
     'typing_extensions',
     'mongoquery',
-    f'convex-api-py @ git+https://{access_token}@github.com/DEX-Company/convex-api-py.git',
+    convex_api_py,
 ]
 
 setup_requirements = ['pytest-runner', ]
