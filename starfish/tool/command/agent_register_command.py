@@ -60,7 +60,7 @@ Services can be: {",".join(ALL_SERVICES)}
     def execute(self, args: Any, output: Any) -> Any:
         network = self.get_network(args.url)
 
-        register_account = EthereumAccount(args.password, key_file=args.keyfile)
+        register_account = EthereumAccount.import_from_file(args.keyfile, args.password)
 
         all_services = True
         service_list = None

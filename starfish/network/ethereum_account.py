@@ -40,21 +40,16 @@ class EthereumAccount(Generic[TAccount]):
 
     """
 
-    def __init__(self, password: str = None, key_data: Any = None, key_file: str = None) -> None:
+    def __init__(self, key_data: Any, password: str) -> None:
         """init a standard account object"""
-        self._password = None
-        self._key_data = None
         self._address = None
-
         self._password = password
-        self._set_key_data(key_data)
-
-        # auto load in key_data from file
-        if key_file:
-            self.load_from_file(key_file)
+        self._key_data = key_data
+        if isinstance(self._key_data, dict):
+            self._address = Web3.toChecksumAddress(self._key_data['address'])
 
     @staticmethod
-    def create(password: str) -> TAccount:
+    def create_new(password: str) -> TAccount:
         """
 
         Create a new account.
@@ -65,22 +60,21 @@ class EthereumAccount(Generic[TAccount]):
         """
         local_account = EthAccount.create(password)
         key_data = EthAccount.encrypt(local_account.key, password)
-        account = EthereumAccount(password, key_data=key_data)
+        account = EthereumAccount(key_data, password)
         return account
 
-    def load_from_file(self, filename: str) -> None:
-        """
+    @staticmethod
+    def import_from_text(data, password):
+        return EthereumAccount(data, password)
 
-        Load in a key value from a file
-
-        :param str filename: file to that has the key_data
-
-        """
+    @staticmethod
+    def import_from_file(filename, password):
         with open(filename, 'r') as fp:
             data = json.load(fp)
-            self._set_key_data(data)
+            return EthereumAccount(data, password)
 
-    def save_to_file(self, filename: str) -> None:
+
+    def export_to_file(self, filename: str) -> None:
         """
 
         Save a key value to a file
@@ -93,7 +87,7 @@ class EthereumAccount(Generic[TAccount]):
                 json.dump(self._key_data, fp)
 
     @property
-    def export_as_text(self):
+    def export_to_text(self):
         """
 
         Export a key_data to json text
@@ -101,31 +95,6 @@ class EthereumAccount(Generic[TAccount]):
         """
         return json.dumps(self._key_data, sort_keys=True, indent=2)
 
-    def import_from_text(self, json_text: str) -> None:
-        """
-
-        Import a key_data from a json string
-
-        """
-        data = json.loads(json_text)
-        self._set_key_data(data)
-
-    def export_private_key(self, password: str) -> str:
-        """
-
-        Export the private key
-
-
-        """
-        return EthAccount.decrypt(self._key_data, password)
-
-    def import_key(self, raw_key: str, password: str) -> None:
-        """
-
-        Import the raw private key
-
-        """
-        self._set_key_data(EthAccount.encrypt(raw_key, password))
 
     def is_address_equal(self, address: str) -> bool:
         """
@@ -148,14 +117,6 @@ class EthereumAccount(Generic[TAccount]):
             secret_key = web3.eth.account.decrypt(self._key_data, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
             return signed
-
-    @property
-    def is_password(self) -> bool:
-        """
-        Return True if the password has been set, else return False
-
-        """
-        return self._password is not None
 
     @property
     def address(self) -> str:
@@ -217,11 +178,6 @@ class EthereumAccount(Generic[TAccount]):
     @property
     def is_valid(self) -> bool:
         return self._address and self._password and self._key_data
-
-    def _set_key_data(self, key_data):
-        self._key_data = key_data
-        if self._key_data:
-            self._address = Web3.toChecksumAddress(self._key_data['address'])
 
     def __str__(self) -> str:
         return f'Account: {self.address}'

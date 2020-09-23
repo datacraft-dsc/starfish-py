@@ -43,8 +43,8 @@ def ethereum_accounts(config):
     account_1 = config['ethereum']['accounts']['account1']
     account_2 = config['ethereum']['accounts']['account2']
     result = [
-        EthereumAccount(account_1['password'], key_file=account_1['keyfile']),
-        EthereumAccount(account_2['password'], key_file=account_2['keyfile']),
+        EthereumAccount.import_from_file(account_1['keyfile'], account_1['password']),
+        EthereumAccount.import_from_file(account_2['keyfile'], account_2['password']),
     ]
     return result
 
