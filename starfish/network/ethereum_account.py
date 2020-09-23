@@ -5,19 +5,14 @@
 """
 
 import json
-from typing import (
-    Any,
-    Generic
-)
-
+from typing import Any
 from eth_account import Account as EthAccount
 from web3 import Web3
 
 from starfish.network.account_base import AccountBase
-from starfish.types import TAccount
 
 
-class EthereumAccount(AccountBase, Generic[TAccount]):
+class EthereumAccount(AccountBase):
     """
 
     Account class, adds functionality for an account to be used on the starfish named network.
@@ -50,7 +45,7 @@ class EthereumAccount(AccountBase, Generic[TAccount]):
             self._address = Web3.toChecksumAddress(self._key_data['address'])
 
     @staticmethod
-    def create_new(password: str) -> TAccount:
+    def create_new(password: str) -> AccountBase:
         """
 
         Create a new account.
@@ -65,11 +60,11 @@ class EthereumAccount(AccountBase, Generic[TAccount]):
         return account
 
     @staticmethod
-    def import_from_text(data, password) -> TAccount:
+    def import_from_text(data, password) -> AccountBase:
         return EthereumAccount(data, password)
 
     @staticmethod
-    def import_from_file(filename, password) -> TAccount:
+    def import_from_file(filename, password) -> AccountBase:
         with open(filename, 'r') as fp:
             data = json.load(fp)
             return EthereumAccount(data, password)

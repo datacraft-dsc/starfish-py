@@ -12,6 +12,7 @@ from typing import (
     List
 )
 import requests
+
 from web3 import (
     HTTPProvider,
     Web3
@@ -20,10 +21,6 @@ from web3 import (
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 from web3.middleware import geth_poa_middleware
 
-from starfish.ddo import (
-    DDO,
-    create_ddo_object
-)
 from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
@@ -33,7 +30,6 @@ from starfish.network.ethereum_account import EthereumAccount
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
     AccountAddress,
-    Authentication,
     ProvenanceEventList,
     TContractBase
 )
@@ -269,44 +265,6 @@ class EthereumNetwork(NetworkBase):
             did_registry_contract = self.get_contract('DIDRegistry')
             ddo_text = did_registry_contract.get_value(did)
         return ddo_text
-
-    """
-
-
-    Helper methods
-
-
-    """
-
-    def resolve_agent(
-        self,
-        agent_url_did: str,
-        username: str = None,
-        password: str = None,
-        authentication: Authentication = None
-    ) -> DDO:
-
-        # stop circular references on import
-
-        from starfish.agent.remote_agent import RemoteAgent
-
-        ddo = None
-        if is_did(agent_url_did):
-            ddo_text = self.resolve_did(agent_url_did)
-            if ddo_text:
-                ddo = create_ddo_object(ddo_text)
-            return ddo
-
-        if not authentication:
-            if username or password:
-                authentication = {
-                    'username': username,
-                    'password': password
-                }
-        ddo_text = RemoteAgent.resolve_url(agent_url_did, authentication)
-        if ddo_text:
-            ddo = create_ddo_object(ddo_text)
-        return ddo
 
     @property
     def contract_names(self) -> List[str]:
