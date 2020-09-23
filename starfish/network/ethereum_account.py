@@ -73,7 +73,6 @@ class EthereumAccount(Generic[TAccount]):
             data = json.load(fp)
             return EthereumAccount(data, password)
 
-
     def export_to_file(self, filename: str) -> None:
         """
 
@@ -94,7 +93,6 @@ class EthereumAccount(Generic[TAccount]):
 
         """
         return json.dumps(self._key_data, sort_keys=True, indent=2)
-
 
     def is_address_equal(self, address: str) -> bool:
         """
