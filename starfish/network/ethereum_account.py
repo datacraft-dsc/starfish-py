@@ -13,10 +13,11 @@ from typing import (
 from eth_account import Account as EthAccount
 from web3 import Web3
 
+from starfish.network.account_base import AccountBase
 from starfish.types import TAccount
 
 
-class EthereumAccount(Generic[TAccount]):
+class EthereumAccount(AccountBase, Generic[TAccount]):
     """
 
     Account class, adds functionality for an account to be used on the starfish named network.
@@ -64,11 +65,11 @@ class EthereumAccount(Generic[TAccount]):
         return account
 
     @staticmethod
-    def import_from_text(data, password):
+    def import_from_text(data, password) -> TAccount:
         return EthereumAccount(data, password)
 
     @staticmethod
-    def import_from_file(filename, password):
+    def import_from_file(filename, password) -> TAccount:
         with open(filename, 'r') as fp:
             data = json.load(fp)
             return EthereumAccount(data, password)

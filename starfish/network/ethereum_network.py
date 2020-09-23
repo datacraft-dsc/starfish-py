@@ -345,3 +345,6 @@ class EthereumNetwork(NetworkBase):
             self._web3.eth.setGasPriceStrategy(rpc_gas_price_strategy)
             return True
         return False
+
+    def __str__(self) -> str:
+        return f'Account: {self.address}'
