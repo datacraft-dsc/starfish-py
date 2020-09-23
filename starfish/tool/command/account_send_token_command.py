@@ -7,7 +7,7 @@ import logging
 from typing import Any
 from web3 import Web3
 
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 from .command_base import CommandBase
 

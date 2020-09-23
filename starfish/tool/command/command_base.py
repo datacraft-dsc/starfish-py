@@ -10,7 +10,7 @@ from abc import (
 )
 from typing import Any
 
-from starfish.network.ethereum_network import EthereumNetwork
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
 
 DEFAULT_NETWORK_URL = 'http://localhost:8545'
 

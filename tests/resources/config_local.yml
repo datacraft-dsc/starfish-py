@@ -9,12 +9,22 @@ ethereum:
     account1:
       address: '0x19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8'
       password: dex-secret
-      keyfile: tests/resources/account_key_files/local/19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8.json
+      keyfile: tests/resources/account_key_files/ethereum/local/19C2a80BE6f5fA50d4274FecdF7F4b441fB852c8.json
 
     account2:
       address: '0xF3dc3d005F3e854Ce904A7bbF1e09dCe286caF64'
       password: dex-secret
-      keyfile: tests/resources/account_key_files/local/F3dc3d005F3e854Ce904A7bbF1e09dCe286caF64.json
+      keyfile: tests/resources/account_key_files/ethereum/local/F3dc3d005F3e854Ce904A7bbF1e09dCe286caF64.json
+
+convex:
+  network:
+    url: https://convex.world
+
+  accounts:
+    account1:
+      address: '0x5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306'
+      password: secret
+      keyfile: tests/resources/account_key_files/convex/local/5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306.pem
 
 # list of available agents via their DID and/or URL
 # each agent section header is [<agent name> agent]

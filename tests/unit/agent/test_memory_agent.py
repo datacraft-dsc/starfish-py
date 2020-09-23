@@ -7,7 +7,7 @@ import tempfile
 
 from starfish.agent.memory_agent import MemoryAgent
 from starfish.asset.data_asset import DataAsset
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 
 def create_agent():

@@ -9,7 +9,7 @@ import logging
 from eth_utils import remove_0x_prefix
 
 from starfish.network.ethereum.contract.contract_base import ContractBase
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.types import ProvenanceEventList
 
 logger = logging.getLogger(__name__)

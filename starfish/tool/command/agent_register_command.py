@@ -11,7 +11,7 @@ from starfish.agent.services import (
     ALL_SERVICES,
     Services
 )
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 
 from .command_base import CommandBase

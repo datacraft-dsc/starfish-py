@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from starfish.network.ethereum_network import EthereumNetwork
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent, AgentManager
 from starfish.agent.services import Services

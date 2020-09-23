@@ -8,7 +8,7 @@ from typing import (
     Generic
 )
 
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.types import (
     AccountAddress,
     TContractBase

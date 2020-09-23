@@ -4,7 +4,7 @@
 
 """
 
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 from .contract_base import ContractBase
 

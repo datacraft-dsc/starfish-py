@@ -26,7 +26,7 @@ from starfish.exceptions import (
     StarfishInsufficientFunds
 )
 from starfish.network.ethereum.contract.contract_manager import ContractManager
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
     AccountAddress,

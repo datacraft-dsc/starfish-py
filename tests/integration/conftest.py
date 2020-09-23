@@ -6,10 +6,14 @@ import pathlib
 import requests
 from web3 import Web3, HTTPProvider
 
-from starfish.network.ethereum_network import EthereumNetwork
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
+
+from starfish.network.convex.convex_account import ConvexAccount
+from starfish.network.convex.convex_network import ConvexNetwork
+
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 
@@ -20,6 +24,11 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 @pytest.fixture(scope='module')
 def ethereum_network(config):
     network = EthereumNetwork(config['ethereum']['network']['url'])
+    return network
+
+@pytest.fixture(scope='module')
+def convex_network(config):
+    network = ConvexNetwork(config['convex']['network']['url'])
     return network
 
 

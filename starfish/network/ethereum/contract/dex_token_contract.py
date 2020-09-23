@@ -3,7 +3,7 @@
     Ocean Token Contract
 
 """
-from starfish.network.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.types import AccountAddress
 
 from .contract_base import ContractBase
