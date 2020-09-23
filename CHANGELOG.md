@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.13.0
++   Use EtereumAccount and EtherumNetwork to access the ethereum network contracts
+
+
 ### Release v0.12.9
 +   Fix http_client bug
 
