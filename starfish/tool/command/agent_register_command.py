@@ -39,11 +39,6 @@ class AgentRegisterCommand(CommandBase):
         )
 
         parser.add_argument(
-            'address',
-            help='register account address to use'
-        )
-
-        parser.add_argument(
             'password',
             help='account password to use to register'
         )
@@ -66,11 +61,7 @@ Services can be: {",".join(ALL_SERVICES)}
     def execute(self, args: Any, output: Any) -> Any:
         network = self.get_network(args.url)
 
-        if not Web3.isAddress(args.address):
-            output.add_error(f'{args.address} is not an ethereum account address')
-            return
-
-        register_account = EthereumAccount(args.address, args.password, key_file=args.keyfile)
+        register_account = EthereumAccount(args.password, key_file=args.keyfile)
 
         all_services = True
         service_list = None

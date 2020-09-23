@@ -45,7 +45,7 @@ class AccountCreateCommand(CommandBase):
             account.save_to_file(args.keyfile)
         else:
             logger.debug('writing key file to ouptut')
-            output.add_line(account.export_key_value)
+            output.add_line(account.export_as_text)
         output.add_line(account.address)
-        output.set_value('keyvalue', account.key_value)
+        output.set_value('keydata', account.key_data)
         output.set_value('address', account.address)

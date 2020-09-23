@@ -33,7 +33,6 @@ def test_agent_register_command(config):
     args.agent_url = local_agent['url']
 
     account = config['ethereum']['accounts']['account1']
-    args.address = account['address']
     args.password = account['password']
     args.keyfile = account['keyfile']
 

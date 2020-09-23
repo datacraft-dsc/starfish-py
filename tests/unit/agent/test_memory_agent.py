@@ -32,7 +32,7 @@ def purchase_asset(resources, config):
     asset = register_asset(agent)
     listing = create_listing(agent, resources, asset)
 
-    account = EthereumAccount(config.ethereum.accounts[1].as_dict)
+    account = EthereumAccount(config.ethereum.accounts[1].password, config.ethereum.accounts[1].key_data)
     purchase = agent.purchase_asset(listing, account)
     return purchase, listing, agent, asset, account
 
@@ -74,7 +74,7 @@ def test_purchase_asset(resources, config):
     agent = create_agent()
     asset = register_asset(agent)
     listing = create_listing(agent, resources, asset)
-    account = EthereumAccount(config.ethereum.accounts[1].as_dict)
+    account = EthereumAccount(config.ethereum.accounts[1].password, config.ethereum.accounts[1].key_data)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 

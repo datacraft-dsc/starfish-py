@@ -20,7 +20,7 @@ def test_account_create_command(config):
     output = Output()
     network.execute(args, output)
     print(output.values)
-    assert(output.values['keyvalue'])
+    assert(output.values['keydata'])
     assert(output.values['address'])
 
 def test_account_balance(config):
