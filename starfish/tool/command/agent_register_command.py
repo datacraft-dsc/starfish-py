@@ -5,7 +5,6 @@
 """
 import re
 from typing import Any
-from web3 import Web3
 
 from starfish.agent import RemoteAgent
 from starfish.agent.services import (
