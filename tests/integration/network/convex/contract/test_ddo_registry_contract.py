@@ -12,98 +12,15 @@ from convex_api.account import Account
 from convex_api.convex_api import ConvexAPI
 from convex_api.exceptions import ConvexAPIError
 
+from starfish.network.convex.contract.ddo_registry_contract import (
+    CONTRACT_NAME,
+    CONTRACT_VERSION,
+    ddo_registry_contract
+)
+
 # (import convex.trust :as trust)
 
 
-CONTRACT_NAME='starfish-ddo-register'
-CONTRACT_VERSION = '0.0.4'
-
-ddo_register_contract = f"""
-(def {CONTRACT_NAME}
-    (deploy
-        '(do
-            (def registry {{}})
-            (def creator *caller*)
-            (defn version [] "{CONTRACT_VERSION}")
-            (defn get-register [did] (get registry did) )
-            (defn set-register [did owner-address ddo]
-                (let [register-record {{:owner owner-address :ddo ddo}}]
-                    (def registry (assoc registry did register-record))
-                )
-            )
-            (defn delete-register [did] (def registry (dissoc registry did)) )
-            (defn assert-owner [did]
-                (when-not (owner? did) (fail "NOT-OWNER" "not owner"))
-            )
-            (defn assert-address [value]
-                (when-not (address? (address value)) (fail "INVALID" "invalid address"))
-            )
-            (defn assert-did [value]
-                (when-not (and (blob? value) (== 32 (count (blob value)))) (fail "INVALID" "invalid DID"))
-            )
-            (defn resolve? [did]
-                (assert-did did)
-                (boolean (get-register did))
-            )
-            (defn resolve [did]
-                (assert-did did)
-                (when-let [register-record (get-register did)] (register-record :ddo))
-            )
-            (defn owner [did]
-                (assert-did did)
-                (when-let [register-record (get-register did)] (register-record :owner))
-            )
-            (defn owner? [did] (= (owner did) *caller*) )
-            (defn register [did ddo]
-                (assert-did did)
-                (when (resolve? did) (assert-owner did))
-                (set-register did *caller* ddo)
-                did
-            )
-            (defn unregister [did]
-                (when (resolve? did)
-                    (assert-owner did)
-                    (delete-register did)
-                    did
-                )
-            )
-            (defn transfer [did to-account]
-                (when (resolve? did)
-                    (assert-owner did)
-                    (assert-address to-account)
-                    (set-register did (address to-account) (resolve did))
-                    [did (address to-account)]
-                )
-            )
-            (defn owner-list [the-owner]
-                (assert-address the-owner)
-                (mapcat (fn [v] (when (= (address the-owner) (get (last v) :owner)) [(first v)])) registry)
-            )
-            (export resolve resolve? register unregister owner owner? owner-list transfer version)
-        )
-    )
-)
-"""
-
-deploy_single_contract_did_registry = """
-# single contract per did, deployed contract is the didid
-(def starfish-did-registry
-    (deploy
-        '(do
-            (def store-owner *caller*)
-            (def store-ddo nil)
-            (defn resolve [] store-ddo)
-            (defn register[x]
-                (assert (owner?))
-                (def store-ddo x)
-            )
-            (defn owner? [] (= store-owner *caller*))
-            (defn owner [] store-owner)
-            (export resolve register owner? owner)
-        )
-    )
-)
-"""
 
 ddo_register_contract_address = None
 
@@ -113,7 +30,7 @@ def contract_address(convex_network, convex_accounts):
     test_account = convex_accounts[0]
     auto_topup_account(convex_network, test_account, 50000000)
     if ddo_register_contract_address is None:
-        result = convex_network.convex.send(ddo_register_contract, test_account)
+        result = convex_network.convex.send(ddo_registry_contract, test_account)
         assert(result['value'])
         auto_topup_account(convex_network, test_account)
         ddo_register_contract_address = result['value']
