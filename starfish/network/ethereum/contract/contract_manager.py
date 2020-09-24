@@ -22,8 +22,8 @@ from typing import (
 from urllib.parse import urljoin
 import requests
 
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
 from starfish.network.ethereum.contract.contract_base import ContractBase
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
 from starfish.types import (
     TContractBase,
     TContractManager,
@@ -156,7 +156,8 @@ class ContractManager(Generic[TContractManager]):
             data = ContractManager.load_artifact_file(artifact_filename_path)
         else:
             # now try to load from the artifact library
-            if str(self._network.network_id) in self._artifact_items and name in self._artifact_items[str(self._network.network_id)]:
+            if (str(self._network.network_id) in self._artifact_items and
+                    name in self._artifact_items[str(self._network.network_id)]):
                 logger.debug(f'found contract in library {name}.{self._network.network_id}')
                 data = self._artifact_items[str(self._network.network_id)][name]
 

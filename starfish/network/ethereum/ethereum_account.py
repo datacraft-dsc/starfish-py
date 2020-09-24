@@ -11,6 +11,7 @@ from web3 import Web3
 
 from starfish.network.account_base import AccountBase
 
+
 class EthereumAccount(AccountBase):
     """
 
