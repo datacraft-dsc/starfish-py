@@ -25,8 +25,11 @@ class TestContract(ContractBase):
 
 
 def test_contract_base_deploy(convex_network, convex_accounts):
+    auto_topup_account(convex_network, convex_accounts)
+
     test_account = convex_accounts[0]
-    auto_topup_account(convex_network, test_account)
+    other_account = convex_accounts[1]
+
     test_contract = TestContract(convex_network.convex, test_account)
     contract_address = test_contract.deploy()
     assert(contract_address)
@@ -37,3 +40,19 @@ def test_contract_base_deploy(convex_network, convex_accounts):
     version = test_contract.get_version()
     assert(version)
     assert(version == test_contract.version)
+
+    # test load
+    test_contract_instance = TestContract(convex_network.convex, test_account)
+    test_contract_instance.load()
+    assert(test_contract_instance.address == test_contract.address)
+    assert(test_contract_instance.version == test_contract.version)
+
+
+    # test load using a different account
+    test_contract_instance = TestContract(convex_network.convex, test_account.address)
+    test_contract_instance.load()
+    assert(test_contract_instance.address == test_contract.address)
+    assert(test_contract_instance.version == test_contract.version)
+
+    with pytest.raises(TypeError, match='with a valid convex account'):
+        test_contract_instance.deploy()
