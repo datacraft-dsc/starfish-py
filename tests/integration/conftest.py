@@ -57,6 +57,19 @@ def ethereum_accounts(config):
     ]
     return result
 
+@pytest.fixture(scope='module')
+def convex_accounts(config):
+    result = []
+    # load in the test accounts
+    account_1 = config['convex']['accounts']['account1']
+    result = [
+        ConvexAccount.import_from_file(account_1['keyfile'], account_1['password']),
+        ConvexAccount.create_new(),
+    ]
+    return result
+
+
+
 
 @pytest.fixture(scope='module')
 def invokable_list(config):

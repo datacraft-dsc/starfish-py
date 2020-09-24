@@ -5,7 +5,7 @@
 """
 
 from starfish.network.account_base import AccountBase
+from convex_api import Account as ConvexAPIAccount
 
-
-class ConvexAccount(AccountBase):
+class ConvexAccount(ConvexAPIAccount, AccountBase):
     pass
