@@ -49,7 +49,7 @@ class NetworkContract(ContractBase):
             'gasPrice':  self.get_gas_price(account.address),
             'nonce': self.get_nonce(account.address),
         }
-        signed = account.sign_transaction(self._web3, transaction)
+        signed = account.sign_transaction(transaction, self._web3)
         tx_hash = None
         if signed:
             tx_hash = self._web3.eth.sendRawTransaction(signed.rawTransaction)

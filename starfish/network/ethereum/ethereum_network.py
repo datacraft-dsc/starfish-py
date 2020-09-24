@@ -25,7 +25,6 @@ from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
-from starfish.network.ethereum.contract.contract_manager import ContractManager
 from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
@@ -90,11 +89,12 @@ class EthereumNetwork(NetworkBase):
         self._contracts = {}
         if artifacts_path is None:
             artifacts_path = 'artifacts'
+
+        from starfish.network.ethereum.contract.contract_manager import ContractManager
+
         if self._connect(self._url, artifacts_path):
             self._contract_manager = ContractManager(
-                self._web3,
-                self._id,
-                self._name,
+                self,
                 DEFAULT_PACKAGE_NAME,
                 artifacts_path,
             )
@@ -273,6 +273,10 @@ class EthereumNetwork(NetworkBase):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def network_id(self) -> int:
+        return self._id
 
     @property
     def web3(self) -> Any:

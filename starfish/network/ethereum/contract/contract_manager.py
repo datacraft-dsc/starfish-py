@@ -22,10 +22,12 @@ from typing import (
 from urllib.parse import urljoin
 import requests
 
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
 from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.types import (
     TContractBase,
-    TContractManager
+    TContractManager,
+    TNetworkBase
 )
 
 logger = logging.getLogger(__name__)
@@ -39,16 +41,13 @@ class ContractManager(Generic[TContractManager]):
     """
     Setup the contract manager to load and get contracts
 
-    :param web3: Web3 connection to the block chain
-    :param str network_name: name of the connected network
+    :param network: Network connection to the block chain
     :param str default_package_name: default package name for the contract module
 
     """
 
-    def __init__(self, web3: Any, network_id: int, network_name: str, default_package_name: str, artifacts_path: str) -> None:
-        self._web3 = web3
-        self._network_id = network_id
-        self._network_name = network_name
+    def __init__(self, network: EthereumNetwork, default_package_name: str, artifacts_path: str) -> None:
+        self._network = network
         self._default_package_name = default_package_name
         self._artifacts_path = artifacts_path
         self._artifact_items = ContractManager.load_artifacts_package(ARTIFACT_DATA_FILENAME)
@@ -123,12 +122,12 @@ class ContractManager(Generic[TContractManager]):
         if has_artifact:
             contract_data = self.get_contract_data(contract_name, artifact_filename)
             if contract_data:
-                contract_object.load(self.web3, abi=contract_data['abi'], address=contract_data['address'])
+                contract_object.load(self._network.web3, abi=contract_data['abi'], address=contract_data['address'])
             else:
-                raise FileNotFoundError(f'Cannot find artifact data for contract {contract_name}.{self._network_name}')
+                raise FileNotFoundError(f'Cannot find artifact data for contract {contract_name}.{self._network.name}')
         else:
             # load in an dummy contract with no abi or address
-            contract_object.load(self.web3)
+            contract_object.load(self._network.web3)
 
         return contract_object
 
@@ -147,7 +146,7 @@ class ContractManager(Generic[TContractManager]):
 
         # setup the default artifact filename
         if artifact_filename is None:
-            artifact_filename = f'{name}.{self._network_id}.json'
+            artifact_filename = f'{name}.{self._network.network_id}.json'
 
         # first look for user defined folder for any artifact file
         artifacts_path_list = [self._artifacts_path, ContractManager.data_path()]
@@ -157,9 +156,9 @@ class ContractManager(Generic[TContractManager]):
             data = ContractManager.load_artifact_file(artifact_filename_path)
         else:
             # now try to load from the artifact library
-            if str(self._network_id) in self._artifact_items and name in self._artifact_items[str(self._network_id)]:
-                logger.debug(f'found contract in library {name}.{self._network_id}')
-                data = self._artifact_items[str(self._network_id)][name]
+            if str(self._network.network_id) in self._artifact_items and name in self._artifact_items[str(self._network.network_id)]:
+                logger.debug(f'found contract in library {name}.{self._network.network_id}')
+                data = self._artifact_items[str(self._network.network_id)][name]
 
         return data
 
@@ -172,9 +171,9 @@ class ContractManager(Generic[TContractManager]):
         :param dict data: Article data for the contract
 
         """
-        if self._network_id not in self._artifact_items:
-            self._artifact_items[self._network_id] = {}
-        self._artifact_items[self._network_id][name] = data
+        if self._network.network_id not in self._artifact_items:
+            self._artifact_items[self._network.network_id] = {}
+        self._artifact_items[self._network.network_id][name] = data
 
     def _request_local_artifacts_package(self, url: str) -> Any:
         """
@@ -195,8 +194,8 @@ class ContractManager(Generic[TContractManager]):
         return data
 
     @property
-    def web3(self) -> Any:
-        return self._web3
+    def network(self) -> TNetworkBase:
+        return self._network
 
     @property
     def artifacts_path(self) -> str:

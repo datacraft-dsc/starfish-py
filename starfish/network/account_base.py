@@ -21,5 +21,5 @@ class AccountBase(ABC):
     """
 
     @abstractmethod
-    def sign_transaction(self, web3: Any, transaction: Any) -> Any:
+    def sign_transaction(self, transaction: Any) -> Any:
         pass

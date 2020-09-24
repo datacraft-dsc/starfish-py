@@ -11,7 +11,6 @@ from web3 import Web3
 
 from starfish.network.account_base import AccountBase
 
-
 class EthereumAccount(AccountBase):
     """
 
@@ -106,7 +105,7 @@ class EthereumAccount(AccountBase):
         """
         return self.as_checksum_address == Web3.toChecksumAddress(address)
 
-    def sign_transaction(self, web3: Any, transaction: Any) -> Any:
+    def sign_transaction(self, transaction: Any, web3: Any) -> Any:
         if self._key_data:
             secret_key = web3.eth.account.decrypt(self._key_data, self._password)
             signed = web3.eth.account.sign_transaction(transaction, secret_key)
