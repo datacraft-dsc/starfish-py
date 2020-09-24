@@ -3,7 +3,7 @@
 
 """
 
-CONTRACT_NAME='starfish-ddo-registry'
+CONTRACT_NAME = 'starfish-ddo-registry'
 CONTRACT_VERSION = '0.0.4'
 
 ddo_registry_contract = f"""
