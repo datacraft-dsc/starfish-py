@@ -3,16 +3,18 @@
 
 """
 
-CONTRACT_NAME = 'starfish-ddo-registry'
-CONTRACT_VERSION = '0.0.4'
+from starfish.network.convex.contract.contract_base import ContractBase
 
-ddo_registry_contract = f"""
-(def {CONTRACT_NAME}
-    (deploy
-        '(do
+
+class DDORegistryContract(ContractBase):
+
+    def __init__(self, convex, account):
+        ContractBase.__init__(self, convex, account, 'starfish-ddo-registry', '0.0.4')
+
+        self._source = f'''
             (def registry {{}})
             (def creator *caller*)
-            (defn version [] "{CONTRACT_VERSION}")
+            (defn version [] "{self.version}")
             (defn get-register [did] (get registry did) )
             (defn set-register [did owner-address ddo]
                 (let [register-record {{:owner owner-address :ddo ddo}}]
@@ -68,7 +70,4 @@ ddo_registry_contract = f"""
                 (mapcat (fn [v] (when (= (address the-owner) (get (last v) :owner)) [(first v)])) registry)
             )
             (export resolve resolve? register unregister owner owner? owner-list transfer version)
-        )
-    )
-)
-"""
+        '''
