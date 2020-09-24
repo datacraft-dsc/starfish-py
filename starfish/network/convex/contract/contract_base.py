@@ -7,6 +7,7 @@ Contract Base
 
 from convex_api import Account
 
+
 class ContractBase:
     def __init__(self, convex, address_account, name, version):
         self._convex = convex
