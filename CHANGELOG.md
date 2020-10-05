@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.12.10
++   Fix key name error in AssetBundle class
+
 ### Release v0.12.9
 +   Fix http_client bug
 
