@@ -56,7 +56,7 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
             metadata['contents'] = {}
             for name, asset_id in asset_list.items():
                 metadata['contents'][name] = {
-                    'assetId': asset_id
+                    'assetID': asset_id
                 }
 
         return BundleAsset(json.dumps(metadata))
@@ -160,7 +160,7 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         metadata['contents'] = {}
         for name, asset_id in asset_list.items():
             metadata['contents'][name] = {
-                'assetId': asset_id
+                'assetID': asset_id
             }
         self.set_metadata(metadata)
 
