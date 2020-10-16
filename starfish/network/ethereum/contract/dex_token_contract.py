@@ -1,6 +1,6 @@
 """
 
-    Ocean Token Contract
+    Dex Token Contract
 
 """
 from starfish.network.ethereum.ethereum_account import EthereumAccount

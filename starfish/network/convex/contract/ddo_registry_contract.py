@@ -6,6 +6,7 @@
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
+from starfish.types import AccountAddress
 
 
 class DDORegistryContract(ContractBase):
@@ -77,6 +78,17 @@ class DDORegistryContract(ContractBase):
     def register_did(self, account: ConvexAccount, did: str, ddo_text: str):
         command = f'(call {self.address} (register {did} "{ddo_text}"))'
         result = self._convex.send(command, account)
+        if result and 'value' in result:
+            return result['value']
+        return result
+
+    def resolve(self, did: str, account_address: AccountAddress):
+        command = f'(call {self.address} (resolve {did}))'
+        if isinstance(account_address, str):
+            address = account_address
+        else:
+            address = account_address.address
+        result = self._convex.query(command, address)
         if result and 'value' in result:
             return result['value']
         return result

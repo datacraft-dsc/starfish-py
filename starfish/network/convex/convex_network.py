@@ -7,6 +7,7 @@ from convex_api import ConvexAPI
 
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.network_base import NetworkBase
+from starfish.types import AccountAddress
 
 DEFAULT_PACKAGE_NAME = 'starfish.network.convex.contract'
 
@@ -28,7 +29,10 @@ class ConvexNetwork(NetworkBase):
         if ddo_registry_contract:
             return ddo_registry_contract.register_did(account, did, ddo_text)
 
-    def resolve_did(self, did: str) -> str:
+    def resolve_did(self, did: str, account_address: AccountAddress) -> str:
+        ddo_registry_contract = self._manager.load('DDORegistryContract')
+        if ddo_registry_contract:
+            return ddo_registry_contract.resolve(did,  account_address)
         return None
 
     @property

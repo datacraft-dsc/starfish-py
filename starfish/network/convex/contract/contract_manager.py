@@ -8,6 +8,12 @@
 import importlib
 import inspect
 
+from typing import (
+    Any,
+    Generic
+)
+
+from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_network import ConvexNetwork
 from starfish.types import TContractBase
 
@@ -47,4 +53,14 @@ class ContractManager:
                 contract_object = class_def(self._convex)
                 contract_object.load(CONTRACT_ACCOUNTS['development'])
                 return contract_object
+        return None
+
+
+    @staticmethod
+    def _find_class_in_module(class_name: str, contract_module: str) -> Any:
+        for name, obj in inspect.getmembers(contract_module, inspect.isclass):
+            if issubclass(obj, ContractBase) \
+               and name != 'ContractBase' \
+               and name == class_name:
+                return obj
         return None
