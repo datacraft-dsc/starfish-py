@@ -8,10 +8,7 @@
 import importlib
 import inspect
 
-from typing import (
-    Any,
-    Generic
-)
+from typing import Any
 
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_network import ConvexNetwork
@@ -54,7 +51,6 @@ class ContractManager:
                 contract_object.load(CONTRACT_ACCOUNTS['development'])
                 return contract_object
         return None
-
 
     @staticmethod
     def _find_class_in_module(class_name: str, contract_module: str) -> Any:

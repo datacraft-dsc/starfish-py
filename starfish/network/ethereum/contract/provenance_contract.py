@@ -20,7 +20,7 @@ CONTRACT_NAME = 'Provenance'
 class ProvenanceContract(ContractBase):
     """
 
-    Class representing the DIDRegistry contract.
+    Class representing the Provenance contract.
 
     """
 
