@@ -66,6 +66,7 @@ def test_contract_did_register_assert_did(convex_network, convex_accounts, contr
 
 def test_contract_did_register_methods(convex_network, convex_accounts):
     contract_account = convex_accounts[0]
+    query_address = contract_account.address_checksum
     did = f'0x{secrets.token_hex(32)}'
     ddo = f'test - ddo - {did}'
 
@@ -74,6 +75,15 @@ def test_contract_did_register_methods(convex_network, convex_accounts):
     result = ddo_registry_contract.register_did(contract_account, did, ddo)
     assert(result)
     assert(result == did)
+
+    result = ddo_registry_contract.resolve(did, query_address)
+    assert(result)
+    assert(result == ddo)
+
+
+    result = ddo_registry_contract.owner(did, query_address)
+    assert(result)
+    assert(result == query_address)
 
 def test_contract_did_register_resolve(convex_network, convex_accounts, contract_address):
 

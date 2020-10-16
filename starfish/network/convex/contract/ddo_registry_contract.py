@@ -92,3 +92,14 @@ class DDORegistryContract(ContractBase):
         if result and 'value' in result:
             return result['value']
         return result
+
+    def owner(self, did: str,  account_address: AccountAddress):
+        command = f'(call {self.address} (owner {did}))'
+        if isinstance(account_address, str):
+            address = account_address
+        else:
+            address = account_address.address
+        result = self._convex.query(command, address)
+        if result and 'value' in result:
+            return result['value']
+        return result
