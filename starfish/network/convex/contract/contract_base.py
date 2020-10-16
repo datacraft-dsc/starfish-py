@@ -5,23 +5,21 @@ Contract Base
 
 """
 
-from convex_api import Account
+from starfish.network.convex.convex_account import ConvexAccount
+from starfish.network.convex.convex_network import ConvexNetwork
 
 
 class ContractBase:
-    def __init__(self, convex, address_account, name, version):
+    def __init__(self, convex: ConvexNetwork, name: str, version: str):
         self._convex = convex
-        self._account = address_account
         self._name = name
         self._version = version
         self._source = None
         self._address = None
 
-    def deploy(self):
+    def deploy(self, account: ConvexAccount):
         if not self._source:
             raise ValueError(f'Cannot deploy the contract {self.name} with no source text')
-        if not isinstance(self._account, Account):
-            raise TypeError(f'You need to create the contract {self.name} with a valid convex account')
 
         deploy_line = f"""
 (def {self.name}
@@ -33,26 +31,26 @@ class ContractBase:
         )
     )
 )"""
-        result = self._convex.send(deploy_line, self._account)
+        result = self._convex.send(deploy_line, account)
         if result and 'value' in result:
             self._address = result['value']
             return self._address
 
-    def load(self):
-        self._address = self.get_address()
-        self._version = self.get_version()
+    def load(self, deploy_account: str):
+        self._address = self.get_address(deploy_account)
+        self._version = self.get_version(deploy_account)
         return (self._address, self._version)
 
-    def get_address(self):
-        address = self._convex.get_address(self._name, self._account)
+    def get_address(self, deploy_account):
+        address = self._convex.get_address(self._name, deploy_account)
         return address
 
-    def get_version(self):
+    def get_version(self, deploy_account):
         address = self._address
         if address is None:
-            address = self.get_address()
+            address = self.get_address(deploy_account)
 
-        result = self._convex.query(f'(call {address} (version))', self._account)
+        result = self._convex.query(f'(call {address} (version))', deploy_account)
         if result and 'value' in result:
             return result['value']
 

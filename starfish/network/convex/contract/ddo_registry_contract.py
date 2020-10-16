@@ -4,12 +4,14 @@
 """
 
 from starfish.network.convex.contract.contract_base import ContractBase
+from starfish.network.convex.convex_account import ConvexAccount
+from starfish.network.convex.convex_network import ConvexNetwork
 
 
 class DDORegistryContract(ContractBase):
 
-    def __init__(self, convex, account):
-        ContractBase.__init__(self, convex, account, 'starfish-ddo-registry', '0.0.4')
+    def __init__(self, convex: ConvexNetwork):
+        ContractBase.__init__(self, convex, 'starfish-ddo-registry', '0.0.4')
 
         self._source = f'''
             (def registry {{}})
@@ -71,3 +73,10 @@ class DDORegistryContract(ContractBase):
             )
             (export resolve resolve? register unregister owner owner? owner-list transfer version)
         '''
+
+    def register_did(self, account: ConvexAccount, did: str, ddo_text: str):
+        command = f'(call {self.address} (register {did} "{ddo_text}"))'
+        result = self._convex.send(command, account)
+        if result and 'value' in result:
+            return result['value']
+        return result

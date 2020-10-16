@@ -5,22 +5,28 @@
 """
 from convex_api import ConvexAPI
 
-from starfish.network.account_base import AccountBase
+from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.network_base import NetworkBase
+
+DEFAULT_PACKAGE_NAME = 'starfish.network.convex.contract'
 
 
 class ConvexNetwork(NetworkBase):
     def __init__(self, url: str) -> None:
         NetworkBase.__init__(self, url)
         self._convex = ConvexAPI(url)
+        from starfish.network.convex.contract.contract_manager import ContractManager
+        self._manager = ContractManager(self._convex, DEFAULT_PACKAGE_NAME)
 
     """
 
     Register DID with a DDO and resolve DID to a DDO
 
     """
-    def register_did(self, account: AccountBase, did: str, ddo_text: str) -> bool:
-        return False
+    def register_did(self, account: ConvexAccount, did: str, ddo_text: str) -> bool:
+        ddo_registry_contract = self._manager.load('DDORegistryContract')
+        if ddo_registry_contract:
+            return ddo_registry_contract.register_did(account, did, ddo_text)
 
     def resolve_did(self, did: str) -> str:
         return None
