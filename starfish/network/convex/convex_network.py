@@ -24,10 +24,10 @@ class ConvexNetwork(NetworkBase):
     Register DID with a DDO and resolve DID to a DDO
 
     """
-    def register_did(self, account: ConvexAccount, did: str, ddo_text: str) -> bool:
+    def register_did(self, did: str, ddo_text: str, account: ConvexAccount) -> bool:
         ddo_registry_contract = self._manager.load('DDORegistryContract')
         if ddo_registry_contract:
-            return ddo_registry_contract.register_did(account, did, ddo_text)
+            return ddo_registry_contract.register_did(did, ddo_text, account)
 
     def resolve_did(self, did: str, account_address: AccountAddress) -> str:
         ddo_registry_contract = self._manager.load('DDORegistryContract')

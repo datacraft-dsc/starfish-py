@@ -72,7 +72,7 @@ def test_contract_did_register_methods(convex_network, convex_accounts):
 
     ddo_registry_contract = DDORegistryContract(convex_network.convex)
     assert(ddo_registry_contract.load(contract_account))
-    result = ddo_registry_contract.register_did(contract_account, did, ddo)
+    result = ddo_registry_contract.register_did(did, ddo, contract_account)
     assert(result)
     assert(result == did)
 

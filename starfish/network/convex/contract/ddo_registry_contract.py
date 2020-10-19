@@ -75,7 +75,7 @@ class DDORegistryContract(ContractBase):
             (export resolve resolve? register unregister owner owner? owner-list transfer version)
         '''
 
-    def register_did(self, account: ConvexAccount, did: str, ddo_text: str):
+    def register_did(self, did: str, ddo_text: str, account: ConvexAccount):
         command = f'(call {self.address} (register {did} "{ddo_text}"))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
