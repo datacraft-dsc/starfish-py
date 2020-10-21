@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Asset Base class &mdash; starfish-py 0.12.10 documentation</title>
+  <title>Asset Base class &mdash; starfish-py 0.13.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.12.10
+                0.13.0
               </div>
             
           
@@ -179,37 +179,37 @@
 <dl class="py class">
 <dt id="starfish.asset.AssetBase">
 <em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">AssetBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metadata_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – metadata text for the asset</p></li>
-<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Octional did of the asset, if the asset is new then the did will be None.</p></li>
+<li><p><strong>metadata_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – metadata text for the asset</p></li>
+<li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Octional did of the asset, if the asset is new then the did will be None.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.add_provenance_invoke">
-<code class="sig-name descname">add_provenance_invoke</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">asset_list</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">inputs_text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_invoke" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_provenance_invoke</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">asset_list</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">inputs_text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_invoke" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a invoke provenance data to the asset metadata.
 Calling this method will make the asset ‘new’. So the asset_id will change,
 and the asset.did will be set to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.add_provenance_publish">
-<code class="sig-name descname">add_provenance_publish</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_publish" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_provenance_publish</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.AssetBase.add_provenance_publish" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a published provenance data to the asset metadata.
 Calling this method will make the asset ‘new’. So the asset_id will change,
 and the asset.did will be set to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,28 +232,28 @@ and the asset.did will be set to None.</p>
 <dd class="field-odd"><p>the asset did</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.generateMetadata">
-<em class="property">static </em><code class="sig-name descname">generateMetadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">asset_type</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.asset.AssetBase.generateMetadata" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generateMetadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">asset_type</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.asset.AssetBase.generateMetadata" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.get_asset_type">
-<em class="property">static </em><code class="sig-name descname">get_asset_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#starfish.asset.AssetBase.get_asset_type" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_asset_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="headerlink" href="#starfish.asset.AssetBase.get_asset_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.is_asset_type">
-<code class="sig-name descname">is_asset_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.asset.AssetBase.is_asset_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_asset_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.asset.AssetBase.is_asset_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns if this metadata has the correct type</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the asset type stored in the metadata</p>
+<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the asset type stored in the metadata</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True if the metadata type is equal to type_name</p>
@@ -299,7 +299,7 @@ Once you change metadata, the asset id is changed and the did is set to None.</p
 <dd class="field-odd"><p>The metadata for this asset</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -312,7 +312,7 @@ Once you change metadata, the asset id is changed and the did is set to None.</p
 <dd class="field-odd"><p>The metadata for this asset</p>
 </dd>
 <dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -324,7 +324,7 @@ Once you change metadata, the asset id is changed and the did is set to None.</p
 
 <dl class="py method">
 <dt id="starfish.asset.AssetBase.set_did">
-<code class="sig-name descname">set_did</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#starfish.asset.AssetBase.set_did" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_did</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#starfish.asset.AssetBase.set_did" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method makes the object immutable.
 So maybe a solution is that we have a ‘copy’ and
 set the did in the __init__ of the new class, to return a mutable copy of the

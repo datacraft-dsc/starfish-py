@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Memory Agent class &mdash; starfish-py 0.12.10 documentation</title>
+  <title>Memory Agent class &mdash; starfish-py 0.13.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.12.10
+                0.13.0
               </div>
             
           
@@ -186,15 +186,15 @@
 </dl>
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.consume_asset">
-<code class="sig-name descname">consume_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">consume_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Consume the asset and download the data. The actual payment to the asset
 provider will be made at this point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a>) – Listing that was used to make the purchase.</p></li>
-<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
-<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account that was used to purchase the asset.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
+<li><p><strong>account</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object to use for registration.) – Ocean account that was used to purchase the asset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -208,13 +208,13 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.create_listing">
-<code class="sig-name descname">create_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_data</span><span class="p">:</span> <span class="n">starfish.types.ListingData</span></em>, <em class="sig-param"><span class="n">asset_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.create_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_data</span><span class="p">:</span> <span class="n">starfish.types.ListingData</span></em>, <em class="sig-param"><span class="n">asset_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.create_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a listing on the market place for this asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Listing inforamiton to give for this asset</p></li>
-<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – asset DID to assign to this listing</p></li>
+<li><p><strong>listing_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Listing inforamiton to give for this asset</p></li>
+<li><p><strong>asset_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – asset DID to assign to this listing</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -238,18 +238,18 @@ provider will be made at this point.</p>
 <dd class="field-even"><p>list of purchase ids</p>
 </dd>
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.get_listing">
-<code class="sig-name descname">get_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.get_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.get_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an listing from the given listing_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>listing_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Id of the listing.</p>
+<dd class="field-odd"><p><strong>listing_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Id of the listing.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a registered listing given a Id of the listing</p>
@@ -262,14 +262,14 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.is_access_granted_for_asset">
-<code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check to see if the account and purchase_id have access to the assed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – Asset to check for access.</p></li>
-<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to purchase the asset.</p></li>
-<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
+<li><p><strong>account</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object to use for registration.) – Ocean account to purchase the asset.</p></li>
+<li><p><strong>purchase_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – purchase id that was used to purchase the asset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -289,7 +289,7 @@ provider will be made at this point.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>listing</strong> (<a class="reference internal" href="../listing/listing.html#starfish.listing.Listing" title="starfish.listing.Listing"><code class="xref py py-class docutils literal notranslate"><span class="pre">Listing</span></code></a>) – Listing to use for the purchase.</p></li>
-<li><p><strong>account</strong> (<a class="reference internal" href="../account.html#starfish.account.Account" title="starfish.account.Account"><code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code></a> object to use for registration.) – Ocean account to purchase the asset.</p></li>
+<li><p><strong>account</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Account</span></code> object to use for registration.) – Ocean account to purchase the asset.</p></li>
 </ul>
 </dd>
 </dl>
@@ -297,7 +297,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.purchase_wait_for_completion">
-<code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">timeoutSeconds</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">timeoutSeconds</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for completion of the purchase</p>
 <p>TODO: issues here…
 + No method as yet to pass back paramaters and values during the purchase process
@@ -310,7 +310,7 @@ provider will be made at this point.</p>
 <dd><p>Register a memory asset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – asset object to register for this asset.</p>
+<dd class="field-odd"><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – asset object to register for this asset.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A <a class="reference internal" href="../asset/asset_base.html#starfish.asset.AssetBase" title="starfish.asset.AssetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetBase</span></code></a> object that has been registered, if failure then return None.</p>
@@ -323,15 +323,15 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.search_listings">
-<code class="sig-name descname">search_listings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">sort</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.agent.MemoryAgent.search_listings" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search_listings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">sort</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.agent.MemoryAgent.search_listings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for listings with the givien ‘text’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Text to search all listing data for.</p></li>
-<li><p><strong>sort</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – sort the results ( defaults: None, no sort).</p></li>
-<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Return the result from with the maximum record count ( defaults: 100 ).</p></li>
-<li><p><strong>page</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Returns the page number based on the offset.</p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Text to search all listing data for.</p></li>
+<li><p><strong>sort</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – sort the results ( defaults: None, no sort).</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Return the result from with the maximum record count ( defaults: 100 ).</p></li>
+<li><p><strong>page</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Returns the page number based on the offset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -350,7 +350,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.update_listing">
-<code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Listing</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#starfish.agent.MemoryAgent.update_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Listing</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#starfish.agent.MemoryAgent.update_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the listing to the agent server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -361,7 +361,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.validate_asset">
-<code class="sig-name descname">validate_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Asset</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.validate_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">validate_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Asset</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.validate_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate an asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
