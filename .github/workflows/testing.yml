@@ -45,6 +45,9 @@ jobs:
         path: dex-chain
     - name: Start dex-chain
       run: |
+        ls -lrth
+        pwd
+        ls ../
         cd ../dex-chain
         ./start_dex_chain.sh test &
     - name : Start Surfer
