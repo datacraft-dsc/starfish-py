@@ -36,6 +36,7 @@ jobs:
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.ACCESS_PACKAGES }}
+        registry: docker.pkg.github.com
     - name: Install dex-chain
       uses: actions/checkout@v2
       with:
