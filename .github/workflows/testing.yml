@@ -30,13 +30,13 @@ jobs:
         repository: DEX-Company/surfer
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: develop
-        path: ../surfer
+        path: surfer
     - name: Install dex-chain
       uses: actions/checkout@v2
       with:
         repository: DEX-Company/dex-chain
         ref: master
-        path: ../dex-chain
+        path: dex-chain
     - name: Allow Docker access to github packages
       uses: docker/login-action@v1
       with:
@@ -45,13 +45,13 @@ jobs:
         registry: docker.pkg.github.com
     - name: Start dex-chain
       run: |
-        cd ../dex-chain
+        cd dex-chain
         ./start_dex_chain.sh test &
     - name: Auto re-deploy convex-contracts
       run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
     - name : Start Surfer
       run: |
-        cd ../surfer
+        cd surfer
         clojure -M:main &
         scripts/wait_for_surfer.sh
     - name: Test
