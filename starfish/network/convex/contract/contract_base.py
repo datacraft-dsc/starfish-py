@@ -10,31 +10,11 @@ from starfish.network.convex.convex_network import ConvexNetwork
 
 
 class ContractBase:
-    def __init__(self, convex: ConvexNetwork, name: str, version: str):
+    def __init__(self, convex: ConvexNetwork, name: str):
         self._convex = convex
         self._name = name
-        self._version = version
-        self._source = None
+        self._version = None
         self._address = None
-
-    def deploy(self, account: ConvexAccount):
-        if not self._source:
-            raise ValueError(f'Cannot deploy the contract {self.name} with no source text')
-
-        deploy_line = f"""
-(def {self.name}
-    (deploy-once
-        (quote
-            (do
-                {self._source}
-            )
-        )
-    )
-)"""
-        result = self._convex.send(deploy_line, account)
-        if result and 'value' in result:
-            self._address = result['value']
-            return self._address
 
     def load(self, deploy_account: str):
         self._address = self.get_address(deploy_account)

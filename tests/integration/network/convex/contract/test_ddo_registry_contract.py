@@ -13,19 +13,24 @@ from convex_api.convex_api import ConvexAPI
 from convex_api.exceptions import ConvexAPIError
 
 from starfish.network.convex.contract.ddo_registry_contract import DDORegistryContract
+from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
 
 # (import convex.trust :as trust)
 
 
 def test_contract_did_register_methods(convex_network, convex_accounts):
-    contract_account = convex_accounts[0]
-    query_address = contract_account.address_checksum
+
+    deploy_address = CONTRACT_ACCOUNTS['development']
+    register_account = convex_accounts[1]
+    auto_topup_account(convex_network, register_account)
+    query_address = register_account.address_checksum
+
     did = f'0x{secrets.token_hex(32)}'
     ddo = f'test - ddo - {did}'
 
     ddo_registry_contract = DDORegistryContract(convex_network.convex)
-    assert(ddo_registry_contract.load(contract_account))
-    result = ddo_registry_contract.register_did(did, ddo, contract_account)
+    assert(ddo_registry_contract.load(deploy_address))
+    result = ddo_registry_contract.register_did(did, ddo, register_account)
     assert(result)
     assert(result == did)
 
