@@ -32,7 +32,6 @@ class ProvenanceContract(ContractBase):
             return result['value']
         return result
 
-
     def event_owner(self, account_address: AccountAddress):
         if isinstance(account_address, str):
             address = account_address

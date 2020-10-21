@@ -5,7 +5,6 @@ Contract Base
 
 """
 
-from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
 
 
