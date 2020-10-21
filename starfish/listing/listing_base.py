@@ -11,9 +11,9 @@ from typing import (
     Any,
     Generic
 )
-from starfish.account import Account
 from starfish.agent.agent_base import AgentBase
 from starfish.ddo import DDO
+from starfish.network.account_base import AccountBase
 from starfish.types import TListingBase
 
 
@@ -39,7 +39,7 @@ class ListingBase(ABC, Generic[TListingBase]):
         super().__init__()
 
     @abstractmethod
-    def purchase(self, account: Account) -> None:
+    def purchase(self, account: AccountBase) -> None:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset

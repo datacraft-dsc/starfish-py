@@ -12,7 +12,7 @@ from starfish.tool.output import Output
 def test_account_create_command(config):
     args = Mock()
 
-    args.url = config['network']['url']
+    args.url = config['ethereum']['network']['url']
     args.password = 'test_password'
     args.keyfile = None
 
@@ -20,14 +20,14 @@ def test_account_create_command(config):
     output = Output()
     network.execute(args, output)
     print(output.values)
-    assert(output.values['keyvalue'])
+    assert(output.values['keydata'])
     assert(output.values['address'])
 
 def test_account_balance(config):
 
     args = Mock()
-    args.address = config['accounts']['account1']['address']
-    args.url = config['network']['url']
+    args.address = config['ethereum']['accounts']['account1']['address']
+    args.url = config['ethereum']['network']['url']
     network = AccountBalanceCommand()
     output = Output()
     network.execute(args, output)

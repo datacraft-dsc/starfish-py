@@ -6,9 +6,8 @@
 
 """
 
-from starfish.account import Account
-
 from starfish.listing.listing_base import ListingBase
+from starfish.network.account_base import AccountBase
 
 
 class Listing(ListingBase):
@@ -24,7 +23,7 @@ class Listing(ListingBase):
         :type data: dict
     """
 
-    def purchase(self, account: Account) -> bool:
+    def purchase(self, account: AccountBase) -> bool:
         """
 
         Purchase the underlying asset within this listing using the account details, return a purchased asset
@@ -37,12 +36,10 @@ class Listing(ListingBase):
         :type: :class:`.SquidPurchase`
 
         """
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
 
         return self._agent.purchase_asset(self, account)
 
-    def is_purchased(self, account: Account) -> bool:
+    def is_purchased(self, account: AccountBase) -> bool:
         """
 
         Return true if the account has already purchased this listing/asset
@@ -54,8 +51,6 @@ class Listing(ListingBase):
         :type: boolean
 
         """
-        if not isinstance(account, Account):
-            raise TypeError('You need to pass an Account object')
 
         return self._agent.is_access_granted_for_asset(self.asset_did, account)
 

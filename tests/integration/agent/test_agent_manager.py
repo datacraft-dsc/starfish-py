@@ -11,8 +11,8 @@ from starfish.asset import DataAsset
 from starfish.ddo import create_ddo_object
 
 
-def test_agent_manager_add(config, network):
-    manager = AgentManager(network)
+def test_agent_manager_add(config, ethereum_network):
+    manager = AgentManager(ethereum_network)
 
     for name, item in config['agents'].items():
         manager.add(name, item)
@@ -26,8 +26,8 @@ def test_agent_manager_add(config, network):
         ddo = manager.resolve_ddo(name)
         assert(ddo)
 
-def test_agent_manager_load_agent(config, network):
-    manager = AgentManager(network)
+def test_agent_manager_load_agent(config, ethereum_network):
+    manager = AgentManager(ethereum_network)
 
     for name, item in config['agents'].items():
         manager.add(name, item)

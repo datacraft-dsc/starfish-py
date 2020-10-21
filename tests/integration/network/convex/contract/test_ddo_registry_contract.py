@@ -1,0 +1,297 @@
+"""
+
+    Test Convex ddo register contract for starfish
+
+"""
+
+import pytest
+import secrets
+from tests.integration.network.convex.helpers import auto_topup_account
+
+from convex_api.account import Account
+from convex_api.convex_api import ConvexAPI
+from convex_api.exceptions import ConvexAPIError
+
+from starfish.network.convex.contract.ddo_registry_contract import DDORegistryContract
+
+# (import convex.trust :as trust)
+
+
+
+ddo_register_contract_address = None
+
+@pytest.fixture
+def contract_address(convex_network, convex_accounts):
+    global ddo_register_contract_address
+    contract_account = convex_accounts[0]
+    auto_topup_account(convex_network, contract_account, 50000000)
+    if ddo_register_contract_address is None:
+        ddo_registry_contract = DDORegistryContract(convex_network.convex)
+        ddo_register_contract_address = ddo_registry_contract.deploy(contract_account)
+        auto_topup_account(convex_network, contract_account)
+    return ddo_register_contract_address
+
+
+def test_contract_version(convex_network, convex_accounts, contract_address):
+    contract_account = convex_accounts[0]
+    ddo_registry_contract = DDORegistryContract(convex_network.convex)
+    version = ddo_registry_contract.get_version(contract_account)
+    assert(version)
+    assert(version == ddo_registry_contract.version)
+
+def test_contract_did_register_assert_did(convex_network, convex_accounts, contract_address):
+
+    test_account = convex_accounts[0]
+    auto_topup_account(convex_network, test_account)
+
+    did_bad = secrets.token_hex(20)
+    did_valid = secrets.token_hex(32)
+    ddo = 'test - ddo'
+    command = f'(call {contract_address} (register "{did_bad}" "{ddo}"))'
+    with pytest.raises(ConvexAPIError, match='INVALID'):
+        result = convex_network.convex.send(command, test_account)
+
+    command = f'(call {contract_address} (register "" "{ddo}"))'
+    with pytest.raises(ConvexAPIError, match='INVALID'):
+        result = convex_network.convex.send(command, test_account)
+
+    command = f'(call {contract_address} (register 42 "{ddo}"))'
+    with pytest.raises(ConvexAPIError, match='INVALID'):
+        result = convex_network.convex.send(command, test_account)
+
+    command = f'(call {contract_address} (register 0x{did_valid} "{ddo}"))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == f'0x{did_valid}')
+
+def test_contract_did_register_methods(convex_network, convex_accounts):
+    contract_account = convex_accounts[0]
+    query_address = contract_account.address_checksum
+    did = f'0x{secrets.token_hex(32)}'
+    ddo = f'test - ddo - {did}'
+
+    ddo_registry_contract = DDORegistryContract(convex_network.convex)
+    assert(ddo_registry_contract.load(contract_account))
+    result = ddo_registry_contract.register_did(did, ddo, contract_account)
+    assert(result)
+    assert(result == did)
+
+    result = ddo_registry_contract.resolve(did, query_address)
+    assert(result)
+    assert(result == ddo)
+
+
+    result = ddo_registry_contract.owner(did, query_address)
+    assert(result)
+    assert(result == query_address)
+
+def test_contract_did_register_resolve(convex_network, convex_accounts, contract_address):
+
+    test_account = convex_accounts[0]
+    other_account = convex_accounts[1]
+
+    auto_topup_account(convex_network, convex_accounts)
+
+    did = f'0x{secrets.token_hex(32)}'
+    ddo = 'test - ddo'
+
+
+    # call register
+
+    command = f'(call {contract_address} (register {did} "{ddo}"))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == did)
+
+    # call resolve did to ddo
+
+    command = f'(call {contract_address} (resolve {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == ddo)
+
+    # call resolve did to ddo on other account
+
+    command = f'(call {contract_address} (resolve {did}))'
+    result = convex_network.convex.query(command, other_account)
+    assert(result['value'])
+    assert(result['value'] == ddo)
+
+    # call owner? on owner account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'])
+
+    # call owner? on owner other_account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, other_account)
+    assert(not result['value'])
+
+    # call resolve unknown
+    bad_did = f'0x{secrets.token_hex(32)}'
+    command = f'(call {contract_address} (resolve {bad_did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'] == '')
+
+
+    new_ddo = 'new - ddo'
+    # call register - update
+
+    command = f'(call {contract_address} (register {did} "{new_ddo}"))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == did)
+
+
+    # call register - update from other account
+
+    with pytest.raises(ConvexAPIError, match='NOT-OWNER'):
+        command = f'(call {contract_address} (register {did} "{ddo}"))'
+        result = convex_network.convex.send(command, other_account)
+
+
+    # call resolve did to new_ddo
+
+    command = f'(call {contract_address} (resolve {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == new_ddo)
+
+
+    # call unregister fail - from other account
+
+    with pytest.raises(ConvexAPIError, match='NOT-OWNER'):
+        command = f'(call {contract_address} (unregister {did}))'
+        result = convex_network.convex.send(command, other_account)
+
+
+    # call unregister
+
+    command = f'(call {contract_address} (unregister {did}))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == did)
+
+    # call resolve did to empty
+
+    command = f'(call {contract_address} (resolve {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'] == '')
+
+
+    # call unregister - unknown did
+
+    command = f'(call {contract_address} (unregister {bad_did}))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'] == '')
+
+
+
+def test_contract_ddo_transfer(convex_network, convex_accounts):
+    # register and transfer
+
+    test_account = convex_accounts[0]
+    other_account = convex_accounts[1]
+    auto_topup_account(convex_network, convex_accounts)
+
+    ddo_registry_contract = DDORegistryContract(convex_network.convex)
+    contract_address = ddo_registry_contract.get_address(test_account)
+    assert(contract_address)
+
+    did = f'0x{secrets.token_hex(32)}'
+    ddo = 'test - ddo'
+
+    command = f'(call {contract_address} (register {did} "{ddo}"))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'] == did)
+
+    # call owner? on owner account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'])
+
+    # call owner? on other_account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, other_account)
+    assert(not result['value'])
+
+
+    command = f'(call {contract_address} (transfer {did} {other_account.address_checksum}))'
+    result = convex_network.convex.send(command, test_account)
+    assert(result['value'])
+    assert(result['value'][0] == did)
+
+    #check ownership to different accounts
+
+    # call owner? on owner account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, test_account)
+    assert(not result['value'])
+
+    # call owner? on other_account
+    command = f'(call {contract_address} (owner? {did}))'
+    result = convex_network.convex.query(command, other_account)
+    assert(result['value'])
+
+    # call unregister fail - from test_account (old owner)
+
+    with pytest.raises(ConvexAPIError, match='NOT-OWNER'):
+        command = f'(call {contract_address} (unregister {did}))'
+        result = convex_network.convex.send(command, test_account)
+
+
+    # call unregister from other_account ( new owner )
+
+    command = f'(call {contract_address} (unregister {did}))'
+    result = convex_network.convex.send(command, other_account)
+    assert(result['value'])
+    assert(result['value'] == did)
+
+def test_contract_ddo_bulk_register(convex_network, convex_accounts):
+    test_account = convex_accounts[0]
+    ddo_registry_contract = DDORegistryContract(convex_network.convex)
+    contract_address = ddo_registry_contract.get_address(test_account)
+    assert(contract_address)
+
+    for index in range(0, 2):
+        auto_topup_account(convex_network, test_account, 40000000)
+        did = f'0x{secrets.token_hex(32)}'
+#        ddo = secrets.token_hex(51200)
+        ddo = secrets.token_hex(1024)
+
+        command = f'(call {contract_address} (register {did} "{ddo}"))'
+        result = convex_network.convex.send(command, test_account)
+        assert(result['value'])
+        assert(result['value'] == did)
+
+def test_contract_ddo_owner_list(convex_network, convex_accounts):
+
+    test_account = convex_accounts[0]
+    other_account = convex_accounts[1]
+    auto_topup_account(convex_network, convex_accounts)
+
+    ddo_registry_contract = DDORegistryContract(convex_network.convex)
+    contract_address = ddo_registry_contract.get_address(test_account)
+    assert(contract_address)
+
+    did_list = []
+    for index in range(0, 4):
+        auto_topup_account(convex_network, test_account)
+        did = f'0x{secrets.token_hex(32)}'
+        did_list.append(did)
+#        ddo = secrets.token_hex(51200)
+        ddo = f'ddo test - {index}'
+
+        command = f'(call {contract_address} (register {did} "{ddo}"))'
+        result = convex_network.convex.send(command, test_account)
+        assert(result['value'])
+        assert(result['value'] == did)
+
+
+    command = f'(call {contract_address} (owner-list "{test_account.address_api}"))'
+    result = convex_network.convex.query(command, test_account)
+    assert(result['value'])
+    for did in did_list:
+        assert(did in result['value'])
+

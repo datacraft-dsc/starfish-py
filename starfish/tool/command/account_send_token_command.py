@@ -7,7 +7,7 @@ import logging
 from typing import Any
 from web3 import Web3
 
-from starfish.account import Account
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 from .command_base import CommandBase
 
@@ -58,7 +58,7 @@ class AccountSendTokenCommand(CommandBase):
             output.add_error(f'{args.address} is not an ethereum account address')
             return
 
-        account = Account(args.address, args.password, key_file=args.keyfile)
+        account = EthereumAccount(args.address, args.password, key_file=args.keyfile)
         amount = float(args.amount)
         to_address = args.to_address
 

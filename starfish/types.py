@@ -21,7 +21,7 @@ if sys.version_info >= (3, 8):
 else:
     from typing_extensions import TypedDict
 
-TAccount = TypeVar('Account')
+TAccountBase = TypeVar('AccountBase')
 TAsset = TypeVar('Asset')
 TAssetBase = TypeVar('AssetBase')
 TBundleAsset = TypeVar('BundleAsset')
@@ -34,7 +34,7 @@ TDDO = TypeVar('DDO')
 TJobBase = TypeVar('JobBase')
 TListing = TypeVar('Listing')
 TListingBase = TypeVar('ListingBase')
-TNetwork = TypeVar('Network')
+TNetworkBase = TypeVar('NetworkBase')
 TRemoteAgent = TypeVar('RemoteAgent')
 
 
@@ -85,6 +85,6 @@ class ListingData(TypedDict):
 
 AccountAddressOrDict = Union[AccountInitParams, str, Tuple[str, str, str]]
 
-AccountAddress = Union[TAccount, str]
+AccountAddress = Union[TAccountBase, str]
 
 ProvenanceEventList = List[ProvenanceEvent]

@@ -7,7 +7,7 @@ import tempfile
 
 from starfish.agent.memory_agent import MemoryAgent
 from starfish.asset.data_asset import DataAsset
-from starfish.account import Account
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 
 def create_agent():
@@ -32,7 +32,7 @@ def purchase_asset(resources, config):
     asset = register_asset(agent)
     listing = create_listing(agent, resources, asset)
 
-    account = Account(config.accounts[1].as_dict)
+    account = EthereumAccount.import_from_text(config.ethereum.accounts[1].key_data, config.ethereum.accounts[1].password)
     purchase = agent.purchase_asset(listing, account)
     return purchase, listing, agent, asset, account
 
@@ -74,7 +74,7 @@ def test_purchase_asset(resources, config):
     agent = create_agent()
     asset = register_asset(agent)
     listing = create_listing(agent, resources, asset)
-    account = Account(config.accounts[1].as_dict)
+    account = EthereumAccount.import_from_text(config.ethereum.accounts[1].key_data, config.ethereum.accounts[1].password)
     purchase = agent.purchase_asset(listing, account)
     assert(purchase)
 

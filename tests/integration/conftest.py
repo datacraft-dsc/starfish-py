@@ -6,10 +6,14 @@ import pathlib
 import requests
 from web3 import Web3, HTTPProvider
 
-from starfish import Network
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
-from starfish.account import Account
+from starfish.network.ethereum.ethereum_account import EthereumAccount
+from starfish.network.ethereum.ethereum_network import EthereumNetwork
+
+from starfish.network.convex.convex_account import ConvexAccount
+from starfish.network.convex.convex_network import ConvexNetwork
+
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 
@@ -18,8 +22,13 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 
 
 @pytest.fixture(scope='module')
-def network(config):
-    network = Network(config['network']['url'])
+def ethereum_network(config):
+    network = EthereumNetwork(config['ethereum']['network']['url'])
+    return network
+
+@pytest.fixture(scope='module')
+def convex_network(config):
+    network = ConvexNetwork(config['convex']['network']['url'])
     return network
 
 
@@ -37,16 +46,29 @@ def remote_agent(config):
 
 
 @pytest.fixture(scope='module')
-def accounts(config):
+def ethereum_accounts(config):
     result = []
     # load in the test accounts
-    account_1 = config['accounts']['account1']
-    account_2 = config['accounts']['account2']
+    account_1 = config['ethereum']['accounts']['account1']
+    account_2 = config['ethereum']['accounts']['account2']
     result = [
-        Account(account_1['address'], account_1['password'], key_file=account_1['keyfile']),
-        Account(account_2['address'], account_2['password'], key_file=account_2['keyfile']),
+        EthereumAccount.import_from_file(account_1['keyfile'], account_1['password']),
+        EthereumAccount.import_from_file(account_2['keyfile'], account_2['password']),
     ]
     return result
+
+@pytest.fixture(scope='module')
+def convex_accounts(config):
+    result = []
+    # load in the test accounts
+    account_1 = config['convex']['accounts']['account1']
+    result = [
+        ConvexAccount.import_from_file(account_1['keyfile'], account_1['password']),
+        ConvexAccount.create_new(),
+    ]
+    return result
+
+
 
 
 @pytest.fixture(scope='module')

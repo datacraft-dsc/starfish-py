@@ -6,7 +6,7 @@
 from typing import Any
 from web3 import Web3
 
-from starfish.account import Account
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 from .command_base import CommandBase
 
@@ -52,7 +52,7 @@ class AccountGetEtherCommand(CommandBase):
             output.add_error(f'{args.address} is not an ethereum account address')
             return
 
-        account = Account(args.address)
+        account = EthereumAccount(args.address)
 
         faucet_url = args.faucet
         faucet_account = None
@@ -67,7 +67,7 @@ class AccountGetEtherCommand(CommandBase):
             network = self.get_network(args.url)
 
         if faucet_account:
-            send_account = Account(faucet_account[0], faucet_account[1])
+            send_account = EthereumAccount(faucet_account[0], faucet_account[1])
             network.send_ether(send_account, account.address, args.amount)
         else:
             network.request_ether_from_faucet(account, faucet_url)

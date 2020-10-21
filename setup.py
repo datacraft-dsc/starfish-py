@@ -17,10 +17,12 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as changelog_file:
     changelog = changelog_file.read()
 
+
 install_requirements = [
     'web3',
     'typing_extensions',
     'mongoquery',
+    'convex_api_py',
 ]
 
 setup_requirements = ['pytest-runner', ]
@@ -66,6 +68,7 @@ setup(
         'dev': dev_requirements + test_requirements + docs_requirements,
     },
     install_requires=install_requirements,
+    #dependency_links=dependency_links,
     license="Apache Software License 2.0",
     long_description=readme,
     long_description_content_type='text/markdown',

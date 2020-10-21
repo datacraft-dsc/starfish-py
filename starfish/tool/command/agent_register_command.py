@@ -5,14 +5,13 @@
 """
 import re
 from typing import Any
-from web3 import Web3
 
-from starfish.account import Account
 from starfish.agent import RemoteAgent
 from starfish.agent.services import (
     ALL_SERVICES,
     Services
 )
+from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 
 from .command_base import CommandBase
@@ -39,11 +38,6 @@ class AgentRegisterCommand(CommandBase):
         )
 
         parser.add_argument(
-            'address',
-            help='register account address to use'
-        )
-
-        parser.add_argument(
             'password',
             help='account password to use to register'
         )
@@ -66,11 +60,7 @@ Services can be: {",".join(ALL_SERVICES)}
     def execute(self, args: Any, output: Any) -> Any:
         network = self.get_network(args.url)
 
-        if not Web3.isAddress(args.address):
-            output.add_error(f'{args.address} is not an ethereum account address')
-            return
-
-        register_account = Account(args.address, args.password, key_file=args.keyfile)
+        register_account = EthereumAccount.import_from_file(args.keyfile, args.password)
 
         all_services = True
         service_list = None
