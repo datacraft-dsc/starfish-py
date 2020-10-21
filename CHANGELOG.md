@@ -2,6 +2,12 @@
 
 ### Release v0.13.0
 +   Use EthereumAccount and EtherumNetwork to access the ethereum network and contracts
++   Split the network into two types of block chain access: Convex and Ethereum
++   Use ConvexAccount and ConvexNetwork to access the convex network and contracts
++   Add auto deploy support for convex contracts
+
+### Release v0.12.10
++   Fix key name error in AssetBundle class
 
 ### Release v0.12.9
 +   Fix http_client bug
