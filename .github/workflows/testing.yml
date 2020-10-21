@@ -45,7 +45,7 @@ jobs:
         registry: docker.pkg.github.com
     - name: Start dex-chain
       run: |
-        cd ../dex-chain
+        cd dex-chain
         ./start_dex_chain.sh test &
     - name: Deploy convex-contracts
       run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
