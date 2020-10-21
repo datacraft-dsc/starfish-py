@@ -54,7 +54,7 @@ class ProvenanceContract(ContractBase):
 
 '''
 
-    def register_did(self, asse_id: str, account: ConvexAccount):
+    def register_did(self, asset_id: str, account: ConvexAccount):
         command = f'(call {self.address} (register {asset_id}))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
@@ -71,5 +71,3 @@ class ProvenanceContract(ContractBase):
         if result and 'value' in result:
             return result['value']
         return result
-
-
