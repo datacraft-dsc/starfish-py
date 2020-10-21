@@ -48,6 +48,10 @@ jobs:
         clojure -M:main &
         scripts/wait_for_surfer.sh
     - name: Deploy convex-contracts
+      uses: docker/login-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.ACCESS_TOKEN }}
       run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
     - name: Test
       run: make tests
