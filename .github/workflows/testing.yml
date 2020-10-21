@@ -6,12 +6,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     - name: Set up Python 3.8
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
       with:
         java-version: '11.0.5'
@@ -25,12 +25,17 @@ jobs:
     - name: Lint
       run: make lint
     - name: Install Surfer
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
       with:
         repository: DEX-Company/surfer
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: develop
         path: surfer
+    - name: Allow Docker access to github packages
+      uses: docker/login-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.ACCESS_TOKEN }}
     - name: Install dex-chain
       uses: actions/checkout@v2
       with:
@@ -39,7 +44,6 @@ jobs:
         path: dex-chain
     - name: Start dex-chain
       run: |
-        docker login docker.pkg.github.com --username billbsing --password ${{ secrets.ACCESS_PACKAGES }}
         cd ../dex-chain
         ./start_dex_chain.sh test &
     - name : Start Surfer
@@ -47,11 +51,6 @@ jobs:
         cd ../surfer
         clojure -M:main &
         scripts/wait_for_surfer.sh
-    - name: Allow Docker access to github packages
-      uses: docker/login-action@v1
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.ACCESS_TOKEN }}
     - name: Deploy convex-contracts
       run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
     - name: Test
