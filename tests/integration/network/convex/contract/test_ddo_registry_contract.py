@@ -4,6 +4,7 @@
 
 """
 
+import datetime
 import json
 import pytest
 import secrets
@@ -51,10 +52,14 @@ def test_contract_did_register_full_ddo(convex_network, convex_accounts):
     auto_topup_account(convex_network, register_account)
     query_address = register_account.address_checksum
 
+
+    did_id = secrets.token_hex(32)
+    did = f'0x{did_id}'
+    now = datetime.datetime.now()
     ddo = {
         '@context': 'https://w3id.org/did/v1',
-        'id': 'did:dep:bbce6d66754f46a2424c9178ad8e48339a1f03bcd3a5f8d7d2aa0446ae9a1f7a',
-        'created': '2020-10-22 10:16:53.362945',
+        'id': f'did:dep:{did_id}',
+        'created': now.isoformat(sep=' '),
         'service': [
             {
                 'type': 'DEP.Invoke.v1',
@@ -78,7 +83,6 @@ def test_contract_did_register_full_ddo(convex_network, convex_accounts):
     assert(contract.load(deploy_address))
 
 
-    did = f'0x{secrets.token_hex(32)}'
     result = contract.register_did(did, json.dumps(ddo), register_account)
     assert(result)
     assert(result == did)
