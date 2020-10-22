@@ -21,7 +21,7 @@ def test_convex_network_ddo(convex_network, convex_accounts):
     did = f'0x{secrets.token_hex(32)}'
     ddo = f'test - ddo - {did}'
 
-    result = convex_network.register_did(did, ddo, register_account)
+    result = convex_network.register_did(register_account, did, ddo)
     assert(result)
     assert(result == did)
 

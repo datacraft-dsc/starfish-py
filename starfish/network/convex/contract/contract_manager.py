@@ -60,3 +60,7 @@ class ContractManager:
                and name == class_name:
                 return obj
         return None
+
+    @property
+    def default_account_address(self):
+        return CONTRACT_ACCOUNTS['development']
