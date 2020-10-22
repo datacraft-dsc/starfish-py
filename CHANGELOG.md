@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.13.2
++   Change convex network did register parameters to be the same as etherum network register
+
 ### Release v0.13.1
 +   Cleanup Convex contracts
 +   Allow for ethereum and convex network/accounts to be used from their module names
