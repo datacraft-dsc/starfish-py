@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.13.1
++   Cleanup Convex contracts
++   Allow for ethereum and convex network/accounts to be used from their module names
+
 ### Release v0.13.0
 +   Use EthereumAccount and EtherumNetwork to access the ethereum network and contracts
 +   Split the network into two types of block chain access: Convex and Ethereum
