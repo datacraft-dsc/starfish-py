@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.13.3
++   Fix ddo register, to accept quoted json text
+
 ### Release v0.13.2
 +   Change convex network did register parameters to be the same as etherum network register
 
