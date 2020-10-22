@@ -2,6 +2,7 @@
     starfish-ddo-registry contract
 
 """
+import re
 
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
@@ -15,7 +16,8 @@ class DDORegistryContract(ContractBase):
         ContractBase.__init__(self, convex, 'starfish-ddo-registry')
 
     def register_did(self, did: str, ddo_text: str, account: ConvexAccount):
-        command = f'(call {self.address} (register {did} "{ddo_text}"))'
+        encode_ddo_text = re.sub('"', '\\"', ddo_text)
+        command = f'(call {self.address} (register {did} "{encode_ddo_text}"))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
             return result['value']
