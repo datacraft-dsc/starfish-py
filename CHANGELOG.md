@@ -1,6 +1,6 @@
 ## Change Log
 
-### Release v0.13.4
+### Release v0.13.5
 +   convex ddo contract only excepts a full did string
 
 ### Release v0.13.4
