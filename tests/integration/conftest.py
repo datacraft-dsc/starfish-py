@@ -8,11 +8,15 @@ from web3 import Web3, HTTPProvider
 
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
-from starfish.network.ethereum.ethereum_account import EthereumAccount
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
+from starfish.network.ethereum import (
+    EthereumAccount,
+    EthereumNetwork
+)
 
-from starfish.network.convex.convex_account import ConvexAccount
-from starfish.network.convex.convex_network import ConvexNetwork
+from starfish.network.convex import (
+    ConvexAccount,
+    ConvexNetwork
+)
 
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'

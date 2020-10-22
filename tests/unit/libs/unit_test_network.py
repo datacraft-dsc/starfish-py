@@ -1,5 +1,5 @@
 
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
+from starfish.network.ethereum import EthereumNetwork
 
 class UnitTestNetwork(EthereumNetwork):
 

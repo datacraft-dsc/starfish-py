@@ -10,7 +10,6 @@ from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
 from starfish.agent.services import Services
 
-# from starfish.ethereum_network.ethereum_network import EthereumNetwork
 
 TEST_AMOUNT = 5
 

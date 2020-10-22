@@ -5,7 +5,7 @@
 
 
 """
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
+from starfish.network.ethereum import EthereumNetwork
 from starfish.network.ethereum.contract.contract_manager import ContractManager
 
 def test_contract_load_local_artiacts_package(config):
