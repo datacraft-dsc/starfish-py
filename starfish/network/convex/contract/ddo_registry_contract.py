@@ -8,6 +8,10 @@ from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
 from starfish.types import AccountAddress
+from starfish.utils.did import (
+    did_to_id,
+    id_to_did
+)
 
 
 class DDORegistryContract(ContractBase):
@@ -17,14 +21,16 @@ class DDORegistryContract(ContractBase):
 
     def register_did(self, did: str, ddo_text: str, account: ConvexAccount):
         encode_ddo_text = re.sub('"', '\\"', ddo_text)
-        command = f'(call {self.address} (register {did} "{encode_ddo_text}"))'
+        did_id = did_to_id(did).lower()
+        command = f'(call {self.address} (register {did_id} "{encode_ddo_text}"))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
-            return result['value']
+            return id_to_did(result['value'])
         return result
 
     def resolve(self, did: str, account_address: AccountAddress):
-        command = f'(call {self.address} (resolve {did}))'
+        did_id = did_to_id(did).lower()
+        command = f'(call {self.address} (resolve {did_id}))'
         if isinstance(account_address, str):
             address = account_address
         else:
@@ -35,7 +41,8 @@ class DDORegistryContract(ContractBase):
         return result
 
     def owner(self, did: str,  account_address: AccountAddress):
-        command = f'(call {self.address} (owner {did}))'
+        did_id = did_to_id(did).lower()
+        command = f'(call {self.address} (owner {did_id}))'
         if isinstance(account_address, str):
             address = account_address
         else:

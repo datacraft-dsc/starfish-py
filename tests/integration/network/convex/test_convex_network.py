@@ -6,6 +6,7 @@
 import pytest
 import secrets
 
+from starfish.utils.did import did_generate_random
 from tests.integration.network.convex.helpers import auto_topup_account
 
 
@@ -18,7 +19,7 @@ def test_convex_network_setup(convex_network, config):
 def test_convex_network_ddo(convex_network, convex_accounts):
     register_account = convex_accounts[1]
     auto_topup_account(convex_network, register_account)
-    did = f'0x{secrets.token_hex(32)}'
+    did = did_generate_random()
     ddo = f'test - ddo - {did}'
 
     result = convex_network.register_did(register_account, did, ddo)

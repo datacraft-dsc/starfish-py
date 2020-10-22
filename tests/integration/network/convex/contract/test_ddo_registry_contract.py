@@ -16,6 +16,7 @@ from convex_api.exceptions import ConvexAPIError
 
 from starfish.network.convex.contract.ddo_registry_contract import DDORegistryContract
 from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
+from starfish.utils.did import did_generate_random
 
 # (import convex.trust :as trust)
 
@@ -27,7 +28,7 @@ def test_contract_did_register_methods(convex_network, convex_accounts):
     auto_topup_account(convex_network, register_account)
     query_address = register_account.address_checksum
 
-    did = f'0x{secrets.token_hex(32)}'
+    did = did_generate_random()
     ddo = f'test - ddo - {did}'
 
     contract = DDORegistryContract(convex_network.convex)
@@ -52,13 +53,12 @@ def test_contract_did_register_full_ddo(convex_network, convex_accounts):
     auto_topup_account(convex_network, register_account)
     query_address = register_account.address_checksum
 
+    did = did_generate_random()
 
-    did_id = secrets.token_hex(32)
-    did = f'0x{did_id}'
     now = datetime.datetime.now()
     ddo = {
         '@context': 'https://w3id.org/did/v1',
-        'id': f'did:dep:{did_id}',
+        'id': did,
         'created': now.isoformat(sep=' '),
         'service': [
             {
