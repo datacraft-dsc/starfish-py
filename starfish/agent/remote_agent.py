@@ -56,6 +56,7 @@ SUPPORTED_SERVICES = {
     'market': 'DEP.Market.v1',
     'trust': 'DEP.Trust.v1',
     'auth': 'DEP.Auth.v1',
+    'collection': 'DEP.Collection.v1',
 }
 
 

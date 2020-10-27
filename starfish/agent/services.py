@@ -37,6 +37,10 @@ SERVICES = {
         'type': 'DEP.Auth.{VERSION}',
         'url': '{BASE_URL}/api/{VERSION}/auth',
     },
+    'collection': {
+        'type': 'DEP.Collection.{VERSION}',
+        'url': '{BASE_URL}/api/{VERSION}/collection',
+    },
 }
 
 ALL_SERVICES = SERVICES.keys()
