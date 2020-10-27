@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.13.6
++   Add collection service to the list of services available for agents
+
 ### Release v0.13.5
 +   convex ddo contract only excepts a full did string
 
