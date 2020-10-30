@@ -36,7 +36,7 @@ jobs:
       with:
         repository: DEX-Company/invokable-py
         token: ${{ secrets.ACCESS_TOKEN }}
-        ref: develop
+        ref: master
         path: invokable-py
     - name: Install dex-chain
       uses: actions/checkout@v2
@@ -59,8 +59,10 @@ jobs:
     - name: Start invokable-py test server
       run: |
         cd invokable-py/
-        make install IGNORE_VENV=1
-        ./tests/run_server.sh &
+        virtualvenv venv
+        source venv/bin/activate
+        make install
+        ./tests/run_server.py &
     - name : Start Surfer
       run: |
         cd surfer
