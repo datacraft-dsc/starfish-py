@@ -31,6 +31,13 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: develop
         path: surfer
+    - name: Install invokable-py
+      uses: actions/checkout@v2
+      with:
+        repository: DEX-Company/invokable-py
+        token: ${{ secrets.ACCESS_TOKEN }}
+        ref: develop
+        path: invokable-py
     - name: Install dex-chain
       uses: actions/checkout@v2
       with:
@@ -49,6 +56,11 @@ jobs:
         ./start_dex_chain.sh test &
     - name: Auto re-deploy convex-contracts
       run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
+    - name: Start invokable-py test server
+      run: |
+        cd invokable-py/
+        make install IGNORE_VENV=1
+        ./tests/run_server.sh &
     - name : Start Surfer
       run: |
         cd surfer
