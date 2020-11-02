@@ -725,6 +725,15 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         asset.set_did(did)
         return asset
 
+    def is_service(self, name):
+        service_type = RemoteAgent.find_supported_service_type(name)
+        if service_type is None:
+            message = f'unknown surfer endpoint service name or type: {name}'
+            logger.error(message)
+            raise ValueError(message)
+        service = self._ddo.get_service(service_type)
+        return service
+
     def get_endpoint(self, name: str, uri: str = None) -> str:
         """return the endpoint based on the name of the service or service type"""
         service_type = RemoteAgent.find_supported_service_type(name)

@@ -40,7 +40,14 @@ def convex_network(config):
 def remote_agent_surfer(config):
     ddo_options = None
     local_agent = config['agents']['surfer']
-    services = Services(local_agent['url'], all_services=True)
+    services = Services(local_agent['url'], service_list=[
+        'meta',
+        'storage',
+        'invoke',
+        'market',
+        'trust',
+        'auth'
+    ])
     ddo = RemoteAgent.generate_ddo(services)
     authentication = {
         'username': local_agent['username'],
