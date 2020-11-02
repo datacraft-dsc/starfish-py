@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.14.0
++   Add collection API to RemoteAgent
+
 ### Release v0.13.6
 +   Add collection service to the list of services available for agents
 
