@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remote Agent class &mdash; starfish-py 0.13.6 documentation</title>
+  <title>Remote Agent class &mdash; starfish-py 0.14.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.13.6
+                0.14.0
               </div>
             
           
@@ -199,6 +199,11 @@ token</p>
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.adapter">
 <em class="property">property </em><code class="sig-name descname">adapter</code><a class="headerlink" href="#starfish.agent.RemoteAgent.adapter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="starfish.agent.RemoteAgent.add_collection_items">
+<code class="sig-name descname">add_collection_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">asset_list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.add_collection_items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -372,6 +377,11 @@ generate_ddo(services)</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="starfish.agent.RemoteAgent.get_collection_items">
+<code class="sig-name descname">get_collection_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.get_collection_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="starfish.agent.RemoteAgent.get_endpoint">
 <code class="sig-name descname">get_endpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">uri</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="headerlink" href="#starfish.agent.RemoteAgent.get_endpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the endpoint based on the name of the service or service type</p>
@@ -493,6 +503,11 @@ to see if it is assigned to a valid Asset.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="starfish.agent.RemoteAgent.is_service">
+<code class="sig-name descname">is_service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.is_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="starfish.agent.RemoteAgent.job_wait_for_completion">
 <code class="sig-name descname">job_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">timeout_seconds</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">60</span></em>, <em class="sig-param"><span class="n">sleep_seconds</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>starfish.job.job.Job<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">]</span><a class="headerlink" href="#starfish.agent.RemoteAgent.job_wait_for_completion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for a job to complete, with optional timeout seconds.</p>
@@ -603,6 +618,11 @@ For the RemoteAgent object to resolve the type of services available.</p>
 </pre></div>
 </div>
 </dd></dl>
+
+<dl class="py method">
+<dt id="starfish.agent.RemoteAgent.remove_collection_items">
+<code class="sig-name descname">remove_collection_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">asset_list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.RemoteAgent.remove_collection_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.agent.RemoteAgent.resolve_url">
