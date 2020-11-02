@@ -34,7 +34,7 @@ def test_agent_manager_load_agent(config, ethereum_network):
 
     items = config['agents'];
     name = manager.default_name
-    assert(name == 'local')
+    assert(name == 'surfer')
     ddo_text = manager.resolve_ddo(name)
     ddo = create_ddo_object(ddo_text)
 

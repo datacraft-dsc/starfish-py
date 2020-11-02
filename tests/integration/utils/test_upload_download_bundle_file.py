@@ -18,7 +18,7 @@ from starfish.utils.data_bundle import (
 
 TEST_FILE_SIZE = '120mb'
 
-def test_bundle_file_upload_download(remote_agent):
+def test_bundle_file_upload_download(remote_agent_surfer):
     # create temp large file
     max_size = decode_readable_size(TEST_FILE_SIZE)
     size = 0
@@ -33,12 +33,12 @@ def test_bundle_file_upload_download(remote_agent):
         test_data_md5 = md5sum.hexdigest()
         fp.seek(0)
         filename = fp.name
-        asset_bundle = register_upload_bundle_file(remote_agent, filename)
+        asset_bundle = register_upload_bundle_file(remote_agent_surfer, filename)
 
         fp.seek(0)
 
         with tempfile.NamedTemporaryFile() as out_fp:
-            download_size = download_bundle_file(remote_agent, asset_bundle, out_fp.name)
+            download_size = download_bundle_file(remote_agent_surfer, asset_bundle, out_fp.name)
             out_fp.seek(0)
             assert(download_size == size)
             md5sum = hashlib.md5()

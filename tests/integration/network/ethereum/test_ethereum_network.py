@@ -116,7 +116,7 @@ def test_network_regiser_provenance(ethereum_network, ethereum_accounts):
 def test_network_regiser_resolve_did_ddo(config, ethereum_network, ethereum_accounts):
     did = did_generate_random()
 
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()
@@ -130,7 +130,7 @@ def test_network_regiser_resolve_did_ddo(config, ethereum_network, ethereum_acco
 
 
 def test_network_resolve_agent(config, ethereum_network, ethereum_accounts):
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     ddo = ethereum_network.resolve_agent(local_agent['url'])
 
     did = did_generate_random()

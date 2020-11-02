@@ -4,6 +4,8 @@
 """
 import re
 
+from eth_utils import add_0x_prefix
+
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
@@ -49,5 +51,5 @@ class DDORegistryContract(ContractBase):
             address = account_address.address
         result = self._convex.query(command, address)
         if result and 'value' in result:
-            return result['value']
+            return add_0x_prefix(result['value'])
         return result

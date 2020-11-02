@@ -14,7 +14,7 @@ from starfish.ddo import DDO
 
 def test_04_agent_register_and_resolve(ethereum_network, config, ethereum_accounts):
 
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     ddo = RemoteAgent.generate_ddo(local_agent['url'])
     authentication = {
         'username': local_agent['username'],

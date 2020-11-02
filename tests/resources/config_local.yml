@@ -30,8 +30,13 @@ convex:
 # each agent section header is [<agent name> agent]
 
 agents:
-  local:
+  surfer:
     url: http://localhost:3030
+    username: Aladdin
+    password: OpenSesame
+
+  invokable:
+    url: http://localhost:9080
     username: Aladdin
     password: OpenSesame
 

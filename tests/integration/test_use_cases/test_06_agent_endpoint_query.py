@@ -12,17 +12,17 @@ import re
 from starfish.agent import RemoteAgent
 
 
-def test_06_agent_endpoint_query(remote_agent):
+def test_06_agent_endpoint_query(remote_agent_surfer):
 
-    endpoint = remote_agent.get_endpoint('meta')
+    endpoint = remote_agent_surfer.get_endpoint('meta')
     assert(re.search('/meta', endpoint))
-    endpoint = remote_agent.get_endpoint('storage')
+    endpoint = remote_agent_surfer.get_endpoint('storage')
     assert(re.search('/assets', endpoint))
-    endpoint = remote_agent.get_endpoint('invoke')
+    endpoint = remote_agent_surfer.get_endpoint('invoke')
     assert(re.search('/invoke', endpoint))
-    endpoint = remote_agent.get_endpoint('market')
+    endpoint = remote_agent_surfer.get_endpoint('market')
     assert(re.search('/market', endpoint))
-    endpoint = remote_agent.get_endpoint('trust')
+    endpoint = remote_agent_surfer.get_endpoint('trust')
     assert(re.search('/trust', endpoint))
-    endpoint = remote_agent.get_endpoint('auth')
+    endpoint = remote_agent_surfer.get_endpoint('auth')
     assert(re.search('/auth', endpoint))

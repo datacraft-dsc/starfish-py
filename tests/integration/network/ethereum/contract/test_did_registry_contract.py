@@ -16,7 +16,7 @@ def test_did_registry_contract(ethereum_network, config, ethereum_accounts):
 
     did = did_generate_random()
 
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     ddo_text = ddo.as_text()

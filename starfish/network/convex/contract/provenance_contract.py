@@ -3,6 +3,8 @@
 
 """
 
+from eth_utils import add_0x_prefix
+
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
@@ -18,7 +20,11 @@ class ProvenanceContract(ContractBase):
         command = f'(call {self.address} (register {asset_id}))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
-            return result['value']
+            return {
+                'timestamp': result['value']['timestamp'],
+                'asset_id': add_0x_prefix(result['value']['asset-id']),
+                'owner': add_0x_prefix(result['value']['owner']),
+            }
         return result
 
     def event_list(self, asset_id: str, account_address: AccountAddress):
@@ -29,7 +35,7 @@ class ProvenanceContract(ContractBase):
             address = account_address.address
         result = self._convex.query(command, address)
         if result and 'value' in result:
-            return result['value']
+            return ProvenanceContract.convert_event_list(result['value'])
         return result
 
     def event_owner(self, account_address: AccountAddress):
@@ -40,5 +46,16 @@ class ProvenanceContract(ContractBase):
         command = f'(call {self.address} (event-owner {address}))'
         result = self._convex.query(command, address)
         if result and 'value' in result:
-            return result['value']
+            return ProvenanceContract.convert_event_list(result['value'])
         return result
+
+    @staticmethod
+    def convert_event_list(items):
+        event_list = []
+        for item in items:
+            event_list.append({
+                'timestamp': item['timestamp'],
+                'asset_id': add_0x_prefix(item['asset-id']),
+                'owner': add_0x_prefix(item['owner']),
+            })
+        return event_list

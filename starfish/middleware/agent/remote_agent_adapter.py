@@ -305,6 +305,49 @@ class RemoteAgentAdapter():
             ddo_text = ResponseWrapper(response).data.decode('utf-8')
         return ddo_text
 
+    def get_collection_items(self, url, collection_name=None, authorization_token=None):
+        if collection_name:
+            url = urljoin(url + '/', 'data/', collection_name)
+        else:
+            url = urljoin(url + '/', 'index')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = self._http_client.get(url, headers=headers)
+        if response and response.status_code == requests.codes.ok:
+            data = ResponseWrapper(response).json
+            return data
+        else:
+            msg = f'GET job response failed: {response.status_code} for {url}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def add_collection_items(self, url, collection_name, asset_list, authorization_token=None):
+        url = urljoin(url + '/', f'data/{collection_name}/add')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        data = asset_list
+        response = self._http_client.post(url, json=data, headers=headers)
+        if response and response.status_code == requests.codes.ok:
+            data = ResponseWrapper(response).json
+            return data
+        else:
+            msg = f'GET job response failed: {response.status_code} {response.text} for {url}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
+    def remove_collection_items(self, url, collection_name, asset_list, authorization_token=None):
+        url = urljoin(url + '/', f'data/{collection_name}/remove')
+        headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
+        response = self._http_client.post(url, json=asset_list, headers=headers)
+        if response and response.status_code == requests.codes.ok:
+            data = ResponseWrapper(response).json
+            return data
+        else:
+            msg = f'GET job response failed: {response.status_code} for {url}'
+            logger.error(msg)
+            raise ValueError(msg)
+        return None
+
     @property
     def http_client(self):
         return self._http_client

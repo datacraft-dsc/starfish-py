@@ -552,6 +552,34 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         response = self._adapter.invoke(remove_0x_prefix(asset.asset_id), inputs, url, authorization_token)
         return response
 
+    def get_collection_items(self, name=None):
+        url = self.get_endpoint('collection')
+        if not url:
+            return None
+        authorization_token = self.get_authorization_token()
+        response = self._adapter.get_collection_items(url, name, authorization_token)
+        return response
+
+    def add_collection_items(self, name, asset_list):
+        if not isinstance(asset_list, (tuple, list)):
+            raise ValueError('You must pass a list of asset ids to add to the collection')
+        url = self.get_endpoint('collection')
+        if not url:
+            return None
+        authorization_token = self.get_authorization_token()
+        response = self._adapter.add_collection_items(url, name, asset_list, authorization_token)
+        return response
+
+    def remove_collection_items(self, name, asset_list):
+        if not isinstance(asset_list, (tuple, list)):
+            raise ValueError('You must pass a list of asset ids to remove from the collection')
+        url = self.get_endpoint('collection')
+        if not url:
+            return None
+        authorization_token = self.get_authorization_token()
+        response = self._adapter.remove_collection_items(url, name, asset_list, authorization_token)
+        return response
+
     def get_authorization_token(self) -> str:
 
         if self._authentication and 'token' in self._authentication:

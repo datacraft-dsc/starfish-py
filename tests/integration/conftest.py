@@ -37,9 +37,9 @@ def convex_network(config):
 
 
 @pytest.fixture(scope='module')
-def remote_agent(config):
+def remote_agent_surfer(config):
     ddo_options = None
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     services = Services(local_agent['url'], all_services=True)
     ddo = RemoteAgent.generate_ddo(services)
     authentication = {
@@ -47,6 +47,19 @@ def remote_agent(config):
         'password': local_agent['password'],
     }
     return RemoteAgent(ddo, authentication)
+
+@pytest.fixture(scope='module')
+def remote_agent_invokable(config):
+    ddo_options = None
+    local_agent = config['agents']['invokable']
+    services = Services(local_agent['url'], all_services=True)
+    ddo = RemoteAgent.generate_ddo(services)
+    authentication = {
+        'username': local_agent['username'],
+        'password': local_agent['password'],
+    }
+    return RemoteAgent(ddo, authentication)
+
 
 
 @pytest.fixture(scope='module')
@@ -78,7 +91,7 @@ def convex_accounts(config):
 @pytest.fixture(scope='module')
 def invokable_list(config):
 
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
 
     url = f'{local_agent["url"]}/api/v1/admin/import-demo?id=operations'
     username = local_agent['username']

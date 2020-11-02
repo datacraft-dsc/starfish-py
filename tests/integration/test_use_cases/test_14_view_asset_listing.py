@@ -13,18 +13,18 @@ import json
 from starfish.asset import DataAsset
 
 
-def test_14_view_asset_listing(resources, remote_agent):
+def test_14_view_asset_listing(resources, remote_agent_surfer):
     test_data = "Test listing searching by listing id"
     asset_data = DataAsset.create('TestAsset', test_data)
-    asset = remote_agent.register_asset(asset_data)
+    asset = remote_agent_surfer.register_asset(asset_data)
     assert(asset)
-    listing = remote_agent.create_listing(resources.listing_data, asset.did)
+    listing = remote_agent_surfer.create_listing(resources.listing_data, asset.did)
     listing.set_published(True)
     logging.debug("view_asset_listing for listing_id: " + listing.listing_id)
-    listing2 = remote_agent.get_listing(listing.listing_id)
+    listing2 = remote_agent_surfer.get_listing(listing.listing_id)
     assert(listing2.listing_id == listing.listing_id)
     # view all listings
-    listings = remote_agent.get_listings()
+    listings = remote_agent_surfer.get_listings()
     logging.debug("listings: " + str(listings))
     assert(listings)
     assert(isinstance(listings,list))

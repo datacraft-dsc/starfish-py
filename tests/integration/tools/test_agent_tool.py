@@ -13,7 +13,7 @@ def test_agent_resolve_command(config):
     args = Mock()
 
     args.url = config['ethereum']['network']['url']
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
     args.agent = local_agent['url']
@@ -28,7 +28,7 @@ def test_agent_register_command(config):
     args = Mock
 
     args.url = config['ethereum']['network']['url']
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
 
     args.agent_url = local_agent['url']
 

@@ -15,12 +15,12 @@ from starfish.agent.services import Services, ALL_SERVICES
 
 
 
-def test_05_agent_endpoint_update(config, remote_agent):
-    endpoint = remote_agent.get_endpoint('DEP.Meta.v1')
+def test_05_agent_endpoint_update(config, remote_agent_surfer):
+    endpoint = remote_agent_surfer.get_endpoint('DEP.Meta.v1')
     assert(endpoint)
     assert(re.search('meta', endpoint))
 
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     services = Services(local_agent['url'], ['meta'], 'v99')
 
     ddo = RemoteAgent.generate_ddo(services)

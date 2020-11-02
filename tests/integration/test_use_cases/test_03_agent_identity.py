@@ -20,8 +20,8 @@ def find_remote_service(find_service_type):
             return service_type
     return None
 
-def test_03_agent_did(remote_agent):
-    did = remote_agent.did
+def test_03_agent_did(remote_agent_surfer):
+    did = remote_agent_surfer.did
     assert(did)
     data = did_parse(did)
     assert(data)
@@ -30,23 +30,23 @@ def test_03_agent_did(remote_agent):
     assert(data['path'] is None)
     assert(data['fragment'] is None)
 
-def test_03_agent_ddo(remote_agent):
-    ddo = remote_agent.ddo
+def test_03_agent_ddo(remote_agent_surfer):
+    ddo = remote_agent_surfer.ddo
     assert(ddo)
     assert(isinstance(ddo, DDO))
     for service in ddo.services:
         service_type = find_remote_service(service.type)
         assert(service_type)
-        endpoint = remote_agent.get_endpoint(service_type)
+        endpoint = remote_agent_surfer.get_endpoint(service_type)
         assert(endpoint)
         assert(endpoint == service.endpoint)
 
 
-def test_03_agent_get_endpoints(remote_agent):
-    assert(remote_agent.get_endpoint('meta'))
-    assert(remote_agent.get_endpoint('storage'))
-    assert(remote_agent.get_endpoint('invoke'))
-    assert(remote_agent.get_endpoint('market'))
-    assert(remote_agent.get_endpoint('trust'))
-    assert(remote_agent.get_endpoint('auth'))
-    assert(remote_agent.get_endpoint('collection'))
+def test_03_agent_get_endpoints(remote_agent_surfer):
+    assert(remote_agent_surfer.get_endpoint('meta'))
+    assert(remote_agent_surfer.get_endpoint('storage'))
+    assert(remote_agent_surfer.get_endpoint('invoke'))
+    assert(remote_agent_surfer.get_endpoint('market'))
+    assert(remote_agent_surfer.get_endpoint('trust'))
+    assert(remote_agent_surfer.get_endpoint('auth'))
+    assert(remote_agent_surfer.get_endpoint('collection'))

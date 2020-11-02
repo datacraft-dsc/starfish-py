@@ -46,7 +46,7 @@ def test_asset_store_and_download_command(config, ethereum_network, ethereum_acc
     create_test_file(test_upload_filename)
 
     args.url = config['ethereum']['network']['url']
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
     args.agent = local_agent['url']
@@ -77,7 +77,7 @@ def test_asset_store_and_download_command(config, ethereum_network, ethereum_acc
     args = Mock()
     test_download_filename = create_random_filename()
     args.url = config['ethereum']['network']['url']
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
 
@@ -117,7 +117,7 @@ def test_asset_store_large_file_command(config):
 
     test_download_filename = create_random_filename()
     args.url = config['ethereum']['network']['url']
-    local_agent = config['agents']['local']
+    local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
     args.agent = local_agent['url']

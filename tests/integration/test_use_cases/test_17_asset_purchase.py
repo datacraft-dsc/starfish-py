@@ -13,16 +13,16 @@ import json
 from starfish.asset import DataAsset
 
 
-def test_17_asset_purchase(resources, config, remote_agent, ethereum_accounts):
+def test_17_asset_purchase(resources, config, remote_agent_surfer, ethereum_accounts):
     purchaser_account = ethereum_accounts
     test_data = secrets.token_bytes(1024)
     asset_data = DataAsset.create('TestAsset', test_data)
-    asset = remote_agent.register_asset(asset_data)
+    asset = remote_agent_surfer.register_asset(asset_data)
     assert(asset)
-    listing = remote_agent.create_listing(resources.listing_data, asset.did)
+    listing = remote_agent_surfer.create_listing(resources.listing_data, asset.did)
     listing.set_published(True)
     logging.debug("create_purchase for listing_id: " + listing.listing_id)
-    purchase = remote_agent.purchase_asset(listing, purchaser_account)
+    purchase = remote_agent_surfer.purchase_asset(listing, purchaser_account)
     assert(purchase['listingid'] == listing.listing_id)
     assert(purchase['status'] == 'wishlist')
     logging.debug("purchase: " + json.dumps(purchase))

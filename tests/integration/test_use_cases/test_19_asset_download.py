@@ -13,17 +13,17 @@ import json
 from starfish.asset import DataAsset
 
 
-def test_19_asset_download(resources, remote_agent):
+def test_19_asset_download(resources, remote_agent_surfer):
     test_data = secrets.token_hex(1024)
     asset_data = DataAsset.create('TestAsset', test_data)
 
 
-    asset = remote_agent.register_asset(asset_data)
+    asset = remote_agent_surfer.register_asset(asset_data)
 
-    remote_agent.upload_asset(asset)
+    remote_agent_surfer.upload_asset(asset)
 
     # now download
-    store_asset = remote_agent.download_asset(asset.asset_id)
+    store_asset = remote_agent_surfer.download_asset(asset.asset_id)
 
     assert(store_asset)
     assert(store_asset.data == asset.data)
