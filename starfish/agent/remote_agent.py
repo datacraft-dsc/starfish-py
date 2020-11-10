@@ -788,14 +788,17 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         if url:
             adapter = RemoteAgentAdapter(http_client)
             token = None
-            token_url = urljoin(f'{url}/', 'api/v1/auth/token')
-            if authentication and 'username' in authentication:
-                token = adapter.get_authorization_token(
-                    authentication['username'],
-                    authentication.get('password', ''),
-                    token_url
-                )
-
+            # try to get a token from the agent using the username/password, or from the authentication dict
+            if authentication:
+                if 'token' in authentication and authentication['token']:
+                    token = authentication['token']
+                elif 'username' in authentication and authentication['username']:
+                    token_url = urljoin(f'{url}/', 'api/v1/auth/token')
+                    token = adapter.get_authorization_token(
+                        authentication['username'],
+                        authentication.get('password', ''),
+                        token_url
+                    )
             ddo = adapter.get_ddo(url, token)
         return ddo
 
