@@ -15,7 +15,7 @@ from starfish.network.convex.convex_network import ConvexNetwork
 from starfish.types import TContractBase
 
 CONTRACT_ACCOUNTS = {
-    'development': '0x5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306',
+    'development': '0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb',
 }
 
 

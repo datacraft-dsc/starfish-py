@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.14.1
++   Pass token to get ddo from an agent
++   Change convex contract owner address to use the deployed address 0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb
+
 ### Release v0.14.0
 +   Add collection API to RemoteAgent
 
