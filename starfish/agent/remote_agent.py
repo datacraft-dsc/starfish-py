@@ -790,15 +790,15 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             token = None
             # try to get a token from the agent using the username/password, or from the authentication dict
             if authentication:
-                if 'token' in authentication and authentication['token']:
-                    token = authentication['token']
-                elif 'username' in authentication and authentication['username']:
+                if 'username' in authentication and authentication['username']:
                     token_url = urljoin(f'{url}/', 'api/v1/auth/token')
                     token = adapter.get_authorization_token(
                         authentication['username'],
                         authentication.get('password', ''),
                         token_url
                     )
+                elif 'token' in authentication and authentication['token']:
+                    token = authentication['token']
             ddo = adapter.get_ddo(url, token)
         return ddo
 
