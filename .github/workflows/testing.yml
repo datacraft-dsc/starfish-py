@@ -47,8 +47,6 @@ jobs:
       run: |
         cd dex-chain
         ./start_dex_chain.sh test &
-    - name: Auto re-deploy convex-contracts
-      run: docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
     - name: Start invokable-py test server
       run: docker run -p 9090:9090 docker.pkg.github.com/dex-company/invokable-py/testing:latest &
     - name : Start Surfer
