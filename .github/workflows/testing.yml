@@ -48,7 +48,7 @@ jobs:
         cd dex-chain
         ./start_dex_chain.sh test &
     - name: Start invokable-py test server
-      run: docker run -p 9090:9090 docker.pkg.github.com/dex-company/invokable-py/testing:latest &
+      run: docker run --publish 9090:9090 --detach docker.pkg.github.com/dex-company/invokable-py/testing:latest
     - name : Start Surfer
       run: |
         cd surfer
