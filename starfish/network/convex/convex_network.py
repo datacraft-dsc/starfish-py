@@ -51,7 +51,6 @@ class ConvexNetwork(NetworkBase):
         provenance_contract = self._manager.load('ProvenanceContract')
         return provenance_contract.event_list(asset_id, self._manager.default_account_address)
 
-
     @property
     def convex(self):
         return self._convex
