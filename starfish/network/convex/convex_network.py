@@ -42,12 +42,12 @@ class ConvexNetwork(NetworkBase):
     Register Provenance
 
     """
-    def register_provenace(self, account: ConvexAccount, asset_id: str):
+    def register_provenance(self, account: ConvexAccount, asset_id: str):
         provenance_contract = self._manager.load('ProvenanceContract')
         result = provenance_contract.register(asset_id, account)
         return result
 
-    def get_provenace_event_list(self, asset_id: str):
+    def get_provenance_event_list(self, asset_id: str):
         provenance_contract = self._manager.load('ProvenanceContract')
         return provenance_contract.event_list(asset_id, self._manager.default_account_address)
 

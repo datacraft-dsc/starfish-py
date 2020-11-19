@@ -22,7 +22,8 @@ class DDORegistryContract(ContractBase):
         ContractBase.__init__(self, convex, 'starfish-ddo-registry')
 
     def register_did(self, did: str, ddo_text: str, account: ConvexAccount):
-        encode_ddo_text = re.sub('"', '\\"', ddo_text)
+        encode_ddo_text = re.sub('\\\\', '\\\\\\\\', ddo_text)
+        encode_ddo_text = re.sub('"', '\\"', encode_ddo_text)
         did_id = did_to_id(did).lower()
         command = f'(call {self.address} (register {did_id} "{encode_ddo_text}"))'
         result = self._convex.send(command, account)
