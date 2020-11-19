@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.14.3
++   Add Convex Provenance
+
 ### Release v0.14.2
 +   Correct precedence in getting username or token for ddo requests
 

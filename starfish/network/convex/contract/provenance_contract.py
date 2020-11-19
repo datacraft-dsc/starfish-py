@@ -17,7 +17,7 @@ class ProvenanceContract(ContractBase):
         ContractBase.__init__(self, convex, 'starfish-provenance')
 
     def register(self, asset_id: str, account: ConvexAccount):
-        command = f'(call {self.address} (register {asset_id}))'
+        command = f'(call {self.address} (register {add_0x_prefix(asset_id)}))'
         result = self._convex.send(command, account)
         if result and 'value' in result:
             return {
@@ -28,7 +28,7 @@ class ProvenanceContract(ContractBase):
         return result
 
     def event_list(self, asset_id: str, account_address: AccountAddress):
-        command = f'(call {self.address} (event-list {asset_id}))'
+        command = f'(call {self.address} (event-list {add_0x_prefix(asset_id)}))'
         if isinstance(account_address, str):
             address = account_address
         else:
@@ -43,7 +43,7 @@ class ProvenanceContract(ContractBase):
             address = account_address
         else:
             address = account_address.address
-        command = f'(call {self.address} (event-owner {address}))'
+        command = f'(call {self.address} (event-owner {add_0x_prefix(address)}))'
         result = self._convex.query(command, address)
         if result and 'value' in result:
             return ProvenanceContract.convert_event_list(result['value'])

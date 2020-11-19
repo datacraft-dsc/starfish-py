@@ -29,3 +29,15 @@ def test_convex_network_ddo(convex_network, convex_accounts):
     result = convex_network.resolve_did(did, register_account.address)
     assert(result)
     assert(result == ddo)
+
+def test_convex_network_provenance(convex_network, convex_accounts):
+    register_account = convex_accounts[1]
+    auto_topup_account(convex_network, register_account)
+    asset_id = secrets.token_hex(32)
+    result = convex_network.register_provenace(register_account, asset_id)
+    print(result)
+    assert(result)
+
+    result = convex_network.get_provenace_event_list(asset_id)
+    print(result)
+    assert(result)
