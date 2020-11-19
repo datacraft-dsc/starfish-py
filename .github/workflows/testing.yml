@@ -18,6 +18,8 @@ jobs:
     - uses: DeLaGuardo/setup-clojure@2.0
       with:
         tools-deps: '1.10.1.483'
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     - name: Install dependencies
       run: make install IGNORE_VENV=1
       env:
