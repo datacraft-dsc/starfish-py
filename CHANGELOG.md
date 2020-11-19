@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.14.5
++   Fix typo for provenance method names in ConvexNetwork
++   Allow for sub json items in json data for register_did
+
 ### Release v0.14.4
 +   Add Convex Provenance
 
