@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.14.6
++   Test with new surfer v0.2.1 - jobId rename
+
 ### Release v0.14.5
 +   Fix typo for provenance method names in ConvexNetwork
 +   Allow for sub json items in json data for register_did
