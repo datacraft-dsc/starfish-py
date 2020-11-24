@@ -11,28 +11,12 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '11.0.5'
-    - uses: DeLaGuardo/setup-clojure@2.0
-      with:
-        tools-deps: '1.10.1.483'
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     - name: Install dependencies
       run: make install IGNORE_VENV=1
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     - name: Lint
       run: make lint
-    - name: Install Surfer
-      uses: actions/checkout@v2
-      with:
-        repository: DEX-Company/surfer
-        token: ${{ secrets.ACCESS_TOKEN }}
-        ref: develop
-        path: surfer
     - name: Install dex-chain
       uses: actions/checkout@v2
       with:
@@ -45,16 +29,15 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.ACCESS_PACKAGES }}
         registry: docker.pkg.github.com
+    - name: Start surfer
+      run: docker run --publish 3030:3030 --detach docker.pkg.github.com/dex-company/surfer/surfer:latest
     - name: Start dex-chain
       run: |
         cd dex-chain
         ./start_dex_chain.sh test &
     - name: Start invokable-py test server
       run: docker run --publish 9090:9090 --detach docker.pkg.github.com/dex-company/invokable-py/testing:latest
-    - name : Start Surfer
-      run: |
-        cd surfer
-        clojure -M:main &
-        scripts/wait_for_surfer.sh
+    - name: Wait for surfer
+      run: docker run --network host docker.pkg.github.com/dex-company/surfer/surfer:latest ./scripts/wait_for_surfer.sh
     - name: Test
       run: make tests
