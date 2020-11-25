@@ -1,10 +1,9 @@
 import pytest
 
 
-from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services
-
+from starfish.network.did import did_generate_random
+from starfish.network.ddo import DDO
 
 def test_did_registry_contract(ethereum_network, config, ethereum_accounts):
     """
@@ -17,9 +16,8 @@ def test_did_registry_contract(ethereum_network, config, ethereum_accounts):
     did = did_generate_random()
 
     local_agent = config['agents']['surfer']
-    services = Services(local_agent['url'], all_services=True)
-    ddo = RemoteAgent.generate_ddo(services)
-    ddo_text = ddo.as_text()
+    ddo = DDO.create_for_all_services('http://localhost', did=did)
+    ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]
 

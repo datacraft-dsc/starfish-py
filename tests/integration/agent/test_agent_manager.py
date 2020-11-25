@@ -8,7 +8,7 @@ import secrets
 
 from starfish.agent import AgentManager
 from starfish.asset import DataAsset
-from starfish.ddo import create_ddo_object
+from starfish.network.ddo import DDO
 
 
 def test_agent_manager_add(config, ethereum_network):
@@ -36,7 +36,7 @@ def test_agent_manager_load_agent(config, ethereum_network):
     name = manager.default_name
     assert(name == 'surfer')
     ddo_text = manager.resolve_ddo(name)
-    ddo = create_ddo_object(ddo_text)
+    ddo = DDO.import_from_text(ddo_text)
 
     # load a named item
     remote_agent = manager.load_agent(name)

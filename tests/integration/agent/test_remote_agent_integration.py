@@ -48,4 +48,4 @@ def test_remote_agent_collecton_add_get(remote_agent_invokable):
 
 def test_remote_agent_not_supported_collecton(remote_agent_surfer):
 
-    assert(remote_agent_surfer.is_service('collection') is None)
+    assert(remote_agent_surfer.is_service('collection') == False)

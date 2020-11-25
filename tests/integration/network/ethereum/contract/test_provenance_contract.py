@@ -2,9 +2,8 @@ import pytest
 import secrets
 import time
 
-from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services
+from starfish.network.did import did_generate_random
 
 ASSET_REGISTER_COUNT = 2
 

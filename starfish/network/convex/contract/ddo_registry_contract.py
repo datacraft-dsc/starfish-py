@@ -9,11 +9,11 @@ from eth_utils import add_0x_prefix
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
 from starfish.network.convex.convex_network import ConvexNetwork
-from starfish.types import AccountAddress
-from starfish.utils.did import (
+from starfish.network.did import (
     did_to_id,
     id_to_did
 )
+from starfish.types import AccountAddress
 
 
 class DDORegistryContract(ContractBase):

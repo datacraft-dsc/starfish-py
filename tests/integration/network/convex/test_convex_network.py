@@ -6,7 +6,7 @@
 import pytest
 import secrets
 
-from starfish.utils.did import did_generate_random
+from starfish.network.did import did_generate_random
 from tests.integration.network.convex.helpers import auto_topup_account
 
 

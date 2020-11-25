@@ -14,8 +14,8 @@ import re
 import requests
 
 from starfish.asset import OperationAsset
+from starfish.network.did import decode_to_asset_id
 from starfish.job import Job
-from starfish.utils.did import decode_to_asset_id
 
 INVOKE_TOKENIZE_TEXT_NAME = "Tokenize Text"
 INVOKE_INCREMENT_NAME = "Increment"

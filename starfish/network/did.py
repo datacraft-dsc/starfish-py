@@ -13,7 +13,6 @@ from eth_utils import remove_0x_prefix
 
 from web3 import Web3
 
-from starfish.ddo import create_ddo_object
 from starfish.types import DIDParts
 
 NETWORK_DID_METHOD = 'dep'
@@ -201,10 +200,3 @@ def did_to_asset_id(did: str) -> str:
     """
     warnings.warn('use "decode_to_asset_id" instead', DeprecationWarning)
     return decode_to_asset_id(did)
-
-
-def get_did_from_ddo(ddo_data: Any) -> str:
-    ddo = create_ddo_object(ddo_data)
-    if ddo:
-        return ddo.did
-    return None

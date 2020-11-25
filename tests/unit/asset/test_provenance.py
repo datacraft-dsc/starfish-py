@@ -9,7 +9,7 @@ import re
 import secrets
 
 from starfish.asset.provenance import Provenance
-from starfish.utils.did import did_generate_random
+from starfish.network.did import did_generate_random
 
 
 def get_activity_id(result):
