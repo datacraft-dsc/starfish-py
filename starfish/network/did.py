@@ -6,7 +6,6 @@ DID utils
 import re
 import secrets
 import warnings
-from typing import Any
 
 from urllib.parse import urlparse
 from eth_utils import remove_0x_prefix

@@ -11,6 +11,7 @@ from typing import Any
 
 from starfish.network.did import did_generate_random
 
+
 class DDO:
 
     SUPPORTED_SERVICES = {
@@ -78,7 +79,6 @@ class DDO:
             del self._service[name]
             return True
         return False
-
 
     def is_sevice(self, name):
         if name in self._service:

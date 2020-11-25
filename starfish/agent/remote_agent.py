@@ -648,7 +648,6 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         data = did_parse(did)
         return data['path'] and data['id_hex']
 
-
     def _create_asset_from_read(self, asset_id: str, read_metadata: Any) -> Any:
         # check the hash of the reading asset
         asset_id = remove_0x_prefix(asset_id)
@@ -668,7 +667,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             logger.error(message)
             raise ValueError(message)
         service = self._ddo.get_service_type(service_type)
-        return not service is None
+        return service is not None
 
     def get_endpoint(self, name: str, uri: str = None) -> str:
         """return the endpoint based on the name of the service or service type"""

@@ -10,12 +10,12 @@ import secrets
 from typing import Any
 
 from starfish.agent.agent_base import AgentBase
+from starfish.listing import Listing
 from starfish.network.ddo import DDO
 from starfish.network.did import (
     decode_to_asset_id,
     did_generate_random
 )
-from starfish.listing import Listing
 from starfish.purchase import Purchase
 from starfish.types import (
     ListingData,

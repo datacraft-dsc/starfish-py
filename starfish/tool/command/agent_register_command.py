@@ -6,7 +6,6 @@
 import re
 from typing import Any
 
-from starfish.agent import RemoteAgent
 from starfish.agent.remote_agent import SUPPORTED_SERVICES
 from starfish.network.ddo import DDO
 from starfish.network.ethereum.ethereum_account import EthereumAccount
