@@ -51,7 +51,7 @@ class DDO:
     def create(url, service_list=None, version=None, did=None):
         if service_list:
             if not isinstance(service_list, (tuple, list)):
-                raise TypeError('service_list must be a list of service names')
+                raise TypeError('Service list must be a list or tuple of service names')
             elif isinstance(service_list, dict):
                 # serice_list is a dict of values
                 return DDO(did, service_list)
@@ -60,6 +60,8 @@ class DDO:
 
         ddo = DDO(did)
         for name in service_list:
+            if not isinstance(name, str):
+                raise TypeError('Service list must be a list of type string names')
             ddo.add_service(name, url, version)
         return ddo
 
@@ -96,7 +98,7 @@ class DDO:
                     name = service_type.lower()
                 self._service[name] = item
 
-    def add_service(self, name, url, version):
+    def add_service(self, name, url, version=None):
         if not version:
             version = DDO.DEFAULT_VERSION
         if name in DDO.SUPPORTED_SERVICES:

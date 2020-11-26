@@ -21,14 +21,37 @@ def test_create_from_service_list():
     assert('meta' in ddo.service)
     assert(ddo.service['meta']['serviceEndpoint'] == 'http://localhost/api/v1/meta')
 
+    with pytest.raises(TypeError, match=r'Service list must be a list or tuple of service names'):
+        ddo = DDO.create(test_url, service_list={
+            'bad_name':'meta',
+            'invalid': 'trust',
+        })
+
+    with pytest.raises(TypeError, match=r'Service list must be a list of type string names'):
+        ddo = DDO.create(test_url, service_list=[
+            {'type':'meta'},
+            {'type': 'trust'},
+        ])
+
+
+def test_create_from_service_list_version():
+    test_url = 'http://localhost'
+    ddo = DDO.create(test_url, service_list=['meta', 'trust'], version='v99')
+    assert(ddo)
+    #ddo_text = json.dumps(json.loads(ddo.as_text), sort_keys=True, indent=4)
+    #print(ddo_text)
+    assert('meta' in ddo.service)
+    assert(ddo.service['meta']['serviceEndpoint'] == 'http://localhost/api/v99/meta')
+
 
 def test_create_all_services():
     test_url = 'http://localhost'
     ddo = DDO.create(test_url)
     assert(ddo)
+    assert(len(ddo.service_list) > 5)
 
 
-def test_create():
+def test_basic_init():
     did = did_generate_random()
     ddo = DDO(did)
     assert(ddo)
