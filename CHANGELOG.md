@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.15.1
++   Improve DDO creation using add_service
+
 ### Release v0.15.0
 +   New DDO calls and creating DDO records
 +   EthereumAccount create_new renamed to create
