@@ -16,7 +16,7 @@ def test_did_registry_contract(ethereum_network, config, ethereum_accounts):
     did = did_generate_random()
 
     local_agent = config['agents']['surfer']
-    ddo = DDO.create_for_all_services('http://localhost', did=did)
+    ddo = DDO.create('http://localhost', did=did)
     ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]

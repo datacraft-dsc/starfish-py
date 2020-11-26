@@ -47,6 +47,40 @@ class DDO:
 
     DEFAULT_VERSION = 'v1'
 
+    @staticmethod
+    def create(url, service_list=None, version=None, did=None):
+        if service_list:
+            if not isinstance(service_list, (tuple, list)):
+                raise TypeError('service_list must be a list of service names')
+            elif isinstance(service_list, dict):
+                # serice_list is a dict of values
+                return DDO(did, service_list)
+        else:
+            service_list = list(DDO.SUPPORTED_SERVICES.keys())
+
+        ddo = DDO(did)
+        for name in service_list:
+            ddo.add_service(name, url, version)
+        return ddo
+
+    @staticmethod
+    def import_from_text(text):
+        data = json.loads(text)
+        return DDO(data['id'], data['service'])
+
+    @staticmethod
+    def is_supported_service(name):
+        return name in DDO.SUPPORTED_SERVICES
+
+    @staticmethod
+    def get_did_from_ddo(ddo_data: Any) -> str:
+        if isinstance(ddo_data, str):
+            ddo = DDO.import_from_text(ddo_data)
+        else:
+            ddo = ddo_data
+        if ddo:
+            return ddo.did
+
     def __init__(self, did=None, service=None):
         if did is None:
             did = did_generate_random()
@@ -59,9 +93,8 @@ class DDO:
                 service_type = item['type']
                 name = DDO._supported_service_name_from_type(service_type)
                 if not name:
-                    raise ValueError(f'Unsupported service type {service_type}')
-                if name:
-                    self._service[name] = item
+                    name = sevice_type.lower()
+                self._service[name] = item
 
     def add_service(self, name, url, version):
         if not version:
@@ -127,38 +160,3 @@ class DDO:
             for name, item in DDO.SUPPORTED_SERVICES.items():
                 if re.match(regexp, item['type']):
                     return name
-
-    @staticmethod
-    def create_from_service_list(url, service_list, did=None, version=None):
-        if not isinstance(service_list, (tuple, list)):
-            raise TypeError('service_list must be a list of service names')
-        ddo = DDO(did)
-        for name in service_list:
-            ddo.add_service(name, url, version)
-        return ddo
-
-    @staticmethod
-    def create_for_all_services(url, did=None, version=None):
-        return DDO.create_from_service_list(url, list(DDO.SUPPORTED_SERVICES.keys()), did, version)
-
-    @staticmethod
-    def create(did=None):
-        return DDO(did)
-
-    @staticmethod
-    def import_from_text(text):
-        data = json.loads(text)
-        return DDO(data['id'], data['service'])
-
-    @staticmethod
-    def is_supported_service(name):
-        return name in DDO.SUPPORTED_SERVICES
-
-    @staticmethod
-    def get_did_from_ddo(ddo_data: Any) -> str:
-        if isinstance(ddo_data, str):
-            ddo = DDO.import_from_text(ddo_data)
-        else:
-            ddo = ddo_data
-        if ddo:
-            return ddo.did

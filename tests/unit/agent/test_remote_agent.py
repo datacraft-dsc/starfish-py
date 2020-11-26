@@ -12,7 +12,7 @@ from starfish.network.ddo import DDO
 
 
 def test_remote_agent_set_http_client():
-    ddo = DDO.create_for_all_services('localhost:3030')
+    ddo = DDO.create('http://localhost:3030')
     agent = RemoteAgent(ddo)
     assert(agent.http_client)
     new_client = object()
@@ -22,7 +22,7 @@ def test_remote_agent_set_http_client():
 
 
 def test_remote_agent_get_adapter():
-    ddo = DDO.create_for_all_services('localhost:3030')
+    ddo = DDO.create('http://localhost:3030')
     agent = RemoteAgent(ddo)
     assert(agent.adapter)
     assert(isinstance(agent.adapter, RemoteAgentAdapter))

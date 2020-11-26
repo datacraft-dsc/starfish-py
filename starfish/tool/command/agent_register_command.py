@@ -70,16 +70,8 @@ Services can be: {",".join(SUPPORTED_SERVICES)}
                     output.add_error(f'{service_name} is not a valid service')
                     return
                 service_list.append(service_name)
-            if service_list:
-                all_services = False
-            else:
-                output.add_error(f'No services found to register in list {args.service_list}')
-                return
 
-        if all_services:
-            ddo = DDO.create_for_all_services(args.agent_url)
-        else:
-            ddo = DDO.create_from_service_list(args.agent_url, service_list=service_list)
+        ddo = DDO.create(args.agent_url, service_list=service_list)
         if network.register_did(register_account, ddo.did, ddo.as_text):
             output.add_line(f'{args.agent_url} has been registered with the did {ddo.did}')
             output.add_line(ddo.as_text)

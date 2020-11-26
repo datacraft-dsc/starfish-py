@@ -117,7 +117,7 @@ def test_network_regiser_resolve_did_ddo(config, ethereum_network, ethereum_acco
     did = did_generate_random()
 
     local_agent = config['agents']['surfer']
-    ddo = DDO.create_for_all_services(local_agent['url'], did=did)
+    ddo = DDO.create(local_agent['url'], did=did)
     ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]
@@ -133,7 +133,7 @@ def test_network_resolve_agent(config, ethereum_network, ethereum_accounts):
     ddo = ethereum_network.resolve_agent(local_agent['url'])
 
     did = did_generate_random()
-    ddo = DDO.create_for_all_services(local_agent['url'])
+    ddo = DDO.create(local_agent['url'])
     ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]

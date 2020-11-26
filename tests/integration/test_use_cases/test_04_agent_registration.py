@@ -15,7 +15,7 @@ from starfish.network.ddo import DDO
 def test_04_agent_register_and_resolve(ethereum_network, config, ethereum_accounts):
 
     local_agent = config['agents']['surfer']
-    ddo = DDO.create_for_all_services(local_agent['url'])
+    ddo = DDO.create(local_agent['url'])
     authentication = {
         'username': local_agent['username'],
         'password': local_agent['password']

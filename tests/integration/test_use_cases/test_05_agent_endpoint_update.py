@@ -20,7 +20,7 @@ def test_05_agent_endpoint_update(config, remote_agent_surfer):
     assert(re.search('meta', endpoint))
 
     local_agent = config['agents']['surfer']
-    ddo = DDO.create_from_service_list(local_agent['url'], ['meta'], 'v99')
+    ddo = DDO.create(local_agent['url'], service_list=['meta'], version='v99')
 
     new_endpoint_uri = '/app/v99/meta/test'
     new_agent = RemoteAgent(ddo=ddo)

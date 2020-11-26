@@ -14,7 +14,7 @@ from starfish.network.did import did_generate_random
 
 def test_create_from_service_list():
     test_url = 'http://localhost'
-    ddo = DDO.create_from_service_list(test_url, ['meta', 'trust'])
+    ddo = DDO.create(test_url, service_list=['meta', 'trust'])
     assert(ddo)
     #ddo_text = json.dumps(json.loads(ddo.as_text), sort_keys=True, indent=4)
     #print(ddo_text)
@@ -24,20 +24,20 @@ def test_create_from_service_list():
 
 def test_create_all_services():
     test_url = 'http://localhost'
-    ddo = DDO.create_for_all_services(test_url)
+    ddo = DDO.create(test_url)
     assert(ddo)
 
 
 def test_create():
     did = did_generate_random()
-    ddo = DDO.create(did)
+    ddo = DDO(did)
     assert(ddo)
     assert(ddo.did == did)
 
 
 def test_import_from_text():
     test_url = 'http://localhost'
-    ddo = DDO.create_from_service_list(test_url, ['meta', 'trust'])
+    ddo = DDO.create(test_url, service_list=['meta', 'trust'])
     assert(ddo)
     ddo_text = json.dumps(json.loads(ddo.as_text), sort_keys=True, indent=4)
     import_ddo = DDO.import_from_text(ddo_text)
@@ -52,7 +52,7 @@ def test_is_supported_service():
 def test_get_did_from_ddo():
     did = did_generate_random()
     test_url = 'http://localhost'
-    ddo = DDO.create_from_service_list(test_url, ['meta', 'trust'], did)
+    ddo = DDO.create(test_url, service_list=['meta', 'trust'], did=did)
     assert(ddo)
     assert(ddo.did == did)
     assert(DDO.get_did_from_ddo(ddo) == did)
