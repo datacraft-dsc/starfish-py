@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.15.0
++   New DDO calls and creating DDO records
++   EthereumAccount create_new renamed to create
+
 ### Release v0.14.6
 +   Test with new surfer v0.2.1 - jobId rename
 
