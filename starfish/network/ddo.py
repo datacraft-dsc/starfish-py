@@ -93,7 +93,7 @@ class DDO:
                 service_type = item['type']
                 name = DDO._supported_service_name_from_type(service_type)
                 if not name:
-                    name = sevice_type.lower()
+                    name = service_type.lower()
                 self._service[name] = item
 
     def add_service(self, name, url, version):

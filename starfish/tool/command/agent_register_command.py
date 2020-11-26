@@ -59,7 +59,6 @@ Services can be: {",".join(SUPPORTED_SERVICES)}
 
         register_account = EthereumAccount.import_from_file(args.keyfile, args.password)
 
-        all_services = True
         service_list = None
         if args.service_list:
             name_list = re.split(r'[^a-z]+', args.service_list, re.IGNORECASE)

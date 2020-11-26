@@ -38,7 +38,7 @@ class AccountCreateCommand(CommandBase):
         return parser
 
     def execute(self, args: Any, output: Any) -> None:
-        account = EthereumAccount.create_new(args.password)
+        account = EthereumAccount.create(args.password)
         logger.debug(f'create new account {account.address}')
         if args.keyfile:
             logger.debug(f'writing key file to {args.keyfile}')
