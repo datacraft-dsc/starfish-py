@@ -63,7 +63,7 @@ class DDO:
         for name in service_list:
             if not isinstance(name, str):
                 raise TypeError('Service list must be a list of type string names')
-            ddo.add_service(name, url, version)
+            ddo.add_service(name, url=url, version=version)
         return ddo
 
     @staticmethod
@@ -99,16 +99,33 @@ class DDO:
                     name = service_type.lower()
                 self._service[name] = item
 
-    def add_service(self, name, url, version=None):
+    def add_service(self, name, endpoint=None, url=None, version=None):
         if not version:
             version = DDO.DEFAULT_VERSION
-        if name in DDO.SUPPORTED_SERVICES:
+        if re.search('\.', name):
+            service_type = name
+            # now try to resolve name based on the service type
+            name = DDO._supported_service_name_from_type(service_type)
+            if not name:
+                # if cannot resolve thet set to the new service_type ( orignal name )
+                name = service_type
+
+        else:
+            if not name in DDO.SUPPORTED_SERVICES:
+                raise ValueError(f'Invalid service name {name}')
             template = DDO.SUPPORTED_SERVICES[name]
-            service = {
-                'type': f'{template["type"]}.{version}',
-                'serviceEndpoint': f'{url}/api/{version}{template["uri"]}'
-            }
-            self._service[name] = service
+            service_type = f'{template["type"]}.{version}'
+        if url:
+            endpoint = f'{url}/api/{version}{template["uri"]}'
+
+        if not endpoint:
+            raise ValueError('No endpoint or url provided to add a service to the ddo')
+
+        service = {
+            'type': service_type,
+            'serviceEndpoint': endpoint
+        }
+        self._service[name] = service
 
     def remove_service(self, name):
         if name in self._service:
