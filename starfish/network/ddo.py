@@ -102,7 +102,7 @@ class DDO:
     def add_service(self, name, endpoint=None, url=None, version=None):
         if not version:
             version = DDO.DEFAULT_VERSION
-        if re.search('\.', name):
+        if re.search(r'\.', name):
             service_type = name
             # now try to resolve name based on the service type
             name = DDO._supported_service_name_from_type(service_type)
@@ -111,12 +111,13 @@ class DDO:
                 name = service_type
 
         else:
-            if not name in DDO.SUPPORTED_SERVICES:
+            # using a template to setup the service
+            if name not in DDO.SUPPORTED_SERVICES:
                 raise ValueError(f'Invalid service name {name}')
             template = DDO.SUPPORTED_SERVICES[name]
             service_type = f'{template["type"]}.{version}'
-        if url:
-            endpoint = f'{url}/api/{version}{template["uri"]}'
+            if url:
+                endpoint = f'{url}/api/{version}{template["uri"]}'
 
         if not endpoint:
             raise ValueError('No endpoint or url provided to add a service to the ddo')
