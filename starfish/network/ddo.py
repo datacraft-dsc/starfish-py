@@ -10,6 +10,7 @@ import re
 from typing import Any
 
 from starfish.network.did import did_generate_random
+from starfish.utils.crypto_hash import hash_sha3_256
 
 
 class DDO:
@@ -146,11 +147,21 @@ class DDO:
 
     @property
     def as_text(self):
+        return DDO._as_json(did=self._did, service_list=self.service_list)
+
+    @property
+    def checksum(self):
+        return hash_sha3_256(DDO._as_json(service_list=self.service_list))
+
+    @staticmethod
+    def _as_json(did=None, service_list=None):
         values = {
             '@context': 'https://www.w3.org/2019/did/v1',
-            'id': self._did,
-            'service': self.service_list,
         }
+        if did:
+            values['id'] = did
+        if service_list:
+            values['service'] = service_list
         return json.dumps(values, sort_keys=True)
 
     @staticmethod

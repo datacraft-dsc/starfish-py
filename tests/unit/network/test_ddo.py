@@ -80,3 +80,8 @@ def test_get_did_from_ddo():
     assert(ddo.did == did)
     assert(DDO.get_did_from_ddo(ddo) == did)
     assert(DDO.get_did_from_ddo(ddo.as_text) == did)
+
+def test_ddo_checksum():
+    test_url = 'http://localhost'
+    ddo = DDO.create(test_url, service_list=['meta', 'trust'])
+    assert(ddo.checksum == '5da48d1d8b9ad1fdb27400e336dc007dc90a86957dfe1cc179566118d79d9166')
