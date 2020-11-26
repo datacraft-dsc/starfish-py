@@ -7,7 +7,7 @@ import requests
 from web3 import Web3, HTTPProvider
 
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services
+from starfish.network.ddo import DDO
 from starfish.network.ethereum import (
     EthereumAccount,
     EthereumNetwork
@@ -40,7 +40,7 @@ def convex_network(config):
 def remote_agent_surfer(config):
     ddo_options = None
     local_agent = config['agents']['surfer']
-    services = Services(local_agent['url'], service_list=[
+    ddo = DDO.create(local_agent['url'], [
         'meta',
         'storage',
         'invoke',
@@ -48,7 +48,6 @@ def remote_agent_surfer(config):
         'trust',
         'auth'
     ])
-    ddo = RemoteAgent.generate_ddo(services)
     authentication = {
         'username': local_agent['username'],
         'password': local_agent['password'],
@@ -59,8 +58,7 @@ def remote_agent_surfer(config):
 def remote_agent_invokable(config):
     ddo_options = None
     local_agent = config['agents']['invokable']
-    services = Services(local_agent['url'], all_services=True)
-    ddo = RemoteAgent.generate_ddo(services)
+    ddo = DDO.create(local_agent['url'])
     authentication = {
         'username': local_agent['username'],
         'password': local_agent['password'],

@@ -9,7 +9,7 @@ import json
 import pytest
 
 from starfish.asset import AssetBase
-from starfish.utils.did import (
+from starfish.network.did import (
     did_to_id,
     id_to_did,
     decode_to_asset_id,

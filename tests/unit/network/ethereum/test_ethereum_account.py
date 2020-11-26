@@ -45,7 +45,7 @@ def test_password(config):
 
 def test_account_key_file():
     test_password = secrets.token_bytes(32)
-    account = EthereumAccount.create_new(test_password)
+    account = EthereumAccount.create(test_password)
 
     assert(account.password == test_password)
     assert(json.dumps(account.key_data))

@@ -13,8 +13,8 @@ from eth_utils import remove_0x_prefix
 
 from unittest.mock import Mock
 
-from starfish.utils.did import did_to_id
 from starfish.agent import AgentManager
+from starfish.network.did import did_to_id
 
 from starfish.tool.command.asset_store_command import AssetStoreCommand
 from starfish.tool.command.asset_download_command import AssetDownloadCommand
@@ -71,7 +71,7 @@ def test_asset_store_and_download_command(config, ethereum_network, ethereum_acc
     ddo = ethereum_network.resolve_agent(args.agent, username=args.username, password=args.password)
     register_account = ethereum_accounts[0]
     did_id = remove_0x_prefix(did_to_id(upload_asset_did))
-    ethereum_network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text())
+    ethereum_network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text)
 
 
     args = Mock()

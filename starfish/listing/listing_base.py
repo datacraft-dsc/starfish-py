@@ -12,8 +12,8 @@ from typing import (
     Generic
 )
 from starfish.agent.agent_base import AgentBase
-from starfish.ddo import DDO
 from starfish.network.account_base import AccountBase
+from starfish.network.ddo import DDO
 from starfish.types import TListingBase
 
 

@@ -11,8 +11,7 @@ import pytest
 import re
 
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services, ALL_SERVICES
-
+from starfish.network.ddo import DDO
 
 
 def test_05_agent_endpoint_update(config, remote_agent_surfer):
@@ -21,9 +20,8 @@ def test_05_agent_endpoint_update(config, remote_agent_surfer):
     assert(re.search('meta', endpoint))
 
     local_agent = config['agents']['surfer']
-    services = Services(local_agent['url'], ['meta'], 'v99')
+    ddo = DDO.create(local_agent['url'], service_list=['meta'], version='v99')
 
-    ddo = RemoteAgent.generate_ddo(services)
     new_endpoint_uri = '/app/v99/meta/test'
     new_agent = RemoteAgent(ddo=ddo)
     with pytest.raises(ValueError):

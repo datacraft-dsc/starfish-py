@@ -10,8 +10,12 @@ import secrets
 from typing import Any
 
 from starfish.agent.agent_base import AgentBase
-from starfish.ddo.ddo import DDO
 from starfish.listing import Listing
+from starfish.network.ddo import DDO
+from starfish.network.did import (
+    decode_to_asset_id,
+    did_generate_random
+)
 from starfish.purchase import Purchase
 from starfish.types import (
     ListingData,
@@ -19,10 +23,6 @@ from starfish.types import (
     TListing
 )
 from starfish.utils.crypto_hash import hash_sha3_256
-from starfish.utils.did import (
-    decode_to_asset_id,
-    did_generate_random
-)
 
 
 class MemoryAgent(AgentBase):

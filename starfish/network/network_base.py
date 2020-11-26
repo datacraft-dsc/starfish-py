@@ -13,13 +13,10 @@ from abc import (
     abstractmethod
 )
 
-from starfish.ddo import (
-    DDO,
-    create_ddo_object
-)
 from starfish.network.account_base import AccountBase
+from starfish.network.ddo import DDO
+from starfish.network.did import is_did
 from starfish.types import Authentication
-from starfish.utils.did import is_did
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +63,7 @@ class NetworkBase(ABC):
         if is_did(agent_url_did):
             ddo_text = self.resolve_did(agent_url_did)
             if ddo_text:
-                ddo = create_ddo_object(ddo_text)
+                ddo = DDO.import_from_text(ddo_text)
             return ddo
 
         if not authentication:
@@ -77,7 +74,7 @@ class NetworkBase(ABC):
                 }
         ddo_text = RemoteAgent.resolve_url(agent_url_did, authentication)
         if ddo_text:
-            ddo = create_ddo_object(ddo_text)
+            ddo = DDO.import_from_text(ddo_text)
         return ddo
 
     @property

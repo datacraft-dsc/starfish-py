@@ -21,14 +21,12 @@ from eth_utils import remove_0x_prefix
 from mongoquery import Query
 
 from starfish.agent.agent_base import AgentBase
-from starfish.agent.services import Services
 from starfish.asset import (
     DataAsset,
     OperationAsset,
     create_asset_from_metadata_text,
     is_asset_hash_valid
 )
-from starfish.ddo.ddo import DDO
 from starfish.exceptions import (
     StarfishAssetInvalid,
     StarfishRemoteAgentInvalidAccess
@@ -37,16 +35,17 @@ from starfish.job import Job
 from starfish.listing import Listing
 from starfish.middleware.agent.remote_agent_adapter import RemoteAgentAdapter
 from starfish.network.account_base import AccountBase
+from starfish.network.ddo import DDO
+from starfish.network.did import (
+    decode_to_asset_id,
+    did_parse
+)
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
     Authentication,
     ListingData,
     TAsset,
     TRemoteAgent
-)
-from starfish.utils.did import (
-    decode_to_asset_id,
-    did_parse
 )
 
 SUPPORTED_SERVICES = {
@@ -85,10 +84,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
     def __init__(self, ddo: DDO, authentication: Authentication = None, http_client: Any = None) -> None:
         self._authentication = authentication
 
-        if isinstance(ddo, dict):
-            ddo = DDO(dictionary=ddo)
-        elif isinstance(ddo, str):
-            ddo = DDO(json_text=ddo)
+        if isinstance(ddo, str):
+            ddo = DDO.import_from_text(ddo)
         elif isinstance(ddo, DDO):
             pass
         else:
@@ -156,8 +153,8 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
         :return: RemoteAgent object that has been registered on the network
         """
-        network.register_did(register_account, ddo.did, ddo.as_text())
-        return RemoteAgent(ddo.as_text(), authentication=authentication, http_client=http_client)
+        network.register_did(register_account, ddo.did, ddo.as_text)
+        return RemoteAgent(ddo.as_text, authentication=authentication, http_client=http_client)
 
     def register_asset(self, asset: TAsset, create_provenance: bool = False) -> TAsset:
         """
@@ -651,68 +648,6 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         data = did_parse(did)
         return data['path'] and data['id_hex']
 
-    @staticmethod
-    def generate_ddo(
-        base_url_or_services: Any,
-        service_list: Any = None,
-        all_services: bool = False,
-        did: str = None
-    ) -> DDO:
-        """
-        Generate a DDO for the remote agent url. This DDO will contain the supported
-        endpoints for the remote agent
-
-        :param str base_url_or_services: Base URL of the remote agent
-        :param dict base_url_or_services: Service dict to use. This has to be in the sample format:
-            see starfish.agent.services SERVICES
-
-        :param :class:`agent.services.Services` base_url_or_services: An agent Services object.
-
-        :param dict service_list: Optional list of services to regsiter. This is only if the
-            base_url_or_services is a string containing the base_url.
-
-        :param bool all_services: Optional False, If set to True register all available services.
-        :param str did: Optional did to use for the agent
-
-        :return: created DDO object assigned to the url of the remote agent service
-        :type: :class:.`DDO`
-
-            generate_ddo('http://localhost', ['metadata', 'storage'])
-
-            # is the same as
-            services = Services('http://localhost', service_list=['metadata', 'storage'])
-            generate_ddo(services)
-
-            # or
-
-            generate_ddo(services.as_dict)
-
-        """
-
-        service_items = None
-
-        if isinstance(base_url_or_services, str):
-            services = Services(base_url_or_services, service_list, all_services=all_services)
-            service_items = services.as_dict
-        elif isinstance(base_url_or_services, dict):
-            service_items = base_url_or_services
-        elif isinstance(base_url_or_services, Services):
-            service_items = base_url_or_services.as_dict
-        else:
-            raise(TypeError('Invalid services type, must be a string, dict or Services object'))
-
-        if not did:
-            did = ''
-        ddo = DDO(did=did)
-        for _service_name, service_item in service_items.items():
-            ddo.add_service(service_item['type'], service_item['url'], None)
-
-        if not did:
-            # generate the did from the list of services
-            ddo.generate_did(ddo.as_text())
-
-        return ddo
-
     def _create_asset_from_read(self, asset_id: str, read_metadata: Any) -> Any:
         # check the hash of the reading asset
         asset_id = remove_0x_prefix(asset_id)
@@ -731,11 +666,12 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
             message = f'unknown surfer endpoint service name or type: {name}'
             logger.error(message)
             raise ValueError(message)
-        service = self._ddo.get_service(service_type)
-        return service
+        service = self._ddo.get_service_type(service_type)
+        return service is not None
 
     def get_endpoint(self, name: str, uri: str = None) -> str:
         """return the endpoint based on the name of the service or service type"""
+
         service_type = RemoteAgent.find_supported_service_type(name)
         if service_type is None:
             message = f'unknown surfer endpoint service name or type: {name}'
@@ -744,12 +680,12 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
         endpoint = None
         if self._ddo:
-            service = self._ddo.get_service(service_type)
-            if not service:
+            service_item = self._ddo.get_service_type(service_type)
+            if not service_item:
                 message = f'unable to find surfer endpoint service type {service_type}'
                 logger.error(message)
                 raise ValueError(message)
-            endpoint = service.endpoint
+            endpoint = service_item['serviceEndpoint']
         if not endpoint:
             message = f'unable to find surfer endpoint for {name} = {service_type}'
             logger.error(message)

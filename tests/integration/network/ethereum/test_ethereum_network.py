@@ -6,9 +6,9 @@
 import pytest
 import secrets
 
-from starfish.utils.did import did_generate_random
 from starfish.agent import RemoteAgent
-from starfish.agent.services import Services
+from starfish.network.ddo import DDO
+from starfish.network.did import did_generate_random
 
 
 TEST_AMOUNT = 5
@@ -117,9 +117,8 @@ def test_network_regiser_resolve_did_ddo(config, ethereum_network, ethereum_acco
     did = did_generate_random()
 
     local_agent = config['agents']['surfer']
-    services = Services(local_agent['url'], all_services=True)
-    ddo = RemoteAgent.generate_ddo(services)
-    ddo_text = ddo.as_text()
+    ddo = DDO.create(local_agent['url'], did=did)
+    ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]
     ethereum_network.register_did(register_account, did, ddo_text)
@@ -134,9 +133,8 @@ def test_network_resolve_agent(config, ethereum_network, ethereum_accounts):
     ddo = ethereum_network.resolve_agent(local_agent['url'])
 
     did = did_generate_random()
-    services = Services(local_agent['url'], all_services=True)
-    ddo = RemoteAgent.generate_ddo(services)
-    ddo_text = ddo.as_text()
+    ddo = DDO.create(local_agent['url'])
+    ddo_text = ddo.as_text
 
     register_account = ethereum_accounts[0]
     ethereum_network.register_did(register_account, did, ddo_text)

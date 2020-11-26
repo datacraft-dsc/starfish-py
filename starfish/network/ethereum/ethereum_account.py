@@ -45,7 +45,7 @@ class EthereumAccount(AccountBase):
             self._address = Web3.toChecksumAddress(self._key_data['address'])
 
     @staticmethod
-    def create_new(password: str) -> AccountBase:
+    def create(password: str) -> AccountBase:
         """
 
         Create a new account.

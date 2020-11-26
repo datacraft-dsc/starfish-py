@@ -7,17 +7,16 @@ import logging
 from typing import Dict
 
 from starfish.agent.remote_agent import RemoteAgent
-from starfish.ddo import create_ddo_object
-from starfish.ddo.ddo import DDO
+from starfish.network.ddo import DDO
+from starfish.network.did import (
+    did_to_id,
+    id_to_did
+)
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
     AgentItem,
     Authentication,
     TRemoteAgent
-)
-from starfish.utils.did import (
-    did_to_id,
-    id_to_did
 )
 
 logger = logging.getLogger(__name__)
@@ -97,7 +96,7 @@ class AgentManager:
                 ddo_text = RemoteAgent.resolve_url(item.get('url', None), authentication=authentication)
 
             self._items[name]['ddo_text'] = ddo_text
-            self._items[name]['ddo'] = create_ddo_object(ddo_text)
+            self._items[name]['ddo'] = DDO.import_from_text(ddo_text)
         return self._items[name]['ddo_text']
 
     def load_agent(self, asset_agent_did_name: str) -> TRemoteAgent:
@@ -135,7 +134,7 @@ class AgentManager:
                     logger.debug(f'resolved {did} from network')
 
         if ddo_text:
-            ddo = DDO(json_text=ddo_text)
+            ddo = DDO.import_from_text(ddo_text)
             authentication = None
 
             item = self.get_item_from_did(ddo.did)
@@ -150,7 +149,7 @@ class AgentManager:
             if 'ddo' in item:
                 did = item['ddo'].did
             elif 'ddo_text' in item:
-                ddo = create_ddo_object(item['ddo_text'])
+                ddo = DDO.import_from_text(item['ddo_text'])
                 did = ddo.did
             if did and did == find_did:
                 return item

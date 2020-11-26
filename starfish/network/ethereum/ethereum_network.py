@@ -25,6 +25,7 @@ from starfish.exceptions import (
     StarfishConnectionError,
     StarfishInsufficientFunds
 )
+from starfish.network.did import is_did
 from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.network.network_base import NetworkBase
 from starfish.types import (
@@ -32,7 +33,6 @@ from starfish.types import (
     ProvenanceEventList,
     TContractBase
 )
-from starfish.utils.did import is_did
 
 
 logger = logging.getLogger(__name__)

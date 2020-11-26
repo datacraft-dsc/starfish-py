@@ -16,7 +16,7 @@ from convex_api.exceptions import ConvexAPIError
 
 from starfish.network.convex.contract.ddo_registry_contract import DDORegistryContract
 from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
-from starfish.utils.did import did_generate_random
+from starfish.network.did import did_generate_random
 
 # (import convex.trust :as trust)
 

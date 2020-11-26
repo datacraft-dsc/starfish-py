@@ -49,9 +49,9 @@ class AgentResolveCommand(CommandBase):
 
         ddo = network.resolve_agent(args.agent, username=args.username, password=args.password)
         if ddo:
-            output.add_line(f'{args.agent} resolved to {ddo.as_text()}')
+            output.add_line(f'{args.agent} resolved to {ddo.as_text}')
             output.add_line(f'did: {ddo.did}')
-            output.set_value('ddo_text', ddo.as_text())
+            output.set_value('ddo_text', ddo.as_text)
             output.set_value('did', ddo.did)
         else:
             output.add_line(f'unable to resolve agent address {args.agent}')

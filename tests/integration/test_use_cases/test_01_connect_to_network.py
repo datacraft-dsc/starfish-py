@@ -12,7 +12,7 @@
 import secrets
 import json
 from starfish.agent import RemoteAgent
-from starfish.utils.did import did_generate_random
+from starfish.network.did import did_generate_random
 
 
 def test_01_connect_to_network(ethereum_network, config):

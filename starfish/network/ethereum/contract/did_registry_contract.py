@@ -6,9 +6,9 @@
 
 import logging
 
+from starfish.network.did import did_to_id
 from starfish.network.ethereum.contract.contract_base import ContractBase
 from starfish.network.ethereum.ethereum_account import EthereumAccount
-from starfish.utils.did import did_to_id
 
 logger = logging.getLogger(__name__)
 

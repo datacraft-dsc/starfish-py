@@ -10,7 +10,7 @@ from abc import (
 
 from typing import Any
 
-from starfish.ddo.ddo import DDO
+from starfish.network.ddo import DDO
 from starfish.types import (
     ListingData,
     TAsset,

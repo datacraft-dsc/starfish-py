@@ -5,7 +5,7 @@
 import pytest
 import secrets
 
-from starfish.utils.did import (
+from starfish.network.did import (
     did_validate,
     did_generate_random,
     did_to_id,

@@ -6,11 +6,8 @@
 import re
 from typing import Any
 
-from starfish.agent import RemoteAgent
-from starfish.agent.services import (
-    ALL_SERVICES,
-    Services
-)
+from starfish.agent.remote_agent import SUPPORTED_SERVICES
+from starfish.network.ddo import DDO
 from starfish.network.ethereum.ethereum_account import EthereumAccount
 
 
@@ -52,7 +49,7 @@ class AgentRegisterCommand(CommandBase):
             nargs='?',
             help=f'''
 Optional list of services, if not given then all services will be registed.
-Services can be: {",".join(ALL_SERVICES)}
+Services can be: {",".join(SUPPORTED_SERVICES)}
 '''
         )
         return parser
@@ -62,30 +59,22 @@ Services can be: {",".join(ALL_SERVICES)}
 
         register_account = EthereumAccount.import_from_file(args.keyfile, args.password)
 
-        all_services = True
         service_list = None
         if args.service_list:
             name_list = re.split(r'[^a-z]+', args.service_list, re.IGNORECASE)
             service_list = []
-            print(name_list)
             for name in name_list:
                 service_name = name.strip()
-                if service_name not in ALL_SERVICES:
+                if service_name not in SUPPORTED_SERVICES:
                     output.add_error(f'{service_name} is not a valid service')
                     return
                 service_list.append(service_name)
-            if service_list:
-                all_services = False
-            else:
-                output.add_error(f'No services found to register in list {args.service_list}')
-                return
 
-        services = Services(args.agent_url, service_list=service_list, all_services=all_services)
-        ddo = RemoteAgent.generate_ddo(services)
-        if network.register_did(register_account, ddo.did, ddo.as_text()):
+        ddo = DDO.create(args.agent_url, service_list=service_list)
+        if network.register_did(register_account, ddo.did, ddo.as_text):
             output.add_line(f'{args.agent_url} has been registered with the did {ddo.did}')
-            output.add_line(ddo.as_text())
+            output.add_line(ddo.as_text)
             output.set_value('did', ddo.did)
-            output.set_value('ddo_text', ddo.as_text())
+            output.set_value('ddo_text', ddo.as_text)
         else:
             output.add_error(f'unable to register {args.agent_url}')
