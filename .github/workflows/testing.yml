@@ -33,10 +33,10 @@ jobs:
       run: |
         cd dex-chain
         ./start_dex_chain.sh test &
-    - name: Start invokable-py test server
-      run: docker run --publish 9090:9090 --detach docker.pkg.github.com/dex-company/invokable-py/testing:latest
     - name: Start surfer
       run: docker run --publish 3030:3030 --detach docker.pkg.github.com/dex-company/surfer/surfer:latest
+    - name: Start invokable-py test server
+      run: docker run --publish 9090:9090 --detach docker.pkg.github.com/dex-company/invokable-py/testing:latest
     - name: Wait for surfer
       run: docker run --network host docker.pkg.github.com/dex-company/surfer/surfer:latest ./scripts/wait_for_surfer.sh
     - name: Test

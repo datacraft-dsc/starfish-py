@@ -22,7 +22,7 @@ install_requirements = [
     'web3',
     'typing_extensions',
     'mongoquery',
-    'convex-api-py>=0.0.7',
+    'convex-api-py>=0.0.8',
 ]
 
 setup_requirements = ['pytest-runner', ]

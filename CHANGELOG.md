@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.15.2
++   Upgrade convex-api-py to v0.0.8
+
 ### Release v0.15.1
 +   Improve DDO creation using add_service
 
