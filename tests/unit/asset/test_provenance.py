@@ -24,7 +24,7 @@ def assert_prefix(result):
     assert(result['prefix']['prov'])
     assert(result['prefix']['prov'] == 'http://www.w3.org/ns/prov#')
     assert(result['prefix']['dep'])
-    assert(result['prefix']['dep'] == 'http://dex.sg')
+    assert(result['prefix']['dep'] == 'http://datacraft.sg')
 
 def assert_activity(result, activity_id, activity_type, inputs_text=None):
     assert(result['activity'])

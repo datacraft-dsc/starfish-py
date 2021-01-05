@@ -1,8 +1,8 @@
 # starfish-py
 
-![](https://github.com/DEX-Company/starfish-py/workflows/testing/badge.svg)
-[![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/starfish-py/graphs/contributors)
-[![dex-chain Version](https://img.shields.io/badge/dex--chain-master-blue.svg)](https://github.com/DEX-Company/dex-chain)
+![](https://github.com/datacraft-dsc/starfish-py/workflows/testing/badge.svg)
+[![GitHub contributors](https://img.shields.io/github/contributors/datacraft-dsc/starfish-py.svg)](https://github.com/datacraft-dsc/starfish-py/graphs/contributors)
+[![datacraft-chain Version](https://img.shields.io/badge/datacraft--chain-master-blue.svg)](https://github.com/datacraft-dsc/datacraft-chain)
 
 ---
 
@@ -43,7 +43,7 @@ Python >= 3.6
 1. Clone this repo
 
     ```bash
-    clone https://github.com/DEX-Company/starfish-py.git
+    clone https://github.com/datacraft-dsc/starfish-py.git
     cd starfish-py
     ```
 
@@ -66,13 +66,13 @@ Python >= 3.6
     make test_unit
     ```
 
-1. Create the local testing environment using [dex-chain](https://github.com/DEX-Company/dex-chain).
+1. Create the local testing environment using [datacraft-chain](https://github.com/datacraft-dsc/datacraft-chain).
 
-    In a seperate terminal session you need to clone and checkout ```dex-chain``` repository, by doing the following:
+    In a seperate terminal session you need to clone and checkout ```datacraft-chain``` repository, by doing the following:
     ```
-    git clone https://github.com/DEX-Company/dex-chain.git
-    cd dex-chain
-    ./start_dex_chain.sh test
+    git clone https://github.com/datacraft-dsc/datacraft-chain.git
+    cd datacraft-chain
+    ./start_datacraft_chain.sh test
     ```
 
 1. Run the integration tests
@@ -96,15 +96,15 @@ Python >= 3.6
     make docs
     ```
 
-The [documentation](https://dex-company.github.io/starfish-py) for this repo.
+The [documentation](https://datacraft-dsc.github.io/starfish-py) for this repo.
 
 
 ## Testing
 
 Automatic tests are setup via github actions.
 Our test use pytest framework.
-The testing uses a dex-chain docker image and surfer server.
-See [github actions for testing](https://github.com/DEX-Company/starfish-py/blob/master/.github/workflows/testing.yml)
+The testing uses a datacraft-chain docker image and surfer server.
+See [github actions for testing](https://github.com/datacraft-dsc/starfish-py/blob/master/.github/workflows/testing.yml)
 
 ## New Version
 
@@ -112,7 +112,7 @@ The `bumpversion.sh` script helps to bump the project version. You can execute t
 
 ## Mailing Lists
 
-  * [developer@dex.sg][starfish-qa] -- General questions regarding the usage of Starfish.
+  * [starfish-qa](developer@datacraft.sg) -- General questions regarding the usage of Starfish.
 
 ## Git Development Cycle
 
@@ -135,13 +135,13 @@ Notes on the current development/release lifecyle.
 
 ## Maintainers
 
- [Developer Dex team][developer@dex.sg]
+ [Developer Datacraft team](developer@datacraft-dsc.sg)
 
 
 ## License
 
 ```
-Copyright 2018-2020 DEX Pte. Ltd.
+Copyright 2018-2021 Datacraft Pte. Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

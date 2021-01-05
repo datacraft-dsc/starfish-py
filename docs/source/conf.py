@@ -115,7 +115,7 @@ highlight_language = 'python3'
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'starfishapi': ('https://dex-company.github.io/starfish-py', None)
+    'starfishapi': ('https://datacraft-dsc.github.io/starfish-py', None)
 }
 
 # -- Options for HTML output -------------------------------------------------
@@ -153,7 +153,7 @@ font_family_monospace = ("'Fira Code', 'Fira Mono', Menlo, Monaco, Consolas, "
 
 html_theme_options = {
     # Colors
-    'logo': 'logo-dex.svg',
+    'logo': 'datacraft-logo.png',
     'logo_name': True,
     'logo_text_align': 'center',
     'show_powered_by': False,

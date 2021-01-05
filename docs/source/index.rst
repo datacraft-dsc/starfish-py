@@ -1,7 +1,7 @@
-.. image:: _static/collab-dex-logo.svg
+.. image:: _static/datacrat-logo.svg
     :align: right
     :alt: Dex.sg
-    :target: https://dex.sg
+    :target: https://github.com/datacraft-dsc
 
 starfish-py API Documentation
 =============================

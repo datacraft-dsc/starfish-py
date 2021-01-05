@@ -52,8 +52,8 @@ docs_requirements = [
 ]
 
 setup(
-    author="dex-company",
-    author_email='devops@dex.sg',
+    author="Datacraft",
+    author_email='devops@datacraft.sg',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -85,7 +85,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/DEX-Company/starfish-py',
+    url='https://github.com/datacraft-dsc/starfish-py',
     version='0.15.2',
     zip_safe=False,
 )

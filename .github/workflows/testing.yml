@@ -17,22 +17,22 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     - name: Lint
       run: make lint
-    - name: Install dex-chain
+    - name: Install datacraft-chain
       uses: actions/checkout@v2
       with:
-        repository: DEX-Company/dex-chain
+        repository: datacraft-dsc/datacraft-chain
         ref: master
-        path: dex-chain
+        path: datacraft-chain
     - name: Allow Docker access to github packages
       uses: docker/login-action@v1
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.ACCESS_PACKAGES }}
         registry: docker.pkg.github.com
-    - name: Start dex-chain
+    - name: Start datacraft-chain
       run: |
-        cd dex-chain
-        ./start_dex_chain.sh test &
+        cd datacraft-chain
+        ./scripts/start_datacraft_chain.sh test &
     - name: Start surfer
       run: docker run --publish 3030:3030 --detach docker.pkg.github.com/dex-company/surfer/surfer:latest
     - name: Start invokable-py test server

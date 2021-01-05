@@ -131,7 +131,7 @@ def test_contract_did_register_long_string(convex_network, convex_accounts):
         }
     },
     "prefix": {
-        "dep": "http://dex.sg",
+        "dep": "http://datacraft.sg",
         "prov": "http://www.w3.org/ns/prov#",
         "xsd": "http://www.w3.org/2001/XMLSchema#"
     },

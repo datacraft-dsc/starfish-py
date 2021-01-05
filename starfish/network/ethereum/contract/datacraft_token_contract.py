@@ -9,10 +9,10 @@ from starfish.types import AccountAddress
 from .contract_base import ContractBase
 
 
-CONTRACT_NAME = 'DexToken'
+CONTRACT_NAME = 'DatacraftToken'
 
 
-class DexTokenContract(ContractBase):
+class DatacraftTokenContract(ContractBase):
     """Class representing the Dex Token contract."""
 
     def __init__(self) -> None:

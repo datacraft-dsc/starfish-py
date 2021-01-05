@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.16.0
++   Rename to datacraft-dsc and use datacraft-chain for testing
+
 ### Release v0.15.2
 +   Upgrade convex-api-py to v0.0.8
 

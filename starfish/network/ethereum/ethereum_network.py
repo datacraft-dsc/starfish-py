@@ -66,8 +66,8 @@ CONTRACT_LIST = {
     'DirectPurchase': {
         'name': 'DirectPurchaseContract'
     },
-    'DexToken': {
-        'name': 'DexTokenContract'
+    'DatacraftToken': {
+        'name': 'DatacraftTokenContract'
     },
     'Dispenser': {
         'name': 'DispenserContract'
@@ -125,8 +125,8 @@ class EthereumNetwork(NetworkBase):
         return network_contract.get_balance(account_address)
 
     def get_token_balance(self, account_address: AccountAddress) -> float:
-        dex_token_contract = self.get_contract('DexToken')
-        return dex_token_contract.get_balance(account_address)
+        datacraft_token_contract = self.get_contract('DatacraftToken')
+        return datacraft_token_contract.get_balance(account_address)
 
     def request_test_tokens(self, account: EthereumAccount, amount: float) -> bool:
         dispenser_contract = self.get_contract('Dispenser')
@@ -165,14 +165,14 @@ class EthereumNetwork(NetworkBase):
         return receipt.status == 1
 
     def send_token(self, account: EthereumAccount, to_account_address: AccountAddress, amount: float) -> bool:
-        dex_token_contract = self.get_contract('DexToken')
+        datacraft_token_contract = self.get_contract('DatacraftToken')
 
         account_balance = self.get_token_balance(account)
         if account_balance < amount:
             raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
 
-        tx_hash = dex_token_contract.transfer(account, to_account_address, amount)
-        receipt = dex_token_contract.wait_for_receipt(tx_hash)
+        tx_hash = datacraft_token_contract.transfer(account, to_account_address, amount)
+        receipt = datacraft_token_contract.wait_for_receipt(tx_hash)
         return receipt.status == 1
 
     """
@@ -188,19 +188,19 @@ class EthereumNetwork(NetworkBase):
         reference_1: str = None,
         reference_2: str = None
     ) -> bool:
-        dex_token_contract = self.get_contract('DexToken')
+        datacraft_token_contract = self.get_contract('DatacraftToken')
         direct_contract = self.get_contract('DirectPurchase')
 
         account_balance = self.get_token_balance(account)
         if account_balance < amount:
             raise StarfishInsufficientFunds(f'The account has insufficient funds to send {amount} tokens')
 
-        tx_hash = dex_token_contract.approve_transfer(
+        tx_hash = datacraft_token_contract.approve_transfer(
             account,
             direct_contract.address,
             amount
         )
-        receipt = dex_token_contract.wait_for_receipt(tx_hash)
+        receipt = datacraft_token_contract.wait_for_receipt(tx_hash)
         if receipt and receipt.status == 1:
             tx_hash = direct_contract.send_token_and_log(
                 account,

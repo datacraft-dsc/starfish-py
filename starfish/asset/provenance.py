@@ -133,7 +133,7 @@ class Provenance:
         return {
             'xsd': 'http://www.w3.org/2001/XMLSchema#',
             'prov': 'http://www.w3.org/ns/prov#',
-            PROVENANCE_DEP: 'http://dex.sg'
+            PROVENANCE_DEP: 'http://datacraft.sg'
         }
 
     def _generate_asset_entity(self, asset_did: str = None, entities: Any = None) -> Any:
