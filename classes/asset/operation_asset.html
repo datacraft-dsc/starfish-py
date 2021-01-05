@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Operation Asset class &mdash; starfish-py 0.15.2 documentation</title>
+  <title>Operation Asset class &mdash; starfish-py 0.16.0 documentation</title>
   
 
   
@@ -17,7 +17,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -30,7 +33,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -52,7 +54,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> starfish-py
+            <a href="../../index.html" class="icon icon-home"> starfish-py
           
 
           
@@ -62,7 +64,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.16.0
               </div>
             
           
@@ -147,6 +149,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -160,7 +164,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../../_sources/classes/asset/operation_asset.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -179,7 +183,7 @@
 <dl class="py class">
 <dt id="starfish.asset.OperationAsset">
 <em class="property">class </em><code class="sig-prename descclassname">starfish.asset.</code><code class="sig-name descname">OperationAsset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata_text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.OperationAsset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">starfish.types.OperationAsset</span></code>]</p>
 <p>Operation asset can be used to perform a invokable service</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -192,7 +196,7 @@ if non used then the class will generate a default metadata based on the data pr
 </dl>
 <dl class="py method">
 <dt id="starfish.asset.OperationAsset.create">
-<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#starfish.asset.OperationAsset" title="starfish.asset.OperationAsset">OperationAsset</a><a class="headerlink" href="#starfish.asset.OperationAsset.create" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#starfish.asset.OperationAsset" title="starfish.asset.OperationAsset">OperationAsset</a><a class="headerlink" href="#starfish.asset.OperationAsset.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new OperationAsset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -231,37 +235,29 @@ if non used then the class will generate a default metadata based on the data pr
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../dnetwork.html" class="btn btn-neutral float-right" title="DNetwork class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="bundle_asset.html" class="btn btn-neutral float-left" title="Bundle Asset class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../dnetwork.html" class="btn btn-neutral float-right" title="DNetwork class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="bundle_asset.html" class="btn btn-neutral float-left" title="Bundle Asset class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright starfish-py contributors
+        &#169; Copyright starfish-py contributors.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
