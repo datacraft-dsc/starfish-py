@@ -2,7 +2,7 @@
 
 ![](https://github.com/datacraft-dsc/starfish-py/workflows/testing/badge.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/datacraft-dsc/starfish-py.svg)](https://github.com/datacraft-dsc/starfish-py/graphs/contributors)
-[![datacraft-chain Version](https://img.shields.io/badge/datacraft--chain-master-blue.svg)](https://github.com/datacraft-dsc/datacraft-chain)
+[![datacraft-chain Version](https://img.shields.io/badge/datacraft--chain-release-blue.svg)](https://github.com/datacraft-dsc/datacraft-chain)
 
 ---
 
@@ -104,7 +104,7 @@ The [documentation](https://datacraft-dsc.github.io/starfish-py) for this repo.
 Automatic tests are setup via github actions.
 Our test use pytest framework.
 The testing uses a datacraft-chain docker image and surfer server.
-See [github actions for testing](https://github.com/datacraft-dsc/starfish-py/blob/master/.github/workflows/testing.yml)
+See [github actions for testing](https://github.com/datacraft-dsc/starfish-py/blob/release/.github/workflows/testing.yml)
 
 ## New Version
 
@@ -114,24 +114,10 @@ The `bumpversion.sh` script helps to bump the project version. You can execute t
 
   * [starfish-qa](developer@datacraft.sg) -- General questions regarding the usage of Starfish.
 
-## Git Development Cycle
+## Release Process
 
-Notes on the current development/release lifecyle.
+See [Release Process](https://github.com/datacraft-dsc/starfish-py/blob/develop/RELEASE_PROCESS.md)
 
-### Start a new release
-+   Get the latest develop branch `git checkout develop`
-+   Bump to the next version `./bumpnersion.sh [patch|minor|major]`
-+   Add version line in CHANGELOG.md
-
-### Develop changes
-+   Develop new feature/patch
-+   Update CHANGELOG.md with changes made
-+   Repeat until version completed
-
-### Release the current version
-+   Checkout master.    `git checkout master`
-+   Merge master with develop.      `git merge develop`
-+   Create release using web page
 
 ## Maintainers
 
