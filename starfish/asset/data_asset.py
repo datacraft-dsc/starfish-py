@@ -57,7 +57,7 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
 
         content_type = 'application/octet-stream'
         if isinstance(data, str):
-            content_type = 'text/plain; charset=utf-8'
+            content_type = 'text/plain'
         elif isinstance(data, bytes):
             content_type = 'application/octet-stream'
         else:

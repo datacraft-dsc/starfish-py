@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.16.1
++   Change default asset data content type for strings to text/plain
+
 ### Release v0.16.0
 +   Rename to datacraft-dsc and use datacraft-chain for testing
 
