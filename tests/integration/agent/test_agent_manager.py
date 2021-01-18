@@ -22,7 +22,6 @@ def test_agent_manager_load_agent(config, ethereum_network):
     manager = AgentManager()
 
     agent_items = config['agents']
-    del agent_items['invokable']
     manager.register_agents(agent_items)
 
     name = 'surfer'

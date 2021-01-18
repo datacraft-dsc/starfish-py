@@ -103,9 +103,7 @@ class AgentManager:
         :returns: RemoteAgent object for the loaded local agent.
         """
 
-        self.resolve_access_agents()
         found_agent_access = self.find_agent_access(name_did_url)
-
         if found_agent_access:
             return found_agent_access.load_agent(authentication=authentication, http_client=self._http_client)
 
@@ -119,25 +117,35 @@ class AgentManager:
         :returns: RemoteAgent object for the loaded local agent.
         """
 
-        self.resolve_access_agents()
         found_agent_access = self.find_agent_access(name_did_url)
-
         if found_agent_access:
             return found_agent_access.ddo
 
-    def find_agent_access(self, name_did_url):
+    def find_agent_access(self, name_did_url, auto_resolve=True):
         """
 
         Finds an agent in the access records of this manager.
         If found return the agent access record
 
         :param str name_did_url: name/did or url of the agent to find in the access records
+        :param bool auto_resolve: If True then if no agent found, try to resolve all of the agents,
+            and call again with this field set too False.
 
         :returns: AgentAccess object if found
         """
+
         for agent_access in self._agent_access_list:
             if agent_access.is_match(name_did_url):
-                return agent_access
+                # only return if we have a valid DDO
+                if agent_access.ddo:
+                    return agent_access
+
+        if auto_resolve:
+            self.resolve_access_agents()
+
+        # call again but with no auto_resolve
+        return self.find_agent_access(name_did_url, False)
+
 
     def is_agent(self, name_did_url):
         """
