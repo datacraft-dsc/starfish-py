@@ -9,7 +9,7 @@ import secrets
 from starfish.agent.remote_agent import RemoteAgent
 
 
-def _test_remote_agent_collecton_add_get(remote_agent_invokable):
+def test_remote_agent_collecton_add_get(remote_agent_invokable):
 
     asset_list_length = 10
 
@@ -46,6 +46,6 @@ def _test_remote_agent_collecton_add_get(remote_agent_invokable):
     result = remote_agent_invokable.get_collection_items()
     assert(result)
 
-def _test_remote_agent_not_supported_collecton(remote_agent_surfer):
+def test_remote_agent_not_supported_collecton(remote_agent_surfer):
 
     assert(remote_agent_surfer.is_service('collection') == False)
