@@ -146,7 +146,6 @@ class AgentManager:
         # call again but with no auto_resolve
         return self.find_agent_access(name_did_url, False)
 
-
     def is_agent(self, name_did_url):
         """
         Is the name/did or url in the agent access record list
