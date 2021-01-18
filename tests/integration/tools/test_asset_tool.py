@@ -13,7 +13,6 @@ from eth_utils import remove_0x_prefix
 
 from unittest.mock import Mock
 
-from starfish.agent import AgentManager
 from starfish.network.did import did_to_id
 
 from starfish.tool.command.asset_store_command import AssetStoreCommand
