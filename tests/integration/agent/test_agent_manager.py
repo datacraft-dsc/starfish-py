@@ -6,38 +6,29 @@ Unit test AgentManager
 import pytest
 import secrets
 
-from starfish.agent import AgentManager
+from starfish.agent_manager import AgentManager
 from starfish.asset import DataAsset
 from starfish.network.ddo import DDO
 
 
-def test_agent_manager_add(config, ethereum_network):
-    manager = AgentManager(ethereum_network)
+def test_agent_manager_register(config, ethereum_network):
+    manager = AgentManager()
 
-    for name, item in config['agents'].items():
-        manager.add(name, item)
+    manager.register_agents(config['agents'])
 
-    assert(manager.items)
-    for name, item in manager.items.items():
-        assert(config['agents'][name])
-
-
-    for name, item in config['agents'].items():
-        ddo = manager.resolve_ddo(name)
-        assert(ddo)
+    assert(manager.access_items)
 
 def test_agent_manager_load_agent(config, ethereum_network):
-    manager = AgentManager(ethereum_network)
+    manager = AgentManager()
 
-    for name, item in config['agents'].items():
-        manager.add(name, item)
+    agent_items = config['agents']
+    del agent_items['invokable']
+    manager.register_agents(agent_items)
 
-    items = config['agents'];
-    name = manager.default_name
+    name = 'surfer'
     assert(name == 'surfer')
-    ddo_text = manager.resolve_ddo(name)
-    ddo = DDO.import_from_text(ddo_text)
-
+    ddo = manager.load_ddo(name)
+    assert(ddo)
     # load a named item
     remote_agent = manager.load_agent(name)
     assert(remote_agent)

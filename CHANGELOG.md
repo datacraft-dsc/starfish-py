@@ -1,5 +1,10 @@
 ## Change Log
 
+### Release v0.16.3
++   New agent manager
+
+### Release v0.16.2
++   Remove agent_manager. This is now replaced by invokable-py
 ### Release v0.16.1
 +   Change default asset data content type for strings to text/plain
 
