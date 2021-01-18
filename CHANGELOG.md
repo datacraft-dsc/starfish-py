@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.16.2
++   AgentManager resolve agents as late as possible
+
 ### Release v0.16.1
 +   Update agent_manager to use as a seperate module
 +   Change default asset data content type for strings to text/plain
