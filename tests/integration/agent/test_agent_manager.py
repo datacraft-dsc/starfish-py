@@ -16,7 +16,7 @@ def test_agent_manager_register(config, ethereum_network):
 
     manager.register_agents(config['agents'])
 
-    assert(manager.access_items)
+    assert(manager.items)
 
 def test_agent_manager_load_agent(config, ethereum_network):
     manager = AgentManager()

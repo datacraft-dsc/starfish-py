@@ -22,7 +22,7 @@ class AgentManager:
         remote agents.
 
         """
-        self._agent_access_list = []
+        self._agent_access_items = {}
         self._local_name = LOCAL_AGENT_NAME
 
     def register_agents(self, agents, http_client=None):
@@ -85,7 +85,7 @@ class AgentManager:
             token=token,
             http_client=http_client
         )
-        self._agent_access_list.append(agent_access)
+        self._agent_access_items[name] = agent_access
 
     def unregister_agent(self, name_did_url):
         """
@@ -95,9 +95,9 @@ class AgentManager:
         :returns: True if found and removed
 
         """
-        for agent_access in self._agent_access_list:
+        for name, agent_access in self._agent_access_item.items():
             if agent_access.is_match(name_did_url):
-                self._agent_access_list.remove(agent_access)
+                del self._agent_access_items[name]
                 return True
         return False
 
@@ -114,11 +114,10 @@ class AgentManager:
         if isinstance(ddo_text, DDO):
             ddo_text = ddo_text.as_text
 
-        self._agent_access_list = []
         if local_name:
             self._local_name = local_name
         agent_access = AgentAccess(self._local_name, ddo_text=ddo_text, authentication=authentication, http_client=http_client)
-        self._agent_access_list.append(agent_access)
+        self._agent_access_items[self._local_name] = agent_access
 
     def resolve_agent_url(self, url,  authentication=None, http_client=None):
         """
@@ -191,7 +190,7 @@ class AgentManager:
         :returns: AgentAccess object if found
         """
 
-        for agent_access in self._agent_access_list:
+        for name, agent_access in self._agent_access_items.items():
             if agent_access.is_match(name_did_url):
                 # only return if we have a valid DDO
                 if agent_access.ddo:
@@ -215,7 +214,7 @@ class AgentManager:
         return self.find_agent_access(name_did_url) is not None
 
     def resolve_access_agents(self):
-        for agent_access in self._agent_access_list:
+        for name, agent_access in self._agent_access_items.items():
             if agent_access.did is None and agent_access.url:
                 agent_access.resolve_url()
 
@@ -232,5 +231,5 @@ class AgentManager:
         return self._local_agent_name
 
     @property
-    def access_items(self):
-        return self._agent_access_list
+    def items(self):
+        return self._agent_access_items
