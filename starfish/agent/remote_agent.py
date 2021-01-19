@@ -699,6 +699,10 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         return self._adapter
 
     @property
+    def authentication(self):
+        return self._authentication
+
+    @property
     def http_client(self):
         return self._adapter.http_client
 

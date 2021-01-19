@@ -22,7 +22,18 @@ logger = logging.getLogger(__name__)
 
 class AgentAccess:
 
-    def __init__(self, name, ddo_text=None, did=None, url=None, authentication=None, username=None, password=None, token=None):
+    def __init__(
+        self,
+        name,
+        ddo_text=None,
+        did=None,
+        url=None,
+        authentication=None,
+        username=None,
+        password=None,
+        token=None,
+        http_client=None
+    ):
         """
         Create an agent access record. This record tries to obtain all the nesseray information needed to resolve
         an agent.
@@ -60,6 +71,7 @@ class AgentAccess:
         self._did = did
         self._authentication = authentication
         self._agent_cache = {}
+        self._http_client = http_client
 
     @staticmethod
     def resolve_agent_url(url, authentication=None, http_client=None):
@@ -90,7 +102,7 @@ class AgentAccess:
         """
         raise NotImplementedError('Cannot resolve did with no block chain netwok')
 
-    def resolve_url(self, http_client=None):
+    def resolve_url(self):
         """
         Resolve the remote agent using it's URL.
 
@@ -100,7 +112,7 @@ class AgentAccess:
 
         """
         if self._url:
-            ddo = AgentAccess.resolve_agent_url(self._url, self._authentication, http_client=http_client)
+            ddo = AgentAccess.resolve_agent_url(self._url, self._authentication, self._http_client)
             if ddo:
                 self._ddo = ddo
                 self._did = ddo.did
@@ -124,7 +136,7 @@ class AgentAccess:
                 return True
         return False
 
-    def load_agent(self, authentication=None, use_cache=True, http_client=None):
+    def load_agent(self, authentication=None, use_cache=True):
         """
         Load this agent and return a starfish RemoteAgent object.
 
@@ -144,13 +156,13 @@ class AgentAccess:
             cache_key = self.calc_cache_key(authentication)
             if cache_key not in self._agent_cache:
                 # same method but with no cache
-                self._agent_cache[cache_key] = self.load_agent(authentication, use_cache=False, http_client=http_client)
+                self._agent_cache[cache_key] = self.load_agent(authentication, use_cache=False)
             agent = self._agent_cache[cache_key]
         else:
             if self._ddo is None:
-                self.resolve_url(http_client)
+                self.resolve_url(self._http_client)
             logger.debug(f'loading remote agent {self._name}: {self._did}')
-            agent = RemoteAgent(self._ddo, authentication=authentication, http_client=http_client)
+            agent = RemoteAgent(self._ddo, authentication=authentication, http_client=self._http_client)
 
         return agent
 
@@ -189,6 +201,14 @@ class AgentAccess:
     @property
     def authentication(self):
         return self._authentication
+
+    @property
+    def http_client(self):
+        return self._http_client
+
+    @http_client.setter
+    def http_client(self, value):
+        self._http_client = value
 
     def __str__(self):
         return f'{self._name} {self._url} {self._did}'
