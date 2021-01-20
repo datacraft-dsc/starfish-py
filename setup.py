@@ -86,6 +86,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/datacraft-dsc/starfish-py',
-    version='0.16.3',
+    version='0.16.4',
     zip_safe=False,
 )
