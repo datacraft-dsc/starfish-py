@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.16.4
++   Better testing, allow to assign all AgentManager access items http_client
+
 ### Release v0.16.3
 +   Improve Agent Manager for testing to allow each agent access record to set the http_client
 

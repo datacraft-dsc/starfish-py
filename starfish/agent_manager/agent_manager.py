@@ -214,9 +214,33 @@ class AgentManager:
         return self.find_agent_access(name_did_url) is not None
 
     def resolve_access_agents(self):
+        """
+        Resolve any agents that have only urls. This calls the agent api
+        to get the DDO and DID from the agent
+
+        """
         for name, agent_access in self._agent_access_items.items():
             if agent_access.did is None and agent_access.url:
                 agent_access.resolve_url()
+
+    def set_http_client(self, value):
+        """
+        Set all of the agents with the same http_client value.
+        This method also clears out any cache with the agent access items
+
+        """
+
+        for name, agent_item in self._agent_access_items.items():
+            agent_item.http_client = value
+            agent_item.clear_cache()
+
+    def clear_cache(self):
+        """
+        Clears out the agent items cache.
+
+        """
+        for name, agent_item in self._agent_access_items.items():
+            agent_item.clear_cache()
 
     @property
     def local_agent(self):
