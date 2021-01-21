@@ -1,5 +1,8 @@
 ## Change Log
 
+### Release v0.16.5
++   More testing for AgentManager, fix not found agent bug
+
 ### Release v0.16.4
 +   Better testing, allow to assign all AgentManager access items http_client
 
