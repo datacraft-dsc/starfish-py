@@ -32,6 +32,38 @@ class AgentManager:
         So that you can pass a given name for the agent
 
         :param dict agents: Dict of agents that can be stored in the agent manager.
+        :param object http_client: HTTP client to make the requests to resolve and load the agent
+
+        The agents structure can have the following optional fields
+
+        .. code-block:: yaml
+
+            agent_name:
+              url: URL of agent
+              ddo: ddo object of agent
+              ddo_text: ddo text of agent ( ddo.as_text )
+              did: did of the agent
+              authentication:
+                username: username to acces the agent api
+                password: password to acces the agent api
+                token: token to access the agent api
+              username: username to acces the agent api
+              password: password to acces the agent api
+              token: token to access the agent api
+
+            # example config, both types of authentication will work
+
+            surfer:
+              url: http://localhost:3030
+              username: Aladdin
+              password: OpenSesame
+
+            invokable:
+              url: http://localhost:9090
+              authentication:
+                username: Aladdin
+                password: OpenSesame
+
 
         """
         if not isinstance(agents, dict):
@@ -40,8 +72,11 @@ class AgentManager:
         for name, agent in agents.items():
             self.register_agent(
                 name,
-                url=agent.get('url', None),
+                ddo_text=agent.get('ddo_text', None),
+                ddo=agent.get('ddo', None),
                 did=agent.get('did', None),
+                url=agent.get('url', None),
+                authentication=agent.get('authentication', None),
                 username=agent.get('username', None),
                 password=agent.get('password', None),
                 token=agent.get('token', None),
@@ -52,6 +87,7 @@ class AgentManager:
         self,
         name,
         ddo_text=None,
+        ddo=None,
         did=None,
         url=None,
         authentication=None,
@@ -65,6 +101,7 @@ class AgentManager:
 
         :param str name: Name of the agent
         :param str ddo_text: DDO string of the local agent.
+        :param DDO ddo: DDO object of the local agent.
         :param str did: Optional did of the agent.
         :param str url: Optional url of the agent, to resolve the ddo and did by calling the agent api.
         :param dict authentication: Authentication dict that can access the agent api
@@ -74,6 +111,9 @@ class AgentManager:
         :param object http_client: Test http client to make requests to the agent
 
         """
+        if ddo:
+            ddo_text = ddo.as_text
+
         agent_access = AgentAccess(
             name,
             ddo_text=ddo_text,
@@ -95,7 +135,7 @@ class AgentManager:
         :returns: True if found and removed
 
         """
-        for name, agent_access in self._agent_access_item.items():
+        for name, agent_access in self._agent_access_items.items():
             if agent_access.is_match(name_did_url):
                 del self._agent_access_items[name]
                 return True
@@ -198,9 +238,8 @@ class AgentManager:
 
         if auto_resolve:
             self.resolve_access_agents()
-
-        # call again but with no auto_resolve
-        return self.find_agent_access(name_did_url, False)
+            # call again but with no auto_resolve
+            return self.find_agent_access(name_did_url, False)
 
     def is_agent(self, name_did_url):
         """
