@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 
 import requests
 
+from starfish.exceptions import StarfishConnectionError
 from starfish.utils.crypto_hash import hash_sha3_256
 
 logger = logging.getLogger(__name__)
@@ -79,7 +80,8 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'index')
         logger.debug(f'metadata list url {url}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
+
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -93,7 +95,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'data')
         logger.debug(f'metadata save url {url}')
         headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
-        response = self._http_client.post(url, data=metadata, headers=headers)
+        response = self.request_post(url, data=metadata, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -111,7 +113,7 @@ class RemoteAgentAdapter():
 
         url = urljoin(f'{url}/', 'listings')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.post(url, json=data, headers=headers)
+        response = self.request_post(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug('listing response returned: ' + str(data))
@@ -126,7 +128,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', asset_id)
 
         headers = RemoteAgentAdapter.create_headers('application/octet-stream', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             return data
@@ -139,7 +141,7 @@ class RemoteAgentAdapter():
     def get_listing(self, listing_id, url, authorization_token=None):
         url = urljoin(f'{url}/', f'listings/{listing_id}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -152,7 +154,7 @@ class RemoteAgentAdapter():
     def get_listings(self, url,  authorization_token=None):
         url = urljoin(f'{url}/', 'listings')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return ResponseWrapper(response).json
         else:
@@ -165,7 +167,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', f'listings/{listing_id}')
 
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.put(url, json=data, headers=headers)
+        response = self.request_put(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             return True
         else:
@@ -182,7 +184,7 @@ class RemoteAgentAdapter():
             'file': (asset_id, io.BytesIO(data), 'application/octet-stream'),
         }
         headers = RemoteAgentAdapter.create_headers(None, authorization_token)
-        response = self._http_client.post(url, files=files, headers=headers)
+        response = self.request_post(url, files=files, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == requests.codes.created):
             return True
         else:
@@ -198,7 +200,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', f'data/{asset_id}')
         logger.debug(f'metadata read url {url}')
         headers = RemoteAgentAdapter.create_headers('text/plain', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).data
             result = {
@@ -218,7 +220,7 @@ class RemoteAgentAdapter():
         url = urljoin(f'{url}/', 'purchases')
         logger.debug(f'market url for purchases {url}')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.post(url, json=purchase, headers=headers)
+        response = self.request_post(url, json=purchase, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             logger.debug(f'purchase response returned {data}')
@@ -246,7 +248,7 @@ class RemoteAgentAdapter():
 
         url = urljoin(f'{url}/', asset_id)
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.post(url, json=inputs, headers=headers)
+        response = self.request_post(url, json=inputs, headers=headers)
         if response and (response.status_code == requests.codes.ok or response.status_code == 201):
             data = ResponseWrapper(response).json
             logger.debug('invoke response returned: ' + str(data))
@@ -260,7 +262,7 @@ class RemoteAgentAdapter():
     def get_job(self, job_id, url, authorization_token=None):
         url = urljoin(f'{url}/', job_id)
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -273,14 +275,14 @@ class RemoteAgentAdapter():
     def get_authorization_token(self, username, password, url):
         """Get an agent authorization token (create one if needed).
         Throws exception on error."""
-        response = self._http_client.get(url, auth=(username, password))
+        response = self.request_get(url, auth=(username, password))
         token = None
         if response.status_code == 200:
             tokens = ResponseWrapper(response).json
             if len(tokens) > 0:
                 token = tokens[-1]
             else:   # need to create a token
-                response = self._http_client.post(url, auth=(username, password))
+                response = self.request_post(url, auth=(username, password))
                 if response.status_code == 200:
                     token = ResponseWrapper(response).json
                 else:
@@ -300,7 +302,7 @@ class RemoteAgentAdapter():
         logger.debug(f'get_ddo url {url}')
 
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response.status_code == 200:
             ddo_text = ResponseWrapper(response).data.decode('utf-8')
         return ddo_text
@@ -311,7 +313,7 @@ class RemoteAgentAdapter():
         else:
             url = urljoin(url + '/', 'index')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.get(url, headers=headers)
+        response = self.request_get(url, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -325,7 +327,7 @@ class RemoteAgentAdapter():
         url = urljoin(url + '/', f'data/{collection_name}/add')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
         data = asset_list
-        response = self._http_client.post(url, json=data, headers=headers)
+        response = self.request_post(url, json=data, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -338,7 +340,7 @@ class RemoteAgentAdapter():
     def remove_collection_items(self, url, collection_name, asset_list, authorization_token=None):
         url = urljoin(url + '/', f'data/{collection_name}/remove')
         headers = RemoteAgentAdapter.create_headers('application/json', authorization_token)
-        response = self._http_client.post(url, json=asset_list, headers=headers)
+        response = self.request_post(url, json=asset_list, headers=headers)
         if response and response.status_code == requests.codes.ok:
             data = ResponseWrapper(response).json
             return data
@@ -347,6 +349,51 @@ class RemoteAgentAdapter():
             logger.error(msg)
             raise ValueError(msg)
         return None
+
+    def request_get(self, *args, **kwargs):
+        try:
+            response = self._http_client.get(*args, **kwargs)
+        except requests.exceptions.HTTPError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ConnectionError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ProxyError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.SSLError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.Timeout as e:
+            raise StarfishConnectionError(e)
+        return response
+
+    def request_post(self, *args, **kwargs):
+        try:
+            response = self._http_client.post(*args, **kwargs)
+        except requests.exceptions.HTTPError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ConnectionError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ProxyError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.SSLError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.Timeout as e:
+            raise StarfishConnectionError(e)
+        return response
+
+    def request_put(self, *args, **kwargs):
+        try:
+            response = self._http_client.put(*args, **kwargs)
+        except requests.exceptions.HTTPError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ConnectionError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.ProxyError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.SSLError as e:
+            raise StarfishConnectionError(e)
+        except requests.exceptions.Timeout as e:
+            raise StarfishConnectionError(e)
+        return response
 
     @property
     def http_client(self):

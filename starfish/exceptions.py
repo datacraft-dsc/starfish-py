@@ -6,7 +6,7 @@
 
 
 class StarfishConnectionError(Exception):
-    """ Raised when starfish cannot connect to the network """
+    """ Raised when starfish cannot connect to the network, or remote agent """
 
 
 class StarfishPurchaseError(Exception):

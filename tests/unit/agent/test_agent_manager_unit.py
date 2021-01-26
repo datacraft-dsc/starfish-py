@@ -7,6 +7,7 @@ import pytest
 import requests
 
 from starfish.agent_manager import AgentManager
+from starfish.exceptions import StarfishConnectionError
 from starfish.network.ddo import DDO
 
 def test_agent_manager_register_agent():
@@ -77,5 +78,5 @@ def test_agent_manager_resolve_with_no_network():
     manager = AgentManager()
 
     url = 'http://invalid_agent.org'
-    with pytest.raises(requests.exceptions.ConnectionError):
-        result = manager.resolve_agent_url(url)
+    result = manager.resolve_agent_url(url)
+    assert(result is None)

@@ -8,10 +8,10 @@
 import hashlib
 import json
 import logging
-import requests
 
 
 from starfish.agent import RemoteAgent
+from starfish.exceptions import StarfishConnectionError
 from starfish.network.ddo import DDO
 from starfish.network.did import (
     did_to_id,
@@ -90,8 +90,9 @@ class AgentAccess:
             ddo_text = RemoteAgent.resolve_url(url, authentication=authentication, http_client=http_client)
             if ddo_text:
                 return DDO.import_from_text(ddo_text)
-        except requests.exceptions.SSLError:
-            return None
+        # ignore connetion errors to remote agents
+        except StarfishConnectionError:
+            pass
 
     @staticmethod
     def resolve_agent_did(did, authentication=None, http_client=None):
