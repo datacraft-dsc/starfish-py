@@ -8,6 +8,7 @@
 import hashlib
 import json
 import logging
+import requests
 
 
 from starfish.agent import RemoteAgent
@@ -85,9 +86,12 @@ class AgentAccess:
         :returns: DDO object of the remote agent
         """
         logger.debug(f'resolving remote agent did from {url}')
-        ddo_text = RemoteAgent.resolve_url(url, authentication=authentication, http_client=http_client)
-        if ddo_text:
-            return DDO.import_from_text(ddo_text)
+        try:
+            ddo_text = RemoteAgent.resolve_url(url, authentication=authentication, http_client=http_client)
+            if ddo_text:
+                return DDO.import_from_text(ddo_text)
+        except requests.exceptions.SSLError:
+            return None
 
     @staticmethod
     def resolve_agent_did(did, authentication=None, http_client=None):

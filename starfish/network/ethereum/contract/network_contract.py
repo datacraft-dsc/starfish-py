@@ -28,7 +28,7 @@ class NetworkContract(ContractBase):
     def get_balance(self, account_address: AccountAddress) -> float:
 
         address = self.get_account_address(account_address)
-        amount_wei = self._web3.eth.getBalance(address, block_identifier='latest')
+        amount_wei = self._web3.eth.get_balance(address, block_identifier='latest')
         return self.to_ether(amount_wei)
 
     def send_ether(self, account: EthereumAccount, to_account_address: AccountAddress, amount: float) -> str:

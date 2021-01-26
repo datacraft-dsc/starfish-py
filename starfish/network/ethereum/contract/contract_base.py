@@ -117,7 +117,7 @@ class ContractBase(Generic[TContractBase]):
         return nonce
 
     def get_gas_price(self, address: str) -> int:
-        block = self._web3.eth.getBlock("latest")
+        block = self._web3.eth.get_block("latest")
         gas_price = int(self._web3.eth.gasPrice / 100)
         gas_price = min(block.gasLimit, gas_price)
         gas_price = max(GAS_MINIMUM, gas_price)
