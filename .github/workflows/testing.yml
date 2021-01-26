@@ -38,5 +38,7 @@ jobs:
       run: docker run --publish 9090:9090 --detach docker.pkg.github.com/datacraft-dsc/invokable-py/invokable-py:latest
     - name: Wait for surfer
       run: docker run --network host docker.pkg.github.com/datacraft-dsc/surfer/surfer:latest ./scripts/wait_for_surfer.sh
+    - name: Wait for datacraft-chain to load...
+      run: sleep 10
     - name: Test
       run: make tests
