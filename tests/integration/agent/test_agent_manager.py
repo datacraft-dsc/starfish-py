@@ -57,6 +57,15 @@ def test_agent_manager_convex_network_resolve_did(convex_network, convex_account
     ddo = DDO.create('http://localhost')
     convex_network.register_did(account, ddo.did, ddo.as_text)
 
-    resolve_ddo = manager.resolve_agent_did(ddo.did, network=convex_network)
+    manager.network = convex_network
+    resolve_ddo = manager.resolve_agent_did(ddo.did)
+    assert(resolve_ddo)
+    assert(resolve_ddo.did == ddo.did)
+
+    manager.network = None
+    with pytest.raises(ValueError):
+        resolve_ddo = manager.resolve_agent_did(ddo.did)
+
+    resolve_ddo = manager.resolve_agent_did(ddo.did, convex_network)
     assert(resolve_ddo)
     assert(resolve_ddo.did == ddo.did)

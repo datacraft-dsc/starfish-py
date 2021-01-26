@@ -177,20 +177,24 @@ class AgentManager:
 
     def resolve_agent_did(self, did, network=None, authentication=None, http_client=None):
         """
-        Resolve an agent using ony the DID of the remote agent.
+        Resolve an agent using ony the DID of the remote agent. You need to set the network property
+        on this object before searching for a did in the network
 
         :param str did: DID of the remote agent to resolve
+        :param Network network: Optional network object to resolve the DID, if not used
+            then use the class network value instead
+
         :param dict authentication: Authentication dict that can access the agent api
         :param object http_client: Test http client to make requests to the agent
 
         :returns: RemoteAgent object if found, else return None
 
         """
-        ddo = None
-        if network:
-            ddo = AgentAccess.resolve_agent_did(did, network)
-        else:
-            ddo = AgentAccess.resolve_agent_url(did, authentication=authentication, http_client=http_client)
+        if network is None:
+            network = self._network
+        if not network:
+            raise ValueError('No network set to resolve a DID')
+        ddo = AgentAccess.resolve_agent_did(did, network)
         if ddo:
             return RemoteAgent(ddo, authentication=authentication, http_client=http_client)
 
