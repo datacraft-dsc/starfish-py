@@ -49,3 +49,14 @@ def test_agent_manager_load_agent(config, ethereum_network):
     assert(remote_agent)
     assert(remote_agent.did == ddo.did)
 
+
+def test_agent_manager_convex_network_resolve_did(convex_network, convex_accounts):
+    manager = AgentManager()
+
+    account = convex_accounts[0]
+    ddo = DDO.create('http://localhost')
+    convex_network.register_did(account, ddo.did, ddo.as_text)
+
+    resolve_ddo = manager.resolve_agent_did(ddo.did, network=convex_network)
+    assert(resolve_ddo)
+    assert(resolve_ddo.did == ddo.did)

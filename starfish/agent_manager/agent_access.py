@@ -95,7 +95,7 @@ class AgentAccess:
             pass
 
     @staticmethod
-    def resolve_agent_did(did, authentication=None, http_client=None):
+    def resolve_agent_did(did, network, authentication=None, http_client=None):
         """
         Resolve an agent based on it's DID.
 
@@ -105,7 +105,7 @@ class AgentAccess:
 
         :returns: DDO object of the remote agent
         """
-        raise NotImplementedError('Cannot resolve did with no block chain netwok')
+        return network.resolve_did(did)
 
     def resolve_url(self):
         """
@@ -118,6 +118,14 @@ class AgentAccess:
         """
         if self._url:
             ddo = AgentAccess.resolve_agent_url(self._url, self._authentication, self._http_client)
+            if ddo:
+                self._ddo = ddo
+                self._did = ddo.did
+                return ddo
+
+    def resolve_did(self, network):
+        if self._did:
+            ddo = AgentAccess.resolve_agent_did(self._did, network)
             if ddo:
                 self._ddo = ddo
                 self._did = ddo.did

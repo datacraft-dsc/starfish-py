@@ -14,7 +14,7 @@ LOCAL_AGENT_NAME = '_local_agent'
 
 class AgentManager:
 
-    def __init__(self):
+    def __init__(self, network=None):
         """
         Create an agent manager object to resolve agents and keep a list of knwon agents.
         If the list of known agents only have a url, then the agent manager will try
@@ -24,6 +24,7 @@ class AgentManager:
         """
         self._agent_access_items = {}
         self._local_name = LOCAL_AGENT_NAME
+        self._network = network
 
     def register_agents(self, agents, http_client=None):
         """
@@ -174,7 +175,7 @@ class AgentManager:
         if ddo:
             return RemoteAgent(ddo, authentication=authentication, http_client=http_client)
 
-    def resolve_agent_did(self, did,  authentication=None, http_client=None):
+    def resolve_agent_did(self, did, network=None, authentication=None, http_client=None):
         """
         Resolve an agent using ony the DID of the remote agent.
 
@@ -185,7 +186,11 @@ class AgentManager:
         :returns: RemoteAgent object if found, else return None
 
         """
-        ddo = AgentAccess.resolve_agent_url(did, authentication=authentication, http_client=http_client)
+        ddo = None
+        if network:
+            ddo = AgentAccess.resolve_agent_did(did, network)
+        else:
+            ddo = AgentAccess.resolve_agent_url(did, authentication=authentication, http_client=http_client)
         if ddo:
             return RemoteAgent(ddo, authentication=authentication, http_client=http_client)
 
@@ -259,8 +264,11 @@ class AgentManager:
 
         """
         for name, agent_access in self._agent_access_items.items():
-            if agent_access.did is None and agent_access.url:
-                agent_access.resolve_url()
+            if agent_access.ddo is None:
+                if self._network and agent_access.did:
+                    agent_access.resolve_did(self._network)
+                elif agent_access.url:
+                    agent_access.resolve_url()
 
     def set_http_client(self, value):
         """
@@ -296,3 +304,11 @@ class AgentManager:
     @property
     def items(self):
         return self._agent_access_items
+
+    @property
+    def network(self):
+        return self._network
+
+    @network.setter
+    def network(self, value):
+        self._network = value
