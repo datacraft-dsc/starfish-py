@@ -1,5 +1,9 @@
 ## Change Log
 
+### Release v0.16.6
++   Add resolving of DID using the network
++   Catch requests exceptions and raise as StarfishConnectionError
+
 ### Release v0.16.5
 +   More testing for AgentManager, fix not found agent bug
 
