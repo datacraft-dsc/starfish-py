@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v0.16.7
++   Set to only use convex-api v0.0.*, since the next big release will break convex account setup, creation & addressing
+
 ### Release v0.16.6
 +   Add resolving of DID using the network
 +   Catch requests exceptions and raise as StarfishConnectionError
