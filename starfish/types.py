@@ -85,6 +85,6 @@ class ListingData(TypedDict):
 
 AccountAddressOrDict = Union[AccountInitParams, str, Tuple[str, str, str]]
 
-AccountAddress = Union[TAccountBase, str]
+AccountAddress = Union[TAccountBase, str, int]
 
 ProvenanceEventList = List[ProvenanceEvent]

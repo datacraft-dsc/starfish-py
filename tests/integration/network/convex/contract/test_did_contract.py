@@ -1,6 +1,6 @@
 """
 
-    Test Convex ddo register contract for starfish
+    Test Convex did contract for starfish
 
 """
 
@@ -14,25 +14,24 @@ from convex_api.account import Account
 from convex_api.convex_api import ConvexAPI
 from convex_api.exceptions import ConvexAPIError
 
-from starfish.network.convex.contract.ddo_registry_contract import DDORegistryContract
-from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
+from starfish.network.convex.contract.did_contract import DIDContract
 from starfish.network.did import did_generate_random
 
 # (import convex.trust :as trust)
 
 
-def test_contract_did_register_methods(convex_network, convex_accounts):
+def test_contract_did_methods(convex_network, convex_accounts):
 
-    deploy_address = CONTRACT_ACCOUNTS['development']
     register_account = convex_accounts[1]
     auto_topup_account(convex_network, register_account)
-    query_address = register_account.address_checksum
+    query_address = register_account.address
 
     did = did_generate_random()
     ddo = f'test - ddo - {did}'
 
-    contract = DDORegistryContract(convex_network.convex)
-    assert(contract.load(deploy_address))
+    contract = DIDContract(convex_network.convex)
+    assert(contract)
+    assert(contract.address)
 
     result = contract.register_did(did, ddo, register_account)
     assert(result)
@@ -47,11 +46,10 @@ def test_contract_did_register_methods(convex_network, convex_accounts):
     assert(result)
     assert(result == query_address)
 
-def test_contract_did_register_full_ddo(convex_network, convex_accounts):
-    deploy_address = CONTRACT_ACCOUNTS['development']
+def test_contract_did_full_ddo(convex_network, convex_accounts):
     register_account = convex_accounts[1]
     auto_topup_account(convex_network, register_account)
-    query_address = register_account.address_checksum
+    query_address = register_account.address
 
     did = did_generate_random()
 
@@ -79,9 +77,9 @@ def test_contract_did_register_full_ddo(convex_network, convex_accounts):
             }
         ]
     }
-    contract = DDORegistryContract(convex_network.convex)
-    assert(contract.load(deploy_address))
-
+    contract = DIDContract(convex_network.convex)
+    assert(contract)
+    assert(contract.address)
 
     result = contract.register_did(did, json.dumps(ddo), register_account)
     assert(result)
@@ -93,7 +91,7 @@ def test_contract_did_register_full_ddo(convex_network, convex_accounts):
     assert(result == json.dumps(ddo))
 
 
-def test_contract_did_register_long_string(convex_network, convex_accounts):
+def test_contract_did_long_string(convex_network, convex_accounts):
     big_data = '''
 {
     "activity": {
@@ -156,16 +154,16 @@ def test_contract_did_register_long_string(convex_network, convex_accounts):
 }
 '''
 
-    deploy_address = CONTRACT_ACCOUNTS['development']
     register_account = convex_accounts[1]
-    query_address = register_account.address_checksum
+    query_address = register_account.address
 
     auto_topup_account(convex_network, register_account)
     did = did_generate_random()
 
 
-    contract = DDORegistryContract(convex_network.convex)
-    assert(contract.load(deploy_address))
+    contract = DIDContract(convex_network.convex)
+    assert(contract)
+    assert(contract.address)
 
     result = contract.register_did(did, big_data, register_account)
     assert(result)

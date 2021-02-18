@@ -18,6 +18,8 @@ from starfish.network.convex import (
     ConvexNetwork
 )
 
+from tests.integration.network.convex.helpers import auto_topup_account
+
 
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 
@@ -80,16 +82,17 @@ def ethereum_accounts(config):
     return result
 
 @pytest.fixture(scope='module')
-def convex_accounts(config):
+def convex_accounts(config, convex_network):
     result = []
     # load in the test accounts
     account_1 = config['convex']['accounts']['account1']
-    result = [
-        ConvexAccount.import_from_file(account_1['keyfile'], account_1['password']),
-        ConvexAccount.create(),
+    import_account = ConvexAccount.import_from_file(account_1['keyfile'], account_1['password'])
+    accounts = [
+        convex_network.create_account(import_account),
+        convex_network.create_account(import_account),
     ]
-    return result
-
+    auto_topup_account(convex_network, accounts)
+    return accounts
 
 
 

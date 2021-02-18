@@ -13,7 +13,6 @@ from convex_api.convex_api import ConvexAPI
 from convex_api.exceptions import ConvexAPIError
 
 from starfish.network.convex.contract.provenance_contract import ProvenanceContract
-from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
 
 # (import convex.trust :as trust)
 
@@ -21,17 +20,16 @@ from starfish.network.convex.contract.contract_manager import CONTRACT_ACCOUNTS
 def test_contract_provenance_methods(convex_network, convex_accounts):
 
     TEST_COUNT = 4
-    deploy_address = CONTRACT_ACCOUNTS['development']
     register_account = convex_accounts[1]
     auto_topup_account(convex_network, register_account)
-    query_address = register_account.address_checksum
+    query_address = register_account.address
 
     did = f'0x{secrets.token_hex(32)}'
     ddo = f'test - ddo - {did}'
 
     contract = ProvenanceContract(convex_network.convex)
-    assert(contract.load(deploy_address))
-
+    assert(contract)
+    assert(contract.address)
     register_asset_id_list = []
     for index in range(0, TEST_COUNT):
         asset_id = f'0x{secrets.token_hex(32)}'

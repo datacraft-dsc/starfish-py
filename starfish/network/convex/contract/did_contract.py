@@ -1,14 +1,17 @@
 """
-    starfish-ddo-registry contract
+    starfish.did contract
 
 """
 import re
 
-from eth_utils import add_0x_prefix
+from convex_api import ConvexAPI
+from convex_api.utils import (
+    is_address,
+    to_address
+)
 
 from starfish.network.convex.contract.contract_base import ContractBase
 from starfish.network.convex.convex_account import ConvexAccount
-from starfish.network.convex.convex_network import ConvexNetwork
 from starfish.network.did import (
     did_to_id,
     id_to_did
@@ -16,41 +19,41 @@ from starfish.network.did import (
 from starfish.types import AccountAddress
 
 
-class DDORegistryContract(ContractBase):
+class DIDContract(ContractBase):
 
-    def __init__(self, convex: ConvexNetwork):
-        ContractBase.__init__(self, convex, 'starfish-ddo-registry')
+    def __init__(self, convex: ConvexAPI):
+        ContractBase.__init__(self, convex, 'starfish.did')
 
     def register_did(self, did: str, ddo_text: str, account: ConvexAccount):
         encode_ddo_text = re.sub('\\\\', '\\\\\\\\', ddo_text)
         encode_ddo_text = re.sub('"', '\\"', encode_ddo_text)
         did_id = did_to_id(did).lower()
-        command = f'(call {self.address} (register {did_id} "{encode_ddo_text}"))'
-        result = self._convex.send(command, account)
+        command = f'(register {did_id} "{encode_ddo_text}")'
+        result = self.send(command, account)
         if result and 'value' in result:
             return id_to_did(result['value'])
         return result
 
     def resolve(self, did: str, account_address: AccountAddress):
         did_id = did_to_id(did).lower()
-        command = f'(call {self.address} (resolve {did_id}))'
-        if isinstance(account_address, str):
+        command = f'(resolve {did_id})'
+        if is_address(account_address):
             address = account_address
         else:
             address = account_address.address
-        result = self._convex.query(command, address)
+        result = self.query(command, address)
         if result and 'value' in result:
             return result['value']
         return result
 
     def owner(self, did: str,  account_address: AccountAddress):
         did_id = did_to_id(did).lower()
-        command = f'(call {self.address} (owner {did_id}))'
-        if isinstance(account_address, str):
+        command = f'(owner {did_id})'
+        if is_address(account_address):
             address = account_address
         else:
             address = account_address.address
-        result = self._convex.query(command, address)
+        result = self.query(command, address)
         if result and 'value' in result:
-            return add_0x_prefix(result['value'])
+            return to_address(result['value'])
         return result

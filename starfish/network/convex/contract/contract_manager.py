@@ -10,18 +10,16 @@ import inspect
 
 from typing import Any
 
-from starfish.network.convex.contract.contract_base import ContractBase
-from starfish.network.convex.convex_network import ConvexNetwork
-from starfish.types import TContractBase
+from convex_api import ConvexAPI
 
-CONTRACT_ACCOUNTS = {
-    'development': '0x1de659D38A129e2358CD3c4aF906Bc5eE48B33F27915539897F9fd66813e2beB',
-}
+from starfish.exceptions import StarfishContractError
+from starfish.network.convex.contract.contract_base import ContractBase
+from starfish.types import TContractBase
 
 
 class ContractManager:
 
-    def __init__(self, convex: ConvexNetwork,  default_package_name: str):
+    def __init__(self, convex: ConvexAPI,  default_package_name: str):
         self._convex = convex
         self._default_package_name = default_package_name
 
@@ -48,9 +46,10 @@ class ContractManager:
             class_def = ContractManager._find_class_in_module(name, item[1])
             if class_def:
                 contract_object = class_def(self._convex)
-                contract_object.load(CONTRACT_ACCOUNTS['development'])
+                if contract_object.address is None:
+                    raise StarfishContractError(f'cannot find address for {contract_object.name}')
                 return contract_object
-        return None
+        raise StarfishContractError(f'cannot find contract {name}')
 
     @staticmethod
     def _find_class_in_module(class_name: str, contract_module: str) -> Any:
@@ -60,7 +59,3 @@ class ContractManager:
                and name == class_name:
                 return obj
         return None
-
-    @property
-    def default_account_address(self):
-        return CONTRACT_ACCOUNTS['development']

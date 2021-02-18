@@ -19,20 +19,23 @@ class ConvexNetwork(NetworkBase):
         from starfish.network.convex.contract.contract_manager import ContractManager
         self._manager = ContractManager(self._convex, DEFAULT_PACKAGE_NAME)
 
+    def create_account(self, account: ConvexAccount = None) -> ConvexAccount:
+        return self._convex.create_account(account)
+
     """
 
     Register DID with a DDO and resolve DID to a DDO
 
     """
     def register_did(self, account: ConvexAccount, did: str, ddo_text: str) -> bool:
-        ddo_registry_contract = self._manager.load('DDORegistryContract')
+        ddo_registry_contract = self._manager.load('DIDContract')
         if ddo_registry_contract:
             return ddo_registry_contract.register_did(did, ddo_text, account)
 
     def resolve_did(self, did: str, account_address: AccountAddress = None) -> str:
-        ddo_registry_contract = self._manager.load('DDORegistryContract')
+        ddo_registry_contract = self._manager.load('DIDContract')
         if account_address is None:
-            account_address = self._manager.default_account_address
+            account_address = ddo_registry_contract.address
         if ddo_registry_contract:
             return ddo_registry_contract.resolve(did,  account_address)
         return None
@@ -49,7 +52,7 @@ class ConvexNetwork(NetworkBase):
 
     def get_provenance_event_list(self, asset_id: str):
         provenance_contract = self._manager.load('ProvenanceContract')
-        return provenance_contract.event_list(asset_id, self._manager.default_account_address)
+        return provenance_contract.event_list(asset_id, provenance_contract.address)
 
     @property
     def convex(self):

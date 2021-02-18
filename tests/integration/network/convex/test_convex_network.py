@@ -16,8 +16,8 @@ TEST_AMOUNT = 5
 def test_convex_network_setup(convex_network, config):
     assert(convex_network.url == config['convex']['network']['url'])
 
-def test_convex_network_ddo(convex_network, convex_accounts):
-    register_account = convex_accounts[1]
+def test_convex_network_did(convex_network, convex_accounts):
+    register_account = convex_accounts[0]
     auto_topup_account(convex_network, register_account)
     did = did_generate_random()
     ddo = f'test - ddo - {did}'
@@ -31,7 +31,7 @@ def test_convex_network_ddo(convex_network, convex_accounts):
     assert(result == ddo)
 
 def test_convex_network_provenance(convex_network, convex_accounts):
-    register_account = convex_accounts[1]
+    register_account = convex_accounts[0]
     auto_topup_account(convex_network, register_account)
     asset_id = secrets.token_hex(32)
     result = convex_network.register_provenance(register_account, asset_id)
