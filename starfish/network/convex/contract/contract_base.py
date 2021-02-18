@@ -4,6 +4,7 @@
 Contract Base
 
 """
+
 from convex_api import ConvexAPI
 
 from starfish.network.convex.contract.convex_registry import ConvexRegistry
