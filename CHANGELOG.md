@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v0.16.8
++   Change to use convex-api v0.1.*, new create_account method in convex api
+
 ## Release v0.16.7
 +   Set to only use convex-api v0.0.*, since the next big release will break convex account setup, creation & addressing
 
