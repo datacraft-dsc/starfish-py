@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Purchase class &mdash; starfish-py 0.16.7 documentation</title>
+  <title>Purchase class &mdash; starfish-py 0.16.8 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.16.7
+                0.16.8
               </div>
             
           
@@ -178,7 +178,7 @@
 <h1>Purchase class<a class="headerlink" href="#purchase-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.purchase.Purchase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.purchase.</code><code class="sig-name descname">Purchase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent</span></em>, <em class="sig-param"><span class="n">listing</span></em>, <em class="sig-param"><span class="n">purchase_id</span></em>, <em class="sig-param"><span class="n">account</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.Purchase" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.purchase.</span></code><code class="sig-name descname"><span class="pre">Purchase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">purchase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.Purchase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.purchase.purchase_base.PurchaseBase</span></code></p>
 <p>This class is returned by purchasing an asset uning the <code class="xref py py-func docutils literal notranslate"><span class="pre">Listing.purchase()</span></code> method.</p>
 <dl class="field-list simple">
@@ -192,7 +192,7 @@
 </dl>
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.consume_asset">
-<em class="property">property </em><code class="sig-name descname">consume_asset</code><a class="headerlink" href="#starfish.purchase.Purchase.consume_asset" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">consume_asset</span></code><a class="headerlink" href="#starfish.purchase.Purchase.consume_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Consume a purchased asset. This call will try to download the asset data.</p>
 <p>You can call the <a class="reference internal" href="#starfish.purchase.Purchase.is_purchased" title="starfish.purchase.Purchase.is_purchased"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_purchased()</span></code></a> property before hand to check that you
 have already purchased this asset.</p>
@@ -211,12 +211,12 @@ have already purchased this asset.</p>
 
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.get_type">
-<em class="property">property </em><code class="sig-name descname">get_type</code><a class="headerlink" href="#starfish.purchase.Purchase.get_type" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">get_type</span></code><a class="headerlink" href="#starfish.purchase.Purchase.get_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.is_completed">
-<em class="property">property </em><code class="sig-name descname">is_completed</code><a class="headerlink" href="#starfish.purchase.Purchase.is_completed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_completed</span></code><a class="headerlink" href="#starfish.purchase.Purchase.is_completed" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Currently the same as <cite>is_purchase_valid</cite>, but renamed to be more meaningfull</dt><dd><p>with the <cite>wait_for_completion</cite> method.</p>
 </dd>
@@ -231,7 +231,7 @@ False if the purchase is invalid or the has not finished.</p>
 
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.is_purchase_valid">
-<em class="property">property </em><code class="sig-name descname">is_purchase_valid</code><a class="headerlink" href="#starfish.purchase.Purchase.is_purchase_valid" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_purchase_valid</span></code><a class="headerlink" href="#starfish.purchase.Purchase.is_purchase_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to see if this purchased asset can be accessed and is valid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -245,7 +245,7 @@ False if the purchase is invalid or the has not finished.</p>
 
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.is_purchased">
-<em class="property">property </em><code class="sig-name descname">is_purchased</code><a class="headerlink" href="#starfish.purchase.Purchase.is_purchased" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_purchased</span></code><a class="headerlink" href="#starfish.purchase.Purchase.is_purchased" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if this asset is a purchased asset.</p>
@@ -258,7 +258,7 @@ False if the purchase is invalid or the has not finished.</p>
 
 <dl class="py method">
 <dt id="starfish.purchase.Purchase.wait_for_completion">
-<code class="sig-name descname">wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout_seconds</span><span class="o">=</span><span class="default_value">60</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.Purchase.wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">wait_for_completion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout_seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.Purchase.wait_for_completion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Some purchases ( squid ), require to wait for the smart contracts to complete
 This method will call the underlying agent to wait for the purchase to complete</p>
 <dl class="field-list simple">

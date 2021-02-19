@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Memory Agent class &mdash; starfish-py 0.16.7 documentation</title>
+  <title>Memory Agent class &mdash; starfish-py 0.16.8 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.7
+                0.16.8
               </div>
             
           
@@ -180,7 +180,7 @@
 <h1>Memory Agent class<a class="headerlink" href="#memory-agent-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.agent.MemoryAgent">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.agent.</code><code class="sig-name descname">MemoryAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddo</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>starfish.network.ddo.DDO<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.agent.</span></code><code class="sig-name descname"><span class="pre">MemoryAgent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">starfish.network.ddo.DDO</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.agent.MemoryAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.agent.agent_base.AgentBase</span></code></p>
 <p>Memory Agent class allows to register, list, purchase and consume assets.</p>
 <dl class="field-list simple">
@@ -190,7 +190,7 @@
 </dl>
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.consume_asset">
-<code class="sig-name descname">consume_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">consume_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">purchase_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.agent.MemoryAgent.consume_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Consume the asset and download the data. The actual payment to the asset
 provider will be made at this point.</p>
 <dl class="field-list simple">
@@ -212,7 +212,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.create_listing">
-<code class="sig-name descname">create_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_data</span><span class="p">:</span> <span class="n">starfish.types.ListingData</span></em>, <em class="sig-param"><span class="n">asset_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.create_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">create_listing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listing_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.types.ListingData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_did</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Listing</span><a class="headerlink" href="#starfish.agent.MemoryAgent.create_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a listing on the market place for this asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -232,7 +232,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.get_asset_purchase_ids">
-<code class="sig-name descname">get_asset_purchase_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.agent.MemoryAgent.get_asset_purchase_ids" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_asset_purchase_ids</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="headerlink" href="#starfish.agent.MemoryAgent.get_asset_purchase_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns as list of purchase id’s that have been used for this asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -249,7 +249,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.get_listing">
-<code class="sig-name descname">get_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Listing<a class="headerlink" href="#starfish.agent.MemoryAgent.get_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_listing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listing_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Listing</span><a class="headerlink" href="#starfish.agent.MemoryAgent.get_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an listing from the given listing_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -266,7 +266,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.is_access_granted_for_asset">
-<code class="sig-name descname">is_access_granted_for_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">is_access_granted_for_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">purchase_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.agent.MemoryAgent.is_access_granted_for_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check to see if the account and purchase_id have access to the assed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -287,7 +287,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.purchase_asset">
-<code class="sig-name descname">purchase_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">purchase_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Purchase an asset using it’s listing and an account.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -301,7 +301,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.purchase_wait_for_completion">
-<code class="sig-name descname">purchase_wait_for_completion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">purchase_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">timeoutSeconds</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">purchase_wait_for_completion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">purchase_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSeconds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.agent.MemoryAgent.purchase_wait_for_completion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for completion of the purchase</p>
 <p>TODO: issues here…
 + No method as yet to pass back paramaters and values during the purchase process
@@ -310,7 +310,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.register_asset">
-<code class="sig-name descname">register_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Asset</span></em><span class="sig-paren">)</span> &#x2192; Asset<a class="headerlink" href="#starfish.agent.MemoryAgent.register_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">register_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Asset</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Asset</span><a class="headerlink" href="#starfish.agent.MemoryAgent.register_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a memory asset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -327,7 +327,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.search_listings">
-<code class="sig-name descname">search_listings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">sort</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#starfish.agent.MemoryAgent.search_listings" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">search_listings</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="headerlink" href="#starfish.agent.MemoryAgent.search_listings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for listings with the givien ‘text’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -354,7 +354,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.update_listing">
-<code class="sig-name descname">update_listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">listing</span><span class="p">:</span> <span class="n">Listing</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#starfish.agent.MemoryAgent.update_listing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">update_listing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Listing</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#starfish.agent.MemoryAgent.update_listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the listing to the agent server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -365,7 +365,7 @@ provider will be made at this point.</p>
 
 <dl class="py method">
 <dt id="starfish.agent.MemoryAgent.validate_asset">
-<code class="sig-name descname">validate_asset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset</span><span class="p">:</span> <span class="n">Asset</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.agent.MemoryAgent.validate_asset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">validate_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Asset</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.agent.MemoryAgent.validate_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate an asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

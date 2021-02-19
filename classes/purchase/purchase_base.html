@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Purchase Base class &mdash; starfish-py 0.16.7 documentation</title>
+  <title>Purchase Base class &mdash; starfish-py 0.16.8 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.7
+                0.16.8
               </div>
             
           
@@ -179,11 +179,11 @@
 <h1>Purchase Base class<a class="headerlink" href="#purchase-base-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.purchase.PurchaseBase">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.purchase.</code><code class="sig-name descname">PurchaseBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent</span></em>, <em class="sig-param"><span class="n">listing</span></em>, <em class="sig-param"><span class="n">purchase_id</span></em>, <em class="sig-param"><span class="n">account</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.PurchaseBase" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.purchase.</span></code><code class="sig-name descname"><span class="pre">PurchaseBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">purchase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.purchase.PurchaseBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.account">
-<em class="property">property </em><code class="sig-name descname">account</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.account" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">account</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.account" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>account that is doing the purchase</p>
@@ -196,7 +196,7 @@
 
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.agent">
-<em class="property">property </em><code class="sig-name descname">agent</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.agent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">agent</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.agent" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Agent object</p>
@@ -209,7 +209,7 @@
 
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.is_purchase_valid">
-<em class="property">abstract property </em><code class="sig-name descname">is_purchase_valid</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.is_purchase_valid" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_purchase_valid</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.is_purchase_valid" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if this asset is a valid purchase.</p>
@@ -222,7 +222,7 @@
 
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.is_purchased">
-<em class="property">abstract property </em><code class="sig-name descname">is_purchased</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.is_purchased" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_purchased</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.is_purchased" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if this asset is a purchased asset.</p>
@@ -235,7 +235,7 @@
 
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.listing">
-<em class="property">property </em><code class="sig-name descname">listing</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.listing" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">listing</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.listing" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Listing object</p>
@@ -248,7 +248,7 @@
 
 <dl class="py method">
 <dt id="starfish.purchase.PurchaseBase.purchase_id">
-<em class="property">property </em><code class="sig-name descname">purchase_id</code><a class="headerlink" href="#starfish.purchase.PurchaseBase.purchase_id" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">purchase_id</span></code><a class="headerlink" href="#starfish.purchase.PurchaseBase.purchase_id" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>purchase id</p>

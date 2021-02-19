@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Listing class &mdash; starfish-py 0.16.7 documentation</title>
+  <title>Listing class &mdash; starfish-py 0.16.8 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.7
+                0.16.8
               </div>
             
           
@@ -179,7 +179,7 @@
 <h1>Listing class<a class="headerlink" href="#listing-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.listing.Listing">
-<em class="property">class </em><code class="sig-prename descclassname">starfish.listing.</code><code class="sig-name descname">Listing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agent</span><span class="p">:</span> <span class="n">starfish.agent.agent_base.AgentBase</span></em>, <em class="sig-param"><span class="n">listing_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">asset_did</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">ddo</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>starfish.network.ddo.DDO<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.listing.</span></code><code class="sig-name descname"><span class="pre">Listing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.agent.agent_base.AgentBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listing_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_did</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ddo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">starfish.network.ddo.DDO</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.listing.Listing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">starfish.types.ListingBase</span></code>]</p>
 <p>Create a Listing object</p>
 <dl class="field-list simple">
@@ -195,12 +195,12 @@
 </dl>
 <dl class="py method">
 <dt id="starfish.listing.Listing.get_purchase_ids">
-<em class="property">property </em><code class="sig-name descname">get_purchase_ids</code><a class="headerlink" href="#starfish.listing.Listing.get_purchase_ids" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">get_purchase_ids</span></code><a class="headerlink" href="#starfish.listing.Listing.get_purchase_ids" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.is_published">
-<em class="property">property </em><code class="sig-name descname">is_published</code><a class="headerlink" href="#starfish.listing.Listing.is_published" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_published</span></code><a class="headerlink" href="#starfish.listing.Listing.is_published" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a True if this listing is published</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -214,7 +214,7 @@
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.is_purchased">
-<code class="sig-name descname">is_purchased</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">starfish.network.account_base.AccountBase</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.listing.Listing.is_purchased" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">is_purchased</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.network.account_base.AccountBase</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.listing.Listing.is_purchased" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return true if the account has already purchased this listing/asset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -231,7 +231,7 @@
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.purchase">
-<code class="sig-name descname">purchase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account</span><span class="p">:</span> <span class="n">starfish.network.account_base.AccountBase</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="headerlink" href="#starfish.listing.Listing.purchase" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">purchase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.network.account_base.AccountBase</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><a class="headerlink" href="#starfish.listing.Listing.purchase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Purchase the underlying asset within this listing using the account details, return a purchased asset
 with the service_agreement_id ( purchase_id ) set.</p>
 <dl class="field-list simple">
@@ -249,7 +249,7 @@ with the service_agreement_id ( purchase_id ) set.</p>
 
 <dl class="py method">
 <dt id="starfish.listing.Listing.set_published">
-<code class="sig-name descname">set_published</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#starfish.listing.Listing.set_published" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_published</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#starfish.listing.Listing.set_published" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the published value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Params boolean value</dt>
