@@ -22,7 +22,6 @@ convex:
 
   accounts:
     account1:
-      address: '0x5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306'
       password: secret
       keyfile: tests/resources/account_key_files/convex/local/5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306.pem
 
