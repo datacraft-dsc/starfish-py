@@ -69,3 +69,4 @@ def test_agent_manager_convex_network_resolve_did(convex_network, convex_account
     resolve_ddo = manager.resolve_agent_did(ddo.did, convex_network)
     assert(resolve_ddo)
     assert(resolve_ddo.did == ddo.did)
+

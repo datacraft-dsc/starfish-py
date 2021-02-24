@@ -80,3 +80,13 @@ def test_agent_manager_resolve_with_no_network():
     url = 'http://invalid_agent.org'
     result = manager.resolve_agent_url(url)
     assert(result is None)
+
+
+def test_agent_manager_load_with_unrechable_agent():
+    manager = AgentManager()
+    url = 'http://ec2-13-229-224-174.ap-southeast-1.compute.amazonaws.com:3030'
+    result = manager.resolve_agent_url(url)
+    assert(result is None)
+
+    result = manager.load_agent(url)
+    assert(result is None)
