@@ -8,6 +8,8 @@ from typing import (
     Generic
 )
 
+from web3 import Web3
+
 from starfish.network.ethereum.ethereum_account import EthereumAccount
 from starfish.types import (
     AccountAddress,
@@ -16,7 +18,7 @@ from starfish.types import (
 
 nonce_list = {}
 
-GAS_MINIMUM = 200000
+GAS_MINIMUM = 20000
 
 
 class ContractBase(Generic[TContractBase]):
@@ -88,7 +90,7 @@ class ContractBase(Generic[TContractBase]):
 
         built_transaction = contract_function_call.buildTransaction(transact)
         transaction = {
-            'from': account.address,
+            'from': account.as_checksum_address,
             'to': built_transaction['to'],
             'gas': built_transaction['gas'],
             'data': built_transaction['data'],
@@ -98,7 +100,7 @@ class ContractBase(Generic[TContractBase]):
         signed = account.sign_transaction(transaction, self._web3)
         tx_hash = None
         if signed:
-            tx_hash = self._web3.eth.sendRawTransaction(signed.rawTransaction)
+            tx_hash = self._web3.eth.send_raw_transaction(signed.rawTransaction)
 
         return tx_hash
 
@@ -108,7 +110,7 @@ class ContractBase(Generic[TContractBase]):
 
     def get_nonce(self, address: str) -> int:
         global nonce_list
-        nonce = self._web3.eth.getTransactionCount(address)
+        nonce = self._web3.eth.get_transaction_count(address)
         if address not in nonce_list:
             nonce_list[address] = nonce
         else:
@@ -118,7 +120,7 @@ class ContractBase(Generic[TContractBase]):
 
     def get_gas_price(self, address: str) -> int:
         block = self._web3.eth.get_block("latest")
-        gas_price = int(self._web3.eth.gasPrice / 100)
+        gas_price = int(self._web3.eth.gas_price / 1000)
         gas_price = min(block.gasLimit, gas_price)
         gas_price = max(GAS_MINIMUM, gas_price)
         return gas_price
