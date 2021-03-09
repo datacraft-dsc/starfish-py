@@ -5,7 +5,6 @@
 """
 import logging
 from typing import Any
-from web3 import Web3
 
 from starfish.network.convex.convex_account import ConvexAccount
 
@@ -58,7 +57,7 @@ class AccountSendTokenCommand(CommandBase):
             output.add_error(f'{args.address} is not a convex account address')
             return
 
-        account = ConvexAccount.import_from_file( args.keyfile, args.password, args.address)
+        account = ConvexAccount.import_from_file(args.keyfile, args.password, args.address)
         amount = float(args.amount)
         to_address = args.to_address
         if not self.is_address(to_address):

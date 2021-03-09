@@ -7,8 +7,8 @@ import re
 from typing import Any
 
 from starfish.agent.remote_agent import SUPPORTED_SERVICES
-from starfish.network.ddo import DDO
 from starfish.network.convex.convex_account import ConvexAccount
+from starfish.network.ddo import DDO
 
 from .command_base import CommandBase
 

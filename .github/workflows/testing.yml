@@ -17,28 +17,19 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     - name: Lint
       run: make lint
-    - name: Install datacraft-chain
-      uses: actions/checkout@v2
-      with:
-        repository: datacraft-dsc/datacraft-chain
-        path: datacraft-chain
     - name: Allow Docker access to github packages
       uses: docker/login-action@v1
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.ACCESS_PACKAGES }}
         registry: docker.pkg.github.com
-    - name: Start datacraft-chain
-      run: |
-        cd datacraft-chain
-        ./scripts/start_datacraft_chain.sh test &
-    - name: Start surfer
+S    - name: Start surfer
       run: docker run --publish 3030:3030 --detach docker.pkg.github.com/datacraft-dsc/surfer/surfer:latest
     - name: Start invokable-py test server
       run: docker run --publish 9090:9090 --detach docker.pkg.github.com/datacraft-dsc/invokable-py/invokable-py:release
     - name: Wait for surfer
       run: docker run --network host docker.pkg.github.com/datacraft-dsc/surfer/surfer:latest ./scripts/wait_for_surfer.sh
-    - name: Wait for datacraft-chain to load...
-      run: sleep 10
+    - name: Wait for servers to load...
+      run: sleep 30
     - name: Test
       run: make tests

@@ -4,7 +4,6 @@
 
 """
 from typing import Any
-from web3 import Web3
 
 
 from .command_base import CommandBase

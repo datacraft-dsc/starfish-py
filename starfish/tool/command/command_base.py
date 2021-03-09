@@ -17,7 +17,6 @@ from starfish.network.convex.convex_network import ConvexNetwork
 DEFAULT_NETWORK_URL = 'https://convex.world'
 
 
-
 class CommandBase(ABC):
     def __init__(self, name: str, sub_parser: Any = None) -> None:
         self._name = name
