@@ -11,14 +11,14 @@ from starfish.asset import DataAsset
 from starfish.network.ddo import DDO
 
 
-def test_agent_manager_register(config, ethereum_network):
+def test_agent_manager_register(config):
     manager = AgentManager()
 
     manager.register_agents(config['agents'])
 
     assert(manager.items)
 
-def test_agent_manager_load_agent(config, ethereum_network):
+def test_agent_manager_load_agent(config):
     manager = AgentManager()
 
     agent_items = config['agents']

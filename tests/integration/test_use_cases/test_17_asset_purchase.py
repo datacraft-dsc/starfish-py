@@ -13,8 +13,8 @@ import json
 from starfish.asset import DataAsset
 
 
-def test_17_asset_purchase(resources, config, remote_agent_surfer, ethereum_accounts):
-    purchaser_account = ethereum_accounts
+def test_17_asset_purchase(resources, config, remote_agent_surfer, convex_accounts):
+    purchaser_account = convex_accounts
     test_data = secrets.token_bytes(1024)
     asset_data = DataAsset.create('TestAsset', test_data)
     asset = remote_agent_surfer.register_asset(asset_data)

@@ -34,14 +34,11 @@ class AccountBalanceCommand(CommandBase):
         return parser
 
     def execute(self, args: Any, output: Any) -> None:
-        if not Web3.isAddress(args.address):
-            output.add_error(f'{args.address} is not an ethereum account address')
+        if not self.is_address(args.address):
+            output.add_error(f'{args.address} is not an convex account address')
             return
 
         network = self.get_network(args.url)
-        ether_balance = network.get_ether_balance(args.address)
-        token_balance = network.get_token_balance(args.address)
-        output.add_line(f'ether balance: {ether_balance}')
+        token_balance = network.convex.get_balance(args.address)
         output.add_line(f'token balance: {token_balance}')
-        output.set_value('ether', ether_balance)
         output.set_value('token', token_balance)

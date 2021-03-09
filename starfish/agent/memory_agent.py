@@ -202,7 +202,7 @@ class MemoryAgent(AgentBase):
 
         if purchase_id in self._memory['purchase']:
             purchase, account_address = self._memory['purchase'][purchase_id]
-            return purchase and account.is_address_equal(account_address)
+            return purchase and account.address == account_address
 
         return False
 

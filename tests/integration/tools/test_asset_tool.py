@@ -8,8 +8,9 @@ import hashlib
 import os
 import secrets
 import tempfile
-from eth_utils import remove_0x_prefix
 
+from convex_api.exceptions import ConvexAPIError
+from eth_utils import remove_0x_prefix
 
 from unittest.mock import Mock
 
@@ -38,13 +39,13 @@ def hash_file(filename):
         md5.update(fp.read())
     return md5.hexdigest()
 
-def test_asset_store_and_download_command(config, ethereum_network, ethereum_accounts):
+def test_asset_store_and_download_command(config, convex_network, convex_accounts):
     args = Mock()
 
     test_upload_filename = create_random_filename()
     create_test_file(test_upload_filename)
 
-    args.url = config['ethereum']['network']['url']
+    args.url = config['convex']['network']['url']
     local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -67,15 +68,18 @@ def test_asset_store_and_download_command(config, ethereum_network, ethereum_acc
 
     # register agent in network using it's did
 
-    ddo = ethereum_network.resolve_agent(args.agent, username=args.username, password=args.password)
-    register_account = ethereum_accounts[0]
+    ddo = convex_network.resolve_agent(args.agent, username=args.username, password=args.password)
+    register_account = convex_accounts[0]
     did_id = remove_0x_prefix(did_to_id(upload_asset_did))
-    ethereum_network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text)
+    try:
+        convex_network.register_did(register_account, f'did:dep:{did_id}', ddo.as_text)
+    except ConvexAPIError as e:
+        pass
 
 
     args = Mock()
     test_download_filename = create_random_filename()
-    args.url = config['ethereum']['network']['url']
+    args.url = config['convex']['network']['url']
     local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -115,7 +119,7 @@ def test_asset_store_large_file_command(config):
     create_test_file(test_upload_filename, (pow(2, 20) * 7))
 
     test_download_filename = create_random_filename()
-    args.url = config['ethereum']['network']['url']
+    args.url = config['convex']['network']['url']
     local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']

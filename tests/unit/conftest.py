@@ -3,12 +3,12 @@ import pytest
 import secrets
 
 from tests.unit.libs.unit_test_config import unitTestConfig
-from tests.unit.libs.unit_test_network import UnitTestNetwork
 
 @pytest.fixture(scope="module")
 def config():
     return unitTestConfig
 
+"""
 @pytest.fixture(scope="module")
 def ethereum_network(config):
     network = UnitTestNetwork(config.ethereum.network_url)
@@ -20,3 +20,4 @@ def ethereum_accounts(config):
     for acount_info in config.ethereum.accounts:
         accounts.append(Account(account_info.as_dict))
     return accounts
+"""

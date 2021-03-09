@@ -12,7 +12,7 @@ from starfish.network.ddo import DDO
 
 
 
-def test_04_agent_register_and_resolve(ethereum_network, config, ethereum_accounts):
+def test_04_agent_register_and_resolve(convex_network, config, convex_accounts):
 
     local_agent = config['agents']['surfer']
     ddo = DDO.create(local_agent['url'])
@@ -21,16 +21,16 @@ def test_04_agent_register_and_resolve(ethereum_network, config, ethereum_accoun
         'password': local_agent['password']
     }
 
-    register_account = ethereum_accounts[0]
+    register_account = convex_accounts[0]
 
     did = ddo.did
-    remote_agent = RemoteAgent.register(ethereum_network, register_account, ddo, authentication)
+    remote_agent = RemoteAgent.register(convex_network, register_account, ddo, authentication)
     assert(remote_agent)
-    found_ddo = DDO.import_from_text(ethereum_network.resolve_did(did))
+    found_ddo = DDO.import_from_text(convex_network.resolve_did(did))
     assert(found_ddo.as_text == ddo.as_text)
 
 
-    resolved_agent = RemoteAgent.load(ddo.did, ethereum_network, authentication=authentication)
+    resolved_agent = RemoteAgent.load(ddo.did, convex_network, authentication=authentication)
     assert(resolved_agent)
     assert(resolved_agent.ddo)
     assert(resolved_agent.ddo.as_text == ddo.as_text)

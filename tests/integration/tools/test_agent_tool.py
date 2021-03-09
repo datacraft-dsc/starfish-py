@@ -7,12 +7,16 @@ from unittest.mock import Mock
 
 from starfish.tool.command.agent_register_command import AgentRegisterCommand
 from starfish.tool.command.agent_resolve_command import AgentResolveCommand
+from starfish.tool.command.account_create_command import AccountCreateCommand
+from starfish.tool.command.account_get_token_command import AccountGetTokenCommand
 from starfish.tool.output import Output
+
+TEST_AMOUNT = 100000000
 
 def test_agent_resolve_command(config):
     args = Mock()
 
-    args.url = config['ethereum']['network']['url']
+    args.url = config['convex']['network']['url']
     local_agent = config['agents']['surfer']
     args.username = local_agent['username']
     args.password = local_agent['password']
@@ -27,14 +31,26 @@ def test_agent_resolve_command(config):
 def test_agent_register_command(config):
     args = Mock
 
-    args.url = config['ethereum']['network']['url']
+    args.url = config['convex']['network']['url']
     local_agent = config['agents']['surfer']
 
     args.agent_url = local_agent['url']
 
-    account = config['ethereum']['accounts']['account1']
+    account = config['convex']['accounts']['account1']
     args.password = account['password']
     args.keyfile = account['keyfile']
+
+    # create a new address
+    command = AccountCreateCommand()
+    output = Output()
+    command.execute(args, output)
+    assert(output.values['address'])
+    args.address = output.values['address']
+
+    args.amount = TEST_AMOUNT
+    command = AccountGetTokenCommand()
+    output = Output()
+    command.execute(args, output)
 
     # all services
     args.service_list = None

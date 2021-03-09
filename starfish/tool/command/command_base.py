@@ -10,41 +10,12 @@ from abc import (
 )
 from typing import Any
 
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
+from convex_api.utils import is_address
 
-DEFAULT_NETWORK_URL = 'http://localhost:8545'
+from starfish.network.convex.convex_network import ConvexNetwork
 
-NETWORK_NAMES = {
-    'local': {
-        'description': 'Spree network running on a local barge',
-        'url': 'http://localhost:8545',
-        'faucet_account': ['0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'secret'],
-    },
-    'spree': {
-        'description': 'Spree network running on a local barge',
-        'url': 'http://localhost:8545',
-        'faucet_account': ['0x068Ed00cF0441e4829D9784fCBe7b9e26D4BD8d0', 'secret'],
-    },
-    'nile': {
-        'description': 'Nile network access to remote network node',
-        'url': 'https://nile.dev-ocean.com',
-        'faucet_url': 'https://faucet.nile.dev-ocean.com/faucet',
-    },
-    'pacific': {
-        'description': 'Pacific network access to remote network node',
-        'url': 'https://pacific.oceanprotocol.com',
-        'faucet_url': 'https://faucet.oceanprotocol.com/faucet',
-    },
-    'duero': {
-        'description': 'Duero network access to remote network node',
-        'url': 'https://duero.dev-ocean.com',
-        'faucet_url': 'https://faucet.duero.dev-ocean.com/faucet',
-    },
-    'host': {
-        'description': 'Local node running on barge',
-        'url': 'http://localhost:8545',
-    }
-}
+DEFAULT_NETWORK_URL = 'https://convex.world'
+
 
 
 class CommandBase(ABC):
@@ -61,16 +32,10 @@ class CommandBase(ABC):
         if url is None:
             url = default_url
         if url is None:
-            url = 'http://localhost:8545'
-        network = EthereumNetwork(url, load_development_contracts=load_development_contracts)
+            url = DEFAULT_NETWORK_URL
+        network = ConvexNetwork(url)
 
         return network
-
-    def get_network_setup(self, name: str) -> Any:
-        result = None
-        if name in NETWORK_NAMES:
-            result = NETWORK_NAMES[name]
-        return result
 
     def process_sub_command(self, args: Any, output: Any, command: str) -> None:
         is_found = False
@@ -85,6 +50,9 @@ class CommandBase(ABC):
 
     def print_help(self) -> None:
         self._sub_parser.choices[self._name].print_help()
+
+    def is_address(self, value):
+        return is_address(value)
 
     @abstractmethod
     def create_parser(self, sub_parser: Any) -> Any:

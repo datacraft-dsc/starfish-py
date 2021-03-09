@@ -5,9 +5,9 @@
 """
 import logging
 from typing import Any
-from web3 import Web3
 
-from starfish.network.ethereum.ethereum_account import EthereumAccount
+
+from starfish.network.convex.convex_account import ConvexAccount
 
 from .command_base import CommandBase
 
@@ -42,7 +42,13 @@ class AccountGetTokenCommand(CommandBase):
 
         parser.add_argument(
             'keyfile',
-            help='Account keyfile'
+            nargs='?',
+            help='Account keyfile',
+        )
+        parser.add_argument(
+            'keytext',
+            nargs='?',
+            help='Account keytext',
         )
 
         parser.add_argument(
@@ -54,17 +60,22 @@ class AccountGetTokenCommand(CommandBase):
         return parser
 
     def execute(self, args: Any, output: Any) -> None:
-        if not Web3.isAddress(args.address):
-            output.add_error(f'{args.address} is not an ethereum account address')
+        if not self.is_address(args.address):
+            output.add_error(f'{args.address} is not an convex account address')
             return
 
-        account = EthereumAccount(args.address, args.password, key_file=args.keyfile)
+        if args.keyfile:
+            account = ConvexAccount.import_from_file(args.keyfile, args.password, args.address)
+        elif args.keytext:
+            account = ConvexAccount.import_from_text(args.keytext, args.password, args.address)
+        else:
+            output.add_error('no keyfile or key text provided that contains the encrypted account private key')
 
         network = self.get_network(args.url)
-        network.request_test_tokens(account, int(args.amount))
+        network.convex.request_funds(int(args.amount), account)
 
-        logger.debug(f'requesting tokens for account {account.address}')
-        balance = network.get_token_balance(account)
-        output.add_line(f'Get {args.get_command} for account: {args.address} balance: {balance}')
+        logger.debug(f'requesting funds for account {account.address}')
+        balance = network.convex.get_balance(account)
+        output.add_line(f'Get token for account: {args.address} balance: {balance}')
         output.set_value('balance', balance)
         output.set_value('address', args.address)

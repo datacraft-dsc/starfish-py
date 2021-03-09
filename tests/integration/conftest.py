@@ -8,10 +8,13 @@ from web3 import Web3, HTTPProvider
 
 from starfish.agent import RemoteAgent
 from starfish.network.ddo import DDO
+
+"""
 from starfish.network.ethereum import (
     EthereumAccount,
     EthereumNetwork
 )
+"""
 
 from starfish.network.convex import (
     ConvexAccount,
@@ -26,12 +29,25 @@ INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 logging.getLogger('web3').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
 
-
+"""
 @pytest.fixture(scope='module')
 def ethereum_network(config):
     network = EthereumNetwork(config['ethereum']['network']['url'])
     return network
 
+@pytest.fixture(scope='module')
+def ethereum_accounts(config):
+    result = []
+    # load in the test accounts
+    account_1 = config['ethereum']['accounts']['account1']
+    account_2 = config['ethereum']['accounts']['account2']
+    result = [
+        EthereumAccount.import_from_file(account_1['keyfile'], account_1['password']),
+        EthereumAccount.import_from_file(account_2['keyfile'], account_2['password']),
+    ]
+    return result
+
+"""
 @pytest.fixture(scope='module')
 def convex_network(config):
     network = ConvexNetwork(config['convex']['network']['url'])
@@ -67,19 +83,6 @@ def remote_agent_invokable(config):
     }
     return RemoteAgent(ddo, authentication)
 
-
-
-@pytest.fixture(scope='module')
-def ethereum_accounts(config):
-    result = []
-    # load in the test accounts
-    account_1 = config['ethereum']['accounts']['account1']
-    account_2 = config['ethereum']['accounts']['account2']
-    result = [
-        EthereumAccount.import_from_file(account_1['keyfile'], account_1['password']),
-        EthereumAccount.import_from_file(account_2['keyfile'], account_2['password']),
-    ]
-    return result
 
 @pytest.fixture(scope='module')
 def convex_accounts(config, convex_network):

@@ -24,12 +24,12 @@ def register_asset_for_sale(agent, resources, account):
     assert listing.asset_did
     return listing
 
-def test_asset(resources, config, ethereum_accounts):
+def test_asset(resources, config, convex_accounts):
 
     # create an memory agent object
 
-    publisher_account = ethereum_accounts[0]
-    purchaser_account = ethereum_accounts[1]
+    publisher_account = convex_accounts[0]
+    purchaser_account = convex_accounts[1]
 
     agent = MemoryAgent()
     assert agent
@@ -60,10 +60,10 @@ def test_asset(resources, config, ethereum_accounts):
 
 
 
-def test_search_listing(resources, config, ethereum_accounts):
+def test_search_listing(resources, config, convex_accounts):
 
-    publisher_account = ethereum_accounts[0]
-    purchaser_account = ethereum_accounts[1]
+    publisher_account = convex_accounts[0]
+    purchaser_account = convex_accounts[1]
 
     agent = MemoryAgent()
 

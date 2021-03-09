@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-from starfish.network.ethereum.ethereum_network import EthereumNetwork
+from starfish.network.convex.convex_network import ConvexNetwork
 from starfish.asset import DataAsset
 from starfish.agent import RemoteAgent
 
 def main():
 
-    # Create a new Ocean instance.
-    network = EthereumNetwork('http://localhost:8545')
-    print(network.name)
+    # Create a new convex network instance.
+    network = ConvexNetwork('https://convex.world')
 
     # Create a remote agent to do the work.
     agent_url = 'http://localhost:3030'

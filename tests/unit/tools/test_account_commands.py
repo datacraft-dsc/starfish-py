@@ -10,10 +10,8 @@ from starfish.tool.command.account_command import AccountCommand
 from starfish.tool.command.account_balance_command import AccountBalanceCommand
 from starfish.tool.command.account_create_command import AccountCreateCommand
 from starfish.tool.command.account_get_command import AccountGetCommand
-from starfish.tool.command.account_get_ether_command import AccountGetEtherCommand
 from starfish.tool.command.account_get_token_command import AccountGetTokenCommand
 from starfish.tool.command.account_send_command import AccountSendCommand
-from starfish.tool.command.account_send_ether_command import AccountSendEtherCommand
 from starfish.tool.command.account_send_token_command import AccountSendTokenCommand
 
 
@@ -62,31 +60,16 @@ def test_tool_account_get(parser, account_get_parser):
     args = parser.parse_args(['account', 'get'])
     assert(args)
 
-def test_tool_account_get_ether(parser, account_get_parser):
-    account = AccountGetEtherCommand()
-    ether_parser = account.create_parser(account_get_parser)
-    assert(ether_parser)
-    args = parser.parse_args(['account', 'get', 'ether', 'address', 'faucet-url'])
-    assert(args)
-
 def test_tool_account_get_token(parser, account_get_parser):
     account = AccountGetTokenCommand()
     token_parser = account.create_parser(account_get_parser)
     assert(token_parser)
-    args = parser.parse_args(['account', 'get', 'token', 'address', 'password', 'key-file'])
+    args = parser.parse_args(['account', 'get', 'token', 'address', 'password', 'keyfile'])
     assert(args)
 
 def test_tool_account_send(parser, account_send_parser):
     assert(account_send_parser)
     args = parser.parse_args(['account', 'send'])
-    assert(args)
-
-
-def test_tool_account_send_ether(parser, account_send_parser):
-    account = AccountSendEtherCommand()
-    ether_parser = account.create_parser(account_send_parser)
-    assert(ether_parser)
-    args = parser.parse_args(['account', 'send', 'ether', 'address', 'password', 'keyfile', 'to_address', 'amount'])
     assert(args)
 
 

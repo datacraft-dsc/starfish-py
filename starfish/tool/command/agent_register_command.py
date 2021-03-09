@@ -8,8 +8,7 @@ from typing import Any
 
 from starfish.agent.remote_agent import SUPPORTED_SERVICES
 from starfish.network.ddo import DDO
-from starfish.network.ethereum.ethereum_account import EthereumAccount
-
+from starfish.network.convex.convex_account import ConvexAccount
 
 from .command_base import CommandBase
 
@@ -35,6 +34,11 @@ class AgentRegisterCommand(CommandBase):
         )
 
         parser.add_argument(
+            'address',
+            help='Account address'
+        )
+
+        parser.add_argument(
             'password',
             help='account password to use to register'
         )
@@ -57,7 +61,7 @@ Services can be: {",".join(SUPPORTED_SERVICES)}
     def execute(self, args: Any, output: Any) -> Any:
         network = self.get_network(args.url)
 
-        register_account = EthereumAccount.import_from_file(args.keyfile, args.password)
+        register_account = ConvexAccount.import_from_file(args.keyfile, args.password, args.address)
 
         service_list = None
         if args.service_list:

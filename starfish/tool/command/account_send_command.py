@@ -5,7 +5,6 @@
 """
 from typing import Any
 
-from .account_send_ether_command import AccountSendEtherCommand
 from .account_send_token_command import AccountSendTokenCommand
 from .command_base import CommandBase
 from .help_command import HelpCommand
@@ -23,8 +22,8 @@ class AccountSendCommand(CommandBase):
 
         parser = sub_parser.add_parser(
             self._name,
-            description='Send ether or tokens from one account to another',
-            help='Send some tokens or ether from one account to another'
+            description='Send tokens from one account to another',
+            help='Send some tokens from one account to another'
         )
 
         account_send_parser = parser.add_subparsers(
@@ -35,7 +34,6 @@ class AccountSendCommand(CommandBase):
         )
 
         self._command_list = [
-            AccountSendEtherCommand(account_send_parser),
             AccountSendTokenCommand(account_send_parser),
             HelpCommand(account_send_parser, self)
         ]

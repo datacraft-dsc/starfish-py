@@ -5,7 +5,6 @@
 """
 from typing import Any
 
-from .account_get_ether_command import AccountGetEtherCommand
 from .account_get_token_command import AccountGetTokenCommand
 from .command_base import CommandBase
 from .help_command import HelpCommand
@@ -23,8 +22,8 @@ class AccountGetCommand(CommandBase):
 
         parser = sub_parser.add_parser(
             self._name,
-            description='Get ether or tokens for an account address',
-            help='Get some token or ether from a faucet or a tokens on a test network'
+            description='Get tokens for an account address',
+            help='Get some tokens from the faucet on the network'
 
         )
         account_get_parser = parser.add_subparsers(
@@ -35,7 +34,6 @@ class AccountGetCommand(CommandBase):
         )
 
         self._command_list = [
-            AccountGetEtherCommand(account_get_parser),
             AccountGetTokenCommand(account_get_parser),
             HelpCommand(account_get_parser, self)
         ]

@@ -18,5 +18,5 @@ from starfish.asset import (
 TEST_ASSET_COUNT = 4
 
 
-def test_16_asset_bundle_register(ethereum_network, config, remote_agent_surfer, metadata):
+def test_16_asset_bundle_register(convex_network, config, remote_agent_surfer, metadata):
     pass
