@@ -23,7 +23,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.ACCESS_PACKAGES }}
         registry: docker.pkg.github.com
-S    - name: Start surfer
+    - name: Start surfer
       run: docker run --publish 3030:3030 --detach docker.pkg.github.com/datacraft-dsc/surfer/surfer:latest
     - name: Start invokable-py test server
       run: docker run --publish 9090:9090 --detach docker.pkg.github.com/datacraft-dsc/invokable-py/invokable-py:release
