@@ -11,7 +11,6 @@ from typing import (
     Generic
 )
 
-from starfish.asset.provenance import Provenance
 from starfish.types import TAssetBase
 from starfish.utils.crypto_hash import hash_sha3_256
 
@@ -24,15 +23,15 @@ class AssetBase(ABC, Generic[TAssetBase]):
     :type did: None or str
 
     """
-    def __init__(self, metadata_text: str) -> None:
+    def __init__(self, metadata_text: str, did: str = None) -> None:
         """
         init an asset class
         """
         if not isinstance(metadata_text, str):
             raise TypeError('metadata must be in text form')
 
-        self._did = None
         self._metadata_text = metadata_text
+        self._did = did
 
         if 'name' not in self.metadata:
             raise ValueError('metadata must contain a metadata name')
@@ -42,44 +41,6 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
         super().__init__()
 
-    def add_provenance_publish(self, agent_did: str = None):
-        """
-
-        Add a published provenance data to the asset metadata.
-        Calling this method will make the asset 'new'. So the asset_id will change,
-        and the asset.did will be set to None.
-
-        :param str agent_did: DID of the agent that this asset will be registered with
-
-        """
-        metadata = self.metadata
-        provenance = Provenance(agent_did=agent_did)
-        metadata['provenance'] = provenance.create_publish
-        self.set_metadata(metadata)
-
-    def add_provenance_invoke(self, agent_did: str, job_id: str, asset_list: Any, inputs_text: str):
-        """
-
-        Add a invoke provenance data to the asset metadata.
-        Calling this method will make the asset 'new'. So the asset_id will change,
-        and the asset.did will be set to None.
-
-        :param str agent_did: DID of the agent that this asset will be registered with
-
-        """
-        metadata = self.metadata
-        provenance = Provenance(agent_did=agent_did, activity_id=job_id, asset_list=asset_list, inputs_text=inputs_text)
-        metadata['provenance'] = provenance.create_invoke
-        self.set_metadata(metadata)
-
-    def set_did(self, did: str) -> None:
-        """
-        This method makes the object immutable.
-        So maybe a solution is that we have a 'copy' and
-        set the did in the __init__ of the new class, to return a mutable copy of the
-        same asset object.
-        """
-        self._did = did
 
     def is_asset_type(self, type_name: str) -> bool:
         """
@@ -94,10 +55,6 @@ class AssetBase(ABC, Generic[TAssetBase]):
         """
         asset_type = AssetBase.get_asset_type(self.metadata)
         return asset_type == type_name
-
-    def set_metadata(self, metadata: any):
-        self._metadata_text = json.dumps(metadata)
-        self._did = None
 
     @property
     def did(self) -> str:
@@ -133,11 +90,11 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
     @property
     def name(self) -> str:
-        return self.metadata['name']
+        return self.metadata.get('name', None)
 
     @property
     def type_name(self) -> str:
-        return self.metadata['type']
+        return self.metadata.get('type', None)
 
     @property
     def is_bundle(self) -> bool:
@@ -168,14 +125,9 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
     @staticmethod
     def get_asset_type(metadata: Any) -> str:
-        asset_type = ''
+        asset_type = None
         if isinstance(metadata, dict):
-            if 'type' in metadata:
-                asset_type = metadata['type']
-            else:
-                # if from squid then it's always a bundle
-                if 'base' in metadata:
-                    asset_type = 'bundle'
+            asset_type = metadata.get('type', None)
         return asset_type
 
     @staticmethod

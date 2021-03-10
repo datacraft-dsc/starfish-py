@@ -27,9 +27,9 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
     :type did: None or str
 
     """
-    def __init__(self, metadata_text: str) -> None:
+    def __init__(self, metadata_text: str, did: str = None) -> None:
 
-        AssetBase.__init__(self, metadata_text)
+        AssetBase.__init__(self, metadata_text, did)
         self._assets = {}
         metadata = json.loads(metadata_text)
         if 'contents' in metadata:
@@ -70,6 +70,8 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         :param asset: asset to add to the bundle collection
         :type asset: :class:`.Asset` object
 
+        :returns: new bundle asset with the added asset
+
         """
 
         if not isinstance(name, str):
@@ -78,7 +80,7 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
             raise TypeError('You need to pass an Asset object')
 
         self._assets[name] = asset.asset_id
-        self._rebuild_metadata(self._assets)
+        return self._recreate_asset(self._assets)
 
     def get_asset_id(self, name: str) -> str:
         """
@@ -110,14 +112,14 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         :return: the removed asset id
         :type: str
 
+        :returns: new bundle asset without the asset
+
         """
         if self._assets is None or name not in self._assets:
             raise ValueError(f'Cannot find asset named {name}')
         asset = self._assets[name]
         del self._assets[name]
-        self._rebuild_metadata(self._assets)
-
-        return asset
+        return self._recreate_asset(self._assets)
 
     def __iter__(self) -> Iterator[str]:
         """
@@ -155,14 +157,16 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         """ return the asset based on the index of available assets """
         return list(self._assets.values())[index]
 
-    def _rebuild_metadata(self, asset_list):
+    def _recreate_asset(self, asset_list):
+        from starfish.asset import create_asset
+
         metadata = self.metadata
         metadata['contents'] = {}
         for name, asset_id in asset_list.items():
             metadata['contents'][name] = {
                 'assetID': asset_id
             }
-        self.set_metadata(metadata)
+        return create_asset(metadata)
 
     @property
     def asset_count(self) -> int:

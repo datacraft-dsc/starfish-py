@@ -64,7 +64,7 @@ def register_upload_data(remote_agent: AgentBase, name: str, data_stream: Any, c
             data_asset = DataAsset.create(asset_name, data)
             asset = remote_agent.register_asset(data_asset)
             remote_agent.upload_asset(asset)
-            bundle_asset.add(asset_name, asset)
+            bundle_asset = bundle_asset.add(asset_name, asset)
             index += 1
         else:
             break

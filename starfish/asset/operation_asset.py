@@ -24,8 +24,8 @@ class OperationAsset(AssetBase, Generic[TOperationAsset]):
     :type did: None or str
 
     """
-    def __init__(self, metadata_text: str) -> None:
-        AssetBase.__init__(self, metadata_text)
+    def __init__(self, metadata_text: str, did: str = None) -> None:
+        AssetBase.__init__(self, metadata_text, did)
 
     def create(name: str, metadata: Any = None) -> TOperationAsset:
         """

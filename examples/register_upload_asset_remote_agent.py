@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 from starfish.network.convex.convex_network import ConvexNetwork
-from starfish.asset import DataAsset
+from starfish.asset import (
+    create_asset_provenance_publish,
+    DataAsset
+)
 from starfish.agent import RemoteAgent
 
 def main():
@@ -25,15 +28,14 @@ def main():
     # create a listing specifying the information about the asset
     listing_data = {
         'name': 'The white paper',
-        'author': 'Ocean Protocol',
+        'author': 'Datacraft',
         'license': 'CC0: Public Domain',
         'price': '0'
     }
 
     # Now create a memory asset
     asset = DataAsset.create('TestAsset', 'Some test data that I want to save for this asset')
-
-    asset.add_provenance_publish(agent.did)
+    asset = create_asset_provenance_publish(asset, agent.did)
 
     # Print the asset data
     print('my asset:', asset.data)

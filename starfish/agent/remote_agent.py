@@ -24,7 +24,7 @@ from starfish.agent.agent_base import AgentBase
 from starfish.asset import (
     DataAsset,
     OperationAsset,
-    create_asset_from_metadata_text,
+    create_asset,
     is_asset_hash_valid
 )
 from starfish.exceptions import (
@@ -192,7 +192,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
                     f' calculated asset_id {asset.asset_id} is not the same as the agent generated asset_id {asset_id}'
                 )
             did = f'{self._ddo.did}/{asset_id}'
-            asset.set_did(did)
+            asset = create_asset(asset.metadata_text, did=did, asset=asset)
         return asset
 
     def create_listing(self, listing_data: ListingData, asset_did: str) -> Listing:
@@ -290,9 +290,9 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         store_asset = self.get_asset(asset_id)
         asset = DataAsset(
             store_asset.metadata_text,
+            did=store_asset.did,
             data=data
         )
-        asset.set_did(store_asset.did)
         return asset
 
     def get_listing(self, listing_id: str) -> Listing:
@@ -656,8 +656,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
 
         did = f'{self._ddo.did}/{asset_id}'
         metadata_text = read_metadata['metadata_text']
-        asset = create_asset_from_metadata_text(metadata_text)
-        asset.set_did(did)
+        asset = create_asset(metadata_text, did)
         return asset
 
     def is_service(self, name):

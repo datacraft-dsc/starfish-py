@@ -28,8 +28,9 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
     :param str data: Optional data of the asset, this can be str or bytes
 
     """
-    def __init__(self, metadata_text: str, data: Any = None) -> None:
+    def __init__(self, metadata_text: str, did: str = None, data: Any = None) -> None:
 
+        AssetBase.__init__(self, metadata_text, did)
         if data:
             if not (isinstance(data, str) or isinstance(data, bytes)):
                 raise ValueError('data can only be str or bytes')
@@ -37,7 +38,6 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
                 data = data.encode('utf-8')
 
         self._data = data
-        AssetBase.__init__(self, metadata_text)
 
     @staticmethod
     def create(name: str, data: Any, metadata: Any = None) -> TDataAsset:

@@ -9,6 +9,7 @@ import re
 import secrets
 from typing import Any
 
+from starfish.asset import create_asset
 from starfish.agent.agent_base import AgentBase
 from starfish.listing import Listing
 from starfish.network.ddo import DDO
@@ -64,8 +65,8 @@ class MemoryAgent(AgentBase):
         asset_id = hash_sha3_256(asset.metadata_text)
         did = f'{self._ddo.did}/{asset_id}'
 
+        asset = create_asset(asset.metadata_text, did)
         self._memory['asset'][did] = asset
-        asset.set_did(did)
         return asset
 
     def create_listing(self, listing_data: ListingData, asset_did: str) -> TListing:

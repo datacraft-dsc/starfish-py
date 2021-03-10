@@ -2,6 +2,7 @@
 
 ## Release v.17.0
 +   Remove ethereum network from the library
++   Rename `add_provenance_..` to `create_asset_provenance_..` and move to the asset module init
 
 ## Release v0.16.8
 +   Change to use convex-api v0.1.*, new create_account method in convex api
