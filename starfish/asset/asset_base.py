@@ -41,7 +41,6 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
         super().__init__()
 
-
     def is_asset_type(self, type_name: str) -> bool:
         """
 

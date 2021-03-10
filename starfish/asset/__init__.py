@@ -50,6 +50,7 @@ def create_asset(metadata: [str, dict, bytes], did: str = None, asset: AssetBase
         raise ValueError(f'Unknown asset type {asset_type}')
     return AssetBase(metadata_text, did=did)
 
+
 def is_asset_hash_valid(asset_id, hash_hex):
     """
 
@@ -77,6 +78,7 @@ def create_asset_provenance_publish(asset: AssetBase, agent_did: str = None):
     provenance = Provenance(agent_did=agent_did)
     metadata['provenance'] = provenance.create_publish
     return create_asset(metadata, asset=asset)
+
 
 def create_asset_provenance_invoke(asset: AssetBase, agent_did: str, job_id: str, asset_list: Any, inputs_text: str):
     """

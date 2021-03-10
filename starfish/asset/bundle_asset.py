@@ -117,7 +117,6 @@ class BundleAsset(AssetBase, Generic[TBundleAsset]):
         """
         if self._assets is None or name not in self._assets:
             raise ValueError(f'Cannot find asset named {name}')
-        asset = self._assets[name]
         del self._assets[name]
         return self._recreate_asset(self._assets)
 

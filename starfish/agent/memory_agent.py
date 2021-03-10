@@ -9,8 +9,8 @@ import re
 import secrets
 from typing import Any
 
-from starfish.asset import create_asset
 from starfish.agent.agent_base import AgentBase
+from starfish.asset import create_asset
 from starfish.listing import Listing
 from starfish.network.ddo import DDO
 from starfish.network.did import (
