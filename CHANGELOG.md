@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v.17.0
++   Remove ethereum network from the library
+
 ## Release v0.16.8
 +   Change to use convex-api v0.1.*, new create_account method in convex api
 
