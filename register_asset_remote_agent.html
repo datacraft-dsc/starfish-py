@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Register asset on a remote agent &mdash; starfish-py 0.16.8 documentation</title>
+  <title>Register asset on a remote agent &mdash; starfish-py 0.17.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.8
+                0.17.0
               </div>
             
           
@@ -299,15 +299,17 @@ block chain, the second id is the internall asset id registered on the remote ag
 <h2>Full example to register and upload an Asset on Remote Agent<a class="headerlink" href="#full-example-to-register-and-upload-an-asset-on-remote-agent" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
-<span class="kn">from</span> <span class="nn">starfish.network.ethereum.ethereum_network</span> <span class="kn">import</span> <span class="n">EthereumNetwork</span>
-<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="n">DataAsset</span>
+<span class="kn">from</span> <span class="nn">starfish.network.convex.convex_network</span> <span class="kn">import</span> <span class="n">ConvexNetwork</span>
+<span class="kn">from</span> <span class="nn">starfish.asset</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">create_asset_provenance_publish</span><span class="p">,</span>
+    <span class="n">DataAsset</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">starfish.agent</span> <span class="kn">import</span> <span class="n">RemoteAgent</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
-    <span class="c1"># Create a new Ocean instance.</span>
-    <span class="n">network</span> <span class="o">=</span> <span class="n">EthereumNetwork</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="c1"># Create a new convex network instance.</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">ConvexNetwork</span><span class="p">(</span><span class="s1">&#39;https://convex.world&#39;</span><span class="p">)</span>
 
     <span class="c1"># Create a remote agent to do the work.</span>
     <span class="n">agent_url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:3030&#39;</span>
@@ -325,15 +327,14 @@ block chain, the second id is the internall asset id registered on the remote ag
     <span class="c1"># create a listing specifying the information about the asset</span>
     <span class="n">listing_data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;The white paper&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Ocean Protocol&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Datacraft&#39;</span><span class="p">,</span>
         <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;CC0: Public Domain&#39;</span><span class="p">,</span>
         <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span>
     <span class="p">}</span>
 
     <span class="c1"># Now create a memory asset</span>
     <span class="n">asset</span> <span class="o">=</span> <span class="n">DataAsset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;TestAsset&#39;</span><span class="p">,</span> <span class="s1">&#39;Some test data that I want to save for this asset&#39;</span><span class="p">)</span>
-
-    <span class="n">asset</span><span class="o">.</span><span class="n">add_provenance_publish</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">create_asset_provenance_publish</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">did</span><span class="p">)</span>
 
     <span class="c1"># Print the asset data</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my asset:&#39;</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>

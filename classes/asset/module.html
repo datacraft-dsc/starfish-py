@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Asset Module &mdash; starfish-py 0.16.8 documentation</title>
+  <title>Asset Module &mdash; starfish-py 0.17.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.8
+                0.17.0
               </div>
             
           
@@ -181,8 +181,8 @@
   <div class="section" id="module-starfish.asset">
 <span id="asset-module"></span><h1>Asset Module<a class="headerlink" href="#module-starfish.asset" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="starfish.asset.create_asset_from_metadata_text">
-<code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">create_asset_from_metadata_text</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">did</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset_from_metadata_text" title="Permalink to this definition">¶</a></dt>
+<dt id="starfish.asset.create_asset">
+<code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">create_asset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">metadata:</span> <span class="pre">[&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'bytes'&gt;],</span> <span class="pre">did:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">asset:</span> <span class="pre">Optional[starfish.asset.asset_base.AssetBase]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new asset class based on the metadata. Once created assign
 the metadata to the asset and also the optional did</p>
 <dl class="field-list simple">
@@ -190,10 +190,37 @@ the metadata to the asset and also the optional did</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>metadata_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – metadata text to test and create the correct asset object</p></li>
 <li><p><strong>did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – optional did to assign to the asset</p></li>
+<li><p><strong>asset</strong> (<em>TAssetBase</em>) – optional asset object to copy data (only for DataAsset)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Return an asset class based on the metadata type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="starfish.asset.create_asset_provenance_invoke">
+<code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">create_asset_provenance_invoke</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.asset.asset_base.AssetBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_did</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset_provenance_invoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a invoke provenance data to the asset metadata.
+Calling this method will make the asset ‘new’. So the asset_id will change,
+and the asset.did will be set to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="starfish.asset.create_asset_provenance_publish">
+<code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">create_asset_provenance_publish</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starfish.asset.asset_base.AssetBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_did</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.create_asset_provenance_publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a published provenance data to the asset metadata.
+Calling this method will make the asset ‘new’. So the asset_id will change,
+and the asset.did will be set to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>agent_did</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – DID of the agent that this asset will be registered with</p>
 </dd>
 </dl>
 </dd></dl>

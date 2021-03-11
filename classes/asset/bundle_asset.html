@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Bundle Asset class &mdash; starfish-py 0.16.8 documentation</title>
+  <title>Bundle Asset class &mdash; starfish-py 0.17.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.16.8
+                0.17.0
               </div>
             
           
@@ -182,7 +182,7 @@
 <h1>Bundle Asset class<a class="headerlink" href="#bundle-asset-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="starfish.asset.BundleAsset">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">BundleAsset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.BundleAsset" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">starfish.asset.</span></code><code class="sig-name descname"><span class="pre">BundleAsset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">did</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#starfish.asset.BundleAsset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">starfish.asset.asset_base.AssetBase</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">starfish.types.BundleAsset</span></code>]</p>
 <p>Bundle asset can be used to hold many assets</p>
 <dl class="field-list simple">
@@ -203,6 +203,9 @@
 <li><p><strong>name</strong> (<em>string</em>) – name of the asset in the bundle</p></li>
 <li><p><strong>asset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Asset</span></code> object) – asset to add to the bundle collection</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new bundle asset with the added asset</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,6 +247,9 @@
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new bundle asset without the asset</p>
 </dd>
 </dl>
 </dd></dl>
