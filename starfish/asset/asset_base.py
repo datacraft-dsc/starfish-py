@@ -85,7 +85,7 @@ class AssetBase(ABC, Generic[TAssetBase]):
 
     @property
     def asset_id(self) -> str:
-        return hash_sha3_256(self._metadata_text)
+        return AssetBase.calc_asset_id(self._metadata_text)
 
     @property
     def name(self) -> str:
@@ -139,3 +139,7 @@ class AssetBase(ABC, Generic[TAssetBase]):
         metadata['name'] = name
         metadata['type'] = asset_type
         return metadata
+
+    @staticmethod
+    def calc_asset_id(metadata_text):
+        return hash_sha3_256(metadata_text)
