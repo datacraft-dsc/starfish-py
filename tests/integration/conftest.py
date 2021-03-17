@@ -29,25 +29,7 @@ INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 logging.getLogger('web3').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
 
-"""
-@pytest.fixture(scope='module')
-def ethereum_network(config):
-    network = EthereumNetwork(config['ethereum']['network']['url'])
-    return network
 
-@pytest.fixture(scope='module')
-def ethereum_accounts(config):
-    result = []
-    # load in the test accounts
-    account_1 = config['ethereum']['accounts']['account1']
-    account_2 = config['ethereum']['accounts']['account2']
-    result = [
-        EthereumAccount.import_from_file(account_1['keyfile'], account_1['password']),
-        EthereumAccount.import_from_file(account_2['keyfile'], account_2['password']),
-    ]
-    return result
-
-"""
 @pytest.fixture(scope='module')
 def convex_network(config):
     network = ConvexNetwork(config['convex']['network']['url'])
@@ -90,8 +72,9 @@ def convex_accounts(config, convex_network):
     # load in the test accounts
     account_1 = config['convex']['accounts']['account1']
     import_account = ConvexAccount.import_from_file(account_1['keyfile'], account_1['password'])
+
     accounts = [
-        convex_network.create_account(import_account),
+        convex_network.setup_account(account_1['name'], import_account),
         convex_network.create_account(import_account),
     ]
     auto_topup_account(convex_network, accounts)

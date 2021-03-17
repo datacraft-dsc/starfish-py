@@ -22,6 +22,15 @@ class ConvexNetwork(NetworkBase):
     def create_account(self, account: ConvexAccount = None) -> ConvexAccount:
         return self._convex.create_account(account)
 
+    def load_account(self, name, account: ConvexAccount) -> ConvexAccount:
+        return self._convex.setup_account(name, account)
+
+    def setup_account(self, name, account: ConvexAccount) -> ConvexAccount:
+        return self._convex.setup_account(name, account)
+
+    def register_account_name(self, name, account: ConvexAccount) -> ConvexAccount:
+        return self._convex.setup_account(name, account)
+
     """
 
     Register DID with a DDO and resolve DID to a DDO
