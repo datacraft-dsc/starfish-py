@@ -1,5 +1,9 @@
 ## Change Log
 
+## Release v.17.1
++   Upgrade convex-apy-py
++   Add in test account name for convex account
+
 ## Release v.17.0
 +   Remove ethereum network from the library
 +   Rename `add_provenance_..` to `create_asset_provenance_..` and move to the asset module init
