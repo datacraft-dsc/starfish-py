@@ -27,7 +27,6 @@ class ProvenanceContract(ContractBase):
         if result and 'value' in result:
             return {
                 'timestamp': result['value']['timestamp'],
-                'asset_id': add_0x_prefix(result['value']['asset-id']),
                 'owner': to_address(result['value']['owner']),
             }
         return result
@@ -43,15 +42,15 @@ class ProvenanceContract(ContractBase):
             return ProvenanceContract.convert_event_list(result['value'])
         return result
 
-    def event_owner(self, account_address: AccountAddress):
+    def owner_asset_list(self, account_address: AccountAddress):
         if is_address(account_address):
             address = account_address
         else:
             address = account_address.address
-        command = f'(event-owner {address})'
+        command = f'(owner-list {address})'
         result = self.query(command, address)
         if result and 'value' in result:
-            return ProvenanceContract.convert_event_list(result['value'])
+            return result['value']
         return result
 
     @staticmethod
@@ -60,7 +59,6 @@ class ProvenanceContract(ContractBase):
         for item in items:
             event_list.append({
                 'timestamp': item['timestamp'],
-                'asset_id': add_0x_prefix(item['asset-id']),
                 'owner': to_address(item['owner']),
             })
         return event_list

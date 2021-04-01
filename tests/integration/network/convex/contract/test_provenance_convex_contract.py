@@ -36,7 +36,6 @@ def test_contract_provenance_methods(convex_network, convex_accounts):
         register_asset_id_list.append(asset_id)
         result = contract.register(asset_id, register_account)
         assert(result)
-        assert(result['asset_id'] == asset_id)
         assert(result['owner'] == query_address)
 
 
@@ -44,9 +43,8 @@ def test_contract_provenance_methods(convex_network, convex_accounts):
         result = contract.event_list(asset_id, query_address)
         print(result)
         assert(result)
-        assert(result[0]['asset_id'] == asset_id)
         assert(result[0]['owner'] == query_address)
 
-    result = contract.event_owner(query_address)
+    result = contract.owner_asset_list(query_address)
     assert(result)
     assert(len(result) == len(register_asset_id_list))
