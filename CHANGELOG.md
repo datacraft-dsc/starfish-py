@@ -1,7 +1,7 @@
 ## Change Log
 
 ## Release v.17.2
-+   Upgrade convex-apy-py
++   Upgrade convex-api-py
 
 ## Release v.17.1
 +   Upgrade convex-apy-py
