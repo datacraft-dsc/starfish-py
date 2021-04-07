@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v.17.2
++   Upgrade convex-apy-py
+
 ## Release v.17.1
 +   Upgrade convex-apy-py
 +   Add in test account name for convex account
