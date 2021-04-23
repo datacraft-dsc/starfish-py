@@ -32,10 +32,11 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
 
         AssetBase.__init__(self, metadata_text, did)
         if data:
-            if not (isinstance(data, str) or isinstance(data, bytes)):
-                raise ValueError('data can only be str or bytes')
-            if not isinstance(data, bytes):
-                data = data.encode('utf-8')
+            if isinstance(data, (str, bytes)):
+                if isinstance(data, str):
+                    data = data.encode('utf-8')
+            else:
+                raise TypeError('data can only be str or bytes')
 
         self._data = data
 
@@ -54,20 +55,7 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
 
         """
         metadata = AssetBase.generateMetadata(name, 'dataset', metadata)
-
-        content_type = 'application/octet-stream'
-        if isinstance(data, str):
-            content_type = 'text/plain'
-        elif isinstance(data, bytes):
-            content_type = 'application/octet-stream'
-        else:
-            raise ValueError('data can only be str or bytes')
-
-        if 'contentType' not in metadata:
-            metadata['contentType'] = content_type
-        if 'contentHash' not in metadata:
-            metadata['contentHash'] = hash_sha3_256(data)
-
+        metadata = DataAsset.set_metadata_content_data(metadata, data=data)
         return DataAsset(json.dumps(metadata), data=data)
 
     @staticmethod
@@ -98,17 +86,56 @@ class DataAsset(AssetBase, Generic[TDataAsset]):
             mime_type = mime.guess_type(f'file://{filename}')
             if mime_type:
                 content_type = mime_type[0]
-            if 'contentType' not in metadata:
-                metadata['contentType'] = content_type
             if is_read:
                 with open(filename, 'rb') as fp:
                     data = fp.read()
-                if 'contentLength' not in metadata:
-                    metadata['contentLength'] = os.path.getsize(filename)
-            if 'contentHash' not in metadata:
-                metadata['contentHash'] = hash_sha3_256(data)
+            metadata = DataAsset.set_metadata_content_data(metadata, data=data, content_type=content_type)
 
         return DataAsset(json.dumps(metadata), data=data)
+
+    @staticmethod
+    def set_metadata_content_data(metadata: dict, data: Any, content_type: str = None) -> dict:
+        """
+
+        Static method to generate the metadata values associated with storing data with an asset.
+
+        This method will try to assign 'contentType', 'contentHash', 'contentLength' in the metadata dict
+
+        :param dict metadata: Metadata to assign and return
+        :param str,bytes data: Data to get the hash and length from
+        :param str content_type: Optional content_type, if not provided the data will be used to determin the contentType
+
+        :returns: a modified metadata dict with the new fields set
+
+        """
+        if not isinstance(metadata, dict):
+            raise TypeError('you must assign a dict as the metadata to set the content data metadata')
+
+        if content_type is None:
+            content_type = 'application/octet-stream'
+            if isinstance(data, str):
+                content_type = 'text/plain'
+            elif isinstance(data, bytes):
+                content_type = 'application/octet-stream'
+            else:
+                raise ValueError('data can only be str or bytes')
+
+            # test for json
+            try:
+                json_data = json.loads(data)
+                if json_data:
+                    content_type = 'application/json'
+            except ValueError:
+                pass
+
+        if 'contentType' not in metadata and content_type:
+            metadata['contentType'] = content_type
+        if data:
+            if 'contentHash' not in metadata:
+                metadata['contentHash'] = hash_sha3_256(data)
+            if 'contentLength' not in metadata:
+                metadata['contentLength'] = len(data)
+        return metadata
 
     def save_to_file(self, filename: str) -> None:
         """

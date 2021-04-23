@@ -1,13 +1,17 @@
 ## Change Log
 
-## Release v.17.2
+## Release v0.17.3
++   Add data to an operation asset, for orchestration class types
++   Add properties `is_orchestration` and `class_name` in OperationAsset
+
+## Release v0.17.2
 +   Upgrade convex-api-py
 
-## Release v.17.1
+## Release v0.17.1
 +   Upgrade convex-apy-py
 +   Add in test account name for convex account
 
-## Release v.17.0
+## Release v0.17.0
 +   Remove ethereum network from the library
 +   Rename `add_provenance_..` to `create_asset_provenance_..` and move to the asset module init
 
