@@ -36,15 +36,15 @@ def create_asset(metadata: [str, dict, bytes], did: str = None, asset: AssetBase
     # now set the metadata for reading
     metadata = json.loads(metadata_text)
     asset_type = metadata.get('type', None)
+    data = None
+    if asset and hasattr(asset, 'data'):
+        data = asset.data
 
     if asset_type == 'bundle':
         return BundleAsset(metadata_text, did=did)
     elif asset_type == 'operation':
-        return OperationAsset(metadata_text, did=did)
+        return OperationAsset(metadata_text, did=did, data=data)
     elif asset_type == 'dataset':
-        data = None
-        if asset and asset.type_name == 'dataset':
-            data = asset.data
         return DataAsset(metadata_text, did=did, data=data)
     else:
         raise ValueError(f'Unknown asset type {asset_type}')
