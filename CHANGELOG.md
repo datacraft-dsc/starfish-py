@@ -1,6 +1,6 @@
 ## Change Log
 
-## Release v0.17.5
+## Release v0.17.6
 +   Cleanup job class with better creation methods and a result proprerty
 
 ## Release v0.17.4
