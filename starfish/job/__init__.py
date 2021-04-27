@@ -5,7 +5,6 @@
 """
 
 
-
 class JobStatus():
     SCHEDULE = 'scheduled'
     RUNNING = 'running'
@@ -15,15 +14,19 @@ class JobStatus():
 
 
 JobStatusWorking = [
-        JobStatus.SCHEDULE,
-        JobStatus.RUNNING,
-    ]
+    JobStatus.SCHEDULE,
+    JobStatus.RUNNING,
+]
 
 JobStatusDone = [
-        JobStatus.SUCCEEDED,
-        JobStatus.FAILED,
-        JobStatus.CANCELLED
-    ]
+    JobStatus.SUCCEEDED,
+    JobStatus.FAILED,
+    JobStatus.CANCELLED
+]
 
+JobStatusFailed = [
+    JobStatus.FAILED,
+    JobStatus.CANCELLED
+]
 
-from starfish.job.job import Job                               # noqa: F401
+from starfish.job.job import Job                               # noqa: F401 E402

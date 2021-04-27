@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v0.17.5
++   Cleanup job class with better creation methods and a result proprerty
+
 ## Release v0.17.4
 +   Fix asset create to copy the asset data
 
