@@ -377,9 +377,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         authorization_token = self.get_authorization_token()
         data = self._adapter.get_job(job_id, url, authorization_token)
         if data:
-            status = data.get('status', None)
-            outputs = data.get('outputs', None)
-            job = Job(job_id, status, outputs)
+            job = Job.create_from_result(job_id, data)
         return job
 
     def job_wait_for_completion(self, job_id: str, timeout_seconds: int = 60, sleep_seconds: int = 1) -> Union[Job, bool]:
@@ -398,7 +396,7 @@ class RemoteAgent(AgentBase, Generic[TRemoteAgent]):
         timeout_time = time.time() + timeout_seconds
         while timeout_time > time.time():
             job = self.get_job(job_id)
-            if job.is_finished:
+            if job.is_done:
                 return job
             if sleep_seconds > 0:
                 time.sleep(sleep_seconds)

@@ -4,5 +4,26 @@
 
 """
 
+
+
+class JobStatus():
+    SCHEDULE = 'scheduled'
+    RUNNING = 'running'
+    SUCCEEDED = 'succeeded'
+    FAILED = 'failed'
+    CANCELLED = 'cancelled'
+
+
+JobStatusWorking = [
+        JobStatus.SCHEDULE,
+        JobStatus.RUNNING,
+    ]
+
+JobStatusDone = [
+        JobStatus.SUCCEEDED,
+        JobStatus.FAILED,
+        JobStatus.CANCELLED
+    ]
+
+
 from starfish.job.job import Job                               # noqa: F401
-from starfish.job.job_base import JobBase                      # noqa: F401
