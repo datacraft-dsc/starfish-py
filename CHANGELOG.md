@@ -1,5 +1,8 @@
 ## Change Log
 
+## Release v0.17.4
++   Fix asset create to copy the asset data
+
 ## Release v0.17.3
 +   Add data to an operation asset, for orchestration class types
 +   Add properties `is_orchestration` and `class_name` in OperationAsset
