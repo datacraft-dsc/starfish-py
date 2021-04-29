@@ -1,5 +1,9 @@
 ## Change Log
 
+## Release v0.17.7
++   Fix metadata type conversion
++   Add modes option to operation assets
+
 ## Release v0.17.6
 +   Cleanup job class with better creation methods and a result proprerty
 
