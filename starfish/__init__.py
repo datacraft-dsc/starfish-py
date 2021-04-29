@@ -6,4 +6,4 @@
 
 
 __author__ = """DEX.sg"""
-__version__ = '0.17.6'
+__version__ = '0.17.7'
