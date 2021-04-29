@@ -27,6 +27,10 @@ class AssetBase(ABC, Generic[TAssetBase]):
         """
         init an asset class
         """
+
+        if isinstance(metadata_text, bytes):
+            metadata_text = metadata_text.decode('utf-8')
+
         if not isinstance(metadata_text, str):
             raise TypeError('metadata must be in text form')
 

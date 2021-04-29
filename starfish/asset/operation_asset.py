@@ -30,7 +30,7 @@ class OperationAsset(DataAsset, Generic[TOperationAsset]):
         DataAsset.__init__(self, metadata_text, did=did, data=data)
 
     @staticmethod
-    def create(name: str, metadata: Any = None, data: Any = None) -> TOperationAsset:
+    def create(name: str, metadata: Any = None, data: Any = None, modes: Any = None) -> TOperationAsset:
         """
 
         Create a new OperationAsset.
@@ -38,15 +38,24 @@ class OperationAsset(DataAsset, Generic[TOperationAsset]):
         :param str name: Name of the asset
         :param dict metadata: Optional metadata to add to the assets metadata
         :param str, bytes data: Option data to pass to the operation asset
+        :param list,tuple modes: Modes supported by this opreation, defaults to ['sync', 'async']
 
         :returns OperationAsset object
 
         """
         metadata = AssetBase.generateMetadata(name, 'operation', metadata)
+        if 'operation' not in metadata:
+            metadata['operation'] = {}
+        if modes is None:
+            modes = ['sync', 'async']
+        metadata['modes'] = modes
+        if not isinstance(modes, (tuple, list)):
+            raise TypeError(f'modes {modes} must be a list or tuple of the operation modes supported')
+
         return OperationAsset(json.dumps(metadata), data=data)
 
     @staticmethod
-    def create_orchestration(name: str, data: Any = None, metadata: Any = None) -> TOperationAsset:
+    def create_orchestration(name: str, data: Any = None, metadata: Any = None, modes: Any = None) -> TOperationAsset:
         """
 
         Create a new OperationAsset with a class of orchestration.
@@ -54,6 +63,7 @@ class OperationAsset(DataAsset, Generic[TOperationAsset]):
         :param str name: Name of the asset
         :param str, bytes data: Option orchestration dict or json str to pass to the operation asset
         :param dict metadata: Optional metadata to add to the assets metadata
+        :param list,tuple modes: Modes supported by this opreation, defaults to ['sync', 'async']
 
         :returns OperationAsset object
 
@@ -75,6 +85,13 @@ class OperationAsset(DataAsset, Generic[TOperationAsset]):
             metadata['operation'] = {}
         metadata['operation']['class'] = 'orchestration'
 
+        if modes is None:
+            modes = ['sync', 'async']
+        if not isinstance(modes, (tuple, list)):
+            raise TypeError(f'modes {modes} must be a list or tuple of the operation modes supported')
+
+        metadata['modes'] = modes
+
         return OperationAsset(json.dumps(metadata), data=data_text)
 
     def is_mode(self, mode_type: str) -> bool:
@@ -88,7 +105,8 @@ class OperationAsset(DataAsset, Generic[TOperationAsset]):
 
         """
         try:
-            return mode_type in self.metadata['operation']['modes']
+            if 'operation' in self.metadata and self.metadata['operation']:
+                return mode_type in self.metadata['operation'].get('modes', [])
         except ValueError:
             raise ValueError('Metadata does not contain operation->modes structure')
 

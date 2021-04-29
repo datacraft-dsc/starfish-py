@@ -27,7 +27,7 @@ def create_asset(metadata: [str, dict, bytes], did: str = None, asset: AssetBase
     if isinstance(metadata, str):
         metadata_text = metadata
     elif isinstance(metadata, bytes):
-        metadata_text = metadata.encode('utf-8')
+        metadata_text = metadata.decode('utf-8')
     elif isinstance(metadata, dict):
         metadata_text = json.dumps(metadata)
     else:
